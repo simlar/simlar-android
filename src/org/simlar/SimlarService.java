@@ -29,6 +29,7 @@ import org.linphone.core.LinphoneCall.State;
 import org.linphone.core.LinphoneCore.RegistrationState;
 import org.simlar.PreferencesHelper.NotInitedException;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -53,6 +54,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.os.SystemClock;
 import android.provider.ContactsContract;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -79,6 +81,8 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	private RingtoneThread mRingtoneThread = null;
 	private boolean mResumeMusicAfterCall = false;
 	private NetworkChangeReceiver mNetworkChangeReceiver = new NetworkChangeReceiver();
+	private PendingIntent mkeepAwakePendingIntent = null;
+	private KeepAwakeReceiver mKeepAwakeReceiver = new KeepAwakeReceiver();
 
 	public class SimlarServiceBinder extends Binder
 	{
@@ -94,6 +98,15 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		public void onReceive(Context context, Intent intent)
 		{
 			SimlarService.this.checkNetworkConnectivityAndRefreshRegisters();
+		}
+	}
+
+	class KeepAwakeReceiver extends BroadcastReceiver
+	{
+		@Override
+		public void onReceive(Context context, Intent intent)
+		{
+			SimlarService.this.keepAwake();
 		}
 	}
 
@@ -185,6 +198,8 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 		registerReceiver(mNetworkChangeReceiver, intentFilter);
 
+		startKeepAwake();
+
 		mHandler.post(new Runnable() {
 			@Override
 			public void run()
@@ -273,6 +288,8 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 
 		unregisterReceiver(mNetworkChangeReceiver);
 
+		stopKeepAwake();
+
 		// just in case
 		releaseWakeLock();
 		releaseWifiLock();
@@ -297,7 +314,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		}
 	}
 
-	private void releaseWakeLock()
+	void releaseWakeLock()
 	{
 		if (mWakeLock.isHeld()) {
 			mWakeLock.release();
@@ -324,6 +341,44 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		if (ni.isConnected()) {
 			mLinphoneThread.refreshRegisters();
 		}
+	}
+
+	private void startKeepAwake()
+	{
+		final Intent startIntent = new Intent("org.simlar.keepAwake");
+		mkeepAwakePendingIntent = PendingIntent.getBroadcast(this, 0, startIntent, 0);
+
+		((AlarmManager) getSystemService(Context.ALARM_SERVICE))
+				.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 600000, 600000, mkeepAwakePendingIntent);
+
+		IntentFilter filter = new IntentFilter();
+		filter.addAction("org.simlar.keepAwake");
+		registerReceiver(mKeepAwakeReceiver, filter);
+	}
+
+	private void stopKeepAwake()
+	{
+		unregisterReceiver(mKeepAwakeReceiver);
+		((AlarmManager) getSystemService(Context.ALARM_SERVICE)).cancel(mkeepAwakePendingIntent);
+	}
+
+	void keepAwake()
+	{
+		// idea from linphones KeepAliveHandler
+
+		checkNetworkConnectivityAndRefreshRegisters();
+
+		// make sure iterate will have enough time before device eventually goes to sleep
+		acquireWakeLock();
+		mHandler.postDelayed(new Runnable() {
+			@Override
+			public void run()
+			{
+				if (!getSimlarCallState().isNewCall()) {
+					releaseWakeLock();
+				}
+			}
+		}, 4000);
 	}
 
 	@Override
