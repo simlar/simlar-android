@@ -45,6 +45,7 @@ import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
 import android.os.AsyncTask;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -153,7 +154,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	@Override
 	public void onCreate()
 	{
-		Log.i(LOGTAG, "onCreate");
+		Log.i(LOGTAG, "started on device: " + Build.DEVICE);
 
 		FileHelper.init(this);
 
