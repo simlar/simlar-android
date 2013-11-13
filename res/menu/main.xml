@@ -1,0 +1,59 @@
+<!--
+  Copyright (C) 2013 The Simlar Authors.
+
+  This file is part of Simlar. (http://www.simlar.org)
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_settings"/>
+
+    <item
+        android:id="@+id/action_upload_logfile"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_upload_logfile"/>
+
+    <item
+        android:id="@+id/action_enable_linphone_debug_mode"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_enable_linphone_debug_mode"/>
+
+    <item
+        android:id="@+id/action_delete_account"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_delete_account"/>
+
+    <item
+        android:id="@+id/action_show_about"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_show_about"/>
+
+    <item
+        android:id="@+id/action_quit"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_quit"/>
+
+</menu>

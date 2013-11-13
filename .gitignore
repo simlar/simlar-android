@@ -1,0 +1,8 @@
+## general android and eclipse
+bin/
+gen/
+obj/
+
+## bootstrap liblinphone
+build.log
+liblinphone_build_*

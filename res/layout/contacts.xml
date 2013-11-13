@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  Copyright (C) 2013 The Simlar Authors.
+
+  This file is part of Simlar. (http://www.simlar.org)
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-->
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:paddingLeft="0dip"
+    android:paddingRight="9dip"
+    android:layout_height= "wrap_content"
+    android:minHeight="48dip">
+
+    <QuickContactBadge
+        android:id="@+id/picture"
+        android:layout_width="70dip"
+        android:layout_height="70dip"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="3dip"
+        android:layout_marginLeft="2dip"
+        android:layout_marginRight="14dip"
+        android:layout_marginTop="4dip"
+        android:src="@drawable/contact_picture" />
+
+    <TextView
+        android:id="@+id/name"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="2dip"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/picture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/online_status"
+        android:layout_width="45dip"
+        android:layout_height="45dip"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="3dip"
+        android:layout_marginLeft="2dip"
+        android:layout_marginRight="14dip"
+        android:layout_marginTop="4dip"
+        tools:ignore="ContentDescription"
+        android:visibility="gone"
+        android:src="@drawable/contact_offline" />
+</RelativeLayout>
