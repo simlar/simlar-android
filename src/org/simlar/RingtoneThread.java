@@ -29,11 +29,14 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.media.RingtoneManager;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.util.Log;
 
 class RingtoneThread
 {
 	static final String LOGTAG = RingtoneThread.class.getSimpleName();
+	static final long MIN_PLAY_TIME = VibratorThread.VIBRATE_LENGTH + VibratorThread.VIBRATE_PAUSE;
+
 	Context mContext = null;
 	private RingtoneThreadImpl mThread = null;
 
@@ -81,7 +84,12 @@ class RingtoneThread
 
 		public void startMediaPlayer()
 		{
-			mHandler.post(new Runnable() {
+			startMediaPlayer(0);
+		}
+
+		void startMediaPlayer(final long delayMillis)
+		{
+			mHandler.postDelayed(new Runnable() {
 				@Override
 				public void run()
 				{
@@ -94,19 +102,22 @@ class RingtoneThread
 						}
 					}
 
-					Log.i(LOGTAG, "start ringing");
+					final long playStartTime = SystemClock.elapsedRealtime();
+					Log.i(LOGTAG, "start ringing at: " + playStartTime);
 					mMediaPlayer.start();
 
 					mMediaPlayer.setOnCompletionListener(new OnCompletionListener() {
 						@Override
 						public void onCompletion(MediaPlayer mp)
 						{
-							Log.i(LOGTAG, "MediaPlayer onCompletion");
-							startMediaPlayer();
+							final long now = SystemClock.elapsedRealtime();
+							final long delay = Math.max(0, playStartTime + MIN_PLAY_TIME - now);
+							Log.i(LOGTAG, "MediaPlayer onCompletion at: " + now + " restarting with delay: " + delay);
+							startMediaPlayer(delay);
 						}
 					});
 				}
-			});
+			}, delayMillis);
 		}
 
 		public void stopMediaPlayer()
