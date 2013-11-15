@@ -21,6 +21,7 @@
 package org.simlar;
 
 import android.content.Context;
+import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Vibrator;
@@ -85,11 +86,21 @@ class VibratorThread
 				}
 			});
 		}
+
+		public boolean hasVibrator()
+		{
+			return mVibrator != null && mVibrator.hasVibrator();
+		}
 	}
 
 	public VibratorThread(final Context context)
 	{
 		mContext = context;
+	}
+
+	private boolean shouldVibrate()
+	{
+		return ((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE)).getRingerMode() != AudioManager.RINGER_MODE_SILENT;
 	}
 
 	public void start()
@@ -99,7 +110,18 @@ class VibratorThread
 			return;
 		}
 
+		if (!shouldVibrate()) {
+			Log.i(LOGTAG, "VibratorThread: vibration disabled at the moment");
+			return;
+		}
+
 		mThread = new VibratorThreadImpl();
+
+		if (!mThread.hasVibrator()) {
+			Log.i(LOGTAG, "VibratorThread: no vibrator");
+			mThread = null;
+			return;
+		}
 
 		mThread.start();
 	}
