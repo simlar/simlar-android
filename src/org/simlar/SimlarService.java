@@ -50,7 +50,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
-import android.os.Vibrator;
 import android.provider.ContactsContract;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -60,7 +59,6 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 {
 	static final String LOGTAG = SimlarService.class.getSimpleName();
 	private static final int NOTIFICATION_ID = 1;
-	private static final long VIBRATION_PATTERN[] = { 1000, 1000 };
 
 	LinphoneThread mLinphoneThread = null;
 	Handler mHandler = new Handler();
@@ -69,13 +67,13 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	private SimlarStatus mSimlarStatus = SimlarStatus.OFFLINE;
 	private SimlarCallState mSimlarCallState = new SimlarCallState();
 	private Ringtone mRingtone = null;
-	private Vibrator mVibrator = null;
 	private WakeLock mWakeLock = null;
 	private WifiLock mWifiLock = null;
 	private boolean mGoingDown = false;
 	private boolean mTerminatePrivateAlreadyCalled = false;
 	private boolean mCreatingAccount = false;
 	private Class<?> mNotificationActivity = null;
+	private VibratorThread mVibratorThread = null;
 
 	public class SimlarServiceBinder extends Binder
 	{
@@ -157,6 +155,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		Log.i(LOGTAG, "started on device: " + Build.DEVICE);
 
 		FileHelper.init(this);
+		mVibratorThread = new VibratorThread(this.getApplicationContext());
 
 		mWakeLock = ((PowerManager) this.getSystemService(Context.POWER_SERVICE))
 				.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "SimlarWakeLock");
@@ -724,11 +723,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 			mRingtone.play();
 		}
 
-		if (mVibrator == null) {
-			mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-		}
-
-		mVibrator.vibrate(VIBRATION_PATTERN, 0);
+		mVibratorThread.start();
 	}
 
 	private void stopRinging()
@@ -739,8 +734,6 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 			mRingtone.stop();
 		}
 
-		if (mVibrator != null) {
-			mVibrator.cancel();
-		}
+		mVibratorThread.stop();
 	}
 }
