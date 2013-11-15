@@ -38,8 +38,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
@@ -66,7 +64,6 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	Map<String, ContactData> mContacts = new HashMap<String, ContactData>();
 	private SimlarStatus mSimlarStatus = SimlarStatus.OFFLINE;
 	private SimlarCallState mSimlarCallState = new SimlarCallState();
-	private Ringtone mRingtone = null;
 	private WakeLock mWakeLock = null;
 	private WifiLock mWifiLock = null;
 	private boolean mGoingDown = false;
@@ -74,6 +71,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	private boolean mCreatingAccount = false;
 	private Class<?> mNotificationActivity = null;
 	private VibratorThread mVibratorThread = null;
+	private RingtoneThread mRingtoneThread = null;
 
 	public class SimlarServiceBinder extends Binder
 	{
@@ -156,6 +154,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 
 		FileHelper.init(this);
 		mVibratorThread = new VibratorThread(this.getApplicationContext());
+		mRingtoneThread = new RingtoneThread(this.getApplicationContext());
 
 		mWakeLock = ((PowerManager) this.getSystemService(Context.POWER_SERVICE))
 				.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "SimlarWakeLock");
@@ -353,9 +352,11 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		Log.i(LOGTAG, "SimlarCallState updated: " + mSimlarCallState);
 
 		if (mSimlarCallState.isRinging()) {
-			startRinging();
+			mVibratorThread.start();
+			mRingtoneThread.start();
 		} else {
-			stopRinging();
+			mVibratorThread.stop();
+			mRingtoneThread.stop();
 		}
 
 		// make sure WLAN is not suspended while calling
@@ -708,32 +709,5 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	public void setVolumes(final Volumes volumes)
 	{
 		mLinphoneThread.setVolumes(volumes);
-	}
-
-	private void startRinging()
-	{
-		Log.i(LOGTAG, "start ringing");
-
-		if (mRingtone == null) {
-			final Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-			mRingtone = RingtoneManager.getRingtone(getApplicationContext(), alert);
-		}
-
-		if (!mRingtone.isPlaying()) {
-			mRingtone.play();
-		}
-
-		mVibratorThread.start();
-	}
-
-	private void stopRinging()
-	{
-		Log.i(LOGTAG, "stop ringing");
-
-		if (mRingtone != null) {
-			mRingtone.stop();
-		}
-
-		mVibratorThread.stop();
 	}
 }
