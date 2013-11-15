@@ -20,7 +20,10 @@
 
 package org.simlar;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Looper;
@@ -34,7 +37,23 @@ class VibratorThread
 	public static final long VIBRATE_PAUSE = 1000; // ms
 
 	Context mContext = null;
+	private boolean mHasOnGoingAlarm = false;
 	private VibratorThreadImpl mThread = null;
+	private RingerModeReceiver mRingerModeReceiver = new RingerModeReceiver();
+
+	private class RingerModeReceiver extends BroadcastReceiver
+	{
+		public RingerModeReceiver()
+		{
+			super();
+		}
+
+		@Override
+		public void onReceive(Context context, Intent intent)
+		{
+			VibratorThread.this.onRingerModeChanged();
+		}
+	}
 
 	private class VibratorThreadImpl extends Thread
 	{
@@ -105,13 +124,28 @@ class VibratorThread
 
 	public void start()
 	{
-		if (mThread != null) {
-			Log.i(LOGTAG, "already vibrating => abort");
+		if (mHasOnGoingAlarm) {
 			return;
 		}
 
+		mHasOnGoingAlarm = true;
+
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(AudioManager.RINGER_MODE_CHANGED_ACTION);
+		mContext.registerReceiver(mRingerModeReceiver, filter);
+
 		if (!shouldVibrate()) {
 			Log.i(LOGTAG, "VibratorThread: vibration disabled at the moment");
+			return;
+		}
+
+		startVibrate();
+	}
+
+	private void startVibrate()
+	{
+		if (mThread != null) {
+			Log.i(LOGTAG, "already vibrating");
 			return;
 		}
 
@@ -128,6 +162,19 @@ class VibratorThread
 
 	public void stop()
 	{
+		if (!mHasOnGoingAlarm) {
+			return;
+		}
+
+		mHasOnGoingAlarm = false;
+
+		mContext.unregisterReceiver(mRingerModeReceiver);
+
+		stopVibrate();
+	}
+
+	private void stopVibrate()
+	{
 		if (mThread == null) {
 			Log.i(LOGTAG, "not vibrating");
 			return;
@@ -143,6 +190,21 @@ class VibratorThread
 		} finally {
 			Log.i(LOGTAG, "thread joined");
 			mThread = null;
+		}
+	}
+
+	public void onRingerModeChanged()
+	{
+		Log.i(LOGTAG, "onRingerModeChanged");
+
+		if (!mHasOnGoingAlarm) {
+			return;
+		}
+
+		if (shouldVibrate()) {
+			startVibrate();
+		} else {
+			stopVibrate();
 		}
 	}
 }
