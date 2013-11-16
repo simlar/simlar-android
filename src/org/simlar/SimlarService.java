@@ -58,14 +58,14 @@ import android.widget.Toast;
 
 public class SimlarService extends Service implements LinphoneHandlerListener
 {
-	protected static final String LOGTAG = SimlarService.class.getSimpleName();
+	static final String LOGTAG = SimlarService.class.getSimpleName();
 	private static final int NOTIFICATION_ID = 1;
 	private static final long VIBRATION_PATTERN[] = { 1000, 1000 };
 
-	protected LinphoneThread mLinphoneThread = null;
-	protected Handler mHandler = new Handler();
+	LinphoneThread mLinphoneThread = null;
+	Handler mHandler = new Handler();
 	private final IBinder mBinder = new SimlarServiceBinder();
-	protected Map<String, ContactData> mContacts = new HashMap<String, ContactData>();
+	Map<String, ContactData> mContacts = new HashMap<String, ContactData>();
 	private SimlarStatus mSimlarStatus = SimlarStatus.OFFLINE;
 	private SimlarCallState mSimlarCallState = new SimlarCallState();
 	private Ringtone mRingtone = null;
@@ -190,7 +190,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		nm.notify(NOTIFICATION_ID, createNotification(mSimlarStatus));
 	}
 
-	protected Notification createNotification(final SimlarStatus status)
+	Notification createNotification(final SimlarStatus status)
 	{
 		String text = null;
 
@@ -224,7 +224,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		return notificationBuilder.build();
 	}
 
-	protected void initializeCredentials()
+	void initializeCredentials()
 	{
 		notifySimlarStatusChanged(SimlarStatus.OFFLINE);
 
@@ -308,7 +308,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		notifySimlarStatusChanged(status);
 	}
 
-	protected void notifySimlarStatusChanged(final SimlarStatus status)
+	void notifySimlarStatusChanged(final SimlarStatus status)
 	{
 		Log.i(LOGTAG, "notifySimlarStatusChanged: " + status);
 
@@ -458,7 +458,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		});
 	}
 
-	protected void handleTerminate()
+	void handleTerminate()
 	{
 		Log.i(LOGTAG, "handleTerminate");
 		mGoingDown = true;
@@ -486,7 +486,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		}
 	}
 
-	protected void terminatePrivate()
+	void terminatePrivate()
 	{
 		// make sure this function is only called once
 		if (mTerminatePrivateAlreadyCalled) {
@@ -525,7 +525,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		});
 	}
 
-	protected void loadContactsFromTelephonebook()
+	void loadContactsFromTelephonebook()
 	{
 		new AsyncTask<Void, Void, Map<String, ContactData>>() {
 			@Override
@@ -625,7 +625,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		}.execute(mContacts.keySet());
 	}
 
-	protected boolean updateContactData(final String number, final ContactStatus status)
+	boolean updateContactData(final String number, final ContactStatus status)
 	{
 		if (Util.isNullOrEmpty(number)) {
 			return false;
@@ -645,7 +645,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		return true;
 	}
 
-	protected void addLinphoneFriend(final String number)
+	void addLinphoneFriend(final String number)
 	{
 		Log.d(LOGTAG, "adding linphone friend for presence watching: " + number);
 		mLinphoneThread.addFriend(number);

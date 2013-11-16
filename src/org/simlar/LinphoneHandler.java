@@ -200,7 +200,7 @@ public class LinphoneHandler
 		}
 	}
 
-	protected void linphoneCoreIterate()
+	void linphoneCoreIterate()
 	{
 		mLinphoneCore.iterate();
 	}

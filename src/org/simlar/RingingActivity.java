@@ -31,7 +31,7 @@ import android.widget.Toast;
 
 public class RingingActivity extends Activity
 {
-	protected static final String LOGTAG = RingingActivity.class.getSimpleName();
+	static final String LOGTAG = RingingActivity.class.getSimpleName();
 
 	private SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorRinging();
 
@@ -43,19 +43,19 @@ public class RingingActivity extends Activity
 		}
 
 		@Override
-		protected void onBoundToSimlarService()
+		void onBoundToSimlarService()
 		{
 			RingingActivity.this.onSimlarCallStateChanged();
 		}
 
 		@Override
-		protected void onSimlarCallStateChanged()
+		void onSimlarCallStateChanged()
 		{
 			RingingActivity.this.onSimlarCallStateChanged();
 		}
 
 		@Override
-		protected void onServiceFinishes()
+		void onServiceFinishes()
 		{
 			RingingActivity.this.finish();
 		}
@@ -98,7 +98,7 @@ public class RingingActivity extends Activity
 		return true;
 	}
 
-	protected void onSimlarCallStateChanged()
+	void onSimlarCallStateChanged()
 	{
 		if (mCommunicator.getService() == null) {
 			Log.e(LOGTAG, "ERROR: onSimlarCallStateChanged but not bound to service");

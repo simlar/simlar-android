@@ -147,7 +147,7 @@ public class ContactsAdapter extends ArrayAdapter<FullContactData>
 		sort(new SortByName());
 	}
 
-	protected void onSimlarStatusChanged()
+	void onSimlarStatusChanged()
 	{
 		if (mCommunicator.getService() == null) {
 			Log.e(LOGTAG, "ERROR onSimlarStatusChanged: no service bound");
@@ -182,7 +182,7 @@ public class ContactsAdapter extends ArrayAdapter<FullContactData>
 		return null;
 	}
 
-	protected void onPresenceStateChanged(String number, boolean online)
+	void onPresenceStateChanged(String number, boolean online)
 	{
 		final FullContactData contact = getContactByNumber(number);
 		if (contact == null) {

@@ -39,7 +39,7 @@ import android.util.Log;
 
 public class UploadLogFile
 {
-	protected static final String LOGTAG = UploadLogFile.class.getSimpleName();
+	static final String LOGTAG = UploadLogFile.class.getSimpleName();
 	private static final String EMAIL_ADDRESS = "mail@ben-sartor.de";
 	private static final String EMAIL_SUBJECT = "bug report to log file ";
 	private static final String EMAIL_TEXT = "\r\n\r\n"
@@ -53,8 +53,8 @@ public class UploadLogFile
 	private static final String LINE_END = "\r\n";
 	private static final String TWO_HYPHENS = "--";
 
-	protected Context mContext = null;
-	protected ProgressDialog mProgressDialog = null;
+	Context mContext = null;
+	ProgressDialog mProgressDialog = null;
 
 	class PostResult
 	{
@@ -75,7 +75,7 @@ public class UploadLogFile
 		}
 	}
 
-	protected PostResult postFile(final File file)
+	PostResult postFile(final File file)
 	{
 
 		final HttpsURLConnection connection = HttpsPost.createConnection(URL_PATH, true);
