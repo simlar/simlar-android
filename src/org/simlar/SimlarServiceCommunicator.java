@@ -35,9 +35,9 @@ import android.util.Log;
 public class SimlarServiceCommunicator
 {
 	private static final String DEFAULT_LOGTAG = "SimlarServiceCommunicator";
-	final protected String mLogtag;
-	protected SimlarService mService = null;
-	protected Class<?> mActivity = null;
+	final String mLogtag;
+	SimlarService mService = null;
+	Class<?> mActivity = null;
 
 	public SimlarServiceCommunicator(final String logtag)
 	{
@@ -154,32 +154,32 @@ public class SimlarServiceCommunicator
 		}
 	}
 
-	protected void onBoundToSimlarService()
+	void onBoundToSimlarService()
 	{
 	}
 
-	protected void onSimlarStatusChanged()
+	void onSimlarStatusChanged()
 	{
 	}
 
 	@SuppressWarnings("unused")
-	protected void onPresenceStateChanged(final String number, final boolean online)
+	void onPresenceStateChanged(final String number, final boolean online)
 	{
 	}
 
-	protected void onSimlarCallStateChanged()
+	void onSimlarCallStateChanged()
 	{
 	}
 
-	protected void onServiceFinishes()
+	void onServiceFinishes()
 	{
 	}
 
-	protected void onTestRegistrationFailed()
+	void onTestRegistrationFailed()
 	{
 	}
 
-	protected void onTestRegistrationSuccess()
+	void onTestRegistrationSuccess()
 	{
 	}
 

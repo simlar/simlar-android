@@ -37,10 +37,10 @@ import android.widget.Spinner;
 
 public class VerifyNumberActivity extends Activity
 {
-	protected static final String LOGTAG = VerifyNumberActivity.class.getSimpleName();
+	static final String LOGTAG = VerifyNumberActivity.class.getSimpleName();
 	private static final int RESULT_CREATE_ACCOUNT_ACTIVITY = 0;
 
-	protected ProgressDialog mProgressDialog = null;
+	ProgressDialog mProgressDialog = null;
 
 	private SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCall();
 
@@ -52,7 +52,7 @@ public class VerifyNumberActivity extends Activity
 		}
 
 		@Override
-		protected void onServiceFinishes()
+		void onServiceFinishes()
 		{
 			Log.i(LOGTAG, "onServiceFinishes");
 

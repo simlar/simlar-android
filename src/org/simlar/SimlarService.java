@@ -38,8 +38,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
@@ -50,7 +48,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
-import android.os.Vibrator;
 import android.provider.ContactsContract;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -58,24 +55,23 @@ import android.widget.Toast;
 
 public class SimlarService extends Service implements LinphoneHandlerListener
 {
-	protected static final String LOGTAG = SimlarService.class.getSimpleName();
+	static final String LOGTAG = SimlarService.class.getSimpleName();
 	private static final int NOTIFICATION_ID = 1;
-	private static final long VIBRATION_PATTERN[] = { 1000, 1000 };
 
-	protected LinphoneThread mLinphoneThread = null;
-	protected Handler mHandler = new Handler();
+	LinphoneThread mLinphoneThread = null;
+	Handler mHandler = new Handler();
 	private final IBinder mBinder = new SimlarServiceBinder();
-	protected Map<String, ContactData> mContacts = new HashMap<String, ContactData>();
+	Map<String, ContactData> mContacts = new HashMap<String, ContactData>();
 	private SimlarStatus mSimlarStatus = SimlarStatus.OFFLINE;
 	private SimlarCallState mSimlarCallState = new SimlarCallState();
-	private Ringtone mRingtone = null;
-	private Vibrator mVibrator = null;
 	private WakeLock mWakeLock = null;
 	private WifiLock mWifiLock = null;
 	private boolean mGoingDown = false;
 	private boolean mTerminatePrivateAlreadyCalled = false;
 	private boolean mCreatingAccount = false;
 	private Class<?> mNotificationActivity = null;
+	private VibratorThread mVibratorThread = null;
+	private RingtoneThread mRingtoneThread = null;
 
 	public class SimlarServiceBinder extends Binder
 	{
@@ -157,6 +153,8 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		Log.i(LOGTAG, "started on device: " + Build.DEVICE);
 
 		FileHelper.init(this);
+		mVibratorThread = new VibratorThread(this.getApplicationContext());
+		mRingtoneThread = new RingtoneThread(this.getApplicationContext());
 
 		mWakeLock = ((PowerManager) this.getSystemService(Context.POWER_SERVICE))
 				.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "SimlarWakeLock");
@@ -190,7 +188,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		nm.notify(NOTIFICATION_ID, createNotification(mSimlarStatus));
 	}
 
-	protected Notification createNotification(final SimlarStatus status)
+	Notification createNotification(final SimlarStatus status)
 	{
 		String text = null;
 
@@ -224,7 +222,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		return notificationBuilder.build();
 	}
 
-	protected void initializeCredentials()
+	void initializeCredentials()
 	{
 		notifySimlarStatusChanged(SimlarStatus.OFFLINE);
 
@@ -308,7 +306,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		notifySimlarStatusChanged(status);
 	}
 
-	protected void notifySimlarStatusChanged(final SimlarStatus status)
+	void notifySimlarStatusChanged(final SimlarStatus status)
 	{
 		Log.i(LOGTAG, "notifySimlarStatusChanged: " + status);
 
@@ -354,9 +352,11 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		Log.i(LOGTAG, "SimlarCallState updated: " + mSimlarCallState);
 
 		if (mSimlarCallState.isRinging()) {
-			startRinging();
+			mVibratorThread.start();
+			mRingtoneThread.start();
 		} else {
-			stopRinging();
+			mVibratorThread.stop();
+			mRingtoneThread.stop();
 		}
 
 		// make sure WLAN is not suspended while calling
@@ -458,7 +458,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		});
 	}
 
-	protected void handleTerminate()
+	void handleTerminate()
 	{
 		Log.i(LOGTAG, "handleTerminate");
 		mGoingDown = true;
@@ -486,7 +486,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		}
 	}
 
-	protected void terminatePrivate()
+	void terminatePrivate()
 	{
 		// make sure this function is only called once
 		if (mTerminatePrivateAlreadyCalled) {
@@ -525,7 +525,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		});
 	}
 
-	protected void loadContactsFromTelephonebook()
+	void loadContactsFromTelephonebook()
 	{
 		new AsyncTask<Void, Void, Map<String, ContactData>>() {
 			@Override
@@ -625,7 +625,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		}.execute(mContacts.keySet());
 	}
 
-	protected boolean updateContactData(final String number, final ContactStatus status)
+	boolean updateContactData(final String number, final ContactStatus status)
 	{
 		if (Util.isNullOrEmpty(number)) {
 			return false;
@@ -645,7 +645,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		return true;
 	}
 
-	protected void addLinphoneFriend(final String number)
+	void addLinphoneFriend(final String number)
 	{
 		Log.d(LOGTAG, "adding linphone friend for presence watching: " + number);
 		mLinphoneThread.addFriend(number);
@@ -709,38 +709,5 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	public void setVolumes(final Volumes volumes)
 	{
 		mLinphoneThread.setVolumes(volumes);
-	}
-
-	private void startRinging()
-	{
-		Log.i(LOGTAG, "start ringing");
-
-		if (mRingtone == null) {
-			final Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-			mRingtone = RingtoneManager.getRingtone(getApplicationContext(), alert);
-		}
-
-		if (!mRingtone.isPlaying()) {
-			mRingtone.play();
-		}
-
-		if (mVibrator == null) {
-			mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-		}
-
-		mVibrator.vibrate(VIBRATION_PATTERN, 0);
-	}
-
-	private void stopRinging()
-	{
-		Log.i(LOGTAG, "stop ringing");
-
-		if (mRingtone != null) {
-			mRingtone.stop();
-		}
-
-		if (mVibrator != null) {
-			mVibrator.cancel();
-		}
 	}
 }

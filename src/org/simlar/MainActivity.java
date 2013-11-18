@@ -37,9 +37,9 @@ import android.widget.ListView;
 
 public class MainActivity extends android.support.v4.app.FragmentActivity
 {
-	protected static final String LOGTAG = MainActivity.class.getSimpleName();
+	static final String LOGTAG = MainActivity.class.getSimpleName();
 
-	protected ContactsAdapter mAdapter = null;
+	ContactsAdapter mAdapter = null;
 
 	private SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorContacts();
 
@@ -51,7 +51,7 @@ public class MainActivity extends android.support.v4.app.FragmentActivity
 		}
 
 		@Override
-		protected void onBoundToSimlarService()
+		void onBoundToSimlarService()
 		{
 			if (mAdapter == null) {
 				Log.w(LOGTAG, "no contact adapter");
@@ -62,7 +62,7 @@ public class MainActivity extends android.support.v4.app.FragmentActivity
 		}
 
 		@Override
-		protected void onSimlarStatusChanged()
+		void onSimlarStatusChanged()
 		{
 			if (mAdapter == null) {
 				Log.w(LOGTAG, "no contact adapter");
@@ -73,7 +73,7 @@ public class MainActivity extends android.support.v4.app.FragmentActivity
 		}
 
 		@Override
-		protected void onPresenceStateChanged(final String number, final boolean online)
+		void onPresenceStateChanged(final String number, final boolean online)
 		{
 			if (mAdapter == null) {
 				Log.w(LOGTAG, "no contact adapter");
@@ -84,7 +84,7 @@ public class MainActivity extends android.support.v4.app.FragmentActivity
 		}
 
 		@Override
-		protected void onServiceFinishes()
+		void onServiceFinishes()
 		{
 			MainActivity.this.finish();
 		}

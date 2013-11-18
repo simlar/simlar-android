@@ -39,7 +39,7 @@ import android.widget.Toast;
 
 public class CallActivity extends Activity implements SensorEventListener
 {
-	protected static final String LOGTAG = CallActivity.class.getSimpleName();
+	static final String LOGTAG = CallActivity.class.getSimpleName();
 
 	private SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCall();
 	private SensorManager mSensorManager;
@@ -53,19 +53,19 @@ public class CallActivity extends Activity implements SensorEventListener
 		}
 
 		@Override
-		protected void onBoundToSimlarService()
+		void onBoundToSimlarService()
 		{
 			CallActivity.this.onSimlarCallStateChanged();
 		}
 
 		@Override
-		protected void onSimlarCallStateChanged()
+		void onSimlarCallStateChanged()
 		{
 			CallActivity.this.onSimlarCallStateChanged();
 		}
 
 		@Override
-		protected void onServiceFinishes()
+		void onServiceFinishes()
 		{
 			CallActivity.this.finish();
 		}
@@ -145,7 +145,7 @@ public class CallActivity extends Activity implements SensorEventListener
 		tvQuality.setText(quality);
 	}
 
-	protected void setCallEncryption(final boolean encrypted, final String authenticationToken, final boolean authenticationTokenVerified)
+	void setCallEncryption(final boolean encrypted, final String authenticationToken, final boolean authenticationTokenVerified)
 	{
 		final TextView label = (TextView) findViewById(R.id.textViewLabelAuthenticationToken);
 		final TextView token = (TextView) findViewById(R.id.textViewAuthenticationToken);
@@ -183,7 +183,7 @@ public class CallActivity extends Activity implements SensorEventListener
 		}
 	}
 
-	protected void onSimlarCallStateChanged()
+	void onSimlarCallStateChanged()
 	{
 		if (mCommunicator.getService() == null) {
 			Log.e(LOGTAG, "ERROR: onSimlarCallStateChanged but not bound to service");

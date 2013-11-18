@@ -53,20 +53,20 @@ import android.util.Log;
 
 public class LinphoneThread extends Thread implements LinphoneCoreListener
 {
-	protected static final String LOGTAG = LinphoneThread.class.getSimpleName();
+	static final String LOGTAG = LinphoneThread.class.getSimpleName();
 
-	protected Handler mLinphoneThreadHandler = null;
-	protected Handler mMainThreadHandler = new Handler();
+	Handler mLinphoneThreadHandler = null;
+	Handler mMainThreadHandler = new Handler();
 
 	// NOTICE: the linphone handler should only be used in the LINPHONE-THREAD
-	protected LinphoneHandler mLinphoneHandler = new LinphoneHandler();
+	LinphoneHandler mLinphoneHandler = new LinphoneHandler();
 
 	// NOTICE: the following members should only be used in the MAIN-THREAD
-	protected LinphoneHandlerListener mListener = null;
-	protected RegistrationState mRegistrationState = RegistrationState.RegistrationNone;
-	protected Set<String> mFriends = new HashSet<String>();
-	protected Volumes mVolumes = new Volumes();
-	protected Context mContext = null;
+	LinphoneHandlerListener mListener = null;
+	RegistrationState mRegistrationState = RegistrationState.RegistrationNone;
+	Set<String> mFriends = new HashSet<String>();
+	Volumes mVolumes = new Volumes();
+	Context mContext = null;
 
 	public LinphoneThread(LinphoneHandlerListener listener, Context context)
 	{
@@ -150,7 +150,7 @@ public class LinphoneThread extends Thread implements LinphoneCoreListener
 		}
 	}
 
-	protected void linphoneIterator()
+	void linphoneIterator()
 	{
 		if (mLinphoneHandler == null) {
 			Log.e(LOGTAG, "linphoneIterator no handler => quitting");
@@ -321,7 +321,7 @@ public class LinphoneThread extends Thread implements LinphoneCoreListener
 		return mVolumes;
 	}
 
-	static protected String getNumber(final LinphoneCall call)
+	static String getNumber(final LinphoneCall call)
 	{
 		if (call == null || call.getRemoteAddress() == null) {
 			return "";
@@ -378,7 +378,7 @@ public class LinphoneThread extends Thread implements LinphoneCoreListener
 		Log.d(LOGTAG, "displayStatus message='" + message + "'");
 	}
 
-	protected LinphoneCall.State fixLinphoneCallState(final LinphoneCall.State callState)
+	LinphoneCall.State fixLinphoneCallState(final LinphoneCall.State callState)
 	{
 		if (callState == LinphoneCall.State.CallReleased || callState == LinphoneCall.State.Error) {
 			if (mLinphoneHandler == null || mLinphoneHandler.hasNoCurrentCalls()) {

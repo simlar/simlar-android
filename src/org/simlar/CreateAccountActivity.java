@@ -44,20 +44,20 @@ import android.widget.TextView;
 
 public class CreateAccountActivity extends Activity
 {
-	protected static final String LOGTAG = CreateAccountActivity.class.getSimpleName();
+	static final String LOGTAG = CreateAccountActivity.class.getSimpleName();
 	public static final String INTENT_EXTRA_NUMBER = "telefonNumber";
 	private static final int SECONDS_TO_WAIT_FOR_SMS = 30;
 	private static final String SIMLAR_SMS_SOURCE = "+4922199999930";
 
 	private View mLayoutProgress = null;
-	protected ProgressBar mProgressRequest = null;
-	protected ProgressBar mProgressWaitingForSMS = null;
-	protected ProgressBar mProgressConfirm = null;
-	protected ProgressBar mProgressFirstLogIn = null;
+	ProgressBar mProgressRequest = null;
+	ProgressBar mProgressWaitingForSMS = null;
+	ProgressBar mProgressConfirm = null;
+	ProgressBar mProgressFirstLogIn = null;
 	private TextView mWaitingForSmsText = null;
 	private EditText mEditRegistrationCode = null;
 	private TextView mDetails = null;
-	protected Button mButtonConfirm = null;
+	Button mButtonConfirm = null;
 	private Button mButtonCancel = null;
 
 	private int mSecondsToStillWaitForSms = 0;
@@ -74,7 +74,7 @@ public class CreateAccountActivity extends Activity
 		}
 
 		@Override
-		protected void onTestRegistrationFailed()
+		void onTestRegistrationFailed()
 		{
 			Log.i(LOGTAG, "onTestRegistrationFailed");
 			mProgressFirstLogIn.setVisibility(View.INVISIBLE);
@@ -82,7 +82,7 @@ public class CreateAccountActivity extends Activity
 		}
 
 		@Override
-		protected void onTestRegistrationSuccess()
+		void onTestRegistrationSuccess()
 		{
 			Log.i(LOGTAG, "onTestRegistrationSuccess");
 			mProgressFirstLogIn.setVisibility(View.INVISIBLE);
@@ -91,7 +91,7 @@ public class CreateAccountActivity extends Activity
 		}
 
 		@Override
-		protected void onServiceFinishes()
+		void onServiceFinishes()
 		{
 			Log.i(LOGTAG, "onServiceFinishes");
 			setResult(RESULT_OK);
@@ -268,7 +268,7 @@ public class CreateAccountActivity extends Activity
 		}.execute(telephoneNumber, smsText);
 	}
 
-	protected void waitForSms()
+	void waitForSms()
 	{
 		Log.i(LOGTAG, "waiting for sms");
 		mProgressWaitingForSMS.setVisibility(View.VISIBLE);
@@ -277,7 +277,7 @@ public class CreateAccountActivity extends Activity
 		waitingForSmsIteration();
 	}
 
-	protected void waitingForSmsIteration()
+	void waitingForSmsIteration()
 	{
 		mWaitingForSmsText.setText(getString(R.string.create_account_activity_waiting_for_sms) + " (" + mSecondsToStillWaitForSms + "s)");
 		--mSecondsToStillWaitForSms;
@@ -305,7 +305,7 @@ public class CreateAccountActivity extends Activity
 		onError(R.string.create_account_activity_error_sms_timeout);
 	}
 
-	protected void onSmsReceived(final String sender, final String message)
+	void onSmsReceived(final String sender, final String message)
 	{
 		if (Util.isNullOrEmpty(sender) || Util.isNullOrEmpty(message)) {
 			return;
@@ -333,7 +333,7 @@ public class CreateAccountActivity extends Activity
 		confirmRegistrationCode(registrationCode);
 	}
 
-	protected void confirmRegistrationCode(final String registrationCode)
+	void confirmRegistrationCode(final String registrationCode)
 	{
 		Log.i(LOGTAG, "confirmRegistrationCode: " + registrationCode);
 
@@ -379,13 +379,13 @@ public class CreateAccountActivity extends Activity
 
 	}
 
-	protected void connectToServer()
+	void connectToServer()
 	{
 		mProgressFirstLogIn.setVisibility(View.VISIBLE);
 		mCommunicator.getService().connect();
 	}
 
-	protected void onError(int resId)
+	void onError(int resId)
 	{
 		mLayoutProgress.setVisibility(View.GONE);
 		mDetails.setText(resId);

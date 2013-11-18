@@ -31,11 +31,11 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 
 public class VolumesControlActivity extends Activity
 {
-	protected static final String LOGTAG = VolumesControlActivity.class.getSimpleName();
+	static final String LOGTAG = VolumesControlActivity.class.getSimpleName();
 
-	protected SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorVolumes();
+	SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorVolumes();
 
-	protected Volumes mVolumes = null;
+	Volumes mVolumes = null;
 
 	private class SimlarServiceCommunicatorVolumes extends SimlarServiceCommunicator
 	{
@@ -45,13 +45,13 @@ public class VolumesControlActivity extends Activity
 		}
 
 		@Override
-		protected void onBoundToSimlarService()
+		void onBoundToSimlarService()
 		{
 			VolumesControlActivity.this.setVolumes();
 		}
 
 		@Override
-		protected void onSimlarCallStateChanged()
+		void onSimlarCallStateChanged()
 		{
 			if (getService() == null) {
 				Log.e(LOGTAG, "service is null");
@@ -168,7 +168,7 @@ public class VolumesControlActivity extends Activity
 		setButtonMicophoneMute();
 	}
 
-	protected void setVolumes()
+	void setVolumes()
 	{
 		mVolumes = mCommunicator.getService().getVolumes();
 

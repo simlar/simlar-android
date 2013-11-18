@@ -43,7 +43,7 @@ public class CreateAccount
 
 		private final int mErrorId;
 		private final String mResult1;
-		protected final String mResult2;
+		final String mResult2;
 
 		public Result(final int errorId, final String result1, final String result2)
 		{
