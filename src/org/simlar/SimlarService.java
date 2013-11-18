@@ -33,12 +33,16 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
@@ -74,12 +78,22 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	private VibratorThread mVibratorThread = null;
 	private RingtoneThread mRingtoneThread = null;
 	private boolean mResumeMusicAfterCall = false;
+	private NetworkChangeReceiver mNetworkChangeReceiver = new NetworkChangeReceiver();
 
 	public class SimlarServiceBinder extends Binder
 	{
 		SimlarService getService()
 		{
 			return SimlarService.this;
+		}
+	}
+
+	class NetworkChangeReceiver extends BroadcastReceiver
+	{
+		@Override
+		public void onReceive(Context context, Intent intent)
+		{
+			SimlarService.this.checkNetworkConnectivityAndRefreshRegisters();
 		}
 	}
 
@@ -167,6 +181,10 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 
 		mLinphoneThread = new LinphoneThread(this, this);
 
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+		registerReceiver(mNetworkChangeReceiver, intentFilter);
+
 		mHandler.post(new Runnable() {
 			@Override
 			public void run()
@@ -253,6 +271,8 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	{
 		Log.i(LOGTAG, "onDestroy");
 
+		unregisterReceiver(mNetworkChangeReceiver);
+
 		// just in case
 		if (mWakeLock.isHeld()) {
 			mWakeLock.release();
@@ -266,6 +286,21 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		Toast.makeText(this, R.string.simlarservice_on_destroy, Toast.LENGTH_SHORT).show();
 
 		Log.i(LOGTAG, "onDestroy ended");
+	}
+
+	void checkNetworkConnectivityAndRefreshRegisters()
+	{
+		final NetworkInfo ni = ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+
+		if (ni == null) {
+			Log.e(LOGTAG, "no NetworkInfo found");
+			return;
+		}
+
+		Log.i(LOGTAG, "NetworkInfo " + ni.getTypeName() + " " + ni.getState());
+		if (ni.isConnected()) {
+			mLinphoneThread.refreshRegisters();
+		}
 	}
 
 	@Override
