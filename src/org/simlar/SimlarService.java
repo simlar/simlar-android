@@ -38,6 +38,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
@@ -72,6 +73,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	private Class<?> mNotificationActivity = null;
 	private VibratorThread mVibratorThread = null;
 	private RingtoneThread mRingtoneThread = null;
+	private boolean mResumeMusicAfterCall = false;
 
 	public class SimlarServiceBinder extends Binder
 	{
@@ -370,6 +372,11 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 				mWifiLock.acquire();
 			}
 
+			if (((AudioManager) getSystemService(Context.AUDIO_SERVICE)).isMusicActive()) {
+				sendBroadcast(new Intent("com.android.music.musicservicecommand.pause"));
+				mResumeMusicAfterCall = true;
+			}
+
 			if (mSimlarCallState.isRinging()) {
 				Log.i(LOGTAG, "starting RingingActivity");
 				startActivity(new Intent(SimlarService.this, RingingActivity.class).addFlags(
@@ -389,6 +396,11 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 			}
 			if (mWifiLock.isHeld()) {
 				mWifiLock.release();
+			}
+
+			if (mResumeMusicAfterCall) {
+				sendBroadcast(new Intent("com.android.music.musicservicecommand.togglepause"));
+				mResumeMusicAfterCall = false;
 			}
 		}
 
