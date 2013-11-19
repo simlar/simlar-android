@@ -274,18 +274,41 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		unregisterReceiver(mNetworkChangeReceiver);
 
 		// just in case
-		if (mWakeLock.isHeld()) {
-			mWakeLock.release();
-		}
-
-		if (mWifiLock.isHeld()) {
-			mWifiLock.release();
-		}
+		releaseWakeLock();
+		releaseWifiLock();
 
 		// Tell the user we stopped.
 		Toast.makeText(this, R.string.simlarservice_on_destroy, Toast.LENGTH_SHORT).show();
 
 		Log.i(LOGTAG, "onDestroy ended");
+	}
+
+	private void acquireWakeLock()
+	{
+		if (!mWakeLock.isHeld()) {
+			mWakeLock.acquire();
+		}
+	}
+
+	private void acquireWifiLock()
+	{
+		if (!mWifiLock.isHeld()) {
+			mWifiLock.acquire();
+		}
+	}
+
+	private void releaseWakeLock()
+	{
+		if (mWakeLock.isHeld()) {
+			mWakeLock.release();
+		}
+	}
+
+	private void releaseWifiLock()
+	{
+		if (mWifiLock.isHeld()) {
+			mWifiLock.release();
+		}
 	}
 
 	void checkNetworkConnectivityAndRefreshRegisters()
@@ -400,12 +423,8 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		if (mSimlarCallState.isNewCall()) {
 			notifySimlarStatusChanged(SimlarStatus.ONGOING_CALL);
 
-			if (!mWakeLock.isHeld()) {
-				mWakeLock.acquire();
-			}
-			if (!mWifiLock.isHeld()) {
-				mWifiLock.acquire();
-			}
+			acquireWakeLock();
+			acquireWifiLock();
 
 			if (((AudioManager) getSystemService(Context.AUDIO_SERVICE)).isMusicActive()) {
 				sendBroadcast(new Intent("com.android.music.musicservicecommand.pause"));
@@ -426,12 +445,8 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		if (mSimlarCallState.isEndedCall()) {
 			notifySimlarStatusChanged(SimlarStatus.ONLINE);
 
-			if (!mWakeLock.isHeld()) {
-				mWakeLock.release();
-			}
-			if (mWifiLock.isHeld()) {
-				mWifiLock.release();
-			}
+			releaseWakeLock();
+			releaseWifiLock();
 
 			if (mResumeMusicAfterCall) {
 				sendBroadcast(new Intent("com.android.music.musicservicecommand.togglepause"));
