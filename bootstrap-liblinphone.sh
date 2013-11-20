@@ -6,6 +6,7 @@ set -eu -o pipefail
 declare -r COMPILE_SCRIPT="$(dirname $(readlink -f $0))/compile-liblinphone.sh"
 declare -r LINPHONE_PATCH_DIR="$(dirname $(readlink -f $0))/patches/linphone"
 declare -r MEDIASTREAMER2_PATCH_DIR="$(dirname $(readlink -f $0))/patches/mediastreamer2"
+declare -r BELLESIP_PATCH_DIR="$(dirname $(readlink -f $0))/patches/belle-sip"
 
 declare -r BUILD_DIR="liblinphone_build_$(date '+%Y%m%d_%H%M%S')"
 mkdir "${BUILD_DIR}"
@@ -26,6 +27,12 @@ if [ -d "${MEDIASTREAMER2_PATCH_DIR}" ] ; then
 	cd submodules/linphone/mediastreamer2
 	find "${MEDIASTREAMER2_PATCH_DIR}" -maxdepth 1 -name \*.patch -exec git am {} \;
 	cd ../../..
+fi
+
+if [ -d "${BELLESIP_PATCH_DIR}" ] ; then
+	cd submodules/belle-sip
+	find "${BELLESIP_PATCH_DIR}" -maxdepth 1 -name \*.patch -exec git am {} \;
+	cd ../..
 fi
 
 cd ../..
