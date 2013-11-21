@@ -168,6 +168,27 @@ public class LinphoneThread extends Thread implements LinphoneCoreListener
 		}, 20);
 	}
 
+	public void refreshRegisters()
+	{
+		if (mLinphoneThreadHandler == null) {
+			Log.e(LOGTAG, "handler is null, probably thread not started");
+			return;
+		}
+
+		if (mLinphoneHandler == null) {
+			Log.e(LOGTAG, "refreshRegisters no handler => quitting");
+			return;
+		}
+
+		mLinphoneThreadHandler.post(new Runnable() {
+			@Override
+			public void run()
+			{
+				mLinphoneHandler.refreshRegisters();
+			}
+		});
+	}
+
 	public void unregister()
 	{
 		if (mLinphoneThreadHandler == null) {
@@ -347,6 +368,12 @@ public class LinphoneThread extends Thread implements LinphoneCoreListener
 			{
 				if (mRegistrationState == state) {
 					Log.d(LOGTAG, "registration state for " + identity + " not changed : " + state.toString() + " " + message);
+					return;
+				}
+
+				if (mRegistrationState == RegistrationState.RegistrationOk && state == RegistrationState.RegistrationProgress
+						&& message.equals("Refresh registration")) {
+					Log.i(LOGTAG, "registration state for " + identity + " ignored: " + state + "as it is because of refreshRegisters");
 					return;
 				}
 

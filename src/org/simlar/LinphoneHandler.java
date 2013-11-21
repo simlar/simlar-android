@@ -205,6 +205,17 @@ public class LinphoneHandler
 		mLinphoneCore.iterate();
 	}
 
+	public void refreshRegisters()
+	{
+		if (!isInitialized()) {
+			Log.i(LOGTAG, "refreshRegisters called but linphoneCore not initialized");
+			return;
+		}
+
+		Log.i(LOGTAG, "refreshRegisters");
+		mLinphoneCore.refreshRegisters();
+	}
+
 	public void setCredentials(final String mySimlarId, final String password)
 	{
 		if (mLinphoneCore == null) {
