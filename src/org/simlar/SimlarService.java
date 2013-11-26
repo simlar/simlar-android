@@ -497,10 +497,6 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 				Log.i(LOGTAG, "starting RingingActivity");
 				startActivity(new Intent(SimlarService.this, RingingActivity.class).addFlags(
 						Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-			} else {
-				Log.i(LOGTAG, "starting CallActivity");
-				startActivity(new Intent(SimlarService.this, CallActivity.class).addFlags(
-						Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
 			}
 		}
 

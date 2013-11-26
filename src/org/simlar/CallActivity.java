@@ -41,6 +41,8 @@ public class CallActivity extends Activity implements SensorEventListener
 {
 	static final String LOGTAG = CallActivity.class.getSimpleName();
 
+	public static final String INTENT_EXTRA_SIMLAR_ID = "simlarId";
+
 	private SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCall();
 	private SensorManager mSensorManager;
 	private Sensor mSensor;
@@ -55,7 +57,12 @@ public class CallActivity extends Activity implements SensorEventListener
 		@Override
 		void onBoundToSimlarService()
 		{
-			CallActivity.this.onSimlarCallStateChanged();
+			final String simlarId = CallActivity.this.getIntent().getStringExtra(INTENT_EXTRA_SIMLAR_ID);
+			if (!Util.isNullOrEmpty(simlarId)) {
+				getService().call(simlarId);
+			} else {
+				CallActivity.this.onSimlarCallStateChanged();
+			}
 		}
 
 		@Override
