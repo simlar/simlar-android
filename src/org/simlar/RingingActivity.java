@@ -70,7 +70,8 @@ public class RingingActivity extends Activity
 		setContentView(R.layout.activity_ringing);
 
 		// make sure this activity is shown even if the phone is locked
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN |
+				WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
 				WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
 				WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
 				WindowManager.LayoutParams.FLAG_IGNORE_CHEEK_PRESSES);
