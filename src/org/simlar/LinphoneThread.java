@@ -436,7 +436,7 @@ public class LinphoneThread extends Thread implements LinphoneCoreListener
 						&& (state == LinphoneCall.State.CallEnd || state == LinphoneCall.State.Error || state == LinphoneCall.State.CallReleased)) {
 					if (msg.equals("Call declined.")) {
 						msgId = R.string.call_ended_because_declined;
-					} else if (msg.equals("User not found.")) {
+					} else if (msg.equals("Not Found")) {
 						msgId = R.string.call_ended_because_user_offline;
 					} else if (msg.equals("Incompatible media parameters.")) {
 						msgId = R.string.call_ended_because_incompatible_media;
