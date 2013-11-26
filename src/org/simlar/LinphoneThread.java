@@ -424,12 +424,7 @@ public class LinphoneThread extends Thread implements LinphoneCoreListener
 		// LinphoneCall.State is immutable
 
 		final String number = getNumber(call);
-
-		Log.i(LOGTAG, "callState call='" + call.toString() + "' state='" + state + "' message='" + msg + "'");
-		Log.i(LOGTAG, "AuthenticationToken='" + call.getAuthenticationToken() + "'");
-		Log.i(LOGTAG, "RemoteAddress='" + call.getRemoteAddress().asStringUriOnly() + "'");
-		Log.i(LOGTAG, "CurrentQuality='" + call.getCurrentQuality() + "' AverageQuality='" + call.getAverageQuality() + "'");
-		Log.i(LOGTAG, "CurrentParams='" + call.getCurrentParamsCopy().getUsedAudioCodec() + "'");
+		Log.i(LOGTAG, "callState changed number='" + number + "' state='" + state + "' message='" + msg + "'");
 
 		mMainThreadHandler.post(new Runnable() {
 
