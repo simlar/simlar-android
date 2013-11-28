@@ -168,8 +168,8 @@ public class LinphoneHandler
 			enableAudioCodec("GSM", 8000, 1, false);
 			enableAudioCodec("G722", 8000, 1, false);
 			//enableDisableAudioCodec("G729", 8000, 1, true);
-			enableAudioCodec("PCMU", 8000, 1, false);
-			enableAudioCodec("PCMA", 8000, 1, false);
+			enableAudioCodec("PCMU", 8000, 1, true);
+			enableAudioCodec("PCMA", 8000, 1, true);
 			enableAudioCodec("AMR", 8000, 1, false);
 			//enableDisableAudioCodec("AMR-WB", 16000, 1, true);
 			enableAudioCodec("SILK", 24000, 1, false);
