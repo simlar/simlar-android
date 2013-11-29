@@ -59,6 +59,8 @@ public class SimlarCallState
 				return R.string.call_ended_because_user_offline;
 			} else if (message.equals("Unsupported media type")) {
 				return R.string.call_ended_because_incompatible_media;
+			} else if (message.equals("Busy here")) {
+				return R.string.call_ended_because_user_busy;
 			}
 		}
 
