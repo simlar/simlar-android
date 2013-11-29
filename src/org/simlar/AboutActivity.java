@@ -27,7 +27,6 @@ import android.widget.TextView;
 
 public class AboutActivity extends Activity
 {
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -43,5 +42,4 @@ public class AboutActivity extends Activity
 	{
 		return true;
 	}
-
 }
