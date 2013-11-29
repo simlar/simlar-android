@@ -49,8 +49,24 @@ public class SimlarCallState
 		return callState == State.CallEnd || callState == State.Error || callState == State.CallReleased;
 	}
 
-	public boolean updateCallStateChanged(final String displayName, final State callState, final int msgId)
+	private static int getErrorMessageId(final State callState, final String message)
 	{
+		if (!Util.isNullOrEmpty(message) && possibleErrorMessage(callState)) {
+			if (message.equals("Call declined.")) {
+				return R.string.call_ended_because_declined;
+			} else if (message.equals("Not Found")) {
+				return R.string.call_ended_because_user_offline;
+			} else if (message.equals("Incompatible media parameters.")) {
+				return R.string.call_ended_because_incompatible_media;
+			}
+		}
+
+		return -1;
+	}
+
+	public boolean updateCallStateChanged(final String displayName, final State callState, final String message)
+	{
+		final int msgId = getErrorMessageId(callState, message);
 		final boolean updateErrorMessageId = !(possibleErrorMessage(callState) && msgId <= 0);
 
 		if (Util.equalString(displayName, mDisplayName) && equalCallState(callState, mLinphoneCallState)

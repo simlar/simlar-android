@@ -452,9 +452,9 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	}
 
 	@Override
-	public void onCallStateChanged(final String number, final State callState, final int msgId)
+	public void onCallStateChanged(final String number, final State callState, final String message)
 	{
-		if (!mSimlarCallState.updateCallStateChanged(getContact(number).getNameOrNumber(), callState, msgId)) {
+		if (!mSimlarCallState.updateCallStateChanged(getContact(number).getNameOrNumber(), callState, message)) {
 			Log.d(LOGTAG, "SimlarCallState staying the same: " + mSimlarCallState);
 			return;
 		}
