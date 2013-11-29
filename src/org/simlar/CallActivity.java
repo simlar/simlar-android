@@ -222,8 +222,8 @@ public class CallActivity extends Activity implements SensorEventListener
 			volumes.setVisibility(View.INVISIBLE);
 		}
 
-		if (simlarCallState.hasMessage()) {
-			Toast.makeText(this, String.format(getString(simlarCallState.getMsgId()), simlarCallState.getDisplayName()), Toast.LENGTH_LONG).show();
+		if (simlarCallState.hasErrorMessage()) {
+			Toast.makeText(this, String.format(getString(simlarCallState.getErrorMessageId()), simlarCallState.getDisplayName()), Toast.LENGTH_LONG).show();
 		}
 
 		if (simlarCallState.isEndedCall()) {
