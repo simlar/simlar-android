@@ -89,7 +89,7 @@
     <string name="button_volumes">Volumes</string>
     <string name="call_ended_because_declined">%1$s declined your call.</string>
     <string name="call_ended_because_user_offline">%1$s is offline.</string>
-    <string name="call_ended_because_incompatible_media">%1$s has incompatible media/</string>
+    <string name="call_ended_because_incompatible_media">%1$s has incompatible media type.</string>
     <string name="verify_number_activity_title">Verify your telephone number</string>
     <string name="verify_number_activity_welcome">Welcome to Simlar.</string>
     <string name="verify_number_activity_please_put_in_your_number">It is necessary to create an account based on your telephone number. This enables others to find you and you to find others.</string>

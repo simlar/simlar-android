@@ -51,12 +51,13 @@ public class SimlarCallState
 
 	private static int getErrorMessageId(final State callState, final String message)
 	{
+		// see linphone-android/submodules/belle-sip/src/message.c: well_known_codes
 		if (!Util.isNullOrEmpty(message) && possibleErrorMessage(callState)) {
 			if (message.equals("Call declined.")) {
 				return R.string.call_ended_because_declined;
 			} else if (message.equals("Not Found")) {
 				return R.string.call_ended_because_user_offline;
-			} else if (message.equals("Incompatible media parameters.")) {
+			} else if (message.equals("Unsupported media type")) {
 				return R.string.call_ended_because_incompatible_media;
 			}
 		}
