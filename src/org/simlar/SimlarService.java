@@ -29,16 +29,21 @@ import org.linphone.core.LinphoneCall.State;
 import org.linphone.core.LinphoneCore.RegistrationState;
 import org.simlar.PreferencesHelper.NotInitedException;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
@@ -49,6 +54,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.os.SystemClock;
 import android.provider.ContactsContract;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -74,12 +80,33 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	private VibratorThread mVibratorThread = null;
 	private RingtoneThread mRingtoneThread = null;
 	private boolean mResumeMusicAfterCall = false;
+	private NetworkChangeReceiver mNetworkChangeReceiver = new NetworkChangeReceiver();
+	private PendingIntent mkeepAwakePendingIntent = null;
+	private KeepAwakeReceiver mKeepAwakeReceiver = new KeepAwakeReceiver();
 
 	public class SimlarServiceBinder extends Binder
 	{
 		SimlarService getService()
 		{
 			return SimlarService.this;
+		}
+	}
+
+	class NetworkChangeReceiver extends BroadcastReceiver
+	{
+		@Override
+		public void onReceive(Context context, Intent intent)
+		{
+			SimlarService.this.checkNetworkConnectivityAndRefreshRegisters();
+		}
+	}
+
+	class KeepAwakeReceiver extends BroadcastReceiver
+	{
+		@Override
+		public void onReceive(Context context, Intent intent)
+		{
+			SimlarService.this.keepAwake();
 		}
 	}
 
@@ -167,6 +194,12 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 
 		mLinphoneThread = new LinphoneThread(this, this);
 
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+		registerReceiver(mNetworkChangeReceiver, intentFilter);
+
+		startKeepAwake();
+
 		mHandler.post(new Runnable() {
 			@Override
 			public void run()
@@ -253,19 +286,99 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	{
 		Log.i(LOGTAG, "onDestroy");
 
-		// just in case
-		if (mWakeLock.isHeld()) {
-			mWakeLock.release();
-		}
+		unregisterReceiver(mNetworkChangeReceiver);
 
-		if (mWifiLock.isHeld()) {
-			mWifiLock.release();
-		}
+		stopKeepAwake();
+
+		// just in case
+		releaseWakeLock();
+		releaseWifiLock();
 
 		// Tell the user we stopped.
 		Toast.makeText(this, R.string.simlarservice_on_destroy, Toast.LENGTH_SHORT).show();
 
 		Log.i(LOGTAG, "onDestroy ended");
+	}
+
+	private void acquireWakeLock()
+	{
+		if (!mWakeLock.isHeld()) {
+			mWakeLock.acquire();
+		}
+	}
+
+	private void acquireWifiLock()
+	{
+		if (!mWifiLock.isHeld()) {
+			mWifiLock.acquire();
+		}
+	}
+
+	void releaseWakeLock()
+	{
+		if (mWakeLock.isHeld()) {
+			mWakeLock.release();
+		}
+	}
+
+	private void releaseWifiLock()
+	{
+		if (mWifiLock.isHeld()) {
+			mWifiLock.release();
+		}
+	}
+
+	void checkNetworkConnectivityAndRefreshRegisters()
+	{
+		final NetworkInfo ni = ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+
+		if (ni == null) {
+			Log.e(LOGTAG, "no NetworkInfo found");
+			return;
+		}
+
+		Log.i(LOGTAG, "NetworkInfo " + ni.getTypeName() + " " + ni.getState());
+		if (ni.isConnected()) {
+			mLinphoneThread.refreshRegisters();
+		}
+	}
+
+	private void startKeepAwake()
+	{
+		final Intent startIntent = new Intent("org.simlar.keepAwake");
+		mkeepAwakePendingIntent = PendingIntent.getBroadcast(this, 0, startIntent, 0);
+
+		((AlarmManager) getSystemService(Context.ALARM_SERVICE))
+				.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 600000, 600000, mkeepAwakePendingIntent);
+
+		IntentFilter filter = new IntentFilter();
+		filter.addAction("org.simlar.keepAwake");
+		registerReceiver(mKeepAwakeReceiver, filter);
+	}
+
+	private void stopKeepAwake()
+	{
+		unregisterReceiver(mKeepAwakeReceiver);
+		((AlarmManager) getSystemService(Context.ALARM_SERVICE)).cancel(mkeepAwakePendingIntent);
+	}
+
+	void keepAwake()
+	{
+		// idea from linphones KeepAliveHandler
+
+		checkNetworkConnectivityAndRefreshRegisters();
+
+		// make sure iterate will have enough time before device eventually goes to sleep
+		acquireWakeLock();
+		mHandler.postDelayed(new Runnable() {
+			@Override
+			public void run()
+			{
+				if (!getSimlarCallState().isNewCall()) {
+					releaseWakeLock();
+				}
+			}
+		}, 4000);
 	}
 
 	@Override
@@ -365,12 +478,8 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		if (mSimlarCallState.isNewCall()) {
 			notifySimlarStatusChanged(SimlarStatus.ONGOING_CALL);
 
-			if (!mWakeLock.isHeld()) {
-				mWakeLock.acquire();
-			}
-			if (!mWifiLock.isHeld()) {
-				mWifiLock.acquire();
-			}
+			acquireWakeLock();
+			acquireWifiLock();
 
 			if (((AudioManager) getSystemService(Context.AUDIO_SERVICE)).isMusicActive()) {
 				sendBroadcast(new Intent("com.android.music.musicservicecommand.pause"));
@@ -391,12 +500,8 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		if (mSimlarCallState.isEndedCall()) {
 			notifySimlarStatusChanged(SimlarStatus.ONLINE);
 
-			if (!mWakeLock.isHeld()) {
-				mWakeLock.release();
-			}
-			if (mWifiLock.isHeld()) {
-				mWifiLock.release();
-			}
+			releaseWakeLock();
+			releaseWifiLock();
 
 			if (mResumeMusicAfterCall) {
 				sendBroadcast(new Intent("com.android.music.musicservicecommand.togglepause"));
