@@ -129,9 +129,11 @@ class RingtoneThread
 				public void run()
 				{
 					Log.i(LOGTAG, "stop ringing");
-					mMediaPlayer.stop();
-					mMediaPlayer.release();
-					mMediaPlayer = null;
+					if (mMediaPlayer != null) {
+						mMediaPlayer.stop();
+						mMediaPlayer.release();
+						mMediaPlayer = null;
+					}
 					Looper.myLooper().quit();
 					Log.i(LOGTAG, "ringing stopped");
 				}
