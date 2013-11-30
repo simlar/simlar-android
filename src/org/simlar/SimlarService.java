@@ -79,7 +79,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	private Class<?> mNotificationActivity = null;
 	private VibratorThread mVibratorThread = null;
 	private RingtoneThread mRingtoneThread = null;
-	private boolean mResumeMusicAfterCall = false;
+	private boolean mHasAudioFocus = false;
 	private NetworkChangeReceiver mNetworkChangeReceiver = new NetworkChangeReceiver();
 	private PendingIntent mkeepAwakePendingIntent = null;
 	private KeepAwakeReceiver mKeepAwakeReceiver = new KeepAwakeReceiver();
@@ -481,9 +481,16 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 			acquireWakeLock();
 			acquireWifiLock();
 
-			if (((AudioManager) getSystemService(Context.AUDIO_SERVICE)).isMusicActive()) {
-				sendBroadcast(new Intent("com.android.music.musicservicecommand.pause"));
-				mResumeMusicAfterCall = true;
+			if (!mHasAudioFocus) {
+				// We acquire AUDIOFOCUS_GAIN_TRANSIENT instead of AUDIOFOCUS_GAIN because we want the music to resume after ringing or call
+				final AudioManager audioManger = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+				if (audioManger.requestAudioFocus(null, AudioManager.STREAM_VOICE_CALL, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT) == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+					mHasAudioFocus = true;
+					Log.i(LOGTAG, "audio focus granted");
+				} else {
+					Log.e(LOGTAG, "audio focus not granted");
+				}
+
 			}
 
 			if (mSimlarCallState.isRinging()) {
@@ -503,9 +510,14 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 			releaseWakeLock();
 			releaseWifiLock();
 
-			if (mResumeMusicAfterCall) {
-				sendBroadcast(new Intent("com.android.music.musicservicecommand.togglepause"));
-				mResumeMusicAfterCall = false;
+			if (mHasAudioFocus) {
+				final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+				if (audioManager.abandonAudioFocus(null) == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+					Log.i(LOGTAG, "audio focus released");
+				} else {
+					Log.e(LOGTAG, "releasing audio focus not granted");
+				}
+				mHasAudioFocus = false;
 			}
 		}
 
