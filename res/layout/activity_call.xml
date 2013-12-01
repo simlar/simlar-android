@@ -29,13 +29,13 @@
     tools:context=".CallActivity" >
 
     <LinearLayout
-        android:id="@+id/linearLayoutErrorMessage"
+        android:id="@+id/linearLayoutCallStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true" >
 
         <TextView
-            android:id="@+id/textViewErrorMessage"
+            android:id="@+id/textViewCallStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium" />

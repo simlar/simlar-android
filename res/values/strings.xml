@@ -87,6 +87,8 @@
     <string name="button_authentication_token_verify">Verify</string>
     <string name="button_authentication_token_wrong">Wrong</string>
     <string name="button_volumes">Volumes</string>
+    <string name="call_outgoing_connecting">Connecting ...</string>
+    <string name="call_outgoing_ringing">Ringing ...</string>
     <string name="call_ended_because_declined">%1$s declined your call.</string>
     <string name="call_ended_because_user_offline">%1$s is offline.</string>
     <string name="call_ended_because_incompatible_media">%1$s has incompatible media type.</string>

@@ -101,10 +101,10 @@ public class CallActivity extends Activity implements SensorEventListener
 		buttonVerify.setVisibility(View.INVISIBLE);
 		buttonWrong.setVisibility(View.INVISIBLE);
 
-		final LinearLayout errorMessage = (LinearLayout) findViewById(R.id.linearLayoutErrorMessage);
+		final LinearLayout callStatus = (LinearLayout) findViewById(R.id.linearLayoutCallStatus);
 		final LinearLayout connection = (LinearLayout) findViewById(R.id.linearLayoutConnection);
 		final LinearLayout iceAndCodec = (LinearLayout) findViewById(R.id.linearLayoutIceStateAndCodec);
-		errorMessage.setVisibility(View.INVISIBLE);
+		callStatus.setVisibility(View.INVISIBLE);
 		connection.setVisibility(View.INVISIBLE);
 		iceAndCodec.setVisibility(View.INVISIBLE);
 
@@ -148,10 +148,10 @@ public class CallActivity extends Activity implements SensorEventListener
 		tv.setText(codec);
 	}
 
-	private void setErrorMessage(final String message)
+	private void setCallStatus(final String status)
 	{
-		final TextView tv = (TextView) findViewById(R.id.textViewErrorMessage);
-		tv.setText(message);
+		final TextView tv = (TextView) findViewById(R.id.textViewCallStatus);
+		tv.setText(status);
 	}
 
 	private void setBandwidthInfo(String upload, String download, String quality)
@@ -221,11 +221,11 @@ public class CallActivity extends Activity implements SensorEventListener
 		setTitle(getString(R.string.title_activity_call) + " " + simlarCallState.getDisplayName());
 		setCallEncryption(simlarCallState.isEncrypted(), simlarCallState.getAuthenticationToken(), simlarCallState.isAuthenticationTokenVerified());
 
-		final LinearLayout errorMessage = (LinearLayout) findViewById(R.id.linearLayoutErrorMessage);
+		final LinearLayout callStatus = (LinearLayout) findViewById(R.id.linearLayoutCallStatus);
 		final LinearLayout iceAndCodec = (LinearLayout) findViewById(R.id.linearLayoutIceStateAndCodec);
 		final LinearLayout connection = (LinearLayout) findViewById(R.id.linearLayoutConnection);
 		if (simlarCallState.hasConnectionInfo()) {
-			errorMessage.setVisibility(View.INVISIBLE);
+			callStatus.setVisibility(View.INVISIBLE);
 			iceAndCodec.setVisibility(View.VISIBLE);
 			connection.setVisibility(View.VISIBLE);
 			setIceState(simlarCallState.getIceState());
@@ -235,11 +235,14 @@ public class CallActivity extends Activity implements SensorEventListener
 			iceAndCodec.setVisibility(View.INVISIBLE);
 			connection.setVisibility(View.INVISIBLE);
 
-			if (simlarCallState.hasErrorMessage()) {
-				errorMessage.setVisibility(View.VISIBLE);
-				setErrorMessage(String.format(getString(simlarCallState.getErrorMessageId()), simlarCallState.getDisplayName()));
+			if (simlarCallState.hasCallStatusMessage()) {
+				callStatus.setVisibility(View.VISIBLE);
+				setCallStatus(simlarCallState.getCallStatusDisplayMessage(this));
+			} else if (simlarCallState.hasErrorMessage()) {
+				callStatus.setVisibility(View.VISIBLE);
+				setCallStatus(simlarCallState.getErrorDisplayMessage(this, simlarCallState.getDisplayName()));
 			} else {
-				errorMessage.setVisibility(View.INVISIBLE);
+				callStatus.setVisibility(View.INVISIBLE);
 			}
 		}
 

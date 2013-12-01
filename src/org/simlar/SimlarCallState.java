@@ -24,6 +24,7 @@ import java.text.DecimalFormat;
 
 import org.linphone.core.LinphoneCall.State;
 
+import android.content.Context;
 import android.util.Log;
 
 public class SimlarCallState
@@ -33,7 +34,7 @@ public class SimlarCallState
 
 	private String mDisplayName = null;
 	private org.linphone.core.LinphoneCall.State mLinphoneCallState = null;
-	private int mErrorMessageId = -1;
+	private int mCallStatusMessageId = -1;
 	private boolean mEncrypted = true;
 	private String mAuthenticationToken = null;
 	private boolean mAuthenticationTokenVerified = false;
@@ -49,8 +50,26 @@ public class SimlarCallState
 		return callState == State.CallEnd || callState == State.Error || callState == State.CallReleased;
 	}
 
-	private static int getErrorMessageId(final State callState, final String message)
+	private static boolean isCallOutgoingConnecting(final State callState)
 	{
+		return callState == State.OutgoingInit || callState == State.OutgoingProgress;
+	}
+
+	private static boolean isCallOutgoingRinging(final State callState)
+	{
+		return callState == State.OutgoingRinging;
+	}
+
+	private static int getMessageId(final State callState, final String message)
+	{
+		if (isCallOutgoingConnecting(callState)) {
+			return R.string.call_outgoing_connecting;
+		}
+
+		if (isCallOutgoingRinging(callState)) {
+			return R.string.call_outgoing_ringing;
+		}
+
 		// see linphone-android/submodules/belle-sip/src/message.c: well_known_codes
 		if (!Util.isNullOrEmpty(message) && possibleErrorMessage(callState)) {
 			if (message.equals("Call declined.")) {
@@ -69,11 +88,11 @@ public class SimlarCallState
 
 	public boolean updateCallStateChanged(final String displayName, final State callState, final String message)
 	{
-		final int msgId = getErrorMessageId(callState, message);
-		final boolean updateErrorMessageId = !(possibleErrorMessage(callState) && msgId <= 0);
+		final int msgId = getMessageId(callState, message);
+		final boolean updateCallStatusMessageId = !(possibleErrorMessage(callState) && msgId <= 0);
 
 		if (Util.equalString(displayName, mDisplayName) && equalCallState(callState, mLinphoneCallState)
-				&& (mErrorMessageId == msgId || !updateErrorMessageId)) {
+				&& (mCallStatusMessageId == msgId || !updateCallStatusMessageId)) {
 			return false;
 		}
 
@@ -87,8 +106,8 @@ public class SimlarCallState
 
 		mLinphoneCallState = callState;
 
-		if (updateErrorMessageId) {
-			mErrorMessageId = msgId;
+		if (updateCallStatusMessageId) {
+			mCallStatusMessageId = msgId;
 		}
 
 		if (isNewCall()) {
@@ -153,10 +172,10 @@ public class SimlarCallState
 		return mLinphoneCallState == null;
 	}
 
-	private String formatErrorMessageId()
+	private String formatCallStatusMessageId()
 	{
-		if (mErrorMessageId > 0) {
-			return " mErrorMessageId=" + mErrorMessageId;
+		if (mCallStatusMessageId > 0) {
+			return " mCallStatusMessageId=" + mCallStatusMessageId;
 		}
 
 		return "";
@@ -204,7 +223,7 @@ public class SimlarCallState
 		if (isEmpty()) {
 			return "";
 		}
-		return "[" + mLinphoneCallState.toString() + "] " + mDisplayName + formatErrorMessageId() + formatEncryption() + formatIceState()
+		return "[" + mLinphoneCallState.toString() + "] " + mDisplayName + formatCallStatusMessageId() + formatEncryption() + formatIceState()
 				+ formatCodec() + formatValue("upload", mUpload) + formatValue("download", mDownload) + formatValue("quality", mQuality);
 	}
 
@@ -213,9 +232,14 @@ public class SimlarCallState
 		return mDisplayName;
 	}
 
-	public int getErrorMessageId()
+	public String getCallStatusDisplayMessage(final Context context)
 	{
-		return hasErrorMessage() ? mErrorMessageId : -1;
+		return hasCallStatusMessage() ? context.getString(mCallStatusMessageId) : null;
+	}
+
+	public String getErrorDisplayMessage(final Context context, final String displayName)
+	{
+		return hasErrorMessage() ? String.format(context.getString(mCallStatusMessageId), displayName) : null;
 	}
 
 	public boolean isEncrypted()
@@ -323,9 +347,14 @@ public class SimlarCallState
 		return mLinphoneCallState == State.IncomingReceived;
 	}
 
+	public boolean hasCallStatusMessage()
+	{
+		return !isEmpty() && (isCallOutgoingConnecting(mLinphoneCallState) || isCallOutgoingRinging(mLinphoneCallState)) && mCallStatusMessageId > 0;
+	}
+
 	public boolean hasErrorMessage()
 	{
-		return !isEmpty() && possibleErrorMessage(mLinphoneCallState) && mErrorMessageId > 0;
+		return !isEmpty() && possibleErrorMessage(mLinphoneCallState) && mCallStatusMessageId > 0;
 	}
 
 	public boolean hasConnectionInfo()
