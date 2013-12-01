@@ -62,13 +62,13 @@
         <Spinner
             android:id="@+id/spinnerCountryCodes"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1" />
 
         <EditText
             android:id="@+id/editTextPhoneNumber"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="5"
             android:ems="8"
             android:inputType="phone" >

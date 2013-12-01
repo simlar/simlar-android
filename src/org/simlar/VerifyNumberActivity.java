@@ -67,6 +67,7 @@ public class VerifyNumberActivity extends Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
+		Log.i(LOGTAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_verify_number);
 
