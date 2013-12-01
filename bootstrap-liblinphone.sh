@@ -8,12 +8,17 @@ declare -r LINPHONE_ANDROID_PATCH_DIR="$(dirname $(readlink -f $0))/patches/linp
 declare -r LINPHONE_PATCH_DIR="$(dirname $(readlink -f $0))/patches/linphone"
 declare -r MEDIASTREAMER2_PATCH_DIR="$(dirname $(readlink -f $0))/patches/mediastreamer2"
 declare -r BELLESIP_PATCH_DIR="$(dirname $(readlink -f $0))/patches/belle-sip"
+declare -r BRANCH=${1:-""}
 
 declare -r BUILD_DIR="liblinphone_build_$(date '+%Y%m%d_%H%M%S')"
 mkdir "${BUILD_DIR}"
 cd "${BUILD_DIR}"
 
-git clone git://git.linphone.org/linphone-android.git --recursive
+if [ "${BRANCH}" == "" ] ; then
+	git clone git://git.linphone.org/linphone-android.git --recursive
+else
+	git clone -b "${BRANCH}" git://git.linphone.org/linphone-android.git --recursive
+fi
 
 cd linphone-android
 declare -r GIT_HASH=$(git log -n1 --format="%H")
