@@ -91,7 +91,7 @@ public class SimlarCallState
 		final int msgId = getMessageId(callState, message);
 		final boolean updateCallStatusMessageId = !(possibleErrorMessage(callState) && msgId <= 0);
 
-		if (Util.equalString(displayName, mDisplayName) && equalCallState(callState, mLinphoneCallState)
+		if (Util.equalString(displayName, mDisplayName) && callState == mLinphoneCallState
 				&& (mCallStatusMessageId == msgId || !updateCallStatusMessageId)) {
 			return false;
 		}
@@ -123,19 +123,6 @@ public class SimlarCallState
 		}
 
 		return true;
-	}
-
-	private static boolean equalCallState(final State lhs, final State rhs)
-	{
-		if (rhs == null && lhs == null) {
-			return true;
-		}
-
-		if (rhs == null || lhs == null) {
-			return false;
-		}
-
-		return lhs.value() == rhs.value();
 	}
 
 	public boolean updateCallStats(final float upload, final float download, final float quality, final String codec, final String iceState)
