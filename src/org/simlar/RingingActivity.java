@@ -27,7 +27,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 public class RingingActivity extends Activity
 {
@@ -114,10 +113,6 @@ public class RingingActivity extends Activity
 		Log.i(LOGTAG, "onSimlarCallStateChanged " + simlarCallState);
 
 		setTitle(String.format(getString(R.string.ringing_activity_title), simlarCallState.getDisplayName()));
-
-		if (simlarCallState.hasMessage()) {
-			Toast.makeText(this, String.format(getString(simlarCallState.getMsgId()), simlarCallState.getDisplayName()), Toast.LENGTH_LONG).show();
-		}
 
 		if (simlarCallState.isEndedCall()) {
 			finish();

@@ -31,7 +31,7 @@ public interface LinphoneHandlerListener
 
 	public void onCallStatsChanged(final float upload, final float download, final float quality, final String codec, final String iceState);
 
-	public void onCallStateChanged(final String number, final State state, final int msgId);
+	public void onCallStateChanged(final String number, final State state, final String message);
 
 	public void onCallEncryptionChanged(final boolean encrypted, final String authenticationToken, final boolean authenticationTokenVerified);
 

@@ -71,7 +71,7 @@ public class LinphoneThread extends Thread implements LinphoneCoreListener
 	public LinphoneThread(LinphoneHandlerListener listener, Context context)
 	{
 		mListener = listener;
-		mListener.onCallStateChanged("", LinphoneCall.State.Idle, -1);
+		mListener.onCallStateChanged("", LinphoneCall.State.Idle, null);
 		mContext = context;
 
 		start();
@@ -418,36 +418,20 @@ public class LinphoneThread extends Thread implements LinphoneCoreListener
 	}
 
 	@Override
-	public void callState(LinphoneCore lc, final LinphoneCall call, final LinphoneCall.State state, final String msg)
+	public void callState(LinphoneCore lc, final LinphoneCall call, final LinphoneCall.State state, final String message)
 	{
 		// LinphoneCall is mutable => use it only in the calling thread
 		// LinphoneCall.State is immutable
 
 		final String number = getNumber(call);
-
-		Log.i(LOGTAG, "callState call='" + call.toString() + "' state='" + state + "' message='" + msg + "'");
-		Log.i(LOGTAG, "AuthenticationToken='" + call.getAuthenticationToken() + "'");
-		Log.i(LOGTAG, "RemoteAddress='" + call.getRemoteAddress().asStringUriOnly() + "'");
-		Log.i(LOGTAG, "CurrentQuality='" + call.getCurrentQuality() + "' AverageQuality='" + call.getAverageQuality() + "'");
-		Log.i(LOGTAG, "CurrentParams='" + call.getCurrentParamsCopy().getUsedAudioCodec() + "'");
+		Log.i(LOGTAG, "callState changed number='" + number + "' state='" + state + "' message='" + message + "'");
 
 		mMainThreadHandler.post(new Runnable() {
 
 			@Override
 			public void run()
 			{
-				int msgId = -1;
-				if (msg != null
-						&& (state == LinphoneCall.State.CallEnd || state == LinphoneCall.State.Error || state == LinphoneCall.State.CallReleased)) {
-					if (msg.equals("Call declined.")) {
-						msgId = R.string.call_ended_because_declined;
-					} else if (msg.equals("User not found.")) {
-						msgId = R.string.call_ended_because_user_offline;
-					} else if (msg.equals("Incompatible media parameters.")) {
-						msgId = R.string.call_ended_because_incompatible_media;
-					}
-				}
-				mListener.onCallStateChanged(number, fixLinphoneCallState(state), msgId);
+				mListener.onCallStateChanged(number, fixLinphoneCallState(state), message);
 			}
 		});
 	}

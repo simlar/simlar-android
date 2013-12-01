@@ -452,9 +452,9 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	}
 
 	@Override
-	public void onCallStateChanged(final String number, final State callState, final int msgId)
+	public void onCallStateChanged(final String number, final State callState, final String message)
 	{
-		if (!mSimlarCallState.updateCallStateChanged(getContact(number).getNameOrNumber(), callState, msgId)) {
+		if (!mSimlarCallState.updateCallStateChanged(getContact(number).getNameOrNumber(), callState, message)) {
 			Log.d(LOGTAG, "SimlarCallState staying the same: " + mSimlarCallState);
 			return;
 		}
@@ -496,10 +496,6 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 			if (mSimlarCallState.isRinging()) {
 				Log.i(LOGTAG, "starting RingingActivity");
 				startActivity(new Intent(SimlarService.this, RingingActivity.class).addFlags(
-						Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-			} else {
-				Log.i(LOGTAG, "starting CallActivity");
-				startActivity(new Intent(SimlarService.this, CallActivity.class).addFlags(
 						Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
 			}
 		}

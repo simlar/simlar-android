@@ -28,6 +28,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -35,11 +36,12 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class CallActivity extends Activity implements SensorEventListener
 {
 	static final String LOGTAG = CallActivity.class.getSimpleName();
+
+	public static final String INTENT_EXTRA_SIMLAR_ID = "simlarId";
 
 	private SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCall();
 	private SensorManager mSensorManager;
@@ -55,7 +57,12 @@ public class CallActivity extends Activity implements SensorEventListener
 		@Override
 		void onBoundToSimlarService()
 		{
-			CallActivity.this.onSimlarCallStateChanged();
+			final String simlarId = CallActivity.this.getIntent().getStringExtra(INTENT_EXTRA_SIMLAR_ID);
+			if (!Util.isNullOrEmpty(simlarId)) {
+				getService().call(simlarId);
+			} else {
+				CallActivity.this.onSimlarCallStateChanged();
+			}
 		}
 
 		@Override
@@ -93,6 +100,13 @@ public class CallActivity extends Activity implements SensorEventListener
 		textViewToken.setVisibility(View.INVISIBLE);
 		buttonVerify.setVisibility(View.INVISIBLE);
 		buttonWrong.setVisibility(View.INVISIBLE);
+
+		final LinearLayout callStatus = (LinearLayout) findViewById(R.id.linearLayoutCallStatus);
+		final LinearLayout connection = (LinearLayout) findViewById(R.id.linearLayoutConnection);
+		final LinearLayout iceAndCodec = (LinearLayout) findViewById(R.id.linearLayoutIceStateAndCodec);
+		callStatus.setVisibility(View.INVISIBLE);
+		connection.setVisibility(View.INVISIBLE);
+		iceAndCodec.setVisibility(View.INVISIBLE);
 
 		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
@@ -132,6 +146,12 @@ public class CallActivity extends Activity implements SensorEventListener
 	{
 		final TextView tv = (TextView) findViewById(R.id.textViewCodec);
 		tv.setText(codec);
+	}
+
+	private void setCallStatus(final String status)
+	{
+		final TextView tv = (TextView) findViewById(R.id.textViewCallStatus);
+		tv.setText(status);
 	}
 
 	private void setBandwidthInfo(String upload, String download, String quality)
@@ -201,9 +221,11 @@ public class CallActivity extends Activity implements SensorEventListener
 		setTitle(getString(R.string.title_activity_call) + " " + simlarCallState.getDisplayName());
 		setCallEncryption(simlarCallState.isEncrypted(), simlarCallState.getAuthenticationToken(), simlarCallState.isAuthenticationTokenVerified());
 
+		final LinearLayout callStatus = (LinearLayout) findViewById(R.id.linearLayoutCallStatus);
 		final LinearLayout iceAndCodec = (LinearLayout) findViewById(R.id.linearLayoutIceStateAndCodec);
 		final LinearLayout connection = (LinearLayout) findViewById(R.id.linearLayoutConnection);
 		if (simlarCallState.hasConnectionInfo()) {
+			callStatus.setVisibility(View.INVISIBLE);
 			iceAndCodec.setVisibility(View.VISIBLE);
 			connection.setVisibility(View.VISIBLE);
 			setIceState(simlarCallState.getIceState());
@@ -212,6 +234,16 @@ public class CallActivity extends Activity implements SensorEventListener
 		} else {
 			iceAndCodec.setVisibility(View.INVISIBLE);
 			connection.setVisibility(View.INVISIBLE);
+
+			if (simlarCallState.hasCallStatusMessage()) {
+				callStatus.setVisibility(View.VISIBLE);
+				setCallStatus(simlarCallState.getCallStatusDisplayMessage(this));
+			} else if (simlarCallState.hasErrorMessage()) {
+				callStatus.setVisibility(View.VISIBLE);
+				setCallStatus(simlarCallState.getErrorDisplayMessage(this, simlarCallState.getDisplayName()));
+			} else {
+				callStatus.setVisibility(View.INVISIBLE);
+			}
 		}
 
 		final Button volumes = (Button) findViewById(R.id.buttonSoundVolumes);
@@ -222,13 +254,26 @@ public class CallActivity extends Activity implements SensorEventListener
 			volumes.setVisibility(View.INVISIBLE);
 		}
 
-		if (simlarCallState.hasMessage()) {
-			Toast.makeText(this, String.format(getString(simlarCallState.getMsgId()), simlarCallState.getDisplayName()), Toast.LENGTH_LONG).show();
-		}
-
 		if (simlarCallState.isEndedCall()) {
-			finish();
+			if (simlarCallState.hasErrorMessage()) {
+				finishDelayed(5000);
+			} else {
+				finish();
+			}
 		}
+	}
+
+	private void finishDelayed(final int milliSeconds)
+	{
+		Log.i(LOGTAG, "finishing activity in " + milliSeconds + " ms");
+
+		new Handler().postDelayed(new Runnable() {
+			@Override
+			public void run()
+			{
+				finish();
+			}
+		}, milliSeconds);
 	}
 
 	@SuppressWarnings("unused")

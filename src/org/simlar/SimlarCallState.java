@@ -24,6 +24,7 @@ import java.text.DecimalFormat;
 
 import org.linphone.core.LinphoneCall.State;
 
+import android.content.Context;
 import android.util.Log;
 
 public class SimlarCallState
@@ -33,7 +34,7 @@ public class SimlarCallState
 
 	private String mDisplayName = null;
 	private org.linphone.core.LinphoneCall.State mLinphoneCallState = null;
-	private int mMsgId = -1;
+	private int mCallStatusMessageId = -1;
 	private boolean mEncrypted = true;
 	private String mAuthenticationToken = null;
 	private boolean mAuthenticationTokenVerified = false;
@@ -44,9 +45,54 @@ public class SimlarCallState
 	private String mCodec = null;
 	private String mIceState = null;
 
-	public boolean updateCallStateChanged(final String displayName, final State callState, final int msgId)
+	private static boolean possibleErrorMessage(final State callState)
 	{
-		if (Util.equalString(displayName, mDisplayName) && equalCallState(callState, mLinphoneCallState) && mMsgId == msgId) {
+		return callState == State.CallEnd || callState == State.Error || callState == State.CallReleased;
+	}
+
+	private static boolean isCallOutgoingConnecting(final State callState)
+	{
+		return callState == State.OutgoingInit || callState == State.OutgoingProgress;
+	}
+
+	private static boolean isCallOutgoingRinging(final State callState)
+	{
+		return callState == State.OutgoingRinging;
+	}
+
+	private static int getMessageId(final State callState, final String message)
+	{
+		if (isCallOutgoingConnecting(callState)) {
+			return R.string.call_outgoing_connecting;
+		}
+
+		if (isCallOutgoingRinging(callState)) {
+			return R.string.call_outgoing_ringing;
+		}
+
+		// see linphone-android/submodules/belle-sip/src/message.c: well_known_codes
+		if (!Util.isNullOrEmpty(message) && possibleErrorMessage(callState)) {
+			if (message.equals("Call declined.")) {
+				return R.string.call_ended_because_declined;
+			} else if (message.equals("Not Found")) {
+				return R.string.call_ended_because_user_offline;
+			} else if (message.equals("Unsupported media type")) {
+				return R.string.call_ended_because_incompatible_media;
+			} else if (message.equals("Busy here")) {
+				return R.string.call_ended_because_user_busy;
+			}
+		}
+
+		return -1;
+	}
+
+	public boolean updateCallStateChanged(final String displayName, final State callState, final String message)
+	{
+		final int msgId = getMessageId(callState, message);
+		final boolean updateCallStatusMessageId = !(possibleErrorMessage(callState) && msgId <= 0);
+
+		if (Util.equalString(displayName, mDisplayName) && callState == mLinphoneCallState
+				&& (mCallStatusMessageId == msgId || !updateCallStatusMessageId)) {
 			return false;
 		}
 
@@ -59,7 +105,10 @@ public class SimlarCallState
 		}
 
 		mLinphoneCallState = callState;
-		mMsgId = msgId;
+
+		if (updateCallStatusMessageId) {
+			mCallStatusMessageId = msgId;
+		}
 
 		if (isNewCall()) {
 			mEncrypted = true;
@@ -74,19 +123,6 @@ public class SimlarCallState
 		}
 
 		return true;
-	}
-
-	private static boolean equalCallState(final State lhs, final State rhs)
-	{
-		if (rhs == null && lhs == null) {
-			return true;
-		}
-
-		if (rhs == null || lhs == null) {
-			return false;
-		}
-
-		return lhs.value() == rhs.value();
 	}
 
 	public boolean updateCallStats(final float upload, final float download, final float quality, final String codec, final String iceState)
@@ -123,10 +159,10 @@ public class SimlarCallState
 		return mLinphoneCallState == null;
 	}
 
-	private String formatMsgId()
+	private String formatCallStatusMessageId()
 	{
-		if (mMsgId > 0) {
-			return " mMsgId=" + mMsgId;
+		if (mCallStatusMessageId > 0) {
+			return " mCallStatusMessageId=" + mCallStatusMessageId;
 		}
 
 		return "";
@@ -174,8 +210,8 @@ public class SimlarCallState
 		if (isEmpty()) {
 			return "";
 		}
-		return "[" + mLinphoneCallState.toString() + "] " + mDisplayName + formatMsgId() + formatEncryption() + formatIceState() + formatCodec()
-				+ formatValue("upload", mUpload) + formatValue("download", mDownload) + formatValue("quality", mQuality);
+		return "[" + mLinphoneCallState.toString() + "] " + mDisplayName + formatCallStatusMessageId() + formatEncryption() + formatIceState()
+				+ formatCodec() + formatValue("upload", mUpload) + formatValue("download", mDownload) + formatValue("quality", mQuality);
 	}
 
 	public String getDisplayName()
@@ -183,9 +219,14 @@ public class SimlarCallState
 		return mDisplayName;
 	}
 
-	public int getMsgId()
+	public String getCallStatusDisplayMessage(final Context context)
 	{
-		return mMsgId;
+		return hasCallStatusMessage() ? context.getString(mCallStatusMessageId) : null;
+	}
+
+	public String getErrorDisplayMessage(final Context context, final String displayName)
+	{
+		return hasErrorMessage() ? String.format(context.getString(mCallStatusMessageId), displayName) : null;
 	}
 
 	public boolean isEncrypted()
@@ -293,9 +334,14 @@ public class SimlarCallState
 		return mLinphoneCallState == State.IncomingReceived;
 	}
 
-	public boolean hasMessage()
+	public boolean hasCallStatusMessage()
 	{
-		return mMsgId > 0;
+		return !isEmpty() && (isCallOutgoingConnecting(mLinphoneCallState) || isCallOutgoingRinging(mLinphoneCallState)) && mCallStatusMessageId > 0;
+	}
+
+	public boolean hasErrorMessage()
+	{
+		return !isEmpty() && possibleErrorMessage(mLinphoneCallState) && mCallStatusMessageId > 0;
 	}
 
 	public boolean hasConnectionInfo()
