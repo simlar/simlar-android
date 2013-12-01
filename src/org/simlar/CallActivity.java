@@ -28,6 +28,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -35,7 +36,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class CallActivity extends Activity implements SensorEventListener
 {
@@ -101,6 +101,13 @@ public class CallActivity extends Activity implements SensorEventListener
 		buttonVerify.setVisibility(View.INVISIBLE);
 		buttonWrong.setVisibility(View.INVISIBLE);
 
+		final LinearLayout errorMessage = (LinearLayout) findViewById(R.id.linearLayoutErrorMessage);
+		final LinearLayout connection = (LinearLayout) findViewById(R.id.linearLayoutConnection);
+		final LinearLayout iceAndCodec = (LinearLayout) findViewById(R.id.linearLayoutIceStateAndCodec);
+		errorMessage.setVisibility(View.INVISIBLE);
+		connection.setVisibility(View.INVISIBLE);
+		iceAndCodec.setVisibility(View.INVISIBLE);
+
 		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
 	}
@@ -139,6 +146,12 @@ public class CallActivity extends Activity implements SensorEventListener
 	{
 		final TextView tv = (TextView) findViewById(R.id.textViewCodec);
 		tv.setText(codec);
+	}
+
+	private void setErrorMessage(final String message)
+	{
+		final TextView tv = (TextView) findViewById(R.id.textViewErrorMessage);
+		tv.setText(message);
 	}
 
 	private void setBandwidthInfo(String upload, String download, String quality)
@@ -208,9 +221,11 @@ public class CallActivity extends Activity implements SensorEventListener
 		setTitle(getString(R.string.title_activity_call) + " " + simlarCallState.getDisplayName());
 		setCallEncryption(simlarCallState.isEncrypted(), simlarCallState.getAuthenticationToken(), simlarCallState.isAuthenticationTokenVerified());
 
+		final LinearLayout errorMessage = (LinearLayout) findViewById(R.id.linearLayoutErrorMessage);
 		final LinearLayout iceAndCodec = (LinearLayout) findViewById(R.id.linearLayoutIceStateAndCodec);
 		final LinearLayout connection = (LinearLayout) findViewById(R.id.linearLayoutConnection);
 		if (simlarCallState.hasConnectionInfo()) {
+			errorMessage.setVisibility(View.INVISIBLE);
 			iceAndCodec.setVisibility(View.VISIBLE);
 			connection.setVisibility(View.VISIBLE);
 			setIceState(simlarCallState.getIceState());
@@ -219,6 +234,13 @@ public class CallActivity extends Activity implements SensorEventListener
 		} else {
 			iceAndCodec.setVisibility(View.INVISIBLE);
 			connection.setVisibility(View.INVISIBLE);
+
+			if (simlarCallState.hasErrorMessage()) {
+				errorMessage.setVisibility(View.VISIBLE);
+				setErrorMessage(String.format(getString(simlarCallState.getErrorMessageId()), simlarCallState.getDisplayName()));
+			} else {
+				errorMessage.setVisibility(View.INVISIBLE);
+			}
 		}
 
 		final Button volumes = (Button) findViewById(R.id.buttonSoundVolumes);
@@ -229,13 +251,26 @@ public class CallActivity extends Activity implements SensorEventListener
 			volumes.setVisibility(View.INVISIBLE);
 		}
 
-		if (simlarCallState.hasErrorMessage()) {
-			Toast.makeText(this, String.format(getString(simlarCallState.getErrorMessageId()), simlarCallState.getDisplayName()), Toast.LENGTH_LONG).show();
-		}
-
 		if (simlarCallState.isEndedCall()) {
-			finish();
+			if (simlarCallState.hasErrorMessage()) {
+				finishDelayed(5000);
+			} else {
+				finish();
+			}
 		}
+	}
+
+	private void finishDelayed(final int milliSeconds)
+	{
+		Log.i(LOGTAG, "finishing activity in " + milliSeconds + " ms");
+
+		new Handler().postDelayed(new Runnable() {
+			@Override
+			public void run()
+			{
+				finish();
+			}
+		}, milliSeconds);
 	}
 
 	@SuppressWarnings("unused")

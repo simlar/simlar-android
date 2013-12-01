@@ -29,6 +29,19 @@
     tools:context=".CallActivity" >
 
     <LinearLayout
+        android:id="@+id/linearLayoutErrorMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true" >
+
+        <TextView
+            android:id="@+id/textViewErrorMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/linearLayoutConnection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
