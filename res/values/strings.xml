@@ -60,8 +60,8 @@
     <string name="contacts_adapter_simlar_status_error">Error: Connection Error</string>
     <string name="contacts_adapter_simlar_status_error_unknown">Error: unknown</string>
 
-    <string name="progress_uploading_log_file">Please wait while uploading log file \.\.\.</string>
-    <string name="progress_finishing">Please wait while shutting down \.\.\.</string>
+    <string name="progress_uploading_log_file">Please wait while uploading log file&#8230;</string>
+    <string name="progress_finishing">Please wait while shutting down&#8230;</string>
 
     <string name="title_activity_call">Call</string>
 
@@ -80,15 +80,15 @@
     <string name="call_activity_label_codec">Codec: </string>
     <string name="call_activity_label_ice_state">ICE State: </string>
     <string name="error_not_encrypted">ERROR: Not encrypted!</string>
-    <string name="no_authentication_token">\.\.\.</string>
+    <string name="no_authentication_token">&#8230;</string>
     <string name="waiting_for_authentication_token">Waiting for authentication token</string>
     <string name="please_verify_authentication_token">Please verify the following authentication token</string>
     <string name="verified_authentication_token">Verified authentication token</string>
     <string name="button_authentication_token_verify">Verify</string>
     <string name="button_authentication_token_wrong">Wrong</string>
     <string name="button_volumes">Volumes</string>
-    <string name="call_outgoing_connecting">Connecting ...</string>
-    <string name="call_outgoing_ringing">Ringing ...</string>
+    <string name="call_outgoing_connecting">Connecting&#8230;</string>
+    <string name="call_outgoing_ringing">Ringing&#8230;</string>
     <string name="call_ended_because_declined">%1$s declined your call.</string>
     <string name="call_ended_because_user_offline">%1$s is offline.</string>
     <string name="call_ended_because_incompatible_media">%1$s has incompatible media type.</string>
