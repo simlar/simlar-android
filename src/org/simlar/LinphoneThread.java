@@ -367,7 +367,7 @@ public class LinphoneThread extends Thread implements LinphoneCoreListener
 			public void run()
 			{
 				if (mRegistrationState == state) {
-					Log.d(LOGTAG, "registration state for " + identity + " not changed : " + state.toString() + " " + message);
+					Log.d(LOGTAG, "registration state for " + identity + " not changed : " + state + " " + message);
 					return;
 				}
 
@@ -377,7 +377,7 @@ public class LinphoneThread extends Thread implements LinphoneCoreListener
 					return;
 				}
 
-				Log.i(LOGTAG, "registration state for " + identity + " changed: " + state.toString() + " " + message);
+				Log.i(LOGTAG, "registration state for " + identity + " changed: " + state + " " + message);
 				mRegistrationState = state;
 
 				mListener.onRegistrationStateChanged(state);
@@ -402,14 +402,14 @@ public class LinphoneThread extends Thread implements LinphoneCoreListener
 	@Override
 	public void displayStatus(LinphoneCore lc, final String message)
 	{
-		Log.d(LOGTAG, "displayStatus message='" + message + "'");
+		Log.d(LOGTAG, "displayStatus message=" + message);
 	}
 
 	LinphoneCall.State fixLinphoneCallState(final LinphoneCall.State callState)
 	{
 		if (callState == LinphoneCall.State.CallReleased || callState == LinphoneCall.State.Error) {
 			if (mLinphoneHandler == null || mLinphoneHandler.hasNoCurrentCalls()) {
-				Log.i(LOGTAG, "fixLinphoneCallState: " + callState + " -> " + LinphoneCall.State.CallEnd.toString());
+				Log.i(LOGTAG, "fixLinphoneCallState: " + callState + " -> " + LinphoneCall.State.CallEnd);
 				return LinphoneCall.State.CallEnd;
 			}
 		}
@@ -424,7 +424,7 @@ public class LinphoneThread extends Thread implements LinphoneCoreListener
 		// LinphoneCall.State is immutable
 
 		final String number = getNumber(call);
-		Log.i(LOGTAG, "callState changed number='" + number + "' state='" + state + "' message='" + message + "'");
+		Log.i(LOGTAG, "callState changed number=" + number + " state=" + state + " message=" + message);
 
 		mMainThreadHandler.post(new Runnable() {
 
@@ -451,25 +451,25 @@ public class LinphoneThread extends Thread implements LinphoneCoreListener
 	@Override
 	public void authInfoRequested(LinphoneCore lc, final String realm, final String username)
 	{
-		Log.w(LOGTAG, "authInfoRequested realm='" + realm + "' username='" + username + "'");
+		Log.w(LOGTAG, "authInfoRequested realm=" + realm + " username=" + username);
 	}
 
 	@Override
 	public void displayMessage(LinphoneCore lc, final String message)
 	{
-		Log.i(LOGTAG, "displayMessage message='" + message + "'");
+		Log.i(LOGTAG, "displayMessage message=" + message);
 	}
 
 	@Override
 	public void displayWarning(LinphoneCore lc, final String message)
 	{
-		Log.w(LOGTAG, "displayWarning message='" + message + "'");
+		Log.w(LOGTAG, "displayWarning message=" + message);
 	}
 
 	@Override
 	public void globalState(LinphoneCore lc, final GlobalState state, final String message)
 	{
-		Log.i(LOGTAG, "globalState state='" + state.toString() + " message='" + message + "'");
+		Log.i(LOGTAG, "globalState state=" + state + " message=" + message);
 	}
 
 	@Override
@@ -482,7 +482,7 @@ public class LinphoneThread extends Thread implements LinphoneCoreListener
 		this.addFriend(number);
 
 //		// old style from example which may not be thread-safe
-//		Log.i(LOGTAG, "newSubscriptionRequest friend='" + lf.toString() + "' url='" + url + "'");
+//		Log.i(LOGTAG, "newSubscriptionRequest friend=" + lf + " url=" + url);
 //		Log.w(LOGTAG, "[" + lf.getAddress().getUserName() + "] wants to see your presence status => always accepting");
 //		mLinphoneHandler.addFriend(lf);
 //		Log.w(LOGTAG, "[" + lf.getAddress().getUserName() + "] accepted to see your presence status");
@@ -547,7 +547,7 @@ public class LinphoneThread extends Thread implements LinphoneCoreListener
 	@Override
 	public void textReceived(LinphoneCore lc, final LinphoneChatRoom cr, final LinphoneAddress from, final String message)
 	{
-		Log.i(LOGTAG, "textReceived chatroom='" + cr + "' from='" + from.toString() + "' message='" + message);
+		Log.i(LOGTAG, "textReceived chatroom=" + cr + " from=" + from + " message=" + message);
 	}
 
 	@Override
@@ -556,8 +556,6 @@ public class LinphoneThread extends Thread implements LinphoneCoreListener
 		// LinphoneCall is mutable => use it only in the calling thread
 		// LinphoneCallStats maybe mutable => use it only in the calling thread
 
-		Log.i(LOGTAG, "callStatsUpdated call='" + call.toString() + "' stats='" + stats.toString() + "'");
-
 		final float upload = stats.getUploadBandwidth() / 8.0f;
 		final float download = stats.getDownloadBandwidth() / 8.0f;
 		final float quality = call.getCurrentQuality();
@@ -565,7 +563,8 @@ public class LinphoneThread extends Thread implements LinphoneCoreListener
 		final String codec = payloadType.getMime() + " " + payloadType.getRate() / 1000;
 		final String iceState = stats.getIceState().toString();
 
-		Log.i(LOGTAG, "upload=" + upload + " download=" + download + " quality=" + quality + " codec=" + codec + " iceState=" + iceState);
+		Log.i(LOGTAG, "callStatsUpdated: number=" + getNumber(call) + " upload=" + upload + " download=" + download + " quality=" + quality
+				+ " codec=" + codec + " iceState=" + iceState);
 
 		mMainThreadHandler.post(new Runnable() {
 			@Override
@@ -579,7 +578,7 @@ public class LinphoneThread extends Thread implements LinphoneCoreListener
 	@Override
 	public void ecCalibrationStatus(LinphoneCore lc, final EcCalibratorStatus status, final int delay_ms, final Object data)
 	{
-		Log.i(LOGTAG, "ecCalibrationStatus status='" + status.toString() + "' delay_ms='" + delay_ms + "'");
+		Log.i(LOGTAG, "ecCalibrationStatus status=" + status + " delay_ms=" + delay_ms);
 	}
 
 	@Override
@@ -589,11 +588,11 @@ public class LinphoneThread extends Thread implements LinphoneCoreListener
 
 		final boolean isTokenVerified = call.isAuthenticationTokenVerified();
 
-		Log.i(LOGTAG, "callEncryptionChanged call='" + call.toString() + "' encrypted='" + encrypted + "' authenticationToken='"
-				+ authenticationToken + "'");
+		Log.i(LOGTAG, "callEncryptionChanged number=" + getNumber(call) + " encrypted=" + encrypted + " authenticationToken="
+				+ authenticationToken);
 
 		if (!encrypted) {
-			Log.e(LOGTAG, "unencrypted call: " + call.getRemoteAddress().asStringUriOnly() + " with UserAgent " + call.getRemoteUserAgent());
+			Log.e(LOGTAG, "unencrypted call: number=" + getNumber(call) + " with UserAgent " + call.getRemoteUserAgent());
 		}
 
 		mMainThreadHandler.post(new Runnable() {
@@ -608,25 +607,25 @@ public class LinphoneThread extends Thread implements LinphoneCoreListener
 	@Override
 	public void notifyReceived(LinphoneCore lc, final LinphoneCall call, final LinphoneAddress from, final byte[] event)
 	{
-		Log.i(LOGTAG, "notifyReceived call='" + call.toString() + "' from='" + from.toString());
+		Log.w(LOGTAG, "notifyReceived number=" + getNumber(call) + " from=" + from);
 	}
 
 	@Override
 	public void dtmfReceived(LinphoneCore lc, final LinphoneCall call, final int dtmf)
 	{
-		Log.i(LOGTAG, "dtmfReceived call='" + call.toString() + "' dtmf='" + dtmf + "'");
+		Log.w(LOGTAG, "dtmfReceived number=" + getNumber(call) + " dtmf=" + dtmf);
 	}
 
 	@Override
 	public void transferState(LinphoneCore lc, final LinphoneCall call, final LinphoneCall.State state)
 	{
-		Log.w(LOGTAG, "transferState call=" + call + " State=" + state);
+		Log.w(LOGTAG, "transferState number=" + getNumber(call) + " State=" + state);
 	}
 
 	@Override
 	public void infoReceived(LinphoneCore lc, final LinphoneCall call, final LinphoneInfoMessage info)
 	{
-		Log.w(LOGTAG, "infoReceived call=" + call + " LinphoneInfoMessage=" + info.getContent().getDataAsString());
+		Log.w(LOGTAG, "infoReceived number=" + getNumber(call) + " LinphoneInfoMessage=" + info.getContent().getDataAsString());
 	}
 
 	@Override
