@@ -170,7 +170,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId)
 	{
-		Log.i(LOGTAG, "onStartCommand intent='" + intent + "' startId='" + startId + "'");
+		Log.i(LOGTAG, "onStartCommand intent=" + intent + " startId=" + startId);
 
 		// We want this service to continue running until it is explicitly stopped, so return sticky.
 		return START_STICKY;
@@ -384,7 +384,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	@Override
 	public void onRegistrationStateChanged(final RegistrationState state)
 	{
-		Log.i(LOGTAG, "handleRegistrationStateChanged: " + state.toString());
+		Log.i(LOGTAG, "onRegistrationStateChanged: " + state);
 
 		SimlarStatus status = SimlarStatus.fromRegistrationState(state);
 
