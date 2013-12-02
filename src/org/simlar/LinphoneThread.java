@@ -342,7 +342,7 @@ public class LinphoneThread extends Thread implements LinphoneCoreListener
 		return mVolumes;
 	}
 
-	static String getNumber(final LinphoneCall call)
+	private static String getNumber(final LinphoneCall call)
 	{
 		if (call == null || call.getRemoteAddress() == null) {
 			return "";
