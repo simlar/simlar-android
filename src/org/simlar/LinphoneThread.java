@@ -32,6 +32,7 @@ import org.linphone.core.LinphoneContent;
 import org.linphone.core.LinphoneCore;
 import org.linphone.core.LinphoneCore.EcCalibratorStatus;
 import org.linphone.core.LinphoneCore.GlobalState;
+import org.linphone.core.LinphoneCore.MediaEncryption;
 import org.linphone.core.LinphoneCore.RegistrationState;
 import org.linphone.core.LinphoneCoreListener;
 import org.linphone.core.LinphoneEvent;
@@ -549,6 +550,18 @@ public class LinphoneThread
 		{
 			// LinphoneCall is mutable => use it only in the calling thread
 			// LinphoneCallStats maybe mutable => use it only in the calling thread
+
+			if (call.getCurrentParamsCopy().getMediaEncryption() != MediaEncryption.ZRTP) {
+				Log.w(LOGTAG, "call not encrypted: number=" + getNumber(call) + " user agent=" + call.getRemoteUserAgent());
+
+				mMainThreadHandler.post(new Runnable() {
+					@Override
+					public void run()
+					{
+						mListener.onCallEncryptionChanged(false, "", false);
+					}
+				});
+			}
 
 			final float upload = stats.getUploadBandwidth() / 8.0f;
 			final float download = stats.getDownloadBandwidth() / 8.0f;
