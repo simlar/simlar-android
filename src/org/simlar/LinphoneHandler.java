@@ -83,10 +83,10 @@ public class LinphoneHandler
 	{
 		PayloadType pt = mLinphoneCore.findPayloadType(codec, rate, channels);
 		if (pt != null) {
-			Log.v(LOGTAG, "AudioCodec: codec='" + codec + "' rate='" + rate + "' channels='" + channels + "' enable='" + enable + "'");
+			Log.v(LOGTAG, "AudioCodec: codec=" + codec + " rate=" + rate + " channels=" + channels + " enable=" + enable);
 			mLinphoneCore.enablePayloadType(pt, enable);
 		} else {
-			Log.w(LOGTAG, "AudioCodec: payload not found for codec='" + codec + "' rate='" + rate + "'");
+			Log.w(LOGTAG, "AudioCodec: payload not found for codec=" + codec + " rate=" + rate);
 		}
 	}
 
@@ -329,7 +329,7 @@ public class LinphoneHandler
 			return;
 		}
 
-		Log.i(LOGTAG, "Call to '" + number + "' is in progress...");
+		Log.i(LOGTAG, "Call to " + number + " is in progress...");
 	}
 
 	private LinphoneCall getCurrentCall()
