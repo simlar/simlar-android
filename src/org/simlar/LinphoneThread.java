@@ -351,6 +351,39 @@ public class LinphoneThread extends Thread implements LinphoneCoreListener
 		return call.getRemoteAddress().asStringUriOnly().split("@")[0].replaceFirst("sip:", "");
 	}
 
+	private static boolean isOnline(final PresenceModel presenceModel)
+	{
+		if (presenceModel == null) {
+			Log.w(LOGTAG, "isOnline: no PresenceModel");
+			return false;
+		}
+
+		final PresenceService service = presenceModel.getNthService(0);
+		if (service == null) {
+			Log.w(LOGTAG, "isOnline: no PresenceService");
+			return false;
+		}
+
+		PresenceBasicStatus status = service.getBasicStatus();
+		if (status == null) {
+			return false;
+		}
+
+		//Log.i(LOGTAG, "NbServices" + presenceModel.getNbServices());
+
+		for (long i = presenceModel.getNbServices() - 1; i >= 0; --i) {
+			Log.w(LOGTAG, "Service " + presenceModel.getNthService(i).getBasicStatus());
+			if (presenceModel.getNthService(i).getContact() == null) {
+				status = presenceModel.getNthService(i).getBasicStatus();
+				Log.w(LOGTAG, "using serivce no " + i);
+			}
+		}
+
+		Log.i(LOGTAG, "PresenceBasicStatus: " + status);
+
+		return status.equals(PresenceBasicStatus.Open);
+	}
+
 	//
 	// LinphoneCoreListener overloaded member functions
 	//
@@ -509,39 +542,6 @@ public class LinphoneThread extends Thread implements LinphoneCoreListener
 				mListener.onPresenceStateChanged(userName, online);
 			}
 		});
-	}
-
-	private static boolean isOnline(final PresenceModel presenceModel)
-	{
-		if (presenceModel == null) {
-			Log.w(LOGTAG, "isOnline: no PresenceModel");
-			return false;
-		}
-
-		final PresenceService service = presenceModel.getNthService(0);
-		if (service == null) {
-			Log.w(LOGTAG, "isOnline: no PresenceService");
-			return false;
-		}
-
-		PresenceBasicStatus status = service.getBasicStatus();
-		if (status == null) {
-			return false;
-		}
-
-		//Log.i(LOGTAG, "NbServices" + presenceModel.getNbServices());
-
-		for (long i = presenceModel.getNbServices() - 1; i >= 0; --i) {
-			Log.w(LOGTAG, "Service " + presenceModel.getNthService(i).getBasicStatus());
-			if (presenceModel.getNthService(i).getContact() == null) {
-				status = presenceModel.getNthService(i).getBasicStatus();
-				Log.w(LOGTAG, "using serivce no " + i);
-			}
-		}
-
-		Log.i(LOGTAG, "PresenceBasicStatus: " + status);
-
-		return status.equals(PresenceBasicStatus.Open);
 	}
 
 	@Override
