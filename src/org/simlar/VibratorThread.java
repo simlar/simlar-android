@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Vibrator;
@@ -108,7 +109,15 @@ class VibratorThread
 
 		public boolean hasVibrator()
 		{
-			return mVibrator != null && mVibrator.hasVibrator();
+			if (mVibrator == null) {
+				return false;
+			}
+
+			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+				return true;
+			}
+
+			return mVibrator.hasVibrator();
 		}
 	}
 
