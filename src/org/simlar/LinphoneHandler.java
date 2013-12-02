@@ -136,7 +136,7 @@ public class LinphoneHandler
 			// The listener will react to events in Linphone core.
 			mLinphoneCore = LinphoneCoreFactory.instance().createLinphoneCore(listener, "", linphoneInitialConfigFile, null);
 			mLinphoneCore.setContext(context);
-			mLinphoneCore.setUserAgent("Simlar", "0.0.0");
+			mLinphoneCore.setUserAgent("Simlar", Version.getVersionName(context));
 
 			// enable STUN with ICE
 			mLinphoneCore.setStunServer(STUN_SERVER);
