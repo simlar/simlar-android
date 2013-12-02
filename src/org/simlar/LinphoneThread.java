@@ -168,6 +168,22 @@ public class LinphoneThread extends Thread implements LinphoneCoreListener
 		}, 20);
 	}
 
+	public void unregister()
+	{
+		if (mLinphoneThreadHandler == null) {
+			Log.e(LOGTAG, "handler is null, probably thread not started");
+			return;
+		}
+
+		mLinphoneThreadHandler.post(new Runnable() {
+			@Override
+			public void run()
+			{
+				mLinphoneHandler.unregister();
+			}
+		});
+	}
+
 	public void refreshRegisters()
 	{
 		if (mLinphoneThreadHandler == null) {
@@ -185,22 +201,6 @@ public class LinphoneThread extends Thread implements LinphoneCoreListener
 			public void run()
 			{
 				mLinphoneHandler.refreshRegisters();
-			}
-		});
-	}
-
-	public void unregister()
-	{
-		if (mLinphoneThreadHandler == null) {
-			Log.e(LOGTAG, "handler is null, probably thread not started");
-			return;
-		}
-
-		mLinphoneThreadHandler.post(new Runnable() {
-			@Override
-			public void run()
-			{
-				mLinphoneHandler.unregister();
 			}
 		});
 	}
