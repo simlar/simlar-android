@@ -21,7 +21,7 @@ git add "${ANDROID_MANIFEST}"
 git commit -m "[Release] Version: ${SIMLAR_VERSION_CODE}"
 git push
 
-git tag -a "${SIMLAR_VERSION_TAG}" -m "Version: 0.0.1 alpha 2013-09-17"
+git tag -a "${SIMLAR_VERSION_TAG}" -m "Version: ${SIMLAR_VERSION_CODE}"
 git push origin "${SIMLAR_VERSION_TAG}"
 git checkout "${SIMLAR_VERSION_TAG}"
 
