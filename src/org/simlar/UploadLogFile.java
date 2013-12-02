@@ -121,9 +121,9 @@ public class UploadLogFile
 					result = new PostResult(false, response);
 				}
 			}
-		} catch (Exception ex) {
+		} catch (Exception e) {
 			result = new PostResult(false, "Posting log file failed");
-			ex.printStackTrace();
+			Log.e(LOGTAG, "Exception during postFile: " + e.getMessage(), e);
 		}
 
 		try {
@@ -131,28 +131,28 @@ public class UploadLogFile
 				outputStream.close();
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			Log.e(LOGTAG, "Exception during outputStream.close(): " + e.getMessage(), e);
 		}
 		try {
 			if (fileInputStream != null) {
 				fileInputStream.close();
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			Log.e(LOGTAG, "Exception during fileInputStream.close(): " + e.getMessage(), e);
 		}
 		try {
 			if (inputStream != null) {
 				inputStream.close();
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			Log.e(LOGTAG, "Exception during inputStream.close(): " + e.getMessage(), e);
 		}
 		try {
 			if (baos != null) {
 				baos.close();
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			Log.e(LOGTAG, "Exception during baos.close(): " + e.getMessage(), e);
 		}
 
 		return result;
@@ -187,7 +187,7 @@ public class UploadLogFile
 					p.waitFor();
 					return postFile(logFile);
 				} catch (Exception e) {
-					e.printStackTrace();
+					Log.e(LOGTAG, "Exception during log file creation: " + e.getMessage(), e);
 					return new PostResult(false, "Log file creation failed");
 				} finally {
 					logFile.delete();
@@ -228,7 +228,7 @@ public class UploadLogFile
 				try {
 					mContext.startActivity(Intent.createChooser(sendIntent, mContext.getString(R.string.chooser_send_email)));
 				} catch (android.content.ActivityNotFoundException e) {
-					e.printStackTrace();
+					Log.e(LOGTAG, "ActivityNotFoundException chooser_send_email: " + e.getMessage(), e);
 				}
 			}
 		}.execute(new File(mContext.getCacheDir(), fileName));

@@ -60,24 +60,21 @@ public class GetContactsStatus
 			try {
 				parsedResult = parseXml(result);
 			} catch (XmlPullParserException e) {
-				Log.e(LOGTAG, "parsing xml failed: " + e.getMessage());
-				e.printStackTrace();
+				Log.e(LOGTAG, "parsing xml failed: " + e.getMessage(), e);
 			} catch (IOException e) {
-				Log.e(LOGTAG, "IOException " + e.getMessage());
-				e.printStackTrace();
+				Log.e(LOGTAG, "IOException: " + e.getMessage(), e);
 			}
 
 			try {
 				result.close();
 			} catch (IOException e) {
-				Log.e(LOGTAG, "IOException " + e.getMessage());
-				e.printStackTrace();
+				Log.e(LOGTAG, "IOException: " + e.getMessage(), e);
 			}
 
 			return parsedResult;
 
 		} catch (NotInitedException e) {
-			e.printStackTrace();
+			Log.e(LOGTAG, "PreferencesHelper.NotInitedException", e);
 			return null;
 		}
 	}

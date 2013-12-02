@@ -150,7 +150,7 @@ public class LinphoneThread
 					}
 				});
 			} catch (NotInitedException e) {
-				e.printStackTrace();
+				Log.e(LOGTAG, "PreferencesHelper.NotInitedException", e);
 			}
 		}
 

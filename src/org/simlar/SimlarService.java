@@ -277,7 +277,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		try {
 			mLinphoneThread.register(PreferencesHelper.getMySimlarId(), PreferencesHelper.getPassword());
 		} catch (NotInitedException e) {
-			e.printStackTrace();
+			Log.e(LOGTAG, "PreferencesHelper.NotInitedException", e);
 		}
 	}
 
@@ -634,7 +634,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		try {
 			mLinphoneThread.join(2000);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			Log.e(LOGTAG, "join interrupted: " + e.getMessage(), e);
 		}
 		SimlarServiceBroadcast.sendServiceFinishes(this);
 

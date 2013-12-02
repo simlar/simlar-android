@@ -194,8 +194,7 @@ class VibratorThread
 		try {
 			mThread.join(300);
 		} catch (InterruptedException e) {
-			Log.e(LOGTAG, "join interrupted: " + e.getMessage());
-			e.printStackTrace();
+			Log.e(LOGTAG, "join interrupted: " + e.getMessage(), e);
 		} finally {
 			Log.i(LOGTAG, "thread joined");
 			mThread = null;

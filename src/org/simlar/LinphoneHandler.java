@@ -71,7 +71,7 @@ public class LinphoneHandler
 			try {
 				mLinphoneCore.destroy();
 			} catch (RuntimeException e) {
-				e.printStackTrace();
+				Log.e(LOGTAG, "RuntimeException during mLinphoneCore.destroy()", e);
 			} finally {
 				mLinphoneCore = null;
 			}
@@ -175,8 +175,8 @@ public class LinphoneHandler
 				enableDisableAudioCodec("SILK", 12000, 1, false);
 				enableDisableAudioCodec("SILK", 8000, 1, true);
 				enableDisableAudioCodec("OPUS", 48000, 1, true);
-			} catch (LinphoneCoreException lce) {
-				Log.e(LOGTAG, "Exception during enabling Audio Codec: " + lce.toString());
+			} catch (LinphoneCoreException e) {
+				Log.e(LOGTAG, "LinphoneCoreException during enabling Audio Codec: " + e.getMessage(), e);
 			}
 
 			// enable echo cancellation
@@ -194,9 +194,8 @@ public class LinphoneHandler
 
 			// make sure we only handle one call
 			mLinphoneCore.setMaxCalls(1);
-		} catch (LinphoneCoreException lce) {
-			Log.e(LOGTAG, "LinphoneCoreException: " + lce.toString());
-			lce.printStackTrace();
+		} catch (LinphoneCoreException e) {
+			Log.e(LOGTAG, "LinphoneCoreException during initialize: " + e.getMessage(), e);
 		}
 	}
 
@@ -248,8 +247,7 @@ public class LinphoneHandler
 			mLinphoneCore.addProxyConfig(proxyCfg);
 			mLinphoneCore.setDefaultProxyConfig(proxyCfg);
 		} catch (LinphoneCoreException e) {
-			Log.e(LOGTAG, "LinphoneCoreException: " + e.toString());
-			e.printStackTrace();
+			Log.e(LOGTAG, "LinphoneCoreException during setCredentials: " + e.getMessage(), e);
 		}
 	}
 
@@ -262,7 +260,7 @@ public class LinphoneHandler
 		try {
 			proxyConfig.enableRegister(false);
 		} catch (LinphoneCoreException e) {
-			e.printStackTrace();
+			Log.e(LOGTAG, "LinphoneCoreException during unregister: " + e.getMessage(), e);
 		}
 		proxyConfig.done();
 	}
@@ -282,8 +280,7 @@ public class LinphoneHandler
 		try {
 			mLinphoneCore.addFriend(lf);
 		} catch (LinphoneCoreException e) {
-			Log.e(LOGTAG, "Exception: while adding friend [" + lf.getAddress().getUserName() + "] to linphone in newSubscriptionRequest");
-			e.printStackTrace();
+			Log.e(LOGTAG, "LinphoneCoreException: during addFriend [" + lf.getAddress().getUserName() + "]: " + e.getMessage(), e);
 		}
 	}
 
@@ -324,8 +321,8 @@ public class LinphoneHandler
 				Log.i(LOGTAG, "Aborting");
 				return;
 			}
-		} catch (LinphoneCoreException lce) {
-			Log.e(LOGTAG, "Exception: " + lce.toString());
+		} catch (LinphoneCoreException e) {
+			Log.e(LOGTAG, "LinphoneCoreException during invite: " + e.getMessage(), e);
 			return;
 		}
 
@@ -352,7 +349,7 @@ public class LinphoneHandler
 		try {
 			mLinphoneCore.acceptCallWithParams(currentCall, params);
 		} catch (LinphoneCoreException e) {
-			Log.e(LOGTAG, "Exception: " + e.toString());
+			Log.e(LOGTAG, "LinphoneCoreException during acceptCallWithParams: " + e.getMessage(), e);
 		}
 	}
 
