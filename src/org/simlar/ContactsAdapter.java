@@ -195,9 +195,9 @@ public class ContactsAdapter extends ArrayAdapter<FullContactData>
 		}
 	}
 
-	public String getNumber(final int position)
+	public void call(int position)
 	{
-		return getItem(position).number;
+		mCommunicator.getService().call(getItem(position).number);
 	}
 
 	public void setEmptyTextListener(final EmptyTextListener listener)
