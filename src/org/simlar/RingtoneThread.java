@@ -45,7 +45,7 @@ class RingtoneThread
 		private Handler mHandler = null;
 
 		// should only be accessed within thread
-		MediaPlayer mMediaPlayer = initializeMediaPlayer();
+		MediaPlayer mMediaPlayer = null;
 
 		public RingtoneThreadImpl()
 		{
