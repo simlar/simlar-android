@@ -63,7 +63,7 @@ public class HttpsPost
 							.append(PARAMETER_EQUALS_CHAR)
 							.append(URLEncoder.encode(parameters.get(parameterName), "UTF-8"));
 				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
+					Log.e(LOGTAG, "UnsupportedEncodingException", e);
 				}
 
 				firstParameter = false;
@@ -93,11 +93,9 @@ public class HttpsPost
 			Log.d(LOGTAG, "created connection for: " + urlPath);
 			return connection;
 		} catch (MalformedURLException e) {
-			Log.e(LOGTAG, "MalformedURLException " + e.getMessage());
-			e.printStackTrace();
+			Log.e(LOGTAG, "MalformedURLException: " + e.getMessage(), e);
 		} catch (IOException e) {
-			Log.e(LOGTAG, "IOException " + e.getMessage());
-			e.printStackTrace();
+			Log.e(LOGTAG, "IOException: " + e.getMessage(), e);
 		}
 
 		Log.e(LOGTAG, "failed to create connection for: " + urlPath);
@@ -112,8 +110,7 @@ public class HttpsPost
 					Log.i(LOGTAG, "sleeping 500ms before retrying post: " + urlPath);
 					Thread.sleep(500);
 				} catch (InterruptedException e) {
-					Log.e(LOGTAG, "sleep interrupted: " + e.getMessage());
-					e.printStackTrace();
+					Log.e(LOGTAG, "sleep interrupted: " + e.getMessage(), e);
 				}
 			}
 
@@ -147,8 +144,7 @@ public class HttpsPost
 			return connection.getInputStream();
 
 		} catch (IOException e) {
-			Log.e(LOGTAG, "IOException " + e.getMessage());
-			e.printStackTrace();
+			Log.e(LOGTAG, "IOException: " + e.getMessage(), e);
 			return null;
 		}
 	}

@@ -158,18 +158,15 @@ public class CreateAccount
 		try {
 			parsedResult = parseXml(result, responseAttribute1, responseAttribute2);
 		} catch (XmlPullParserException e) {
-			Log.e(LOGTAG, "parsing xml failed: " + e.getMessage());
-			e.printStackTrace();
+			Log.e(LOGTAG, "parsing xml failed: " + e.getMessage(), e);
 		} catch (IOException e) {
-			Log.e(LOGTAG, "IOException " + e.getMessage());
-			e.printStackTrace();
+			Log.e(LOGTAG, "IOException: " + e.getMessage(), e);
 		}
 
 		try {
 			result.close();
 		} catch (IOException e) {
-			Log.e(LOGTAG, "IOException " + e.getMessage());
-			e.printStackTrace();
+			Log.e(LOGTAG, "IOException: " + e.getMessage(), e);
 		}
 
 		return parsedResult;

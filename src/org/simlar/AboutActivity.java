@@ -34,7 +34,7 @@ public class AboutActivity extends Activity
 		setContentView(R.layout.activity_about);
 
 		TextView version = (TextView) findViewById(R.id.textViewVersion);
-		version.setText(Util.getVersionName(this));
+		version.setText(Version.getVersionName(this));
 	}
 
 	@Override

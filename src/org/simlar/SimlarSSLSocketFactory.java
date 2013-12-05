@@ -97,8 +97,7 @@ public class SimlarSSLSocketFactory extends SSLSocketFactory
 			Log.i(LOGTAG, "using protocols: " + TextUtils.join(", ", protocols));
 			return protocols;
 		} catch (IOException e) {
-			Log.e(LOGTAG, "failed to create protocols: " + e.getMessage());
-			e.printStackTrace();
+			Log.e(LOGTAG, "failed to create protocols: " + e.getMessage(), e);
 			return null;
 		}
 	}
@@ -116,7 +115,7 @@ public class SimlarSSLSocketFactory extends SSLSocketFactory
 			caInput = new BufferedInputStream(new FileInputStream(FileHelper.getRootCaFileName()));
 			return cf.generateCertificate(caInput);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log.e(LOGTAG, "Exception during loadCertificate: " + e.getMessage(), e);
 			return null;
 		} finally {
 			try {
@@ -148,7 +147,7 @@ public class SimlarSSLSocketFactory extends SSLSocketFactory
 			context.init(null, tmf.getTrustManagers(), null);
 			return context.getSocketFactory();
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log.e(LOGTAG, "Exception during createSSLSocketFactory: " + e.getMessage(), e);
 			return null;
 		}
 	}

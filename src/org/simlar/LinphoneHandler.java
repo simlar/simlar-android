@@ -71,7 +71,7 @@ public class LinphoneHandler
 			try {
 				mLinphoneCore.destroy();
 			} catch (RuntimeException e) {
-				e.printStackTrace();
+				Log.e(LOGTAG, "RuntimeException during mLinphoneCore.destroy()", e);
 			} finally {
 				mLinphoneCore = null;
 			}
@@ -79,14 +79,18 @@ public class LinphoneHandler
 		Log.i(LOGTAG, "destroy ended");
 	}
 
-	private void enableDisableAudioCodec(String codec, int rate, int channels, boolean enable) throws LinphoneCoreException
+	private void enableAudioCodec(String codec, int rate, int channels, boolean enable)
 	{
 		PayloadType pt = mLinphoneCore.findPayloadType(codec, rate, channels);
 		if (pt != null) {
-			Log.v(LOGTAG, "AudioCodec: codec='" + codec + "' rate='" + rate + "' channels='" + channels + "' enable='" + enable + "'");
-			mLinphoneCore.enablePayloadType(pt, enable);
+			try {
+				mLinphoneCore.enablePayloadType(pt, enable);
+				Log.v(LOGTAG, "AudioCodec: codec=" + codec + " rate=" + rate + " channels=" + channels + " enable=" + enable);
+			} catch (LinphoneCoreException e) {
+				Log.e(LOGTAG, "LinphoneCoreException during enabling Audio Codec: " + e.getMessage(), e);
+			}
 		} else {
-			Log.w(LOGTAG, "AudioCodec: payload not found for codec='" + codec + "' rate='" + rate + "'");
+			Log.w(LOGTAG, "AudioCodec: payload not found for codec=" + codec + " rate=" + rate);
 		}
 	}
 
@@ -132,7 +136,7 @@ public class LinphoneHandler
 			// The listener will react to events in Linphone core.
 			mLinphoneCore = LinphoneCoreFactory.instance().createLinphoneCore(listener, "", linphoneInitialConfigFile, null);
 			mLinphoneCore.setContext(context);
-			mLinphoneCore.setUserAgent("Simlar", "0.0.0");
+			mLinphoneCore.setUserAgent("Simlar", Version.getVersionName(context));
 
 			// enable STUN with ICE
 			mLinphoneCore.setStunServer(STUN_SERVER);
@@ -157,27 +161,22 @@ public class LinphoneHandler
 			mLinphoneCore.setZrtpSecretsCache(zrtpSecretsCacheFile);
 
 			// Audio Codecs
-			// Configure audio codecs
-			try {
-				enableDisableAudioCodec("speex", 32000, 1, false);
-				enableDisableAudioCodec("speex", 16000, 1, false);
-				enableDisableAudioCodec("speex", 8000, 1, false);
-				enableDisableAudioCodec("iLBC", 8000, 1, false);
-				enableDisableAudioCodec("GSM", 8000, 1, false);
-				enableDisableAudioCodec("G722", 8000, 1, false);
-				//enableDisableAudioCodec("G729", 8000, 1, true);
-				enableDisableAudioCodec("PCMU", 8000, 1, false);
-				enableDisableAudioCodec("PCMA", 8000, 1, false);
-				enableDisableAudioCodec("AMR", 8000, 1, false);
-				//enableDisableAudioCodec("AMR-WB", 16000, 1, true);
-				enableDisableAudioCodec("SILK", 24000, 1, false);
-				enableDisableAudioCodec("SILK", 16000, 1, true);
-				enableDisableAudioCodec("SILK", 12000, 1, false);
-				enableDisableAudioCodec("SILK", 8000, 1, true);
-				enableDisableAudioCodec("OPUS", 48000, 1, true);
-			} catch (LinphoneCoreException lce) {
-				Log.e(LOGTAG, "Exception during enabling Audio Codec: " + lce.toString());
-			}
+			enableAudioCodec("speex", 32000, 1, false);
+			enableAudioCodec("speex", 16000, 1, false);
+			enableAudioCodec("speex", 8000, 1, false);
+			enableAudioCodec("iLBC", 8000, 1, false);
+			enableAudioCodec("GSM", 8000, 1, false);
+			enableAudioCodec("G722", 8000, 1, false);
+			//enableDisableAudioCodec("G729", 8000, 1, true);
+			enableAudioCodec("PCMU", 8000, 1, false);
+			enableAudioCodec("PCMA", 8000, 1, false);
+			enableAudioCodec("AMR", 8000, 1, false);
+			//enableDisableAudioCodec("AMR-WB", 16000, 1, true);
+			enableAudioCodec("SILK", 24000, 1, false);
+			enableAudioCodec("SILK", 16000, 1, true);
+			enableAudioCodec("SILK", 12000, 1, false);
+			enableAudioCodec("SILK", 8000, 1, true);
+			enableAudioCodec("OPUS", 48000, 1, true);
 
 			// enable echo cancellation
 			mLinphoneCore.enableEchoCancellation(true);
@@ -194,9 +193,8 @@ public class LinphoneHandler
 
 			// make sure we only handle one call
 			mLinphoneCore.setMaxCalls(1);
-		} catch (LinphoneCoreException lce) {
-			Log.e(LOGTAG, "LinphoneCoreException: " + lce.toString());
-			lce.printStackTrace();
+		} catch (LinphoneCoreException e) {
+			Log.e(LOGTAG, "LinphoneCoreException during initialize: " + e.getMessage(), e);
 		}
 	}
 
@@ -248,8 +246,7 @@ public class LinphoneHandler
 			mLinphoneCore.addProxyConfig(proxyCfg);
 			mLinphoneCore.setDefaultProxyConfig(proxyCfg);
 		} catch (LinphoneCoreException e) {
-			Log.e(LOGTAG, "LinphoneCoreException: " + e.toString());
-			e.printStackTrace();
+			Log.e(LOGTAG, "LinphoneCoreException during setCredentials: " + e.getMessage(), e);
 		}
 	}
 
@@ -262,7 +259,7 @@ public class LinphoneHandler
 		try {
 			proxyConfig.enableRegister(false);
 		} catch (LinphoneCoreException e) {
-			e.printStackTrace();
+			Log.e(LOGTAG, "LinphoneCoreException during unregister: " + e.getMessage(), e);
 		}
 		proxyConfig.done();
 	}
@@ -282,8 +279,7 @@ public class LinphoneHandler
 		try {
 			mLinphoneCore.addFriend(lf);
 		} catch (LinphoneCoreException e) {
-			Log.e(LOGTAG, "Exception: while adding friend [" + lf.getAddress().getUserName() + "] to linphone in newSubscriptionRequest");
-			e.printStackTrace();
+			Log.e(LOGTAG, "LinphoneCoreException: during addFriend [" + lf.getAddress().getUserName() + "]: " + e.getMessage(), e);
 		}
 	}
 
@@ -324,12 +320,12 @@ public class LinphoneHandler
 				Log.i(LOGTAG, "Aborting");
 				return;
 			}
-		} catch (LinphoneCoreException lce) {
-			Log.e(LOGTAG, "Exception: " + lce.toString());
+		} catch (LinphoneCoreException e) {
+			Log.e(LOGTAG, "LinphoneCoreException during invite: " + e.getMessage(), e);
 			return;
 		}
 
-		Log.i(LOGTAG, "Call to '" + number + "' is in progress...");
+		Log.i(LOGTAG, "Call to " + number + " is in progress...");
 	}
 
 	private LinphoneCall getCurrentCall()
@@ -352,7 +348,7 @@ public class LinphoneHandler
 		try {
 			mLinphoneCore.acceptCallWithParams(currentCall, params);
 		} catch (LinphoneCoreException e) {
-			Log.e(LOGTAG, "Exception: " + e.toString());
+			Log.e(LOGTAG, "LinphoneCoreException during acceptCallWithParams: " + e.getMessage(), e);
 		}
 	}
 

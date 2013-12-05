@@ -72,12 +72,10 @@ class RingtoneThread
 				mediaPlayer.setLooping(false);
 				return mediaPlayer;
 			} catch (IllegalStateException e) {
-				Log.e(LOGTAG, "Media Player illegal state: " + e.getMessage());
-				e.printStackTrace();
+				Log.e(LOGTAG, "Media Player illegal state: " + e.getMessage(), e);
 				return null;
 			} catch (IOException e) {
-				Log.e(LOGTAG, "Media Player io exception: " + e.getMessage());
-				e.printStackTrace();
+				Log.e(LOGTAG, "Media Player io exception: " + e.getMessage(), e);
 				return null;
 			}
 		}
@@ -169,8 +167,7 @@ class RingtoneThread
 		try {
 			mThread.join(300);
 		} catch (InterruptedException e) {
-			Log.e(LOGTAG, "join interrupted: " + e.getMessage());
-			e.printStackTrace();
+			Log.e(LOGTAG, "join interrupted: " + e.getMessage(), e);
 		} finally {
 			Log.i(LOGTAG, "thread joined");
 			mThread = null;

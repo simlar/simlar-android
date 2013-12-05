@@ -170,7 +170,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId)
 	{
-		Log.i(LOGTAG, "onStartCommand intent='" + intent + "' startId='" + startId + "'");
+		Log.i(LOGTAG, "onStartCommand intent=" + intent + " startId=" + startId);
 
 		// We want this service to continue running until it is explicitly stopped, so return sticky.
 		return START_STICKY;
@@ -277,7 +277,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		try {
 			mLinphoneThread.register(PreferencesHelper.getMySimlarId(), PreferencesHelper.getPassword());
 		} catch (NotInitedException e) {
-			e.printStackTrace();
+			Log.e(LOGTAG, "PreferencesHelper.NotInitedException", e);
 		}
 	}
 
@@ -384,7 +384,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	@Override
 	public void onRegistrationStateChanged(final RegistrationState state)
 	{
-		Log.i(LOGTAG, "handleRegistrationStateChanged: " + state.toString());
+		Log.i(LOGTAG, "onRegistrationStateChanged: " + state);
 
 		SimlarStatus status = SimlarStatus.fromRegistrationState(state);
 
@@ -634,7 +634,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		try {
 			mLinphoneThread.join(2000);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			Log.e(LOGTAG, "join interrupted: " + e.getMessage(), e);
 		}
 		SimlarServiceBroadcast.sendServiceFinishes(this);
 

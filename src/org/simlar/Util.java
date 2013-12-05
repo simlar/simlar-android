@@ -24,8 +24,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import android.content.Context;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 
 public class Util
@@ -69,20 +67,6 @@ public class Util
 		int length = 0;
 		while ((length = is.read(buffer)) != -1) {
 			os.write(buffer, 0, length);
-		}
-	}
-
-	public static String getVersionName(final Context context)
-	{
-		if (context == null) {
-			return "";
-		}
-
-		try {
-			return context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
-		} catch (NameNotFoundException e) {
-			e.printStackTrace();
-			return "";
 		}
 	}
 }

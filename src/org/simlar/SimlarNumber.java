@@ -157,7 +157,7 @@ public class SimlarNumber
 			return tmpTelephoneNumber;
 		} catch (NumberParseException e1) {
 			Log.i(LOGTAG,
-					"NumberParseException (telephoneNumber='" + telephoneNumber + " mDefaultRegion='" + mDefaultRegion + "'): " + e1.getMessage());
+					"NumberParseException (telephoneNumber=" + telephoneNumber + " mDefaultRegion=" + mDefaultRegion + "): " + e1.getMessage());
 			return "";
 		}
 	}
@@ -184,14 +184,14 @@ public class SimlarNumber
 
 		final String internationalTelephoneNumber = parseNumberWithLibPhonenumber(telephoneNumber, true);
 		if (Util.isNullOrEmpty(internationalTelephoneNumber)) {
-			Log.w(LOGTAG, "createSimlarNumber: parsing number='" + telephoneNumber + "' with libphonenumber failed");
+			Log.w(LOGTAG, "createSimlarNumber: parsing number=" + telephoneNumber + " with libphonenumber failed");
 			return "";
 		}
 
 		final String simlarId = "*" + internationalTelephoneNumber + "*";
 
 		if (!hasSimlarIdFormat(simlarId)) {
-			Log.e(LOGTAG, "WTF no frrech Id: " + simlarId);
+			Log.e(LOGTAG, "WTF no SimlarId: " + simlarId);
 			return "";
 		}
 
