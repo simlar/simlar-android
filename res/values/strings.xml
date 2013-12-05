@@ -47,7 +47,6 @@
     <string name="notification_simlar_status_creating_account">creating account</string>
     <string name="notification_simlar_status_connecting">%1$s connecting</string>
     <string name="notification_simlar_status_online">%1$s online</string>
-    <string name="notification_simlar_status_ongoing_call">%1$s is on the phone</string>
     <string name="notification_simlar_status_error">%1$s registration failed</string>
     <string name="notification_simlar_status_error_loading_contacts">%1$s error loading contacts</string>
 
