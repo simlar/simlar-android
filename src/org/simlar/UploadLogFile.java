@@ -35,6 +35,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.util.Log;
 
 public class UploadLogFile
@@ -56,7 +57,7 @@ public class UploadLogFile
 	Context mContext = null;
 	ProgressDialog mProgressDialog = null;
 
-	class PostResult
+	private class PostResult
 	{
 		final boolean success;
 		final String fileName;
@@ -174,6 +175,10 @@ public class UploadLogFile
 			Log.w(LOGTAG, "no context");
 			return;
 		}
+
+		Log.i(LOGTAG, "uploading log file started: " + fileName);
+		Log.i(LOGTAG, "simlar version: " + Version.getVersionName(mContext));
+		Log.i(LOGTAG, "running on device: " + Build.DEVICE);
 
 		new AsyncTask<File, Void, PostResult>() {
 			@Override
