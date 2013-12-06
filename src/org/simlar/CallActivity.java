@@ -139,23 +139,14 @@ public class CallActivity extends Activity implements SensorEventListener
 	void setCallEncryption(final boolean encrypted, final String authenticationToken, final boolean authenticationTokenVerified)
 	{
 		final LinearLayout linearLayoutAuthenticationToken = (LinearLayout) findViewById(R.id.linearLayoutAuthenticationToken);
+		final LinearLayout linearLayoutUnencryptedCall = (LinearLayout) findViewById(R.id.linearLayoutUnencryptedCall);
 
 		if (!encrypted) {
-			linearLayoutAuthenticationToken.setVisibility(View.VISIBLE);
-
-			final TextView label = (TextView) findViewById(R.id.textViewLabelAuthenticationToken);
-			final TextView token = (TextView) findViewById(R.id.textViewAuthenticationToken);
-			final Button verify = (Button) findViewById(R.id.buttonAuthenticationTokenVerify);
-			final Button wrong = (Button) findViewById(R.id.buttonAuthenticationTokenWrong);
-
-			label.setVisibility(View.VISIBLE);
-			label.setText(R.string.call_activity_error_not_encrypted);
-			token.setVisibility(View.INVISIBLE);
-			verify.setVisibility(View.INVISIBLE);
-			wrong.setVisibility(View.INVISIBLE);
-
+			linearLayoutAuthenticationToken.setVisibility(View.GONE);
+			linearLayoutUnencryptedCall.setVisibility(View.VISIBLE);
 			return;
 		}
+		linearLayoutUnencryptedCall.setVisibility(View.GONE);
 
 		if (authenticationTokenVerified || Util.isNullOrEmpty(authenticationToken)) {
 			linearLayoutAuthenticationToken.setVisibility(View.GONE);
