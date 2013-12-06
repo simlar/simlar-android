@@ -25,6 +25,9 @@ declare -r GIT_HASH=$(git log -n1 --format="%H")
 
 if [ -d "${LINPHONE_ANDROID_PATCH_DIR}" ] ; then
 	git am "${LINPHONE_ANDROID_PATCH_DIR}"/*.patch
+
+	## patches to linphone-android may change submodules, so be sure to update them here
+	git submodule update --recursive --init
 fi
 
 if [ -d "${LINPHONE_PATCH_DIR}" ] ; then
