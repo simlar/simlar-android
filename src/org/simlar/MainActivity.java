@@ -90,12 +90,8 @@ public class MainActivity extends android.support.v4.app.FragmentActivity
 		}
 	}
 
-	private class ContactsListFragment extends android.support.v4.app.ListFragment implements EmptyTextListener
+	public static class ContactsListFragment extends android.support.v4.app.ListFragment implements EmptyTextListener
 	{
-		public ContactsListFragment()
-		{
-		}
-
 		public void setAdapter(ContactsAdapter adapter)
 		{
 			setListAdapter(adapter);
@@ -112,15 +108,7 @@ public class MainActivity extends android.support.v4.app.FragmentActivity
 		@Override
 		public void onListItemClick(ListView l, View v, int position, long id)
 		{
-			final String number = ((ContactsAdapter) getListAdapter()).getNumber(position);
-
-			if (Util.isNullOrEmpty(number)) {
-				Log.e(LOGTAG, "ContactsListFragment no number at position: " + number);
-				return;
-			}
-
-			Log.i(LOGTAG, "starting CallActivity to call: " + number);
-			MainActivity.this.startActivity(new Intent(MainActivity.this, CallActivity.class).putExtra(CallActivity.INTENT_EXTRA_SIMLAR_ID, number));
+			((ContactsAdapter) getListAdapter()).call(position);
 		}
 
 		@Override

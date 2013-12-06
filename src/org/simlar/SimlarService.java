@@ -234,9 +234,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		final PendingIntent activity = PendingIntent.getActivity(this, 0,
 				new Intent(this, mNotificationActivity).addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED), 0);
 
-		if (status == SimlarStatus.ONGOING_CALL) {
-			text = String.format(getString(status.getNotificationTextId()), mSimlarCallState.getDisplayName());
-		} else if (mCreatingAccount) {
+		if (mCreatingAccount) {
 			text = getString(R.string.notification_simlar_status_creating_account);
 			if (!Util.isNullOrEmpty(PreferencesHelper.getMySimlarIdOrEmptyString())) {
 				text += ": " + String.format(getString(status.getNotificationTextId()), PreferencesHelper.getMySimlarIdOrEmptyString());
@@ -496,6 +494,10 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 			if (mSimlarCallState.isRinging()) {
 				Log.i(LOGTAG, "starting RingingActivity");
 				startActivity(new Intent(SimlarService.this, RingingActivity.class).addFlags(
+						Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+			} else {
+				Log.i(LOGTAG, "starting CallActivity");
+				startActivity(new Intent(SimlarService.this, CallActivity.class).addFlags(
 						Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
 			}
 		}

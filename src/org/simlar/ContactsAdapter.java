@@ -158,7 +158,7 @@ public class ContactsAdapter extends ArrayAdapter<FullContactData>
 		final SimlarStatus status = mCommunicator.getService().getSimlarStatus();
 		Log.i(LOGTAG, "onSimlarStatusChanged " + status + " (isGoingDown=" + mCommunicator.getService().isGoingDown() + ")");
 
-		if (status == SimlarStatus.ONLINE && !mCommunicator.getService().isGoingDown()) {
+		if (status.shouldShowContacts(mCommunicator.getService().isGoingDown())) {
 			addAll(mCommunicator.getService().getContacts());
 		}
 
@@ -195,9 +195,9 @@ public class ContactsAdapter extends ArrayAdapter<FullContactData>
 		}
 	}
 
-	public String getNumber(final int position)
+	public void call(int position)
 	{
-		return getItem(position).number;
+		mCommunicator.getService().call(getItem(position).number);
 	}
 
 	public void setEmptyTextListener(final EmptyTextListener listener)
