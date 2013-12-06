@@ -32,22 +32,22 @@ import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
 
-class RingtoneThread
+class SoundEffectManager
 {
-	static final String LOGTAG = RingtoneThread.class.getSimpleName();
+	static final String LOGTAG = SoundEffectManager.class.getSimpleName();
 	static final long MIN_PLAY_TIME = VibratorThread.VIBRATE_LENGTH + VibratorThread.VIBRATE_PAUSE;
 
 	Context mContext = null;
-	private RingtoneThreadImpl mThread = null;
+	private SoundEffectThreadImpl mThread = null;
 
-	private class RingtoneThreadImpl extends Thread
+	private class SoundEffectThreadImpl extends Thread
 	{
 		private Handler mHandler = null;
 
 		// should only be accessed within thread
 		MediaPlayer mMediaPlayer = null;
 
-		public RingtoneThreadImpl()
+		public SoundEffectThreadImpl()
 		{
 			super();
 		}
@@ -139,7 +139,7 @@ class RingtoneThread
 		}
 	}
 
-	public RingtoneThread(final Context context)
+	public SoundEffectManager(final Context context)
 	{
 		mContext = context;
 	}
@@ -151,7 +151,7 @@ class RingtoneThread
 			return;
 		}
 
-		mThread = new RingtoneThreadImpl();
+		mThread = new SoundEffectThreadImpl();
 		mThread.start();
 	}
 

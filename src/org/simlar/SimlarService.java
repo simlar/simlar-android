@@ -78,7 +78,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	private boolean mCreatingAccount = false;
 	private Class<?> mNotificationActivity = null;
 	private VibratorThread mVibratorThread = null;
-	private RingtoneThread mRingtoneThread = null;
+	private SoundEffectManager mSoundEffectManager = null;
 	private boolean mHasAudioFocus = false;
 	private NetworkChangeReceiver mNetworkChangeReceiver = new NetworkChangeReceiver();
 	private PendingIntent mkeepAwakePendingIntent = null;
@@ -183,7 +183,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 
 		FileHelper.init(this);
 		mVibratorThread = new VibratorThread(this.getApplicationContext());
-		mRingtoneThread = new RingtoneThread(this.getApplicationContext());
+		mSoundEffectManager = new SoundEffectManager(this.getApplicationContext());
 
 		mWakeLock = ((PowerManager) this.getSystemService(Context.POWER_SERVICE))
 				.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "SimlarWakeLock");
@@ -466,10 +466,10 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 
 		if (mSimlarCallState.isRinging()) {
 			mVibratorThread.start();
-			mRingtoneThread.start();
+			mSoundEffectManager.start();
 		} else {
 			mVibratorThread.stop();
-			mRingtoneThread.stop();
+			mSoundEffectManager.stop();
 		}
 
 		// make sure WLAN is not suspended while calling
