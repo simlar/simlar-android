@@ -495,6 +495,11 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			mSoundEffectManager.stop(SoundEffectType.RINGTONE);
 		}
 
+		if (mSimlarCallState.isBeforeEncryption()) {
+			mLinphoneThread.setMicrophoneMuted(true);
+			mSoundEffectManager.start(SoundEffectType.ENCRYPTION_HANDSHAKE);
+		}
+
 		// make sure WLAN is not suspended while calling
 		if (mSimlarCallState.isNewCall()) {
 			notifySimlarStatusChanged(SimlarStatus.ONGOING_CALL);
@@ -566,6 +571,9 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 
 		Log.i(LOGTAG, "SimlarCallState updated encryption: " + mSimlarCallState);
+
+		mLinphoneThread.setMicrophoneMuted(false);
+		mSoundEffectManager.stop(SoundEffectType.ENCRYPTION_HANDSHAKE);
 
 		if (encrypted) {
 			// just to be sure

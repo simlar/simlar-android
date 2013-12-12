@@ -44,6 +44,7 @@ final class SoundEffectManager
 
 	public enum SoundEffectType {
 		RINGTONE,
+		ENCRYPTION_HANDSHAKE,
 		UNENCRYPTED_CALL_ALARM
 	}
 
@@ -76,6 +77,11 @@ final class SoundEffectManager
 					mediaPlayer.setAudioStreamType(AudioManager.STREAM_RING);
 					mediaPlayer.setDataSource(mContext, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE));
 					mediaPlayer.setLooping(false);
+					return mediaPlayer;
+				case ENCRYPTION_HANDSHAKE:
+					mediaPlayer.setDataSource(mContext,
+							Uri.parse("android.resource://" + mContext.getPackageName() + "/" + R.raw.encryption_handshake));
+					mediaPlayer.setLooping(true);
 					return mediaPlayer;
 				case UNENCRYPTED_CALL_ALARM:
 					mediaPlayer.setDataSource(mContext, Uri.parse("android.resource://" + mContext.getPackageName() + "/" + R.raw.unencrypted_call));

@@ -641,6 +641,18 @@ public final class LinphoneThread
 		mImpl.setVolumes(volumes);
 	}
 
+	public void setMicrophoneMuted(final boolean enabled)
+	{
+		if (mImpl.mVolumes == null) {
+			Log.e(LOGTAG, "volumes not initialized");
+			return;
+		}
+
+		if (mImpl.mVolumes.getMicrophoneMuted() != enabled) {
+			setVolumes(mImpl.mVolumes.toggleMicrophoneMuted());
+		}
+	}
+
 	public Volumes getVolumes()
 	{
 		return mImpl.mVolumes;

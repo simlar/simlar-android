@@ -289,6 +289,11 @@ public final class SimlarCallState
 		return State.IncomingReceived.equals(mLinphoneCallState);
 	}
 
+	public boolean isBeforeEncryption()
+	{
+		return State.Connected.equals(mLinphoneCallState);
+	}
+
 	public boolean hasCallStatusMessage()
 	{
 		return !isEmpty() && (isCallOutgoingConnecting(mLinphoneCallState) || isCallOutgoingRinging(mLinphoneCallState)) && mCallStatusMessageId > 0;
