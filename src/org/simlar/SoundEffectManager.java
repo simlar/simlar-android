@@ -21,6 +21,8 @@
 package org.simlar;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.content.Context;
 import android.media.AudioManager;
@@ -38,44 +40,60 @@ class SoundEffectManager
 	static final long MIN_PLAY_TIME = VibratorThread.VIBRATE_LENGTH + VibratorThread.VIBRATE_PAUSE;
 
 	Context mContext = null;
-	private SoundEffectThreadImpl mThread = null;
+	private final Map<SoundEffectType, SoundEffectThreadImpl> mThreads = new HashMap<SoundEffectType, SoundEffectThreadImpl>();
+
+	public enum SoundEffectType {
+		RINGTONE,
+		UNENCRYPTED_CALL_ALARM
+	}
 
 	private class SoundEffectThreadImpl extends Thread
 	{
 		private Handler mHandler = null;
+		final SoundEffectType mType;
 
 		// should only be accessed within thread
 		MediaPlayer mMediaPlayer = null;
 
-		public SoundEffectThreadImpl()
+		public SoundEffectThreadImpl(final SoundEffectType type)
 		{
 			super();
+			mType = type;
 		}
 
 		@Override
 		public void run()
 		{
-			Log.i(LOGTAG, "started");
+			Log.i(LOGTAG, "[" + mType + "] started");
 			Looper.prepare();
 			mHandler = new Handler();
 			startMediaPlayer();
 			Looper.loop();
+			Log.i(LOGTAG, "[" + mType + "] ended");
 		}
 
 		MediaPlayer initializeMediaPlayer()
 		{
 			try {
-				MediaPlayer mediaPlayer = new MediaPlayer();
-				mediaPlayer.setAudioStreamType(AudioManager.STREAM_RING);
-				mediaPlayer.setDataSource(mContext, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE));
-				mediaPlayer.prepare();
-				mediaPlayer.setLooping(false);
-				return mediaPlayer;
+				switch (mType) {
+				case RINGTONE:
+					MediaPlayer mediaPlayer = new MediaPlayer();
+					mediaPlayer.setAudioStreamType(AudioManager.STREAM_RING);
+					mediaPlayer.setDataSource(mContext, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE));
+					mediaPlayer.prepare();
+					mediaPlayer.setLooping(false);
+					return mediaPlayer;
+				case UNENCRYPTED_CALL_ALARM:
+					return MediaPlayer.create(mContext, R.raw.unencrypted_call);
+				default:
+					Log.e(LOGTAG, "unknown type");
+					return null;
+				}
 			} catch (IllegalStateException e) {
-				Log.e(LOGTAG, "Media Player illegal state: " + e.getMessage(), e);
+				Log.e(LOGTAG, "[" + mType + "] Media Player illegal state: " + e.getMessage(), e);
 				return null;
 			} catch (IOException e) {
-				Log.e(LOGTAG, "Media Player io exception: " + e.getMessage(), e);
+				Log.e(LOGTAG, "[" + mType + "] Media Player io exception: " + e.getMessage(), e);
 				return null;
 			}
 		}
@@ -95,13 +113,13 @@ class SoundEffectManager
 						mMediaPlayer = initializeMediaPlayer();
 
 						if (mMediaPlayer == null) {
-							Log.e(LOGTAG, "failed to initialize MediaPlayer");
+							Log.e(LOGTAG, "[" + mType + "] failed to initialize MediaPlayer");
 							return;
 						}
 					}
 
 					final long playStartTime = SystemClock.elapsedRealtime();
-					Log.i(LOGTAG, "start ringing at: " + playStartTime);
+					Log.i(LOGTAG, "[" + mType + "] start playing at time: " + playStartTime);
 					mMediaPlayer.start();
 
 					mMediaPlayer.setOnCompletionListener(new OnCompletionListener() {
@@ -110,7 +128,7 @@ class SoundEffectManager
 						{
 							final long now = SystemClock.elapsedRealtime();
 							final long delay = Math.max(0, playStartTime + MIN_PLAY_TIME - now);
-							Log.i(LOGTAG, "MediaPlayer onCompletion at: " + now + " restarting with delay: " + delay);
+							Log.i(LOGTAG, "[" + mType + "] MediaPlayer onCompletion at: " + now + " restarting with delay: " + delay);
 							startMediaPlayer(delay);
 						}
 					});
@@ -126,14 +144,14 @@ class SoundEffectManager
 				@Override
 				public void run()
 				{
-					Log.i(LOGTAG, "stop ringing");
+					Log.i(LOGTAG, "[" + mType + "] stop playing");
 					if (mMediaPlayer != null) {
 						mMediaPlayer.stop();
 						mMediaPlayer.release();
 						mMediaPlayer = null;
 					}
 					Looper.myLooper().quit();
-					Log.i(LOGTAG, "ringing stopped");
+					Log.i(LOGTAG, "[" + mType + "] playing stopped");
 				}
 			});
 		}
@@ -144,33 +162,52 @@ class SoundEffectManager
 		mContext = context;
 	}
 
-	public void start()
+	public void start(final SoundEffectType type)
 	{
-		if (mThread != null) {
-			Log.i(LOGTAG, "already ringing => abort");
+		if (type == null) {
+			Log.e(LOGTAG, "start with type null");
 			return;
 		}
 
-		mThread = new SoundEffectThreadImpl();
-		mThread.start();
+		if (mThreads.containsKey(type)) {
+			Log.i(LOGTAG, "[" + type + "] already playing");
+			return;
+		}
+
+		//Log.i(LOGTAG, "[" + type + "] start playing");
+
+		mThreads.put(type, new SoundEffectThreadImpl(type));
+		mThreads.get(type).start();
 	}
 
-	public void stop()
+	public void stop(final SoundEffectType type)
 	{
-		if (mThread == null) {
-			Log.i(LOGTAG, "not ringing");
+		if (type == null) {
+			Log.e(LOGTAG, "stop with type null");
 			return;
 		}
 
-		mThread.stopMediaPlayer();
+		if (!mThreads.containsKey(type)) {
+			//Log.i(LOGTAG, "[" + type + "] not playing");
+			return;
+		}
+
+		mThreads.get(type).stopMediaPlayer();
 
 		try {
-			mThread.join(300);
+			mThreads.get(type).join(300);
 		} catch (InterruptedException e) {
-			Log.e(LOGTAG, "join interrupted: " + e.getMessage(), e);
+			Log.e(LOGTAG, "[" + type + "] join interrupted: " + e.getMessage(), e);
 		} finally {
-			Log.i(LOGTAG, "thread joined");
-			mThread = null;
+			Log.i(LOGTAG, "[" + type + "] thread joined");
+			mThreads.remove(type);
+		}
+	}
+
+	public void stopAll()
+	{
+		for (final SoundEffectType type : SoundEffectType.values()) {
+			stop(type);
 		}
 	}
 }

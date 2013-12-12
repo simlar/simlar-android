@@ -28,6 +28,7 @@ import java.util.Set;
 import org.linphone.core.LinphoneCall.State;
 import org.linphone.core.LinphoneCore.RegistrationState;
 import org.simlar.PreferencesHelper.NotInitedException;
+import org.simlar.SoundEffectManager.SoundEffectType;
 
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -284,6 +285,9 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	{
 		Log.i(LOGTAG, "onDestroy");
 
+		mVibratorThread.stop();
+		mSoundEffectManager.stopAll();
+
 		unregisterReceiver(mNetworkChangeReceiver);
 
 		stopKeepAwake();
@@ -466,10 +470,10 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 
 		if (mSimlarCallState.isRinging()) {
 			mVibratorThread.start();
-			mSoundEffectManager.start();
+			mSoundEffectManager.start(SoundEffectType.RINGTONE);
 		} else {
 			mVibratorThread.stop();
-			mSoundEffectManager.stop();
+			mSoundEffectManager.stop(SoundEffectType.RINGTONE);
 		}
 
 		// make sure WLAN is not suspended while calling
