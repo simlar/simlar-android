@@ -24,8 +24,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.View;
-import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
@@ -152,22 +150,6 @@ public class VolumesControlActivity extends Activity
 		super.onPause();
 	}
 
-	@SuppressWarnings("unused")
-	public void toggleSpeakerMuted(View view)
-	{
-		mVolumes = mVolumes.toggleExternalSpeaker();
-		mCommunicator.getService().setVolumes(mVolumes);
-		setButtonSpeakerMute();
-	}
-
-	@SuppressWarnings("unused")
-	public void toggleMicrophoneMuted(View view)
-	{
-		mVolumes = mVolumes.toggleMicrophoneMuted();
-		mCommunicator.getService().setVolumes(mVolumes);
-		setButtonMicophoneMute();
-	}
-
 	void setVolumes()
 	{
 		mVolumes = mCommunicator.getService().getVolumes();
@@ -177,30 +159,5 @@ public class VolumesControlActivity extends Activity
 
 		seekBarSpeaker.setProgress(mVolumes.getProgressSpeaker());
 		seekBarMicrophone.setProgress(mVolumes.getProgessMicrophone());
-
-		setButtonSpeakerMute();
-		setButtonMicophoneMute();
-	}
-
-	private void setButtonSpeakerMute()
-	{
-		ImageButton button = (ImageButton) findViewById(R.id.imageButtonSpeaker);
-
-		if (mVolumes.getExternalSpeaker()) {
-			button.setImageResource(R.drawable.volume_control_activity_speaker_external);
-		} else {
-			button.setImageResource(R.drawable.volume_control_activity_speaker_internal);
-		}
-	}
-
-	private void setButtonMicophoneMute()
-	{
-		ImageButton button = (ImageButton) findViewById(R.id.imageButtonMicrophone);
-
-		if (mVolumes.getMicrophoneMuted()) {
-			button.setImageResource(R.drawable.volume_control_activity_microphone_muted);
-		} else {
-			button.setImageResource(R.drawable.volume_control_activity_microphone);
-		}
 	}
 }
