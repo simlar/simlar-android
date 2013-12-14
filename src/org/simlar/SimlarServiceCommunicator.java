@@ -119,7 +119,7 @@ public class SimlarServiceCommunicator
 				return;
 			}
 			default:
-				Log.e(mLogtag, "Error in onReceive: unkown type");
+				Log.e(mLogtag, "Error in onReceive: unknown type");
 				return;
 			}
 		}
