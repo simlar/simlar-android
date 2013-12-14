@@ -272,6 +272,7 @@ public class CallActivity extends Activity implements SensorEventListener
 	@SuppressWarnings("unused")
 	public void showConnectionDetails(View view)
 	{
+		startActivity(new Intent(this, ConnectionDetailsActivity.class));
 	}
 
 	@SuppressWarnings("unused")
