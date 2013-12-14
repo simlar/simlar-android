@@ -130,4 +130,5 @@
     <string name="create_account_activity_button_confirm">Confirm</string>
 
     <string name="ringing_activity_title">%1$s is calling</string>
+    <string name="ringing_activity_phone_is_ringing">your phone is ringing</string>
 </resources>
