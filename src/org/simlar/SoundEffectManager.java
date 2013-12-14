@@ -55,11 +55,14 @@ final class SoundEffectManager
 		final SoundEffectType mType;
 		final Handler mHandler = new Handler();
 		private MediaPlayer mMediaPlayer;
+		private final long mPlayRequestTime;
+		private long mPlayStart = -1;
 
-		public SoundEffectPlayer(final SoundEffectType type)
+		public SoundEffectPlayer(final SoundEffectType type, final long now)
 		{
 			mType = type;
 			mMediaPlayer = initializeMediaPlayer();
+			mPlayRequestTime = now;
 
 			if (mMediaPlayer == null) {
 				Log.e(LOGTAG, "[" + type + "] failed to create media player");
@@ -120,6 +123,9 @@ final class SoundEffectManager
 				return;
 			}
 
+			if (mPlayStart == -1) {
+				mPlayStart = SystemClock.elapsedRealtime();
+			}
 			final long playStartTime = SystemClock.elapsedRealtime();
 			Log.i(LOGTAG, "[" + mType + "] start playing at time: " + playStartTime);
 			mMediaPlayer.start();
@@ -155,6 +161,10 @@ final class SoundEffectManager
 				mMediaPlayer.reset();
 				mMediaPlayer.release();
 				mMediaPlayer = null;
+				final long now = SystemClock.elapsedRealtime();
+				Log.i(LOGTAG, "[" + mType + "] play time=" + (now - mPlayStart)
+						+ "ms delay=" + (mPlayRequestTime - mPlayStart)
+						+ "ms sum=" + (now - mPlayRequestTime) + "ms");
 			}
 		}
 
@@ -179,6 +189,8 @@ final class SoundEffectManager
 
 	public void start(final SoundEffectType type)
 	{
+		final long now = SystemClock.elapsedRealtime();
+
 		if (type == null) {
 			Log.e(LOGTAG, "start with type null");
 			return;
@@ -189,7 +201,7 @@ final class SoundEffectManager
 			return;
 		}
 
-		mPlayers.put(type, new SoundEffectPlayer(type));
+		mPlayers.put(type, new SoundEffectPlayer(type, now));
 		mPlayers.get(type).startMediaPlayer();
 	}
 
