@@ -512,6 +512,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 			releaseWakeLock();
 			releaseWifiLock();
 
+			mSoundEffectManager.stopAll();
 			if (mHasAudioFocus) {
 				final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 				if (audioManager.abandonAudioFocus(null) == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
@@ -559,7 +560,25 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		}
 
 		Log.i(LOGTAG, "SimlarCallState updated encryption: " + mSimlarCallState);
+
+		if (encrypted) {
+			// just to be sure
+			mVibratorThread.stop();
+			mSoundEffectManager.stop(SoundEffectType.UNENCRYPTED_CALL_ALARM);
+		} else {
+			Log.w(LOGTAG, "unencrypted call");
+			mVibratorThread.start();
+			mSoundEffectManager.start(SoundEffectType.UNENCRYPTED_CALL_ALARM);
+		}
+
 		SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
+	}
+
+	public void acceptUnencryptedCall()
+	{
+		Log.w(LOGTAG, "user accepts unencrypted call");
+		mVibratorThread.stop();
+		mSoundEffectManager.stop(SoundEffectType.UNENCRYPTED_CALL_ALARM);
 	}
 
 	public void call(final String simlarId)

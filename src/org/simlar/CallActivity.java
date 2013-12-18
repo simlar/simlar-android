@@ -254,6 +254,15 @@ public class CallActivity extends Activity implements SensorEventListener
 	}
 
 	@SuppressWarnings("unused")
+	public void acceptUnencryptedCall(View view)
+	{
+		mCommunicator.getService().acceptUnencryptedCall();
+
+		final Button button = (Button) findViewById(R.id.buttonAcceptUnencryptedCall);
+		button.setVisibility(View.INVISIBLE);
+	}
+
+	@SuppressWarnings("unused")
 	public void showSoundSettingsDialog(View view)
 	{
 		startActivity(new Intent(this, VolumesControlActivity.class));
