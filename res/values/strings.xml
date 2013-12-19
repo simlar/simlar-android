@@ -64,12 +64,10 @@
 
     <string name="title_activity_call">Call</string>
 
-    <string name="terminatecall">Terminate Call</string>
-    <string name="pickupcall">Pick Up Call</string>
     <string name="call_activity_label_upload">Up: </string>
     <string name="call_activity_label_download">Down: </string>
-    <string name="call_activity_kbytes_per_second">kbytes/s</string>
-    <string name="call_activity_label_quality">Quality: </string>
+    <string name="call_activity_kbytes_per_second">kb/s</string>
+    <string name="call_activity_label_quality">Network Quality: </string>
     <string name="call_activity_quality_good">good</string>
     <string name="call_activity_quality_average">average</string>
     <string name="call_activity_quality_poor">poor</string>
@@ -78,6 +76,12 @@
     <string name="call_activity_quality_unknown">unknown</string>
     <string name="call_activity_label_codec">Codec: </string>
     <string name="call_activity_label_ice_state">ICE State: </string>
+    <string name="call_activity_sound_settings">Sound Settings</string>
+    <string name="call_activity_microphone_mute">Microphone mute</string>
+    <string name="call_activity_microphone_on">Microphone on</string>
+    <string name="call_activity_loudspeaker_on">loudspeaker</string>
+    <string name="call_activity_loudspeaker_off">loudspeaker off</string>
+    <string name="call_activity_terminate_call">Terminate Call</string>
     <string name="error_not_encrypted">ERROR: Not encrypted!</string>
     <string name="no_authentication_token">&#8230;</string>
     <string name="waiting_for_authentication_token">Waiting for authentication token</string>
@@ -85,7 +89,6 @@
     <string name="verified_authentication_token">Verified authentication token</string>
     <string name="button_authentication_token_verify">Verify</string>
     <string name="button_authentication_token_wrong">Wrong</string>
-    <string name="button_volumes">Volumes</string>
     <string name="call_outgoing_connecting">Connecting&#8230;</string>
     <string name="call_outgoing_ringing">Ringing&#8230;</string>
     <string name="call_ended_because_declined">%1$s declined your call.</string>
