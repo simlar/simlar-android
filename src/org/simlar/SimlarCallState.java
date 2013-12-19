@@ -33,6 +33,7 @@ public class SimlarCallState
 	private static final DecimalFormat GUI_VALUE = new DecimalFormat("#0.0");
 
 	private String mDisplayName = null;
+	private String mDisplayPhotoId = null;
 	private org.linphone.core.LinphoneCall.State mLinphoneCallState = null;
 	private int mCallStatusMessageId = -1;
 	private boolean mEncrypted = true;
@@ -86,12 +87,12 @@ public class SimlarCallState
 		return -1;
 	}
 
-	public boolean updateCallStateChanged(final String displayName, final State callState, final String message)
+	public boolean updateCallStateChanged(final String displayName, final String photoId, final State callState, final String message)
 	{
 		final int msgId = getMessageId(callState, message);
 		final boolean updateCallStatusMessageId = !(possibleErrorMessage(callState) && msgId <= 0);
 
-		if (Util.equalString(displayName, mDisplayName) && callState == mLinphoneCallState
+		if (Util.equalString(displayName, mDisplayName) && Util.equalString(photoId, mDisplayPhotoId) && callState == mLinphoneCallState
 				&& (mCallStatusMessageId == msgId || !updateCallStatusMessageId)) {
 			return false;
 		}
@@ -104,6 +105,7 @@ public class SimlarCallState
 			mDisplayName = displayName;
 		}
 
+		mDisplayPhotoId = photoId;
 		mLinphoneCallState = callState;
 
 		if (updateCallStatusMessageId) {
@@ -159,6 +161,15 @@ public class SimlarCallState
 		return mLinphoneCallState == null;
 	}
 
+	private String formatPhotoId()
+	{
+		if (Util.isNullOrEmpty(mDisplayPhotoId)) {
+			return "";
+		}
+
+		return " photoId=" + mDisplayPhotoId;
+	}
+
 	private String formatCallStatusMessageId()
 	{
 		if (mCallStatusMessageId > 0) {
@@ -210,13 +221,20 @@ public class SimlarCallState
 		if (isEmpty()) {
 			return "";
 		}
-		return "[" + mLinphoneCallState.toString() + "] " + mDisplayName + formatCallStatusMessageId() + formatEncryption() + formatIceState()
-				+ formatCodec() + formatValue("upload", mUpload) + formatValue("download", mDownload) + formatValue("quality", mQuality);
+
+		return "[" + mLinphoneCallState.toString() + "] " + mDisplayName + formatPhotoId()
+				+ formatCallStatusMessageId() + formatEncryption() + formatIceState() + formatCodec()
+				+ formatValue("upload", mUpload) + formatValue("download", mDownload) + formatValue("quality", mQuality);
 	}
 
 	public String getDisplayName()
 	{
 		return mDisplayName;
+	}
+
+	public String getDisplayPhotoId()
+	{
+		return mDisplayPhotoId;
 	}
 
 	public String getCallStatusDisplayMessage(final Context context)
