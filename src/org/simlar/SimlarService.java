@@ -497,6 +497,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		if (mSimlarCallState.isBeforeEncryption()) {
 			mLinphoneThread.setMicrophoneMuted(true);
+			mSoundEffectManager.setInCallMode(true);
 			mSoundEffectManager.start(SoundEffectType.ENCRYPTION_HANDSHAKE);
 		}
 
@@ -539,6 +540,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			releaseWifiLock();
 
 			mSoundEffectManager.stopAll();
+			mSoundEffectManager.setInCallMode(false);
 			if (mHasAudioFocus) {
 				final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 				if (audioManager.abandonAudioFocus(null) == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {

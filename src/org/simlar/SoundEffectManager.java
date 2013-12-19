@@ -24,12 +24,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
@@ -79,11 +81,13 @@ final class SoundEffectManager
 					mediaPlayer.setLooping(false);
 					return mediaPlayer;
 				case ENCRYPTION_HANDSHAKE:
+					mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
 					mediaPlayer.setDataSource(mContext,
 							Uri.parse("android.resource://" + mContext.getPackageName() + "/" + R.raw.encryption_handshake));
 					mediaPlayer.setLooping(true);
 					return mediaPlayer;
 				case UNENCRYPTED_CALL_ALARM:
+					mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
 					mediaPlayer.setDataSource(mContext, Uri.parse("android.resource://" + mContext.getPackageName() + "/" + R.raw.unencrypted_call));
 					mediaPlayer.setLooping(true);
 					return mediaPlayer;
@@ -217,6 +221,22 @@ final class SoundEffectManager
 	{
 		for (final SoundEffectType type : SoundEffectType.values()) {
 			stop(type);
+		}
+	}
+
+	@SuppressLint("InlinedApi")
+	public void setInCallMode(final boolean enabled)
+	{
+		Log.i(LOGTAG, "setInCallMode: " + enabled);
+
+		if (enabled) {
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+				((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE)).setMode(AudioManager.MODE_IN_COMMUNICATION);
+			} else {
+				((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE)).setMode(AudioManager.MODE_IN_CALL);
+			}
+		} else {
+			((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE)).setMode(AudioManager.MODE_NORMAL);
 		}
 	}
 }
