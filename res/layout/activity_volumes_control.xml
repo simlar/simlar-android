@@ -26,6 +26,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/border_round_corners"
     tools:context=".VolumesControlActivity" >
 
     <LinearLayout
@@ -36,12 +37,11 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="20dp" >
 
-        <ImageButton
+        <ImageView
             android:id="@+id/imageButtonSpeaker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/volume_control_activity_speaker_internal"
-            android:onClick="toggleSpeakerMuted"
+            android:src="@drawable/speaker_on"
             tools:ignore="ContentDescription" />
 
         <RelativeLayout
@@ -64,12 +64,11 @@
         android:layout_below="@+id/linearLayoutSpeaker"
         android:layout_marginTop="20dp" >
 
-        <ImageButton
+        <ImageView
             android:id="@+id/imageButtonMicrophone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/volume_control_activity_microphone"
-            android:onClick="toggleMicrophoneMuted"
+            android:src="@drawable/micro_on"
             tools:ignore="ContentDescription" />
 
         <RelativeLayout
