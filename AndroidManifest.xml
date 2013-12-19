@@ -74,7 +74,7 @@
         </activity>
         <activity
             android:name="org.simlar.CallActivity"
-            android:label="@string/title_activity_call"
+            android:label="@string/call_activity_title"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" >
         </activity>

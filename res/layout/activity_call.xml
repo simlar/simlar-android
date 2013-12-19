@@ -112,7 +112,7 @@
             android:layout_gravity="center"
             android:gravity="center_horizontal"
             android:textColor="#000000"
-            android:text="@string/please_verify_authentication_token"
+            android:text="@string/call_activity_please_verify_authentication_token"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -122,7 +122,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="2dp"
             android:textColor="#000000"
-            android:text="@string/no_authentication_token"
+            android:text="@string/call_activity_no_authentication_token"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <LinearLayout
@@ -148,7 +148,7 @@
                     android:onClick="wrongAuthenticationToken"
                     android:background="@drawable/border_round_corners"
                     android:textColor="#000000"
-                    android:text="@string/button_authentication_token_wrong" />
+                    android:text="@string/call_activity_button_authentication_token_wrong" />
             </LinearLayout>
 
             <LinearLayout
@@ -165,7 +165,7 @@
                     android:onClick="verifyAuthenticationToken"
                     android:textColor="#000000"
                     android:background="@drawable/border_round_corners"
-                    android:text="@string/button_authentication_token_verify" />
+                    android:text="@string/call_activity_button_authentication_token_verify" />
             </LinearLayout>
 
         </LinearLayout>

@@ -149,7 +149,7 @@ public class CallActivity extends Activity implements SensorEventListener
 			final Button wrong = (Button) findViewById(R.id.buttonAuthenticationTokenWrong);
 
 			label.setVisibility(View.VISIBLE);
-			label.setText(R.string.error_not_encrypted);
+			label.setText(R.string.call_activity_error_not_encrypted);
 			token.setVisibility(View.INVISIBLE);
 			verify.setVisibility(View.INVISIBLE);
 			wrong.setVisibility(View.INVISIBLE);
@@ -182,7 +182,7 @@ public class CallActivity extends Activity implements SensorEventListener
 
 		Log.i(LOGTAG, "onSimlarCallStateChanged " + simlarCallState);
 
-		setTitle(getString(R.string.title_activity_call) + " " + simlarCallState.getDisplayName());
+		setTitle(getString(R.string.call_activity_title) + " " + simlarCallState.getDisplayName());
 		setCallEncryption(simlarCallState.isEncrypted(), simlarCallState.getAuthenticationToken(), simlarCallState.isAuthenticationTokenVerified());
 
 		final LinearLayout callStatus = (LinearLayout) findViewById(R.id.linearLayoutCallStatus);
