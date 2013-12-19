@@ -24,7 +24,6 @@
 
     <string name="app_name">Simlar</string>
     <string name="app_homepage">www.simlar.org</string>
-    <string name="no_simlar_contacts_online">No Simlar contacts online</string>
     <string name="action_settings">Settings</string>
     <string name="action_upload_logfile">Report bug and upload logfile</string>
     <string name="action_enable_linphone_debug_mode">Enable debug mode</string>

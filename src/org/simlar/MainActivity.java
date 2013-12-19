@@ -102,7 +102,7 @@ public class MainActivity extends android.support.v4.app.FragmentActivity
 		public void onActivityCreated(Bundle savedInstanceState)
 		{
 			super.onActivityCreated(savedInstanceState);
-			setEmptyText(getString(R.string.no_simlar_contacts_online));
+			setEmptyText(getString(R.string.contacts_adapter_simlar_status_no_contacts_found));
 		}
 
 		@Override
