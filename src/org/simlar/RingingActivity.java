@@ -83,8 +83,7 @@ public class RingingActivity extends Activity
 		animation.addFrame(getResources().getDrawable(R.drawable.ringing_d), 550);
 		animation.setOneShot(false);
 
-		ImageView imageAnim = (ImageView) findViewById(R.id.RingingAnimate);
-		imageAnim.setBackground(animation);
+		Util.setBackgroundCompatible((ImageView) findViewById(R.id.RingingAnimate), animation);
 
 		// start the animation!
 		animation.start();

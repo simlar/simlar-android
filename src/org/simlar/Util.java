@@ -24,7 +24,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.widget.ImageView;
 
 public class Util
 {
@@ -67,6 +69,16 @@ public class Util
 		int length = 0;
 		while ((length = is.read(buffer)) != -1) {
 			os.write(buffer, 0, length);
+		}
+	}
+
+	@SuppressWarnings("deprecation")
+	public static void setBackgroundCompatible(final ImageView imageView, final Drawable drawable)
+	{
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+			imageView.setBackground(drawable);
+		} else {
+			imageView.setBackgroundDrawable(drawable);
 		}
 	}
 }
