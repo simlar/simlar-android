@@ -112,7 +112,7 @@
             android:layout_gravity="center"
             android:gravity="center_horizontal"
             android:textColor="#000000"
-            android:text="@string/waiting_for_authentication_token"
+            android:text="@string/please_verify_authentication_token"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView

@@ -79,9 +79,7 @@
     <string name="call_activity_terminate_call">Terminate Call</string>
     <string name="error_not_encrypted">ERROR: Not encrypted!</string>
     <string name="no_authentication_token">&#8230;</string>
-    <string name="waiting_for_authentication_token">Waiting for authentication token</string>
     <string name="please_verify_authentication_token">Please verify the following authentication token</string>
-    <string name="verified_authentication_token">Verified authentication token</string>
     <string name="button_authentication_token_verify">Verify</string>
     <string name="button_authentication_token_wrong">Wrong</string>
     <string name="call_outgoing_connecting">Connecting&#8230;</string>

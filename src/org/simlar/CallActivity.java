@@ -88,21 +88,13 @@ public class CallActivity extends Activity implements SensorEventListener
 				WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
 				WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
 
-		final TextView textViewLabelToken = (TextView) findViewById(R.id.textViewLabelAuthenticationToken);
-		final TextView textViewToken = (TextView) findViewById(R.id.textViewAuthenticationToken);
-		final Button buttonVerify = (Button) findViewById(R.id.buttonAuthenticationTokenVerify);
-		final Button buttonWrong = (Button) findViewById(R.id.buttonAuthenticationTokenWrong);
-		final ImageButton buttonInfo = (ImageButton) findViewById(R.id.buttonConnectionDetails);
-		textViewLabelToken.setVisibility(View.INVISIBLE);
-		textViewToken.setVisibility(View.INVISIBLE);
-		buttonVerify.setVisibility(View.INVISIBLE);
-		buttonWrong.setVisibility(View.INVISIBLE);
-		buttonInfo.setVisibility(View.INVISIBLE);
-
 		final LinearLayout callStatus = (LinearLayout) findViewById(R.id.linearLayoutCallStatus);
 		final LinearLayout connectionQuality = (LinearLayout) findViewById(R.id.linearLayoutConnectionQuality);
+		final LinearLayout linearLayoutAuthenticationToken = (LinearLayout) findViewById(R.id.linearLayoutAuthenticationToken);
+
 		callStatus.setVisibility(View.INVISIBLE);
 		connectionQuality.setVisibility(View.INVISIBLE);
+		linearLayoutAuthenticationToken.setVisibility(View.INVISIBLE);
 
 		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
@@ -146,47 +138,33 @@ public class CallActivity extends Activity implements SensorEventListener
 
 	void setCallEncryption(final boolean encrypted, final String authenticationToken, final boolean authenticationTokenVerified)
 	{
-		final TextView label = (TextView) findViewById(R.id.textViewLabelAuthenticationToken);
-		final TextView token = (TextView) findViewById(R.id.textViewAuthenticationToken);
-		final Button verify = (Button) findViewById(R.id.buttonAuthenticationTokenVerify);
-		final Button wrong = (Button) findViewById(R.id.buttonAuthenticationTokenWrong);
 		final LinearLayout linearLayoutAuthenticationToken = (LinearLayout) findViewById(R.id.linearLayoutAuthenticationToken);
 
 		if (!encrypted) {
-			linearLayoutAuthenticationToken.setVisibility(View.GONE);
+			linearLayoutAuthenticationToken.setVisibility(View.VISIBLE);
+
+			final TextView label = (TextView) findViewById(R.id.textViewLabelAuthenticationToken);
+			final TextView token = (TextView) findViewById(R.id.textViewAuthenticationToken);
+			final Button verify = (Button) findViewById(R.id.buttonAuthenticationTokenVerify);
+			final Button wrong = (Button) findViewById(R.id.buttonAuthenticationTokenWrong);
+
 			label.setVisibility(View.VISIBLE);
 			label.setText(R.string.error_not_encrypted);
 			token.setVisibility(View.INVISIBLE);
 			verify.setVisibility(View.INVISIBLE);
 			wrong.setVisibility(View.INVISIBLE);
-			linearLayoutAuthenticationToken.setVisibility(View.VISIBLE);
+
 			return;
 		}
 
-		if (Util.isNullOrEmpty(authenticationToken)) {
+		if (authenticationTokenVerified || Util.isNullOrEmpty(authenticationToken)) {
 			linearLayoutAuthenticationToken.setVisibility(View.GONE);
-			label.setVisibility(View.INVISIBLE);
-			token.setVisibility(View.INVISIBLE);
-			verify.setVisibility(View.INVISIBLE);
-			wrong.setVisibility(View.INVISIBLE);
 			return;
 		}
 
-		token.setText(authenticationToken);
-		token.setVisibility(View.VISIBLE);
-		label.setVisibility(View.VISIBLE);
 		linearLayoutAuthenticationToken.setVisibility(View.VISIBLE);
-		if (authenticationTokenVerified) {
-			label.setText(R.string.verified_authentication_token);
-			linearLayoutAuthenticationToken.setVisibility(View.GONE);
-			verify.setVisibility(View.INVISIBLE);
-			wrong.setVisibility(View.INVISIBLE);
-		} else {
-			label.setText(R.string.please_verify_authentication_token);
-			verify.setVisibility(View.VISIBLE);
-			wrong.setVisibility(View.VISIBLE);
-			linearLayoutAuthenticationToken.setVisibility(View.VISIBLE);
-		}
+		final TextView token = (TextView) findViewById(R.id.textViewAuthenticationToken);
+		token.setText(authenticationToken);
 	}
 
 	void onSimlarCallStateChanged()
