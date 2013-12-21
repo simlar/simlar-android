@@ -85,8 +85,6 @@ public final class CallActivity extends Activity implements SensorEventListener
 		void onBoundToSimlarService()
 		{
 			CallActivity.this.onSimlarCallStateChanged();
-			CallActivity.this.setButtonMicophoneMute();
-			CallActivity.this.setButtonSpeakerMute();
 		}
 
 		@Override
@@ -251,6 +249,9 @@ public final class CallActivity extends Activity implements SensorEventListener
 			setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
 		}
 
+		setButtonMicrophoneMute();
+		setButtonSpeakerMute();
+
 		if (simlarCallState.isEndedCall()) {
 			if (simlarCallState.hasErrorMessage()) {
 				finishDelayed(5000);
@@ -336,7 +337,7 @@ public final class CallActivity extends Activity implements SensorEventListener
 	public void toggleMicrophoneMuted(final View view)
 	{
 		mCommunicator.getService().setVolumes(mCommunicator.getService().getVolumes().toggleMicrophoneMuted());
-		setButtonMicophoneMute();
+		setButtonMicrophoneMute();
 	}
 
 	@SuppressWarnings("unused")
@@ -346,7 +347,7 @@ public final class CallActivity extends Activity implements SensorEventListener
 		setButtonSpeakerMute();
 	}
 
-	void setButtonMicophoneMute()
+	private void setButtonMicrophoneMute()
 	{
 		if (mCommunicator.getService().getVolumes().getMicrophoneMuted()) {
 			mButtonMicro.setImageResource(R.drawable.micro_off);
@@ -357,7 +358,7 @@ public final class CallActivity extends Activity implements SensorEventListener
 		}
 	}
 
-	void setButtonSpeakerMute()
+	private void setButtonSpeakerMute()
 	{
 		if (mCommunicator.getService().getVolumes().getExternalSpeaker()) {
 			mButtonSpeaker.setImageResource(R.drawable.speaker_on);
