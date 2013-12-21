@@ -470,8 +470,8 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		Log.i(LOGTAG, "SimlarCallState updated: " + mSimlarCallState);
 
 		if (mSimlarCallState.isRinging()) {
-			mVibratorThread.start();
 			mSoundEffectManager.start(SoundEffectType.RINGTONE);
+			mVibratorThread.start();
 		} else {
 			mVibratorThread.stop();
 			mSoundEffectManager.stop(SoundEffectType.RINGTONE);
