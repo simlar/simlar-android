@@ -63,23 +63,23 @@ public class SimlarCallState
 	private static int getMessageId(final State callState, final String message)
 	{
 		if (isCallOutgoingConnecting(callState)) {
-			return R.string.call_outgoing_connecting;
+			return R.string.call_activity_outgoing_connecting;
 		}
 
 		if (isCallOutgoingRinging(callState)) {
-			return R.string.call_outgoing_ringing;
+			return R.string.call_activity_outgoing_ringing;
 		}
 
 		// see linphone-android/submodules/belle-sip/src/message.c: well_known_codes
 		if (!Util.isNullOrEmpty(message) && possibleErrorMessage(callState)) {
 			if (message.equals("Call declined.")) {
-				return R.string.call_ended_because_declined;
+				return R.string.call_activity_call_ended_because_declined;
 			} else if (message.equals("Not Found")) {
-				return R.string.call_ended_because_user_offline;
+				return R.string.call_activity_call_ended_because_user_offline;
 			} else if (message.equals("Unsupported media type")) {
-				return R.string.call_ended_because_incompatible_media;
+				return R.string.call_activity_call_ended_because_incompatible_media;
 			} else if (message.equals("Busy here")) {
-				return R.string.call_ended_because_user_busy;
+				return R.string.call_activity_call_ended_because_user_busy;
 			}
 		}
 

@@ -22,11 +22,13 @@ package org.simlar;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 public class RingingActivity extends Activity
 {
@@ -74,6 +76,17 @@ public class RingingActivity extends Activity
 				WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
 				WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
 				WindowManager.LayoutParams.FLAG_IGNORE_CHEEK_PRESSES);
+
+		final AnimationDrawable animation = new AnimationDrawable();
+		animation.addFrame(getResources().getDrawable(R.drawable.ringing_b), 550);
+		animation.addFrame(getResources().getDrawable(R.drawable.ringing_c), 550);
+		animation.addFrame(getResources().getDrawable(R.drawable.ringing_d), 550);
+		animation.setOneShot(false);
+
+		Util.setBackgroundCompatible((ImageView) findViewById(R.id.RingingAnimate), animation);
+
+		// start the animation!
+		animation.start();
 	}
 
 	@Override

@@ -34,6 +34,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -56,6 +57,8 @@ public class CallActivity extends Activity implements SensorEventListener
 		void onBoundToSimlarService()
 		{
 			CallActivity.this.onSimlarCallStateChanged();
+			CallActivity.this.setButtonMicophoneMute();
+			CallActivity.this.setButtonSpeakerMute();
 		}
 
 		@Override
@@ -85,21 +88,13 @@ public class CallActivity extends Activity implements SensorEventListener
 				WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
 				WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
 
-		final TextView textViewLabelToken = (TextView) findViewById(R.id.textViewLabelAuthenticationToken);
-		final TextView textViewToken = (TextView) findViewById(R.id.textViewAuthenticationToken);
-		final Button buttonVerify = (Button) findViewById(R.id.buttonAuthenticationTokenVerify);
-		final Button buttonWrong = (Button) findViewById(R.id.buttonAuthenticationTokenWrong);
-		textViewLabelToken.setVisibility(View.INVISIBLE);
-		textViewToken.setVisibility(View.INVISIBLE);
-		buttonVerify.setVisibility(View.INVISIBLE);
-		buttonWrong.setVisibility(View.INVISIBLE);
-
 		final LinearLayout callStatus = (LinearLayout) findViewById(R.id.linearLayoutCallStatus);
-		final LinearLayout connection = (LinearLayout) findViewById(R.id.linearLayoutConnection);
-		final LinearLayout iceAndCodec = (LinearLayout) findViewById(R.id.linearLayoutIceStateAndCodec);
+		final LinearLayout connectionQuality = (LinearLayout) findViewById(R.id.linearLayoutConnectionQuality);
+		final LinearLayout linearLayoutAuthenticationToken = (LinearLayout) findViewById(R.id.linearLayoutAuthenticationToken);
+
 		callStatus.setVisibility(View.INVISIBLE);
-		connection.setVisibility(View.INVISIBLE);
-		iceAndCodec.setVisibility(View.INVISIBLE);
+		connectionQuality.setVisibility(View.INVISIBLE);
+		linearLayoutAuthenticationToken.setVisibility(View.INVISIBLE);
 
 		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
@@ -129,71 +124,47 @@ public class CallActivity extends Activity implements SensorEventListener
 		return true;
 	}
 
-	private void setIceState(final String iceState)
-	{
-		final TextView tv = (TextView) findViewById(R.id.textViewIceState);
-		tv.setText(iceState);
-	}
-
-	private void setCodec(final String codec)
-	{
-		final TextView tv = (TextView) findViewById(R.id.textViewCodec);
-		tv.setText(codec);
-	}
-
 	private void setCallStatus(final String status)
 	{
 		final TextView tv = (TextView) findViewById(R.id.textViewCallStatus);
 		tv.setText(status);
 	}
 
-	private void setBandwidthInfo(String upload, String download, String quality)
+	void setQuality(String quality)
 	{
-		final TextView tvUpload = (TextView) findViewById(R.id.textViewUpload);
-		final TextView tvDownload = (TextView) findViewById(R.id.textViewDownload);
 		final TextView tvQuality = (TextView) findViewById(R.id.textViewQuality);
-
-		tvUpload.setText(upload + " " + getString(R.string.call_activity_kbytes_per_second));
-		tvDownload.setText(download + " " + getString(R.string.call_activity_kbytes_per_second));
 		tvQuality.setText(quality);
 	}
 
 	void setCallEncryption(final boolean encrypted, final String authenticationToken, final boolean authenticationTokenVerified)
 	{
-		final TextView label = (TextView) findViewById(R.id.textViewLabelAuthenticationToken);
-		final TextView token = (TextView) findViewById(R.id.textViewAuthenticationToken);
-		final Button verify = (Button) findViewById(R.id.buttonAuthenticationTokenVerify);
-		final Button wrong = (Button) findViewById(R.id.buttonAuthenticationTokenWrong);
+		final LinearLayout linearLayoutAuthenticationToken = (LinearLayout) findViewById(R.id.linearLayoutAuthenticationToken);
 
 		if (!encrypted) {
+			linearLayoutAuthenticationToken.setVisibility(View.VISIBLE);
+
+			final TextView label = (TextView) findViewById(R.id.textViewLabelAuthenticationToken);
+			final TextView token = (TextView) findViewById(R.id.textViewAuthenticationToken);
+			final Button verify = (Button) findViewById(R.id.buttonAuthenticationTokenVerify);
+			final Button wrong = (Button) findViewById(R.id.buttonAuthenticationTokenWrong);
+
 			label.setVisibility(View.VISIBLE);
-			label.setText(R.string.error_not_encrypted);
+			label.setText(R.string.call_activity_error_not_encrypted);
 			token.setVisibility(View.INVISIBLE);
 			verify.setVisibility(View.INVISIBLE);
 			wrong.setVisibility(View.INVISIBLE);
+
 			return;
 		}
 
-		if (Util.isNullOrEmpty(authenticationToken)) {
-			label.setVisibility(View.INVISIBLE);
-			token.setVisibility(View.INVISIBLE);
-			verify.setVisibility(View.INVISIBLE);
-			wrong.setVisibility(View.INVISIBLE);
+		if (authenticationTokenVerified || Util.isNullOrEmpty(authenticationToken)) {
+			linearLayoutAuthenticationToken.setVisibility(View.GONE);
 			return;
 		}
 
+		linearLayoutAuthenticationToken.setVisibility(View.VISIBLE);
+		final TextView token = (TextView) findViewById(R.id.textViewAuthenticationToken);
 		token.setText(authenticationToken);
-		token.setVisibility(View.VISIBLE);
-		label.setVisibility(View.VISIBLE);
-		if (authenticationTokenVerified) {
-			label.setText(R.string.verified_authentication_token);
-			verify.setVisibility(View.INVISIBLE);
-			wrong.setVisibility(View.INVISIBLE);
-		} else {
-			label.setText(R.string.please_verify_authentication_token);
-			verify.setVisibility(View.VISIBLE);
-			wrong.setVisibility(View.VISIBLE);
-		}
 	}
 
 	void onSimlarCallStateChanged()
@@ -211,22 +182,20 @@ public class CallActivity extends Activity implements SensorEventListener
 
 		Log.i(LOGTAG, "onSimlarCallStateChanged " + simlarCallState);
 
-		setTitle(getString(R.string.title_activity_call) + " " + simlarCallState.getDisplayName());
+		setTitle(getString(R.string.call_activity_title) + " " + simlarCallState.getDisplayName());
 		setCallEncryption(simlarCallState.isEncrypted(), simlarCallState.getAuthenticationToken(), simlarCallState.isAuthenticationTokenVerified());
 
 		final LinearLayout callStatus = (LinearLayout) findViewById(R.id.linearLayoutCallStatus);
-		final LinearLayout iceAndCodec = (LinearLayout) findViewById(R.id.linearLayoutIceStateAndCodec);
-		final LinearLayout connection = (LinearLayout) findViewById(R.id.linearLayoutConnection);
+		final LinearLayout connectionQuality = (LinearLayout) findViewById(R.id.linearLayoutConnectionQuality);
+		final ImageButton buttonInfo = (ImageButton) findViewById(R.id.buttonConnectionDetails);
+
 		if (simlarCallState.hasConnectionInfo()) {
-			callStatus.setVisibility(View.INVISIBLE);
-			iceAndCodec.setVisibility(View.VISIBLE);
-			connection.setVisibility(View.VISIBLE);
-			setIceState(simlarCallState.getIceState());
-			setCodec(simlarCallState.getCodec());
-			setBandwidthInfo(simlarCallState.getUpload(), simlarCallState.getDownload(), getString(simlarCallState.getQualityDescription()));
+			setQuality(getString(simlarCallState.getQualityDescription()));
+			connectionQuality.setVisibility(View.VISIBLE);
+			buttonInfo.setVisibility(View.VISIBLE);
+			getString(simlarCallState.getQualityDescription());
 		} else {
-			iceAndCodec.setVisibility(View.INVISIBLE);
-			connection.setVisibility(View.INVISIBLE);
+			connectionQuality.setVisibility(View.INVISIBLE);
 
 			if (simlarCallState.hasCallStatusMessage()) {
 				callStatus.setVisibility(View.VISIBLE);
@@ -239,12 +208,8 @@ public class CallActivity extends Activity implements SensorEventListener
 			}
 		}
 
-		final Button volumes = (Button) findViewById(R.id.buttonSoundVolumes);
 		if (simlarCallState.isTalking()) {
-			volumes.setVisibility(View.VISIBLE);
 			setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
-		} else {
-			volumes.setVisibility(View.INVISIBLE);
 		}
 
 		if (simlarCallState.isEndedCall()) {
@@ -283,9 +248,55 @@ public class CallActivity extends Activity implements SensorEventListener
 	}
 
 	@SuppressWarnings("unused")
+	public void showConnectionDetails(View view)
+	{
+		startActivity(new Intent(this, ConnectionDetailsActivity.class));
+	}
+
+	@SuppressWarnings("unused")
 	public void showSoundSettingsDialog(View view)
 	{
 		startActivity(new Intent(this, VolumesControlActivity.class));
+	}
+
+	@SuppressWarnings("unused")
+	public void toggleMicrophoneMuted(View view)
+	{
+		mCommunicator.getService().setVolumes(mCommunicator.getService().getVolumes().toggleMicrophoneMuted());
+		setButtonMicophoneMute();
+	}
+
+	@SuppressWarnings("unused")
+	public void toggleSpeakerMuted(View view)
+	{
+		mCommunicator.getService().setVolumes(mCommunicator.mService.getVolumes().toggleExternalSpeaker());
+		setButtonSpeakerMute();
+	}
+
+	void setButtonMicophoneMute()
+	{
+		final ImageButton button = (ImageButton) findViewById(R.id.buttonMicro);
+
+		if (mCommunicator.getService().getVolumes().getMicrophoneMuted()) {
+			button.setImageResource(R.drawable.micro_off);
+			button.setContentDescription(getString(R.string.call_activity_microphone_mute));
+		} else {
+			button.setImageResource(R.drawable.micro_on);
+			button.setContentDescription(getString(R.string.call_activity_microphone_on));
+		}
+	}
+
+	void setButtonSpeakerMute()
+	{
+		final ImageButton button = (ImageButton) findViewById(R.id.buttonSpeaker);
+
+		if (mCommunicator.getService().getVolumes().getExternalSpeaker()) {
+			button.setImageResource(R.drawable.speaker_on);
+			button.setContentDescription(getString(R.string.call_activity_loudspeaker_on));
+		} else {
+			button.setImageResource(R.drawable.speaker_off);
+			button.setContentDescription(getString(R.string.call_activity_loudspeaker_off));
+		}
 	}
 
 	@SuppressWarnings("unused")
