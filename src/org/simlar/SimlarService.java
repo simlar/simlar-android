@@ -498,11 +498,12 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		if (mSimlarCallState.isBeforeEncryption()) {
 			mLinphoneThread.setMicrophoneMuted(true);
 			mSoundEffectManager.setInCallMode(true);
-			mSoundEffectManager.start(SoundEffectType.ENCRYPTION_HANDSHAKE);
+			mSoundEffectManager.startPrepared(SoundEffectType.ENCRYPTION_HANDSHAKE);
 		}
 
 		// make sure WLAN is not suspended while calling
 		if (mSimlarCallState.isNewCall()) {
+			mSoundEffectManager.prepare(SoundEffectType.ENCRYPTION_HANDSHAKE);
 			notifySimlarStatusChanged(SimlarStatus.ONGOING_CALL);
 
 			mCallConnectionDetails = new CallConnectionDetails();
