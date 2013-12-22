@@ -63,8 +63,8 @@ public class ContactsAdapter extends ArrayAdapter<FullContactData>
 
 			final int retVal = Util.compareString(lhs.name, rhs.name);
 			if (retVal == 0) {
-				// if name is the same compare by number
-				return Util.compareString(lhs.number, rhs.number);
+				// if name is the same compare by simlarId
+				return Util.compareString(lhs.simlarId, rhs.simlarId);
 			}
 
 			return retVal;
@@ -109,7 +109,7 @@ public class ContactsAdapter extends ArrayAdapter<FullContactData>
 		final TextView nameView = (TextView) rowView.findViewById(R.id.name);
 		nameView.setText(contact.getNameOrNumber());
 		final TextView numberView = (TextView) rowView.findViewById(R.id.number);
-		numberView.setText("0" + SimlarNumber.parseNumberWithLibPhonenumber("00" + contact.number.replace("*", ""), false));
+		numberView.setText("0" + SimlarNumber.parseNumberWithLibPhonenumber("00" + contact.simlarId.replace("*", ""), false));
 
 		return rowView;
 	}
@@ -171,23 +171,23 @@ public class ContactsAdapter extends ArrayAdapter<FullContactData>
 		this.notifyDataSetChanged();
 	}
 
-	private FullContactData getContactByNumber(final String number)
+	private FullContactData getContactBySimlarId(final String simlarId)
 	{
 		for (int i = 0; i < getCount(); ++i) {
 			final FullContactData contact = getItem(i);
-			if (contact.number.equals(number)) {
+			if (contact.simlarId.equals(simlarId)) {
 				return contact;
 			}
 		}
 		return null;
 	}
 
-	void onPresenceStateChanged(final String number, final boolean online)
+	void onPresenceStateChanged(final String simlarId, final boolean online)
 	{
-		final FullContactData contact = getContactByNumber(number);
+		final FullContactData contact = getContactBySimlarId(simlarId);
 		if (contact == null) {
 			if (mCommunicator.getService().getSimlarStatus() == SimlarStatus.ONLINE && !mCommunicator.getService().isGoingDown()) {
-				add(mCommunicator.getService().getContact(number));
+				add(mCommunicator.getService().getContact(simlarId));
 			}
 		} else {
 			contact.status = online ? ContactStatus.ONLINE : ContactStatus.OFFLINE;
@@ -197,7 +197,7 @@ public class ContactsAdapter extends ArrayAdapter<FullContactData>
 
 	public void call(final int position)
 	{
-		mCommunicator.getService().call(getItem(position).number);
+		mCommunicator.getService().call(getItem(position).simlarId);
 	}
 
 	public void setEmptyTextListener(final EmptyTextListener listener)

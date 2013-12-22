@@ -145,24 +145,24 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 
 	public class FullContactData extends ContactData
 	{
-		public final String number;
+		public final String simlarId;
 
-		public FullContactData(final String number, final String name, final ContactStatus status, final String photoId)
+		public FullContactData(final String simlarId, final String name, final ContactStatus status, final String photoId)
 		{
 			super(name, status, photoId);
-			this.number = number;
+			this.simlarId = simlarId;
 		}
 
-		public FullContactData(final String number, final ContactData cd)
+		public FullContactData(final String simlarId, final ContactData cd)
 		{
 			super(cd.name, cd.status, cd.photoId);
-			this.number = number;
+			this.simlarId = simlarId;
 		}
 
 		public String getNameOrNumber()
 		{
 			if (Util.isNullOrEmpty(name)) {
-				return number;
+				return simlarId;
 			}
 
 			return name;
@@ -704,12 +704,12 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 				while (contacts.moveToNext())
 				{
 					final long contactId = contacts.getLong(0);
-					final String number = SimlarNumber.createSimlarNumber(contacts.getString(1));
+					final String simlarId = SimlarNumber.createSimlarNumber(contacts.getString(1));
 					final String name = contacts.getString(2);
 					final boolean hasPhotoId = contacts.getLong(3) != 0;
 					String photoUri = null;
 
-					if (Util.isNullOrEmpty(number)) {
+					if (Util.isNullOrEmpty(simlarId)) {
 						continue;
 					}
 
@@ -719,9 +719,9 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 						photoUri = u.toString();
 					}
 
-					if (!result.containsKey(number)) {
-						result.put(number, new ContactData(name, ContactStatus.UNKNOWN, photoUri));
-						Log.d(LOGTAG, "adding contact " + name + " " + number);
+					if (!result.containsKey(simlarId)) {
+						result.put(simlarId, new ContactData(name, ContactStatus.UNKNOWN, photoUri));
+						Log.d(LOGTAG, "adding contact " + name + " " + simlarId);
 					}
 				}
 				contacts.close();
@@ -758,20 +758,20 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 					return;
 				}
 
-				for (final String number : result.keySet()) {
-					final ContactStatus status = result.get(number);
+				for (final String simlarId : result.keySet()) {
+					final ContactStatus status = result.get(simlarId);
 
 					if (!status.isRegistered()) {
-						updateContactData(number, status);
+						updateContactData(simlarId, status);
 					} else {
-						onPresenceStateChanged(number, status.isOnline());
+						onPresenceStateChanged(simlarId, status.isOnline());
 
 						// make sure to add friends in the gui thread
 						mHandler.post(new Runnable() {
 							@Override
 							public void run()
 							{
-								addLinphoneFriend(number);
+								addLinphoneFriend(simlarId);
 							}
 						});
 					}
@@ -821,13 +821,13 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		return contacts;
 	}
 
-	public FullContactData getContact(final String number)
+	public FullContactData getContact(final String simlarId)
 	{
-		if (Util.isNullOrEmpty(number) || !mContacts.containsKey(number)) {
-			return new FullContactData(number, "", ContactStatus.UNKNOWN, "");
+		if (Util.isNullOrEmpty(simlarId) || !mContacts.containsKey(simlarId)) {
+			return new FullContactData(simlarId, "", ContactStatus.UNKNOWN, "");
 		}
 
-		return new FullContactData(number, mContacts.get(number));
+		return new FullContactData(simlarId, mContacts.get(simlarId));
 	}
 
 	public void verifyAuthenticationTokenOfCurrentCall(final boolean verified)
