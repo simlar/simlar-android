@@ -161,14 +161,14 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	}
 
 	@Override
-	public IBinder onBind(Intent arg0)
+	public IBinder onBind(final Intent arg0)
 	{
 		Log.i(LOGTAG, "onBind");
 		return mBinder;
 	}
 
 	@Override
-	public int onStartCommand(Intent intent, int flags, int startId)
+	public int onStartCommand(final Intent intent, final int flags, final int startId)
 	{
 		Log.i(LOGTAG, "onStartCommand intent=" + intent + " startId=" + startId);
 
@@ -698,7 +698,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 			}
 
 			@Override
-			protected void onPostExecute(Map<String, ContactData> result)
+			protected void onPostExecute(final Map<String, ContactData> result)
 			{
 				mContacts = result;
 				requestRegisteredContacts();
