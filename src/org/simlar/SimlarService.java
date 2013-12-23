@@ -709,7 +709,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 				{
 					final long contactId = contacts.getLong(0);
 					final String simlarId = SimlarNumber.createSimlarId(contacts.getString(1));
-					final String guiTelephoneNumber = contacts.getString(1);
+					final String guiTelephoneNumber = SimlarNumber.createGuiTelephoneNumber(contacts.getString(1));
 					final String name = contacts.getString(2);
 					final boolean hasPhotoId = contacts.getLong(3) != 0;
 					String photoUri = null;
