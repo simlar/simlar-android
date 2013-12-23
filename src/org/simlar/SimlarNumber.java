@@ -136,7 +136,7 @@ public class SimlarNumber
 		return Long.toString(pn.getNationalNumber());
 	}
 
-	static String parseNumberWithLibPhonenumber(final String telephoneNumber, final boolean formatSimlar)
+	private static String parseNumberWithLibPhonenumber(final String telephoneNumber, final boolean formatSimlar)
 	{
 		if (Util.isNullOrEmpty(mDefaultRegion)) {
 			Log.e(LOGTAG, "parseNumberWithLibPhone: default region not initilializeds");

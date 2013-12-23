@@ -122,12 +122,15 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	public class ContactData
 	{
 		public final String name;
+		public final String guiTelephoneNumber;
+
 		public ContactStatus status;
 		public final String photoId;
 
-		public ContactData(final String name, final ContactStatus status, final String photoId)
+		public ContactData(final String name, final String guiTelephoneNumber, final ContactStatus status, final String photoId)
 		{
 			this.name = name;
+			this.guiTelephoneNumber = guiTelephoneNumber;
 			this.status = status;
 			this.photoId = photoId;
 		}
@@ -147,15 +150,16 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	{
 		public final String simlarId;
 
-		public FullContactData(final String simlarId, final String name, final ContactStatus status, final String photoId)
+		public FullContactData(final String simlarId, final String name, final String guiTelephoneNumber, final ContactStatus status,
+				final String photoId)
 		{
-			super(name, status, photoId);
+			super(name, guiTelephoneNumber, status, photoId);
 			this.simlarId = simlarId;
 		}
 
 		public FullContactData(final String simlarId, final ContactData cd)
 		{
-			super(cd.name, cd.status, cd.photoId);
+			super(cd.name, cd.guiTelephoneNumber, cd.status, cd.photoId);
 			this.simlarId = simlarId;
 		}
 
@@ -705,6 +709,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 				{
 					final long contactId = contacts.getLong(0);
 					final String simlarId = SimlarNumber.createSimlarId(contacts.getString(1));
+					final String guiTelephoneNumber = contacts.getString(1);
 					final String name = contacts.getString(2);
 					final boolean hasPhotoId = contacts.getLong(3) != 0;
 					String photoUri = null;
@@ -720,7 +725,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 					}
 
 					if (!result.containsKey(simlarId)) {
-						result.put(simlarId, new ContactData(name, ContactStatus.UNKNOWN, photoUri));
+						result.put(simlarId, new ContactData(name, guiTelephoneNumber, ContactStatus.UNKNOWN, photoUri));
 						Log.d(LOGTAG, "adding contact " + name + " " + simlarId);
 					}
 				}
@@ -792,7 +797,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 
 		ContactData cd = mContacts.get(number);
 		if (cd == null) {
-			mContacts.put(number, new ContactData(null, status, null));
+			mContacts.put(number, new ContactData(null, null, status, null));
 			return true;
 		}
 
@@ -824,7 +829,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	public FullContactData getContact(final String simlarId)
 	{
 		if (Util.isNullOrEmpty(simlarId) || !mContacts.containsKey(simlarId)) {
-			return new FullContactData(simlarId, "", ContactStatus.UNKNOWN, "");
+			return new FullContactData(simlarId, "", "", ContactStatus.UNKNOWN, "");
 		}
 
 		return new FullContactData(simlarId, mContacts.get(simlarId));

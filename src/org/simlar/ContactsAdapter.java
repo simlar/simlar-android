@@ -109,7 +109,7 @@ public class ContactsAdapter extends ArrayAdapter<FullContactData>
 		final TextView nameView = (TextView) rowView.findViewById(R.id.name);
 		nameView.setText(contact.getNameOrNumber());
 		final TextView numberView = (TextView) rowView.findViewById(R.id.number);
-		numberView.setText("0" + SimlarNumber.parseNumberWithLibPhonenumber("00" + contact.simlarId.replace("*", ""), false));
+		numberView.setText(contact.guiTelephoneNumber);
 
 		return rowView;
 	}
