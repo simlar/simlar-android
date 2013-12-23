@@ -38,7 +38,7 @@ public class SimlarNumber
 
 	public static String createMySimlarNumber(final Context c)
 	{
-		return createSimlarNumber(readLocalPhoneNumberFromSimCard(c));
+		return createSimlarId(readLocalPhoneNumberFromSimCard(c));
 	}
 
 	public static String readRegionFromSimCardOrConfiguration(final Context c)
@@ -171,7 +171,7 @@ public class SimlarNumber
 		return telephoneNumber.matches("\\*\\d*\\*");
 	}
 
-	public static String createSimlarNumber(final String telephoneNumber)
+	public static String createSimlarId(final String telephoneNumber)
 	{
 		if (Util.isNullOrEmpty(telephoneNumber)) {
 			Log.e(LOGTAG, "createSimlarNumber: empty telefone number");
@@ -184,7 +184,7 @@ public class SimlarNumber
 
 		final String internationalTelephoneNumber = parseNumberWithLibPhonenumber(telephoneNumber, true);
 		if (Util.isNullOrEmpty(internationalTelephoneNumber)) {
-			Log.w(LOGTAG, "createSimlarNumber: parsing number=" + telephoneNumber + " with libphonenumber failed");
+			Log.w(LOGTAG, "createSimlarId: parsing number=" + telephoneNumber + " with libphonenumber failed");
 			return "";
 		}
 

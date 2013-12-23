@@ -230,7 +230,7 @@ public class CreateAccountActivity extends Activity
 
 		Log.i(LOGTAG, "createAccountRequest: " + telephoneNumber);
 		final String smsText = getString(R.string.create_account_activity_sms_text) + " ";
-		final String expextedSimlarId = SimlarNumber.createSimlarNumber(telephoneNumber);
+		final String expextedSimlarId = SimlarNumber.createSimlarId(telephoneNumber);
 
 		IntentFilter filter = new IntentFilter();
 		filter.addAction("android.provider.Telephony.SMS_RECEIVED");

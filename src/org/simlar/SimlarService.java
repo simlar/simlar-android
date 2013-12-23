@@ -704,7 +704,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 				while (contacts.moveToNext())
 				{
 					final long contactId = contacts.getLong(0);
-					final String simlarId = SimlarNumber.createSimlarNumber(contacts.getString(1));
+					final String simlarId = SimlarNumber.createSimlarId(contacts.getString(1));
 					final String name = contacts.getString(2);
 					final boolean hasPhotoId = contacts.getLong(3) != 0;
 					String photoUri = null;
