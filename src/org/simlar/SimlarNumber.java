@@ -36,10 +36,106 @@ public class SimlarNumber
 {
 	private static final String LOGTAG = SimlarNumber.class.getSimpleName();
 	private static String mDefaultRegion = null;
+	private final PhoneNumber mPhoneNumber;
+	private final String mPlainSimlarId;
 
-	public static String createMySimlarNumber(final Context c)
+	public SimlarNumber(final String telephoneNumber)
 	{
-		return createSimlarId(readLocalPhoneNumberFromSimCard(c));
+		if (hasSimlarIdFormat(telephoneNumber)) {
+			mPhoneNumber = null;
+			mPlainSimlarId = telephoneNumber;
+		} else {
+			mPhoneNumber = createPhoneNumber(telephoneNumber);
+			mPlainSimlarId = null;
+		}
+	}
+
+	private static PhoneNumber createPhoneNumber(final String telephoneNumber)
+	{
+		if (Util.isNullOrEmpty(telephoneNumber)) {
+			Log.e(LOGTAG, "createPhoneNumber: empty telephone number");
+			return null;
+		}
+
+		if (Util.isNullOrEmpty(mDefaultRegion)) {
+			Log.e(LOGTAG, "no default region set, please initialize ");
+			return null;
+		}
+
+		try {
+			final PhoneNumber pn = PhoneNumberUtil.getInstance().parse(telephoneNumber, mDefaultRegion);
+
+			if (pn == null) {
+				Log.w(LOGTAG, "parseNumberWithLibPhonenumber failed: pn is null");
+				return null;
+			}
+
+			if (!pn.hasCountryCode()) {
+				Log.w(LOGTAG, "parseNumberWithLibPhonenumber failed: no country code");
+				return null;
+			}
+
+			if (!pn.hasNationalNumber()) {
+				Log.w(LOGTAG, "parseNumberWithLibPhonenumber failed: no national number");
+				return null;
+			}
+
+			return pn;
+		} catch (NumberParseException e) {
+			Log.i(LOGTAG, "NumberParseException (telephoneNumber=" + telephoneNumber + " mDefaultRegion=" + mDefaultRegion + "): " + e.getMessage());
+			return null;
+		}
+	}
+
+	public String getSimlarId()
+	{
+		if (!Util.isNullOrEmpty(mPlainSimlarId)) {
+			return mPlainSimlarId;
+		}
+
+		if (mPhoneNumber == null) {
+			return "";
+		}
+
+		return "*" + Long.toString(mPhoneNumber.getCountryCode()) + Long.toString(mPhoneNumber.getNationalNumber()) + "*";
+	}
+
+	public String getGuiTelephoneNumber()
+	{
+		if (!Util.isNullOrEmpty(mPlainSimlarId)) {
+			return mPlainSimlarId;
+		}
+
+		if (mPhoneNumber == null) {
+			return "";
+		}
+
+		return PhoneNumberUtil.getInstance().format(mPhoneNumber, PhoneNumberFormat.INTERNATIONAL);
+	}
+
+	private String getNationalOnly()
+	{
+		if (mPhoneNumber == null) {
+			return "";
+		}
+
+		return Long.toString(mPhoneNumber.getNationalNumber());
+	}
+
+	public static void setDefaultRegion(int countryCallingCode)
+	{
+		mDefaultRegion = PhoneNumberUtil.getInstance().getRegionCodeForCountryCode(countryCallingCode);
+		Log.i(LOGTAG, "for number parsing now using default region: " + mDefaultRegion);
+	}
+
+	public static int getDefaultRegion()
+	{
+		return PhoneNumberUtil.getInstance().getCountryCodeForRegion(mDefaultRegion);
+	}
+
+	public static String createSimlarId(final String telephoneNumber)
+	{
+		return new SimlarNumber(telephoneNumber).getSimlarId();
 	}
 
 	public static String readRegionFromSimCardOrConfiguration(final Context c)
@@ -59,26 +155,10 @@ public class SimlarNumber
 		return regionFromConfig;
 	}
 
-	public static void setDefaultRegion(int countryCallingCode)
-	{
-		mDefaultRegion = PhoneNumberUtil.getInstance().getRegionCodeForCountryCode(countryCallingCode);
-		Log.i(LOGTAG, "for number parsing now using default region: " + mDefaultRegion);
-	}
-
-	public static int getDefaultRegion()
-	{
-		return PhoneNumberUtil.getInstance().getCountryCodeForRegion(mDefaultRegion);
-	}
-
 	public static int readRegionCodeFromSimCardOrConfiguration(final Context c)
 	{
 		// returns 0 if not found
 		return PhoneNumberUtil.getInstance().getCountryCodeForRegion(readRegionFromSimCardOrConfiguration(c));
-	}
-
-	public static String readPhoneNumberFromSimCard(final Context c)
-	{
-		return ((TelephonyManager) c.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
 	}
 
 	public static String readLocalPhoneNumberFromSimCard(final Context c)
@@ -87,23 +167,19 @@ public class SimlarNumber
 			readRegionFromSimCardOrConfiguration(c);
 		}
 
-		final String numberFromSim = readPhoneNumberFromSimCard(c);
+		final String numberFromSim = ((TelephonyManager) c.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
+
 		if (Util.isNullOrEmpty(numberFromSim)) {
 			Log.w(LOGTAG, "failed to read telephone number from sim card");
 			return "";
 		}
 
-		final String parsedNumber = parseNumberWithLibPhonenumber(numberFromSim, FormatType.NATIONAL_ONLY);
-		if (Util.isNullOrEmpty(parsedNumber)) {
-			return "";
-		}
-
-		return parsedNumber;
+		return new SimlarNumber(numberFromSim).getNationalOnly();
 	}
 
 	public static Set<Integer> getSupportedCountryCodes()
 	{
-		Set<Integer> supportedCountryCodes = new HashSet<Integer>();
+		final Set<Integer> supportedCountryCodes = new HashSet<Integer>();
 
 		final PhoneNumberUtil pnUtil = PhoneNumberUtil.getInstance();
 		for (final String region : pnUtil.getSupportedRegions()) {
@@ -113,68 +189,6 @@ public class SimlarNumber
 		return supportedCountryCodes;
 	}
 
-	private static enum FormatType {
-		SIMLAR_ID,
-		NATIONAL_ONLY,
-		INTERNATIONAL
-	}
-
-	private static String parseNumberWithLibPhonenumber(final PhoneNumber pn, final FormatType type)
-	{
-		if (pn == null) {
-			Log.w(LOGTAG, "parseNumberWithLibPhonenumber failed: pn is null");
-			return null;
-		}
-
-		if (!pn.hasCountryCode()) {
-			Log.w(LOGTAG, "parseNumberWithLibPhonenumber failed: no country code");
-			return null;
-		}
-
-		if (!pn.hasNationalNumber()) {
-			Log.w(LOGTAG, "parseNumberWithLibPhonenumber failed: no national number");
-			return null;
-		}
-
-		switch (type) {
-		case SIMLAR_ID:
-			return Long.toString(pn.getCountryCode()) + Long.toString(pn.getNationalNumber());
-		case NATIONAL_ONLY:
-			return Long.toString(pn.getNationalNumber());
-		case INTERNATIONAL:
-			return PhoneNumberUtil.getInstance().format(pn, PhoneNumberFormat.INTERNATIONAL);
-		default:
-			Log.e(LOGTAG, "wrong type");
-			return "";
-		}
-	}
-
-	private static String parseNumberWithLibPhonenumber(final String telephoneNumber, final FormatType type)
-	{
-		if (Util.isNullOrEmpty(mDefaultRegion)) {
-			Log.e(LOGTAG, "parseNumberWithLibPhone: default region not initilializeds");
-			return telephoneNumber;
-		}
-
-		try {
-			PhoneNumberUtil pnUtil = PhoneNumberUtil.getInstance();
-			PhoneNumber pn = pnUtil.parse(telephoneNumber, mDefaultRegion);
-			final String tmpTelephoneNumber = parseNumberWithLibPhonenumber(pn, type);
-
-			if (Util.isNullOrEmpty(tmpTelephoneNumber)) {
-				Log.e(LOGTAG, "parseNumberWithLibPhone: failed");
-				return "";
-			}
-
-			Log.d(LOGTAG, "parseNumberWithLibPhone converted: " + telephoneNumber + " -> " + tmpTelephoneNumber);
-			return tmpTelephoneNumber;
-		} catch (NumberParseException e1) {
-			Log.i(LOGTAG,
-					"NumberParseException (telephoneNumber=" + telephoneNumber + " mDefaultRegion=" + mDefaultRegion + "): " + e1.getMessage());
-			return "";
-		}
-	}
-
 	private static boolean hasSimlarIdFormat(final String telephoneNumber)
 	{
 		if (Util.isNullOrEmpty(telephoneNumber)) {
@@ -182,46 +196,5 @@ public class SimlarNumber
 		}
 
 		return telephoneNumber.matches("\\*\\d*\\*");
-	}
-
-	public static String createSimlarId(final String telephoneNumber)
-	{
-		if (Util.isNullOrEmpty(telephoneNumber)) {
-			Log.e(LOGTAG, "createSimlarNumber: empty telephone number");
-			return "";
-		}
-
-		if (hasSimlarIdFormat(telephoneNumber)) {
-			return telephoneNumber;
-		}
-
-		final String internationalTelephoneNumber = parseNumberWithLibPhonenumber(telephoneNumber, FormatType.SIMLAR_ID);
-		if (Util.isNullOrEmpty(internationalTelephoneNumber)) {
-			Log.w(LOGTAG, "createSimlarId: parsing number=" + telephoneNumber + " with libphonenumber failed");
-			return "";
-		}
-
-		final String simlarId = "*" + internationalTelephoneNumber + "*";
-
-		if (!hasSimlarIdFormat(simlarId)) {
-			Log.e(LOGTAG, "WTF no SimlarId: " + simlarId);
-			return "";
-		}
-
-		return simlarId;
-	}
-
-	public static String createGuiTelephoneNumber(final String telephoneNumber)
-	{
-		if (Util.isNullOrEmpty(telephoneNumber)) {
-			Log.e(LOGTAG, "createSimlarNumber: empty telephone number");
-			return "";
-		}
-
-		if (hasSimlarIdFormat(telephoneNumber)) {
-			return telephoneNumber;
-		}
-
-		return parseNumberWithLibPhonenumber(telephoneNumber, FormatType.INTERNATIONAL);
 	}
 }

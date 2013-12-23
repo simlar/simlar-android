@@ -708,13 +708,17 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 				while (contacts.moveToNext())
 				{
 					final long contactId = contacts.getLong(0);
-					final String simlarId = SimlarNumber.createSimlarId(contacts.getString(1));
-					final String guiTelephoneNumber = SimlarNumber.createGuiTelephoneNumber(contacts.getString(1));
+					final String number = contacts.getString(1);
 					final String name = contacts.getString(2);
 					final boolean hasPhotoId = contacts.getLong(3) != 0;
 					String photoUri = null;
 
-					if (Util.isNullOrEmpty(simlarId)) {
+					if (Util.isNullOrEmpty(number)) {
+						continue;
+					}
+
+					final SimlarNumber simlarNumber = new SimlarNumber(number);
+					if (Util.isNullOrEmpty(simlarNumber.getSimlarId())) {
 						continue;
 					}
 
@@ -724,9 +728,10 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 						photoUri = u.toString();
 					}
 
-					if (!result.containsKey(simlarId)) {
-						result.put(simlarId, new ContactData(name, guiTelephoneNumber, ContactStatus.UNKNOWN, photoUri));
-						Log.d(LOGTAG, "adding contact " + name + " " + simlarId);
+					if (!result.containsKey(simlarNumber.getSimlarId())) {
+						result.put(simlarNumber.getSimlarId(), new ContactData(name, simlarNumber.getGuiTelephoneNumber(), ContactStatus.UNKNOWN,
+								photoUri));
+						Log.d(LOGTAG, "adding contact " + name + " " + number + " => " + simlarNumber.getSimlarId());
 					}
 				}
 				contacts.close();
