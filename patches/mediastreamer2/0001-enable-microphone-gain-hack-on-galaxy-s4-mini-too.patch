@@ -1,25 +1,25 @@
-From 699c64b7cb9b7e5fa7e8226da7385954375cb41d Mon Sep 17 00:00:00 2001
+From ddd5b1115c4d472c63f21877c6ad633cdaf1bf94 Mon Sep 17 00:00:00 2001
 From: Ben Sartor <mail@ben-sartor.de>
-Date: Tue, 14 Jan 2014 09:47:15 +0100
-Subject: [PATCH 2/2] enable microphone gain hack on galaxy s4 mini, too
+Date: Fri, 6 Dec 2013 05:00:53 +0100
+Subject: [PATCH 1/2] enable microphone gain hack on galaxy s4 mini, too
 
 ---
  java/src/org/linphone/mediastream/video/capture/hwconf/Hacks.java |    5 +++++
  1 file changed, 5 insertions(+)
 
 diff --git a/java/src/org/linphone/mediastream/video/capture/hwconf/Hacks.java b/java/src/org/linphone/mediastream/video/capture/hwconf/Hacks.java
-index 5cc47bb..c47f011 100644
+index ac22f76..ed2fce0 100644
 --- a/java/src/org/linphone/mediastream/video/capture/hwconf/Hacks.java
 +++ b/java/src/org/linphone/mediastream/video/capture/hwconf/Hacks.java
-@@ -83,6 +83,7 @@ public final class Hacks {
+@@ -77,6 +77,7 @@ public final class Hacks {
  	private static final boolean isSPHD700() {return Build.DEVICE.startsWith("SPH-D700");} // Epic 
  	private static boolean isSGHI896() {return Build.DEVICE.startsWith("SGH-I896");} // Captivate
- 	private static boolean isGT9000() {return Build.DEVICE.startsWith("GT-I9000") && !isCyanogenMod();} // CyanogenMod fixed issues on GT-I9000
+ 	private static boolean isGT9000() {return Build.DEVICE.startsWith("GT-I9000");} // Galaxy S
 +	private static boolean isGT9195() {return Build.DEVICE.startsWith("GT-I9195");} // Galaxy S 4 mini
  	private static boolean isSC02B() {return Build.DEVICE.startsWith("SC-02B");} // Docomo
  	private static boolean isGTP1000() {return Build.DEVICE.startsWith("GT-P1000");} // Tab
  
-@@ -129,6 +130,10 @@ public final class Hacks {
+@@ -97,6 +98,10 @@ public final class Hacks {
  		return isGalaxySOrTab() && !isSC02B();
  	}
  
