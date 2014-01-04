@@ -112,9 +112,9 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 
 	public class ContactData
 	{
-		public String name;
+		public final String name;
 		public ContactStatus status;
-		public String photoId;
+		public final String photoId;
 
 		public ContactData(final String name, final ContactStatus status, final String photoId)
 		{
@@ -136,7 +136,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 
 	public class FullContactData extends ContactData
 	{
-		public String number;
+		public final String number;
 
 		public FullContactData(final String number, final String name, final ContactStatus status, final String photoId)
 		{
