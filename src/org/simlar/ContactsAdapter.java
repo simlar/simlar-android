@@ -44,12 +44,12 @@ public class ContactsAdapter extends ArrayAdapter<FullContactData>
 
 	private final int mLayout;
 	private EmptyTextListener mEmptyTextListener = null;
-	private SimlarServiceCommunicator mCommunicator = null;
+	private final SimlarServiceCommunicator mCommunicator;
 
 	public class SortByName implements Comparator<FullContactData>
 	{
 		@Override
-		public int compare(FullContactData lhs, FullContactData rhs)
+		public int compare(final FullContactData lhs, final FullContactData rhs)
 		{
 			if (lhs == null && rhs == null) {
 				return 0;
@@ -73,13 +73,13 @@ public class ContactsAdapter extends ArrayAdapter<FullContactData>
 		}
 	}
 
-	public static ContactsAdapter createContactsAdapter(Context context, final SimlarServiceCommunicator communicator)
+	public static ContactsAdapter createContactsAdapter(final Context context, final SimlarServiceCommunicator communicator)
 	{
 		Log.i(LOGTAG, "creating ContactsAdapter");
 		return new ContactsAdapter(context, R.layout.contacts, new ArrayList<FullContactData>(), communicator);
 	}
 
-	private ContactsAdapter(Context context, int layout, List<FullContactData> values, final SimlarServiceCommunicator communicator)
+	private ContactsAdapter(final Context context, final int layout, final List<FullContactData> values, final SimlarServiceCommunicator communicator)
 	{
 		super(context, layout, values);
 		mLayout = layout;
@@ -87,7 +87,7 @@ public class ContactsAdapter extends ArrayAdapter<FullContactData>
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent)
+	public View getView(final int position, final View convertView, final ViewGroup parent)
 	{
 		final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		final View rowView = inflater.inflate(mLayout, parent, false);
@@ -115,7 +115,7 @@ public class ContactsAdapter extends ArrayAdapter<FullContactData>
 	}
 
 	@Override
-	public void addAll(Collection<? extends FullContactData> contacts)
+	public void addAll(final Collection<? extends FullContactData> contacts)
 	{
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			super.addAll(contacts);
@@ -128,7 +128,7 @@ public class ContactsAdapter extends ArrayAdapter<FullContactData>
 	}
 
 	@Override
-	public void addAll(FullContactData... contacts)
+	public void addAll(final FullContactData... contacts)
 	{
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			super.addAll(contacts);
@@ -141,7 +141,7 @@ public class ContactsAdapter extends ArrayAdapter<FullContactData>
 	}
 
 	@Override
-	public void add(FullContactData contact)
+	public void add(final FullContactData contact)
 	{
 		super.add(contact);
 		sort(new SortByName());
@@ -182,7 +182,7 @@ public class ContactsAdapter extends ArrayAdapter<FullContactData>
 		return null;
 	}
 
-	void onPresenceStateChanged(String number, boolean online)
+	void onPresenceStateChanged(final String number, final boolean online)
 	{
 		final FullContactData contact = getContactByNumber(number);
 		if (contact == null) {
@@ -195,7 +195,7 @@ public class ContactsAdapter extends ArrayAdapter<FullContactData>
 		}
 	}
 
-	public void call(int position)
+	public void call(final int position)
 	{
 		mCommunicator.getService().call(getItem(position).number);
 	}

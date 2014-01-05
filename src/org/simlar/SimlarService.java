@@ -112,9 +112,9 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 
 	public class ContactData
 	{
-		public String name;
+		public final String name;
 		public ContactStatus status;
-		public String photoId;
+		public final String photoId;
 
 		public ContactData(final String name, final ContactStatus status, final String photoId)
 		{
@@ -136,7 +136,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 
 	public class FullContactData extends ContactData
 	{
-		public String number;
+		public final String number;
 
 		public FullContactData(final String number, final String name, final ContactStatus status, final String photoId)
 		{
@@ -161,14 +161,14 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	}
 
 	@Override
-	public IBinder onBind(Intent arg0)
+	public IBinder onBind(final Intent arg0)
 	{
 		Log.i(LOGTAG, "onBind");
 		return mBinder;
 	}
 
 	@Override
-	public int onStartCommand(Intent intent, int flags, int startId)
+	public int onStartCommand(final Intent intent, final int flags, final int startId)
 	{
 		Log.i(LOGTAG, "onStartCommand intent=" + intent + " startId=" + startId);
 
@@ -698,7 +698,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 			}
 
 			@Override
-			protected void onPostExecute(Map<String, ContactData> result)
+			protected void onPostExecute(final Map<String, ContactData> result)
 			{
 				mContacts = result;
 				requestRegisteredContacts();

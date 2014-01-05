@@ -49,7 +49,7 @@ public class Volumes
 	@Override
 	public String toString()
 	{
-		return "playGain: " + mPlayGain + " micGain: " + mMicGain;
+		return "playGain: " + mPlayGain + " micGain: " + mMicGain + " micMuted: " + mMicrophoneMuted + " externalSpeaker: " + mExternalSpeaker;
 	}
 
 	public float getPlayGain()
