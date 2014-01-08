@@ -230,7 +230,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		Log.i(LOGTAG, "registerActivityToNotification: " + activity.getSimpleName());
 		mNotificationActivity = activity;
 
-		NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		nm.notify(NOTIFICATION_ID, createNotification(mSimlarStatus));
 	}
 
@@ -441,7 +441,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	{
 		Log.i(LOGTAG, "notifySimlarStatusChanged: " + status);
 
-		NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		nm.notify(NOTIFICATION_ID, createNotification(status));
 
 		mSimlarStatus = status;
