@@ -34,7 +34,7 @@
         android:layout_alignParentTop="true"
         android:background="@null"
         android:contentDescription="@string/ringing_activity_phone_is_ringing"
-        android:src="@drawable/kontakt" />
+        android:src="@drawable/contact_picture" />
 
     <TextView
         android:id="@+id/contactName"
