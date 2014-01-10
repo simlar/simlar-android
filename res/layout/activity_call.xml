@@ -190,10 +190,7 @@
 
                     <Button
                         android:id="@+id/buttonAuthenticationTokenWrong"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="@drawable/border_round_corners"
+                        style="@style/buttonWhite"
                         android:onClick="wrongAuthenticationToken"
                         android:text="@string/call_activity_button_authentication_token_wrong" />
                 </LinearLayout>
@@ -207,10 +204,7 @@
 
                     <Button
                         android:id="@+id/buttonAuthenticationTokenVerify"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="@drawable/border_round_corners"
+                        style="@style/buttonWhite"
                         android:onClick="verifyAuthenticationToken"
                         android:text="@string/call_activity_button_authentication_token_verify" />
                 </LinearLayout>
@@ -242,11 +236,8 @@
 
             <Button
                 android:id="@+id/buttonAcceptUnencryptedCall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                style="@style/buttonWhite"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/border_round_corners"
                 android:onClick="acceptUnencryptedCall"
                 android:padding="8dp"
                 android:text="@string/call_activity_button_accept_unencrypted_call" />

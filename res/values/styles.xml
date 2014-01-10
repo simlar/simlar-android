@@ -52,4 +52,12 @@
         <item name="android:windowBackground">@drawable/border_round_corners</item>
     </style>
 
+    <!-- Buttons -->
+    <style name="buttonWhite" parent="android:Widget.Holo.Light.Button">
+        <item name="android:background">@drawable/button_white</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
 </resources>
