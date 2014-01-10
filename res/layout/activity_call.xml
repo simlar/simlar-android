@@ -265,32 +265,23 @@
 
                 <ImageButton
                     android:id="@+id/buttonSoundSettings"
-                    style="?android:attr/buttonStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/buttonWhiteBorderLess"
                     android:layout_marginRight="25dp"
-                    android:background="@color/background_white"
                     android:contentDescription="@string/call_activity_sound_settings"
                     android:onClick="showSoundSettingsDialog"
                     android:src="@drawable/sound_settings" />
 
                 <ImageButton
                     android:id="@+id/buttonMicro"
-                    style="?android:attr/buttonStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/background_white"
+                    style="@style/buttonWhiteBorderLess"
                     android:contentDescription="@string/call_activity_microphone_mute"
                     android:onClick="toggleMicrophoneMuted"
                     android:src="@drawable/micro_on" />
 
                 <ImageButton
                     android:id="@+id/buttonSpeaker"
-                    style="?android:attr/buttonStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/buttonWhiteBorderLess"
                     android:layout_marginLeft="25dp"
-                    android:background="@color/background_white"
                     android:contentDescription="@string/call_activity_loudspeaker_off"
                     android:onClick="toggleSpeakerMuted"
                     android:src="@drawable/speaker_off" />

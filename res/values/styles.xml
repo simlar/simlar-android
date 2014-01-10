@@ -60,4 +60,10 @@
         <item name="android:layout_gravity">center</item>
     </style>
 
+    <style name="buttonWhiteBorderLess" parent="@android:attr/buttonStyleSmall">
+        <item name="android:background">@drawable/button_white_borderless</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
 </resources>
