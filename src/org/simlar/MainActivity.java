@@ -106,6 +106,19 @@ public class MainActivity extends android.support.v4.app.FragmentActivity
 		}
 
 		@Override
+		public void onViewCreated(final View view, final Bundle savedInstanceState)
+		{
+			final ListView listView = getListView();
+
+			if (listView == null) {
+				Log.e(LOGTAG, "no list view");
+				return;
+			}
+
+			listView.setDivider(null);
+		}
+
+		@Override
 		public void onListItemClick(final ListView l, final View v, final int position, final long id)
 		{
 			((ContactsAdapter) getListAdapter()).call(position);
