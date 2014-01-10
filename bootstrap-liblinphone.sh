@@ -24,24 +24,24 @@ cd linphone-android
 declare -r GIT_HASH=$(git log -n1 --format="%H")
 
 if [ -d "${LINPHONE_ANDROID_PATCH_DIR}" ] ; then
-	find "${LINPHONE_ANDROID_PATCH_DIR}" -maxdepth 1 -name \*.patch -exec git am {} \;
+	git am "${LINPHONE_ANDROID_PATCH_DIR}"/*.patch
 fi
 
 if [ -d "${LINPHONE_PATCH_DIR}" ] ; then
 	cd submodules/linphone/
-	find "${LINPHONE_PATCH_DIR}" -maxdepth 1 -name \*.patch -exec git am {} \;
+	git am "${LINPHONE_PATCH_DIR}"/*.patch
 	cd ../..
 fi
 
 if [ -d "${MEDIASTREAMER2_PATCH_DIR}" ] ; then
 	cd submodules/linphone/mediastreamer2
-	find "${MEDIASTREAMER2_PATCH_DIR}" -maxdepth 1 -name \*.patch -exec git am {} \;
+	git am "${MEDIASTREAMER2_PATCH_DIR}"/*.patch
 	cd ../../..
 fi
 
 if [ -d "${BELLESIP_PATCH_DIR}" ] ; then
 	cd submodules/belle-sip
-	find "${BELLESIP_PATCH_DIR}" -maxdepth 1 -name \*.patch -exec git am {} \;
+	git am "${BELLESIP_PATCH_DIR}"/*.patch
 	cd ../..
 fi
 
