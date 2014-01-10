@@ -49,16 +49,13 @@ cd ..
 echo "linphone-srtp success"
 
 
-git clone git://git.linphone.org/zrtpcpp.git linphone-libzrtpcpp
-cd linphone-libzrtpcpp/
-mkdir build
-cd build
-cmake -Denable-ccrtp=false ..
+git clone https://github.com/wernerd/ZRTPCPP.git libzrtpcpp
+cd libzrtpcpp/
+cmake -DCORE_LIB=true -DSDES=false .
 make
 make install DESTDIR="${BUILD_DIR}/prefixdir/"
 cd ..
-cd ..
-echo "linphone-libzrtpcpp success"
+echo "libzrtpcpp success"
 
 
 git clone git://git.linphone.org/linphone.git --recursive linphone
