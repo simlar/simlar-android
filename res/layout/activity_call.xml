@@ -52,7 +52,6 @@
         android:layout_height="30dip"
         android:layout_below="@+id/contactName"
         android:layout_toRightOf="@+id/contactImage"
-        android:background="#000000"
         android:gravity="top"
         android:paddingLeft="10dp"
         android:text="00:00"
