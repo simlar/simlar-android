@@ -19,11 +19,14 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -->
+
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+    android:background="@drawable/background" >
+
     <TextView
         android:id="@+id/letter"
         android:layout_width="wrap_content"
@@ -31,24 +34,28 @@
         android:gravity="center"
         android:minHeight="25dp"
         android:minWidth="25dp"
-        android:layout_margin="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="2dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:background="@drawable/letter_border_round_corners" />
+
     <TextView
         android:id="@+id/name"
         android:background="#CCFFFFFF"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="2dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:layout_below="@+id/letter"
         android:paddingLeft="50dp"
         android:paddingTop="10dp"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+
     <TextView
         android:id="@+id/number"
         android:background="#CCFFFFFF"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:paddingLeft="50dp"
         android:paddingBottom="10dp"
         android:layout_below="@+id/name"
