@@ -81,7 +81,7 @@
         android:contentDescription="@string/call_activity_sound_settings"
         android:onClick="terminateCall"
         android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:src="@drawable/hang_up_left" />
+        android:src="@drawable/button_ringing_hang_up" />
 
     <ImageButton
         android:id="@+id/buttonPickUp"
@@ -93,6 +93,6 @@
         android:contentDescription="@string/call_activity_sound_settings"
         android:onClick="pickUp"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:src="@drawable/pick_up" />
+        android:src="@drawable/button_ringing_pick_up" />
 
 </RelativeLayout>
