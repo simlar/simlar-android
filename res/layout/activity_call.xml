@@ -140,7 +140,7 @@
                     android:background="@null"
                     android:contentDescription="@string/call_activity_sound_settings"
                     android:onClick="showConnectionDetails"
-                    android:src="@drawable/info" />
+                    android:src="@drawable/button_info" />
             </LinearLayout>
         </LinearLayout>
 
