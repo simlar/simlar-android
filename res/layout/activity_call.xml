@@ -47,7 +47,7 @@
         android:textColor="@color/calling_title_text_white" />
 
     <TextView
-        android:id="@+id/contactText"
+        android:id="@+id/callTimer"
         android:layout_width="fill_parent"
         android:layout_height="30dip"
         android:layout_below="@+id/contactName"

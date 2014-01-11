@@ -30,6 +30,7 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -48,6 +49,7 @@ public class CallActivity extends Activity implements SensorEventListener
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCall();
 	private SensorManager mSensorManager;
 	private Sensor mSensor;
+	private final Handler mHandler = new Handler();
 
 	private class SimlarServiceCommunicatorCall extends SimlarServiceCommunicator
 	{
@@ -92,6 +94,9 @@ public class CallActivity extends Activity implements SensorEventListener
 				WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
 				WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
 
+		final TextView callTimer = (TextView) findViewById(R.id.callTimer);
+		callTimer.setVisibility(View.INVISIBLE);
+
 		final LinearLayout callStatus = (LinearLayout) findViewById(R.id.linearLayoutCallStatus);
 		final LinearLayout connectionQuality = (LinearLayout) findViewById(R.id.linearLayoutConnectionQuality);
 		final LinearLayout linearLayoutAuthenticationToken = (LinearLayout) findViewById(R.id.linearLayoutAuthenticationToken);
@@ -120,6 +125,16 @@ public class CallActivity extends Activity implements SensorEventListener
 		mCommunicator.unregister(this);
 		mSensorManager.unregisterListener(this);
 		super.onPause();
+	}
+
+	@Override
+	protected void onStop()
+	{
+		Log.i(LOGTAG, "onStop");
+		mHandler.removeCallbacksAndMessages(null);
+		final TextView callTimer = (TextView) findViewById(R.id.callTimer);
+		callTimer.setVisibility(View.INVISIBLE);
+		super.onStop();
 	}
 
 	@Override
@@ -192,6 +207,10 @@ public class CallActivity extends Activity implements SensorEventListener
 		final LinearLayout connectionQuality = (LinearLayout) findViewById(R.id.linearLayoutConnectionQuality);
 		final ImageButton buttonInfo = (ImageButton) findViewById(R.id.buttonConnectionDetails);
 
+		if (simlarCallState.isTalking()) {
+			startCallTimer();
+		}
+
 		if (simlarCallState.hasConnectionInfo()) {
 			setQuality(getString(simlarCallState.getQualityDescription()));
 			connectionQuality.setVisibility(View.VISIBLE);
@@ -222,6 +241,39 @@ public class CallActivity extends Activity implements SensorEventListener
 				finish();
 			}
 		}
+	}
+
+	private void startCallTimer()
+	{
+		final TextView callTimer = (TextView) findViewById(R.id.callTimer);
+
+		if (callTimer.getVisibility() == View.VISIBLE) {
+			return;
+		}
+		callTimer.setVisibility(View.VISIBLE);
+
+		iterateTimer(callTimer, SystemClock.elapsedRealtime());
+	}
+
+	protected void iterateTimer(final TextView callTimer, final long callBegin)
+	{
+		final String text = Util.formatMilliSeconds(SystemClock.elapsedRealtime() - callBegin);
+		Log.i(LOGTAG, "iterateTimer: " + text);
+
+		if (callTimer == null) {
+			return;
+		}
+
+		callTimer.setText(text);
+
+		mHandler.postDelayed(new Runnable() {
+			@Override
+			public void run()
+			{
+				iterateTimer(callTimer, callBegin);
+			}
+		}, 1000);
+
 	}
 
 	private void finishDelayed(final int milliSeconds)
