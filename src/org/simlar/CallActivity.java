@@ -182,6 +182,8 @@ public class CallActivity extends Activity implements SensorEventListener
 
 		if (!Util.isNullOrEmpty(simlarCallState.getDisplayPhotoId())) {
 			contactImage.setImageURI(Uri.parse(simlarCallState.getDisplayPhotoId()));
+		} else {
+			contactImage.setImageResource(R.drawable.contact_picture);
 		}
 		contactName.setText(simlarCallState.getDisplayName());
 		setCallEncryption(simlarCallState.isEncrypted(), simlarCallState.getAuthenticationToken(), simlarCallState.isAuthenticationTokenVerified());
