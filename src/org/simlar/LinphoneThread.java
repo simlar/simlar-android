@@ -556,15 +556,16 @@ public class LinphoneThread
 			final PayloadType payloadType = call.getCurrentParamsCopy().getUsedAudioCodec();
 			final String codec = payloadType.getMime() + " " + payloadType.getRate() / 1000;
 			final String iceState = stats.getIceState().toString();
+			final int duration = call.getDuration();
 
 			Log.i(LOGTAG, "callStatsUpdated: number=" + getNumber(call) + " upload=" + upload + " download=" + download + " quality=" + quality
-					+ " codec=" + codec + " iceState=" + iceState);
+					+ " codec=" + codec + " iceState=" + iceState + " duration=" + duration);
 
 			mMainThreadHandler.post(new Runnable() {
 				@Override
 				public void run()
 				{
-					mListener.onCallStatsChanged(upload, download, quality, codec, iceState);
+					mListener.onCallStatsChanged(upload, download, quality, codec, iceState, duration);
 				}
 			});
 		}

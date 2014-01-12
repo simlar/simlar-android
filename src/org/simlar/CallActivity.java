@@ -49,6 +49,7 @@ public class CallActivity extends Activity implements SensorEventListener
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCall();
 	private SensorManager mSensorManager;
 	private Sensor mSensor;
+	private long mCallStartTime = -1;
 	private final Handler mHandler = new Handler();
 
 	private class SimlarServiceCommunicatorCall extends SimlarServiceCommunicator
@@ -207,7 +208,8 @@ public class CallActivity extends Activity implements SensorEventListener
 		final LinearLayout connectionQuality = (LinearLayout) findViewById(R.id.linearLayoutConnectionQuality);
 		final ImageButton buttonInfo = (ImageButton) findViewById(R.id.buttonConnectionDetails);
 
-		if (simlarCallState.isTalking()) {
+		mCallStartTime = simlarCallState.getStartTime();
+		if (mCallStartTime > 0) {
 			startCallTimer();
 		}
 
@@ -252,12 +254,12 @@ public class CallActivity extends Activity implements SensorEventListener
 		}
 		callTimer.setVisibility(View.VISIBLE);
 
-		iterateTimer(callTimer, SystemClock.elapsedRealtime());
+		iterateTimer(callTimer);
 	}
 
-	protected void iterateTimer(final TextView callTimer, final long callBegin)
+	protected void iterateTimer(final TextView callTimer)
 	{
-		final String text = Util.formatMilliSeconds(SystemClock.elapsedRealtime() - callBegin);
+		final String text = Util.formatMilliSeconds(SystemClock.elapsedRealtime() - mCallStartTime);
 		Log.i(LOGTAG, "iterateTimer: " + text);
 
 		if (callTimer == null) {
@@ -270,7 +272,7 @@ public class CallActivity extends Activity implements SensorEventListener
 			@Override
 			public void run()
 			{
-				iterateTimer(callTimer, callBegin);
+				iterateTimer(callTimer);
 			}
 		}, 1000);
 

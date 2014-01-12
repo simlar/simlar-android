@@ -25,6 +25,7 @@ import java.text.DecimalFormat;
 import org.linphone.core.LinphoneCall.State;
 
 import android.content.Context;
+import android.os.SystemClock;
 import android.util.Log;
 
 public class SimlarCallState
@@ -45,6 +46,8 @@ public class SimlarCallState
 	private float mQuality = -1.0f;
 	private String mCodec = null;
 	private String mIceState = null;
+	private int mDuration = 0;
+	private long mCallStartTime = -1;
 
 	private static boolean possibleErrorMessage(final State callState)
 	{
@@ -122,15 +125,18 @@ public class SimlarCallState
 			mQuality = -1.0f;
 			mCodec = null;
 			mIceState = null;
+			mDuration = 0;
+			mCallStartTime = -1;
 		}
 
 		return true;
 	}
 
-	public boolean updateCallStats(final float upload, final float download, final float quality, final String codec, final String iceState)
+	public boolean updateCallStats(final float upload, final float download, final float quality, final String codec, final String iceState,
+			final int callDuration)
 	{
 		if (upload == mUpload && download == mDownload && quality == mQuality
-				&& Util.equalString(codec, mCodec) && Util.equalString(iceState, mIceState)) {
+				&& Util.equalString(codec, mCodec) && Util.equalString(iceState, mIceState) && callDuration == mDuration) {
 			return false;
 		}
 
@@ -139,6 +145,16 @@ public class SimlarCallState
 		mQuality = quality;
 		mCodec = codec;
 		mIceState = iceState;
+
+		if (callDuration != mDuration) {
+			mDuration = callDuration;
+			if (mDuration <= 0) {
+				mCallStartTime = -1;
+			} else {
+				mCallStartTime = SystemClock.elapsedRealtime() - mDuration * 1000L;
+			}
+		}
+
 		return true;
 	}
 
@@ -373,5 +389,10 @@ public class SimlarCallState
 		}
 
 		return true;
+	}
+
+	public long getStartTime()
+	{
+		return mDuration > 0 ? mCallStartTime : -1;
 	}
 }
