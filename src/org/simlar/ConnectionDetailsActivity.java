@@ -32,6 +32,13 @@ public class ConnectionDetailsActivity extends Activity
 
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorConnectionDetails();
 
+	// gui elements
+	private TextView mTextViewQuality;
+	private TextView mTextViewUpload;
+	private TextView mTextViewDownload;
+	private TextView mTextViewIceState;
+	private TextView mTextViewCodec;
+
 	private class SimlarServiceCommunicatorConnectionDetails extends SimlarServiceCommunicator
 	{
 		public SimlarServiceCommunicatorConnectionDetails()
@@ -62,7 +69,6 @@ public class ConnectionDetailsActivity extends Activity
 				setCodec(simlarCallState.getCodec());
 				setBandwidthInfo(simlarCallState.getUpload(), simlarCallState.getDownload(), getString(simlarCallState.getQualityDescription()));
 			}
-
 		}
 	}
 
@@ -71,6 +77,12 @@ public class ConnectionDetailsActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_connection_details);
+
+		mTextViewQuality = (TextView) findViewById(R.id.textViewQuality);
+		mTextViewUpload = (TextView) findViewById(R.id.textViewUpload);
+		mTextViewDownload = (TextView) findViewById(R.id.textViewDownload);
+		mTextViewIceState = (TextView) findViewById(R.id.textViewIceState);
+		mTextViewCodec = (TextView) findViewById(R.id.textViewCodec);
 	}
 
 	@Override
@@ -97,24 +109,18 @@ public class ConnectionDetailsActivity extends Activity
 
 	void setIceState(final String iceState)
 	{
-		final TextView tv = (TextView) findViewById(R.id.textViewIceState);
-		tv.setText(iceState);
+		mTextViewIceState.setText(iceState);
 	}
 
 	void setCodec(final String codec)
 	{
-		final TextView tv = (TextView) findViewById(R.id.textViewCodec);
-		tv.setText(codec);
+		mTextViewCodec.setText(codec);
 	}
 
 	void setBandwidthInfo(final String upload, final String download, final String quality)
 	{
-		final TextView tvUpload = (TextView) findViewById(R.id.textViewUpload);
-		final TextView tvDownload = (TextView) findViewById(R.id.textViewDownload);
-		final TextView tvQuality = (TextView) findViewById(R.id.textViewQuality);
-
-		tvUpload.setText(upload + " " + getString(R.string.connection_details_activity_kbytes_per_second));
-		tvDownload.setText(download + " " + getString(R.string.connection_details_activity_kbytes_per_second));
-		tvQuality.setText(quality);
+		mTextViewUpload.setText(upload + " " + getString(R.string.connection_details_activity_kbytes_per_second));
+		mTextViewDownload.setText(download + " " + getString(R.string.connection_details_activity_kbytes_per_second));
+		mTextViewQuality.setText(quality);
 	}
 }
