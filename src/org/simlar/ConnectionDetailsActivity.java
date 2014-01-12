@@ -30,7 +30,7 @@ public class ConnectionDetailsActivity extends Activity
 {
 	static final String LOGTAG = ConnectionDetailsActivity.class.getSimpleName();
 
-	private SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorConnectionDetails();
+	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorConnectionDetails();
 
 	private class SimlarServiceCommunicatorConnectionDetails extends SimlarServiceCommunicator
 	{
@@ -67,14 +67,14 @@ public class ConnectionDetailsActivity extends Activity
 	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
+	protected void onCreate(final Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_connection_details);
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
+	public boolean onCreateOptionsMenu(final Menu menu)
 	{
 		return true;
 	}
