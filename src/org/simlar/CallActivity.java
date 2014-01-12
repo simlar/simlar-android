@@ -182,16 +182,6 @@ public class CallActivity extends Activity implements SensorEventListener
 		return true;
 	}
 
-	private void setCallStatus(final String status)
-	{
-		mTextViewCallStatus.setText(status);
-	}
-
-	void setQuality(final String quality)
-	{
-		mTextViewQuality.setText(quality);
-	}
-
 	void setCallEncryption(final boolean encrypted, final String authenticationToken, final boolean authenticationTokenVerified)
 	{
 		if (!encrypted) {
@@ -239,7 +229,7 @@ public class CallActivity extends Activity implements SensorEventListener
 		}
 
 		if (simlarCallState.hasConnectionInfo()) {
-			setQuality(getString(simlarCallState.getQualityDescription()));
+			mTextViewQuality.setText(getString(simlarCallState.getQualityDescription()));
 			mLayoutConnectionQuality.setVisibility(View.VISIBLE);
 			mButtonConnectionDetails.setVisibility(View.VISIBLE);
 			getString(simlarCallState.getQualityDescription());
@@ -248,10 +238,10 @@ public class CallActivity extends Activity implements SensorEventListener
 
 			if (simlarCallState.hasCallStatusMessage()) {
 				mLayoutCallStatus.setVisibility(View.VISIBLE);
-				setCallStatus(simlarCallState.getCallStatusDisplayMessage(this));
+				mTextViewCallStatus.setText(simlarCallState.getCallStatusDisplayMessage(this));
 			} else if (simlarCallState.hasErrorMessage()) {
 				mLayoutCallStatus.setVisibility(View.VISIBLE);
-				setCallStatus(simlarCallState.getErrorDisplayMessage(this, simlarCallState.getDisplayName()));
+				mTextViewCallStatus.setText(simlarCallState.getErrorDisplayMessage(this, simlarCallState.getDisplayName()));
 			} else {
 				mLayoutCallStatus.setVisibility(View.INVISIBLE);
 			}
