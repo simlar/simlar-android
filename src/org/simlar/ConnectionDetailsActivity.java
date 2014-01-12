@@ -47,28 +47,15 @@ public class ConnectionDetailsActivity extends Activity
 		}
 
 		@Override
+		void onBoundToSimlarService()
+		{
+			ConnectionDetailsActivity.this.onSimlarCallStateChanged();
+		}
+
+		@Override
 		void onSimlarCallStateChanged()
 		{
-			if (getService() == null) {
-				Log.e(LOGTAG, "service is null");
-				return;
-			}
-
-			final SimlarCallState simlarCallState = getService().getSimlarCallState();
-			if (simlarCallState == null || simlarCallState.isEmpty()) {
-				Log.e(LOGTAG, "ERROR: onSimlarCallStateChanged simlarCallState null or empty");
-				return;
-			}
-
-			if (simlarCallState.isEndedCall()) {
-				ConnectionDetailsActivity.this.finish();
-			}
-
-			if (simlarCallState.hasConnectionInfo()) {
-				setIceState(simlarCallState.getIceState());
-				setCodec(simlarCallState.getCodec());
-				setBandwidthInfo(simlarCallState.getUpload(), simlarCallState.getDownload(), getString(simlarCallState.getQualityDescription()));
-			}
+			ConnectionDetailsActivity.this.onSimlarCallStateChanged();
 		}
 	}
 
@@ -107,20 +94,30 @@ public class ConnectionDetailsActivity extends Activity
 		super.onPause();
 	}
 
-	void setIceState(final String iceState)
+	public void onSimlarCallStateChanged()
 	{
-		mTextViewIceState.setText(iceState);
-	}
+		if (mCommunicator.getService() == null) {
+			Log.e(LOGTAG, "ERROR: onSimlarCallStateChanged but not bound to service");
+			return;
+		}
 
-	void setCodec(final String codec)
-	{
-		mTextViewCodec.setText(codec);
-	}
+		final SimlarCallState simlarCallState = mCommunicator.getService().getSimlarCallState();
 
-	void setBandwidthInfo(final String upload, final String download, final String quality)
-	{
-		mTextViewUpload.setText(upload + " " + getString(R.string.connection_details_activity_kbytes_per_second));
-		mTextViewDownload.setText(download + " " + getString(R.string.connection_details_activity_kbytes_per_second));
-		mTextViewQuality.setText(quality);
+		if (simlarCallState == null || simlarCallState.isEmpty()) {
+			Log.e(LOGTAG, "ERROR: onSimlarCallStateChanged simlarCallState null or empty");
+			return;
+		}
+
+		if (simlarCallState.isEndedCall()) {
+			ConnectionDetailsActivity.this.finish();
+		}
+
+		if (simlarCallState.hasConnectionInfo()) {
+			mTextViewQuality.setText(getString(simlarCallState.getQualityDescription()));
+			mTextViewUpload.setText(simlarCallState.getUpload() + " " + getString(R.string.connection_details_activity_kbytes_per_second));
+			mTextViewDownload.setText(simlarCallState.getDownload() + " " + getString(R.string.connection_details_activity_kbytes_per_second));
+			mTextViewIceState.setText(simlarCallState.getIceState());
+			mTextViewCodec.setText(simlarCallState.getCodec());
+		}
 	}
 }
