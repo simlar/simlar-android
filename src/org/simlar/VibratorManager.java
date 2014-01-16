@@ -31,15 +31,15 @@ import android.os.Looper;
 import android.os.Vibrator;
 import android.util.Log;
 
-class VibratorThread
+class VibratorManager
 {
-	static final String LOGTAG = VibratorThread.class.getSimpleName();
+	static final String LOGTAG = VibratorManager.class.getSimpleName();
 	public static final long VIBRATE_LENGTH = 1000; // ms
 	public static final long VIBRATE_PAUSE = 1000; // ms
 
 	Context mContext = null;
 	private boolean mHasOnGoingAlarm = false;
-	private VibratorThreadImpl mThread = null;
+	private VibratorManagerImpl mImpl = null;
 	private RingerModeReceiver mRingerModeReceiver = new RingerModeReceiver();
 
 	private class RingerModeReceiver extends BroadcastReceiver
@@ -52,18 +52,18 @@ class VibratorThread
 		@Override
 		public void onReceive(Context context, Intent intent)
 		{
-			VibratorThread.this.onRingerModeChanged();
+			VibratorManager.this.onRingerModeChanged();
 		}
 	}
 
-	private class VibratorThreadImpl extends Thread
+	private class VibratorManagerImpl extends Thread
 	{
 		private Handler mHandler = null;
 
 		// should only be accessed within thread
 		Vibrator mVibrator = null;
 
-		public VibratorThreadImpl()
+		public VibratorManagerImpl()
 		{
 			super();
 			mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
@@ -121,7 +121,7 @@ class VibratorThread
 		}
 	}
 
-	public VibratorThread(final Context context)
+	public VibratorManager(final Context context)
 	{
 		mContext = context;
 	}
@@ -144,7 +144,7 @@ class VibratorThread
 		mContext.registerReceiver(mRingerModeReceiver, filter);
 
 		if (!shouldVibrate()) {
-			Log.i(LOGTAG, "VibratorThread: vibration disabled at the moment");
+			Log.i(LOGTAG, "VibratorManager: vibration disabled at the moment");
 			return;
 		}
 
@@ -153,20 +153,20 @@ class VibratorThread
 
 	private void startVibrate()
 	{
-		if (mThread != null) {
+		if (mImpl != null) {
 			Log.i(LOGTAG, "already vibrating");
 			return;
 		}
 
-		mThread = new VibratorThreadImpl();
+		mImpl = new VibratorManagerImpl();
 
-		if (!mThread.hasVibrator()) {
-			Log.i(LOGTAG, "VibratorThread: no vibrator");
-			mThread = null;
+		if (!mImpl.hasVibrator()) {
+			Log.i(LOGTAG, "VibratorManager: no vibrator");
+			mImpl = null;
 			return;
 		}
 
-		mThread.start();
+		mImpl.start();
 	}
 
 	public void stop()
@@ -184,20 +184,20 @@ class VibratorThread
 
 	private void stopVibrate()
 	{
-		if (mThread == null) {
+		if (mImpl == null) {
 			Log.i(LOGTAG, "not vibrating");
 			return;
 		}
 
-		mThread.stopVibration();
+		mImpl.stopVibration();
 
 		try {
-			mThread.join(300);
+			mImpl.join(300);
 		} catch (InterruptedException e) {
 			Log.e(LOGTAG, "join interrupted: " + e.getMessage(), e);
 		} finally {
 			Log.i(LOGTAG, "thread joined");
-			mThread = null;
+			mImpl = null;
 		}
 	}
 
