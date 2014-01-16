@@ -27,7 +27,6 @@ import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Vibrator;
 import android.util.Log;
 
@@ -56,55 +55,35 @@ class VibratorManager
 		}
 	}
 
-	private class VibratorManagerImpl extends Thread
+	private class VibratorManagerImpl
 	{
-		private Handler mHandler = null;
-
-		// should only be accessed within thread
-		Vibrator mVibrator = null;
+		private final Handler mHandler;
+		private final Vibrator mVibrator;
 
 		public VibratorManagerImpl()
 		{
-			super();
+			mHandler = new Handler();
 			mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
 		}
 
-		@Override
-		public void run()
+		void startVibration()
 		{
-			Log.i(LOGTAG, "started");
-			Looper.prepare();
-			mHandler = new Handler();
-			startVibration(0);
-			Looper.loop();
-		}
+			Log.i(LOGTAG, "vibrate");
+			mVibrator.vibrate(VIBRATE_LENGTH);
 
-		void startVibration(final long delayMillis)
-		{
 			mHandler.postDelayed(new Runnable() {
 				@Override
 				public void run()
 				{
-					Log.i(LOGTAG, "vibrate");
-					mVibrator.vibrate(VIBRATE_LENGTH);
-					startVibration(VIBRATE_LENGTH + VIBRATE_PAUSE);
+					startVibration();
 				}
-			}, delayMillis);
+			}, VIBRATE_LENGTH + VIBRATE_PAUSE);
 		}
 
 		public void stopVibration()
 		{
 			mHandler.removeCallbacksAndMessages(null);
-
-			mHandler.post(new Runnable() {
-				@Override
-				public void run()
-				{
-					mVibrator.cancel();
-					Looper.myLooper().quit();
-					Log.i(LOGTAG, "vibration stopped");
-				}
-			});
+			mVibrator.cancel();
 		}
 
 		public boolean hasVibrator()
@@ -166,7 +145,7 @@ class VibratorManager
 			return;
 		}
 
-		mImpl.start();
+		mImpl.startVibration();
 	}
 
 	public void stop()
@@ -190,15 +169,9 @@ class VibratorManager
 		}
 
 		mImpl.stopVibration();
+		mImpl = null;
 
-		try {
-			mImpl.join(300);
-		} catch (InterruptedException e) {
-			Log.e(LOGTAG, "join interrupted: " + e.getMessage(), e);
-		} finally {
-			Log.i(LOGTAG, "thread joined");
-			mImpl = null;
-		}
+		Log.i(LOGTAG, "stopped");
 	}
 
 	public void onRingerModeChanged()
