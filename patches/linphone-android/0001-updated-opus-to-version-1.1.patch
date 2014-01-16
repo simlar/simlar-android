@@ -1,0 +1,19 @@
+From e5265467e983addd064f84f222403525154446b5 Mon Sep 17 00:00:00 2001
+From: Ben Sartor <mail@ben-sartor.de>
+Date: Fri, 6 Dec 2013 22:10:05 +0100
+Subject: [PATCH] updated opus to version 1.1
+
+---
+ submodules/externals/opus |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/submodules/externals/opus b/submodules/externals/opus
+index fcecd29..65471dd 160000
+--- a/submodules/externals/opus
++++ b/submodules/externals/opus
+@@ -1 +1 @@
+-Subproject commit fcecd29abf32164326e568acdcdf7d8e877b33b1
++Subproject commit 65471dd567beb6b1156dc292858c0a28ca55ca3e
+-- 
+1.7.10.4
+

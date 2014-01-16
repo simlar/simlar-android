@@ -1,0 +1,68 @@
+From 21ec89ffb14c04bb4abd4a4f97c20b781c6aaba4 Mon Sep 17 00:00:00 2001
+From: Ben Sartor <mail@ben-sartor.de>
+Date: Tue, 29 Oct 2013 03:06:55 +0100
+Subject: [PATCH 2/2] Disable galaxyS hacks if running on CyanogenMod
+
+---
+ .../mediastream/video/capture/hwconf/Hacks.java    |   34 +++++++++++++++++++-
+ 1 file changed, 33 insertions(+), 1 deletion(-)
+
+diff --git a/java/src/org/linphone/mediastream/video/capture/hwconf/Hacks.java b/java/src/org/linphone/mediastream/video/capture/hwconf/Hacks.java
+index 9175037..c04e506 100644
+--- a/java/src/org/linphone/mediastream/video/capture/hwconf/Hacks.java
++++ b/java/src/org/linphone/mediastream/video/capture/hwconf/Hacks.java
+@@ -18,6 +18,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+  */
+ package org.linphone.mediastream.video.capture.hwconf;
+ 
++import java.io.BufferedReader;
++import java.io.FileNotFoundException;
++import java.io.FileReader;
++import java.io.IOException;
++import java.util.Locale;
++
+ import org.linphone.mediastream.Log;
+ import org.linphone.mediastream.Version;
+ 
+@@ -76,11 +82,37 @@ public final class Hacks {
+ 	// Galaxy S variants
+ 	private static final boolean isSPHD700() {return Build.DEVICE.startsWith("SPH-D700");} // Epic 
+ 	private static boolean isSGHI896() {return Build.DEVICE.startsWith("SGH-I896");} // Captivate
+-	private static boolean isGT9000() {return Build.DEVICE.startsWith("GT-I9000");} // Galaxy S
++	private static boolean isGT9000() {return Build.DEVICE.startsWith("GT-I9000") && !isCyanogenMod();} // CyanogenMod fixed issues on GT-I9000
+ 	private static boolean isGT9195() {return Build.DEVICE.startsWith("GT-I9195");} // Galaxy S 4 mini
+ 	private static boolean isSC02B() {return Build.DEVICE.startsWith("SC-02B");} // Docomo
+ 	private static boolean isGTP1000() {return Build.DEVICE.startsWith("GT-P1000");} // Tab
+ 
++	private static boolean isCyanogenMod()
++	{
++		BufferedReader reader = null;
++		try {
++			reader = new BufferedReader(new FileReader("/proc/version"));
++			final String procVersion = reader.readLine();
++			if (procVersion != null) {
++				if (procVersion.toLowerCase(Locale.ENGLISH).contains("cyanogenmod")) {
++					Log.i("detected CyanogenMod");
++					return true;
++				}
++			}
++		} catch (FileNotFoundException e) {
++			Log.e("file not found: /proc/version");
++		} catch (IOException e) {
++			Log.e("IOException: " + e.getMessage());
++		} finally {
++			if (reader != null) {
++				try {
++					reader.close();
++				} catch (IOException e) {}
++			}
++		}
++		return false;
++	}
++
+ 	// LG with two cameras
+ 	private static final boolean isLGP970() {return Build.DEVICE.startsWith("LG-P970");}
+ 
+-- 
+1.7.10.4
+
