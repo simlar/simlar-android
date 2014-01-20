@@ -199,7 +199,7 @@ public class SimlarCallState
 
 	private String formatIceState()
 	{
-		if (Util.isNullOrEmpty(mAuthenticationToken)) {
+		if (Util.isNullOrEmpty(mIceState)) {
 			return "";
 		}
 
