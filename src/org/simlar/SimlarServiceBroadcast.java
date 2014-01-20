@@ -37,6 +37,7 @@ public class SimlarServiceBroadcast implements Serializable
 		SIMLAR_STATUS,
 		PRESENCE_STATE,
 		SIMLAR_CALL_STATE,
+		CALL_CONNECTION_DETAILS,
 		SERVICE_FINISHES,
 		TEST_REGISTRATION_SUCCESS,
 		TEST_REGISTRATION_FAILED;
@@ -89,6 +90,11 @@ public class SimlarServiceBroadcast implements Serializable
 	public static void sendSimlarCallStateChanged(final Context context)
 	{
 		new SimlarServiceBroadcast(Type.SIMLAR_CALL_STATE, null).send(context);
+	}
+
+	public static void sendCallConnectionDetailsChanged(final Context context)
+	{
+		new SimlarServiceBroadcast(Type.CALL_CONNECTION_DETAILS, null).send(context);
 	}
 
 	public static void sendServiceFinishes(final Context context)

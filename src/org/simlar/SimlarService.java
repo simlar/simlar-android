@@ -72,6 +72,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	Map<String, ContactData> mContacts = new HashMap<String, ContactData>();
 	private SimlarStatus mSimlarStatus = SimlarStatus.OFFLINE;
 	private final SimlarCallState mSimlarCallState = new SimlarCallState();
+	private CallConnectionDetails mCallConnectionDetails = new CallConnectionDetails();
 	private WakeLock mWakeLock = null;
 	private WifiLock mWifiLock = null;
 	private boolean mGoingDown = false;
@@ -451,19 +452,27 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	public void onCallStatsChanged(final NetworkQuality quality, final int callDuration, final String codec, final String iceState,
 			final int upload, final int download)
 	{
-		if (!mSimlarCallState.updateCallStats(upload, download, quality, codec, iceState, callDuration)) {
-			Log.d(LOGTAG, "SimlarCallState staying the same: " + mSimlarCallState);
-			return;
-		}
+		final boolean simlarCallStateChanged = mSimlarCallState.updateCallStats(quality, callDuration);
 
 		if (mSimlarCallState.isEmpty()) {
 			Log.e(LOGTAG, "SimlarCallState is empty: " + mSimlarCallState);
 			return;
 		}
 
-		Log.i(LOGTAG, "SimlarCallState updated: " + mSimlarCallState);
+		if (!simlarCallStateChanged) {
+			Log.d(LOGTAG, "SimlarCallState staying the same: " + mSimlarCallState);
+		} else {
+			Log.i(LOGTAG, "SimlarCallState updated: " + mSimlarCallState);
+			SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
+		}
 
-		SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
+		if (!mCallConnectionDetails.updateCallStats(quality, codec, iceState, upload, download)) {
+			Log.d(LOGTAG, "CallConnectionDetails staying the same: " + mCallConnectionDetails);
+			return;
+		}
+
+		Log.i(LOGTAG, "CallConnectionDetails updated: " + mCallConnectionDetails);
+		SimlarServiceBroadcast.sendCallConnectionDetailsChanged(this);
 	}
 
 	@Override
@@ -493,6 +502,8 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		// make sure WLAN is not suspended while calling
 		if (mSimlarCallState.isNewCall()) {
 			notifySimlarStatusChanged(SimlarStatus.ONGOING_CALL);
+
+			mCallConnectionDetails = new CallConnectionDetails();
 
 			acquireWakeLock();
 			acquireWifiLock();
@@ -535,6 +546,10 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 					Log.e(LOGTAG, "releasing audio focus not granted");
 				}
 				mHasAudioFocus = false;
+			}
+
+			if (mCallConnectionDetails.updateEndedCall()) {
+				SimlarServiceBroadcast.sendCallConnectionDetailsChanged(this);
 			}
 		}
 
@@ -879,5 +894,10 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	public void setVolumes(final Volumes volumes)
 	{
 		mLinphoneThread.setVolumes(volumes);
+	}
+
+	public CallConnectionDetails getCallConnectionDetails()
+	{
+		return mCallConnectionDetails;
 	}
 }

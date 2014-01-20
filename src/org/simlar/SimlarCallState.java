@@ -20,8 +20,6 @@
 
 package org.simlar;
 
-import java.text.DecimalFormat;
-
 import org.linphone.core.LinphoneCall.State;
 
 import android.content.Context;
@@ -31,7 +29,6 @@ import android.util.Log;
 public class SimlarCallState
 {
 	private static final String LOGTAG = SimlarCallState.class.getSimpleName();
-	private static final DecimalFormat GUI_VALUE = new DecimalFormat("#0.0");
 
 	private String mDisplayName = null;
 	private String mDisplayPhotoId = null;
@@ -40,12 +37,7 @@ public class SimlarCallState
 	private boolean mEncrypted = true;
 	private String mAuthenticationToken = null;
 	private boolean mAuthenticationTokenVerified = false;
-
-	private int mUpload = -1;
-	private int mDownload = -1;
 	private NetworkQuality mQuality = NetworkQuality.UNKNOWN;
-	private String mCodec = null;
-	private String mIceState = null;
 	private int mDuration = 0;
 	private long mCallStartTime = -1;
 
@@ -119,12 +111,7 @@ public class SimlarCallState
 			mEncrypted = true;
 			mAuthenticationToken = null;
 			mAuthenticationTokenVerified = false;
-
-			mUpload = -1;
-			mDownload = -1;
 			mQuality = NetworkQuality.UNKNOWN;
-			mCodec = null;
-			mIceState = null;
 			mDuration = 0;
 			mCallStartTime = -1;
 		}
@@ -132,19 +119,13 @@ public class SimlarCallState
 		return true;
 	}
 
-	public boolean updateCallStats(final int upload, final int download, final NetworkQuality quality, final String codec, final String iceState,
-			final int callDuration)
+	public boolean updateCallStats(final NetworkQuality quality, final int callDuration)
 	{
-		if (upload == mUpload && download == mDownload && quality == mQuality
-				&& Util.equalString(codec, mCodec) && Util.equalString(iceState, mIceState) && callDuration == mDuration) {
+		if (quality == mQuality && callDuration == mDuration) {
 			return false;
 		}
 
-		mUpload = upload;
-		mDownload = download;
 		mQuality = quality;
-		mCodec = codec;
-		mIceState = iceState;
 
 		if (callDuration != mDuration) {
 			mDuration = callDuration;
@@ -204,31 +185,13 @@ public class SimlarCallState
 		return " SAS=" + mAuthenticationToken + (mAuthenticationTokenVerified ? " (verified)" : " (not verified)");
 	}
 
-	private String formatCodec()
+	private String formatQuality()
 	{
-		if (Util.isNullOrEmpty(mCodec)) {
+		if (!mQuality.isKnown()) {
 			return "";
 		}
 
-		return " Codec=" + mCodec;
-	}
-
-	private String formatIceState()
-	{
-		if (Util.isNullOrEmpty(mIceState)) {
-			return "";
-		}
-
-		return " IceState=" + mIceState;
-	}
-
-	private static String formatValue(final String name, final float value)
-	{
-		if (value <= 0) {
-			return "";
-		}
-
-		return " " + name + "=" + String.valueOf(value);
+		return " quality=" + mQuality;
 	}
 
 	@Override
@@ -239,8 +202,7 @@ public class SimlarCallState
 		}
 
 		return "[" + mLinphoneCallState.toString() + "] " + mDisplayName + formatPhotoId()
-				+ formatCallStatusMessageId() + formatEncryption() + formatIceState() + formatCodec()
-				+ formatValue("upload", mUpload) + formatValue("download", mDownload) + " quality=" + mQuality;
+				+ formatCallStatusMessageId() + formatEncryption() + formatQuality();
 	}
 
 	public String getDisplayName()
@@ -273,29 +235,14 @@ public class SimlarCallState
 		return mAuthenticationToken;
 	}
 
-	public String getUpload()
+	public boolean hasQuality()
 	{
-		return GUI_VALUE.format(mUpload / 10.0f);
-	}
-
-	public String getDownload()
-	{
-		return GUI_VALUE.format(mDownload / 10.0f);
+		return mQuality.isKnown();
 	}
 
 	public int getQualityDescription()
 	{
 		return mQuality.getDescription();
-	}
-
-	public String getCodec()
-	{
-		return mCodec;
-	}
-
-	public String getIceState()
-	{
-		return mIceState;
 	}
 
 	public boolean isAuthenticationTokenVerified()
@@ -350,19 +297,6 @@ public class SimlarCallState
 	public boolean hasErrorMessage()
 	{
 		return !isEmpty() && possibleErrorMessage(mLinphoneCallState) && mCallStatusMessageId > 0;
-	}
-
-	public boolean hasConnectionInfo()
-	{
-		if (mUpload < 0 || mDownload < 0 || !mQuality.isKnown()) {
-			return false;
-		}
-
-		if (Util.isNullOrEmpty(mCodec) || Util.isNullOrEmpty(mIceState)) {
-			return false;
-		}
-
-		return true;
 	}
 
 	public long getStartTime()

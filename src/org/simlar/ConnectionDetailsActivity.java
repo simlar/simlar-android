@@ -49,13 +49,13 @@ public class ConnectionDetailsActivity extends Activity
 		@Override
 		void onBoundToSimlarService()
 		{
-			ConnectionDetailsActivity.this.onSimlarCallStateChanged();
+			ConnectionDetailsActivity.this.onCallConnectionDetailsChanged();
 		}
 
 		@Override
-		void onSimlarCallStateChanged()
+		void onCallConnectionDetailsChanged()
 		{
-			ConnectionDetailsActivity.this.onSimlarCallStateChanged();
+			ConnectionDetailsActivity.this.onCallConnectionDetailsChanged();
 		}
 	}
 
@@ -94,30 +94,30 @@ public class ConnectionDetailsActivity extends Activity
 		super.onPause();
 	}
 
-	public void onSimlarCallStateChanged()
+	public void onCallConnectionDetailsChanged()
 	{
 		if (mCommunicator.getService() == null) {
 			Log.e(LOGTAG, "ERROR: onSimlarCallStateChanged but not bound to service");
 			return;
 		}
 
-		final SimlarCallState simlarCallState = mCommunicator.getService().getSimlarCallState();
+		final CallConnectionDetails callConnectionDetails = mCommunicator.getService().getCallConnectionDetails();
 
-		if (simlarCallState == null || simlarCallState.isEmpty()) {
-			Log.e(LOGTAG, "ERROR: onSimlarCallStateChanged simlarCallState null or empty");
+		if (callConnectionDetails == null) {
+			Log.e(LOGTAG, "ERROR: onCallConnectionDetailsChanged but callConnectionDetails null or empty");
 			return;
 		}
 
-		if (simlarCallState.isEndedCall()) {
+		if (callConnectionDetails.isEndedCall()) {
 			ConnectionDetailsActivity.this.finish();
 		}
 
-		if (simlarCallState.hasConnectionInfo()) {
-			mTextViewQuality.setText(getString(simlarCallState.getQualityDescription()));
-			mTextViewUpload.setText(simlarCallState.getUpload() + " " + getString(R.string.connection_details_activity_kbytes_per_second));
-			mTextViewDownload.setText(simlarCallState.getDownload() + " " + getString(R.string.connection_details_activity_kbytes_per_second));
-			mTextViewIceState.setText(simlarCallState.getIceState());
-			mTextViewCodec.setText(simlarCallState.getCodec());
+		if (callConnectionDetails.hasConnectionInfo()) {
+			mTextViewQuality.setText(getString(callConnectionDetails.getQualityDescription()));
+			mTextViewUpload.setText(callConnectionDetails.getUpload() + " " + getString(R.string.connection_details_activity_kbytes_per_second));
+			mTextViewDownload.setText(callConnectionDetails.getDownload() + " " + getString(R.string.connection_details_activity_kbytes_per_second));
+			mTextViewIceState.setText(callConnectionDetails.getIceState());
+			mTextViewCodec.setText(callConnectionDetails.getCodec());
 		}
 	}
 }
