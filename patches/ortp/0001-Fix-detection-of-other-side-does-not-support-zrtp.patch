@@ -1,0 +1,26 @@
+From e72534f2cc5c0e5c6957e6ad81ca6cd384d213b3 Mon Sep 17 00:00:00 2001
+From: Ben Sartor <mail@ben-sartor.de>
+Date: Thu, 12 Dec 2013 15:57:38 +0100
+Subject: [PATCH] Fix detection of other side does not support zrtp
+
+---
+ src/zrtp.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/zrtp.c b/src/zrtp.c
+index fee98bd..648a142 100644
+--- a/src/zrtp.c
++++ b/src/zrtp.c
+@@ -572,7 +572,8 @@ static void ozrtp_zrtpNegotiationFailed (ZrtpContext* ctx, int32_t severity, int
+  *
+  */
+ static void ozrtp_zrtpNotSuppOther(ZrtpContext* ctx) {
+-	// FIXME: do nothing
++	ortp_error("other side does not have zrtp");
++	ozrtp_sendInfo(ctx, zrtp_Severe, zrtp_InfoSecureStateOff);
+ }
+ 
+ /**
+-- 
+1.7.10.4
+
