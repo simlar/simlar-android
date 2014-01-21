@@ -83,4 +83,5 @@ echo "mediastreamer2 success"
 PKG_CONFIG_PATH="${BUILD_DIR}/prefixdir/usr/local/lib/pkgconfig/" ./configure --prefix="${BUILD_DIR}/prefixdir/usr/local/" --with-osip="${BUILD_DIR}/prefixdir/usr/local/" --enable-external-ortp --enable-zrtp --enable-ssl
 make
 make install
+echo "BUILD_DIR=${BUILD_DIR}"
 echo "linphone success"
