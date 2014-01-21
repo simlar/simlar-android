@@ -43,7 +43,7 @@ public class SimlarCallState
 
 	private int mUpload = -1;
 	private int mDownload = -1;
-	private float mQuality = -1.0f;
+	private NetworkQuality mQuality = NetworkQuality.UNKNOWN;
 	private String mCodec = null;
 	private String mIceState = null;
 	private int mDuration = 0;
@@ -122,7 +122,7 @@ public class SimlarCallState
 
 			mUpload = -1;
 			mDownload = -1;
-			mQuality = -1.0f;
+			mQuality = NetworkQuality.UNKNOWN;
 			mCodec = null;
 			mIceState = null;
 			mDuration = 0;
@@ -132,7 +132,7 @@ public class SimlarCallState
 		return true;
 	}
 
-	public boolean updateCallStats(final int upload, final int download, final float quality, final String codec, final String iceState,
+	public boolean updateCallStats(final int upload, final int download, final NetworkQuality quality, final String codec, final String iceState,
 			final int callDuration)
 	{
 		if (upload == mUpload && download == mDownload && quality == mQuality
@@ -240,7 +240,7 @@ public class SimlarCallState
 
 		return "[" + mLinphoneCallState.toString() + "] " + mDisplayName + formatPhotoId()
 				+ formatCallStatusMessageId() + formatEncryption() + formatIceState() + formatCodec()
-				+ formatValue("upload", mUpload) + formatValue("download", mDownload) + formatValue("quality", mQuality);
+				+ formatValue("upload", mUpload) + formatValue("download", mDownload) + " quality=" + mQuality;
 	}
 
 	public String getDisplayName()
@@ -283,35 +283,9 @@ public class SimlarCallState
 		return GUI_VALUE.format(mDownload / 10.0f);
 	}
 
-	public String getQuality()
-	{
-		return GUI_VALUE.format(mQuality);
-	}
-
 	public int getQualityDescription()
 	{
-		if (4 <= mQuality && mQuality <= 5) {
-			return R.string.call_activity_quality_good;
-		}
-
-		if (3 <= mQuality && mQuality < 4) {
-			return R.string.call_activity_quality_average;
-		}
-
-		if (2 <= mQuality && mQuality < 3) {
-			return R.string.call_activity_quality_poor;
-		}
-
-		if (1 <= mQuality && mQuality < 2) {
-			return R.string.call_activity_quality_very_poor;
-		}
-
-		if (0 <= mQuality && mQuality < 1) {
-			return R.string.call_activity_quality_unusable;
-		}
-
-		Log.e(LOGTAG, "unknown quality");
-		return R.string.call_activity_quality_unknown;
+		return mQuality.getDescription();
 	}
 
 	public String getCodec()
@@ -380,7 +354,7 @@ public class SimlarCallState
 
 	public boolean hasConnectionInfo()
 	{
-		if (mUpload < 0 || mDownload < 0 || mQuality < 0) {
+		if (mUpload < 0 || mDownload < 0 || !mQuality.isKnown()) {
 			return false;
 		}
 

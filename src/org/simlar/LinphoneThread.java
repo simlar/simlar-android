@@ -567,7 +567,7 @@ public class LinphoneThread
 				@Override
 				public void run()
 				{
-					mListener.onCallStatsChanged(upload, download, quality, codec, iceState, duration);
+					mListener.onCallStatsChanged(upload, download, NetworkQuality.fromFloat(quality), codec, iceState, duration);
 				}
 			});
 		}

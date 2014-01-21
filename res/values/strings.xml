@@ -61,13 +61,14 @@
     <string name="progress_uploading_log_file">Please wait while uploading log file&#8230;</string>
     <string name="progress_finishing">Please wait while shutting down&#8230;</string>
 
+    <string name="network_quality_good">good</string>
+    <string name="network_quality_average">average</string>
+    <string name="network_quality_poor">poor</string>
+    <string name="network_quality_very_poor">very poor</string>
+    <string name="network_quality_unusable">unusable</string>
+    <string name="network_quality_unknown">unknown</string>
+
     <string name="call_activity_label_quality">Network Quality: </string>
-    <string name="call_activity_quality_good">good</string>
-    <string name="call_activity_quality_average">average</string>
-    <string name="call_activity_quality_poor">poor</string>
-    <string name="call_activity_quality_very_poor">very poor</string>
-    <string name="call_activity_quality_unusable">unusable</string>
-    <string name="call_activity_quality_unknown">unknown</string>
     <string name="call_activity_sound_settings">Sound Settings</string>
     <string name="call_activity_microphone_mute">Microphone mute</string>
     <string name="call_activity_microphone_on">Microphone on</string>
