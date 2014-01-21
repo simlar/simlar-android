@@ -450,7 +450,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 
 	@Override
 	public void onCallStatsChanged(final NetworkQuality quality, final int callDuration, final String codec, final String iceState,
-			final int upload, final int download)
+			final int upload, final int download, final int jitter, final int packetLoss, final long latePackets, final int roundTripDelay)
 	{
 		final boolean simlarCallStateChanged = mSimlarCallState.updateCallStats(quality, callDuration);
 
@@ -466,7 +466,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 			SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
 		}
 
-		if (!mCallConnectionDetails.updateCallStats(quality, codec, iceState, upload, download)) {
+		if (!mCallConnectionDetails.updateCallStats(quality, codec, iceState, upload, download, jitter, packetLoss, latePackets, roundTripDelay)) {
 			Log.d(LOGTAG, "CallConnectionDetails staying the same: " + mCallConnectionDetails);
 			return;
 		}

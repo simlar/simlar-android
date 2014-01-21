@@ -38,6 +38,10 @@ public class ConnectionDetailsActivity extends Activity
 	private TextView mTextViewDownload;
 	private TextView mTextViewIceState;
 	private TextView mTextViewCodec;
+	private TextView mTextViewJitter;
+	private TextView mTextViewPacketLoss;
+	private TextView mTextViewLatePackets;
+	private TextView mTextViewRoundTripDelay;
 
 	private class SimlarServiceCommunicatorConnectionDetails extends SimlarServiceCommunicator
 	{
@@ -70,6 +74,10 @@ public class ConnectionDetailsActivity extends Activity
 		mTextViewDownload = (TextView) findViewById(R.id.textViewDownload);
 		mTextViewIceState = (TextView) findViewById(R.id.textViewIceState);
 		mTextViewCodec = (TextView) findViewById(R.id.textViewCodec);
+		mTextViewJitter = (TextView) findViewById(R.id.textViewJitter);
+		mTextViewPacketLoss = (TextView) findViewById(R.id.textViewPacketLoss);
+		mTextViewLatePackets = (TextView) findViewById(R.id.textViewLatePackets);
+		mTextViewRoundTripDelay = (TextView) findViewById(R.id.textViewRoundTripDelay);
 	}
 
 	@Override
@@ -118,6 +126,11 @@ public class ConnectionDetailsActivity extends Activity
 			mTextViewDownload.setText(callConnectionDetails.getDownload() + " " + getString(R.string.connection_details_activity_kbytes_per_second));
 			mTextViewIceState.setText(callConnectionDetails.getIceState());
 			mTextViewCodec.setText(callConnectionDetails.getCodec());
+			mTextViewJitter.setText(callConnectionDetails.getJitter());
+			mTextViewPacketLoss.setText(callConnectionDetails.getPacketLoss() + " " + getString(R.string.connection_details_activity_percent));
+			mTextViewLatePackets.setText(callConnectionDetails.getLatePackets());
+			mTextViewRoundTripDelay
+					.setText(callConnectionDetails.getRoundTripDelay() + " " + getString(R.string.connection_details_activity_milli_seconds));
 		}
 	}
 }

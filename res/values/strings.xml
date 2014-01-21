@@ -93,7 +93,13 @@
     <string name="connection_details_activity_label_ice_state">ICE State: </string>
     <string name="connection_details_activity_label_upload">Up: </string>
     <string name="connection_details_activity_label_download">Down: </string>
+    <string name="connection_details_activity_label_packet_loss">Loss: </string>
+    <string name="connection_details_activity_label_late_packets">Late: </string>
+    <string name="connection_details_activity_label_round_trip_delay">Delay: </string>
+    <string name="connection_details_activity_label_jitter">Jitter: </string>
     <string name="connection_details_activity_kbytes_per_second">kb/s</string>
+    <string name="connection_details_activity_milli_seconds">ms</string>
+    <string name="connection_details_activity_percent">&#65285;</string>
 
     <string name="verify_number_activity_title">Verify your telephone number</string>
     <string name="verify_number_activity_welcome">Welcome to Simlar.</string>

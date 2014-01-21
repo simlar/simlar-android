@@ -65,6 +65,39 @@
         <TextView
             android:id="@+id/textViewDownload"
             style="@style/connectionDetailsActivityTableValue" />
+
+        <TextView
+            android:id="@+id/textViewLabelPacketLoss"
+            style="@style/connectionDetailsActivityTableLabel"
+            android:text="@string/connection_details_activity_label_packet_loss" />
+
+        <TextView
+            android:id="@+id/textViewPacketLoss"
+            style="@style/connectionDetailsActivityTableValue" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left" >
+
+        <TextView
+            android:id="@+id/textViewLabelUpload"
+            style="@style/connectionDetailsActivityTableLabel"
+            android:text="@string/connection_details_activity_label_upload" />
+
+        <TextView
+            android:id="@+id/textViewUpload"
+            style="@style/connectionDetailsActivityTableValue" />
+
+        <TextView
+            android:id="@+id/textViewLabelLatePackets"
+            style="@style/connectionDetailsActivityTableLabel"
+            android:text="@string/connection_details_activity_label_late_packets" />
+
+        <TextView
+            android:id="@+id/textViewLatePackets"
+            style="@style/connectionDetailsActivityTableValue" />
     </TableRow>
 
     <TableRow
@@ -74,12 +107,21 @@
         android:paddingBottom="10dp" >
 
         <TextView
-            android:id="@+id/textViewLabelUpload"
+            android:id="@+id/textViewLabelRoundTripDelay"
             style="@style/connectionDetailsActivityTableLabel"
-            android:text="@string/connection_details_activity_label_upload" />
+            android:text="@string/connection_details_activity_label_round_trip_delay" />
 
         <TextView
-            android:id="@+id/textViewUpload"
+            android:id="@+id/textViewRoundTripDelay"
+            style="@style/connectionDetailsActivityTableValue" />
+
+        <TextView
+            android:id="@+id/textViewLabelJitter"
+            style="@style/connectionDetailsActivityTableLabel"
+            android:text="@string/connection_details_activity_label_jitter" />
+
+        <TextView
+            android:id="@+id/textViewJitter"
             style="@style/connectionDetailsActivityTableValue" />
     </TableRow>
 
