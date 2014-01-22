@@ -439,16 +439,16 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	public void onCallStatsChanged(final float upload, final float download, final float quality, final String codec, final String iceState)
 	{
 		if (!mSimlarCallState.updateCallStats(upload, download, quality, codec, iceState)) {
-			Log.d(LOGTAG, "IceStateChanged but SimlarCallState unchanged: " + mSimlarCallState);
+			Log.d(LOGTAG, "SimlarCallState staying the same: " + mSimlarCallState);
 			return;
 		}
 
 		if (mSimlarCallState.isEmpty()) {
-			Log.w(LOGTAG, "IceStateChanged but SimlarCallState isEmpty");
+			Log.e(LOGTAG, "SimlarCallState is empty: " + mSimlarCallState);
 			return;
 		}
 
-		Log.i(LOGTAG, "SimlarCallState IceStateChanged: " + mSimlarCallState);
+		Log.i(LOGTAG, "SimlarCallState updated: " + mSimlarCallState);
 
 		SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
 	}
@@ -456,7 +456,8 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	@Override
 	public void onCallStateChanged(final String number, final State callState, final String message)
 	{
-		if (!mSimlarCallState.updateCallStateChanged(getContact(number).getNameOrNumber(), callState, message)) {
+		final FullContactData contact = getContact(number);
+		if (!mSimlarCallState.updateCallStateChanged(contact.getNameOrNumber(), contact.photoId, callState, message)) {
 			Log.d(LOGTAG, "SimlarCallState staying the same: " + mSimlarCallState);
 			return;
 		}
