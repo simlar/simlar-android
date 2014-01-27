@@ -34,7 +34,7 @@ public class SimlarCallState
 
 	private String mDisplayName = null;
 	private String mDisplayPhotoId = null;
-	private org.linphone.core.LinphoneCall.State mLinphoneCallState = null;
+	private State mLinphoneCallState = null;
 	private int mCallStatusMessageId = -1;
 	private boolean mEncrypted = true;
 	private String mAuthenticationToken = null;
@@ -48,17 +48,17 @@ public class SimlarCallState
 
 	private static boolean possibleErrorMessage(final State callState)
 	{
-		return callState == State.CallEnd || callState == State.Error || callState == State.CallReleased;
+		return State.CallEnd.equals(callState) || State.Error.equals(callState) || State.CallReleased.equals(callState);
 	}
 
 	private static boolean isCallOutgoingConnecting(final State callState)
 	{
-		return callState == State.OutgoingInit || callState == State.OutgoingProgress;
+		return State.OutgoingInit.equals(callState) || State.OutgoingProgress.equals(callState);
 	}
 
 	private static boolean isCallOutgoingRinging(final State callState)
 	{
-		return callState == State.OutgoingRinging;
+		return State.OutgoingRinging.equals(callState);
 	}
 
 	private static int getMessageId(final State callState, final String message)
@@ -92,7 +92,7 @@ public class SimlarCallState
 		final int msgId = getMessageId(callState, message);
 		final boolean updateCallStatusMessageId = !(possibleErrorMessage(callState) && msgId <= 0);
 
-		if (Util.equalString(displayName, mDisplayName) && Util.equalString(photoId, mDisplayPhotoId) && callState == mLinphoneCallState
+		if (Util.equalString(displayName, mDisplayName) && Util.equalString(photoId, mDisplayPhotoId) && Util.equals(callState, mLinphoneCallState)
 				&& (mCallStatusMessageId == msgId || !updateCallStatusMessageId)) {
 			return false;
 		}
@@ -319,10 +319,10 @@ public class SimlarCallState
 			return false;
 		}
 
-		return mLinphoneCallState == State.Connected ||
-				mLinphoneCallState == State.StreamsRunning ||
-				mLinphoneCallState == State.CallUpdatedByRemote ||
-				mLinphoneCallState == State.CallUpdating;
+		return State.Connected.equals(mLinphoneCallState) ||
+				State.StreamsRunning.equals(mLinphoneCallState) ||
+				State.CallUpdatedByRemote.equals(mLinphoneCallState) ||
+				State.CallUpdating.equals(mLinphoneCallState);
 	}
 
 	public boolean isNewCall()
@@ -331,7 +331,7 @@ public class SimlarCallState
 			return false;
 		}
 
-		return mLinphoneCallState == State.OutgoingInit || mLinphoneCallState == State.IncomingReceived;
+		return State.OutgoingInit.equals(mLinphoneCallState) || State.IncomingReceived.equals(mLinphoneCallState);
 	}
 
 	public boolean isEndedCall()
@@ -340,7 +340,7 @@ public class SimlarCallState
 			return false;
 		}
 
-		return mLinphoneCallState == State.CallEnd;
+		return State.CallEnd.equals(mLinphoneCallState);
 	}
 
 	public boolean isRinging()
@@ -349,7 +349,7 @@ public class SimlarCallState
 			return false;
 		}
 
-		return mLinphoneCallState == State.IncomingReceived;
+		return State.IncomingReceived.equals(mLinphoneCallState);
 	}
 
 	public boolean hasCallStatusMessage()
