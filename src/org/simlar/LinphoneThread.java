@@ -434,7 +434,7 @@ public class LinphoneThread
 
 		LinphoneCall.State fixLinphoneCallState(final LinphoneCall.State callState)
 		{
-			if (callState == LinphoneCall.State.CallReleased || callState == LinphoneCall.State.Error) {
+			if (LinphoneCall.State.CallReleased.equals(callState) || LinphoneCall.State.Error.equals(callState)) {
 				if (mLinphoneHandler == null || mLinphoneHandler.hasNoCurrentCalls()) {
 					Log.i(LOGTAG, "fixLinphoneCallState: " + callState + " -> " + LinphoneCall.State.CallEnd);
 					return LinphoneCall.State.CallEnd;
