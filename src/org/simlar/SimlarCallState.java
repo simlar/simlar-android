@@ -41,8 +41,8 @@ public class SimlarCallState
 	private String mAuthenticationToken = null;
 	private boolean mAuthenticationTokenVerified = false;
 
-	private float mUpload = -1.0f;
-	private float mDownload = -1.0f;
+	private int mUpload = -1;
+	private int mDownload = -1;
 	private float mQuality = -1.0f;
 	private String mCodec = null;
 	private String mIceState = null;
@@ -120,8 +120,8 @@ public class SimlarCallState
 			mAuthenticationToken = null;
 			mAuthenticationTokenVerified = false;
 
-			mUpload = -1.0f;
-			mDownload = -1.0f;
+			mUpload = -1;
+			mDownload = -1;
 			mQuality = -1.0f;
 			mCodec = null;
 			mIceState = null;
@@ -132,7 +132,7 @@ public class SimlarCallState
 		return true;
 	}
 
-	public boolean updateCallStats(final float upload, final float download, final float quality, final String codec, final String iceState,
+	public boolean updateCallStats(final int upload, final int download, final float quality, final String codec, final String iceState,
 			final int callDuration)
 	{
 		if (upload == mUpload && download == mDownload && quality == mQuality
@@ -275,12 +275,12 @@ public class SimlarCallState
 
 	public String getUpload()
 	{
-		return GUI_VALUE.format(mUpload);
+		return GUI_VALUE.format(mUpload / 10.0f);
 	}
 
 	public String getDownload()
 	{
-		return GUI_VALUE.format(mDownload);
+		return GUI_VALUE.format(mDownload / 10.0f);
 	}
 
 	public String getQuality()

@@ -29,7 +29,7 @@ public interface LinphoneHandlerListener
 
 	public void onPresenceStateChanged(final String number, final boolean online);
 
-	public void onCallStatsChanged(final float upload, final float download, final float quality, final String codec, final String iceState,
+	public void onCallStatsChanged(final int upload, final int download, final float quality, final String codec, final String iceState,
 			final int callDuration);
 
 	public void onCallStateChanged(final String number, final State state, final String message);

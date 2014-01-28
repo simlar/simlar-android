@@ -448,7 +448,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	}
 
 	@Override
-	public void onCallStatsChanged(final float upload, final float download, final float quality, final String codec, final String iceState,
+	public void onCallStatsChanged(final int upload, final int download, final float quality, final String codec, final String iceState,
 			final int callDuration)
 	{
 		if (!mSimlarCallState.updateCallStats(upload, download, quality, codec, iceState, callDuration)) {
