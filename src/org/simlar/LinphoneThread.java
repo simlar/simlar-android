@@ -226,7 +226,7 @@ public class LinphoneThread
 				return;
 			}
 
-			if (mRegistrationState == RegistrationState.RegistrationOk) {
+			if (RegistrationState.RegistrationOk.equals(mRegistrationState)) {
 				mLinphoneThreadHandler.post(new Runnable() {
 					@Override
 					public void run()
@@ -393,12 +393,12 @@ public class LinphoneThread
 				@Override
 				public void run()
 				{
-					if (mRegistrationState == state) {
+					if (Util.equals(mRegistrationState, state)) {
 						Log.d(LOGTAG, "registration state for " + identity + " not changed : " + state + " " + message);
 						return;
 					}
 
-					if (mRegistrationState == RegistrationState.RegistrationOk && state == RegistrationState.RegistrationProgress
+					if (RegistrationState.RegistrationOk.equals(mRegistrationState) && RegistrationState.RegistrationProgress.equals(state)
 							&& message.equals("Refresh registration")) {
 						Log.i(LOGTAG, "registration state for " + identity + " ignored: " + state + "as it is because of refreshRegisters");
 						return;
@@ -409,7 +409,7 @@ public class LinphoneThread
 
 					mListener.onRegistrationStateChanged(state);
 
-					if (state == RegistrationState.RegistrationOk) {
+					if (RegistrationState.RegistrationOk.equals(state)) {
 						for (final String friend : mFriends) {
 							mLinphoneThreadHandler.post(new Runnable() {
 								@Override
@@ -434,7 +434,7 @@ public class LinphoneThread
 
 		LinphoneCall.State fixLinphoneCallState(final LinphoneCall.State callState)
 		{
-			if (callState == LinphoneCall.State.CallReleased || callState == LinphoneCall.State.Error) {
+			if (LinphoneCall.State.CallReleased.equals(callState) || LinphoneCall.State.Error.equals(callState)) {
 				if (mLinphoneHandler == null || mLinphoneHandler.hasNoCurrentCalls()) {
 					Log.i(LOGTAG, "fixLinphoneCallState: " + callState + " -> " + LinphoneCall.State.CallEnd);
 					return LinphoneCall.State.CallEnd;

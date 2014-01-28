@@ -34,13 +34,13 @@ public enum SimlarStatus {
 
 	public static SimlarStatus fromRegistrationState(final org.linphone.core.LinphoneCore.RegistrationState state)
 	{
-		if (state == RegistrationState.RegistrationNone || state == RegistrationState.RegistrationCleared) {
+		if (RegistrationState.RegistrationNone.equals(state) || RegistrationState.RegistrationCleared.equals(state)) {
 			return OFFLINE;
-		} else if (state == RegistrationState.RegistrationProgress) {
+		} else if (RegistrationState.RegistrationProgress.equals(state)) {
 			return CONNECTING;
-		} else if (state == RegistrationState.RegistrationOk) {
+		} else if (RegistrationState.RegistrationOk.equals(state)) {
 			return ONLINE;
-		} else if (state == RegistrationState.RegistrationFailed) {
+		} else if (RegistrationState.RegistrationFailed.equals(state)) {
 			return ERROR;
 		} else {
 			return UNKNOWN;

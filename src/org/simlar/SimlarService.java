@@ -405,7 +405,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 			}
 		}
 
-		if (state == RegistrationState.RegistrationOk) {
+		if (RegistrationState.RegistrationOk.equals(state)) {
 			loadContactsFromTelephonebook();
 			status = SimlarStatus.LOADING_CONTACTS;
 		}
@@ -769,7 +769,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 					}
 				}
 
-				if (mLinphoneThread.getRegistrationState() == RegistrationState.RegistrationOk) {
+				if (RegistrationState.RegistrationOk.equals(mLinphoneThread.getRegistrationState())) {
 					notifySimlarStatusChanged(SimlarStatus.ONLINE);
 				}
 			}

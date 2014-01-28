@@ -42,7 +42,7 @@ public class CallActivity extends Activity implements SensorEventListener
 {
 	static final String LOGTAG = CallActivity.class.getSimpleName();
 
-	private SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCall();
+	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCall();
 	private SensorManager mSensorManager;
 	private Sensor mSensor;
 
@@ -75,7 +75,7 @@ public class CallActivity extends Activity implements SensorEventListener
 	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
+	protected void onCreate(final Bundle savedInstanceState)
 	{
 		Log.i(LOGTAG, "onCreate ");
 		super.onCreate(savedInstanceState);
@@ -119,7 +119,7 @@ public class CallActivity extends Activity implements SensorEventListener
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
+	public boolean onCreateOptionsMenu(final Menu menu)
 	{
 		return true;
 	}
@@ -130,7 +130,7 @@ public class CallActivity extends Activity implements SensorEventListener
 		tv.setText(status);
 	}
 
-	void setQuality(String quality)
+	void setQuality(final String quality)
 	{
 		final TextView tvQuality = (TextView) findViewById(R.id.textViewQuality);
 		tvQuality.setText(quality);
@@ -226,26 +226,26 @@ public class CallActivity extends Activity implements SensorEventListener
 	}
 
 	@SuppressWarnings("unused")
-	public void verifyAuthenticationToken(View view)
+	public void verifyAuthenticationToken(final View view)
 	{
 		mCommunicator.getService().verifyAuthenticationTokenOfCurrentCall(true);
 	}
 
 	@SuppressWarnings("unused")
-	public void wrongAuthenticationToken(View view)
+	public void wrongAuthenticationToken(final View view)
 	{
 		mCommunicator.getService().verifyAuthenticationTokenOfCurrentCall(false);
 		//terminateCall(view);
 	}
 
 	@SuppressWarnings("unused")
-	public void showConnectionDetails(View view)
+	public void showConnectionDetails(final View view)
 	{
 		startActivity(new Intent(this, ConnectionDetailsActivity.class));
 	}
 
 	@SuppressWarnings("unused")
-	public void acceptUnencryptedCall(View view)
+	public void acceptUnencryptedCall(final View view)
 	{
 		mCommunicator.getService().acceptUnencryptedCall();
 
@@ -254,20 +254,20 @@ public class CallActivity extends Activity implements SensorEventListener
 	}
 
 	@SuppressWarnings("unused")
-	public void showSoundSettingsDialog(View view)
+	public void showSoundSettingsDialog(final View view)
 	{
 		startActivity(new Intent(this, VolumesControlActivity.class));
 	}
 
 	@SuppressWarnings("unused")
-	public void toggleMicrophoneMuted(View view)
+	public void toggleMicrophoneMuted(final View view)
 	{
 		mCommunicator.getService().setVolumes(mCommunicator.getService().getVolumes().toggleMicrophoneMuted());
 		setButtonMicophoneMute();
 	}
 
 	@SuppressWarnings("unused")
-	public void toggleSpeakerMuted(View view)
+	public void toggleSpeakerMuted(final View view)
 	{
 		mCommunicator.getService().setVolumes(mCommunicator.mService.getVolumes().toggleExternalSpeaker());
 		setButtonSpeakerMute();
@@ -300,7 +300,7 @@ public class CallActivity extends Activity implements SensorEventListener
 	}
 
 	@SuppressWarnings("unused")
-	public void terminateCall(View view)
+	public void terminateCall(final View view)
 	{
 		mCommunicator.getService().terminateCall();
 		finish();
@@ -317,14 +317,14 @@ public class CallActivity extends Activity implements SensorEventListener
 	// SensorEventListener overloaded member functions
 	//
 	@Override
-	public void onAccuracyChanged(Sensor sensor, int accuracy)
+	public void onAccuracyChanged(final Sensor sensor, final int accuracy)
 	{
 	}
 
 	@Override
-	public void onSensorChanged(SensorEvent event)
+	public void onSensorChanged(final SensorEvent event)
 	{
-		WindowManager.LayoutParams params = getWindow().getAttributes();
+		final WindowManager.LayoutParams params = getWindow().getAttributes();
 		if (event.values[0] == 0) {
 			params.screenBrightness = 0.1f;
 		} else {
