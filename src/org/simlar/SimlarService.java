@@ -113,9 +113,11 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			switch (state) {
 			case TelephonyManager.CALL_STATE_IDLE:
 				Lg.i(LOGTAG, "onTelephonyCallStateChanged: state=IDLE");
+				SimlarService.this.onTelephonyCallStateIdle();
 				break;
 			case TelephonyManager.CALL_STATE_OFFHOOK:
 				Lg.i(LOGTAG, "onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=OFFHOOK");
+				SimlarService.this.onTelephonyCallStateOffHook();
 				break;
 			case TelephonyManager.CALL_STATE_RINGING:
 				Lg.i(LOGTAG, "onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=RINGING");
@@ -132,6 +134,32 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	{
 		Lg.i(LOGTAG, "onBind");
 		return mBinder;
+	}
+
+	public void onTelephonyCallStateOffHook()
+	{
+		if (mSimlarStatus != SimlarStatus.ONGOING_CALL) {
+			return;
+		}
+
+		if (mLinphoneThread == null) {
+			return;
+		}
+
+		mLinphoneThread.pauseAllCalls();
+	}
+
+	public void onTelephonyCallStateIdle()
+	{
+		if (mSimlarStatus != SimlarStatus.ONGOING_CALL) {
+			return;
+		}
+
+		if (mLinphoneThread == null) {
+			return;
+		}
+
+		mLinphoneThread.resumeCall();
 	}
 
 	@Override

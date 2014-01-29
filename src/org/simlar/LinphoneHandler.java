@@ -313,6 +313,34 @@ public final class LinphoneHandler
 		return mLinphoneCore.getCallsNb() == 0;
 	}
 
+	public void pauseAllCalls()
+	{
+		if (mLinphoneCore == null) {
+			Lg.e(LOGTAG, "pauseAllCalls: mLinphoneCore is null => aborting");
+			return;
+		}
+
+		Lg.i(LOGTAG, "pausing all calls");
+		mLinphoneCore.pauseAllCalls();
+	}
+
+	public void resumeCall()
+	{
+		if (mLinphoneCore == null) {
+			Lg.e(LOGTAG, "resumeCall: mLinphoneCore is null => aborting");
+			return;
+		}
+
+		final LinphoneCall call = getCurrentCall();
+		if (call == null) {
+			Lg.e(LOGTAG, "resuming call but no current call");
+			return;
+		}
+
+		Lg.i(LOGTAG, "resuming call");
+		mLinphoneCore.resumeCall(call);
+	}
+
 	public void setVolumes(final Volumes volumes)
 	{
 		if (mLinphoneCore == null) {

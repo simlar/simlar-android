@@ -297,6 +297,38 @@ public final class LinphoneThread
 			});
 		}
 
+		public void pauseAllCalls()
+		{
+			if (mLinphoneThreadHandler == null) {
+				Lg.e(LOGTAG, "handler is null, probably thread not started");
+				return;
+			}
+
+			mLinphoneThreadHandler.post(new Runnable() {
+				@Override
+				public void run()
+				{
+					mLinphoneHandler.pauseAllCalls();
+				}
+			});
+		}
+
+		public void resumeCall()
+		{
+			if (mLinphoneThreadHandler == null) {
+				Lg.e(LOGTAG, "handler is null, probably thread not started");
+				return;
+			}
+
+			mLinphoneThreadHandler.post(new Runnable() {
+				@Override
+				public void run()
+				{
+					mLinphoneHandler.resumeCall();
+				}
+			});
+		}
+
 		public void setVolumes(final Volumes volumes)
 		{
 			if (mLinphoneThreadHandler == null) {
@@ -789,6 +821,16 @@ public final class LinphoneThread
 	public void verifyAuthenticationToken(final String token, final boolean verified)
 	{
 		mImpl.verifyAuthenticationToken(token, verified);
+	}
+
+	public void pauseAllCalls()
+	{
+		mImpl.pauseAllCalls();
+	}
+
+	public void resumeCall()
+	{
+		mImpl.resumeCall();
 	}
 
 	public void setVolumes(final Volumes volumes)
