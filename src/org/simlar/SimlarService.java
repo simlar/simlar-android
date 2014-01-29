@@ -71,7 +71,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	private final IBinder mBinder = new SimlarServiceBinder();
 	Map<String, ContactData> mContacts = new HashMap<String, ContactData>();
 	private SimlarStatus mSimlarStatus = SimlarStatus.OFFLINE;
-	private SimlarCallState mSimlarCallState = new SimlarCallState();
+	private final SimlarCallState mSimlarCallState = new SimlarCallState();
 	private WakeLock mWakeLock = null;
 	private WifiLock mWifiLock = null;
 	private boolean mGoingDown = false;
@@ -81,9 +81,9 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	private VibratorManager mVibratorManager = null;
 	private SoundEffectManager mSoundEffectManager = null;
 	private boolean mHasAudioFocus = false;
-	private NetworkChangeReceiver mNetworkChangeReceiver = new NetworkChangeReceiver();
+	private final NetworkChangeReceiver mNetworkChangeReceiver = new NetworkChangeReceiver();
 	private PendingIntent mkeepAwakePendingIntent = null;
-	private KeepAwakeReceiver mKeepAwakeReceiver = new KeepAwakeReceiver();
+	private final KeepAwakeReceiver mKeepAwakeReceiver = new KeepAwakeReceiver();
 
 	public class SimlarServiceBinder extends Binder
 	{
@@ -93,8 +93,12 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		}
 	}
 
-	class NetworkChangeReceiver extends BroadcastReceiver
+	private class NetworkChangeReceiver extends BroadcastReceiver
 	{
+		public NetworkChangeReceiver()
+		{
+		}
+
 		@Override
 		public void onReceive(Context context, Intent intent)
 		{
@@ -102,8 +106,12 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		}
 	}
 
-	class KeepAwakeReceiver extends BroadcastReceiver
+	private class KeepAwakeReceiver extends BroadcastReceiver
 	{
+		public KeepAwakeReceiver()
+		{
+		}
+
 		@Override
 		public void onReceive(Context context, Intent intent)
 		{
