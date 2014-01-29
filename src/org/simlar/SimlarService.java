@@ -78,7 +78,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	private boolean mTerminatePrivateAlreadyCalled = false;
 	private boolean mCreatingAccount = false;
 	private Class<?> mNotificationActivity = null;
-	private VibratorThread mVibratorThread = null;
+	private VibratorManager mVibratorManager = null;
 	private SoundEffectManager mSoundEffectManager = null;
 	private boolean mHasAudioFocus = false;
 	private NetworkChangeReceiver mNetworkChangeReceiver = new NetworkChangeReceiver();
@@ -183,7 +183,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		Log.i(LOGTAG, "started on device: " + Build.DEVICE);
 
 		FileHelper.init(this);
-		mVibratorThread = new VibratorThread(this.getApplicationContext());
+		mVibratorManager = new VibratorManager(this.getApplicationContext());
 		mSoundEffectManager = new SoundEffectManager(this.getApplicationContext());
 
 		mWakeLock = ((PowerManager) this.getSystemService(Context.POWER_SERVICE))
@@ -285,7 +285,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	{
 		Log.i(LOGTAG, "onDestroy");
 
-		mVibratorThread.stop();
+		mVibratorManager.stop();
 		mSoundEffectManager.stopAll();
 
 		unregisterReceiver(mNetworkChangeReceiver);
@@ -470,10 +470,10 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		Log.i(LOGTAG, "SimlarCallState updated: " + mSimlarCallState);
 
 		if (mSimlarCallState.isRinging()) {
-			mVibratorThread.start();
 			mSoundEffectManager.start(SoundEffectType.RINGTONE);
+			mVibratorManager.start();
 		} else {
-			mVibratorThread.stop();
+			mVibratorManager.stop();
 			mSoundEffectManager.stop(SoundEffectType.RINGTONE);
 		}
 
@@ -564,11 +564,11 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 
 		if (encrypted) {
 			// just to be sure
-			mVibratorThread.stop();
+			mVibratorManager.stop();
 			mSoundEffectManager.stop(SoundEffectType.UNENCRYPTED_CALL_ALARM);
 		} else {
 			Log.w(LOGTAG, "unencrypted call");
-			mVibratorThread.start();
+			mVibratorManager.start();
 			mSoundEffectManager.start(SoundEffectType.UNENCRYPTED_CALL_ALARM);
 		}
 
@@ -578,7 +578,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	public void acceptUnencryptedCall()
 	{
 		Log.w(LOGTAG, "user accepts unencrypted call");
-		mVibratorThread.stop();
+		mVibratorManager.stop();
 		mSoundEffectManager.stop(SoundEffectType.UNENCRYPTED_CALL_ALARM);
 	}
 

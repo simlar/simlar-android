@@ -37,7 +37,7 @@ import android.util.Log;
 class SoundEffectManager
 {
 	static final String LOGTAG = SoundEffectManager.class.getSimpleName();
-	static final long MIN_PLAY_TIME = VibratorThread.VIBRATE_LENGTH + VibratorThread.VIBRATE_PAUSE;
+	static final long MIN_PLAY_TIME = VibratorManager.VIBRATE_LENGTH + VibratorManager.VIBRATE_PAUSE;
 
 	final Context mContext;
 	private final Map<SoundEffectType, SoundEffectPlayer> mPlayers = new HashMap<SoundEffectType, SoundEffectPlayer>();
