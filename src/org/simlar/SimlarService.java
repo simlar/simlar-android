@@ -50,6 +50,8 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 
 public final class SimlarService extends Service implements LinphoneThreadListener
 {
@@ -76,6 +78,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private final NetworkChangeReceiver mNetworkChangeReceiver = new NetworkChangeReceiver();
 	private String mSimlarIdToCall = null;
 	private static volatile boolean mRunning = false;
+	private final TelephonyCallStateListener mTelephonyCallStateListener = new TelephonyCallStateListener();
 
 	public final class SimlarServiceBinder extends Binder
 	{
@@ -95,6 +98,32 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		public void onReceive(Context context, Intent intent)
 		{
 			SimlarService.this.checkNetworkConnectivityAndRefreshRegisters();
+		}
+	}
+
+	private final class TelephonyCallStateListener extends PhoneStateListener
+	{
+		public TelephonyCallStateListener()
+		{
+		}
+
+		@Override
+		public void onCallStateChanged(final int state, final String incomingNumber)
+		{
+			switch (state) {
+			case TelephonyManager.CALL_STATE_IDLE:
+				Lg.i(LOGTAG, "onTelephonyCallStateChanged: state=IDLE");
+				break;
+			case TelephonyManager.CALL_STATE_OFFHOOK:
+				Lg.i(LOGTAG, "onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=OFFHOOK");
+				break;
+			case TelephonyManager.CALL_STATE_RINGING:
+				Lg.i(LOGTAG, "onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=RINGING");
+				break;
+			default:
+				Lg.i(LOGTAG, "onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=", Integer.valueOf(state));
+				break;
+			}
 		}
 	}
 
@@ -172,6 +201,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 		registerReceiver(mNetworkChangeReceiver, intentFilter);
+
+		((TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE)).listen(mTelephonyCallStateListener, PhoneStateListener.LISTEN_CALL_STATE);
 
 		PreferencesHelper.readPrefencesFromFile(this);
 
@@ -308,6 +339,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mSoundEffectManager.stopAll();
 
 		unregisterReceiver(mNetworkChangeReceiver);
+
+		((TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE)).listen(mTelephonyCallStateListener, PhoneStateListener.LISTEN_NONE);
 
 		// just in case
 		releaseWakeLock();
