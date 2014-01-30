@@ -77,7 +77,7 @@ public final class LinphoneHandler
 	}
 
 	public void initialize(final LinphoneCoreListener listener, final Context context, final String linphoneInitialConfigFile,
-			final String rootCaFile, final String zrtpSecretsCacheFile)
+			final String rootCaFile, final String zrtpSecretsCacheFile, final String pauseSoundFile)
 	{
 		if (listener == null) {
 			Lg.e(LOGTAG, "Error: initialize without listener");
@@ -101,6 +101,11 @@ public final class LinphoneHandler
 
 		if (Util.isNullOrEmpty(zrtpSecretsCacheFile)) {
 			Lg.e(LOGTAG, "Error: zrtpSecretsCacheFile not set");
+			return;
+		}
+
+		if (Util.isNullOrEmpty(pauseSoundFile)) {
+			Lg.e(LOGTAG, "Error: pauseSoundFile not set");
 			return;
 		}
 
@@ -136,6 +141,9 @@ public final class LinphoneHandler
 			// enable zrtp
 			mLinphoneCore.setMediaEncryption(MediaEncryption.ZRTP);
 			mLinphoneCore.setZrtpSecretsCache(zrtpSecretsCacheFile);
+
+			// pause sound file
+			mLinphoneCore.setPlayFile(pauseSoundFile);
 
 			// enable echo cancellation
 			mLinphoneCore.enableEchoCancellation(true);
