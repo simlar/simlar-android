@@ -980,6 +980,16 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		}
 	}
 
+	public void pauseCall()
+	{
+		mLinphoneThread.pauseAllCalls();
+	}
+
+	public void resumeCall()
+	{
+		mLinphoneThread.resumeCall();
+	}
+
 	public void terminate()
 	{
 		Lg.i("terminate");
