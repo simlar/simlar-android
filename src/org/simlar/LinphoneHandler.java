@@ -79,9 +79,9 @@ public class LinphoneHandler
 		Log.i(LOGTAG, "destroy ended");
 	}
 
-	private void enableAudioCodec(String codec, int rate, int channels, boolean enable)
+	private void enableAudioCodec(final String codec, final int rate, final int channels, final boolean enable)
 	{
-		PayloadType pt = mLinphoneCore.findPayloadType(codec, rate, channels);
+		final PayloadType pt = mLinphoneCore.findPayloadType(codec, rate, channels);
 		if (pt != null) {
 			try {
 				mLinphoneCore.enablePayloadType(pt, enable);
@@ -99,8 +99,8 @@ public class LinphoneHandler
 		return mLinphoneCore != null;
 	}
 
-	public void initialize(LinphoneCoreListener listener, Context context, final String linphoneInitialConfigFile, final String rootCaFile,
-			final String zrtpSecretsCacheFile)
+	public void initialize(final LinphoneCoreListener listener, final Context context, final String linphoneInitialConfigFile,
+			final String rootCaFile, final String zrtpSecretsCacheFile)
 	{
 		if (listener == null) {
 			Log.e(LOGTAG, "Error: initialize without listener");
@@ -254,7 +254,7 @@ public class LinphoneHandler
 	{
 		Log.i(LOGTAG, "unregister triggered");
 
-		LinphoneProxyConfig proxyConfig = mLinphoneCore.getDefaultProxyConfig();
+		final LinphoneProxyConfig proxyConfig = mLinphoneCore.getDefaultProxyConfig();
 		proxyConfig.edit();
 		try {
 			proxyConfig.enableRegister(false);
@@ -314,7 +314,7 @@ public class LinphoneHandler
 
 		Log.i(LOGTAG, "calling " + number);
 		try {
-			LinphoneCall call = mLinphoneCore.invite("sip:" + number + "@" + DOMAIN);
+			final LinphoneCall call = mLinphoneCore.invite("sip:" + number + "@" + DOMAIN);
 			if (call == null) {
 				Log.i(LOGTAG, "Could not place call to: " + number);
 				Log.i(LOGTAG, "Aborting");
@@ -338,13 +338,13 @@ public class LinphoneHandler
 
 	public void pickUp()
 	{
-		LinphoneCall currentCall = getCurrentCall();
+		final LinphoneCall currentCall = getCurrentCall();
 		if (currentCall == null) {
 			return;
 		}
 
 		Log.i(LOGTAG, "Picking up call: " + currentCall.getRemoteAddress().asStringUriOnly());
-		LinphoneCallParams params = mLinphoneCore.createDefaultCallParameters();
+		final LinphoneCallParams params = mLinphoneCore.createDefaultCallParameters();
 		try {
 			mLinphoneCore.acceptCallWithParams(currentCall, params);
 		} catch (LinphoneCoreException e) {
@@ -365,7 +365,7 @@ public class LinphoneHandler
 			return;
 		}
 
-		LinphoneCall call = mLinphoneCore.getCurrentCall();
+		final LinphoneCall call = mLinphoneCore.getCurrentCall();
 
 		if (!token.equals(call.getAuthenticationToken())) {
 			Log.e(LOGTAG, "ERROR in verifyAuthenticationToken: token(" + token +

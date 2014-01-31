@@ -92,21 +92,21 @@ public class MainActivity extends android.support.v4.app.FragmentActivity
 
 	public static class ContactsListFragment extends android.support.v4.app.ListFragment implements EmptyTextListener
 	{
-		public void setAdapter(ContactsAdapter adapter)
+		public void setAdapter(final ContactsAdapter adapter)
 		{
 			setListAdapter(adapter);
 			adapter.setEmptyTextListener(this);
 		}
 
 		@Override
-		public void onActivityCreated(Bundle savedInstanceState)
+		public void onActivityCreated(final Bundle savedInstanceState)
 		{
 			super.onActivityCreated(savedInstanceState);
 			setEmptyText(getString(R.string.contacts_adapter_simlar_status_no_contacts_found));
 		}
 
 		@Override
-		public void onListItemClick(ListView l, View v, int position, long id)
+		public void onListItemClick(final ListView l, final View v, final int position, final long id)
 		{
 			((ContactsAdapter) getListAdapter()).call(position);
 		}
@@ -119,7 +119,7 @@ public class MainActivity extends android.support.v4.app.FragmentActivity
 	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
+	protected void onCreate(final Bundle savedInstanceState)
 	{
 		Log.i(LOGTAG, "onCreate " + savedInstanceState);
 		super.onCreate(savedInstanceState);
@@ -160,7 +160,7 @@ public class MainActivity extends android.support.v4.app.FragmentActivity
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
+	public boolean onCreateOptionsMenu(final Menu menu)
 	{
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
@@ -168,7 +168,7 @@ public class MainActivity extends android.support.v4.app.FragmentActivity
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item)
+	public boolean onOptionsItemSelected(final MenuItem item)
 	{
 		// Handle item selection
 		switch (item.getItemId()) {
