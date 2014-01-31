@@ -688,12 +688,6 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	{
 		mCommunicator.getService().toggleMicrophoneMuted();
 		setButtonMicrophoneMute();
-
-		if (mCommunicator.getService().getVolumes().getMicrophoneMuted()) {
-			mCommunicator.getService().pauseCall();
-		} else {
-			mCommunicator.getService().resumeCall();
-		}
 	}
 
 	@SuppressWarnings({ "unused", "RedundantSuppression" })
