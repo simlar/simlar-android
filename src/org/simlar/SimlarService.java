@@ -256,7 +256,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 			text = String.format(getString(status.getNotificationTextId()), PreferencesHelper.getMySimlarIdOrEmptyString());
 		}
 
-		NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
+		final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
 		notificationBuilder.setSmallIcon(status.getNotificationIcon());
 		notificationBuilder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.app_logo));
 		notificationBuilder.setContentTitle(getString(R.string.app_name));
