@@ -35,6 +35,7 @@
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="android:textColor">#000000</item>
     </style>
 
     <!-- Application dialog theme. -->
@@ -46,6 +47,7 @@
     <style name="dialogThemeNoTitle" parent="android:Theme.Holo.Light.Dialog">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
         <item name="android:windowNoTitle">true</item>
+        <item name="android:textColor">#000000</item>
     </style>
 
 </resources>

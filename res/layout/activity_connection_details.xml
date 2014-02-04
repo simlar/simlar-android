@@ -49,7 +49,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:textStyle="bold"
-            android:textColor="#000000"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
@@ -65,7 +64,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:textColor="#000000"
             android:textAppearance="?android:attr/textAppearanceSmall" />
     </TableRow>
 
@@ -88,7 +86,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:textStyle="bold"
-            android:textColor="#000000"
             android:textAppearance="?android:attr/textAppearanceSmall" />
     </TableRow>
 
@@ -112,7 +109,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:textStyle="bold"
-            android:textColor="#000000"
             android:textAppearance="?android:attr/textAppearanceSmall" />
     </TableRow>
 
@@ -134,7 +130,6 @@
             android:id="@+id/textViewIceState"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#000000"
             android:textAppearance="?android:attr/textAppearanceSmall" />
     </TableRow>
 

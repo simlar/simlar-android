@@ -40,7 +40,6 @@
             android:id="@+id/textViewCallStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#000000"
             android:paddingLeft="15dp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
@@ -58,7 +57,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/call_activity_label_quality"
-            android:textColor="#000000"
             android:paddingLeft="15dp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -68,7 +66,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="2dp"
             android:text=""
-            android:textColor="#000000"
             android:textStyle="bold"
             android:paddingRight="25dp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -110,7 +107,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center_horizontal"
-            android:textColor="#000000"
             android:text="@string/call_activity_please_verify_authentication_token"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -120,7 +116,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="2dp"
-            android:textColor="#000000"
             android:text="@string/call_activity_no_authentication_token"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -146,7 +141,6 @@
                     android:layout_gravity="center"
                     android:onClick="wrongAuthenticationToken"
                     android:background="@drawable/border_round_corners"
-                    android:textColor="#000000"
                     android:text="@string/call_activity_button_authentication_token_wrong" />
             </LinearLayout>
 
@@ -162,7 +156,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:onClick="verifyAuthenticationToken"
-                    android:textColor="#000000"
                     android:background="@drawable/border_round_corners"
                     android:text="@string/call_activity_button_authentication_token_verify" />
             </LinearLayout>
@@ -191,7 +184,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center_horizontal"
-            android:textColor="#000000"
             android:text="@string/call_activity_not_encrypted"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -204,7 +196,6 @@
             android:padding="8dp"
             android:onClick="acceptUnencryptedCall"
             android:background="@drawable/border_round_corners"
-            android:textColor="#000000"
             android:text="@string/call_activity_button_accept_unencrypted_call" />
     </LinearLayout>
 
