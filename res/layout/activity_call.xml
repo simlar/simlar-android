@@ -68,6 +68,13 @@
             android:paddingTop="@dimen/activity_vertical_margin"
             android:layout_marginTop="70dip" >
 
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/logo_big" />
+
             <LinearLayout
                 android:id="@+id/linearLayoutCallStatus"
                 android:layout_width="wrap_content"
