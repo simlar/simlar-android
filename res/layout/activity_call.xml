@@ -257,8 +257,8 @@
     <ImageButton
         android:id="@+id/ButtonTerminateCall"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/hang_up"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="false"
