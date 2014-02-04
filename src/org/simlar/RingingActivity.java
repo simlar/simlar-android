@@ -78,14 +78,13 @@ public class RingingActivity extends Activity
 				WindowManager.LayoutParams.FLAG_IGNORE_CHEEK_PRESSES);
 
 		final AnimationDrawable animation = new AnimationDrawable();
-		animation.addFrame(getResources().getDrawable(R.drawable.ringing_b), 550);
-		animation.addFrame(getResources().getDrawable(R.drawable.ringing_c), 550);
-		animation.addFrame(getResources().getDrawable(R.drawable.ringing_d), 550);
+		animation.addFrame(getResources().getDrawable(R.drawable.ringing_b), 250);
+		animation.addFrame(getResources().getDrawable(R.drawable.ringing_c), 250);
+		animation.addFrame(getResources().getDrawable(R.drawable.ringing_d), 250);
 		animation.setOneShot(false);
 
 		Util.setBackgroundCompatible((ImageView) findViewById(R.id.RingingAnimate), animation);
 
-		// start the animation!
 		animation.start();
 	}
 
