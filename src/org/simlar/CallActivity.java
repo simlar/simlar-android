@@ -27,14 +27,17 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -80,6 +83,7 @@ public class CallActivity extends Activity implements SensorEventListener
 		Log.i(LOGTAG, "onCreate ");
 		super.onCreate(savedInstanceState);
 
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_call);
 
 		// make sure this activity is shown even if the phone is locked
@@ -173,7 +177,13 @@ public class CallActivity extends Activity implements SensorEventListener
 
 		Log.i(LOGTAG, "onSimlarCallStateChanged " + simlarCallState);
 
-		setTitle(getString(R.string.call_activity_title) + " " + simlarCallState.getDisplayName());
+		final ImageView contactImage = (ImageView) findViewById(R.id.contactImage);
+		final TextView contactName = (TextView) findViewById(R.id.contactName);
+
+		if (!Util.isNullOrEmpty(simlarCallState.getDisplayPhotoId())) {
+			contactImage.setImageURI(Uri.parse(simlarCallState.getDisplayPhotoId()));
+		}
+		contactName.setText(simlarCallState.getDisplayName());
 		setCallEncryption(simlarCallState.isEncrypted(), simlarCallState.getAuthenticationToken(), simlarCallState.isAuthenticationTokenVerified());
 
 		final LinearLayout callStatus = (LinearLayout) findViewById(R.id.linearLayoutCallStatus);
