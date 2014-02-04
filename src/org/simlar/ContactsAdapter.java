@@ -65,7 +65,7 @@ public class ContactsAdapter extends ArrayAdapter<FullContactData>
 
 			final int retVal = Util.compareString(lhs.name, rhs.name);
 			if (retVal == 0) {
-				// if name is the same compare by by number
+				// if name is the same compare by number
 				return Util.compareString(lhs.number, rhs.number);
 			}
 
