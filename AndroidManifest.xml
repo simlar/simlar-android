@@ -68,7 +68,6 @@
 
         <activity
             android:name="org.simlar.RingingActivity"
-            android:label="@string/ringing_activity_title"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" >
         </activity>

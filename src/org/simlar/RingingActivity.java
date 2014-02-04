@@ -23,12 +23,15 @@ package org.simlar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class RingingActivity extends Activity
 {
@@ -68,6 +71,7 @@ public class RingingActivity extends Activity
 		Log.i(LOGTAG, "onCreate ");
 		super.onCreate(savedInstanceState);
 
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_ringing);
 
 		// make sure this activity is shown even if the phone is locked
@@ -125,7 +129,14 @@ public class RingingActivity extends Activity
 
 		Log.i(LOGTAG, "onSimlarCallStateChanged " + simlarCallState);
 
-		setTitle(String.format(getString(R.string.ringing_activity_title), simlarCallState.getDisplayName()));
+		final ImageView contactImage = (ImageView) findViewById(R.id.contactImage);
+		final TextView contactName = (TextView) findViewById(R.id.contactName);
+
+		if (!Util.isNullOrEmpty(simlarCallState.getDisplayPhotoId())) {
+			contactImage.setImageURI(Uri.parse(simlarCallState.getDisplayPhotoId()));
+		}
+
+		contactName.setText(simlarCallState.getDisplayName());
 
 		if (simlarCallState.isEndedCall()) {
 			finish();
