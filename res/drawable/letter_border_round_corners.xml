@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+
 <!--
   Copyright (C) 2013 The Simlar Authors.
 
@@ -18,14 +20,11 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -->
 
-<resources>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+   android:shape="oval" >
+     <stroke
+         android:width="1dip"
+         android:color="#808284" />
 
-    <!--
-        Base application theme for API 11+. This theme completely replaces
-        AppBaseTheme from res/values/styles.xml on API 11+ devices.
-    -->
-    <style name="AppBaseTheme" parent="android:Theme.Holo.Light">
-        <!-- API 11 theme customizations can go here. -->
-    </style>
-
-</resources>
+     <solid android:color="#FFFFFF" />
+</shape>

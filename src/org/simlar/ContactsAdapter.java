@@ -28,14 +28,12 @@ import java.util.List;
 import org.simlar.SimlarService.FullContactData;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ContactsAdapter extends ArrayAdapter<FullContactData>
@@ -65,7 +63,7 @@ public class ContactsAdapter extends ArrayAdapter<FullContactData>
 
 			final int retVal = Util.compareString(lhs.name, rhs.name);
 			if (retVal == 0) {
-				// if name is the same compare by by number
+				// if name is the same compare by number
 				return Util.compareString(lhs.number, rhs.number);
 			}
 
@@ -92,25 +90,27 @@ public class ContactsAdapter extends ArrayAdapter<FullContactData>
 		final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		final View rowView = inflater.inflate(mLayout, parent, false);
 		final FullContactData contact = getItem(position);
-
 		if (contact == null) {
 			return rowView;
 		}
 
-		final TextView textView = (TextView) rowView.findViewById(R.id.name);
-		textView.setText(contact.getNameOrNumber());
-
-		if (!Util.isNullOrEmpty(contact.photoId)) {
-			final ImageView imageView = (ImageView) rowView.findViewById(R.id.picture);
-			imageView.setImageURI(Uri.parse(contact.photoId));
-		}
-
-		final ImageView statusView = (ImageView) rowView.findViewById(R.id.online_status);
-		if (contact.isOnline()) {
-			statusView.setImageResource(R.drawable.contact_online);
+		final TextView letterView = (TextView) rowView.findViewById(R.id.letter);
+		if (position > 0) {
+			final FullContactData prevContact = getItem(position - 1);
+			if (contact.getNameOrNumber().charAt(0) != prevContact.getNameOrNumber().charAt(0)) {
+				letterView.setText(Character.toString(contact.getNameOrNumber().charAt(0)));
+			} else {
+				letterView.setVisibility(View.GONE);
+			}
 		} else {
-			statusView.setImageResource(R.drawable.contact_offline);
+			letterView.setText(Character.toString(contact.getNameOrNumber().charAt(0)));
 		}
+
+		final TextView nameView = (TextView) rowView.findViewById(R.id.name);
+		nameView.setText(contact.getNameOrNumber());
+		final TextView numberView = (TextView) rowView.findViewById(R.id.number);
+		numberView.setText("0" + SimlarNumber.parseNumberWithLibPhonenumber("00" + contact.number.replace("*", ""), false));
+
 		return rowView;
 	}
 

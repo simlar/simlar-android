@@ -35,17 +35,21 @@
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="android:textColor">#000000</item>
     </style>
 
     <!-- Application dialog theme. -->
-    <style name="dialogTheme" parent="android:Theme.Holo.Dialog">
+    <style name="dialogTheme" parent="android:Theme.Holo.Light.Dialog">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="android:windowBackground">@drawable/border_round_corners</item>
     </style>
 
     <!-- Application dialog theme without title. -->
-    <style name="dialogThemeNoTitle" parent="android:Theme.Holo.Dialog">
+    <style name="dialogThemeNoTitle" parent="android:Theme.Holo.Light.Dialog">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
         <item name="android:windowNoTitle">true</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:windowBackground">@drawable/border_round_corners</item>
     </style>
 
 </resources>
