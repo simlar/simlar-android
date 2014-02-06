@@ -128,7 +128,7 @@ public final class LinphoneHandler
 
 			// First instantiate the core Linphone object given only a listener.
 			// The listener will react to events in Linphone core.
-			mLinphoneCore = LinphoneCoreFactory.instance().createLinphoneCore(listener, "", linphoneInitialConfigFile, null);
+			mLinphoneCore = LinphoneCoreFactory.instance().createLinphoneCore(listener, "", linphoneInitialConfigFile, null, context);
 			mLinphoneCore.setContext(context);
 			mLinphoneCore.setUserAgent("Simlar", Version.getVersionName(context));
 
@@ -237,7 +237,7 @@ public final class LinphoneHandler
 
 			// create linphone proxy config
 			mLinphoneCore.clearProxyConfigs();
-			LinphoneProxyConfig proxyCfg = LinphoneCoreFactory.instance().createProxyConfig(
+			LinphoneProxyConfig proxyCfg = mLinphoneCore.createProxyConfig(
 					"sip:" + mySimlarId + "@" + DOMAIN, "sip:" + DOMAIN, null, true);
 			proxyCfg.setExpires(60); // connection times out after 1 minute. This overrides kamailio setting which is 3600 (1 hour).
 			proxyCfg.enablePublish(false);
@@ -254,11 +254,7 @@ public final class LinphoneHandler
 
 		final LinphoneProxyConfig proxyConfig = mLinphoneCore.getDefaultProxyConfig();
 		proxyConfig.edit();
-		try {
-			proxyConfig.enableRegister(false);
-		} catch (final LinphoneCoreException e) {
-			Lg.ex(LOGTAG, e, "LinphoneCoreException during unregister");
-		}
+		proxyConfig.enableRegister(false);
 		proxyConfig.done();
 	}
 
