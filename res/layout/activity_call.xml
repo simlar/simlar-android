@@ -23,7 +23,7 @@
     android:id="@+id/contactLayout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="#000000"
+    android:background="@color/calling_title_background_black"
     tools:context=".CallActivity" >
 
     <ImageView
@@ -44,7 +44,7 @@
         android:gravity="bottom"
         android:paddingLeft="10dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#FFFFFF" />
+        android:textColor="@color/calling_title_text_white" />
 
     <TextView
         android:id="@+id/contactText"
@@ -56,7 +56,7 @@
         android:paddingLeft="10dp"
         android:text="00:00"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/calling_title_text_white"
         tools:ignore="HardcodedText" />
 
     <RelativeLayout

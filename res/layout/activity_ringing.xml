@@ -41,12 +41,12 @@
         android:layout_width="fill_parent"
         android:layout_height="40dip"
         android:layout_toRightOf="@+id/contactImage"
-        android:background="#000000"
+        android:background="@color/calling_title_background_black"
         android:contentDescription="@string/ringing_activity_phone_is_ringing"
         android:gravity="bottom"
         android:paddingLeft="10dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#FFFFFF" />
+        android:textColor="@color/calling_title_text_white" />
 
     <TextView
         android:id="@+id/contactText"
@@ -54,13 +54,13 @@
         android:layout_height="30dip"
         android:layout_below="@+id/contactName"
         android:layout_toRightOf="@+id/contactImage"
-        android:background="#000000"
+        android:background="@color/calling_title_background_black"
         android:contentDescription="@string/ringing_activity_phone_is_ringing"
         android:gravity="top"
         android:paddingLeft="10dp"
         android:text="@string/ringing_activity_title"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#FFFFFF" />
+        android:textColor="@color/calling_title_text_white" />
 
     <ImageView
         android:id="@+id/RingingAnimate"
