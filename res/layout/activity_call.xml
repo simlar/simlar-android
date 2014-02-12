@@ -278,7 +278,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="25dp"
-                    android:background="#FFFFFF"
+                    android:background="@color/background_white"
                     android:contentDescription="@string/call_activity_sound_settings"
                     android:onClick="showSoundSettingsDialog"
                     android:src="@drawable/sound_settings" />
@@ -288,7 +288,7 @@
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="#FFFFFF"
+                    android:background="@color/background_white"
                     android:contentDescription="@string/call_activity_microphone_mute"
                     android:onClick="toggleMicrophoneMuted"
                     android:src="@drawable/micro_on" />
@@ -299,7 +299,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="25dp"
-                    android:background="#FFFFFF"
+                    android:background="@color/background_white"
                     android:contentDescription="@string/call_activity_loudspeaker_off"
                     android:onClick="toggleSpeakerMuted"
                     android:src="@drawable/speaker_off" />

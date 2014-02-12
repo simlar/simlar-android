@@ -20,17 +20,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -->
 
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-<!-- This is the line -->
-<item>
-      <shape>
-            <solid android:color="@color/text_black" />
-      </shape>
-</item>
-<!-- This is the main color -->
-<item android:top="1dp" android:right="1dp" android:left="1dp">
-     <shape>
-           <solid android:color="@color/background_white" />
-     </shape>
-</item>
-</layer-list>
+<resources>
+    <color name="background_white">@android:color/white</color>
+    <color name="text_black">@android:color/black</color>
+</resources>

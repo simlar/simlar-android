@@ -26,5 +26,5 @@
          android:width="1dip"
          android:color="#808284" />
 
-     <solid android:color="#FFFFFF" />
+     <solid android:color="@color/background_white" />
 </shape>
