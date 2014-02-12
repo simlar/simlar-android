@@ -23,6 +23,7 @@
 <resources>
     <color name="background_white">@android:color/white</color>
     <color name="text_black">@android:color/black</color>
+    <color name="border">#808284</color>
 
     <color name="calling_title_background_black">@android:color/black</color>
     <color name="calling_title_text_white">@android:color/white</color>

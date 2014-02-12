@@ -24,7 +24,7 @@
    android:shape="oval" >
      <stroke
          android:width="1dip"
-         android:color="#808284" />
+         android:color="@color/border" />
 
      <solid android:color="@color/background_white" />
 </shape>

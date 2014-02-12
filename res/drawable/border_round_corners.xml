@@ -25,7 +25,7 @@
 
      <stroke
          android:width="1dip"
-         android:color="#808284" />
+         android:color="@color/border" />
 
      <solid android:color="@color/background_white" />
      <corners android:bottomRightRadius="5dp" android:bottomLeftRadius="5dp" android:topLeftRadius="5dp" android:topRightRadius="5dp"/>
