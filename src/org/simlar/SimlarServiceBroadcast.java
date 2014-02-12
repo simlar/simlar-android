@@ -71,19 +71,19 @@ public class SimlarServiceBroadcast implements Serializable
 	{
 		private static final long serialVersionUID = 2863651982137778543L;
 
-		public final String number;
+		public final String simlarId;
 		public final boolean online;
 
-		public PresenceStateChanged(final String number, final boolean online)
+		public PresenceStateChanged(final String simlarId, final boolean online)
 		{
-			this.number = number;
+			this.simlarId = simlarId;
 			this.online = online;
 		}
 	}
 
-	public static void sendPresenceStateChanged(final Context context, final String number, final boolean online)
+	public static void sendPresenceStateChanged(final Context context, final String simlarId, final boolean online)
 	{
-		new SimlarServiceBroadcast(Type.PRESENCE_STATE, new PresenceStateChanged(number, online)).send(context);
+		new SimlarServiceBroadcast(Type.PRESENCE_STATE, new PresenceStateChanged(simlarId, online)).send(context);
 	}
 
 	public static void sendSimlarCallStateChanged(final Context context)

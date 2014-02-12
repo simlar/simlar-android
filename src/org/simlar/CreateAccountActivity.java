@@ -45,7 +45,7 @@ import android.widget.TextView;
 public class CreateAccountActivity extends Activity
 {
 	static final String LOGTAG = CreateAccountActivity.class.getSimpleName();
-	public static final String INTENT_EXTRA_NUMBER = "telefonNumber";
+	public static final String INTENT_EXTRA_NUMBER = "telephonNumber";
 	private static final int SECONDS_TO_WAIT_FOR_SMS = 30;
 	private static final String SIMLAR_SMS_SOURCE = "+4922199999930";
 
@@ -230,7 +230,7 @@ public class CreateAccountActivity extends Activity
 
 		Log.i(LOGTAG, "createAccountRequest: " + telephoneNumber);
 		final String smsText = getString(R.string.create_account_activity_sms_text) + " ";
-		final String expextedSimlarId = SimlarNumber.createSimlarNumber(telephoneNumber);
+		final String expextedSimlarId = SimlarNumber.createSimlarId(telephoneNumber);
 
 		IntentFilter filter = new IntentFilter();
 		filter.addAction("android.provider.Telephony.SMS_RECEIVED");

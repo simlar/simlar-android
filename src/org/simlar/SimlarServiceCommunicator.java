@@ -99,7 +99,7 @@ public class SimlarServiceCommunicator
 			}
 			case PRESENCE_STATE: {
 				SimlarServiceBroadcast.PresenceStateChanged c = (SimlarServiceBroadcast.PresenceStateChanged) fsb.parameters;
-				onPresenceStateChanged(c.number, c.online);
+				onPresenceStateChanged(c.simlarId, c.online);
 				return;
 			}
 			case SIMLAR_CALL_STATE: {
@@ -163,7 +163,7 @@ public class SimlarServiceCommunicator
 	}
 
 	@SuppressWarnings("unused")
-	void onPresenceStateChanged(final String number, final boolean online)
+	void onPresenceStateChanged(final String simlarId, final boolean online)
 	{
 	}
 
