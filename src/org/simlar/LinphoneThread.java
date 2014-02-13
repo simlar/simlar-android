@@ -550,12 +550,12 @@ public class LinphoneThread
 			// LinphoneCall is mutable => use it only in the calling thread
 			// LinphoneCallStats maybe mutable => use it only in the calling thread
 
-			final int upload = Math.round(stats.getUploadBandwidth() / 8.0f * 10.0f); // upload bandwidth in 100 Bytes / second
-			final int download = Math.round(stats.getDownloadBandwidth() / 8.0f * 10.0f); // download bandwidth in 100 Bytes / second
+			final int duration = call.getDuration();
 			final PayloadType payloadType = call.getCurrentParamsCopy().getUsedAudioCodec();
 			final String codec = payloadType.getMime() + " " + payloadType.getRate() / 1000;
 			final String iceState = stats.getIceState().toString();
-			final int duration = call.getDuration();
+			final int upload = Math.round(stats.getUploadBandwidth() / 8.0f * 10.0f); // upload bandwidth in 100 Bytes / second
+			final int download = Math.round(stats.getDownloadBandwidth() / 8.0f * 10.0f); // download bandwidth in 100 Bytes / second
 
 			// set quality to unusable if up or download bandwidth is zero
 			final float quality = (upload > 0 && download > 0) ? call.getCurrentQuality() : 0;
@@ -567,7 +567,7 @@ public class LinphoneThread
 				@Override
 				public void run()
 				{
-					mListener.onCallStatsChanged(upload, download, NetworkQuality.fromFloat(quality), codec, iceState, duration);
+					mListener.onCallStatsChanged(NetworkQuality.fromFloat(quality), duration, codec, iceState, upload, download);
 				}
 			});
 		}
