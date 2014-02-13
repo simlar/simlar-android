@@ -35,34 +35,21 @@
 
         <TextView
             android:id="@+id/textViewLabelQuality"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:text="@string/connection_details_activity_label_quality"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            style="@style/connectionDetailsActivityTableLabel"
+            android:text="@string/connection_details_activity_label_quality" />
 
         <TextView
             android:id="@+id/textViewQuality"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textStyle="bold" />
+            style="@style/connectionDetailsActivityTableValue" />
 
         <TextView
             android:id="@+id/textViewLabelCodec"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:text="@string/connection_details_activity_label_codec"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            style="@style/connectionDetailsActivityTableLabel"
+            android:text="@string/connection_details_activity_label_codec" />
 
         <TextView
             android:id="@+id/textViewCodec"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textStyle="bold" />
+            style="@style/connectionDetailsActivityTableValue" />
     </TableRow>
 
     <TableRow
@@ -72,19 +59,12 @@
 
         <TextView
             android:id="@+id/textViewLabelDownload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:text="@string/connection_details_activity_label_download"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            style="@style/connectionDetailsActivityTableLabel"
+            android:text="@string/connection_details_activity_label_download" />
 
         <TextView
             android:id="@+id/textViewDownload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textStyle="bold" />
+            style="@style/connectionDetailsActivityTableValue" />
     </TableRow>
 
     <TableRow
@@ -95,19 +75,12 @@
 
         <TextView
             android:id="@+id/textViewLabelUpload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:text="@string/connection_details_activity_label_upload"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            style="@style/connectionDetailsActivityTableLabel"
+            android:text="@string/connection_details_activity_label_upload" />
 
         <TextView
             android:id="@+id/textViewUpload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textStyle="bold" />
+            style="@style/connectionDetailsActivityTableValue" />
     </TableRow>
 
     <TableRow
@@ -119,16 +92,12 @@
 
         <TextView
             android:id="@+id/textViewLabelIceState"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/connection_details_activity_label_ice_state"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            style="@style/connectionDetailsActivityTable"
+            android:text="@string/connection_details_activity_label_ice_state" />
 
         <TextView
             android:id="@+id/textViewIceState"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            style="@style/connectionDetailsActivityTable" />
     </TableRow>
 
 </TableLayout>
