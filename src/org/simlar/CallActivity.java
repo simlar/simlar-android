@@ -46,6 +46,8 @@ public class CallActivity extends Activity implements SensorEventListener
 {
 	static final String LOGTAG = CallActivity.class.getSimpleName();
 
+	private static final float PROXIMITY_DISTANCE_THRESHOLD = 4.0f;
+
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCall();
 	private SensorManager mSensorManager;
 	private long mCallStartTime = -1;
@@ -391,10 +393,21 @@ public class CallActivity extends Activity implements SensorEventListener
 	@Override
 	public void onSensorChanged(final SensorEvent event)
 	{
+		final float distance = event.values[0];
+
+		if (distance > event.sensor.getMaximumRange()) {
+			Log.w(LOGTAG, "proximity sensors distance=" + distance + " out of range");
+			return;
+		}
+
 		final WindowManager.LayoutParams params = getWindow().getAttributes();
-		if (event.values[0] == 0) {
+		if (distance <= PROXIMITY_DISTANCE_THRESHOLD) {
+			Log.i(LOGTAG, "proximity sensors distance=" + distance + " below threshold=" + PROXIMITY_DISTANCE_THRESHOLD
+					+ " => dimming screen in order to disable touch events");
 			params.screenBrightness = 0.1f;
 		} else {
+			Log.i(LOGTAG, "proximity sensors distance=" + distance + " above threshold=" + PROXIMITY_DISTANCE_THRESHOLD
+					+ " => enabling touch events (no screen dimming)");
 			params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
 		}
 		getWindow().setAttributes(params);
