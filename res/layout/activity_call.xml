@@ -39,77 +39,77 @@
         android:id="@+id/contactName"
         android:layout_width="fill_parent"
         android:layout_height="40dip"
-        android:paddingLeft="10dp"
         android:layout_toRightOf="@+id/contactImage"
-        android:textColor="#FFFFFF"
         android:gravity="bottom"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:paddingLeft="10dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#FFFFFF" />
 
     <TextView
         android:id="@+id/contactText"
         android:layout_width="fill_parent"
         android:layout_height="30dip"
-        android:paddingLeft="10dp"
-        android:layout_toRightOf="@+id/contactImage"
         android:layout_below="@+id/contactName"
+        android:layout_toRightOf="@+id/contactImage"
         android:background="#000000"
-        android:textColor="#FFFFFF"
-        android:text="00:00"
         android:gravity="top"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:paddingLeft="10dp"
+        android:text="00:00"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#FFFFFF" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/background"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            android:layout_marginTop="70dip" >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="70dip"
+        android:background="@drawable/background"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin" >
 
-            <ImageView
-                android:id="@+id/logo"
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/logo_big" />
+
+        <LinearLayout
+            android:id="@+id/linearLayoutCallStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/round_corners" >
+
+            <TextView
+                android:id="@+id/textViewCallStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:src="@drawable/logo_big" />
+                android:paddingLeft="15dp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutConnectionQuality"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp" >
 
             <LinearLayout
-                android:id="@+id/linearLayoutCallStatus"
+                android:id="@+id/linearLayoutConnectionQualityText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/round_corners" >
-
-                <TextView
-                    android:id="@+id/textViewCallStatus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="15dp"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linearLayoutConnectionQuality"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="10dp" >
-
-                <LinearLayout
-                  android:id="@+id/linearLayoutConnectionQualityText"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:background="@drawable/round_corners"
-                  android:layout_marginBottom="10dp" >
 
                 <TextView
                     android:id="@+id/textViewLabelQuality"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/call_activity_label_quality"
                     android:paddingLeft="5dp"
+                    android:text="@string/call_activity_label_quality"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <TextView
@@ -117,9 +117,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="2dp"
-                    android:textStyle="bold"
                     android:paddingRight="5dp"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
@@ -139,78 +139,80 @@
                     android:onClick="showConnectionDetails"
                     android:src="@drawable/info" />
             </LinearLayout>
-</LinearLayout>
-            <LinearLayout
-                android:id="@+id/linearLayoutAuthenticationToken"
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutAuthenticationToken"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/linearLayoutConnectionQuality"
+            android:background="@drawable/border_round_corners"
+            android:orientation="vertical"
+            tools:ignore="UselessParent" >
+
+            <TextView
+                android:id="@+id/textViewLabelAuthenticationToken"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal"
+                android:text="@string/call_activity_please_verify_authentication_token"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/textViewAuthenticationToken"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/linearLayoutConnectionQuality"
-                android:background="@drawable/border_round_corners"
-                android:orientation="vertical"
-                tools:ignore="UselessParent" >
+                android:layout_gravity="center"
+                android:layout_marginTop="2dp"
+                android:text="@string/call_activity_no_authentication_token"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
 
-                <TextView
-                    android:id="@+id/textViewLabelAuthenticationToken"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center_horizontal"
-                    android:text="@string/call_activity_please_verify_authentication_token"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                <TextView
-                    android:id="@+id/textViewAuthenticationToken"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="2dp"
-                    android:text="@string/call_activity_no_authentication_token"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:baselineAligned="false"
+                android:gravity="center_horizontal"
+                android:padding="8dp" >
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="20dp"
-                    android:padding="8dp"
-                    android:baselineAligned="false"
-                    android:gravity="center_horizontal" >
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical" >
 
-                    <LinearLayout
+                    <Button
+                        android:id="@+id/buttonAuthenticationTokenWrong"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center_horizontal"
-                        android:orientation="vertical" >
+                        android:layout_gravity="center"
+                        android:background="@drawable/border_round_corners"
+                        android:onClick="wrongAuthenticationToken"
+                        android:text="@string/call_activity_button_authentication_token_wrong" />
+                </LinearLayout>
 
-                        <Button
-                            android:id="@+id/buttonAuthenticationTokenWrong"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:onClick="wrongAuthenticationToken"
-                            android:background="@drawable/border_round_corners"
-                            android:text="@string/call_activity_button_authentication_token_wrong" />
-                    </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical" >
 
-                    <LinearLayout
+                    <Button
+                        android:id="@+id/buttonAuthenticationTokenVerify"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center_horizontal"
-                        android:orientation="vertical" >
-                        <Button
-                            android:id="@+id/buttonAuthenticationTokenVerify"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:onClick="verifyAuthenticationToken"
-                            android:background="@drawable/border_round_corners"
-                            android:text="@string/call_activity_button_authentication_token_verify" />
-                    </LinearLayout>
+                        android:layout_gravity="center"
+                        android:background="@drawable/border_round_corners"
+                        android:onClick="verifyAuthenticationToken"
+                        android:text="@string/call_activity_button_authentication_token_verify" />
                 </LinearLayout>
             </LinearLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/linearLayoutUnencryptedCall"
@@ -222,8 +224,8 @@
             android:layout_centerInParent="false"
             android:background="@drawable/border_round_corners"
             android:orientation="vertical"
-            android:paddingTop="20dp"
             android:paddingBottom="20dp"
+            android:paddingTop="20dp"
             android:visibility="gone" >
 
             <TextView
@@ -241,9 +243,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
-                android:padding="8dp"
-                android:onClick="acceptUnencryptedCall"
                 android:background="@drawable/border_round_corners"
+                android:onClick="acceptUnencryptedCall"
+                android:padding="8dp"
                 android:text="@string/call_activity_button_accept_unencrypted_call" />
         </LinearLayout>
 
@@ -251,9 +253,9 @@
             android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_above="@+id/ButtonTerminateCall"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
-            android:layout_above="@+id/ButtonTerminateCall"
             android:orientation="vertical" >
 
             <LinearLayout
@@ -283,10 +285,10 @@
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:onClick="toggleMicrophoneMuted"
-                    android:src="@drawable/micro_on"
                     android:background="#FFFFFF"
-                    android:contentDescription="@string/call_activity_microphone_mute"/>
+                    android:contentDescription="@string/call_activity_microphone_mute"
+                    android:onClick="toggleMicrophoneMuted"
+                    android:src="@drawable/micro_on" />
 
                 <ImageButton
                     android:id="@+id/buttonSpeaker"
@@ -294,23 +296,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="25dp"
-                    android:onClick="toggleSpeakerMuted"
-                    android:src="@drawable/speaker_off"
                     android:background="#FFFFFF"
-                    android:contentDescription="@string/call_activity_loudspeaker_off"/>
+                    android:contentDescription="@string/call_activity_loudspeaker_off"
+                    android:onClick="toggleSpeakerMuted"
+                    android:src="@drawable/speaker_off" />
             </LinearLayout>
-
         </RelativeLayout>
 
         <ImageButton
             android:id="@+id/ButtonTerminateCall"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/hang_up"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="false"
-            android:onClick="terminateCall"
-            android:contentDescription="@string/call_activity_terminate_call"/>
+            android:layout_marginTop="8dp"
+            android:background="@drawable/hang_up"
+            android:contentDescription="@string/call_activity_terminate_call"
+            android:onClick="terminateCall" />
     </RelativeLayout>
+
 </RelativeLayout>
