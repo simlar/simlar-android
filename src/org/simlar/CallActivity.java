@@ -48,7 +48,6 @@ public class CallActivity extends Activity implements SensorEventListener
 
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCall();
 	private SensorManager mSensorManager;
-	private Sensor mSensor;
 	private long mCallStartTime = -1;
 	private final Handler mHandler = new Handler();
 
@@ -117,7 +116,6 @@ public class CallActivity extends Activity implements SensorEventListener
 				WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
 
 		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-		mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
 
 		mImageViewContactImage = (ImageView) findViewById(R.id.contactImage);
 		mTextViewContactName = (TextView) findViewById(R.id.contactName);
@@ -155,7 +153,7 @@ public class CallActivity extends Activity implements SensorEventListener
 		Log.i(LOGTAG, "onResume ");
 		super.onResume();
 		mCommunicator.register(this, CallActivity.class);
-		mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+		mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY), SensorManager.SENSOR_DELAY_NORMAL);
 	}
 
 	@Override
