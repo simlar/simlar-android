@@ -24,22 +24,21 @@
     android:layout_height="wrap_content"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".ConnectionDetailsActivity"
-
     android:shrinkColumns="*"
-    android:stretchColumns="*" >
+    android:stretchColumns="*"
+    tools:context=".ConnectionDetailsActivity" >
 
     <TableRow
-        android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:gravity="center_horizontal">
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal" >
 
         <TextView
             android:id="@+id/textViewLabelQuality"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/connection_details_activity_label_quality"
             android:gravity="right"
+            android:text="@string/connection_details_activity_label_quality"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
@@ -47,36 +46,36 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:textStyle="bold"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/textViewLabelCodec"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/connection_details_activity_label_codec"
             android:gravity="right"
+            android:text="@string/connection_details_activity_label_codec"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
             android:id="@+id/textViewCodec"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textStyle="bold" />
     </TableRow>
 
     <TableRow
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:gravity="left">
+        android:layout_height="wrap_content"
+        android:gravity="left" >
 
         <TextView
             android:id="@+id/textViewLabelDownload"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/connection_details_activity_label_download"
             android:gravity="right"
+            android:text="@string/connection_details_activity_label_download"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
@@ -84,22 +83,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:textStyle="bold"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textStyle="bold" />
     </TableRow>
 
     <TableRow
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:paddingBottom="10dp"
-        android:gravity="left">
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:paddingBottom="10dp" >
 
         <TextView
             android:id="@+id/textViewLabelUpload"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/connection_details_activity_label_upload"
             android:gravity="right"
+            android:text="@string/connection_details_activity_label_upload"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
@@ -107,16 +106,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:textStyle="bold"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textStyle="bold" />
     </TableRow>
 
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/border_top"
-        android:paddingTop="10dp"
-        android:gravity="center" >
+        android:gravity="center"
+        android:paddingTop="10dp" >
 
         <TextView
             android:id="@+id/textViewLabelIceState"
