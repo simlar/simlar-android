@@ -40,27 +40,27 @@
         android:id="@+id/contactName"
         android:layout_width="fill_parent"
         android:layout_height="40dip"
-        android:paddingLeft="10dp"
         android:layout_toRightOf="@+id/contactImage"
         android:background="#000000"
-        android:textColor="#FFFFFF"
+        android:contentDescription="@string/ringing_activity_phone_is_ringing"
         android:gravity="bottom"
+        android:paddingLeft="10dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:contentDescription="@string/ringing_activity_phone_is_ringing" />
+        android:textColor="#FFFFFF" />
 
     <TextView
         android:id="@+id/contactText"
         android:layout_width="fill_parent"
         android:layout_height="30dip"
-        android:paddingLeft="10dp"
-        android:layout_toRightOf="@+id/contactImage"
         android:layout_below="@+id/contactName"
+        android:layout_toRightOf="@+id/contactImage"
         android:background="#000000"
-        android:textColor="#FFFFFF"
-        android:text="@string/ringing_activity_title"
+        android:contentDescription="@string/ringing_activity_phone_is_ringing"
         android:gravity="top"
+        android:paddingLeft="10dp"
+        android:text="@string/ringing_activity_title"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:contentDescription="@string/ringing_activity_phone_is_ringing" />
+        android:textColor="#FFFFFF" />
 
     <ImageView
         android:id="@+id/RingingAnimate"
@@ -75,24 +75,24 @@
         android:id="@+id/ButtonTerminateCall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
         android:background="@null"
         android:contentDescription="@string/call_activity_sound_settings"
         android:onClick="terminateCall"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
         android:src="@drawable/hang_up_left" />
 
     <ImageButton
         android:id="@+id/buttonPickUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:layout_alignParentRight="true"
         android:background="@null"
         android:contentDescription="@string/call_activity_sound_settings"
         android:onClick="pickUp"
+        android:paddingRight="@dimen/activity_horizontal_margin"
         android:src="@drawable/pick_up" />
 
 </RelativeLayout>
