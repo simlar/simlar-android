@@ -24,6 +24,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
@@ -36,6 +39,7 @@ public final class VolumesControlActivity extends Activity
 	Volumes mVolumes = null;
 	private SeekBar mSeekBarSpeaker;
 	private SeekBar mSeekBarMicrophone;
+	private CheckBox mCheckBoxEchoLimiter;
 
 	private final class SimlarServiceCommunicatorVolumes extends SimlarServiceCommunicator
 	{
@@ -78,6 +82,7 @@ public final class VolumesControlActivity extends Activity
 
 		mSeekBarSpeaker = (SeekBar) findViewById(R.id.seekBarSpeaker);
 		mSeekBarMicrophone = (SeekBar) findViewById(R.id.seekBarMicrophone);
+		mCheckBoxEchoLimiter = (CheckBox) findViewById(R.id.checkBoxEchoLimiter);
 
 		mSeekBarSpeaker.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
@@ -128,6 +133,24 @@ public final class VolumesControlActivity extends Activity
 				mCommunicator.getService().setVolumes(mVolumes);
 			}
 		});
+
+		mCheckBoxEchoLimiter.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked)
+			{
+				Log.i(LOGTAG, "CheckBoxEchoLimiter.onCheckedChanged: " + isChecked);
+				if (mVolumes == null || mCommunicator == null) {
+					return;
+				}
+
+				if (mVolumes.getEchoLimiter() == isChecked) {
+					return;
+				}
+
+				mVolumes = mVolumes.toggleEchoLimiter();
+				mCommunicator.getService().setVolumes(mVolumes);
+			}
+		});
 	}
 
 	@Override
@@ -158,5 +181,6 @@ public final class VolumesControlActivity extends Activity
 
 		mSeekBarSpeaker.setProgress(mVolumes.getProgressSpeaker());
 		mSeekBarMicrophone.setProgress(mVolumes.getProgessMicrophone());
+		mCheckBoxEchoLimiter.setChecked(mVolumes.getEchoLimiter());
 	}
 }
