@@ -396,7 +396,7 @@ public final class CallActivity extends Activity implements SensorEventListener
 		final float distance = event.values[0];
 
 		if (distance > event.sensor.getMaximumRange()) {
-			Log.w(LOGTAG, "proximity sensors distance=" + distance + " out of range");
+			Log.w(LOGTAG, "proximity sensors distance=" + distance + " out of range=" + event.sensor.getMaximumRange());
 			return;
 		}
 
