@@ -42,6 +42,7 @@ import org.linphone.core.PresenceService;
 import org.linphone.core.PublishState;
 import org.linphone.core.SubscriptionState;
 import org.simlar.FileHelper.NotInitedException;
+import org.simlar.Volumes.MicrophoneStatus;
 
 import android.content.Context;
 import android.os.Handler;
@@ -641,16 +642,14 @@ public final class LinphoneThread
 		mImpl.setVolumes(volumes);
 	}
 
-	public void setMicrophoneMuted(final boolean enabled)
+	public void setMicrophoneStatus(final MicrophoneStatus microphoneStatus)
 	{
 		if (mImpl.mVolumes == null) {
 			Log.e(LOGTAG, "volumes not initialized");
 			return;
 		}
 
-		if (mImpl.mVolumes.getMicrophoneMuted() != enabled) {
-			setVolumes(mImpl.mVolumes.toggleMicrophoneMuted());
-		}
+		setVolumes(mImpl.mVolumes.setMicrophoneStatus(microphoneStatus));
 	}
 
 	public Volumes getVolumes()

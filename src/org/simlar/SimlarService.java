@@ -29,6 +29,7 @@ import org.linphone.core.LinphoneCall.State;
 import org.linphone.core.LinphoneCore.RegistrationState;
 import org.simlar.PreferencesHelper.NotInitedException;
 import org.simlar.SoundEffectManager.SoundEffectType;
+import org.simlar.Volumes.MicrophoneStatus;
 
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -496,7 +497,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 
 		if (mSimlarCallState.isBeforeEncryption()) {
-			mLinphoneThread.setMicrophoneMuted(true);
+			mLinphoneThread.setMicrophoneStatus(MicrophoneStatus.DISABLED);
 			mSoundEffectManager.setInCallMode(true);
 			mSoundEffectManager.startPrepared(SoundEffectType.ENCRYPTION_HANDSHAKE);
 		}
@@ -575,7 +576,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		Log.i(LOGTAG, "SimlarCallState updated encryption: " + mSimlarCallState);
 
-		mLinphoneThread.setMicrophoneMuted(false);
+		mLinphoneThread.setMicrophoneStatus(MicrophoneStatus.ON);
 		mSoundEffectManager.stop(SoundEffectType.ENCRYPTION_HANDSHAKE);
 
 		if (encrypted) {

@@ -349,12 +349,20 @@ public final class CallActivity extends Activity implements SensorEventListener
 
 	private void setButtonMicrophoneMute()
 	{
-		if (mCommunicator.getService().getVolumes().getMicrophoneMuted()) {
+		switch (mCommunicator.getService().getVolumes().getMicrophoneStatus()) {
+		case DISABLED:
+			mButtonMicro.setImageResource(R.drawable.micro_out_grey);
+			mButtonMicro.setContentDescription(getString(R.string.call_activity_microphone_disabled));
+			break;
+		case MUTED:
 			mButtonMicro.setImageResource(R.drawable.micro_off);
 			mButtonMicro.setContentDescription(getString(R.string.call_activity_microphone_mute));
-		} else {
+			break;
+		case ON:
+		default:
 			mButtonMicro.setImageResource(R.drawable.micro_on);
 			mButtonMicro.setContentDescription(getString(R.string.call_activity_microphone_on));
+			break;
 		}
 	}
 
