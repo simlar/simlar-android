@@ -182,7 +182,7 @@ public class ContactsAdapter extends ArrayAdapter<FullContactData>
 		return null;
 	}
 
-	void onPresenceStateChanged(final String simlarId, final boolean online)
+	void onPresenceStateChanged(final String simlarId, @SuppressWarnings("unused") final boolean online)
 	{
 		final FullContactData contact = getContactBySimlarId(simlarId);
 		if (contact == null) {
@@ -190,7 +190,7 @@ public class ContactsAdapter extends ArrayAdapter<FullContactData>
 				add(mCommunicator.getService().getContact(simlarId));
 			}
 		} else {
-			contact.status = online ? ContactStatus.ONLINE : ContactStatus.OFFLINE;
+			contact.status = ContactStatus.REGISTERED;
 			notifyDataSetChanged();
 		}
 	}

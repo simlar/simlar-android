@@ -23,8 +23,7 @@ package org.simlar;
 public enum ContactStatus {
 	UNKNOWN,
 	NOTREGISTERED,
-	OFFLINE,
-	ONLINE;
+	REGISTERED;
 
 	public static ContactStatus fromInt(final int i)
 	{
@@ -32,9 +31,7 @@ public enum ContactStatus {
 		case 0:
 			return NOTREGISTERED;
 		case 1:
-			return OFFLINE;
-		case 2:
-			return ONLINE;
+			return REGISTERED;
 		default:
 			return UNKNOWN;
 		}
@@ -42,11 +39,6 @@ public enum ContactStatus {
 
 	public boolean isRegistered()
 	{
-		return this == ONLINE || this == OFFLINE;
-	}
-
-	public boolean isOnline()
-	{
-		return this == ONLINE;
+		return this == REGISTERED;
 	}
 }

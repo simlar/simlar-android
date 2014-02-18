@@ -140,11 +140,6 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		{
 			return status.isRegistered();
 		}
-
-		public boolean isOnline()
-		{
-			return status.isOnline();
-		}
 	}
 
 	public class FullContactData extends ContactData
@@ -563,14 +558,14 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 			Log.i(LOGTAG, "onPresenceStateChanged online " + number);
 		}
 
-		// we assume here that we only get the presence state of registered users
-		if (updateContactData(number, online ? ContactStatus.ONLINE : ContactStatus.OFFLINE)) {
-			if (online) {
-				Log.i(LOGTAG, "notifyPresenceStateChanged online " + number);
-			} else {
-				Log.i(LOGTAG, "notifyPresenceStateChanged offline " + number);
-			}
+		if (online) {
+			Log.i(LOGTAG, "notifyPresenceStateChanged online " + number);
+		} else {
+			Log.i(LOGTAG, "notifyPresenceStateChanged offline " + number);
+		}
 
+		// we assume here that we only get the presence state of registered users
+		if (updateContactData(number, ContactStatus.REGISTERED)) {
 			SimlarServiceBroadcast.sendPresenceStateChanged(this, number, online);
 		}
 	}
@@ -790,8 +785,6 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 					if (!status.isRegistered()) {
 						updateContactData(simlarId, status);
 					} else {
-						onPresenceStateChanged(simlarId, status.isOnline());
-
 						// make sure to add friends in the gui thread
 						mHandler.post(new Runnable() {
 							@Override
