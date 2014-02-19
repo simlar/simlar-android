@@ -771,24 +771,24 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		}.execute(mContacts.keySet());
 	}
 
-	boolean updateContactData(final String number, final ContactStatus status)
+	void updateContactData(final String simlarId, final ContactStatus status)
 	{
-		if (Util.isNullOrEmpty(number)) {
-			return false;
+		if (Util.isNullOrEmpty(simlarId)) {
+			return;
 		}
 
-		final ContactData cd = mContacts.get(number);
+		final ContactData cd = mContacts.get(simlarId);
 		if (cd == null) {
-			mContacts.put(number, new ContactData(null, null, status, null));
-			return true;
+			Log.w(LOGTAG, "updateContactData: new simlerId=" + simlarId);
+			mContacts.put(simlarId, new ContactData(null, null, status, null));
+			return;
 		}
 
-		if (cd.status == status) {
-			return false;
+		if (!status.isValid()) {
+			return;
 		}
 
 		cd.status = status;
-		return true;
 	}
 
 	public Set<FullContactData> getContacts()

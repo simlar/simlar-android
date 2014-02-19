@@ -41,4 +41,9 @@ public enum ContactStatus {
 	{
 		return this == REGISTERED;
 	}
+
+	public boolean isValid()
+	{
+		return this != UNKNOWN;
+	}
 }
