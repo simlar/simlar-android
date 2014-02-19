@@ -73,17 +73,6 @@ public class MainActivity extends android.support.v4.app.FragmentActivity
 		}
 
 		@Override
-		void onPresenceStateChanged(final String simlarId, final boolean online)
-		{
-			if (mAdapter == null) {
-				Log.w(LOGTAG, "no contact adapter");
-				return;
-			}
-
-			mAdapter.onPresenceStateChanged(simlarId, online);
-		}
-
-		@Override
 		void onServiceFinishes()
 		{
 			MainActivity.this.finish();

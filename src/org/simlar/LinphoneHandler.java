@@ -29,7 +29,6 @@ import org.linphone.core.LinphoneCore.Transports;
 import org.linphone.core.LinphoneCoreException;
 import org.linphone.core.LinphoneCoreFactory;
 import org.linphone.core.LinphoneCoreListener;
-import org.linphone.core.LinphoneFriend;
 import org.linphone.core.LinphoneProxyConfig;
 import org.linphone.core.PayloadType;
 
@@ -40,11 +39,6 @@ import android.util.Log;
 
 public class LinphoneHandler
 {
-	// liblinphone version since belle-sip suffer from io errors while adding friends
-	// like before presence is not working properly with kamailio so it is disabled at the moment
-	// liblinphone git revision: a7466b990d270a5336307b2b3235f22137500782
-	public static final boolean PRESENCE_DISABLED = true;
-
 	private static final String LOGTAG = LinphoneHandler.class.getSimpleName();
 
 	private static final String DOMAIN = "sip.simlar.org";
@@ -242,7 +236,7 @@ public class LinphoneHandler
 			LinphoneProxyConfig proxyCfg = LinphoneCoreFactory.instance().createProxyConfig(
 					"sip:" + mySimlarId + "@" + DOMAIN, "sip:" + DOMAIN, null, true);
 			proxyCfg.setExpires(1800); // kamailio setting is 3600
-			proxyCfg.enablePublish(!PRESENCE_DISABLED);
+			proxyCfg.enablePublish(false);
 			mLinphoneCore.addProxyConfig(proxyCfg);
 			mLinphoneCore.setDefaultProxyConfig(proxyCfg);
 		} catch (LinphoneCoreException e) {
@@ -262,47 +256,6 @@ public class LinphoneHandler
 			Log.e(LOGTAG, "LinphoneCoreException during unregister: " + e.getMessage(), e);
 		}
 		proxyConfig.done();
-	}
-
-	public void addFriend(final LinphoneFriend lf)
-	{
-		if (PRESENCE_DISABLED) {
-			return;
-		}
-
-		if (lf == null) {
-			Log.e(LOGTAG, "addFriend without linphone friend");
-			return;
-		}
-
-		lf.enableSubscribes(true);
-		try {
-			mLinphoneCore.addFriend(lf);
-		} catch (LinphoneCoreException e) {
-			Log.e(LOGTAG, "LinphoneCoreException: during addFriend [" + lf.getAddress().getUserName() + "]: " + e.getMessage(), e);
-		}
-	}
-
-	public void addFriend(final String number)
-	{
-		if (PRESENCE_DISABLED) {
-			return;
-		}
-
-		if (Util.isNullOrEmpty(number)) {
-			Log.e(LOGTAG, "addFriend empty number");
-			return;
-		}
-
-		final String sipUrl = "sip:" + number + "@" + DOMAIN;
-		if (mLinphoneCore.findFriendByAddress(sipUrl) != null) {
-			Log.i(LOGTAG, "presence already registered: " + sipUrl);
-			return;
-		}
-
-		addFriend(LinphoneCoreFactory.instance().createLinphoneFriend(sipUrl));
-
-		Log.i(LOGTAG, "successfully added friend: " + number);
 	}
 
 	public void call(final String number)

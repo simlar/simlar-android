@@ -552,25 +552,6 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	}
 
 	@Override
-	public void onPresenceStateChanged(final String number, final boolean online)
-	{
-		if (online) {
-			Log.i(LOGTAG, "onPresenceStateChanged online " + number);
-		}
-
-		if (online) {
-			Log.i(LOGTAG, "notifyPresenceStateChanged online " + number);
-		} else {
-			Log.i(LOGTAG, "notifyPresenceStateChanged offline " + number);
-		}
-
-		// we assume here that we only get the presence state of registered users
-		if (updateContactData(number, ContactStatus.REGISTERED)) {
-			SimlarServiceBroadcast.sendPresenceStateChanged(this, number, online);
-		}
-	}
-
-	@Override
 	public void onCallEncryptionChanged(final boolean encrypted, final String authenticationToken, final boolean authenticationTokenVerified)
 	{
 		if (!mSimlarCallState.updateCallEncryption(encrypted, authenticationToken, authenticationTokenVerified)) {
@@ -780,20 +761,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 				}
 
 				for (final String simlarId : result.keySet()) {
-					final ContactStatus status = result.get(simlarId);
-
-					if (!status.isRegistered()) {
-						updateContactData(simlarId, status);
-					} else {
-						// make sure to add friends in the gui thread
-						mHandler.post(new Runnable() {
-							@Override
-							public void run()
-							{
-								addLinphoneFriend(simlarId);
-							}
-						});
-					}
+					updateContactData(simlarId, result.get(simlarId));
 				}
 
 				if (RegistrationState.RegistrationOk.equals(mLinphoneThread.getRegistrationState())) {
@@ -821,12 +789,6 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 
 		cd.status = status;
 		return true;
-	}
-
-	void addLinphoneFriend(final String number)
-	{
-		Log.d(LOGTAG, "adding linphone friend for presence watching: " + number);
-		mLinphoneThread.addFriend(number);
 	}
 
 	public Set<FullContactData> getContacts()
