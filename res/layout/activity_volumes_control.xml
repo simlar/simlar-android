@@ -51,7 +51,7 @@
                 android:id="@+id/seekBarSpeaker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"/>
+                android:layout_centerInParent="true" />
         </RelativeLayout>
     </LinearLayout>
 
@@ -78,9 +78,8 @@
                 android:id="@+id/seekBarMicrophone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"/>
+                android:layout_centerInParent="true" />
         </RelativeLayout>
-
     </LinearLayout>
 
 </RelativeLayout>

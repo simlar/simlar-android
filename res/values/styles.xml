@@ -35,7 +35,7 @@
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-        <item name="android:textColor">#000000</item>
+        <item name="android:textColor">@color/text_black</item>
     </style>
 
     <!-- Application dialog theme. -->
@@ -48,8 +48,37 @@
     <style name="dialogThemeNoTitle" parent="android:Theme.Holo.Light.Dialog">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
         <item name="android:windowNoTitle">true</item>
-        <item name="android:textColor">#000000</item>
+        <item name="android:textColor">@color/text_black</item>
         <item name="android:windowBackground">@drawable/border_round_corners</item>
+    </style>
+
+    <!-- Buttons -->
+    <style name="buttonWhite" parent="android:Widget.Holo.Light.Button">
+        <item name="android:background">@drawable/button_white</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="buttonWhiteBorderLess" parent="@android:attr/buttonStyleSmall">
+        <item name="android:background">@drawable/button_white_borderless</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!-- ConnectionDetailsActivity  -->
+    <style name="connectionDetailsActivityTable" parent="@android:style/TextAppearance.Small">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="connectionDetailsActivityTableLabel" parent="connectionDetailsActivityTable">
+        <item name="android:gravity">right</item>
+    </style>
+
+    <style name="connectionDetailsActivityTableValue" parent="connectionDetailsActivityTable">
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
 </resources>

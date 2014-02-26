@@ -84,8 +84,8 @@
         android:layout_alignRight="@+id/linearLayoutCompletePhoneNumber"
         android:layout_below="@+id/linearLayoutCompletePhoneNumber"
         android:layout_marginTop="33dp"
-        android:gravity="center_horizontal"
-        android:baselineAligned="false" >
+        android:baselineAligned="false"
+        android:gravity="center_horizontal" >
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -118,7 +118,6 @@
                 android:onClick="createAccount"
                 android:text="@string/verify_number_activity_button_register" />
         </LinearLayout>
-
     </LinearLayout>
 
 </RelativeLayout>

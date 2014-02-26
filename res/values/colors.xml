@@ -20,13 +20,11 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -->
 
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-     android:shape="rectangle">
+<resources>
+    <color name="background_white">@android:color/white</color>
+    <color name="text_black">@android:color/black</color>
+    <color name="border">#808284</color>
 
-     <stroke
-         android:width="1dip"
-         android:color="@color/border" />
-
-     <solid android:color="@color/background_white" />
-     <corners android:bottomRightRadius="5dp" android:bottomLeftRadius="5dp" android:topLeftRadius="5dp" android:topRightRadius="5dp"/>
-</shape>
+    <color name="calling_title_background_black">@android:color/black</color>
+    <color name="calling_title_text_white">@android:color/white</color>
+</resources>

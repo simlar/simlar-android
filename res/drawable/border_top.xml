@@ -24,13 +24,13 @@
 <!-- This is the line -->
 <item>
       <shape>
-            <solid android:color="#000000" />
+            <solid android:color="@color/text_black" />
       </shape>
 </item>
 <!-- This is the main color -->
 <item android:top="1dp" android:right="1dp" android:left="1dp">
      <shape>
-           <solid android:color="#FFFFFF" />
+           <solid android:color="@color/background_white" />
      </shape>
 </item>
 </layer-list>
