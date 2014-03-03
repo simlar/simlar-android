@@ -32,6 +32,13 @@ public class ConnectionDetailsActivity extends Activity
 
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorConnectionDetails();
 
+	// gui elements
+	private TextView mTextViewQuality;
+	private TextView mTextViewUpload;
+	private TextView mTextViewDownload;
+	private TextView mTextViewIceState;
+	private TextView mTextViewCodec;
+
 	private class SimlarServiceCommunicatorConnectionDetails extends SimlarServiceCommunicator
 	{
 		public SimlarServiceCommunicatorConnectionDetails()
@@ -40,29 +47,15 @@ public class ConnectionDetailsActivity extends Activity
 		}
 
 		@Override
+		void onBoundToSimlarService()
+		{
+			ConnectionDetailsActivity.this.onSimlarCallStateChanged();
+		}
+
+		@Override
 		void onSimlarCallStateChanged()
 		{
-			if (getService() == null) {
-				Log.e(LOGTAG, "service is null");
-				return;
-			}
-
-			final SimlarCallState simlarCallState = getService().getSimlarCallState();
-			if (simlarCallState == null || simlarCallState.isEmpty()) {
-				Log.e(LOGTAG, "ERROR: onSimlarCallStateChanged simlarCallState null or empty");
-				return;
-			}
-
-			if (simlarCallState.isEndedCall()) {
-				ConnectionDetailsActivity.this.finish();
-			}
-
-			if (simlarCallState.hasConnectionInfo()) {
-				setIceState(simlarCallState.getIceState());
-				setCodec(simlarCallState.getCodec());
-				setBandwidthInfo(simlarCallState.getUpload(), simlarCallState.getDownload(), getString(simlarCallState.getQualityDescription()));
-			}
-
+			ConnectionDetailsActivity.this.onSimlarCallStateChanged();
 		}
 	}
 
@@ -71,6 +64,12 @@ public class ConnectionDetailsActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_connection_details);
+
+		mTextViewQuality = (TextView) findViewById(R.id.textViewQuality);
+		mTextViewUpload = (TextView) findViewById(R.id.textViewUpload);
+		mTextViewDownload = (TextView) findViewById(R.id.textViewDownload);
+		mTextViewIceState = (TextView) findViewById(R.id.textViewIceState);
+		mTextViewCodec = (TextView) findViewById(R.id.textViewCodec);
 	}
 
 	@Override
@@ -95,26 +94,30 @@ public class ConnectionDetailsActivity extends Activity
 		super.onPause();
 	}
 
-	void setIceState(final String iceState)
+	public void onSimlarCallStateChanged()
 	{
-		final TextView tv = (TextView) findViewById(R.id.textViewIceState);
-		tv.setText(iceState);
-	}
+		if (mCommunicator.getService() == null) {
+			Log.e(LOGTAG, "ERROR: onSimlarCallStateChanged but not bound to service");
+			return;
+		}
 
-	void setCodec(final String codec)
-	{
-		final TextView tv = (TextView) findViewById(R.id.textViewCodec);
-		tv.setText(codec);
-	}
+		final SimlarCallState simlarCallState = mCommunicator.getService().getSimlarCallState();
 
-	void setBandwidthInfo(final String upload, final String download, final String quality)
-	{
-		final TextView tvUpload = (TextView) findViewById(R.id.textViewUpload);
-		final TextView tvDownload = (TextView) findViewById(R.id.textViewDownload);
-		final TextView tvQuality = (TextView) findViewById(R.id.textViewQuality);
+		if (simlarCallState == null || simlarCallState.isEmpty()) {
+			Log.e(LOGTAG, "ERROR: onSimlarCallStateChanged simlarCallState null or empty");
+			return;
+		}
 
-		tvUpload.setText(upload + " " + getString(R.string.connection_details_activity_kbytes_per_second));
-		tvDownload.setText(download + " " + getString(R.string.connection_details_activity_kbytes_per_second));
-		tvQuality.setText(quality);
+		if (simlarCallState.isEndedCall()) {
+			ConnectionDetailsActivity.this.finish();
+		}
+
+		if (simlarCallState.hasConnectionInfo()) {
+			mTextViewQuality.setText(getString(simlarCallState.getQualityDescription()));
+			mTextViewUpload.setText(simlarCallState.getUpload() + " " + getString(R.string.connection_details_activity_kbytes_per_second));
+			mTextViewDownload.setText(simlarCallState.getDownload() + " " + getString(R.string.connection_details_activity_kbytes_per_second));
+			mTextViewIceState.setText(simlarCallState.getIceState());
+			mTextViewCodec.setText(simlarCallState.getCodec());
+		}
 	}
 }

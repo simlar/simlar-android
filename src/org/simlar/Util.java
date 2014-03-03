@@ -23,6 +23,9 @@ package org.simlar;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -93,5 +96,30 @@ public class Util
 		} else {
 			imageView.setBackgroundDrawable(drawable);
 		}
+	}
+
+	public static String formatMilliSeconds(final long milliSeconds)
+	{
+		if (milliSeconds >= 0) {
+			return formatPositiveMilliSeconds(milliSeconds);
+		}
+
+		return "-" + formatPositiveMilliSeconds(-1 * milliSeconds);
+	}
+
+	private static String formatPositiveMilliSeconds(final long milliSeconds)
+	{
+		final SimpleDateFormat sdf = createSimpleDateFormat(milliSeconds);
+		sdf.setTimeZone(TimeZone.getTimeZone("GMT+0"));
+		return sdf.format(new Date(milliSeconds));
+	}
+
+	private static SimpleDateFormat createSimpleDateFormat(final long milliSeconds)
+	{
+		if (milliSeconds >= 3600000) {
+			return new SimpleDateFormat("HH:mm:ss");
+		}
+
+		return new SimpleDateFormat("mm:ss");
 	}
 }
