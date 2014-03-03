@@ -46,9 +46,10 @@ public class CallActivity extends Activity implements SensorEventListener
 {
 	static final String LOGTAG = CallActivity.class.getSimpleName();
 
+	private static final float PROXIMITY_DISTANCE_THRESHOLD = 4.0f;
+
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCall();
 	private SensorManager mSensorManager;
-	private Sensor mSensor;
 	private long mCallStartTime = -1;
 	private final Handler mHandler = new Handler();
 
@@ -117,7 +118,6 @@ public class CallActivity extends Activity implements SensorEventListener
 				WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
 
 		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-		mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
 
 		mImageViewContactImage = (ImageView) findViewById(R.id.contactImage);
 		mTextViewContactName = (TextView) findViewById(R.id.contactName);
@@ -155,7 +155,7 @@ public class CallActivity extends Activity implements SensorEventListener
 		Log.i(LOGTAG, "onResume ");
 		super.onResume();
 		mCommunicator.register(this, CallActivity.class);
-		mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+		mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY), SensorManager.SENSOR_DELAY_NORMAL);
 	}
 
 	@Override
@@ -393,10 +393,21 @@ public class CallActivity extends Activity implements SensorEventListener
 	@Override
 	public void onSensorChanged(final SensorEvent event)
 	{
+		final float distance = event.values[0];
+
+		if (distance > event.sensor.getMaximumRange()) {
+			Log.w(LOGTAG, "proximity sensors distance=" + distance + " out of range");
+			return;
+		}
+
 		final WindowManager.LayoutParams params = getWindow().getAttributes();
-		if (event.values[0] == 0) {
+		if (distance <= PROXIMITY_DISTANCE_THRESHOLD) {
+			Log.i(LOGTAG, "proximity sensors distance=" + distance + " below threshold=" + PROXIMITY_DISTANCE_THRESHOLD
+					+ " => dimming screen in order to disable touch events");
 			params.screenBrightness = 0.1f;
 		} else {
+			Log.i(LOGTAG, "proximity sensors distance=" + distance + " above threshold=" + PROXIMITY_DISTANCE_THRESHOLD
+					+ " => enabling touch events (no screen dimming)");
 			params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
 		}
 		getWindow().setAttributes(params);
