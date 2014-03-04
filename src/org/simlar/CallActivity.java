@@ -228,7 +228,7 @@ public class CallActivity extends Activity implements SensorEventListener
 			startCallTimer();
 		}
 
-		if (simlarCallState.hasConnectionInfo()) {
+		if (simlarCallState.hasQuality()) {
 			mTextViewQuality.setText(getString(simlarCallState.getQualityDescription()));
 			mLayoutConnectionQuality.setVisibility(View.VISIBLE);
 			mButtonConnectionDetails.setVisibility(View.VISIBLE);

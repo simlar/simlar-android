@@ -106,6 +106,10 @@ public class SimlarServiceCommunicator
 				onSimlarCallStateChanged();
 				return;
 			}
+			case CALL_CONNECTION_DETAILS: {
+				onCallConnectionDetailsChanged();
+				return;
+			}
 			case SERVICE_FINISHES: {
 				onServiceFinishes();
 				return;
@@ -168,6 +172,10 @@ public class SimlarServiceCommunicator
 	}
 
 	void onSimlarCallStateChanged()
+	{
+	}
+
+	void onCallConnectionDetailsChanged()
 	{
 	}
 

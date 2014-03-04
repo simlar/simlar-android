@@ -20,8 +20,6 @@
 
 package org.simlar;
 
-import java.text.DecimalFormat;
-
 import org.linphone.core.LinphoneCall.State;
 
 import android.content.Context;
@@ -31,7 +29,6 @@ import android.util.Log;
 public class SimlarCallState
 {
 	private static final String LOGTAG = SimlarCallState.class.getSimpleName();
-	private static final DecimalFormat GUI_VALUE = new DecimalFormat("#0.0");
 
 	private String mDisplayName = null;
 	private String mDisplayPhotoId = null;
@@ -40,12 +37,7 @@ public class SimlarCallState
 	private boolean mEncrypted = true;
 	private String mAuthenticationToken = null;
 	private boolean mAuthenticationTokenVerified = false;
-
-	private float mUpload = -1.0f;
-	private float mDownload = -1.0f;
-	private float mQuality = -1.0f;
-	private String mCodec = null;
-	private String mIceState = null;
+	private NetworkQuality mQuality = NetworkQuality.UNKNOWN;
 	private int mDuration = 0;
 	private long mCallStartTime = -1;
 
@@ -119,12 +111,7 @@ public class SimlarCallState
 			mEncrypted = true;
 			mAuthenticationToken = null;
 			mAuthenticationTokenVerified = false;
-
-			mUpload = -1.0f;
-			mDownload = -1.0f;
-			mQuality = -1.0f;
-			mCodec = null;
-			mIceState = null;
+			mQuality = NetworkQuality.UNKNOWN;
 			mDuration = 0;
 			mCallStartTime = -1;
 		}
@@ -132,19 +119,13 @@ public class SimlarCallState
 		return true;
 	}
 
-	public boolean updateCallStats(final float upload, final float download, final float quality, final String codec, final String iceState,
-			final int callDuration)
+	public boolean updateCallStats(final NetworkQuality quality, final int callDuration)
 	{
-		if (upload == mUpload && download == mDownload && quality == mQuality
-				&& Util.equalString(codec, mCodec) && Util.equalString(iceState, mIceState) && callDuration == mDuration) {
+		if (quality == mQuality && callDuration == mDuration) {
 			return false;
 		}
 
-		mUpload = upload;
-		mDownload = download;
 		mQuality = quality;
-		mCodec = codec;
-		mIceState = iceState;
 
 		if (callDuration != mDuration) {
 			mDuration = callDuration;
@@ -204,31 +185,13 @@ public class SimlarCallState
 		return " SAS=" + mAuthenticationToken + (mAuthenticationTokenVerified ? " (verified)" : " (not verified)");
 	}
 
-	private String formatCodec()
+	private String formatQuality()
 	{
-		if (Util.isNullOrEmpty(mCodec)) {
+		if (!mQuality.isKnown()) {
 			return "";
 		}
 
-		return " Codec=" + mCodec;
-	}
-
-	private String formatIceState()
-	{
-		if (Util.isNullOrEmpty(mIceState)) {
-			return "";
-		}
-
-		return " IceState=" + mIceState;
-	}
-
-	private static String formatValue(final String name, final float value)
-	{
-		if (value <= 0) {
-			return "";
-		}
-
-		return " " + name + "=" + String.valueOf(value);
+		return " quality=" + mQuality;
 	}
 
 	@Override
@@ -239,8 +202,7 @@ public class SimlarCallState
 		}
 
 		return "[" + mLinphoneCallState.toString() + "] " + mDisplayName + formatPhotoId()
-				+ formatCallStatusMessageId() + formatEncryption() + formatIceState() + formatCodec()
-				+ formatValue("upload", mUpload) + formatValue("download", mDownload) + formatValue("quality", mQuality);
+				+ formatCallStatusMessageId() + formatEncryption() + formatQuality();
 	}
 
 	public String getDisplayName()
@@ -273,55 +235,14 @@ public class SimlarCallState
 		return mAuthenticationToken;
 	}
 
-	public String getUpload()
+	public boolean hasQuality()
 	{
-		return GUI_VALUE.format(mUpload);
-	}
-
-	public String getDownload()
-	{
-		return GUI_VALUE.format(mDownload);
-	}
-
-	public String getQuality()
-	{
-		return GUI_VALUE.format(mQuality);
+		return mQuality.isKnown();
 	}
 
 	public int getQualityDescription()
 	{
-		if (4 <= mQuality && mQuality <= 5) {
-			return R.string.call_activity_quality_good;
-		}
-
-		if (3 <= mQuality && mQuality < 4) {
-			return R.string.call_activity_quality_average;
-		}
-
-		if (2 <= mQuality && mQuality < 3) {
-			return R.string.call_activity_quality_poor;
-		}
-
-		if (1 <= mQuality && mQuality < 2) {
-			return R.string.call_activity_quality_very_poor;
-		}
-
-		if (0 <= mQuality && mQuality < 1) {
-			return R.string.call_activity_quality_unusable;
-		}
-
-		Log.e(LOGTAG, "unknown quality");
-		return R.string.call_activity_quality_unknown;
-	}
-
-	public String getCodec()
-	{
-		return mCodec;
-	}
-
-	public String getIceState()
-	{
-		return mIceState;
+		return mQuality.getDescription();
 	}
 
 	public boolean isAuthenticationTokenVerified()
@@ -376,19 +297,6 @@ public class SimlarCallState
 	public boolean hasErrorMessage()
 	{
 		return !isEmpty() && possibleErrorMessage(mLinphoneCallState) && mCallStatusMessageId > 0;
-	}
-
-	public boolean hasConnectionInfo()
-	{
-		if (mUpload < 0 || mDownload < 0 || mQuality < 0) {
-			return false;
-		}
-
-		if (Util.isNullOrEmpty(mCodec) || Util.isNullOrEmpty(mIceState)) {
-			return false;
-		}
-
-		return true;
 	}
 
 	public long getStartTime()

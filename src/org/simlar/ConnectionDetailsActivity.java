@@ -38,6 +38,10 @@ public class ConnectionDetailsActivity extends Activity
 	private TextView mTextViewDownload;
 	private TextView mTextViewIceState;
 	private TextView mTextViewCodec;
+	private TextView mTextViewJitter;
+	private TextView mTextViewPacketLoss;
+	private TextView mTextViewLatePackets;
+	private TextView mTextViewRoundTripDelay;
 
 	private class SimlarServiceCommunicatorConnectionDetails extends SimlarServiceCommunicator
 	{
@@ -49,13 +53,13 @@ public class ConnectionDetailsActivity extends Activity
 		@Override
 		void onBoundToSimlarService()
 		{
-			ConnectionDetailsActivity.this.onSimlarCallStateChanged();
+			ConnectionDetailsActivity.this.onCallConnectionDetailsChanged();
 		}
 
 		@Override
-		void onSimlarCallStateChanged()
+		void onCallConnectionDetailsChanged()
 		{
-			ConnectionDetailsActivity.this.onSimlarCallStateChanged();
+			ConnectionDetailsActivity.this.onCallConnectionDetailsChanged();
 		}
 	}
 
@@ -70,6 +74,10 @@ public class ConnectionDetailsActivity extends Activity
 		mTextViewDownload = (TextView) findViewById(R.id.textViewDownload);
 		mTextViewIceState = (TextView) findViewById(R.id.textViewIceState);
 		mTextViewCodec = (TextView) findViewById(R.id.textViewCodec);
+		mTextViewJitter = (TextView) findViewById(R.id.textViewJitter);
+		mTextViewPacketLoss = (TextView) findViewById(R.id.textViewPacketLoss);
+		mTextViewLatePackets = (TextView) findViewById(R.id.textViewLatePackets);
+		mTextViewRoundTripDelay = (TextView) findViewById(R.id.textViewRoundTripDelay);
 	}
 
 	@Override
@@ -94,30 +102,35 @@ public class ConnectionDetailsActivity extends Activity
 		super.onPause();
 	}
 
-	public void onSimlarCallStateChanged()
+	public void onCallConnectionDetailsChanged()
 	{
 		if (mCommunicator.getService() == null) {
 			Log.e(LOGTAG, "ERROR: onSimlarCallStateChanged but not bound to service");
 			return;
 		}
 
-		final SimlarCallState simlarCallState = mCommunicator.getService().getSimlarCallState();
+		final CallConnectionDetails callConnectionDetails = mCommunicator.getService().getCallConnectionDetails();
 
-		if (simlarCallState == null || simlarCallState.isEmpty()) {
-			Log.e(LOGTAG, "ERROR: onSimlarCallStateChanged simlarCallState null or empty");
+		if (callConnectionDetails == null) {
+			Log.e(LOGTAG, "ERROR: onCallConnectionDetailsChanged but callConnectionDetails null or empty");
 			return;
 		}
 
-		if (simlarCallState.isEndedCall()) {
+		if (callConnectionDetails.isEndedCall()) {
 			ConnectionDetailsActivity.this.finish();
 		}
 
-		if (simlarCallState.hasConnectionInfo()) {
-			mTextViewQuality.setText(getString(simlarCallState.getQualityDescription()));
-			mTextViewUpload.setText(simlarCallState.getUpload() + " " + getString(R.string.connection_details_activity_kbytes_per_second));
-			mTextViewDownload.setText(simlarCallState.getDownload() + " " + getString(R.string.connection_details_activity_kbytes_per_second));
-			mTextViewIceState.setText(simlarCallState.getIceState());
-			mTextViewCodec.setText(simlarCallState.getCodec());
+		if (callConnectionDetails.hasConnectionInfo()) {
+			mTextViewQuality.setText(getString(callConnectionDetails.getQualityDescription()));
+			mTextViewUpload.setText(callConnectionDetails.getUpload() + " " + getString(R.string.connection_details_activity_kbytes_per_second));
+			mTextViewDownload.setText(callConnectionDetails.getDownload() + " " + getString(R.string.connection_details_activity_kbytes_per_second));
+			mTextViewIceState.setText(callConnectionDetails.getIceState());
+			mTextViewCodec.setText(callConnectionDetails.getCodec());
+			mTextViewJitter.setText(callConnectionDetails.getJitter());
+			mTextViewPacketLoss.setText(callConnectionDetails.getPacketLoss() + " " + getString(R.string.connection_details_activity_percent));
+			mTextViewLatePackets.setText(callConnectionDetails.getLatePackets());
+			mTextViewRoundTripDelay
+					.setText(callConnectionDetails.getRoundTripDelay() + " " + getString(R.string.connection_details_activity_milli_seconds));
 		}
 	}
 }
