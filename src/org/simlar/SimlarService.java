@@ -708,10 +708,10 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	{
 		new AsyncTask<Void, Void, Map<String, ContactData>>() {
 			@Override
-			protected Map<String, ContactData> doInBackground(Void... params)
+			protected Map<String, ContactData> doInBackground(final Void... params)
 			{
 				Log.i(LOGTAG, "loading contacts from telephone book");
-				Map<String, ContactData> result = new HashMap<String, SimlarService.ContactData>();
+				final Map<String, ContactData> result = new HashMap<String, SimlarService.ContactData>();
 
 				final String[] projection = new String[] {
 						ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
@@ -770,13 +770,13 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		new AsyncTask<Set<String>, Void, Map<String, ContactStatus>>() {
 
 			@Override
-			protected Map<String, ContactStatus> doInBackground(Set<String>... params)
+			protected Map<String, ContactStatus> doInBackground(final Set<String>... params)
 			{
 				return GetContactsStatus.httpPostGetContactsStatus(params[0]);
 			}
 
 			@Override
-			protected void onPostExecute(Map<String, ContactStatus> result)
+			protected void onPostExecute(final Map<String, ContactStatus> result)
 			{
 				if (result == null) {
 					Log.i(LOGTAG, "getting contacts status failed");
@@ -816,7 +816,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 			return false;
 		}
 
-		ContactData cd = mContacts.get(number);
+		final ContactData cd = mContacts.get(number);
 		if (cd == null) {
 			mContacts.put(number, new ContactData(null, null, status, null));
 			return true;
@@ -838,7 +838,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 
 	public Set<FullContactData> getContacts()
 	{
-		Set<FullContactData> contacts = new HashSet<FullContactData>();
+		final Set<FullContactData> contacts = new HashSet<FullContactData>();
 		for (final Map.Entry<String, ContactData> entry : mContacts.entrySet()) {
 			if (entry.getValue().isRegistered()) {
 				contacts.add(new FullContactData(entry.getKey(), entry.getValue()));
