@@ -49,6 +49,7 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -111,7 +112,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	}
 
 	@Override
-	public IBinder onBind(final Intent arg0)
+	public IBinder onBind(final Intent intent)
 	{
 		Log.i(LOGTAG, "onBind");
 		return mBinder;
@@ -121,6 +122,13 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	public int onStartCommand(final Intent intent, final int flags, final int startId)
 	{
 		Log.i(LOGTAG, "onStartCommand intent=" + intent + " startId=" + startId);
+
+		Log.i(LOGTAG, "acquiring simlar wake lock");
+		acquireWakeLock();
+		acquireWifiLock();
+
+		// releasing wakelock of gcm's WakefulBroadcastReceiver if needed
+		WakefulBroadcastReceiver.completeWakefulIntent(intent);
 
 		// We want this service to continue running until it is explicitly stopped, so return sticky.
 		return START_STICKY;
@@ -451,9 +459,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 			mCallConnectionDetails = new CallConnectionDetails();
 
-			acquireWakeLock();
-			acquireWifiLock();
-
 			if (!mHasAudioFocus) {
 				// We acquire AUDIOFOCUS_GAIN_TRANSIENT instead of AUDIOFOCUS_GAIN because we want the music to resume after ringing or call
 				final AudioManager audioManger = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -479,10 +484,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		if (mSimlarCallState.isEndedCall()) {
 			notifySimlarStatusChanged(SimlarStatus.ONLINE);
-
-			releaseWakeLock();
-			releaseWifiLock();
-
 			mSoundEffectManager.stopAll();
 			mSoundEffectManager.setInCallMode(false);
 			if (mHasAudioFocus) {
