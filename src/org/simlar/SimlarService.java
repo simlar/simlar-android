@@ -499,6 +499,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			if (mCallConnectionDetails.updateEndedCall()) {
 				SimlarServiceBroadcast.sendCallConnectionDetailsChanged(this);
 			}
+
+			terminate();
 		}
 
 		ContactsProvider.getNameAndPhotoId(number, this, new ContactListener() {
