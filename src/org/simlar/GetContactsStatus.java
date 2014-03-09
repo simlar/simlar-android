@@ -45,12 +45,12 @@ public class GetContactsStatus
 		Log.i(LOGTAG, "httpPostGetContactsStatus requested");
 
 		try {
-			Map<String, String> parameters = new HashMap<String, String>();
+			final Map<String, String> parameters = new HashMap<String, String>();
 			parameters.put("login", PreferencesHelper.getMySimlarId());
 			parameters.put("password", PreferencesHelper.getPasswordHash());
 			parameters.put("contacts", TextUtils.join("|", contacts));
 
-			InputStream result = HttpsPost.post(URL_PATH, parameters);
+			final InputStream result = HttpsPost.post(URL_PATH, parameters);
 
 			if (result == null) {
 				return null;
@@ -81,7 +81,7 @@ public class GetContactsStatus
 
 	private static Map<String, ContactStatus> parseXml(InputStream inputStream) throws XmlPullParserException, IOException
 	{
-		XmlPullParser parser = Xml.newPullParser();
+		final XmlPullParser parser = Xml.newPullParser();
 		parser.setInput(inputStream, null);
 		parser.nextTag();
 
@@ -100,7 +100,7 @@ public class GetContactsStatus
 			return null;
 		}
 
-		Map<String, ContactStatus> parsedResult = new HashMap<String, ContactStatus>();
+		final Map<String, ContactStatus> parsedResult = new HashMap<String, ContactStatus>();
 		while (parser.next() != XmlPullParser.END_DOCUMENT) {
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
 				continue;
