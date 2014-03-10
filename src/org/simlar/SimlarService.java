@@ -715,9 +715,8 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 					}
 
 					if (hasPhotoId) {
-						Uri u = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, contactId);
-						u = Uri.withAppendedPath(u, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
-						photoUri = u.toString();
+						photoUri = Uri.withAppendedPath(ContentUris.withAppendedId(
+								ContactsContract.Contacts.CONTENT_URI, contactId), ContactsContract.Contacts.Photo.CONTENT_DIRECTORY).toString();
 					}
 
 					if (!result.containsKey(simlarNumber.getSimlarId())) {
