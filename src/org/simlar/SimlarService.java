@@ -801,7 +801,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		return contacts;
 	}
 
-	public FullContactData getContact(final String simlarId)
+	private FullContactData getContact(final String simlarId)
 	{
 		if (Util.isNullOrEmpty(simlarId) || !mContacts.containsKey(simlarId)) {
 			return new FullContactData(simlarId, "", "", ContactStatus.UNKNOWN, "");
