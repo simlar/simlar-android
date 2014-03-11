@@ -717,67 +717,19 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			@Override
 			protected Map<String, ContactData> doInBackground(final Void... params)
 			{
-				return ContactsProvider.loadContactsFromTelephonebook(SimlarService.this);
+				return ContactsProvider.loadContacts(SimlarService.this);
 			}
 
 			@Override
 			protected void onPostExecute(final Map<String, ContactData> result)
 			{
 				mContacts = result;
-				requestRegisteredContacts();
-			}
-		}.execute();
-	}
-
-	@SuppressWarnings("unchecked")
-	public void requestRegisteredContacts()
-	{
-		new AsyncTask<Set<String>, Void, Map<String, ContactStatus>>() {
-
-			@Override
-			protected Map<String, ContactStatus> doInBackground(final Set<String>... params)
-			{
-				return GetContactsStatus.httpPostGetContactsStatus(params[0]);
-			}
-
-			@Override
-			protected void onPostExecute(final Map<String, ContactStatus> result)
-			{
-				if (result == null) {
-					Log.i(LOGTAG, "getting contacts status failed");
-					notifySimlarStatusChanged(SimlarStatus.ERROR_LOADING_CONTACTS);
-					return;
-				}
-
-				for (final String simlarId : result.keySet()) {
-					updateContactData(simlarId, result.get(simlarId));
-				}
 
 				if (RegistrationState.RegistrationOk.equals(mLinphoneThread.getRegistrationState())) {
 					notifySimlarStatusChanged(SimlarStatus.ONLINE);
 				}
 			}
-		}.execute(mContacts.keySet());
-	}
-
-	void updateContactData(final String simlarId, final ContactStatus status)
-	{
-		if (Util.isNullOrEmpty(simlarId)) {
-			return;
-		}
-
-		final ContactData cd = mContacts.get(simlarId);
-		if (cd == null) {
-			Log.w(LOGTAG, "updateContactData: new simlerId=" + simlarId);
-			mContacts.put(simlarId, new ContactData(null, null, status, null));
-			return;
-		}
-
-		if (!status.isValid()) {
-			return;
-		}
-
-		cd.status = status;
+		}.execute();
 	}
 
 	public Set<FullContactData> getContacts()

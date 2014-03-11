@@ -36,7 +36,14 @@ public final class ContactsProvider
 {
 	private static final String LOGTAG = ContactsProvider.class.getSimpleName();
 
-	public static Map<String, ContactData> loadContactsFromTelephonebook(final Context context)
+	public static Map<String, ContactData> loadContacts(final Context context)
+	{
+		final Map<String, ContactData> contacts = loadContactsFromTelephonebook(context);
+		updateContactStatus(contacts);
+		return contacts;
+	}
+
+	private static Map<String, ContactData> loadContactsFromTelephonebook(final Context context)
 	{
 		Log.i(LOGTAG, "loading contacts from telephone book");
 		final Map<String, ContactData> result = new HashMap<String, ContactData>();
@@ -86,4 +93,23 @@ public final class ContactsProvider
 		return result;
 	}
 
+	private static void updateContactStatus(final Map<String, ContactData> contacts)
+	{
+		final Map<String, ContactStatus> statusMap = GetContactsStatus.httpPostGetContactsStatus(contacts.keySet());
+		Log.i(LOGTAG, "contact status received for " + statusMap.size() + " contacts");
+
+		for (final Map.Entry<String, ContactStatus> entry : statusMap.entrySet()) {
+			if (!contacts.containsKey(entry.getKey())) {
+				Log.e(LOGTAG, "received contact status " + entry.getValue() + " for unknown contact " + entry.getKey());
+				continue;
+			}
+
+			if (!entry.getValue().isValid()) {
+				Log.e(LOGTAG, "received invalid contact status " + entry.getValue() + " for contact " + entry.getKey());
+				continue;
+			}
+
+			contacts.get(entry.getKey()).status = entry.getValue();
+		}
+	}
 }
