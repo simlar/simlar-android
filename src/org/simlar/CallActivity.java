@@ -91,12 +91,6 @@ public final class CallActivity extends Activity implements SensorEventListener
 		{
 			CallActivity.this.onSimlarCallStateChanged();
 		}
-
-		@Override
-		void onServiceFinishes()
-		{
-			CallActivity.this.finish();
-		}
 	}
 
 	@Override
