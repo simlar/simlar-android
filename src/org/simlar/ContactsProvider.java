@@ -54,6 +54,12 @@ public final class ContactsProvider
 		{
 			return status.isRegistered();
 		}
+
+		@Override
+		public String toString()
+		{
+			return "ContactData [name=" + name + ", guiTelephoneNumber=" + guiTelephoneNumber + ", status=" + status + ", photoId=" + photoId + "]";
+		}
 	}
 
 	public static final class FullContactData extends ContactData
