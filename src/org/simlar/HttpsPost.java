@@ -49,7 +49,7 @@ public class HttpsPost
 
 	private static String createQueryStringForParameters(final Map<String, String> parameters)
 	{
-		StringBuilder parametersAsQueryString = new StringBuilder();
+		final StringBuilder parametersAsQueryString = new StringBuilder();
 		if (parameters != null) {
 			boolean firstParameter = true;
 
@@ -131,7 +131,7 @@ public class HttpsPost
 		}
 
 		try {
-			PrintWriter out = new PrintWriter(connection.getOutputStream());
+			final PrintWriter out = new PrintWriter(connection.getOutputStream());
 			out.print(HttpsPost.createQueryStringForParameters(parameters));
 			out.close();
 

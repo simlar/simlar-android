@@ -171,30 +171,6 @@ public class ContactsAdapter extends ArrayAdapter<FullContactData>
 		this.notifyDataSetChanged();
 	}
 
-	private FullContactData getContactBySimlarId(final String simlarId)
-	{
-		for (int i = 0; i < getCount(); ++i) {
-			final FullContactData contact = getItem(i);
-			if (contact.simlarId.equals(simlarId)) {
-				return contact;
-			}
-		}
-		return null;
-	}
-
-	void onPresenceStateChanged(final String simlarId, final boolean online)
-	{
-		final FullContactData contact = getContactBySimlarId(simlarId);
-		if (contact == null) {
-			if (mCommunicator.getService().getSimlarStatus() == SimlarStatus.ONLINE && !mCommunicator.getService().isGoingDown()) {
-				add(mCommunicator.getService().getContact(simlarId));
-			}
-		} else {
-			contact.status = online ? ContactStatus.ONLINE : ContactStatus.OFFLINE;
-			notifyDataSetChanged();
-		}
-	}
-
 	public void call(final int position)
 	{
 		mCommunicator.getService().call(getItem(position).simlarId);

@@ -140,11 +140,6 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		{
 			return status.isRegistered();
 		}
-
-		public boolean isOnline()
-		{
-			return status.isOnline();
-		}
 	}
 
 	public class FullContactData extends ContactData
@@ -557,25 +552,6 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	}
 
 	@Override
-	public void onPresenceStateChanged(final String number, final boolean online)
-	{
-		if (online) {
-			Log.i(LOGTAG, "onPresenceStateChanged online " + number);
-		}
-
-		// we assume here that we only get the presence state of registered users
-		if (updateContactData(number, online ? ContactStatus.ONLINE : ContactStatus.OFFLINE)) {
-			if (online) {
-				Log.i(LOGTAG, "notifyPresenceStateChanged online " + number);
-			} else {
-				Log.i(LOGTAG, "notifyPresenceStateChanged offline " + number);
-			}
-
-			SimlarServiceBroadcast.sendPresenceStateChanged(this, number, online);
-		}
-	}
-
-	@Override
 	public void onCallEncryptionChanged(final boolean encrypted, final String authenticationToken, final boolean authenticationTokenVerified)
 	{
 		if (!mSimlarCallState.updateCallEncryption(encrypted, authenticationToken, authenticationTokenVerified)) {
@@ -708,10 +684,10 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	{
 		new AsyncTask<Void, Void, Map<String, ContactData>>() {
 			@Override
-			protected Map<String, ContactData> doInBackground(Void... params)
+			protected Map<String, ContactData> doInBackground(final Void... params)
 			{
 				Log.i(LOGTAG, "loading contacts from telephone book");
-				Map<String, ContactData> result = new HashMap<String, SimlarService.ContactData>();
+				final Map<String, ContactData> result = new HashMap<String, SimlarService.ContactData>();
 
 				final String[] projection = new String[] {
 						ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
@@ -739,9 +715,8 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 					}
 
 					if (hasPhotoId) {
-						Uri u = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, contactId);
-						u = Uri.withAppendedPath(u, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
-						photoUri = u.toString();
+						photoUri = Uri.withAppendedPath(ContentUris.withAppendedId(
+								ContactsContract.Contacts.CONTENT_URI, contactId), ContactsContract.Contacts.Photo.CONTENT_DIRECTORY).toString();
 					}
 
 					if (!result.containsKey(simlarNumber.getSimlarId())) {
@@ -770,13 +745,13 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		new AsyncTask<Set<String>, Void, Map<String, ContactStatus>>() {
 
 			@Override
-			protected Map<String, ContactStatus> doInBackground(Set<String>... params)
+			protected Map<String, ContactStatus> doInBackground(final Set<String>... params)
 			{
 				return GetContactsStatus.httpPostGetContactsStatus(params[0]);
 			}
 
 			@Override
-			protected void onPostExecute(Map<String, ContactStatus> result)
+			protected void onPostExecute(final Map<String, ContactStatus> result)
 			{
 				if (result == null) {
 					Log.i(LOGTAG, "getting contacts status failed");
@@ -785,22 +760,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 				}
 
 				for (final String simlarId : result.keySet()) {
-					final ContactStatus status = result.get(simlarId);
-
-					if (!status.isRegistered()) {
-						updateContactData(simlarId, status);
-					} else {
-						onPresenceStateChanged(simlarId, status.isOnline());
-
-						// make sure to add friends in the gui thread
-						mHandler.post(new Runnable() {
-							@Override
-							public void run()
-							{
-								addLinphoneFriend(simlarId);
-							}
-						});
-					}
+					updateContactData(simlarId, result.get(simlarId));
 				}
 
 				if (RegistrationState.RegistrationOk.equals(mLinphoneThread.getRegistrationState())) {
@@ -810,35 +770,29 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		}.execute(mContacts.keySet());
 	}
 
-	boolean updateContactData(final String number, final ContactStatus status)
+	void updateContactData(final String simlarId, final ContactStatus status)
 	{
-		if (Util.isNullOrEmpty(number)) {
-			return false;
+		if (Util.isNullOrEmpty(simlarId)) {
+			return;
 		}
 
-		ContactData cd = mContacts.get(number);
+		final ContactData cd = mContacts.get(simlarId);
 		if (cd == null) {
-			mContacts.put(number, new ContactData(null, null, status, null));
-			return true;
+			Log.w(LOGTAG, "updateContactData: new simlerId=" + simlarId);
+			mContacts.put(simlarId, new ContactData(null, null, status, null));
+			return;
 		}
 
-		if (cd.status == status) {
-			return false;
+		if (!status.isValid()) {
+			return;
 		}
 
 		cd.status = status;
-		return true;
-	}
-
-	void addLinphoneFriend(final String number)
-	{
-		Log.d(LOGTAG, "adding linphone friend for presence watching: " + number);
-		mLinphoneThread.addFriend(number);
 	}
 
 	public Set<FullContactData> getContacts()
 	{
-		Set<FullContactData> contacts = new HashSet<FullContactData>();
+		final Set<FullContactData> contacts = new HashSet<FullContactData>();
 		for (final Map.Entry<String, ContactData> entry : mContacts.entrySet()) {
 			if (entry.getValue().isRegistered()) {
 				contacts.add(new FullContactData(entry.getKey(), entry.getValue()));

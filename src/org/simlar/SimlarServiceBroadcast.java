@@ -35,7 +35,6 @@ public class SimlarServiceBroadcast implements Serializable
 
 	public enum Type {
 		SIMLAR_STATUS,
-		PRESENCE_STATE,
 		SIMLAR_CALL_STATE,
 		CALL_CONNECTION_DETAILS,
 		SERVICE_FINISHES,
@@ -66,25 +65,6 @@ public class SimlarServiceBroadcast implements Serializable
 	public static void sendSimlarStatusChanged(final Context context)
 	{
 		new SimlarServiceBroadcast(Type.SIMLAR_STATUS, null).send(context);
-	}
-
-	public static class PresenceStateChanged implements Parameters
-	{
-		private static final long serialVersionUID = 2863651982137778543L;
-
-		public final String simlarId;
-		public final boolean online;
-
-		public PresenceStateChanged(final String simlarId, final boolean online)
-		{
-			this.simlarId = simlarId;
-			this.online = online;
-		}
-	}
-
-	public static void sendPresenceStateChanged(final Context context, final String simlarId, final boolean online)
-	{
-		new SimlarServiceBroadcast(Type.PRESENCE_STATE, new PresenceStateChanged(simlarId, online)).send(context);
 	}
 
 	public static void sendSimlarCallStateChanged(final Context context)

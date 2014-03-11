@@ -20,9 +20,6 @@
 
 package org.simlar;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.linphone.core.LinphoneAddress;
 import org.linphone.core.LinphoneCall;
 import org.linphone.core.LinphoneCallStats;
@@ -68,7 +65,6 @@ public class LinphoneThread
 		// NOTICE: the following members should only be used in the MAIN-THREAD
 		LinphoneHandlerListener mListener = null;
 		RegistrationState mRegistrationState = RegistrationState.RegistrationNone;
-		Set<String> mFriends = new HashSet<String>();
 		Volumes mVolumes = new Volumes();
 		Context mContext = null;
 
@@ -207,36 +203,6 @@ public class LinphoneThread
 					mLinphoneHandler.refreshRegisters();
 				}
 			});
-		}
-
-		public void addFriend(final String number)
-		{
-			if (mLinphoneThreadHandler == null) {
-				Log.e(LOGTAG, "handler is null, probably thread not started");
-				return;
-			}
-
-			if (Util.isNullOrEmpty(number)) {
-				Log.e(LOGTAG, "empty number aborting");
-				return;
-			}
-
-			if (number.equals(PreferencesHelper.getMySimlarIdOrEmptyString())) {
-				Log.i(LOGTAG, "not adding myself as a friend");
-				return;
-			}
-
-			if (RegistrationState.RegistrationOk.equals(mRegistrationState)) {
-				mLinphoneThreadHandler.post(new Runnable() {
-					@Override
-					public void run()
-					{
-						mLinphoneHandler.addFriend(number);
-					}
-				});
-			} else {
-				mFriends.add(number);
-			}
 		}
 
 		public void call(final String number)
@@ -408,19 +374,6 @@ public class LinphoneThread
 					mRegistrationState = state;
 
 					mListener.onRegistrationStateChanged(state);
-
-					if (RegistrationState.RegistrationOk.equals(state)) {
-						for (final String friend : mFriends) {
-							mLinphoneThreadHandler.post(new Runnable() {
-								@Override
-								public void run()
-								{
-									mLinphoneHandler.addFriend(friend);
-								}
-							});
-						}
-						mFriends.clear();
-					}
 				}
 			});
 
@@ -504,15 +457,7 @@ public class LinphoneThread
 		{
 			// LinphoneFriend is mutable => use it only in the calling thread
 
-			final String number = lf.getAddress().getUserName();
-			Log.w(LOGTAG, "[" + number + "] wants to see your presence status => always accepting");
-			this.addFriend(number);
-
-//		// old style from example which may not be thread-safe
-//		Log.i(LOGTAG, "newSubscriptionRequest friend=" + lf + " url=" + url);
-//		Log.w(LOGTAG, "[" + lf.getAddress().getUserName() + "] wants to see your presence status => always accepting");
-//		mLinphoneHandler.addFriend(lf);
-//		Log.w(LOGTAG, "[" + lf.getAddress().getUserName() + "] accepted to see your presence status");
+			Log.w(LOGTAG, "[" + lf.getAddress().getUserName() + "] wants to see your presence status => always accepting");
 		}
 
 		@Override
@@ -521,21 +466,8 @@ public class LinphoneThread
 			// LinphoneFriend is mutable => use it only in the calling thread
 			// OnlineStatus is immutable
 
-			if (LinphoneHandler.PRESENCE_DISABLED) {
-				Log.w(LOGTAG, "notifyPresenceReceived although presence is disabled");
-				return;
-			}
-
-			final String userName = lf.getAddress().getUserName();
-			final boolean online = isOnline(lf.getPresenceModel());
-
-			mMainThreadHandler.post(new Runnable() {
-				@Override
-				public void run()
-				{
-					mListener.onPresenceStateChanged(userName, online);
-				}
-			});
+			Log.w(LOGTAG,
+					"presence received: username=" + lf.getAddress().getUserName() + " online=" + Boolean.toString(isOnline(lf.getPresenceModel())));
 		}
 
 		@Override
@@ -682,11 +614,6 @@ public class LinphoneThread
 	public void refreshRegisters()
 	{
 		mImpl.refreshRegisters();
-	}
-
-	public void addFriend(final String number)
-	{
-		mImpl.addFriend(number);
 	}
 
 	public void call(final String number)

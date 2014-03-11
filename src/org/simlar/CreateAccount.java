@@ -125,7 +125,7 @@ public class CreateAccount
 	{
 		Log.i(LOGTAG, "httpPostRequest: " + telephoneNumber);
 
-		Map<String, String> parameters = new HashMap<String, String>();
+		final Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put("command", "request");
 		parameters.put("telephoneNumber", telephoneNumber);
 		parameters.put("smsText", smsText);
@@ -137,7 +137,7 @@ public class CreateAccount
 	{
 		Log.i(LOGTAG, "httpPostConfirm: simlarId" + simlarId + " registrationCode= " + registrationCode);
 
-		Map<String, String> parameters = new HashMap<String, String>();
+		final Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put("command", "confirm");
 		parameters.put("simlarId", simlarId);
 		parameters.put("registrationCode", registrationCode);
@@ -148,7 +148,7 @@ public class CreateAccount
 	private static Result httpPost(final Map<String, String> parameters,
 			final String responseAttribute1, final String responseAttribute2)
 	{
-		InputStream result = HttpsPost.post(URL_PATH, parameters);
+		final InputStream result = HttpsPost.post(URL_PATH, parameters);
 
 		if (result == null) {
 			return null;
@@ -172,10 +172,10 @@ public class CreateAccount
 		return parsedResult;
 	}
 
-	private static Result parseXml(InputStream inputStream, final String attribute1, final String attribute2)
+	private static Result parseXml(final InputStream inputStream, final String attribute1, final String attribute2)
 			throws XmlPullParserException, IOException
 	{
-		XmlPullParser parser = Xml.newPullParser();
+		final XmlPullParser parser = Xml.newPullParser();
 		parser.setInput(inputStream, null);
 		parser.nextTag();
 
