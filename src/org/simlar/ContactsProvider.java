@@ -23,8 +23,6 @@ package org.simlar;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.simlar.SimlarService.ContactData;
-
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
@@ -35,6 +33,55 @@ import android.util.Log;
 public final class ContactsProvider
 {
 	private static final String LOGTAG = ContactsProvider.class.getSimpleName();
+
+	public static class ContactData
+	{
+		public final String name;
+		public final String guiTelephoneNumber;
+
+		public ContactStatus status;
+		public final String photoId;
+
+		public ContactData(final String name, final String guiTelephoneNumber, final ContactStatus status, final String photoId)
+		{
+			this.name = name;
+			this.guiTelephoneNumber = guiTelephoneNumber;
+			this.status = status;
+			this.photoId = photoId;
+		}
+
+		public boolean isRegistered()
+		{
+			return status.isRegistered();
+		}
+	}
+
+	public static final class FullContactData extends ContactData
+	{
+		public final String simlarId;
+
+		public FullContactData(final String simlarId, final String name, final String guiTelephoneNumber, final ContactStatus status,
+				final String photoId)
+		{
+			super(name, guiTelephoneNumber, status, photoId);
+			this.simlarId = simlarId;
+		}
+
+		public FullContactData(final String simlarId, final ContactData cd)
+		{
+			super(cd.name, cd.guiTelephoneNumber, cd.status, cd.photoId);
+			this.simlarId = simlarId;
+		}
+
+		public String getNameOrNumber()
+		{
+			if (Util.isNullOrEmpty(name)) {
+				return simlarId;
+			}
+
+			return name;
+		}
+	}
 
 	public static Map<String, ContactData> loadContacts(final Context context)
 	{

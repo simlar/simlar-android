@@ -25,7 +25,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
-import org.simlar.SimlarService.FullContactData;
+import org.simlar.ContactsProvider.FullContactData;
 
 import android.content.Context;
 import android.os.Build;
