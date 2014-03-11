@@ -46,23 +46,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	ContactsAdapter mAdapter = null;
 	ContactsListFragment mContactList = null;
 
-	final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorContacts();
-
-	private final class SimlarServiceCommunicatorContacts extends SimlarServiceCommunicator
-	{
-		public SimlarServiceCommunicatorContacts()
-		{
-			super(LOGTAG);
-		}
-
-		@Override
-		void onServiceFinishes()
-		{
-			MainActivity.this.finish();
-		}
-	}
-
-	public final class ContactsListFragment extends android.support.v4.app.ListFragment
+	public static final class ContactsListFragment extends android.support.v4.app.ListFragment
 	{
 		@Override
 		public void onActivityCreated(final Bundle savedInstanceState)
@@ -93,7 +77,9 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 				return;
 			}
 
-			mCommunicator.getService().call(simlarId);
+			Log.i(LOGTAG, "starting CallActivity ignoring simlarId=" + simlarId);
+			startActivity(new Intent(getActivity(), CallActivity.class)
+					.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
 		}
 	}
 
@@ -149,8 +135,6 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 			return;
 		}
 
-		mCommunicator.startServiceAndRegister(this, MainActivity.class);
-
 		if (!PreferencesHelper.readPrefencesFromFile(this)) {
 			Log.i(LOGTAG, "we are not registered yet");
 			return;
@@ -165,9 +149,6 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	protected void onPause()
 	{
 		Log.i(LOGTAG, "onPause");
-
-		mCommunicator.unregister(this);
-
 		super.onPause();
 	}
 
@@ -252,7 +233,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	private void deleteAccountAndQuit()
 	{
 		PreferencesHelper.resetPreferencesFile(this);
-		mCommunicator.getService().terminate();
+		finish();
 	}
 
 	private void show_about()
@@ -263,7 +244,6 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	private void quit()
 	{
 		Log.i(LOGTAG, "quit");
-		mCommunicator.getService().terminate();
-		Log.i(LOGTAG, "quit ended");
+		finish();
 	}
 }
