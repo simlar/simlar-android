@@ -45,6 +45,8 @@ public final class CallActivity extends Activity implements SensorEventListener
 {
 	static final String LOGTAG = CallActivity.class.getSimpleName();
 
+	public static final String INTENT_EXTRA_SIMLAR_ID = "simlarId";
+
 	private static final float PROXIMITY_DISTANCE_THRESHOLD = 4.0f;
 
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCall();
@@ -138,6 +140,12 @@ public final class CallActivity extends Activity implements SensorEventListener
 		mLayoutConnectionQuality.setVisibility(View.INVISIBLE);
 		mLayoutAuthenticationToken.setVisibility(View.INVISIBLE);
 		mLayoutUnencryptedCall.setVisibility(View.GONE);
+
+		final String simlarIdToCall = getIntent().getStringExtra(INTENT_EXTRA_SIMLAR_ID);
+		getIntent().removeExtra(INTENT_EXTRA_SIMLAR_ID);
+		if (!Util.isNullOrEmpty(simlarIdToCall)) {
+			mCommunicator.startServiceAndRegister(this, CallActivity.class, simlarIdToCall);
+		}
 	}
 
 	@Override
