@@ -63,7 +63,7 @@ public class CreateAccountActivity extends Activity
 	private int mSecondsToStillWaitForSms = 0;
 	private final Handler mHandler = new Handler();
 
-	private BroadcastReceiver mSmsReceiver = null;
+	private final BroadcastReceiver mSmsReceiver = new SmsReceicer();
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCreateAccount();
 
 	private class SimlarServiceCommunicatorCreateAccount extends SimlarServiceCommunicator
@@ -96,6 +96,34 @@ public class CreateAccountActivity extends Activity
 			Log.i(LOGTAG, "onServiceFinishes");
 			setResult(RESULT_OK);
 			finish();
+		}
+	}
+
+	private class SmsReceicer extends BroadcastReceiver
+	{
+		public SmsReceicer()
+		{
+			super();
+		}
+
+		@Override
+		public void onReceive(final Context context, final Intent intent)
+		{
+			if (intent == null) {
+				return;
+			}
+
+			final Bundle extras = intent.getExtras();
+			if (extras == null) {
+				return;
+			}
+
+			final Object[] pdus = (Object[]) extras.get("pdus");
+			for (int i = 0; i < pdus.length; i++)
+			{
+				final SmsMessage sms = SmsMessage.createFromPdu((byte[]) pdus[i]);
+				onSmsReceived(sms.getOriginatingAddress(), sms.getMessageBody().toString());
+			}
 		}
 	}
 
@@ -155,28 +183,6 @@ public class CreateAccountActivity extends Activity
 			{
 			}
 		});
-
-		mSmsReceiver = new BroadcastReceiver() {
-			@Override
-			public void onReceive(final Context context, final Intent intent)
-			{
-				if (intent == null) {
-					return;
-				}
-
-				final Bundle extras = intent.getExtras();
-				if (extras == null) {
-					return;
-				}
-
-				final Object[] pdus = (Object[]) extras.get("pdus");
-				for (int i = 0; i < pdus.length; i++)
-				{
-					final SmsMessage sms = SmsMessage.createFromPdu((byte[]) pdus[i]);
-					onSmsReceived(sms.getOriginatingAddress(), sms.getMessageBody().toString());
-				}
-			}
-		};
 
 		if (PreferencesHelper.getCreateAccountStatus() == CreateAccountStatus.WAITING_FOR_SMS) {
 			onWaitingForSmsTimedOut();
