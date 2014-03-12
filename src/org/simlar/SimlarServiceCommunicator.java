@@ -117,14 +117,6 @@ public class SimlarServiceCommunicator
 				onServiceFinishes();
 				return;
 			}
-			case TEST_REGISTRATION_FAILED: {
-				onTestRegistrationFailed();
-				return;
-			}
-			case TEST_REGISTRATION_SUCCESS: {
-				onTestRegistrationSuccess();
-				return;
-			}
 			default:
 				Log.e(mLogtag, "Error in onReceive: unknown type");
 				return;
@@ -187,14 +179,6 @@ public class SimlarServiceCommunicator
 	}
 
 	void onServiceFinishes()
-	{
-	}
-
-	void onTestRegistrationFailed()
-	{
-	}
-
-	void onTestRegistrationSuccess()
 	{
 	}
 

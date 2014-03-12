@@ -30,7 +30,6 @@
 
     <string name="notification_simlar_status_unknown">%1$s unknown status</string>
     <string name="notification_simlar_status_offline">%1$s offline</string>
-    <string name="notification_simlar_status_creating_account">creating account</string>
     <string name="notification_simlar_status_connecting">%1$s connecting</string>
     <string name="notification_simlar_status_online">%1$s online</string>
     <string name="notification_simlar_status_error">%1$s registration failed</string>

@@ -37,9 +37,7 @@ public final class SimlarServiceBroadcast implements Serializable
 		SIMLAR_STATUS,
 		SIMLAR_CALL_STATE,
 		CALL_CONNECTION_DETAILS,
-		SERVICE_FINISHES,
-		TEST_REGISTRATION_SUCCESS,
-		TEST_REGISTRATION_FAILED
+		SERVICE_FINISHES
 	}
 
 	public final Type type;
@@ -80,15 +78,5 @@ public final class SimlarServiceBroadcast implements Serializable
 	public static void sendServiceFinishes(final Context context)
 	{
 		new SimlarServiceBroadcast(Type.SERVICE_FINISHES, null).send(context);
-	}
-
-	public static void sendTestRegistrationSuccess(final Context context)
-	{
-		new SimlarServiceBroadcast(Type.TEST_REGISTRATION_SUCCESS, null).send(context);
-	}
-
-	public static void sendTestRegistrationFailed(final Context context)
-	{
-		new SimlarServiceBroadcast(Type.TEST_REGISTRATION_FAILED, null).send(context);
 	}
 }

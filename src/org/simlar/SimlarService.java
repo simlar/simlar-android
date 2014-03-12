@@ -68,7 +68,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private WifiLock mWifiLock = null;
 	private boolean mGoingDown = false;
 	private boolean mTerminatePrivateAlreadyCalled = false;
-	private boolean mCreatingAccount = false;
 	private Class<?> mNotificationActivity = null;
 	private VibratorManager mVibratorManager = null;
 	private SoundEffectManager mSoundEffectManager = null;
@@ -149,7 +148,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mWifiLock = ((WifiManager) this.getSystemService(Context.WIFI_SERVICE))
 				.createWifiLock(WifiManager.WIFI_MODE_FULL, "SimlarWifiLock");
 
-		startForeground(NOTIFICATION_ID, createNotification(SimlarStatus.OFFLINE));
+		startForeground(NOTIFICATION_ID, createNotification());
 
 		mLinphoneThread = new LinphoneThread(this, this);
 
@@ -183,31 +182,31 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mNotificationActivity = activity;
 
 		final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		nm.notify(NOTIFICATION_ID, createNotification(mSimlarStatus));
+		nm.notify(NOTIFICATION_ID, createNotification());
 	}
 
-	Notification createNotification(final SimlarStatus status)
+	Notification createNotification()
 	{
-		String text = null;
-
-		if (mNotificationActivity == null || (status != SimlarStatus.ONGOING_CALL && !mCreatingAccount)) {
-			mNotificationActivity = MainActivity.class;
+		if (mNotificationActivity == null) {
+			if (mSimlarStatus == SimlarStatus.ONGOING_CALL) {
+				if (mSimlarCallState.isRinging()) {
+					mNotificationActivity = RingingActivity.class;
+				} else {
+					mNotificationActivity = CallActivity.class;
+				}
+			} else {
+				mNotificationActivity = MainActivity.class;
+			}
+			Log.i(LOGTAG, "no activity registered based on mSimlarStatus=" + mSimlarStatus + " we now take: " + mNotificationActivity.getSimpleName());
 		}
 
 		final PendingIntent activity = PendingIntent.getActivity(this, 0,
 				new Intent(this, mNotificationActivity).addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED), 0);
 
-		if (mCreatingAccount) {
-			text = getString(R.string.notification_simlar_status_creating_account);
-			if (!Util.isNullOrEmpty(PreferencesHelper.getMySimlarIdOrEmptyString())) {
-				text += ": " + String.format(getString(status.getNotificationTextId()), PreferencesHelper.getMySimlarIdOrEmptyString());
-			}
-		} else {
-			text = String.format(getString(status.getNotificationTextId()), PreferencesHelper.getMySimlarIdOrEmptyString());
-		}
+		final String text = String.format(getString(mSimlarStatus.getNotificationTextId()), PreferencesHelper.getMySimlarIdOrEmptyString());
 
 		final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
-		notificationBuilder.setSmallIcon(status.getNotificationIcon());
+		notificationBuilder.setSmallIcon(mSimlarStatus.getNotificationIcon());
 		notificationBuilder.setLargeIcon(mSimlarCallState.getContactPhotoBitmap(this, R.drawable.app_logo));
 		notificationBuilder.setContentTitle(getString(R.string.app_name));
 		notificationBuilder.setContentText(text);
@@ -222,13 +221,12 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	{
 		notifySimlarStatusChanged(SimlarStatus.OFFLINE);
 
-		if (PreferencesHelper.readPrefencesFromFile(this)) {
-			connect();
-		} else {
-			/// TODO remove this
-			mCreatingAccount = true;
-			notifySimlarStatusChanged(mSimlarStatus);
+		if (!PreferencesHelper.readPrefencesFromFile(this)) {
+			Log.e(LOGTAG, "failed to initialize credentials");
+			return;
 		}
+
+		connect();
 	}
 
 	public void connect()
@@ -356,21 +354,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		final SimlarStatus status = SimlarStatus.fromRegistrationState(state);
 
-		if (mCreatingAccount) {
-			if (status.isRegistrationAtSipServerFailed()) {
-				Log.i(LOGTAG, "creating account: registration failed");
-				//mLinphoneThread.unregister();
-				SimlarServiceBroadcast.sendTestRegistrationFailed(this);
-			}
-
-			if (status.isConnectedToSipServer()) {
-				Log.i(LOGTAG, "creating account: registration succes");
-				mCreatingAccount = false;
-
-				SimlarServiceBroadcast.sendTestRegistrationSuccess(this);
-			}
-		}
-
 		if (mGoingDown && !status.isConnectedToSipServer()) {
 			mHandler.post(new Runnable() {
 				@Override
@@ -388,10 +371,10 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	{
 		Log.i(LOGTAG, "notifySimlarStatusChanged: " + status);
 
-		final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		nm.notify(NOTIFICATION_ID, createNotification(status));
-
 		mSimlarStatus = status;
+
+		final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		nm.notify(NOTIFICATION_ID, createNotification());
 
 		SimlarServiceBroadcast.sendSimlarStatusChanged(this);
 	}
@@ -506,7 +489,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				mSimlarCallState.updateContactNameAndImage(name, photoId);
 
 				final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-				nm.notify(NOTIFICATION_ID, createNotification(getSimlarStatus()));
+				nm.notify(NOTIFICATION_ID, createNotification());
 
 				SimlarServiceBroadcast.sendSimlarCallStateChanged(SimlarService.this);
 			}
