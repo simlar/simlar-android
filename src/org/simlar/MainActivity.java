@@ -128,6 +128,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	private void startAccountCreation()
 	{
 		startActivity(new Intent(this, VerifyNumberActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+		finish();
 	}
 
 	@Override

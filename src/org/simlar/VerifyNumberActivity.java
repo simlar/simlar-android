@@ -265,12 +265,7 @@ public final class VerifyNumberActivity extends Activity
 		mProgressDialog.setMessage(getString(R.string.progress_finishing));
 		mProgressDialog.show();
 		mCommunicator.getService().terminate();
-	}
 
-	@Override
-	public void onBackPressed()
-	{
-		// prevent switch to MainActivity
-		moveTaskToBack(true);
+		finish();
 	}
 }
