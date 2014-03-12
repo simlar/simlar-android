@@ -99,6 +99,34 @@ public final class CreateAccountActivity extends Activity
 		}
 	}
 
+	private final class EditRegistrationCodeListener implements TextWatcher
+	{
+		public EditRegistrationCodeListener()
+		{
+			super();
+		}
+
+		@Override
+		public void onTextChanged(final CharSequence s, final int start, final int before, final int count)
+		{
+			if (s.length() == 6) {
+				mButtonConfirm.setEnabled(true);
+			} else {
+				mButtonConfirm.setEnabled(false);
+			}
+		}
+
+		@Override
+		public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after)
+		{
+		}
+
+		@Override
+		public void afterTextChanged(final Editable s)
+		{
+		}
+	}
+
 	private final class SmsReceicer extends BroadcastReceiver
 	{
 		public SmsReceicer()
@@ -161,28 +189,7 @@ public final class CreateAccountActivity extends Activity
 		mButtonCancel = (Button) findViewById(R.id.buttonCancel);
 		mButtonCancel.setVisibility(View.GONE);
 
-		mEditRegistrationCode.addTextChangedListener(new TextWatcher()
-		{
-			@Override
-			public void onTextChanged(final CharSequence s, final int start, final int before, final int count)
-			{
-				if (s.length() == 6) {
-					mButtonConfirm.setEnabled(true);
-				} else {
-					mButtonConfirm.setEnabled(false);
-				}
-			}
-
-			@Override
-			public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after)
-			{
-			}
-
-			@Override
-			public void afterTextChanged(final Editable s)
-			{
-			}
-		});
+		mEditRegistrationCode.addTextChangedListener(new EditRegistrationCodeListener());
 
 		if (PreferencesHelper.getCreateAccountStatus() == CreateAccountStatus.WAITING_FOR_SMS) {
 			onWaitingForSmsTimedOut();
