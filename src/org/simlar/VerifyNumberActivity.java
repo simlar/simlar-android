@@ -42,7 +42,7 @@ public class VerifyNumberActivity extends Activity
 
 	ProgressDialog mProgressDialog = null;
 
-	private SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCall();
+	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCall();
 
 	private class SimlarServiceCommunicatorCall extends SimlarServiceCommunicator
 	{
@@ -65,7 +65,7 @@ public class VerifyNumberActivity extends Activity
 	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
+	protected void onCreate(final Bundle savedInstanceState)
 	{
 		Log.i(LOGTAG, "onCreate");
 		super.onCreate(savedInstanceState);
@@ -80,12 +80,12 @@ public class VerifyNumberActivity extends Activity
 		mProgressDialog.setCancelable(false);
 
 		if (!Util.isNullOrEmpty(number)) {
-			EditText editNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
+			final EditText editNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
 			editNumber.setText(number);
 		}
 
 		//Country Code Selector
-		ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item);
+		final ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			adapter.addAll(SimlarNumber.getSupportedCountryCodes());
 		} else {
@@ -95,13 +95,13 @@ public class VerifyNumberActivity extends Activity
 		}
 		adapter.sort(new Comparator<Integer>() {
 			@Override
-			public int compare(Integer lhs, Integer rhs)
+			public int compare(final Integer lhs, final Integer rhs)
 			{
 				return lhs.compareTo(rhs);
 			}
 		});
 
-		Spinner spinner = (Spinner) findViewById(R.id.spinnerCountryCodes);
+		final Spinner spinner = (Spinner) findViewById(R.id.spinnerCountryCodes);
 		spinner.setAdapter(adapter);
 
 		Log.i(LOGTAG, "proposing country code: " + regionCode);
@@ -111,7 +111,7 @@ public class VerifyNumberActivity extends Activity
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
+	public boolean onCreateOptionsMenu(final Menu menu)
 	{
 		return true;
 	}
@@ -138,7 +138,7 @@ public class VerifyNumberActivity extends Activity
 	}
 
 	@SuppressWarnings("unused")
-	public void createAccount(View view)
+	public void createAccount(final View view)
 	{
 		final Spinner spinner = (Spinner) findViewById(R.id.spinnerCountryCodes);
 		final EditText editNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
@@ -166,7 +166,7 @@ public class VerifyNumberActivity extends Activity
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	protected void onActivityResult(final int requestCode, final int resultCode, final Intent data)
 	{
 		Log.i(LOGTAG, "onActivityResult requestCode=" + requestCode + " resultCode=" + resultCode);
 		if (requestCode == RESULT_CREATE_ACCOUNT_ACTIVITY) {
@@ -178,7 +178,7 @@ public class VerifyNumberActivity extends Activity
 	}
 
 	@SuppressWarnings("unused")
-	public void cancelAccountCreation(View view)
+	public void cancelAccountCreation(final View view)
 	{
 		mProgressDialog.setMessage(getString(R.string.progress_finishing));
 		mProgressDialog.show();
