@@ -25,12 +25,15 @@ import java.util.Comparator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -110,6 +113,27 @@ public final class VerifyNumberActivity extends Activity
 		mEditNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
 		if (!Util.isNullOrEmpty(number)) {
 			mEditNumber.setText(number);
+		} else {
+			new Handler().postDelayed(new Runnable() {
+				@Override
+				public void run()
+				{
+					showSoftInputForEditNumber();
+				}
+			}, 100);
+		}
+	}
+
+	void showSoftInputForEditNumber()
+	{
+		Log.e(LOGTAG, "no number");
+		mEditNumber.requestFocus();
+		if (((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
+				.showSoftInput(mEditNumber, InputMethodManager.SHOW_IMPLICIT))
+		{
+			Log.w(LOGTAG, "showSoftInput success");
+		} else {
+			Log.w(LOGTAG, "showSoftInput failed");
 		}
 	}
 
