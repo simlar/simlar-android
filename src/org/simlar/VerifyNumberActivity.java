@@ -41,6 +41,8 @@ public class VerifyNumberActivity extends Activity
 	private static final int RESULT_CREATE_ACCOUNT_ACTIVITY = 0;
 
 	ProgressDialog mProgressDialog = null;
+	private Spinner mSpinner;
+	private EditText mEditNumber;
 
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCall();
 
@@ -79,9 +81,9 @@ public class VerifyNumberActivity extends Activity
 		mProgressDialog.setIndeterminate(true);
 		mProgressDialog.setCancelable(false);
 
+		mEditNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
 		if (!Util.isNullOrEmpty(number)) {
-			final EditText editNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
-			editNumber.setText(number);
+			mEditNumber.setText(number);
 		}
 
 		//Country Code Selector
@@ -101,12 +103,12 @@ public class VerifyNumberActivity extends Activity
 			}
 		});
 
-		final Spinner spinner = (Spinner) findViewById(R.id.spinnerCountryCodes);
-		spinner.setAdapter(adapter);
+		mSpinner = (Spinner) findViewById(R.id.spinnerCountryCodes);
+		mSpinner.setAdapter(adapter);
 
 		Log.i(LOGTAG, "proposing country code: " + regionCode);
 		if (regionCode.intValue() > 0) {
-			spinner.setSelection(adapter.getPosition(regionCode));
+			mSpinner.setSelection(adapter.getPosition(regionCode));
 		}
 	}
 
@@ -140,17 +142,14 @@ public class VerifyNumberActivity extends Activity
 	@SuppressWarnings("unused")
 	public void createAccount(final View view)
 	{
-		final Spinner spinner = (Spinner) findViewById(R.id.spinnerCountryCodes);
-		final EditText editNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
-
-		final Integer countryCallingCode = (Integer) spinner.getSelectedItem();
+		final Integer countryCallingCode = (Integer) mSpinner.getSelectedItem();
 		if (countryCallingCode == null) {
 			Log.e(LOGTAG, "createAccount no country code => aborting");
 			return;
 		}
 		SimlarNumber.setDefaultRegion(countryCallingCode.intValue());
 
-		final String number = editNumber.getText().toString();
+		final String number = mEditNumber.getText().toString();
 		if (Util.isNullOrEmpty(number)) {
 			(new AlertDialog.Builder(this))
 					.setTitle(R.string.verify_number_activity_alert_no_telephone_number_title)
