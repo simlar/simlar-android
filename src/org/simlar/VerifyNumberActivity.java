@@ -81,11 +81,6 @@ public class VerifyNumberActivity extends Activity
 		mProgressDialog.setIndeterminate(true);
 		mProgressDialog.setCancelable(false);
 
-		mEditNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
-		if (!Util.isNullOrEmpty(number)) {
-			mEditNumber.setText(number);
-		}
-
 		//Country Code Selector
 		final ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -109,6 +104,12 @@ public class VerifyNumberActivity extends Activity
 		Log.i(LOGTAG, "proposing country code: " + regionCode);
 		if (regionCode.intValue() > 0) {
 			mSpinner.setSelection(adapter.getPosition(regionCode));
+		}
+
+		// telephone number
+		mEditNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
+		if (!Util.isNullOrEmpty(number)) {
+			mEditNumber.setText(number);
 		}
 	}
 
