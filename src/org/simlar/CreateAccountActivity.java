@@ -435,7 +435,6 @@ public class CreateAccountActivity extends Activity
 	@Override
 	public void onBackPressed()
 	{
-		// prevent switch to VerifyNumberActivity
-		//moveTaskToBack(true);
+		// prevent back key from doing anything
 	}
 }
