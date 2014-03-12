@@ -225,9 +225,9 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		if (PreferencesHelper.readPrefencesFromFile(this)) {
 			connect();
 		} else {
+			/// TODO remove this
 			mCreatingAccount = true;
 			notifySimlarStatusChanged(mSimlarStatus);
-			startActivity(new Intent(this, VerifyNumberActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
 		}
 	}
 

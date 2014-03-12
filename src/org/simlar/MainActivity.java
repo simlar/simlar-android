@@ -125,6 +125,11 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 		});
 	}
 
+	private void startAccountCreation()
+	{
+		startActivity(new Intent(this, VerifyNumberActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+	}
+
 	@Override
 	protected void onResume()
 	{
@@ -136,7 +141,8 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 		}
 
 		if (!PreferencesHelper.readPrefencesFromFile(this)) {
-			Log.i(LOGTAG, "we are not registered yet");
+			Log.i(LOGTAG, "as we are not registered yet => creating account");
+			startAccountCreation();
 			return;
 		}
 
