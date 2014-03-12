@@ -24,7 +24,6 @@ import java.util.Comparator;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -45,10 +44,9 @@ import android.widget.Spinner;
 
 public final class VerifyNumberActivity extends Activity
 {
-	static final String LOGTAG = VerifyNumberActivity.class.getSimpleName();
+	private static final String LOGTAG = VerifyNumberActivity.class.getSimpleName();
 	private static final int RESULT_CREATE_ACCOUNT_ACTIVITY = 0;
 
-	ProgressDialog mProgressDialog = null;
 	private Spinner mSpinner;
 	private EditText mEditNumber;
 	private CheckBox mCheckBox;
@@ -78,28 +76,6 @@ public final class VerifyNumberActivity extends Activity
 		}
 	}
 
-	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCall();
-
-	private final class SimlarServiceCommunicatorCall extends SimlarServiceCommunicator
-	{
-		public SimlarServiceCommunicatorCall()
-		{
-			super(LOGTAG);
-		}
-
-		@Override
-		void onServiceFinishes()
-		{
-			Log.i(LOGTAG, "onServiceFinishes");
-
-			mProgressDialog.dismiss();
-
-			// prevent switch to MainActivity but finish
-			VerifyNumberActivity.this.moveTaskToBack(true);
-			VerifyNumberActivity.this.finish();
-		}
-	}
-
 	@Override
 	protected void onCreate(final Bundle savedInstanceState)
 	{
@@ -109,11 +85,6 @@ public final class VerifyNumberActivity extends Activity
 
 		final Integer regionCode = Integer.valueOf(SimlarNumber.readRegionCodeFromSimCardOrConfiguration(this));
 		final String number = SimlarNumber.readLocalPhoneNumberFromSimCard(this);
-
-		mProgressDialog = new ProgressDialog(this);
-		mProgressDialog.setMessage(getString(R.string.progress_finishing));
-		mProgressDialog.setIndeterminate(true);
-		mProgressDialog.setCancelable(false);
 
 		//Country Code Selector
 		final ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item);
@@ -188,7 +159,6 @@ public final class VerifyNumberActivity extends Activity
 		Log.i(LOGTAG, "onResume ");
 		super.onResume();
 
-		mCommunicator.register(this, VerifyNumberActivity.class);
 		if (PreferencesHelper.getCreateAccountStatus() == CreateAccountStatus.WAITING_FOR_SMS) {
 			Log.i(LOGTAG, "CreateAccountStatus = WAITING FOR SMS");
 			startActivityForResult(new Intent(this, CreateAccountActivity.class), RESULT_CREATE_ACCOUNT_ACTIVITY);
@@ -199,7 +169,6 @@ public final class VerifyNumberActivity extends Activity
 	protected void onPause()
 	{
 		Log.i(LOGTAG, "onPause");
-		mCommunicator.unregister(this);
 		super.onPause();
 	}
 
@@ -255,6 +224,7 @@ public final class VerifyNumberActivity extends Activity
 			if (resultCode == RESULT_OK) {
 				Log.i(LOGTAG, "finishing on CreateAccount request");
 				finish();
+				startActivity(new Intent(this, MainActivity.class));
 			}
 		}
 	}
@@ -262,10 +232,6 @@ public final class VerifyNumberActivity extends Activity
 	@SuppressWarnings("unused")
 	public void cancelAccountCreation(final View view)
 	{
-		mProgressDialog.setMessage(getString(R.string.progress_finishing));
-		mProgressDialog.show();
-		mCommunicator.getService().terminate();
-
 		finish();
 	}
 }
