@@ -61,7 +61,7 @@ public class CreateAccountActivity extends Activity
 	private Button mButtonCancel = null;
 
 	private int mSecondsToStillWaitForSms = 0;
-	private Handler mHandler = null;
+	private final Handler mHandler = new Handler();
 
 	private BroadcastReceiver mSmsReceiver = null;
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCreateAccount();
@@ -110,8 +110,6 @@ public class CreateAccountActivity extends Activity
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			setFinishOnTouchOutside(false);
 		}
-
-		mHandler = new Handler();
 
 		mLayoutProgress = findViewById(R.id.linearLayoutProgress);
 		mProgressRequest = (ProgressBar) findViewById(R.id.progressBarRequest);
