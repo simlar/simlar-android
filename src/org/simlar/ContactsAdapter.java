@@ -36,7 +36,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class ContactsAdapter extends ArrayAdapter<FullContactData>
+public final class ContactsAdapter extends ArrayAdapter<FullContactData>
 {
 	private static final String LOGTAG = ContactsAdapter.class.getSimpleName();
 
@@ -44,7 +44,7 @@ public class ContactsAdapter extends ArrayAdapter<FullContactData>
 	private EmptyTextListener mEmptyTextListener = null;
 	private final SimlarServiceCommunicator mCommunicator;
 
-	public class SortByName implements Comparator<FullContactData>
+	public final class SortByName implements Comparator<FullContactData>
 	{
 		@Override
 		public int compare(final FullContactData lhs, final FullContactData rhs)
