@@ -35,15 +35,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
-public class MainActivity extends android.support.v4.app.FragmentActivity
+public final class MainActivity extends android.support.v4.app.FragmentActivity
 {
 	static final String LOGTAG = MainActivity.class.getSimpleName();
 
 	ContactsAdapter mAdapter = null;
 
-	private SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorContacts();
+	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorContacts();
 
-	private class SimlarServiceCommunicatorContacts extends SimlarServiceCommunicator
+	private final class SimlarServiceCommunicatorContacts extends SimlarServiceCommunicator
 	{
 		public SimlarServiceCommunicatorContacts()
 		{
@@ -79,7 +79,7 @@ public class MainActivity extends android.support.v4.app.FragmentActivity
 		}
 	}
 
-	public static class ContactsListFragment extends android.support.v4.app.ListFragment implements EmptyTextListener
+	public static final class ContactsListFragment extends android.support.v4.app.ListFragment implements EmptyTextListener
 	{
 		public void setAdapter(final ContactsAdapter adapter)
 		{
