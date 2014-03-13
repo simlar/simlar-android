@@ -55,6 +55,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 {
 	static final String LOGTAG = SimlarService.class.getSimpleName();
 	private static final int NOTIFICATION_ID = 1;
+	private static final long TERMINATE_CHECKER_INTERVAL = 20 * 1000; // milliseconds
 
 	LinphoneThread mLinphoneThread = null;
 	final Handler mHandler = new Handler();
@@ -150,6 +151,39 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				initializeCredentials();
 			}
 		});
+
+		terminateChecker();
+	}
+
+	void terminateChecker()
+	{
+		mHandler.postDelayed(new Runnable() {
+			@Override
+			public void run()
+			{
+				if (terminateCheck()) {
+					return;
+				}
+
+				terminateChecker();
+			}
+		}, TERMINATE_CHECKER_INTERVAL);
+	}
+
+	protected boolean terminateCheck()
+	{
+		if (mGoingDown) {
+			return true;
+		}
+
+		if (mSimlarStatus == SimlarStatus.ONGOING_CALL) {
+			return false;
+		}
+
+		Log.i(LOGTAG, "terminateChecker triggered on status=" + mSimlarStatus);
+		handleTerminate();
+
+		return true;
 	}
 
 	public void registerActivityToNotification(final Class<?> activity)
