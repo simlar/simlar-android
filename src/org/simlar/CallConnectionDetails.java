@@ -22,7 +22,7 @@ package org.simlar;
 
 import java.text.DecimalFormat;
 
-public class CallConnectionDetails
+public final class CallConnectionDetails
 {
 	private static final DecimalFormat GUI_VALUE = new DecimalFormat("#0.0");
 
