@@ -48,13 +48,13 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-public class LinphoneThread
+public final class LinphoneThread
 {
 	static final String LOGTAG = LinphoneThread.class.getSimpleName();
 
 	final private LinphoneThreadImpl mImpl;
 
-	private static class LinphoneThreadImpl extends Thread implements LinphoneCoreListener
+	private static final class LinphoneThreadImpl extends Thread implements LinphoneCoreListener
 	{
 		Handler mLinphoneThreadHandler = null;
 		Handler mMainThreadHandler = new Handler();
