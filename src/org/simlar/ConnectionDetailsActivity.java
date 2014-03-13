@@ -26,7 +26,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.widget.TextView;
 
-public class ConnectionDetailsActivity extends Activity
+public final class ConnectionDetailsActivity extends Activity
 {
 	static final String LOGTAG = ConnectionDetailsActivity.class.getSimpleName();
 
@@ -43,7 +43,7 @@ public class ConnectionDetailsActivity extends Activity
 	private TextView mTextViewLatePackets;
 	private TextView mTextViewRoundTripDelay;
 
-	private class SimlarServiceCommunicatorConnectionDetails extends SimlarServiceCommunicator
+	private final class SimlarServiceCommunicatorConnectionDetails extends SimlarServiceCommunicator
 	{
 		public SimlarServiceCommunicatorConnectionDetails()
 		{
