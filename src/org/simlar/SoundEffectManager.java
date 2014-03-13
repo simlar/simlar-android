@@ -47,7 +47,7 @@ class SoundEffectManager
 		UNENCRYPTED_CALL_ALARM
 	}
 
-	private class SoundEffectPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener
+	private final class SoundEffectPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener
 	{
 		final SoundEffectType mType;
 		final Handler mHandler = new Handler();
