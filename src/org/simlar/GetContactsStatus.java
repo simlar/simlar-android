@@ -34,7 +34,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Xml;
 
-public class GetContactsStatus
+public final class GetContactsStatus
 {
 	private static final String LOGTAG = GetContactsStatus.class.getSimpleName();
 
