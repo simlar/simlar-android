@@ -35,7 +35,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-public class VerifyNumberActivity extends Activity
+public final class VerifyNumberActivity extends Activity
 {
 	static final String LOGTAG = VerifyNumberActivity.class.getSimpleName();
 	private static final int RESULT_CREATE_ACCOUNT_ACTIVITY = 0;
@@ -46,7 +46,7 @@ public class VerifyNumberActivity extends Activity
 
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCall();
 
-	private class SimlarServiceCommunicatorCall extends SimlarServiceCommunicator
+	private final class SimlarServiceCommunicatorCall extends SimlarServiceCommunicator
 	{
 		public SimlarServiceCommunicatorCall()
 		{
