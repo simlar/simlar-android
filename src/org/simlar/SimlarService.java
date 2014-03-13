@@ -61,7 +61,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-public class SimlarService extends Service implements LinphoneHandlerListener
+public final class SimlarService extends Service implements LinphoneHandlerListener
 {
 	static final String LOGTAG = SimlarService.class.getSimpleName();
 	private static final int NOTIFICATION_ID = 1;
@@ -86,7 +86,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 	private PendingIntent mkeepAwakePendingIntent = null;
 	private final KeepAwakeReceiver mKeepAwakeReceiver = new KeepAwakeReceiver();
 
-	public class SimlarServiceBinder extends Binder
+	public final class SimlarServiceBinder extends Binder
 	{
 		SimlarService getService()
 		{
@@ -94,7 +94,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		}
 	}
 
-	private class NetworkChangeReceiver extends BroadcastReceiver
+	private final class NetworkChangeReceiver extends BroadcastReceiver
 	{
 		public NetworkChangeReceiver()
 		{
@@ -107,7 +107,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		}
 	}
 
-	private class KeepAwakeReceiver extends BroadcastReceiver
+	private final class KeepAwakeReceiver extends BroadcastReceiver
 	{
 		public KeepAwakeReceiver()
 		{
@@ -142,7 +142,7 @@ public class SimlarService extends Service implements LinphoneHandlerListener
 		}
 	}
 
-	public class FullContactData extends ContactData
+	public final class FullContactData extends ContactData
 	{
 		public final String simlarId;
 
