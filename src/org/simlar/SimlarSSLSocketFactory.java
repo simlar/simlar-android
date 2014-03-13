@@ -42,7 +42,7 @@ import javax.net.ssl.TrustManagerFactory;
 import android.text.TextUtils;
 import android.util.Log;
 
-public class SimlarSSLSocketFactory extends SSLSocketFactory
+public final class SimlarSSLSocketFactory extends SSLSocketFactory
 {
 	private static final String LOGTAG = SimlarSSLSocketFactory.class.getSimpleName();
 
