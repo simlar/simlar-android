@@ -64,6 +64,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	final SimlarCallState mSimlarCallState = new SimlarCallState();
 	private CallConnectionDetails mCallConnectionDetails = new CallConnectionDetails();
 	private WakeLock mWakeLock = null;
+	private WakeLock mDisplayWakeLock = null;
 	private WifiLock mWifiLock = null;
 	private boolean mGoingDown = false;
 	private boolean mTerminatePrivateAlreadyCalled = false;
@@ -128,7 +129,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mSoundEffectManager = new SoundEffectManager(this.getApplicationContext());
 
 		mWakeLock = ((PowerManager) this.getSystemService(Context.POWER_SERVICE))
-				.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "SimlarWakeLock");
+				.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SimlarWakeLock");
+		mDisplayWakeLock = createDisplayWakeLock();
 		mWifiLock = ((WifiManager) this.getSystemService(Context.WIFI_SERVICE))
 				.createWifiLock(WifiManager.WIFI_MODE_FULL, "SimlarWifiLock");
 
@@ -153,6 +155,13 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		});
 
 		terminateChecker();
+	}
+
+	@SuppressWarnings("deprecation")
+	private WakeLock createDisplayWakeLock()
+	{
+		return ((PowerManager) getSystemService(Context.POWER_SERVICE))
+				.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "SimlarDisplayWakeLock");
 	}
 
 	void terminateChecker()
@@ -271,6 +280,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		// just in case
 		releaseWakeLock();
+		releaseDisplayWakeLock();
 		releaseWifiLock();
 
 		// Tell the user we stopped.
@@ -286,6 +296,13 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 	}
 
+	private void acquireDisplayWakeLock()
+	{
+		if (!mDisplayWakeLock.isHeld()) {
+			mDisplayWakeLock.acquire();
+		}
+	}
+
 	private void acquireWifiLock()
 	{
 		if (!mWifiLock.isHeld()) {
@@ -293,10 +310,17 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 	}
 
-	void releaseWakeLock()
+	private void releaseWakeLock()
 	{
 		if (mWakeLock.isHeld()) {
 			mWakeLock.release();
+		}
+	}
+
+	private void releaseDisplayWakeLock()
+	{
+		if (mDisplayWakeLock.isHeld()) {
+			mDisplayWakeLock.release();
 		}
 	}
 
@@ -454,6 +478,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				SimlarServiceBroadcast.sendCallConnectionDetailsChanged(this);
 			}
 
+			acquireDisplayWakeLock();
 			terminate();
 		}
 
