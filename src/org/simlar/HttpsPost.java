@@ -34,7 +34,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import android.util.Log;
 
-public class HttpsPost
+public final class HttpsPost
 {
 	private static final String LOGTAG = HttpsPost.class.getSimpleName();
 
