@@ -25,7 +25,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.widget.TextView;
 
-public class AboutActivity extends Activity
+public final class AboutActivity extends Activity
 {
 	@Override
 	protected void onCreate(final Bundle savedInstanceState)
