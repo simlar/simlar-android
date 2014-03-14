@@ -56,6 +56,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	static final String LOGTAG = SimlarService.class.getSimpleName();
 	private static final int NOTIFICATION_ID = 1;
 	private static final long TERMINATE_CHECKER_INTERVAL = 20 * 1000; // milliseconds
+	public static final String INTENT_EXTRA_SIMLAR_ID = "SimlarServiceSimlarId";
 
 	LinphoneThread mLinphoneThread = null;
 	final Handler mHandler = new Handler();
@@ -73,6 +74,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private SoundEffectManager mSoundEffectManager = null;
 	private boolean mHasAudioFocus = false;
 	private final NetworkChangeReceiver mNetworkChangeReceiver = new NetworkChangeReceiver();
+	private String mSimlarIdToCall = null;
 
 	public final class SimlarServiceBinder extends Binder
 	{
@@ -112,7 +114,17 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		acquireWifiLock();
 
 		// releasing wakelock of gcm's WakefulBroadcastReceiver if needed
-		WakefulBroadcastReceiver.completeWakefulIntent(intent);
+		if (intent != null) {
+			WakefulBroadcastReceiver.completeWakefulIntent(intent);
+			mSimlarIdToCall = intent.getStringExtra(INTENT_EXTRA_SIMLAR_ID);
+			intent.removeExtra(INTENT_EXTRA_SIMLAR_ID);
+		} else {
+			Log.w(LOGTAG, "onStartCommand: with no intent");
+			mSimlarIdToCall = null;
+		}
+		Log.i(LOGTAG, "onStartCommand simlarIdToCall=" + mSimlarIdToCall);
+
+		handlePendingCall();
 
 		// We want this service to continue running until it is explicitly stopped, so return sticky.
 		return START_STICKY;
@@ -376,6 +388,25 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		nm.notify(NOTIFICATION_ID, createNotification());
 
 		SimlarServiceBroadcast.sendSimlarStatusChanged(this);
+
+		handlePendingCall();
+	}
+
+	private void handlePendingCall()
+	{
+		if (getSimlarStatus() != SimlarStatus.ONLINE || Util.isNullOrEmpty(mSimlarIdToCall) || mGoingDown) {
+			return;
+		}
+
+		final String simlarId = mSimlarIdToCall;
+		mSimlarIdToCall = null;
+		mHandler.post(new Runnable() {
+			@Override
+			public void run()
+			{
+				call(simlarId);
+			}
+		});
 	}
 
 	@Override

@@ -135,19 +135,22 @@ public class SimlarServiceCommunicator
 
 	public void register(final Context context, final Class<?> activity)
 	{
-		startServiceAndRegister(context, activity, true);
+		startServiceAndRegister(context, activity, true, null);
 	}
 
-	public void startServiceAndRegister(final Context context, final Class<?> activity)
+	public void startServiceAndRegister(final Context context, final Class<?> activity, final String simlarId)
 	{
-		startServiceAndRegister(context, activity, false);
+		startServiceAndRegister(context, activity, false, simlarId);
 	}
 
-	private void startServiceAndRegister(final Context context, final Class<?> activity, final boolean onlyRegister)
+	private void startServiceAndRegister(final Context context, final Class<?> activity, final boolean onlyRegister, final String simlarId)
 	{
 		mActivity = activity;
 		final Intent intent = new Intent(context, SimlarService.class);
 		if (!onlyRegister) {
+			if (!Util.isNullOrEmpty(simlarId)) {
+				intent.putExtra(SimlarService.INTENT_EXTRA_SIMLAR_ID, simlarId);
+			}
 			context.startService(intent);
 		}
 		context.bindService(intent, mConnection, Context.BIND_AUTO_CREATE);

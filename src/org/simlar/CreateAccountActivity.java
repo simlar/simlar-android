@@ -415,7 +415,7 @@ public final class CreateAccountActivity extends Activity
 	void connectToServer()
 	{
 		mProgressFirstLogIn.setVisibility(View.VISIBLE);
-		mCommunicator.startServiceAndRegister(this, VerifyNumberActivity.class);
+		mCommunicator.startServiceAndRegister(this, VerifyNumberActivity.class, null);
 	}
 
 	void onError(final int resId)
