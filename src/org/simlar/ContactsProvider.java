@@ -29,12 +29,18 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.ContactsContract;
 import android.util.Log;
 
 public final class ContactsProvider
 {
 	private static final String LOGTAG = ContactsProvider.class.getSimpleName();
+
+	public static interface FullContactsListener
+	{
+		void onGetContacts(final Set<FullContactData> contacts);
+	}
 
 	public static class ContactData
 	{
@@ -91,7 +97,34 @@ public final class ContactsProvider
 		}
 	}
 
-	public static Set<FullContactData> loadRegisteredContacts(final Context context)
+	static void getContacts(final Context context, final FullContactsListener listener)
+	{
+		if (context == null) {
+			Log.e(LOGTAG, "no context");
+			return;
+		}
+
+		if (listener == null) {
+			Log.e(LOGTAG, "no listener");
+			return;
+		}
+
+		new AsyncTask<Void, Void, Set<FullContactData>>() {
+			@Override
+			protected Set<FullContactData> doInBackground(final Void... params)
+			{
+				return ContactsProvider.loadRegisteredContacts(context);
+			}
+
+			@Override
+			protected void onPostExecute(final Set<FullContactData> contacts)
+			{
+				listener.onGetContacts(contacts);
+			}
+		}.execute();
+	}
+
+	static Set<FullContactData> loadRegisteredContacts(final Context context)
 	{
 		final Map<String, ContactData> contacts = loadContactsFromTelephonebook(context);
 		if (!updateContactStatus(contacts)) {
@@ -110,7 +143,7 @@ public final class ContactsProvider
 		return registeredContacts;
 	}
 
-	public static Map<String, ContactData> loadContacts(final Context context)
+	static Map<String, ContactData> loadContacts(final Context context)
 	{
 		final Map<String, ContactData> contacts = loadContactsFromTelephonebook(context);
 		updateContactStatus(contacts);

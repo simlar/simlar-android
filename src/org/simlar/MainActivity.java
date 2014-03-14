@@ -26,11 +26,11 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.simlar.ContactsProvider.FullContactData;
+import org.simlar.ContactsProvider.FullContactsListener;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -122,16 +122,9 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	void loadContacts()
 	{
 		mContactList.setEmptyText(getString(R.string.main_activity_contactlist_loading_contacts));
-
-		new AsyncTask<Void, Void, Set<FullContactData>>() {
+		ContactsProvider.getContacts(this, new FullContactsListener() {
 			@Override
-			protected Set<FullContactData> doInBackground(final Void... params)
-			{
-				return ContactsProvider.loadRegisteredContacts(MainActivity.this);
-			}
-
-			@Override
-			protected void onPostExecute(final Set<FullContactData> contacts)
+			public void onGetContacts(Set<FullContactData> contacts)
 			{
 				mAdapter.clear();
 				if (contacts == null) {
@@ -141,7 +134,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 					mContactList.setEmptyText(getString(R.string.main_activity_contactlist_no_contacts_found));
 				}
 			}
-		}.execute();
+		});
 	}
 
 	@Override
