@@ -20,6 +20,7 @@
 
 package org.simlar;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -36,6 +37,8 @@ import android.util.Log;
 public final class ContactsProvider
 {
 	static final String LOGTAG = ContactsProvider.class.getSimpleName();
+
+	private static final ContactsProviderImpl mImpl = new ContactsProviderImpl();
 
 	public static interface FullContactsListener
 	{
@@ -104,81 +107,108 @@ public final class ContactsProvider
 
 	private static final class ContactsProviderImpl
 	{
-		static void getContacts(final Context context, final FullContactsListener listener)
+		private Map<String, ContactData> mContacts = null;
+		private State mState = State.UNINITIALIZED;
+		private final Set<FullContactsListener> mFullContactsListeners = new HashSet<FullContactsListener>();
+		private final Map<ContactListener, String> mContactListener = new HashMap<ContactsProvider.ContactListener, String>();
+
+		private enum State {
+			UNINITIALIZED,
+			PARSING_PHONES_ADDRESS_BOOK,
+			REQUESTING_CONTACTS_STATUS_FROM_SERVER,
+			ERROR,
+			INITIALIZED
+		}
+
+		public ContactsProviderImpl()
 		{
-			if (context == null) {
-				Log.e(LOGTAG, "no context");
-				return;
-			}
+		}
 
-			if (listener == null) {
-				Log.e(LOGTAG, "no listener");
-				return;
-			}
-
-			new AsyncTask<Void, Void, Set<FullContactData>>() {
+		private void loadContacts(final Context context)
+		{
+			Log.i(LOGTAG, "start creating contacts cache");
+			mState = State.PARSING_PHONES_ADDRESS_BOOK;
+			new AsyncTask<Void, Void, Map<String, ContactData>>() {
 				@Override
-				protected Set<FullContactData> doInBackground(final Void... params)
+				protected Map<String, ContactData> doInBackground(final Void... params)
 				{
-					return loadRegisteredContacts(context);
+					return loadContactsFromTelephonebook(context);
 				}
 
 				@Override
-				protected void onPostExecute(final Set<FullContactData> contacts)
+				protected void onPostExecute(final Map<String, ContactData> contacts)
 				{
-					listener.onGetContacts(contacts);
+					onContactsLoadedFromTelephoneBook(contacts);
 				}
 			}.execute();
 		}
 
-		static void getNameAndPhotoId(final String simlarId, final Context context, final ContactListener listener)
+		void onContactsLoadedFromTelephoneBook(final Map<String, ContactData> contacts)
 		{
-			if (context == null) {
-				Log.e(LOGTAG, "no context");
-				return;
-			}
+			mContacts = contacts;
+			mState = State.REQUESTING_CONTACTS_STATUS_FROM_SERVER;
 
-			if (listener == null) {
-				Log.e(LOGTAG, "no listener");
-				return;
+			for (final Map.Entry<ContactListener, String> entry : mContactListener.entrySet())
+			{
+				final ContactData cd = createContactData(entry.getValue());
+				entry.getKey().onGetNameAndPhotoId(cd.name, cd.photoId);
 			}
+			mContactListener.clear();
 
-			if (Util.isNullOrEmpty(simlarId)) {
-				Log.w(LOGTAG, "empty simlarId");
-				listener.onGetNameAndPhotoId(null, null);
-				return;
-			}
-
-			new AsyncTask<Void, Void, ContactData>() {
+			new AsyncTask<String, Void, Map<String, ContactStatus>>() {
 				@Override
-				protected ContactData doInBackground(final Void... params)
+				protected Map<String, ContactStatus> doInBackground(final String... params)
 				{
-					return loadContacts(context).get(simlarId);
+					return GetContactsStatus.httpPostGetContactsStatus(new HashSet<String>(Arrays.asList(params)));
 				}
 
 				@Override
-				protected void onPostExecute(final ContactData contact)
+				protected void onPostExecute(final Map<String, ContactStatus> contactsStatus)
 				{
-					if (contact == null) {
-						listener.onGetNameAndPhotoId(simlarId, null);
-						return;
-					}
-
-					listener.onGetNameAndPhotoId(contact.name, contact.photoId);
+					onContactsStatusRequestedFromServer(contactsStatus);
 				}
-			}.execute();
+			}.execute(mContacts.keySet().toArray(new String[mContacts.size()]));
 		}
 
-		static Set<FullContactData> loadRegisteredContacts(final Context context)
+		private ContactData createContactData(final String simlarId)
 		{
-			final Map<String, ContactData> contacts = loadContactsFromTelephonebook(context);
-			if (!updateContactStatus(contacts)) {
-				Log.w(LOGTAG, "unable to get contact status, most probably we are offline");
-				return null;
+			final ContactData cd = mContacts.get(simlarId);
+
+			if (cd == null) {
+				return new ContactData(simlarId, null, null, null);
 			}
 
+			if (Util.isNullOrEmpty(cd.name) && Util.isNullOrEmpty(cd.guiTelephoneNumber)) {
+				return new ContactData(simlarId, null, null, cd.photoId);
+			}
+
+			if (Util.isNullOrEmpty(cd.name)) {
+				return new ContactData(cd.guiTelephoneNumber, null, null, cd.photoId);
+			}
+
+			return cd;
+		}
+
+		void onContactsStatusRequestedFromServer(final Map<String, ContactStatus> contactsStatus)
+		{
+			Set<FullContactData> contacts = null;
+			if (updateContactStatus(contactsStatus)) {
+				contacts = createFullContactDataSet();
+				mState = State.INITIALIZED;
+			} else {
+				mState = State.ERROR;
+			}
+
+			for (final FullContactsListener listener : mFullContactsListeners) {
+				listener.onGetContacts(contacts);
+			}
+			mFullContactsListeners.clear();
+		}
+
+		private Set<FullContactData> createFullContactDataSet()
+		{
 			final Set<FullContactData> registeredContacts = new HashSet<FullContactData>();
-			for (final Map.Entry<String, ContactData> c : contacts.entrySet()) {
+			for (final Map.Entry<String, ContactData> c : mContacts.entrySet()) {
 				if (c.getValue().isRegistered()) {
 					registeredContacts.add(new FullContactData(c.getKey(), c.getValue()));
 				}
@@ -188,14 +218,7 @@ public final class ContactsProvider
 			return registeredContacts;
 		}
 
-		static Map<String, ContactData> loadContacts(final Context context)
-		{
-			final Map<String, ContactData> contacts = loadContactsFromTelephonebook(context);
-			updateContactStatus(contacts);
-			return contacts;
-		}
-
-		private static Map<String, ContactData> loadContactsFromTelephonebook(final Context context)
+		static Map<String, ContactData> loadContactsFromTelephonebook(final Context context)
 		{
 			Log.i(LOGTAG, "loading contacts from telephone book");
 			final Map<String, ContactData> result = new HashMap<String, ContactData>();
@@ -246,9 +269,8 @@ public final class ContactsProvider
 			return result;
 		}
 
-		private static boolean updateContactStatus(final Map<String, ContactData> contacts)
+		private boolean updateContactStatus(final Map<String, ContactStatus> statusMap)
 		{
-			final Map<String, ContactStatus> statusMap = GetContactsStatus.httpPostGetContactsStatus(contacts.keySet());
 			if (statusMap == null) {
 				return false;
 			}
@@ -256,7 +278,7 @@ public final class ContactsProvider
 			Log.i(LOGTAG, "contact status received for " + statusMap.size() + " contacts");
 
 			for (final Map.Entry<String, ContactStatus> entry : statusMap.entrySet()) {
-				if (!contacts.containsKey(entry.getKey())) {
+				if (!mContacts.containsKey(entry.getKey())) {
 					Log.e(LOGTAG, "received contact status " + entry.getValue() + " for unknown contact " + entry.getKey());
 					continue;
 				}
@@ -266,20 +288,91 @@ public final class ContactsProvider
 					continue;
 				}
 
-				contacts.get(entry.getKey()).status = entry.getValue();
+				mContacts.get(entry.getKey()).status = entry.getValue();
 			}
 
 			return true;
+		}
+
+		void getContacts(final Context context, final FullContactsListener listener)
+		{
+			if (context == null) {
+				Log.e(LOGTAG, "no context");
+				return;
+			}
+
+			if (listener == null) {
+				Log.e(LOGTAG, "no listener");
+				return;
+			}
+
+			switch (mState) {
+			case INITIALIZED:
+				Log.i(LOGTAG, "using cached data for all contacts");
+				listener.onGetContacts(createFullContactDataSet());
+				break;
+			case PARSING_PHONES_ADDRESS_BOOK:
+			case REQUESTING_CONTACTS_STATUS_FROM_SERVER:
+				mFullContactsListeners.add(listener);
+				break;
+			case UNINITIALIZED:
+			case ERROR:
+				mFullContactsListeners.add(listener);
+				loadContacts(context);
+				break;
+			default:
+				Log.e(LOGTAG, "unknown state=" + mState);
+				break;
+			}
+		}
+
+		void getNameAndPhotoId(final String simlarId, final Context context, final ContactListener listener)
+		{
+			if (context == null) {
+				Log.e(LOGTAG, "no context");
+				return;
+			}
+
+			if (listener == null) {
+				Log.e(LOGTAG, "no listener");
+				return;
+			}
+
+			if (Util.isNullOrEmpty(simlarId)) {
+				Log.i(LOGTAG, "empty simlarId");
+				listener.onGetNameAndPhotoId(null, null);
+				return;
+			}
+
+			switch (mState) {
+			case INITIALIZED:
+			case REQUESTING_CONTACTS_STATUS_FROM_SERVER:
+				Log.i(LOGTAG, "using cached data for name and photoId");
+				final ContactData cd = createContactData(simlarId);
+				listener.onGetNameAndPhotoId(cd.name, cd.photoId);
+				break;
+			case PARSING_PHONES_ADDRESS_BOOK:
+				mContactListener.put(listener, simlarId);
+				break;
+			case UNINITIALIZED:
+			case ERROR:
+				mContactListener.put(listener, simlarId);
+				loadContacts(context);
+				break;
+			default:
+				Log.e(LOGTAG, "unknown state=" + mState);
+				break;
+			}
 		}
 	}
 
 	public static void getContacts(final Context context, final FullContactsListener listener)
 	{
-		ContactsProviderImpl.getContacts(context, listener);
+		mImpl.getContacts(context, listener);
 	}
 
 	public static void getNameAndPhotoId(final String simlarId, final Context context, final ContactListener listener)
 	{
-		ContactsProviderImpl.getNameAndPhotoId(simlarId, context, listener);
+		mImpl.getNameAndPhotoId(simlarId, context, listener);
 	}
 }
