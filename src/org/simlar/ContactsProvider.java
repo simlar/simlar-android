@@ -35,7 +35,7 @@ import android.util.Log;
 
 public final class ContactsProvider
 {
-	private static final String LOGTAG = ContactsProvider.class.getSimpleName();
+	static final String LOGTAG = ContactsProvider.class.getSimpleName();
 
 	public static interface FullContactsListener
 	{
@@ -102,170 +102,184 @@ public final class ContactsProvider
 		}
 	}
 
-	static void getContacts(final Context context, final FullContactsListener listener)
+	private static final class ContactsProviderImpl
 	{
-		if (context == null) {
-			Log.e(LOGTAG, "no context");
-			return;
-		}
-
-		if (listener == null) {
-			Log.e(LOGTAG, "no listener");
-			return;
-		}
-
-		new AsyncTask<Void, Void, Set<FullContactData>>() {
-			@Override
-			protected Set<FullContactData> doInBackground(final Void... params)
-			{
-				return ContactsProvider.loadRegisteredContacts(context);
+		static void getContacts(final Context context, final FullContactsListener listener)
+		{
+			if (context == null) {
+				Log.e(LOGTAG, "no context");
+				return;
 			}
 
-			@Override
-			protected void onPostExecute(final Set<FullContactData> contacts)
-			{
-				listener.onGetContacts(contacts);
-			}
-		}.execute();
-	}
-
-	static void getNameAndPhotoId(final String simlarId, final Context context, final ContactListener listener)
-	{
-		if (context == null) {
-			Log.e(LOGTAG, "no context");
-			return;
-		}
-
-		if (listener == null) {
-			Log.e(LOGTAG, "no listener");
-			return;
-		}
-
-		if (Util.isNullOrEmpty(simlarId)) {
-			Log.w(LOGTAG, "empty simlarId");
-			listener.onGetNameAndPhotoId(null, null);
-			return;
-		}
-
-		new AsyncTask<Void, Void, ContactData>() {
-			@Override
-			protected ContactData doInBackground(final Void... params)
-			{
-				return ContactsProvider.loadContacts(context).get(simlarId);
+			if (listener == null) {
+				Log.e(LOGTAG, "no listener");
+				return;
 			}
 
-			@Override
-			protected void onPostExecute(final ContactData contact)
-			{
-				if (contact == null) {
-					listener.onGetNameAndPhotoId(simlarId, null);
-					return;
+			new AsyncTask<Void, Void, Set<FullContactData>>() {
+				@Override
+				protected Set<FullContactData> doInBackground(final Void... params)
+				{
+					return loadRegisteredContacts(context);
 				}
 
-				listener.onGetNameAndPhotoId(contact.name, contact.photoId);
-			}
-		}.execute();
-	}
-
-	static Set<FullContactData> loadRegisteredContacts(final Context context)
-	{
-		final Map<String, ContactData> contacts = loadContactsFromTelephonebook(context);
-		if (!updateContactStatus(contacts)) {
-			Log.w(LOGTAG, "unable to get contact status, most probably we are offline");
-			return null;
+				@Override
+				protected void onPostExecute(final Set<FullContactData> contacts)
+				{
+					listener.onGetContacts(contacts);
+				}
+			}.execute();
 		}
 
-		final Set<FullContactData> registeredContacts = new HashSet<FullContactData>();
-		for (final Map.Entry<String, ContactData> c : contacts.entrySet()) {
-			if (c.getValue().isRegistered()) {
-				registeredContacts.add(new FullContactData(c.getKey(), c.getValue()));
-			}
-		}
-
-		Log.i(LOGTAG, "found " + registeredContacts.size() + " registered contacts");
-		return registeredContacts;
-	}
-
-	static Map<String, ContactData> loadContacts(final Context context)
-	{
-		final Map<String, ContactData> contacts = loadContactsFromTelephonebook(context);
-		updateContactStatus(contacts);
-		return contacts;
-	}
-
-	private static Map<String, ContactData> loadContactsFromTelephonebook(final Context context)
-	{
-		Log.i(LOGTAG, "loading contacts from telephone book");
-		final Map<String, ContactData> result = new HashMap<String, ContactData>();
-
-		final String[] projection = new String[] {
-				ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
-				ContactsContract.CommonDataKinds.Phone.NUMBER,
-				ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-				ContactsContract.CommonDataKinds.Phone.PHOTO_ID
-		};
-
-		final Cursor contacts = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projection, null, null, null);
-		while (contacts.moveToNext())
+		static void getNameAndPhotoId(final String simlarId, final Context context, final ContactListener listener)
 		{
-			final long contactId = contacts.getLong(0);
-			final String number = contacts.getString(1);
-			final String name = contacts.getString(2);
-			final boolean hasPhotoId = contacts.getLong(3) != 0;
-			String photoUri = null;
-
-			if (Util.isNullOrEmpty(number)) {
-				continue;
+			if (context == null) {
+				Log.e(LOGTAG, "no context");
+				return;
 			}
 
-			final SimlarNumber simlarNumber = new SimlarNumber(number);
-			if (Util.isNullOrEmpty(simlarNumber.getSimlarId())) {
-				continue;
+			if (listener == null) {
+				Log.e(LOGTAG, "no listener");
+				return;
 			}
 
-			if (hasPhotoId) {
-				photoUri = Uri.withAppendedPath(ContentUris.withAppendedId(
-						ContactsContract.Contacts.CONTENT_URI, contactId), ContactsContract.Contacts.Photo.CONTENT_DIRECTORY).toString();
+			if (Util.isNullOrEmpty(simlarId)) {
+				Log.w(LOGTAG, "empty simlarId");
+				listener.onGetNameAndPhotoId(null, null);
+				return;
 			}
 
-			if (!result.containsKey(simlarNumber.getSimlarId())) {
-				result.put(simlarNumber.getSimlarId(), new ContactData(name, simlarNumber.getGuiTelephoneNumber(), ContactStatus.UNKNOWN,
-						photoUri));
+			new AsyncTask<Void, Void, ContactData>() {
+				@Override
+				protected ContactData doInBackground(final Void... params)
+				{
+					return loadContacts(context).get(simlarId);
+				}
 
-				/// ATTENTIION this logs the users telephone book
-				//Log.d(LOGTAG, "adding contact " + name + " " + number + " => " + simlarNumber.getSimlarId());
-			}
+				@Override
+				protected void onPostExecute(final ContactData contact)
+				{
+					if (contact == null) {
+						listener.onGetNameAndPhotoId(simlarId, null);
+						return;
+					}
+
+					listener.onGetNameAndPhotoId(contact.name, contact.photoId);
+				}
+			}.execute();
 		}
-		contacts.close();
 
-		Log.i(LOGTAG, "found " + result.size() + " contacts from telephone book");
+		static Set<FullContactData> loadRegisteredContacts(final Context context)
+		{
+			final Map<String, ContactData> contacts = loadContactsFromTelephonebook(context);
+			if (!updateContactStatus(contacts)) {
+				Log.w(LOGTAG, "unable to get contact status, most probably we are offline");
+				return null;
+			}
 
-		return result;
+			final Set<FullContactData> registeredContacts = new HashSet<FullContactData>();
+			for (final Map.Entry<String, ContactData> c : contacts.entrySet()) {
+				if (c.getValue().isRegistered()) {
+					registeredContacts.add(new FullContactData(c.getKey(), c.getValue()));
+				}
+			}
+
+			Log.i(LOGTAG, "found " + registeredContacts.size() + " registered contacts");
+			return registeredContacts;
+		}
+
+		static Map<String, ContactData> loadContacts(final Context context)
+		{
+			final Map<String, ContactData> contacts = loadContactsFromTelephonebook(context);
+			updateContactStatus(contacts);
+			return contacts;
+		}
+
+		private static Map<String, ContactData> loadContactsFromTelephonebook(final Context context)
+		{
+			Log.i(LOGTAG, "loading contacts from telephone book");
+			final Map<String, ContactData> result = new HashMap<String, ContactData>();
+
+			final String[] projection = new String[] {
+					ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
+					ContactsContract.CommonDataKinds.Phone.NUMBER,
+					ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+					ContactsContract.CommonDataKinds.Phone.PHOTO_ID
+			};
+
+			final Cursor contacts = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projection, null, null,
+					null);
+			while (contacts.moveToNext())
+			{
+				final long contactId = contacts.getLong(0);
+				final String number = contacts.getString(1);
+				final String name = contacts.getString(2);
+				final boolean hasPhotoId = contacts.getLong(3) != 0;
+				String photoUri = null;
+
+				if (Util.isNullOrEmpty(number)) {
+					continue;
+				}
+
+				final SimlarNumber simlarNumber = new SimlarNumber(number);
+				if (Util.isNullOrEmpty(simlarNumber.getSimlarId())) {
+					continue;
+				}
+
+				if (hasPhotoId) {
+					photoUri = Uri.withAppendedPath(ContentUris.withAppendedId(
+							ContactsContract.Contacts.CONTENT_URI, contactId), ContactsContract.Contacts.Photo.CONTENT_DIRECTORY).toString();
+				}
+
+				if (!result.containsKey(simlarNumber.getSimlarId())) {
+					result.put(simlarNumber.getSimlarId(), new ContactData(name, simlarNumber.getGuiTelephoneNumber(), ContactStatus.UNKNOWN,
+							photoUri));
+
+					/// ATTENTIION this logs the users telephone book
+					// Log.d(LOGTAG, "adding contact " + name + " " + number + " => " + simlarNumber.getSimlarId());
+				}
+			}
+			contacts.close();
+
+			Log.i(LOGTAG, "found " + result.size() + " contacts from telephone book");
+
+			return result;
+		}
+
+		private static boolean updateContactStatus(final Map<String, ContactData> contacts)
+		{
+			final Map<String, ContactStatus> statusMap = GetContactsStatus.httpPostGetContactsStatus(contacts.keySet());
+			if (statusMap == null) {
+				return false;
+			}
+
+			Log.i(LOGTAG, "contact status received for " + statusMap.size() + " contacts");
+
+			for (final Map.Entry<String, ContactStatus> entry : statusMap.entrySet()) {
+				if (!contacts.containsKey(entry.getKey())) {
+					Log.e(LOGTAG, "received contact status " + entry.getValue() + " for unknown contact " + entry.getKey());
+					continue;
+				}
+
+				if (!entry.getValue().isValid()) {
+					Log.e(LOGTAG, "received invalid contact status " + entry.getValue() + " for contact " + entry.getKey());
+					continue;
+				}
+
+				contacts.get(entry.getKey()).status = entry.getValue();
+			}
+
+			return true;
+		}
 	}
 
-	private static boolean updateContactStatus(final Map<String, ContactData> contacts)
+	public static void getContacts(final Context context, final FullContactsListener listener)
 	{
-		final Map<String, ContactStatus> statusMap = GetContactsStatus.httpPostGetContactsStatus(contacts.keySet());
-		if (statusMap == null) {
-			return false;
-		}
+		ContactsProviderImpl.getContacts(context, listener);
+	}
 
-		Log.i(LOGTAG, "contact status received for " + statusMap.size() + " contacts");
-
-		for (final Map.Entry<String, ContactStatus> entry : statusMap.entrySet()) {
-			if (!contacts.containsKey(entry.getKey())) {
-				Log.e(LOGTAG, "received contact status " + entry.getValue() + " for unknown contact " + entry.getKey());
-				continue;
-			}
-
-			if (!entry.getValue().isValid()) {
-				Log.e(LOGTAG, "received invalid contact status " + entry.getValue() + " for contact " + entry.getKey());
-				continue;
-			}
-
-			contacts.get(entry.getKey()).status = entry.getValue();
-		}
-
-		return true;
+	public static void getNameAndPhotoId(final String simlarId, final Context context, final ContactListener listener)
+	{
+		ContactsProviderImpl.getNameAndPhotoId(simlarId, context, listener);
 	}
 }
