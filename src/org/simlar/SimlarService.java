@@ -118,6 +118,17 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			WakefulBroadcastReceiver.completeWakefulIntent(intent);
 			mSimlarIdToCall = intent.getStringExtra(INTENT_EXTRA_SIMLAR_ID);
 			intent.removeExtra(INTENT_EXTRA_SIMLAR_ID);
+
+			// make sure we have a contact name for the CallActivity
+			if (!Util.isNullOrEmpty(mSimlarIdToCall)) {
+				ContactsProvider.getNameAndPhotoId(mSimlarIdToCall, this, new ContactListener() {
+					@Override
+					public void onGetNameAndPhotoId(final String name, final String photoId)
+					{
+						mSimlarCallState.updateContactNameAndImage(name, photoId);
+					}
+				});
+			}
 		} else {
 			Log.w(LOGTAG, "onStartCommand: with no intent");
 			mSimlarIdToCall = null;
