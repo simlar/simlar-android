@@ -31,7 +31,7 @@ public class VolumesControlActivity extends Activity
 {
 	static final String LOGTAG = VolumesControlActivity.class.getSimpleName();
 
-	SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorVolumes();
+	final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorVolumes();
 
 	Volumes mVolumes = null;
 
@@ -69,7 +69,7 @@ public class VolumesControlActivity extends Activity
 	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
+	protected void onCreate(final Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_volumes_control);
@@ -105,17 +105,17 @@ public class VolumesControlActivity extends Activity
 		seekBarMicrophone.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
 			@Override
-			public void onStopTrackingTouch(SeekBar seekBar)
+			public void onStopTrackingTouch(final SeekBar seekBar)
 			{
 			}
 
 			@Override
-			public void onStartTrackingTouch(SeekBar seekBar)
+			public void onStartTrackingTouch(final SeekBar seekBar)
 			{
 			}
 
 			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+			public void onProgressChanged(final SeekBar seekBar, final int progress, final boolean fromUser)
 			{
 				Log.i(LOGTAG, "seekBarMicrophone changed: " + progress);
 				if (mVolumes == null || mCommunicator == null) {
@@ -129,7 +129,7 @@ public class VolumesControlActivity extends Activity
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
+	public boolean onCreateOptionsMenu(final Menu menu)
 	{
 		return true;
 	}
