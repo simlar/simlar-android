@@ -38,18 +38,16 @@ public class SimlarServiceCommunicator
 	final String mLogtag;
 	SimlarService mService = null;
 	Class<?> mActivity = null;
+	private final ServiceConnection mConnection = new SimlarServiceConnection();
+	private final BroadcastReceiver mReceiver = new SimlarServiceReceiver();
 
-	public SimlarServiceCommunicator(final String logtag)
+	private final class SimlarServiceConnection implements ServiceConnection
 	{
-		if (Util.isNullOrEmpty(logtag)) {
-			mLogtag = DEFAULT_LOGTAG;
-		} else {
-			mLogtag = logtag;
+		public SimlarServiceConnection()
+		{
+			super();
 		}
-	}
 
-	private final ServiceConnection mConnection = new ServiceConnection()
-	{
 		@Override
 		public void onServiceConnected(final ComponentName className, final IBinder binder)
 		{
@@ -73,9 +71,14 @@ public class SimlarServiceCommunicator
 			Log.i(mLogtag, "onServiceDisconnected");
 			mService = null;
 		}
-	};
+	}
 
-	private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+	private final class SimlarServiceReceiver extends BroadcastReceiver
+	{
+		public SimlarServiceReceiver()
+		{
+			super();
+		}
 
 		@Override
 		public void onReceive(final Context context, final Intent intent)
@@ -122,7 +125,16 @@ public class SimlarServiceCommunicator
 				return;
 			}
 		}
-	};
+	}
+
+	public SimlarServiceCommunicator(final String logtag)
+	{
+		if (Util.isNullOrEmpty(logtag)) {
+			mLogtag = DEFAULT_LOGTAG;
+		} else {
+			mLogtag = logtag;
+		}
+	}
 
 	public void register(final Context context, final Class<?> activity)
 	{
