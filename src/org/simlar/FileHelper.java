@@ -63,7 +63,7 @@ public class FileHelper
 				!Util.isNullOrEmpty(mLinphoneInitialConfigFile);
 	}
 
-	private static void copyFileFromPackage(Context context, int ressourceId, final String target)
+	private static void copyFileFromPackage(final Context context, final int ressourceId, final String target)
 	{
 		try {
 			FileOutputStream outputStream = context.openFileOutput(target, 0);
