@@ -28,7 +28,7 @@ import android.widget.TextView;
 public class AboutActivity extends Activity
 {
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
+	protected void onCreate(final Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_about);
@@ -38,7 +38,7 @@ public class AboutActivity extends Activity
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
+	public boolean onCreateOptionsMenu(final Menu menu)
 	{
 		return true;
 	}
