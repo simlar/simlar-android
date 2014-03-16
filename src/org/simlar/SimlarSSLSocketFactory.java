@@ -170,45 +170,46 @@ public class SimlarSSLSocketFactory extends SSLSocketFactory
 	}
 
 	@Override
-	public Socket createSocket(Socket s, String host, int port, boolean autoClose) throws IOException
+	public Socket createSocket(final Socket s, final String host, final int port, final boolean autoClose) throws IOException
 	{
-		SSLSocket socket = (SSLSocket) mSSLSocketFactory.createSocket(s, host, port, autoClose);
+		final SSLSocket socket = (SSLSocket) mSSLSocketFactory.createSocket(s, host, port, autoClose);
 		socket.setEnabledCipherSuites(CYPHPER_SUITES);
 		socket.setEnabledProtocols(PROTOCOLS);
 		return socket;
 	}
 
 	@Override
-	public Socket createSocket(String host, int port) throws IOException, UnknownHostException
+	public Socket createSocket(final String host, final int port) throws IOException, UnknownHostException
 	{
-		SSLSocket socket = (SSLSocket) mSSLSocketFactory.createSocket(host, port);
+		final SSLSocket socket = (SSLSocket) mSSLSocketFactory.createSocket(host, port);
 		socket.setEnabledCipherSuites(CYPHPER_SUITES);
 		socket.setEnabledProtocols(PROTOCOLS);
 		return socket;
 	}
 
 	@Override
-	public Socket createSocket(String host, int port, InetAddress localHost, int localPort) throws IOException, UnknownHostException
+	public Socket createSocket(final String host, final int port, final InetAddress localHost, final int localPort) throws IOException,
+			UnknownHostException
 	{
-		SSLSocket socket = (SSLSocket) mSSLSocketFactory.createSocket(host, port, localHost, localPort);
+		final SSLSocket socket = (SSLSocket) mSSLSocketFactory.createSocket(host, port, localHost, localPort);
 		socket.setEnabledCipherSuites(CYPHPER_SUITES);
 		socket.setEnabledProtocols(PROTOCOLS);
 		return socket;
 	}
 
 	@Override
-	public Socket createSocket(InetAddress host, int port) throws IOException
+	public Socket createSocket(final InetAddress host, final int port) throws IOException
 	{
-		SSLSocket socket = (SSLSocket) mSSLSocketFactory.createSocket(host, port);
+		final SSLSocket socket = (SSLSocket) mSSLSocketFactory.createSocket(host, port);
 		socket.setEnabledCipherSuites(CYPHPER_SUITES);
 		socket.setEnabledProtocols(PROTOCOLS);
 		return socket;
 	}
 
 	@Override
-	public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort) throws IOException
+	public Socket createSocket(final InetAddress address, final int port, final InetAddress localAddress, final int localPort) throws IOException
 	{
-		SSLSocket socket = (SSLSocket) mSSLSocketFactory.createSocket(address, port, localAddress, localPort);
+		final SSLSocket socket = (SSLSocket) mSSLSocketFactory.createSocket(address, port, localAddress, localPort);
 		socket.setEnabledCipherSuites(CYPHPER_SUITES);
 		socket.setEnabledProtocols(PROTOCOLS);
 		return socket;

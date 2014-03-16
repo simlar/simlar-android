@@ -41,8 +41,10 @@ public class VerifyNumberActivity extends Activity
 	private static final int RESULT_CREATE_ACCOUNT_ACTIVITY = 0;
 
 	ProgressDialog mProgressDialog = null;
+	private Spinner mSpinner;
+	private EditText mEditNumber;
 
-	private SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCall();
+	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCall();
 
 	private class SimlarServiceCommunicatorCall extends SimlarServiceCommunicator
 	{
@@ -65,7 +67,7 @@ public class VerifyNumberActivity extends Activity
 	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
+	protected void onCreate(final Bundle savedInstanceState)
 	{
 		Log.i(LOGTAG, "onCreate");
 		super.onCreate(savedInstanceState);
@@ -79,13 +81,8 @@ public class VerifyNumberActivity extends Activity
 		mProgressDialog.setIndeterminate(true);
 		mProgressDialog.setCancelable(false);
 
-		if (!Util.isNullOrEmpty(number)) {
-			EditText editNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
-			editNumber.setText(number);
-		}
-
 		//Country Code Selector
-		ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item);
+		final ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			adapter.addAll(SimlarNumber.getSupportedCountryCodes());
 		} else {
@@ -95,23 +92,29 @@ public class VerifyNumberActivity extends Activity
 		}
 		adapter.sort(new Comparator<Integer>() {
 			@Override
-			public int compare(Integer lhs, Integer rhs)
+			public int compare(final Integer lhs, final Integer rhs)
 			{
 				return lhs.compareTo(rhs);
 			}
 		});
 
-		Spinner spinner = (Spinner) findViewById(R.id.spinnerCountryCodes);
-		spinner.setAdapter(adapter);
+		mSpinner = (Spinner) findViewById(R.id.spinnerCountryCodes);
+		mSpinner.setAdapter(adapter);
 
 		Log.i(LOGTAG, "proposing country code: " + regionCode);
 		if (regionCode.intValue() > 0) {
-			spinner.setSelection(adapter.getPosition(regionCode));
+			mSpinner.setSelection(adapter.getPosition(regionCode));
+		}
+
+		// telephone number
+		mEditNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
+		if (!Util.isNullOrEmpty(number)) {
+			mEditNumber.setText(number);
 		}
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
+	public boolean onCreateOptionsMenu(final Menu menu)
 	{
 		return true;
 	}
@@ -138,19 +141,16 @@ public class VerifyNumberActivity extends Activity
 	}
 
 	@SuppressWarnings("unused")
-	public void createAccount(View view)
+	public void createAccount(final View view)
 	{
-		final Spinner spinner = (Spinner) findViewById(R.id.spinnerCountryCodes);
-		final EditText editNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
-
-		final Integer countryCallingCode = (Integer) spinner.getSelectedItem();
+		final Integer countryCallingCode = (Integer) mSpinner.getSelectedItem();
 		if (countryCallingCode == null) {
 			Log.e(LOGTAG, "createAccount no country code => aborting");
 			return;
 		}
 		SimlarNumber.setDefaultRegion(countryCallingCode.intValue());
 
-		final String number = editNumber.getText().toString();
+		final String number = mEditNumber.getText().toString();
 		if (Util.isNullOrEmpty(number)) {
 			(new AlertDialog.Builder(this))
 					.setTitle(R.string.verify_number_activity_alert_no_telephone_number_title)
@@ -166,7 +166,7 @@ public class VerifyNumberActivity extends Activity
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	protected void onActivityResult(final int requestCode, final int resultCode, final Intent data)
 	{
 		Log.i(LOGTAG, "onActivityResult requestCode=" + requestCode + " resultCode=" + resultCode);
 		if (requestCode == RESULT_CREATE_ACCOUNT_ACTIVITY) {
@@ -178,7 +178,7 @@ public class VerifyNumberActivity extends Activity
 	}
 
 	@SuppressWarnings("unused")
-	public void cancelAccountCreation(View view)
+	public void cancelAccountCreation(final View view)
 	{
 		mProgressDialog.setMessage(getString(R.string.progress_finishing));
 		mProgressDialog.show();

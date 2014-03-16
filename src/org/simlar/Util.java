@@ -79,7 +79,7 @@ public class Util
 		return rhs.equals(lhs);
 	}
 
-	public static void copyStream(InputStream is, OutputStream os) throws IOException
+	public static void copyStream(final InputStream is, final OutputStream os) throws IOException
 	{
 		final byte[] buffer = new byte[MAX_BUFFER_SIZE];
 		int length = 0;

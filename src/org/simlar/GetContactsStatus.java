@@ -79,7 +79,7 @@ public class GetContactsStatus
 		}
 	}
 
-	private static Map<String, ContactStatus> parseXml(InputStream inputStream) throws XmlPullParserException, IOException
+	private static Map<String, ContactStatus> parseXml(final InputStream inputStream) throws XmlPullParserException, IOException
 	{
 		final XmlPullParser parser = Xml.newPullParser();
 		parser.setInput(inputStream, null);

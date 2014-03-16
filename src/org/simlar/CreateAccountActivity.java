@@ -61,10 +61,10 @@ public class CreateAccountActivity extends Activity
 	private Button mButtonCancel = null;
 
 	private int mSecondsToStillWaitForSms = 0;
-	private Handler mHandler = null;
+	private final Handler mHandler = new Handler();
 
-	private BroadcastReceiver mSmsReceiver = null;
-	private SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCreateAccount();
+	private final BroadcastReceiver mSmsReceiver = new SmsReceicer();
+	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCreateAccount();
 
 	private class SimlarServiceCommunicatorCreateAccount extends SimlarServiceCommunicator
 	{
@@ -99,8 +99,36 @@ public class CreateAccountActivity extends Activity
 		}
 	}
 
+	private class SmsReceicer extends BroadcastReceiver
+	{
+		public SmsReceicer()
+		{
+			super();
+		}
+
+		@Override
+		public void onReceive(final Context context, final Intent intent)
+		{
+			if (intent == null) {
+				return;
+			}
+
+			final Bundle extras = intent.getExtras();
+			if (extras == null) {
+				return;
+			}
+
+			final Object[] pdus = (Object[]) extras.get("pdus");
+			for (int i = 0; i < pdus.length; i++)
+			{
+				final SmsMessage sms = SmsMessage.createFromPdu((byte[]) pdus[i]);
+				onSmsReceived(sms.getOriginatingAddress(), sms.getMessageBody().toString());
+			}
+		}
+	}
+
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
+	protected void onCreate(final Bundle savedInstanceState)
 	{
 		Log.i(LOGTAG, "onCreate");
 		super.onCreate(savedInstanceState);
@@ -110,8 +138,6 @@ public class CreateAccountActivity extends Activity
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			setFinishOnTouchOutside(false);
 		}
-
-		mHandler = new Handler();
 
 		mLayoutProgress = findViewById(R.id.linearLayoutProgress);
 		mProgressRequest = (ProgressBar) findViewById(R.id.progressBarRequest);
@@ -138,7 +164,7 @@ public class CreateAccountActivity extends Activity
 		mEditRegistrationCode.addTextChangedListener(new TextWatcher()
 		{
 			@Override
-			public void onTextChanged(final CharSequence s, int start, int before, int count)
+			public void onTextChanged(final CharSequence s, final int start, final int before, final int count)
 			{
 				if (s.length() == 6) {
 					mButtonConfirm.setEnabled(true);
@@ -148,37 +174,15 @@ public class CreateAccountActivity extends Activity
 			}
 
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after)
+			public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after)
 			{
 			}
 
 			@Override
-			public void afterTextChanged(Editable s)
+			public void afterTextChanged(final Editable s)
 			{
 			}
 		});
-
-		mSmsReceiver = new BroadcastReceiver() {
-			@Override
-			public void onReceive(final Context context, final Intent intent)
-			{
-				if (intent == null) {
-					return;
-				}
-
-				final Bundle extras = intent.getExtras();
-				if (extras == null) {
-					return;
-				}
-
-				final Object[] pdus = (Object[]) extras.get("pdus");
-				for (int i = 0; i < pdus.length; i++)
-				{
-					final SmsMessage sms = SmsMessage.createFromPdu((byte[]) pdus[i]);
-					onSmsReceived(sms.getOriginatingAddress(), sms.getMessageBody().toString());
-				}
-			}
-		};
 
 		if (PreferencesHelper.getCreateAccountStatus() == CreateAccountStatus.WAITING_FOR_SMS) {
 			onWaitingForSmsTimedOut();
@@ -199,7 +203,7 @@ public class CreateAccountActivity extends Activity
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
+	public boolean onCreateOptionsMenu(final Menu menu)
 	{
 		return true;
 	}
@@ -232,7 +236,7 @@ public class CreateAccountActivity extends Activity
 		final String smsText = getString(R.string.create_account_activity_sms_text) + " ";
 		final String expextedSimlarId = SimlarNumber.createSimlarId(telephoneNumber);
 
-		IntentFilter filter = new IntentFilter();
+		final IntentFilter filter = new IntentFilter();
 		filter.addAction("android.provider.Telephony.SMS_RECEIVED");
 		registerReceiver(mSmsReceiver, filter);
 
@@ -385,7 +389,7 @@ public class CreateAccountActivity extends Activity
 		mCommunicator.getService().connect();
 	}
 
-	void onError(int resId)
+	void onError(final int resId)
 	{
 		mLayoutProgress.setVisibility(View.GONE);
 		mDetails.setText(resId);
@@ -408,14 +412,14 @@ public class CreateAccountActivity extends Activity
 	}
 
 	@SuppressWarnings("unused")
-	public void onCancelClicked(View view)
+	public void onCancelClicked(final View view)
 	{
 		PreferencesHelper.saveToFileCreateAccountStatus(CreateAccountActivity.this, CreateAccountStatus.NONE);
 		finish();
 	}
 
 	@SuppressWarnings("unused")
-	public void onConfirmClicked(View view)
+	public void onConfirmClicked(final View view)
 	{
 		((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);
 		mWaitingForSmsText.setText(R.string.create_account_activity_waiting_for_sms_manual);
@@ -431,7 +435,6 @@ public class CreateAccountActivity extends Activity
 	@Override
 	public void onBackPressed()
 	{
-		// prevent switch to VerifyNumberActivity
-		//moveTaskToBack(true);
+		// prevent back key from doing anything
 	}
 }

@@ -38,20 +38,18 @@ public class SimlarServiceCommunicator
 	final String mLogtag;
 	SimlarService mService = null;
 	Class<?> mActivity = null;
+	private final ServiceConnection mConnection = new SimlarServiceConnection();
+	private final BroadcastReceiver mReceiver = new SimlarServiceReceiver();
 
-	public SimlarServiceCommunicator(final String logtag)
+	private final class SimlarServiceConnection implements ServiceConnection
 	{
-		if (Util.isNullOrEmpty(logtag)) {
-			mLogtag = DEFAULT_LOGTAG;
-		} else {
-			mLogtag = logtag;
+		public SimlarServiceConnection()
+		{
+			super();
 		}
-	}
 
-	private ServiceConnection mConnection = new ServiceConnection()
-	{
 		@Override
-		public void onServiceConnected(ComponentName className, IBinder binder)
+		public void onServiceConnected(final ComponentName className, final IBinder binder)
 		{
 			Log.i(mLogtag, "onServiceConnected");
 			mService = ((SimlarServiceBinder) binder).getService();
@@ -68,17 +66,22 @@ public class SimlarServiceCommunicator
 		}
 
 		@Override
-		public void onServiceDisconnected(ComponentName arg0)
+		public void onServiceDisconnected(final ComponentName arg0)
 		{
 			Log.i(mLogtag, "onServiceDisconnected");
 			mService = null;
 		}
-	};
+	}
 
-	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+	private final class SimlarServiceReceiver extends BroadcastReceiver
+	{
+		public SimlarServiceReceiver()
+		{
+			super();
+		}
 
 		@Override
-		public void onReceive(Context context, Intent intent)
+		public void onReceive(final Context context, final Intent intent)
 		{
 			if (intent == null) {
 				Log.e(mLogtag, "Error in onReceive: no intent");
@@ -122,7 +125,16 @@ public class SimlarServiceCommunicator
 				return;
 			}
 		}
-	};
+	}
+
+	public SimlarServiceCommunicator(final String logtag)
+	{
+		if (Util.isNullOrEmpty(logtag)) {
+			mLogtag = DEFAULT_LOGTAG;
+		} else {
+			mLogtag = logtag;
+		}
+	}
 
 	public void register(final Context context, final Class<?> activity)
 	{
@@ -134,7 +146,7 @@ public class SimlarServiceCommunicator
 		startServiceAndRegister(context, activity, false);
 	}
 
-	private void startServiceAndRegister(final Context context, final Class<?> activity, boolean onlyRegister)
+	private void startServiceAndRegister(final Context context, final Class<?> activity, final boolean onlyRegister)
 	{
 		mActivity = activity;
 		final Intent intent = new Intent(context, SimlarService.class);
