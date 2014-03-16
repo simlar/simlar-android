@@ -36,8 +36,6 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ListView;
 
 public final class MainActivity extends android.support.v4.app.FragmentActivity
 {
@@ -45,43 +43,6 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 
 	ContactsAdapter mAdapter = null;
 	ContactsListFragment mContactList = null;
-
-	public static final class ContactsListFragment extends android.support.v4.app.ListFragment
-	{
-		@Override
-		public void onActivityCreated(final Bundle savedInstanceState)
-		{
-			super.onActivityCreated(savedInstanceState);
-			setEmptyText(getString(R.string.main_activity_contactlist_no_contacts_found));
-		}
-
-		@Override
-		public void onViewCreated(final View view, final Bundle savedInstanceState)
-		{
-			final ListView listView = getListView();
-
-			if (listView == null) {
-				Log.e(LOGTAG, "no list view");
-				return;
-			}
-
-			listView.setDivider(null);
-		}
-
-		@Override
-		public void onListItemClick(final ListView l, final View v, final int position, final long id)
-		{
-			final String simlarId = ((ContactsAdapter) getListAdapter()).getItem(position).simlarId;
-			if (Util.isNullOrEmpty(simlarId)) {
-				Log.e(LOGTAG, "onListItemClick: no simlarId found");
-				return;
-			}
-
-			Log.i(LOGTAG, "starting CallActivity ignoring simlarId=" + simlarId);
-			startActivity(new Intent(getActivity(), CallActivity.class)
-					.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-		}
-	}
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState)
