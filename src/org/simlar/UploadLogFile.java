@@ -122,7 +122,7 @@ public final class UploadLogFile
 					result = new PostResult(false, response);
 				}
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			result = new PostResult(false, "Posting log file failed");
 			Log.e(LOGTAG, "Exception during postFile: " + e.getMessage(), e);
 		}
@@ -131,28 +131,28 @@ public final class UploadLogFile
 			if (outputStream != null) {
 				outputStream.close();
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			Log.e(LOGTAG, "Exception during outputStream.close(): " + e.getMessage(), e);
 		}
 		try {
 			if (fileInputStream != null) {
 				fileInputStream.close();
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			Log.e(LOGTAG, "Exception during fileInputStream.close(): " + e.getMessage(), e);
 		}
 		try {
 			if (inputStream != null) {
 				inputStream.close();
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			Log.e(LOGTAG, "Exception during inputStream.close(): " + e.getMessage(), e);
 		}
 		try {
 			if (baos != null) {
 				baos.close();
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			Log.e(LOGTAG, "Exception during baos.close(): " + e.getMessage(), e);
 		}
 
@@ -191,7 +191,7 @@ public final class UploadLogFile
 					final Process p = Runtime.getRuntime().exec("logcat -d -v threadtime -f " + logFile.getAbsolutePath());
 					p.waitFor();
 					return postFile(logFile);
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					Log.e(LOGTAG, "Exception during log file creation: " + e.getMessage(), e);
 					return new PostResult(false, "Log file creation failed");
 				} finally {
@@ -232,7 +232,7 @@ public final class UploadLogFile
 				sendIntent.putExtra(Intent.EXTRA_TEXT, EMAIL_TEXT + UPLOAD_SFTP_LINK + result.fileName);
 				try {
 					mContext.startActivity(Intent.createChooser(sendIntent, mContext.getString(R.string.chooser_send_email)));
-				} catch (android.content.ActivityNotFoundException e) {
+				} catch (final android.content.ActivityNotFoundException e) {
 					Log.e(LOGTAG, "ActivityNotFoundException chooser_send_email: " + e.getMessage(), e);
 				}
 			}
