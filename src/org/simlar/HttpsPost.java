@@ -62,7 +62,7 @@ public final class HttpsPost
 					parametersAsQueryString.append(parameterName)
 							.append(PARAMETER_EQUALS_CHAR)
 							.append(URLEncoder.encode(parameters.get(parameterName), "UTF-8"));
-				} catch (UnsupportedEncodingException e) {
+				} catch (final UnsupportedEncodingException e) {
 					Log.e(LOGTAG, "UnsupportedEncodingException", e);
 				}
 
@@ -92,9 +92,9 @@ public final class HttpsPost
 
 			Log.d(LOGTAG, "created connection for: " + urlPath);
 			return connection;
-		} catch (MalformedURLException e) {
+		} catch (final MalformedURLException e) {
 			Log.e(LOGTAG, "MalformedURLException: " + e.getMessage(), e);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			Log.e(LOGTAG, "IOException: " + e.getMessage(), e);
 		}
 
@@ -109,7 +109,7 @@ public final class HttpsPost
 				try {
 					Log.i(LOGTAG, "sleeping 500ms before retrying post: " + urlPath);
 					Thread.sleep(500);
-				} catch (InterruptedException e) {
+				} catch (final InterruptedException e) {
 					Log.e(LOGTAG, "sleep interrupted: " + e.getMessage(), e);
 				}
 			}
@@ -143,7 +143,7 @@ public final class HttpsPost
 			Log.i(LOGTAG, "used CipherSuite: " + connection.getCipherSuite());
 			return connection.getInputStream();
 
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			Log.e(LOGTAG, "IOException: " + e.getMessage(), e);
 			return null;
 		}
