@@ -102,12 +102,14 @@ public final class LinphoneThread
 				@Override
 				public void run()
 				{
+					mLinphoneThreadHandler.removeCallbacksAndMessages(null);
 					mLinphoneHandler.destroy();
 					Looper.myLooper().quit();
 					mMainThreadHandler.post(new Runnable() {
 						@Override
 						public void run()
 						{
+							mMainThreadHandler.removeCallbacksAndMessages(null);
 							mListener.onJoin();
 						}
 					});
