@@ -283,7 +283,7 @@ public final class SimlarService extends Service implements LinphoneHandlerListe
 
 		try {
 			mLinphoneThread.register(PreferencesHelper.getMySimlarId(), PreferencesHelper.getPassword());
-		} catch (NotInitedException e) {
+		} catch (final NotInitedException e) {
 			Log.e(LOGTAG, "PreferencesHelper.NotInitedException", e);
 		}
 	}
@@ -663,7 +663,7 @@ public final class SimlarService extends Service implements LinphoneHandlerListe
 	{
 		try {
 			mLinphoneThread.join(2000);
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			Log.e(LOGTAG, "join interrupted: " + e.getMessage(), e);
 		}
 		SimlarServiceBroadcast.sendServiceFinishes(this);
