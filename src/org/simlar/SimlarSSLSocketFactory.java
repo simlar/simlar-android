@@ -96,7 +96,7 @@ public final class SimlarSSLSocketFactory extends SSLSocketFactory
 			final String[] protocols = getPreferred(PREFERRED_PROTOCOLS, deviceSupports, deviceSupports);
 			Log.i(LOGTAG, "using protocols: " + TextUtils.join(", ", protocols));
 			return protocols;
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			Log.e(LOGTAG, "failed to create protocols: " + e.getMessage(), e);
 			return null;
 		}
@@ -114,7 +114,7 @@ public final class SimlarSSLSocketFactory extends SSLSocketFactory
 			final CertificateFactory cf = CertificateFactory.getInstance("X.509");
 			caInput = new BufferedInputStream(new FileInputStream(FileHelper.getRootCaFileName()));
 			return cf.generateCertificate(caInput);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			Log.e(LOGTAG, "Exception during loadCertificate: " + e.getMessage(), e);
 			return null;
 		} finally {
@@ -122,7 +122,7 @@ public final class SimlarSSLSocketFactory extends SSLSocketFactory
 				if (caInput != null) {
 					caInput.close();
 				}
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				e.printStackTrace();
 			}
 		}
@@ -146,7 +146,7 @@ public final class SimlarSSLSocketFactory extends SSLSocketFactory
 			final SSLContext context = SSLContext.getInstance("TLS");
 			context.init(null, tmf.getTrustManagers(), null);
 			return context.getSocketFactory();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			Log.e(LOGTAG, "Exception during createSSLSocketFactory: " + e.getMessage(), e);
 			return null;
 		}
