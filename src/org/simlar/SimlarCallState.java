@@ -26,7 +26,7 @@ import android.content.Context;
 import android.os.SystemClock;
 import android.util.Log;
 
-public class SimlarCallState
+public final class SimlarCallState
 {
 	private static final String LOGTAG = SimlarCallState.class.getSimpleName();
 

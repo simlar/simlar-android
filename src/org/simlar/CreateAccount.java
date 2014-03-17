@@ -31,7 +31,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.util.Log;
 import android.util.Xml;
 
-public class CreateAccount
+public final class CreateAccount
 {
 	private static final String LOGTAG = CreateAccount.class.getSimpleName();
 
@@ -95,7 +95,7 @@ public class CreateAccount
 		}
 	}
 
-	public static class RequestResult extends Result
+	public static final class RequestResult extends Result
 	{
 		public RequestResult(final Result result)
 		{
@@ -108,7 +108,7 @@ public class CreateAccount
 		}
 	}
 
-	public static class ConfirmResult extends Result
+	public static final class ConfirmResult extends Result
 	{
 		public ConfirmResult(final Result result)
 		{

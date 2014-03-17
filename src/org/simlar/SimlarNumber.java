@@ -32,7 +32,7 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat;
 import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 
-public class SimlarNumber
+public final class SimlarNumber
 {
 	private static final String LOGTAG = SimlarNumber.class.getSimpleName();
 	private static String mDefaultRegion = null;

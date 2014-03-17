@@ -27,7 +27,7 @@ import android.view.Menu;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
-public class VolumesControlActivity extends Activity
+public final class VolumesControlActivity extends Activity
 {
 	static final String LOGTAG = VolumesControlActivity.class.getSimpleName();
 
@@ -35,7 +35,7 @@ public class VolumesControlActivity extends Activity
 
 	Volumes mVolumes = null;
 
-	private class SimlarServiceCommunicatorVolumes extends SimlarServiceCommunicator
+	private final class SimlarServiceCommunicatorVolumes extends SimlarServiceCommunicator
 	{
 		public SimlarServiceCommunicatorVolumes()
 		{

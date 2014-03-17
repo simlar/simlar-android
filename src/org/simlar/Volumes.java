@@ -20,7 +20,7 @@
 
 package org.simlar;
 
-public class Volumes
+public final class Volumes
 {
 	private static final float GAIN_MAX = 15.0f;
 	private static final float GAIN_MIN = -15.0f;

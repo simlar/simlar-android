@@ -42,7 +42,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class CallActivity extends Activity implements SensorEventListener
+public final class CallActivity extends Activity implements SensorEventListener
 {
 	static final String LOGTAG = CallActivity.class.getSimpleName();
 
@@ -74,7 +74,7 @@ public class CallActivity extends Activity implements SensorEventListener
 	private ImageButton mButtonMicro;
 	private ImageButton mButtonSpeaker;
 
-	private class SimlarServiceCommunicatorCall extends SimlarServiceCommunicator
+	private final class SimlarServiceCommunicatorCall extends SimlarServiceCommunicator
 	{
 		public SimlarServiceCommunicatorCall()
 		{

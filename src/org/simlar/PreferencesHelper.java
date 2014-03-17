@@ -25,7 +25,7 @@ import java.security.MessageDigest;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class PreferencesHelper
+public final class PreferencesHelper
 {
 	private static final String PREFERENCES_FILE = "settings";
 	private static final String PREFERENCES_USER = "user";
@@ -67,7 +67,7 @@ public class PreferencesHelper
 		}
 	}
 
-	public static class NotInitedException extends Exception
+	public static final class NotInitedException extends Exception
 	{
 		private static final long serialVersionUID = -1402138076439560953L;
 	}

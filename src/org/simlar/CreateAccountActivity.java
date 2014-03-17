@@ -42,7 +42,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class CreateAccountActivity extends Activity
+public final class CreateAccountActivity extends Activity
 {
 	static final String LOGTAG = CreateAccountActivity.class.getSimpleName();
 	public static final String INTENT_EXTRA_NUMBER = "telephonNumber";
@@ -66,7 +66,7 @@ public class CreateAccountActivity extends Activity
 	private final BroadcastReceiver mSmsReceiver = new SmsReceicer();
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCreateAccount();
 
-	private class SimlarServiceCommunicatorCreateAccount extends SimlarServiceCommunicator
+	private final class SimlarServiceCommunicatorCreateAccount extends SimlarServiceCommunicator
 	{
 		public SimlarServiceCommunicatorCreateAccount()
 		{
@@ -99,7 +99,7 @@ public class CreateAccountActivity extends Activity
 		}
 	}
 
-	private class SmsReceicer extends BroadcastReceiver
+	private final class SmsReceicer extends BroadcastReceiver
 	{
 		public SmsReceicer()
 		{

@@ -34,7 +34,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 
-class SoundEffectManager
+final class SoundEffectManager
 {
 	static final String LOGTAG = SoundEffectManager.class.getSimpleName();
 	static final long MIN_PLAY_TIME = VibratorManager.VIBRATE_LENGTH + VibratorManager.VIBRATE_PAUSE;
@@ -47,7 +47,7 @@ class SoundEffectManager
 		UNENCRYPTED_CALL_ALARM
 	}
 
-	private class SoundEffectPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener
+	private final class SoundEffectPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener
 	{
 		final SoundEffectType mType;
 		final Handler mHandler = new Handler();

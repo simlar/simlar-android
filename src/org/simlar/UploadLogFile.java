@@ -38,7 +38,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
 
-public class UploadLogFile
+public final class UploadLogFile
 {
 	static final String LOGTAG = UploadLogFile.class.getSimpleName();
 	private static final String EMAIL_ADDRESS = "mail@ben-sartor.de";
@@ -57,7 +57,7 @@ public class UploadLogFile
 	Context mContext = null;
 	ProgressDialog mProgressDialog = null;
 
-	private class PostResult
+	private final class PostResult
 	{
 		final boolean success;
 		final String fileName;

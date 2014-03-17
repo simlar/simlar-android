@@ -30,7 +30,7 @@ import android.os.Handler;
 import android.os.Vibrator;
 import android.util.Log;
 
-class VibratorManager
+final class VibratorManager
 {
 	static final String LOGTAG = VibratorManager.class.getSimpleName();
 	public static final long VIBRATE_LENGTH = 1000; // ms
@@ -41,7 +41,7 @@ class VibratorManager
 	private VibratorManagerImpl mImpl = null;
 	private RingerModeReceiver mRingerModeReceiver = new RingerModeReceiver();
 
-	private class RingerModeReceiver extends BroadcastReceiver
+	private final class RingerModeReceiver extends BroadcastReceiver
 	{
 		public RingerModeReceiver()
 		{
@@ -55,7 +55,7 @@ class VibratorManager
 		}
 	}
 
-	private class VibratorManagerImpl
+	private final class VibratorManagerImpl
 	{
 		private final Handler mHandler;
 		private final Vibrator mVibrator;

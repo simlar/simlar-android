@@ -33,13 +33,13 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class RingingActivity extends Activity
+public final class RingingActivity extends Activity
 {
 	static final String LOGTAG = RingingActivity.class.getSimpleName();
 
 	private SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorRinging();
 
-	private class SimlarServiceCommunicatorRinging extends SimlarServiceCommunicator
+	private final class SimlarServiceCommunicatorRinging extends SimlarServiceCommunicator
 	{
 		public SimlarServiceCommunicatorRinging()
 		{

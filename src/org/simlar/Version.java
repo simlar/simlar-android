@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
 
-public class Version
+public final class Version
 {
 	private static final String LOGTAG = CreateAccount.class.getSimpleName();
 	private static final String SPECIAL_TAG = "";

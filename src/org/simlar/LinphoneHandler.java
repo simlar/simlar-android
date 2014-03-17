@@ -37,7 +37,7 @@ import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 
-public class LinphoneHandler
+public final class LinphoneHandler
 {
 	private static final String LOGTAG = LinphoneHandler.class.getSimpleName();
 

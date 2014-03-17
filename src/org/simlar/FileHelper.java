@@ -28,7 +28,7 @@ import java.io.InputStream;
 import android.content.Context;
 import android.util.Log;
 
-public class FileHelper
+public final class FileHelper
 {
 	private static final String LOGTAG = FileHelper.class.getSimpleName();
 
@@ -78,7 +78,7 @@ public class FileHelper
 		}
 	}
 
-	public static class NotInitedException extends Exception
+	public static final class NotInitedException extends Exception
 	{
 		private static final long serialVersionUID = -6789607195211210408L;
 	}
