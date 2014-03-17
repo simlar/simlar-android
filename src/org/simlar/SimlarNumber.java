@@ -81,7 +81,7 @@ public final class SimlarNumber
 			}
 
 			return pn;
-		} catch (NumberParseException e) {
+		} catch (final NumberParseException e) {
 			Log.i(LOGTAG, "NumberParseException (telephoneNumber=" + telephoneNumber + " mDefaultRegion=" + mDefaultRegion + "): " + e.getMessage());
 			return null;
 		}
