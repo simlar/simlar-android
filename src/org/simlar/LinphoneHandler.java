@@ -62,12 +62,12 @@ public final class LinphoneHandler
 		Log.i(LOGTAG, "destroy called => forcing unregister");
 
 		if (mLinphoneCore != null) {
+			final LinphoneCore tmp = mLinphoneCore;
+			mLinphoneCore = null;
 			try {
-				mLinphoneCore.destroy();
+				tmp.destroy();
 			} catch (final RuntimeException e) {
 				Log.e(LOGTAG, "RuntimeException during mLinphoneCore.destroy()", e);
-			} finally {
-				mLinphoneCore = null;
 			}
 		}
 		Log.i(LOGTAG, "destroy ended");
@@ -331,6 +331,9 @@ public final class LinphoneHandler
 
 	public boolean hasNoCurrentCalls()
 	{
+		if (mLinphoneCore == null) {
+			return true;
+		}
 		return mLinphoneCore.getCallsNb() == 0;
 	}
 
