@@ -62,7 +62,7 @@ public final class PreferencesHelper
 				sb.append(String.format("%02x", new Byte(b)));
 			}
 			return sb.toString();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			return "";
 		}
 	}
