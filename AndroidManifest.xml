@@ -53,6 +53,7 @@
         android:theme="@style/AppTheme" >
         <service
             android:name="org.simlar.SimlarService"
+            android:exported="false"
             android:stopWithTask="false" />
 
         <activity
