@@ -17,7 +17,7 @@ public final class Version
 
 		try {
 			return SPECIAL_TAG + context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
-		} catch (NameNotFoundException e) {
+		} catch (final NameNotFoundException e) {
 			Log.e(LOGTAG, "NameNotFoundException in Util.getVersionName: " + e.getMessage(), e);
 			return "";
 		}

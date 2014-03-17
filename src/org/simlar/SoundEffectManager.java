@@ -85,7 +85,7 @@ final class SoundEffectManager
 					Log.e(LOGTAG, "[" + mType + "] unknown type");
 					return null;
 				}
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				Log.e(LOGTAG, "[" + mType + "] Media Player io exception: " + e.getMessage(), e);
 				return null;
 			}

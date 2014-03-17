@@ -64,7 +64,7 @@ public final class LinphoneHandler
 		if (mLinphoneCore != null) {
 			try {
 				mLinphoneCore.destroy();
-			} catch (RuntimeException e) {
+			} catch (final RuntimeException e) {
 				Log.e(LOGTAG, "RuntimeException during mLinphoneCore.destroy()", e);
 			} finally {
 				mLinphoneCore = null;
@@ -80,7 +80,7 @@ public final class LinphoneHandler
 			try {
 				mLinphoneCore.enablePayloadType(pt, enable);
 				Log.v(LOGTAG, "AudioCodec: codec=" + codec + " rate=" + rate + " channels=" + channels + " enable=" + enable);
-			} catch (LinphoneCoreException e) {
+			} catch (final LinphoneCoreException e) {
 				Log.e(LOGTAG, "LinphoneCoreException during enabling Audio Codec: " + e.getMessage(), e);
 			}
 		} else {
@@ -187,7 +187,7 @@ public final class LinphoneHandler
 
 			// make sure we only handle one call
 			mLinphoneCore.setMaxCalls(1);
-		} catch (LinphoneCoreException e) {
+		} catch (final LinphoneCoreException e) {
 			Log.e(LOGTAG, "LinphoneCoreException during initialize: " + e.getMessage(), e);
 		}
 	}
@@ -239,7 +239,7 @@ public final class LinphoneHandler
 			proxyCfg.enablePublish(false);
 			mLinphoneCore.addProxyConfig(proxyCfg);
 			mLinphoneCore.setDefaultProxyConfig(proxyCfg);
-		} catch (LinphoneCoreException e) {
+		} catch (final LinphoneCoreException e) {
 			Log.e(LOGTAG, "LinphoneCoreException during setCredentials: " + e.getMessage(), e);
 		}
 	}
@@ -252,7 +252,7 @@ public final class LinphoneHandler
 		proxyConfig.edit();
 		try {
 			proxyConfig.enableRegister(false);
-		} catch (LinphoneCoreException e) {
+		} catch (final LinphoneCoreException e) {
 			Log.e(LOGTAG, "LinphoneCoreException during unregister: " + e.getMessage(), e);
 		}
 		proxyConfig.done();
@@ -273,7 +273,7 @@ public final class LinphoneHandler
 				Log.i(LOGTAG, "Aborting");
 				return;
 			}
-		} catch (LinphoneCoreException e) {
+		} catch (final LinphoneCoreException e) {
 			Log.e(LOGTAG, "LinphoneCoreException during invite: " + e.getMessage(), e);
 			return;
 		}
@@ -300,7 +300,7 @@ public final class LinphoneHandler
 		final LinphoneCallParams params = mLinphoneCore.createDefaultCallParameters();
 		try {
 			mLinphoneCore.acceptCallWithParams(currentCall, params);
-		} catch (LinphoneCoreException e) {
+		} catch (final LinphoneCoreException e) {
 			Log.e(LOGTAG, "LinphoneCoreException during acceptCallWithParams: " + e.getMessage(), e);
 		}
 	}
