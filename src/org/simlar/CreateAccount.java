@@ -157,15 +157,15 @@ public final class CreateAccount
 		Result parsedResult = null;
 		try {
 			parsedResult = parseXml(result, responseAttribute1, responseAttribute2);
-		} catch (XmlPullParserException e) {
+		} catch (final XmlPullParserException e) {
 			Log.e(LOGTAG, "parsing xml failed: " + e.getMessage(), e);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			Log.e(LOGTAG, "IOException: " + e.getMessage(), e);
 		}
 
 		try {
 			result.close();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			Log.e(LOGTAG, "IOException: " + e.getMessage(), e);
 		}
 
