@@ -73,7 +73,7 @@ public final class FileHelper
 			outputStream.close();
 			inputStream.close();
 			Log.i(LOGTAG, "created " + target);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			Log.e(LOGTAG, "Exception: failed to create: " + target);
 		}
 	}
