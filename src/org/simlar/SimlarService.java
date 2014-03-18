@@ -600,7 +600,11 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			return;
 		}
 
-		mLinphoneThread.terminateAllCalls();
+		if (mSimlarStatus == SimlarStatus.ONGOING_CALL) {
+			mLinphoneThread.terminateAllCalls();
+		} else {
+			terminate();
+		}
 	}
 
 	public void terminate()
