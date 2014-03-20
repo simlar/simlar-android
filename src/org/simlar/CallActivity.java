@@ -270,7 +270,7 @@ public final class CallActivity extends Activity implements SensorEventListener
 		iterateTimer();
 	}
 
-	protected void iterateTimer()
+	void iterateTimer()
 	{
 		final String text = Util.formatMilliSeconds(SystemClock.elapsedRealtime() - mCallStartTime);
 		Log.i(LOGTAG, "iterateTimer: " + text);
