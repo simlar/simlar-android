@@ -37,7 +37,7 @@ public final class RingingActivity extends Activity
 {
 	static final String LOGTAG = RingingActivity.class.getSimpleName();
 
-	private SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorRinging();
+	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorRinging();
 
 	private final class SimlarServiceCommunicatorRinging extends SimlarServiceCommunicator
 	{

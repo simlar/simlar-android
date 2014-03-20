@@ -66,8 +66,8 @@ public final class FileHelper
 	private static void copyFileFromPackage(final Context context, final int ressourceId, final String target)
 	{
 		try {
-			FileOutputStream outputStream = context.openFileOutput(target, 0);
-			InputStream inputStream = context.getResources().openRawResource(ressourceId);
+			final FileOutputStream outputStream = context.openFileOutput(target, 0);
+			final InputStream inputStream = context.getResources().openRawResource(ressourceId);
 			Util.copyStream(inputStream, outputStream);
 			outputStream.flush();
 			outputStream.close();

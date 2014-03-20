@@ -122,7 +122,7 @@ public final class CreateAccountActivity extends Activity
 			for (int i = 0; i < pdus.length; i++)
 			{
 				final SmsMessage sms = SmsMessage.createFromPdu((byte[]) pdus[i]);
-				onSmsReceived(sms.getOriginatingAddress(), sms.getMessageBody().toString());
+				onSmsReceived(sms.getOriginatingAddress(), sms.getMessageBody());
 			}
 		}
 	}

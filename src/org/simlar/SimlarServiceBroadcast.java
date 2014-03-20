@@ -39,7 +39,7 @@ public final class SimlarServiceBroadcast implements Serializable
 		CALL_CONNECTION_DETAILS,
 		SERVICE_FINISHES,
 		TEST_REGISTRATION_SUCCESS,
-		TEST_REGISTRATION_FAILED;
+		TEST_REGISTRATION_FAILED
 	}
 
 	public final Type type;

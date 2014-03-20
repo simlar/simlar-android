@@ -67,7 +67,7 @@ public final class SimlarService extends Service implements LinphoneHandlerListe
 	private static final int NOTIFICATION_ID = 1;
 
 	LinphoneThread mLinphoneThread = null;
-	Handler mHandler = new Handler();
+	final Handler mHandler = new Handler();
 	private final IBinder mBinder = new SimlarServiceBinder();
 	Map<String, ContactData> mContacts = new HashMap<String, ContactData>();
 	private SimlarStatus mSimlarStatus = SimlarStatus.OFFLINE;

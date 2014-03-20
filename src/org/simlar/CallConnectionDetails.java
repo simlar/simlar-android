@@ -76,11 +76,7 @@ public final class CallConnectionDetails
 			return false;
 		}
 
-		if (Util.isNullOrEmpty(mCodec) || Util.isNullOrEmpty(mIceState)) {
-			return false;
-		}
-
-		return true;
+		return !Util.isNullOrEmpty(mCodec) && !Util.isNullOrEmpty(mIceState);
 	}
 
 	private String formatCodec()

@@ -57,7 +57,7 @@ public final class LinphoneThread
 	private static final class LinphoneThreadImpl extends Thread implements LinphoneCoreListener
 	{
 		Handler mLinphoneThreadHandler = null;
-		Handler mMainThreadHandler = new Handler();
+		final Handler mMainThreadHandler = new Handler();
 
 		// NOTICE: the linphone handler should only be used in the LINPHONE-THREAD
 		LinphoneHandler mLinphoneHandler = new LinphoneHandler();
