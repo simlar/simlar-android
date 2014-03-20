@@ -52,7 +52,7 @@ public final class SimlarSSLSocketFactory extends SSLSocketFactory
 	private static final String[] CYPHPER_SUITES = createCypherSuite();
 	private static final String[] PROTOCOLS = createProtocols();
 
-	private SSLSocketFactory mSSLSocketFactory = createSSLSocketFactory();
+	private final SSLSocketFactory mSSLSocketFactory = createSSLSocketFactory();
 
 	// thread-safe and lazy evaluation singleton as proposed by Bill Pugh
 	private static final class InstanceHolder
@@ -72,8 +72,7 @@ public final class SimlarSSLSocketFactory extends SSLSocketFactory
 
 		for (final String pref : preferred) {
 			if (sup.contains(pref)) {
-				final String[] retVal = { pref };
-				return retVal;
+				return new String[]{ pref };
 			}
 		}
 
