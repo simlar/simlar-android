@@ -143,6 +143,10 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 		Log.i(LOGTAG, "onResume ");
 		super.onResume();
 
+		if (!GooglePlayServicesHelper.checkPlayServices(this)) {
+			return;
+		}
+
 		mCommunicator.startServiceAndRegister(this, MainActivity.class);
 
 		if (!PreferencesHelper.readPrefencesFromFile(this)) {
