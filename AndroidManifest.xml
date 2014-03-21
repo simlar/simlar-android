@@ -94,7 +94,7 @@
         </activity>
         <activity
             android:name="org.simlar.AboutActivity"
-            android:label="@string/activity_about_title"
+            android:label="@string/about_activity_title"
             android:theme="@style/dialogThemeNoTitle" >
         </activity>
         <activity

@@ -111,9 +111,9 @@
 
     <string name="activity_volumes_control_title">VolumesControlActivity</string>
 
-    <string name="activity_about_title">About Simlar</string>
-    <string name="activity_about_copyright">© 2013 The Simlar Authors. All rights reserved.</string>
-    <string name="activity_about_license">License: GNU General Public License, see http://www.gnu.org/licenses/old-licenses/gpl-2.0.html</string>
+    <string name="about_activity_title">About Simlar</string>
+    <string name="about_activity_copyright">© 2013 The Simlar Authors. All rights reserved.</string>
+    <string name="about_activity_license">License: GNU General Public License, see http://www.gnu.org/licenses/old-licenses/gpl-2.0.html</string>
 
     <string name="create_account_activity_title">Creating Account</string>
     <string name="create_account_activity_request">Request Account Creation</string>
