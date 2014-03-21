@@ -89,7 +89,6 @@
         </activity>
         <activity
             android:name="org.simlar.ConnectionDetailsActivity"
-            android:label="@string/activity_volumes_control_title"
             android:theme="@style/dialogThemeNoTitle" >
         </activity>
         <activity
