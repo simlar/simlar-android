@@ -31,12 +31,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -48,6 +50,7 @@ public final class VerifyNumberActivity extends Activity
 	ProgressDialog mProgressDialog = null;
 	private Spinner mSpinner;
 	private EditText mEditNumber;
+	private CheckBox mCheckBox;
 	private Button mButtonAccept;
 
 	private final class EditNumberTextWatcher implements TextWatcher
@@ -151,8 +154,11 @@ public final class VerifyNumberActivity extends Activity
 		}
 		mEditNumber.addTextChangedListener(new EditNumberTextWatcher());
 
-		mButtonAccept = (Button) findViewById(R.id.buttonRegister);
+		// make hrefs work in terms and conditions checkbox
+		mCheckBox = (CheckBox) findViewById(R.id.checkBoxTermsAndConditions);
+		mCheckBox.setMovementMethod(LinkMovementMethod.getInstance());
 
+		mButtonAccept = (Button) findViewById(R.id.buttonRegister);
 		updateButtonAccept();
 	}
 
@@ -196,9 +202,15 @@ public final class VerifyNumberActivity extends Activity
 		super.onPause();
 	}
 
+	@SuppressWarnings("unused")
+	public void onTermsAndConditionsClicked(final View view)
+	{
+		updateButtonAccept();
+	}
+
 	void updateButtonAccept()
 	{
-		final boolean enabled = !Util.isNullOrEmpty(mEditNumber.getText().toString());
+		final boolean enabled = !Util.isNullOrEmpty(mEditNumber.getText().toString()) && mCheckBox.isChecked();
 		Log.i(LOGTAG, "updateButtonAccept enabled=" + enabled);
 		mButtonAccept.setEnabled(enabled);
 	}

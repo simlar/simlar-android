@@ -77,13 +77,24 @@
         </EditText>
     </LinearLayout>
 
+    <CheckBox
+        android:id="@+id/checkBoxTermsAndConditions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/linearLayoutCompletePhoneNumber"
+        android:layout_alignRight="@+id/linearLayoutCompletePhoneNumber"
+        android:layout_below="@+id/linearLayoutCompletePhoneNumber"
+        android:layout_marginTop="20dp"
+        android:onClick="onTermsAndConditionsClicked"
+        android:text="@string/verify_number_activity_checkbox_privacy_statement_and_terms_and_conditions" />
+
     <LinearLayout
         android:id="@+id/linearLayoutButtons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/linearLayoutCompletePhoneNumber"
         android:layout_alignRight="@+id/linearLayoutCompletePhoneNumber"
-        android:layout_below="@+id/linearLayoutCompletePhoneNumber"
+        android:layout_below="@+id/checkBoxTermsAndConditions"
         android:layout_marginTop="33dp"
         android:baselineAligned="false"
         android:gravity="center_horizontal" >
