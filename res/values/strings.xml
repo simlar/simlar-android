@@ -108,6 +108,7 @@
     <string name="verify_number_activity_please_put_in_your_number">It is necessary to create an account based on your telephone number. This enables others to find you and you to find others.</string>
     <string name="verify_number_activity_button_cancel">Cancel</string>
     <string name="verify_number_activity_button_register">Create Account</string>
+    <string name="verify_number_activity_checkbox_privacy_statement_and_terms_and_conditions">I have read and accept the <a href="http://www.simlar.org/privacy_statement.html">privacy statement</a> and the <a href="http://www.simlar.org/terms_and_conditions.html">terms and conditions</a>.</string>
 
     <string name="volumes_control_activity_title">VolumesControlActivity</string>
     <string name="volumes_control_activity_software_echo_limiter">Software Echo Limiter</string>
