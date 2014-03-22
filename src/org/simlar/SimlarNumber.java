@@ -21,6 +21,7 @@
 package org.simlar;
 
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import android.content.Context;
@@ -142,14 +143,14 @@ public final class SimlarNumber
 	{
 		// try to read country code from sim
 		final TelephonyManager tm = (TelephonyManager) c.getSystemService(Context.TELEPHONY_SERVICE);
-		final String regionFromSim = tm.getSimCountryIso().toUpperCase();
+		final String regionFromSim = tm.getSimCountryIso().toUpperCase(Locale.US);
 		if (!Util.isNullOrEmpty(regionFromSim)) {
 			mDefaultRegion = regionFromSim;
 			return regionFromSim;
 		}
 
 		// read countryCode from configuration
-		final String regionFromConfig = c.getResources().getConfiguration().locale.getCountry().toUpperCase();
+		final String regionFromConfig = c.getResources().getConfiguration().locale.getCountry().toUpperCase(Locale.US);
 		Log.i(LOGTAG, "guessed region by android configuration: " + regionFromConfig);
 		mDefaultRegion = regionFromConfig;
 		return regionFromConfig;
