@@ -23,6 +23,7 @@ package org.simlar;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -179,11 +180,11 @@ public final class CreateAccount
 		parser.setInput(inputStream, null);
 		parser.nextTag();
 
-		final String xmlRootElement = parser.getName().toLowerCase();
+		final String xmlRootElement = parser.getName().toLowerCase(Locale.US);
 		if (xmlRootElement.equals("error")
 				&& parser.getAttributeCount() >= 2
-				&& parser.getAttributeName(0).toLowerCase().equals("id")
-				&& parser.getAttributeName(1).toLowerCase().equals("message"))
+				&& parser.getAttributeName(0).toLowerCase(Locale.US).equals("id")
+				&& parser.getAttributeName(1).toLowerCase(Locale.US).equals("message"))
 		{
 			final int errorId = Integer.parseInt(parser.getAttributeValue(0));
 			Log.i(LOGTAG, "server returned error: " + parser.getAttributeValue(1) + " (" + errorId + ")");
