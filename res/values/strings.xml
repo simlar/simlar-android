@@ -108,8 +108,6 @@
     <string name="verify_number_activity_please_put_in_your_number">It is necessary to create an account based on your telephone number. This enables others to find you and you to find others.</string>
     <string name="verify_number_activity_button_cancel">Cancel</string>
     <string name="verify_number_activity_button_register">Create Account</string>
-    <string name="verify_number_activity_alert_no_telephone_number_title">Error: no telephone number</string>
-    <string name="verify_number_activity_alert_no_telephone_number_message">Please put in your telephone number</string>
 
     <string name="volumes_control_activity_title">VolumesControlActivity</string>
     <string name="volumes_control_activity_software_echo_limiter">Software Echo Limiter</string>

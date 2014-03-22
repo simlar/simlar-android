@@ -23,18 +23,20 @@ package org.simlar;
 import java.util.Comparator;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -46,6 +48,31 @@ public final class VerifyNumberActivity extends Activity
 	ProgressDialog mProgressDialog = null;
 	private Spinner mSpinner;
 	private EditText mEditNumber;
+	private Button mButtonAccept;
+
+	private final class EditNumberTextWatcher implements TextWatcher
+	{
+		public EditNumberTextWatcher()
+		{
+			super();
+		}
+
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before, int count)
+		{
+			VerifyNumberActivity.this.updateButtonAccept();
+		}
+
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count, int after)
+		{
+		}
+
+		@Override
+		public void afterTextChanged(Editable s)
+		{
+		}
+	}
 
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCall();
 
@@ -122,6 +149,11 @@ public final class VerifyNumberActivity extends Activity
 				}
 			}, 100);
 		}
+		mEditNumber.addTextChangedListener(new EditNumberTextWatcher());
+
+		mButtonAccept = (Button) findViewById(R.id.buttonRegister);
+
+		updateButtonAccept();
 	}
 
 	void showSoftInputForEditNumber()
@@ -164,6 +196,13 @@ public final class VerifyNumberActivity extends Activity
 		super.onPause();
 	}
 
+	void updateButtonAccept()
+	{
+		final boolean enabled = !Util.isNullOrEmpty(mEditNumber.getText().toString());
+		Log.i(LOGTAG, "updateButtonAccept enabled=" + enabled);
+		mButtonAccept.setEnabled(enabled);
+	}
+
 	@SuppressWarnings("unused")
 	public void createAccount(final View view)
 	{
@@ -176,10 +215,7 @@ public final class VerifyNumberActivity extends Activity
 
 		final String number = mEditNumber.getText().toString();
 		if (Util.isNullOrEmpty(number)) {
-			(new AlertDialog.Builder(this))
-					.setTitle(R.string.verify_number_activity_alert_no_telephone_number_title)
-					.setMessage(R.string.verify_number_activity_alert_no_telephone_number_message)
-					.create().show();
+			Log.e(LOGTAG, "createAccount no number => aborting");
 			return;
 		}
 
