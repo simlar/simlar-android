@@ -224,7 +224,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		if (PreferencesHelper.readPrefencesFromFile(this)) {
 			connect();
-			GooglePlayServicesHelper.registerGCM(this);
 		} else {
 			mCreatingAccount = true;
 			notifySimlarStatusChanged(mSimlarStatus);

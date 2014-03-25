@@ -41,25 +41,62 @@ public final class GooglePlayServicesHelper
 	private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 	static final String GOOGLE_PUSH_SENDER_ID = "772399062899";
 
-	public static void registerGCM(final Context context)
+	public static void registerGcmIfNeeded(final Context context)
 	{
-		AsyncTask.execute(new Runnable() {
+		final int versionCode = Version.getVersionCode(context);
+		if (versionCode < 1) {
+			Log.e(LOGTAG, "unable to read simlar version code");
+			return;
+		}
+
+		if (PreferencesHelper.getSimlarVersionCode() > 0
+				&& PreferencesHelper.getSimlarVersionCode() == versionCode
+				&& !Util.isNullOrEmpty(PreferencesHelper.getGcmRegistrationId()))
+		{
+			Log.i(LOGTAG, "already registered for google push notifications");
+			return;
+		}
+
+		registerGcm(context, versionCode);
+	}
+
+	private static void registerGcm(final Context context, final int simlarVersionCode)
+	{
+		new AsyncTask<Void, Void, String>() {
 			@Override
-			public void run()
+			protected String doInBackground(Void... params)
 			{
 				try {
 					final GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(context);
-					final String regid = gcm.register(GOOGLE_PUSH_SENDER_ID);
-					if (StorePushId.httpPostStorePushId(regid)) {
-						Log.i(LOGTAG, "GCM push notification registration id=" + regid + " stored on simlar server");
-					} else {
-						Log.e(LOGTAG, "ERROR: failed to store GCM push notification registration id=" + regid + " on simlar server");
+					final String gcmRegistrationId = gcm.register(GOOGLE_PUSH_SENDER_ID);
+
+					if (Util.isNullOrEmpty(gcmRegistrationId)) {
+						Log.e(LOGTAG, "got empty gcm registration id from google server");
+						return null;
 					}
+
+					if (!StorePushId.httpPostStorePushId(gcmRegistrationId)) {
+						Log.e(LOGTAG, "ERROR: failed to store GCM push notification registration id=" + gcmRegistrationId + " on simlar server");
+						return null;
+					}
+
+					Log.i(LOGTAG, "GCM push notification registration id=" + gcmRegistrationId + " stored on simlar server");
+					return gcmRegistrationId;
 				} catch (final IOException e) {
 					Log.w(LOGTAG, "GCM Registration IOException", e);
+					return null;
 				}
 			}
-		});
+
+			@Override
+			protected void onPostExecute(final String gcmRegistrationId)
+			{
+				if (!Util.isNullOrEmpty(gcmRegistrationId)) {
+					PreferencesHelper.saveToFileGcmRegistrationId(context, gcmRegistrationId, simlarVersionCode);
+					Log.i(LOGTAG, "GCM push notification registration id=" + gcmRegistrationId + " cached on device");
+				}
+			}
+		}.execute();
 	}
 
 	private static void showDialogAndFinishParent(final Activity activity, final Dialog dialog)
