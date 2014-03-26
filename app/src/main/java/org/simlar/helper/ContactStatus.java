@@ -35,6 +35,11 @@ public enum ContactStatus
 		};
 	}
 
+	public Integer toInteger()
+	{
+		return this.ordinal();
+	}
+
 	public boolean isRegistered()
 	{
 		return this == REGISTERED;
