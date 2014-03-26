@@ -21,9 +21,9 @@
 package org.simlar;
 
 public enum ContactStatus {
-	UNKNOWN,
 	NOTREGISTERED,
-	REGISTERED;
+	REGISTERED,
+	UNKNOWN;
 
 	public static ContactStatus fromInt(final int i)
 	{
