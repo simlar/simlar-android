@@ -359,7 +359,11 @@ public final class CallActivity extends Activity implements SensorEventListener
 	@SuppressWarnings("unused")
 	public void terminateCall(final View view)
 	{
-		mCommunicator.getService().terminateCall();
+		final SimlarService service = mCommunicator.getService();
+		if (service != null) {
+			service.terminateCall();
+		}
+
 		finish();
 	}
 
