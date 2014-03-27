@@ -78,7 +78,7 @@
     <string name="call_activity_not_encrypted">WARNING: This call is NOT encrypted!</string>
     <string name="call_activity_button_accept_unencrypted_call">Quiet alarm</string>
     <string name="call_activity_no_authentication_token">&#8230;</string>
-    <string name="call_activity_please_verify_authentication_token">Please verify the following authentication token</string>
+    <string name="call_activity_please_verify_authentication_token">Please compare code with your calling partner:</string>
     <string name="call_activity_button_authentication_token_verify">Verify</string>
     <string name="call_activity_button_authentication_token_wrong">Wrong</string>
     <string name="call_activity_outgoing_connecting">Connecting&#8230;</string>
@@ -109,11 +109,11 @@
     <string name="verify_number_activity_alert_no_telephone_number_title">Error: no telephone number</string>
     <string name="verify_number_activity_alert_no_telephone_number_message">Please put in your telephone number</string>
 
-    <string name="activity_volumes_control_title">VolumesControlActivity</string>
+    <string name="volumes_control_activity_title">VolumesControlActivity</string>
 
-    <string name="activity_about_title">About Simlar</string>
-    <string name="activity_about_copyright">© 2013 The Simlar Authors. All rights reserved.</string>
-    <string name="activity_about_license">License: GNU General Public License, see http://www.gnu.org/licenses/old-licenses/gpl-2.0.html</string>
+    <string name="about_activity_title">About Simlar</string>
+    <string name="about_activity_copyright">© 2013 The Simlar Authors. All rights reserved.</string>
+    <string name="about_activity_license">License: GNU General Public License, see http://www.gnu.org/licenses/old-licenses/gpl-2.0.html</string>
 
     <string name="create_account_activity_title">Creating Account</string>
     <string name="create_account_activity_request">Request Account Creation</string>

@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import android.graphics.drawable.Drawable;
@@ -117,9 +118,9 @@ public final class Util
 	private static SimpleDateFormat createSimpleDateFormat(final long milliSeconds)
 	{
 		if (milliSeconds >= 3600000) {
-			return new SimpleDateFormat("HH:mm:ss");
+			return new SimpleDateFormat("HH:mm:ss", Locale.US);
 		}
 
-		return new SimpleDateFormat("mm:ss");
+		return new SimpleDateFormat("mm:ss", Locale.US);
 	}
 }
