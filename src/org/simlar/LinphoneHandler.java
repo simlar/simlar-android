@@ -235,7 +235,7 @@ public final class LinphoneHandler
 			mLinphoneCore.clearProxyConfigs();
 			LinphoneProxyConfig proxyCfg = LinphoneCoreFactory.instance().createProxyConfig(
 					"sip:" + mySimlarId + "@" + DOMAIN, "sip:" + DOMAIN, null, true);
-			proxyCfg.setExpires(1800); // kamailio setting is 3600
+			proxyCfg.setExpires(60); // connection times out after 1 minute. This overrides kamailio setting which is 3600 (1 hour).
 			proxyCfg.enablePublish(false);
 			mLinphoneCore.addProxyConfig(proxyCfg);
 			mLinphoneCore.setDefaultProxyConfig(proxyCfg);
