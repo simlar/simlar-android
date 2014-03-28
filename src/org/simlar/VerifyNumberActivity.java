@@ -23,6 +23,7 @@ package org.simlar;
 import java.util.Comparator;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -231,9 +232,18 @@ public final class VerifyNumberActivity extends Activity
 			return;
 		}
 
-		final String telephoneNumber = "+" + countryCallingCode + number;
+		// check telephoneNumbers plausibility
+		final SimlarNumber simlarNumber = new SimlarNumber(number);
+		if (!simlarNumber.isValid()) {
+			(new AlertDialog.Builder(this))
+					.setTitle(R.string.verify_number_activity_alert_wrong_number_title)
+					.setMessage(R.string.verify_number_activity_alert_wrong_number_text)
+					.create().show();
+			return;
+		}
+
 		final Intent intent = new Intent(this, CreateAccountActivity.class);
-		intent.putExtra(CreateAccountActivity.INTENT_EXTRA_NUMBER, telephoneNumber);
+		intent.putExtra(CreateAccountActivity.INTENT_EXTRA_NUMBER, simlarNumber.getTelephoneNumber());
 		startActivityForResult(intent, RESULT_CREATE_ACCOUNT_ACTIVITY);
 	}
 
