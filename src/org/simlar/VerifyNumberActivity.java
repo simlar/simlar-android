@@ -160,7 +160,7 @@ public final class VerifyNumberActivity extends Activity
 		}
 
 		final String telephoneNumber = "+" + countryCallingCode + number;
-		Intent intent = new Intent(this, CreateAccountActivity.class);
+		final Intent intent = new Intent(this, CreateAccountActivity.class);
 		intent.putExtra(CreateAccountActivity.INTENT_EXTRA_NUMBER, telephoneNumber);
 		startActivityForResult(intent, RESULT_CREATE_ACCOUNT_ACTIVITY);
 	}
