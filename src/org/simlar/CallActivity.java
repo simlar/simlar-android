@@ -278,6 +278,7 @@ public final class CallActivity extends Activity implements SensorEventListener
 			public void run()
 			{
 				finish();
+				overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 			}
 		}, milliSeconds);
 	}
