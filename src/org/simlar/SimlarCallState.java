@@ -199,6 +199,8 @@ public final class SimlarCallState
 
 		if (mOngoingEncryptionHandshake) {
 			return context.getString(R.string.call_activity_encrypting);
+		} else if (mLinphoneCallState.isTalking()) {
+			return context.getString(R.string.call_activity_talking);
 		} else if (mLinphoneCallState.isCallOutgoingConnecting()) {
 			return context.getString(R.string.call_activity_outgoing_connecting);
 		} else if (mLinphoneCallState.isCallOutgoingRinging()) {
