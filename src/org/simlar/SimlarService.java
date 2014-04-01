@@ -213,6 +213,11 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 
 		Log.i(LOGTAG, "terminateChecker triggered on status=" + mSimlarStatus);
+
+		if (!mSimlarStatus.isConnectedToSipServer()) {
+			mSimlarCallState.connectingToSimlarServerTimedOut();
+			SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
+		}
 		handleTerminate();
 
 		return true;

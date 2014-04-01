@@ -107,4 +107,9 @@ public enum LinphoneCallState
 	{
 		return this == LinphoneCallState.CONNECTED;
 	}
+
+	public boolean isIdle()
+	{
+		return this == LinphoneCallState.IDLE;
+	}
 }
