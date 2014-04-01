@@ -193,20 +193,23 @@ public final class SimlarCallState
 
 	public String getCallStatusDisplayMessage(final Context context)
 	{
-		if (!hasCallStatusMessage()) {
+		if (isEmpty()) {
 			return null;
 		}
 
 		if (mOngoingEncryptionHandshake) {
 			return context.getString(R.string.call_activity_encrypting);
+		} else if (mLinphoneCallState.isCallOutgoingConnecting()) {
+			return context.getString(R.string.call_activity_outgoing_connecting);
+		} else if (mLinphoneCallState.isCallOutgoingRinging()) {
+			return context.getString(R.string.call_activity_outgoing_ringing);
+		} else if (mLinphoneCallState.isPossibleCallEndedMessage()) {
+			return String.format(context.getString(mCallEndReason.getDisplayMessageId()), mDisplayName);
 		}
 
-		return String.format(context.getString(mCallEndReason.getDisplayMessageId()), mDisplayName);
-	}
+		Log.w(LOGTAG, "getCallStatusDisplayMessage mLinphoneCallState=" + mLinphoneCallState);
 
-	public String getErrorDisplayMessage(final Context context, final String displayName)
-	{
-		return hasErrorMessage() ? String.format(context.getString(mCallEndReason.getDisplayMessageId()), displayName) : null;
+		return null;
 	}
 
 	public boolean isEncrypted()
@@ -259,18 +262,8 @@ public final class SimlarCallState
 		return mLinphoneCallState.isBeforeEncryption();
 	}
 
-	public boolean hasCallStatusMessage()
-	{
-		return !isEmpty() && mLinphoneCallState.isPossibleCallEndedMessage() && mCallEndReason.getDisplayMessageId() > 0;
-	}
-
 	public long getStartTime()
 	{
 		return mDuration > 0 ? mCallStartTime : -1;
-	}
-
-	private boolean hasErrorMessage()
-	{
-		return !isEmpty() && mLinphoneCallState.isPossibleCallEndedMessage() && mCallEndReason.getDisplayMessageId() > 0;
 	}
 }

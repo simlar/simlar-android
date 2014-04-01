@@ -46,18 +46,38 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/calling_title_text_white" />
 
-    <TextView
-        android:id="@+id/callTimer"
-        android:layout_width="fill_parent"
+    <LinearLayout
+        android:id="@+id/linearLayoutCallStatus"
+        android:layout_width="match_parent"
         android:layout_height="30dip"
         android:layout_below="@+id/contactName"
         android:layout_toRightOf="@+id/contactImage"
         android:gravity="top"
-        android:paddingLeft="10dp"
-        android:text="00:00"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/calling_title_text_white"
-        tools:ignore="HardcodedText" />
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/textViewCallStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:paddingLeft="10dp"
+            android:text="@string/call_activity_outgoing_connecting"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/calling_title_text_white" />
+
+        <TextView
+            android:id="@+id/textViewCallTimer"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:paddingRight="10dp"
+            android:text="00:00"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/calling_title_text_white"
+            tools:ignore="HardcodedText" />
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -76,21 +96,6 @@
             android:layout_centerInParent="true"
             android:src="@drawable/logo_big"
             tools:ignore="ContentDescription" />
-
-        <LinearLayout
-            android:id="@+id/linearLayoutCallStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/round_corners" >
-
-            <TextView
-                android:id="@+id/textViewCallStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="15dp"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/linearLayoutConnectionQuality"

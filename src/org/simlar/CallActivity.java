@@ -56,10 +56,8 @@ public final class CallActivity extends Activity implements SensorEventListener
 	// gui elements
 	private ImageView mImageViewContactImage;
 	private TextView mTextViewContactName;
-	private TextView mTextViewCallTimer;
-
-	private LinearLayout mLayoutCallStatus;
 	private TextView mTextViewCallStatus;
+	private TextView mTextViewCallTimer;
 
 	private LinearLayout mLayoutConnectionQuality;
 	private TextView mTextViewQuality;
@@ -118,10 +116,8 @@ public final class CallActivity extends Activity implements SensorEventListener
 
 		mImageViewContactImage = (ImageView) findViewById(R.id.contactImage);
 		mTextViewContactName = (TextView) findViewById(R.id.contactName);
-		mTextViewCallTimer = (TextView) findViewById(R.id.callTimer);
-
-		mLayoutCallStatus = (LinearLayout) findViewById(R.id.linearLayoutCallStatus);
 		mTextViewCallStatus = (TextView) findViewById(R.id.textViewCallStatus);
+		mTextViewCallTimer = (TextView) findViewById(R.id.textViewCallTimer);
 
 		mLayoutConnectionQuality = (LinearLayout) findViewById(R.id.linearLayoutConnectionQuality);
 		mTextViewQuality = (TextView) findViewById(R.id.textViewQuality);
@@ -140,7 +136,6 @@ public final class CallActivity extends Activity implements SensorEventListener
 		// Presets
 		mTextViewCallTimer.setVisibility(View.INVISIBLE);
 
-		mLayoutCallStatus.setVisibility(View.INVISIBLE);
 		mLayoutConnectionQuality.setVisibility(View.INVISIBLE);
 		mLayoutAuthenticationToken.setVisibility(View.INVISIBLE);
 		mLayoutUnencryptedCall.setVisibility(View.GONE);
@@ -218,7 +213,8 @@ public final class CallActivity extends Activity implements SensorEventListener
 			mImageViewContactImage.setImageResource(R.drawable.contact_picture);
 		}
 		mTextViewContactName.setText(simlarCallState.getDisplayName());
-		setCallEncryption(simlarCallState.isEncrypted(), simlarCallState.getAuthenticationToken(), simlarCallState.isAuthenticationTokenVerified());
+
+		mTextViewCallStatus.setText(simlarCallState.getCallStatusDisplayMessage(this));
 
 		mCallStartTime = simlarCallState.getStartTime();
 		if (mCallStartTime > 0) {
@@ -230,19 +226,9 @@ public final class CallActivity extends Activity implements SensorEventListener
 			mLayoutConnectionQuality.setVisibility(View.VISIBLE);
 			mButtonConnectionDetails.setVisibility(View.VISIBLE);
 			getString(simlarCallState.getQualityDescription());
-		} else {
-			mLayoutConnectionQuality.setVisibility(View.INVISIBLE);
-
-			if (simlarCallState.hasCallStatusMessage()) {
-				mLayoutCallStatus.setVisibility(View.VISIBLE);
-				mTextViewCallStatus.setText(simlarCallState.getCallStatusDisplayMessage(this));
-			} else if (simlarCallState.hasErrorMessage()) {
-				mLayoutCallStatus.setVisibility(View.VISIBLE);
-				mTextViewCallStatus.setText(simlarCallState.getErrorDisplayMessage(this, simlarCallState.getDisplayName()));
-			} else {
-				mLayoutCallStatus.setVisibility(View.INVISIBLE);
-			}
 		}
+
+		setCallEncryption(simlarCallState.isEncrypted(), simlarCallState.getAuthenticationToken(), simlarCallState.isAuthenticationTokenVerified());
 
 		if (simlarCallState.isTalking()) {
 			setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
