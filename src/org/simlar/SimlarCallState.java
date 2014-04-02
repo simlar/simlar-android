@@ -20,8 +20,6 @@
 
 package org.simlar;
 
-import org.linphone.core.LinphoneCall.State;
-
 import android.content.Context;
 import android.os.SystemClock;
 import android.util.Log;
@@ -32,7 +30,7 @@ public final class SimlarCallState
 
 	private String mDisplayName = null;
 	private String mDisplayPhotoId = null;
-	private State mLinphoneCallState = null;
+	private LinphoneCallState mLinphoneCallState = LinphoneCallState.UNKONWN;
 	private int mCallStatusMessageId = -1;
 	private boolean mEncrypted = true;
 	private String mAuthenticationToken = null;
@@ -42,33 +40,18 @@ public final class SimlarCallState
 	private int mDuration = 0;
 	private long mCallStartTime = -1;
 
-	private static boolean possibleErrorMessage(final State callState)
+	private static int getMessageId(final LinphoneCallState callState, final String message)
 	{
-		return State.CallEnd.equals(callState) || State.Error.equals(callState) || State.CallReleased.equals(callState);
-	}
-
-	private static boolean isCallOutgoingConnecting(final State callState)
-	{
-		return State.OutgoingInit.equals(callState) || State.OutgoingProgress.equals(callState);
-	}
-
-	private static boolean isCallOutgoingRinging(final State callState)
-	{
-		return State.OutgoingRinging.equals(callState);
-	}
-
-	private static int getMessageId(final State callState, final String message)
-	{
-		if (isCallOutgoingConnecting(callState)) {
+		if (callState.isCallOutgoingConnecting()) {
 			return R.string.call_activity_outgoing_connecting;
 		}
 
-		if (isCallOutgoingRinging(callState)) {
+		if (callState.isCallOutgoingRinging()) {
 			return R.string.call_activity_outgoing_ringing;
 		}
 
 		// see linphone-android/submodules/belle-sip/src/message.c: well_known_codes
-		if (!Util.isNullOrEmpty(message) && possibleErrorMessage(callState)) {
+		if (!Util.isNullOrEmpty(message) && callState.isPossibleCallEndedMessage()) {
 			if (message.equals("Call declined.")) {
 				return R.string.call_activity_call_ended_because_declined;
 			} else if (message.equals("Not Found")) {
@@ -83,18 +66,18 @@ public final class SimlarCallState
 		return -1;
 	}
 
-	public boolean updateCallStateChanged(final String displayName, final String photoId, final State callState, final String message)
+	public boolean updateCallStateChanged(final String displayName, final String photoId, final LinphoneCallState callState, final String message)
 	{
 		final int msgId = getMessageId(callState, message);
-		final boolean updateCallStatusMessageId = !(possibleErrorMessage(callState) && msgId <= 0);
+		final boolean updateCallStatusMessageId = !(callState.isPossibleCallEndedMessage() && msgId <= 0);
 
-		if (Util.equalString(displayName, mDisplayName) && Util.equalString(photoId, mDisplayPhotoId) && Util.equals(callState, mLinphoneCallState)
+		if (Util.equalString(displayName, mDisplayName) && Util.equalString(photoId, mDisplayPhotoId) && mLinphoneCallState == callState
 				&& (mCallStatusMessageId == msgId || !updateCallStatusMessageId)) {
 			return false;
 		}
 
-		if (callState == null) {
-			Log.e(LOGTAG, "ERROR updateCallStateChanged: callState not set");
+		if (callState == LinphoneCallState.UNKONWN) {
+			Log.e(LOGTAG, "ERROR updateCallStateChanged: callState=" + callState);
 		}
 
 		if (!Util.isNullOrEmpty(displayName)) {
@@ -114,7 +97,7 @@ public final class SimlarCallState
 			mCallStatusMessageId = msgId;
 		}
 
-		if (isNewCall()) {
+		if (mLinphoneCallState.isNewCallJustStarted()) {
 			mEncrypted = true;
 			mAuthenticationToken = null;
 			mAuthenticationTokenVerified = false;
@@ -164,7 +147,7 @@ public final class SimlarCallState
 
 	public boolean isEmpty()
 	{
-		return mLinphoneCallState == null;
+		return mLinphoneCallState == LinphoneCallState.UNKONWN;
 	}
 
 	private String formatPhotoId()
@@ -277,68 +260,41 @@ public final class SimlarCallState
 
 	public boolean isTalking()
 	{
-		if (isEmpty()) {
-			return false;
-		}
-
-		return State.Connected.equals(mLinphoneCallState) ||
-				State.StreamsRunning.equals(mLinphoneCallState) ||
-				State.CallUpdatedByRemote.equals(mLinphoneCallState) ||
-				State.CallUpdating.equals(mLinphoneCallState);
+		return mLinphoneCallState.isTalking();
 	}
 
 	public boolean isNewCall()
 	{
-		if (isEmpty()) {
-			return false;
-		}
-
-		return State.OutgoingInit.equals(mLinphoneCallState) || State.IncomingReceived.equals(mLinphoneCallState);
+		return mLinphoneCallState.isNewCallJustStarted();
 	}
 
 	public boolean isEndedCall()
 	{
-		if (isEmpty()) {
-			return false;
-		}
-
-		return State.CallEnd.equals(mLinphoneCallState);
+		return mLinphoneCallState.isEndedCall();
 	}
 
 	public boolean isRinging()
 	{
-		if (isEmpty()) {
-			return false;
-		}
-
-		return State.IncomingReceived.equals(mLinphoneCallState);
+		return mLinphoneCallState.isMyPhoneRinging();
 	}
 
 	public boolean isBeforeEncryption()
 	{
-		return State.Connected.equals(mLinphoneCallState);
+		return mLinphoneCallState.isBeforeEncryption();
 	}
 
 	public boolean hasCallStatusMessage()
 	{
-		if (isEmpty()) {
-			return false;
-		}
-
-		if ((isCallOutgoingConnecting(mLinphoneCallState) || isCallOutgoingRinging(mLinphoneCallState)) && mCallStatusMessageId > 0) {
-			return true;
-		}
-
-		return mOngoingEncryptionHandshake;
-	}
-
-	public boolean hasErrorMessage()
-	{
-		return !isEmpty() && possibleErrorMessage(mLinphoneCallState) && mCallStatusMessageId > 0;
+		return !isEmpty() && mLinphoneCallState.isPossibleCallEndedMessage() && mCallStatusMessageId > 0;
 	}
 
 	public long getStartTime()
 	{
 		return mDuration > 0 ? mCallStartTime : -1;
+	}
+
+	public boolean hasErrorMessage()
+	{
+		return !isEmpty() && mLinphoneCallState.isPossibleCallEndedMessage() && mCallStatusMessageId > 0;
 	}
 }
