@@ -31,7 +31,7 @@ public final class SimlarCallState
 	private String mDisplayName = null;
 	private String mDisplayPhotoId = null;
 	private LinphoneCallState mLinphoneCallState = LinphoneCallState.UNKONWN;
-	private int mCallStatusMessageId = -1;
+	private CallEndReason mCallEndReason = CallEndReason.NONE;
 	private boolean mEncrypted = true;
 	private String mAuthenticationToken = null;
 	private boolean mAuthenticationTokenVerified = false;
@@ -40,39 +40,27 @@ public final class SimlarCallState
 	private int mDuration = 0;
 	private long mCallStartTime = -1;
 
-	private static int getMessageId(final LinphoneCallState callState, final String message)
+	private boolean updateCallEndReason(final CallEndReason reason)
 	{
-		if (callState.isCallOutgoingConnecting()) {
-			return R.string.call_activity_outgoing_connecting;
+		// do not override existing reasons
+		if (mCallEndReason != CallEndReason.NONE) {
+			return false;
 		}
 
-		if (callState.isCallOutgoingRinging()) {
-			return R.string.call_activity_outgoing_ringing;
+		if (mCallEndReason == reason) {
+			return false;
 		}
 
-		// see linphone-android/submodules/belle-sip/src/message.c: well_known_codes
-		if (!Util.isNullOrEmpty(message) && callState.isPossibleCallEndedMessage()) {
-			if (message.equals("Call declined.")) {
-				return R.string.call_activity_call_ended_because_declined;
-			} else if (message.equals("Not Found")) {
-				return R.string.call_activity_call_ended_because_user_offline;
-			} else if (message.equals("Unsupported media type")) {
-				return R.string.call_activity_call_ended_because_incompatible_media;
-			} else if (message.equals("Busy here")) {
-				return R.string.call_activity_call_ended_because_user_busy;
-			}
-		}
-
-		return -1;
+		Log.w(LOGTAG, "new CallEndReason=" + reason);
+		mCallEndReason = reason;
+		return true;
 	}
 
-	public boolean updateCallStateChanged(final String displayName, final String photoId, final LinphoneCallState callState, final String message)
+	public boolean updateCallStateChanged(final String displayName, final String photoId, final LinphoneCallState callState,
+			final CallEndReason reason)
 	{
-		final int msgId = getMessageId(callState, message);
-		final boolean updateCallStatusMessageId = !(callState.isPossibleCallEndedMessage() && msgId <= 0);
-
-		if (Util.equalString(displayName, mDisplayName) && Util.equalString(photoId, mDisplayPhotoId) && mLinphoneCallState == callState
-				&& (mCallStatusMessageId == msgId || !updateCallStatusMessageId)) {
+		if (!updateCallEndReason(reason) && Util.equalString(displayName, mDisplayName) && Util.equalString(photoId, mDisplayPhotoId)
+				&& mLinphoneCallState == callState) {
 			return false;
 		}
 
@@ -93,11 +81,8 @@ public final class SimlarCallState
 			mOngoingEncryptionHandshake = false;
 		}
 
-		if (updateCallStatusMessageId) {
-			mCallStatusMessageId = msgId;
-		}
-
 		if (mLinphoneCallState.isNewCallJustStarted()) {
+			mCallEndReason = CallEndReason.NONE;
 			mEncrypted = true;
 			mAuthenticationToken = null;
 			mAuthenticationTokenVerified = false;
@@ -159,15 +144,6 @@ public final class SimlarCallState
 		return " photoId=" + mDisplayPhotoId;
 	}
 
-	private String formatCallStatusMessageId()
-	{
-		if (mCallStatusMessageId > 0) {
-			return " mCallStatusMessageId=" + mCallStatusMessageId;
-		}
-
-		return "";
-	}
-
 	private String formatEncryption()
 	{
 		if (!mEncrypted) {
@@ -202,7 +178,7 @@ public final class SimlarCallState
 		}
 
 		return "[" + mLinphoneCallState.toString() + "] " + mDisplayName + formatPhotoId() + formatOngoingEncryptionHandshake()
-				+ formatCallStatusMessageId() + formatEncryption() + formatQuality();
+				+ "CallEndReason=" + mCallEndReason + formatEncryption() + formatQuality();
 	}
 
 	public String getDisplayName()
@@ -225,12 +201,12 @@ public final class SimlarCallState
 			return context.getString(R.string.call_activity_encrypting);
 		}
 
-		return context.getString(mCallStatusMessageId);
+		return String.format(context.getString(mCallEndReason.getDisplayMessageId()));
 	}
 
 	public String getErrorDisplayMessage(final Context context, final String displayName)
 	{
-		return hasErrorMessage() ? String.format(context.getString(mCallStatusMessageId), displayName) : null;
+		return hasErrorMessage() ? String.format(context.getString(mCallEndReason.getDisplayMessageId()), displayName) : null;
 	}
 
 	public boolean isEncrypted()
@@ -285,7 +261,7 @@ public final class SimlarCallState
 
 	public boolean hasCallStatusMessage()
 	{
-		return !isEmpty() && mLinphoneCallState.isPossibleCallEndedMessage() && mCallStatusMessageId > 0;
+		return !isEmpty() && mLinphoneCallState.isPossibleCallEndedMessage() && mCallEndReason.getDisplayMessageId() > 0;
 	}
 
 	public long getStartTime()
@@ -295,6 +271,6 @@ public final class SimlarCallState
 
 	public boolean hasErrorMessage()
 	{
-		return !isEmpty() && mLinphoneCallState.isPossibleCallEndedMessage() && mCallStatusMessageId > 0;
+		return !isEmpty() && mLinphoneCallState.isPossibleCallEndedMessage() && mCallEndReason.getDisplayMessageId() > 0;
 	}
 }

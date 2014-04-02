@@ -481,7 +481,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	{
 		final FullContactData contact = getContact(number);
 		if (!mSimlarCallState.updateCallStateChanged(contact.getNameOrNumber(), contact.photoId,
-				LinphoneCallState.fromLinphoneCallState(callState), message))
+				LinphoneCallState.fromLinphoneCallState(callState), CallEndReason.fromMessage(message)))
 		{
 			Log.d(LOGTAG, "SimlarCallState staying the same: " + mSimlarCallState);
 			return;
