@@ -269,7 +269,7 @@ public final class SimlarCallState
 		return mDuration > 0 ? mCallStartTime : -1;
 	}
 
-	public boolean hasErrorMessage()
+	private boolean hasErrorMessage()
 	{
 		return !isEmpty() && mLinphoneCallState.isPossibleCallEndedMessage() && mCallEndReason.getDisplayMessageId() > 0;
 	}

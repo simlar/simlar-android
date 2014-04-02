@@ -252,11 +252,7 @@ public final class CallActivity extends Activity implements SensorEventListener
 		setButtonSpeakerMute();
 
 		if (simlarCallState.isEndedCall()) {
-			if (simlarCallState.hasErrorMessage()) {
-				finishDelayed(5000);
-			} else {
-				finish();
-			}
+			finishDelayed(5000);
 		}
 	}
 
