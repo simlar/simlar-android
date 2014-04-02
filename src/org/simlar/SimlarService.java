@@ -255,7 +255,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		final PendingIntent activity = PendingIntent.getActivity(this, 0,
 				new Intent(this, mNotificationActivity).addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED), 0);
 
-		final String text = String.format(getString(mSimlarStatus.getNotificationTextId()), PreferencesHelper.getMySimlarIdOrEmptyString());
+		final String text = mSimlarCallState.createNotificationText(this);
 
 		final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
 		notificationBuilder.setSmallIcon(R.drawable.notification_bar_icon);
@@ -399,9 +399,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		Log.i(LOGTAG, "notifySimlarStatusChanged: " + status);
 
 		mSimlarStatus = status;
-
-		final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		nm.notify(NOTIFICATION_ID, createNotification());
 
 		SimlarServiceBroadcast.sendSimlarStatusChanged(this);
 

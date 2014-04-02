@@ -45,24 +45,6 @@ public enum SimlarStatus {
 		}
 	}
 
-	public int getNotificationTextId()
-	{
-		switch (this) {
-		case OFFLINE:
-			return R.string.notification_simlar_status_offline;
-		case CONNECTING:
-			return R.string.notification_simlar_status_connecting;
-		case ONLINE:
-		case ONGOING_CALL:
-			return R.string.notification_simlar_status_online;
-		case ERROR:
-			return R.string.notification_simlar_status_error;
-		case UNKNOWN:
-		default:
-			return R.string.notification_simlar_status_unknown;
-		}
-	}
-
 	public boolean isConnectedToSipServer()
 	{
 		switch (this) {
