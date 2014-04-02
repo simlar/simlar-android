@@ -60,7 +60,7 @@ public enum CallEndReason {
 			return R.string.call_activity_call_ended_because_user_busy;
 		case NONE:
 		default:
-			return -1;
+			return R.string.call_activity_call_ended_normally;
 		}
 	}
 }
