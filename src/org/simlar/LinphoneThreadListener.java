@@ -23,7 +23,7 @@ package org.simlar;
 import org.linphone.core.LinphoneCall.State;
 import org.linphone.core.LinphoneCore.RegistrationState;
 
-public interface LinphoneHandlerListener
+public interface LinphoneThreadListener
 {
 	public void onRegistrationStateChanged(final RegistrationState state);
 

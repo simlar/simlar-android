@@ -63,12 +63,12 @@ public final class LinphoneThread
 		LinphoneHandler mLinphoneHandler = new LinphoneHandler();
 
 		// NOTICE: the following members should only be used in the MAIN-THREAD
-		LinphoneHandlerListener mListener = null;
+		LinphoneThreadListener mListener = null;
 		RegistrationState mRegistrationState = RegistrationState.RegistrationNone;
 		Volumes mVolumes = new Volumes();
 		Context mContext = null;
 
-		public LinphoneThreadImpl(final LinphoneHandlerListener listener, final Context context)
+		public LinphoneThreadImpl(final LinphoneThreadListener listener, final Context context)
 		{
 			mListener = listener;
 			mListener.onCallStateChanged("", LinphoneCall.State.Idle, null);
@@ -586,7 +586,7 @@ public final class LinphoneThread
 	//
 	// LinphoneThread
 	//
-	public LinphoneThread(final LinphoneHandlerListener listener, final Context context)
+	public LinphoneThread(final LinphoneThreadListener listener, final Context context)
 	{
 		mImpl = new LinphoneThreadImpl(listener, context);
 	}

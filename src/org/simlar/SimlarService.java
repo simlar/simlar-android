@@ -61,7 +61,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-public final class SimlarService extends Service implements LinphoneHandlerListener
+public final class SimlarService extends Service implements LinphoneThreadListener
 {
 	static final String LOGTAG = SimlarService.class.getSimpleName();
 	private static final int NOTIFICATION_ID = 1;
