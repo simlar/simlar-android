@@ -88,6 +88,14 @@ public final class LinphoneThread
 
 			Log.i(LOGTAG, "handler initialized");
 
+			mMainThreadHandler.post(new Runnable() {
+				@Override
+				public void run()
+				{
+					mListener.onInitialized();
+				}
+			});
+
 			Looper.loop();
 		}
 

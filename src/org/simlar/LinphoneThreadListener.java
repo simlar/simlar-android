@@ -25,6 +25,8 @@ import org.linphone.core.LinphoneCore.RegistrationState;
 
 public interface LinphoneThreadListener
 {
+	public void onInitialized();
+
 	public void onRegistrationStateChanged(final RegistrationState state);
 
 	public void onCallStatsChanged(final NetworkQuality quality, final int callDuration, final String codec, final String iceState,

@@ -169,14 +169,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		ContactsProvider.preLoadContacts(this);
 
-		mHandler.post(new Runnable() {
-			@Override
-			public void run()
-			{
-				initializeCredentials();
-			}
-		});
-
 		terminateChecker();
 	}
 
@@ -267,18 +259,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		notificationBuilder.setContentIntent(activity);
 		notificationBuilder.setWhen(System.currentTimeMillis());
 		return notificationBuilder.build();
-	}
-
-	void initializeCredentials()
-	{
-		notifySimlarStatusChanged(SimlarStatus.OFFLINE);
-
-		if (!PreferencesHelper.readPrefencesFromFile(this)) {
-			Log.e(LOGTAG, "failed to initialize credentials");
-			return;
-		}
-
-		connect();
 	}
 
 	public void connect()
@@ -372,6 +352,19 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		if (ni.isConnected()) {
 			mLinphoneThread.refreshRegisters();
 		}
+	}
+
+	@Override
+	public void onInitialized()
+	{
+		notifySimlarStatusChanged(SimlarStatus.OFFLINE);
+
+		if (!PreferencesHelper.readPrefencesFromFile(this)) {
+			Log.e(LOGTAG, "failed to initialize credentials");
+			return;
+		}
+
+		connect();
 	}
 
 	@Override
