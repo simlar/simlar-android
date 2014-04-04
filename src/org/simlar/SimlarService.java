@@ -149,6 +149,10 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 		registerReceiver(mNetworkChangeReceiver, intentFilter);
 
+		PreferencesHelper.readPrefencesFromFile(this);
+
+		ContactsProvider.preLoadContacts(this);
+
 		startKeepAwake();
 
 		mHandler.post(new Runnable() {

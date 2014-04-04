@@ -294,6 +294,28 @@ public final class ContactsProvider
 			return true;
 		}
 
+		void preLoadContacts(final Context context)
+		{
+			if (context == null) {
+				Log.e(LOGTAG, "no context");
+				return;
+			}
+
+			switch (mState) {
+			case INITIALIZED:
+			case PARSING_PHONES_ADDRESS_BOOK:
+			case REQUESTING_CONTACTS_STATUS_FROM_SERVER:
+				break;
+			case UNINITIALIZED:
+			case ERROR:
+				loadContacts(context);
+				break;
+			default:
+				Log.e(LOGTAG, "unknown state=" + mState);
+				break;
+			}
+		}
+
 		void getContacts(final Context context, final FullContactsListener listener)
 		{
 			if (context == null) {
@@ -364,6 +386,11 @@ public final class ContactsProvider
 				break;
 			}
 		}
+	}
+
+	public static void preLoadContacts(final Context context)
+	{
+		mImpl.preLoadContacts(context);
 	}
 
 	public static void getContacts(final Context context, final FullContactsListener listener)
