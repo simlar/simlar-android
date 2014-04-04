@@ -135,50 +135,16 @@ public final class SimlarCallState
 		return mLinphoneCallState == LinphoneCallState.UNKONWN;
 	}
 
-	private String formatPhotoId()
-	{
-		if (Util.isNullOrEmpty(mContactPhotoId)) {
-			return "";
-		}
-
-		return " photoId=" + mContactPhotoId;
-	}
-
-	private String formatEncryption()
-	{
-		if (!mEncrypted) {
-			return " NOT ENCRYPTED";
-		}
-
-		return " SAS=" + mAuthenticationToken + (mAuthenticationTokenVerified ? " (verified)" : " (not verified)");
-	}
-
-	private String formatOngoingEncryptionHandshake()
-	{
-		if (mOngoingEncryptionHandshake) {
-			return " ongoingEncryptionHandshake";
-		}
-		return "";
-	}
-
-	private String formatQuality()
-	{
-		if (!mQuality.isKnown()) {
-			return "";
-		}
-
-		return " quality=" + mQuality;
-	}
-
 	@Override
 	public String toString()
 	{
-		if (isEmpty()) {
-			return "";
-		}
-
-		return "[" + mLinphoneCallState.toString() + "] " + mContactName + formatPhotoId() + formatOngoingEncryptionHandshake()
-				+ "CallEndReason=" + mCallEndReason + formatEncryption() + formatQuality();
+		return "SimlarCallState [" + (mContactName != null ? "mContactName=" + mContactName + ", " : "")
+				+ (mContactPhotoId != null ? "mContactPhotoId=" + mContactPhotoId + ", " : "")
+				+ (mLinphoneCallState != null ? "mLinphoneCallState=" + mLinphoneCallState + ", " : "")
+				+ (mCallEndReason != null ? "mCallEndReason=" + mCallEndReason + ", " : "") + "mEncrypted=" + mEncrypted + ", "
+				+ (mAuthenticationToken != null ? "mAuthenticationToken=" + mAuthenticationToken + ", " : "") + "mAuthenticationTokenVerified="
+				+ mAuthenticationTokenVerified + ", mOngoingEncryptionHandshake=" + mOngoingEncryptionHandshake + ", "
+				+ (mQuality != null ? "mQuality=" + mQuality + ", " : "") + "mDuration=" + mDuration + ", mCallStartTime=" + mCallStartTime + "]";
 	}
 
 	public String getContactName()
