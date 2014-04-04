@@ -24,7 +24,6 @@
 
     <string name="app_name">Simlar</string>
     <string name="app_homepage">www.simlar.org</string>
-    <string name="simlarservice_on_destroy">Simlar terminated</string>
     <string name="button_continue">Continue</string>
     <string name="button_cancel">Cancel</string>
 

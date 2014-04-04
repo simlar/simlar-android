@@ -49,7 +49,6 @@ import android.os.PowerManager.WakeLock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
-import android.widget.Toast;
 
 public final class SimlarService extends Service implements LinphoneThreadListener
 {
@@ -304,9 +303,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		releaseWakeLock();
 		releaseDisplayWakeLock();
 		releaseWifiLock();
-
-		// Tell the user we stopped.
-		Toast.makeText(this, R.string.simlarservice_on_destroy, Toast.LENGTH_SHORT).show();
 
 		Log.i(LOGTAG, "onDestroy ended");
 	}
