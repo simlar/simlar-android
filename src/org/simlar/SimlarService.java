@@ -673,7 +673,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			@Override
 			public void run()
 			{
-				Log.i(LOGTAG, "terminatePrivate: calling stopSelf");
+				Log.i(LOGTAG, "onJoin: calling stopSelf");
 				stopForeground(true);
 				stopSelf();
 			}
