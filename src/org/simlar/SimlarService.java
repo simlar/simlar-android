@@ -137,6 +137,14 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		handlePendingCall();
 
+		if (mGoingDown) {
+			Log.i(LOGTAG, "onStartCommand called while service is going down => recovering");
+			mGoingDown = false;
+			if (mLinphoneThread == null) {
+				startLinphone();
+			}
+		}
+
 		// We want this service to continue running until it is explicitly stopped, so return sticky.
 		return START_STICKY;
 	}
@@ -159,8 +167,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		startForeground(NOTIFICATION_ID, createNotification());
 
-		mLinphoneThread = new LinphoneThread(this, this);
-
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 		registerReceiver(mNetworkChangeReceiver, intentFilter);
@@ -169,6 +175,14 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		ContactsProvider.preLoadContacts(this);
 
+		startLinphone();
+	}
+
+	private void startLinphone()
+	{
+		Log.i(LOGTAG, "startLinphone");
+		mLinphoneThread = new LinphoneThread(this, this);
+		mTerminatePrivateAlreadyCalled = false;
 		terminateChecker();
 	}
 
@@ -666,23 +680,35 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	@Override
 	public void onJoin()
 	{
-		try {
-			mLinphoneThread.join(2000);
-		} catch (final InterruptedException e) {
-			Log.e(LOGTAG, "join interrupted: " + e.getMessage(), e);
+		if (mLinphoneThread != null) {
+			try {
+				mLinphoneThread.join(2000);
+			} catch (final InterruptedException e) {
+				Log.e(LOGTAG, "join interrupted: " + e.getMessage(), e);
+			}
+			mLinphoneThread = null;
 		}
+
 		SimlarServiceBroadcast.sendServiceFinishes(this);
 
-		// make sure the notification update is done before destruction by firing destruction event to the handler
-		mHandler.post(new Runnable() {
-			@Override
-			public void run()
-			{
-				Log.i(LOGTAG, "onJoin: calling stopSelf");
-				stopForeground(true);
-				stopSelf();
-			}
-		});
+		// make sure we remove the terminateChecker by removing all events
+		mHandler.removeCallbacksAndMessages(null);
+
+		if (mGoingDown) {
+			// make sure the notification update is done before destruction by firing destruction event to the handler
+			mHandler.post(new Runnable() {
+				@Override
+				public void run()
+				{
+					Log.i(LOGTAG, "onJoin: calling stopSelf");
+					stopForeground(true);
+					stopSelf();
+				}
+			});
+		} else {
+			Log.i(LOGTAG, "onJoin: recovering calling startLinphone");
+			startLinphone();
+		}
 	}
 
 	public void verifyAuthenticationTokenOfCurrentCall(final boolean verified)
