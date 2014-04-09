@@ -695,16 +695,11 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mHandler.removeCallbacksAndMessages(null);
 
 		if (mGoingDown) {
-			// make sure the notification update is done before destruction by firing destruction event to the handler
-			mHandler.post(new Runnable() {
-				@Override
-				public void run()
-				{
-					Log.i(LOGTAG, "onJoin: calling stopSelf");
-					stopForeground(true);
-					stopSelf();
-				}
-			});
+			Log.i(LOGTAG, "onJoin: calling stopSelf");
+			stopForeground(true);
+			// as notification icon stays in some circumstances
+			((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
+			stopSelf();
 		} else {
 			Log.i(LOGTAG, "onJoin: recovering calling startLinphone");
 			startLinphone();
