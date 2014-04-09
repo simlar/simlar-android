@@ -28,8 +28,8 @@ public final class SimlarCallState
 {
 	private static final String LOGTAG = SimlarCallState.class.getSimpleName();
 
-	private String mDisplayName = null;
-	private String mDisplayPhotoId = null;
+	private String mContactName = null;
+	private String mContactPhotoId = null;
 	private LinphoneCallState mLinphoneCallState = LinphoneCallState.UNKONWN;
 	private CallEndReason mCallEndReason = CallEndReason.NONE;
 	private boolean mEncrypted = true;
@@ -56,10 +56,10 @@ public final class SimlarCallState
 		return true;
 	}
 
-	public boolean updateCallStateChanged(final String displayName, final String photoId, final LinphoneCallState callState,
+	public boolean updateCallStateChanged(final String contactName, final String photoId, final LinphoneCallState callState,
 			final CallEndReason reason)
 	{
-		if (!updateCallEndReason(reason) && Util.equalString(displayName, mDisplayName) && Util.equalString(photoId, mDisplayPhotoId)
+		if (!updateCallEndReason(reason) && Util.equalString(contactName, mContactName) && Util.equalString(photoId, mContactPhotoId)
 				&& mLinphoneCallState == callState) {
 			return false;
 		}
@@ -68,11 +68,11 @@ public final class SimlarCallState
 			Log.e(LOGTAG, "ERROR updateCallStateChanged: callState=" + callState);
 		}
 
-		if (!Util.isNullOrEmpty(displayName)) {
-			mDisplayName = displayName;
+		if (!Util.isNullOrEmpty(contactName)) {
+			mContactName = contactName;
 		}
 
-		mDisplayPhotoId = photoId;
+		mContactPhotoId = photoId;
 		mLinphoneCallState = callState;
 
 		if (isBeforeEncryption()) {
@@ -137,11 +137,11 @@ public final class SimlarCallState
 
 	private String formatPhotoId()
 	{
-		if (Util.isNullOrEmpty(mDisplayPhotoId)) {
+		if (Util.isNullOrEmpty(mContactPhotoId)) {
 			return "";
 		}
 
-		return " photoId=" + mDisplayPhotoId;
+		return " photoId=" + mContactPhotoId;
 	}
 
 	private String formatEncryption()
@@ -177,18 +177,18 @@ public final class SimlarCallState
 			return "";
 		}
 
-		return "[" + mLinphoneCallState.toString() + "] " + mDisplayName + formatPhotoId() + formatOngoingEncryptionHandshake()
+		return "[" + mLinphoneCallState.toString() + "] " + mContactName + formatPhotoId() + formatOngoingEncryptionHandshake()
 				+ "CallEndReason=" + mCallEndReason + formatEncryption() + formatQuality();
 	}
 
-	public String getDisplayName()
+	public String getContactName()
 	{
-		return mDisplayName;
+		return mContactName;
 	}
 
-	public String getDisplayPhotoId()
+	public String getContactPhotoId()
 	{
-		return mDisplayPhotoId;
+		return mContactPhotoId;
 	}
 
 	public String getCallStatusDisplayMessage(final Context context)
@@ -206,7 +206,7 @@ public final class SimlarCallState
 		} else if (mLinphoneCallState.isCallOutgoingRinging()) {
 			return context.getString(R.string.call_activity_outgoing_ringing);
 		} else if (mLinphoneCallState.isPossibleCallEndedMessage()) {
-			return String.format(context.getString(mCallEndReason.getDisplayMessageId()), mDisplayName);
+			return String.format(context.getString(mCallEndReason.getDisplayMessageId()), mContactName);
 		}
 
 		Log.w(LOGTAG, "getCallStatusDisplayMessage mLinphoneCallState=" + mLinphoneCallState);

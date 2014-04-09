@@ -132,11 +132,11 @@ public final class RingingActivity extends Activity
 		final ImageView contactImage = (ImageView) findViewById(R.id.contactImage);
 		final TextView contactName = (TextView) findViewById(R.id.contactName);
 
-		if (!Util.isNullOrEmpty(simlarCallState.getDisplayPhotoId())) {
-			contactImage.setImageURI(Uri.parse(simlarCallState.getDisplayPhotoId()));
+		if (!Util.isNullOrEmpty(simlarCallState.getContactPhotoId())) {
+			contactImage.setImageURI(Uri.parse(simlarCallState.getContactPhotoId()));
 		}
 
-		contactName.setText(simlarCallState.getDisplayName());
+		contactName.setText(simlarCallState.getContactName());
 
 		if (simlarCallState.isEndedCall()) {
 			finish();

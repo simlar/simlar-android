@@ -207,12 +207,12 @@ public final class CallActivity extends Activity implements SensorEventListener
 
 		Log.i(LOGTAG, "onSimlarCallStateChanged " + simlarCallState);
 
-		if (!Util.isNullOrEmpty(simlarCallState.getDisplayPhotoId())) {
-			mImageViewContactImage.setImageURI(Uri.parse(simlarCallState.getDisplayPhotoId()));
+		if (!Util.isNullOrEmpty(simlarCallState.getContactPhotoId())) {
+			mImageViewContactImage.setImageURI(Uri.parse(simlarCallState.getContactPhotoId()));
 		} else {
 			mImageViewContactImage.setImageResource(R.drawable.contact_picture);
 		}
-		mTextViewContactName.setText(simlarCallState.getDisplayName());
+		mTextViewContactName.setText(simlarCallState.getContactName());
 
 		mTextViewCallStatus.setText(simlarCallState.getCallStatusDisplayMessage(this));
 
