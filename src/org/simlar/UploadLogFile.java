@@ -41,7 +41,7 @@ import android.util.Log;
 public final class UploadLogFile
 {
 	static final String LOGTAG = UploadLogFile.class.getSimpleName();
-	private static final String EMAIL_ADDRESS = "mail@ben-sartor.de";
+	private static final String EMAIL_ADDRESS = "support@simlar.org";
 	private static final String EMAIL_SUBJECT = "bug report to log file ";
 	private static final String EMAIL_TEXT = "\r\n\r\n"
 			+ "Please put in your bug description here. It may be in German or English"

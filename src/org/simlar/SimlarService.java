@@ -61,7 +61,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-public final class SimlarService extends Service implements LinphoneHandlerListener
+public final class SimlarService extends Service implements LinphoneThreadListener
 {
 	static final String LOGTAG = SimlarService.class.getSimpleName();
 	private static final int NOTIFICATION_ID = 1;
@@ -673,7 +673,7 @@ public final class SimlarService extends Service implements LinphoneHandlerListe
 			@Override
 			public void run()
 			{
-				Log.i(LOGTAG, "terminatePrivate: calling stopSelf");
+				Log.i(LOGTAG, "onJoin: calling stopSelf");
 				stopForeground(true);
 				stopSelf();
 			}

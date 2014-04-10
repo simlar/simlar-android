@@ -79,7 +79,7 @@
     <string name="call_activity_button_accept_unencrypted_call">Quiet alarm</string>
     <string name="call_activity_no_authentication_token">&#8230;</string>
     <string name="call_activity_please_verify_authentication_token">Please compare code with your calling partner:</string>
-    <string name="call_activity_button_authentication_token_verify">Verify</string>
+    <string name="call_activity_button_authentication_token_verify">Right</string>
     <string name="call_activity_button_authentication_token_wrong">Wrong</string>
     <string name="call_activity_outgoing_connecting">Connecting&#8230;</string>
     <string name="call_activity_outgoing_ringing">Ringing&#8230;</string>
