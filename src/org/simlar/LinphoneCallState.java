@@ -114,10 +114,14 @@ public enum LinphoneCallState
 		return this == LinphoneCallState.IDLE;
 	}
 
-	public String createNotificationText(final Context context, final String simlarId)
+	public String createNotificationText(final Context context, final String simlarId, boolean goingDown)
 	{
 		if (Util.isNullOrEmpty(simlarId)) {
 			return context.getString(R.string.linphone_call_state_notification_initializing);
+		}
+
+		if (goingDown) {
+			return String.format(context.getString(R.string.linphone_call_state_notification_ended), simlarId);
 		}
 
 		switch (this) {

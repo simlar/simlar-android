@@ -261,7 +261,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		final PendingIntent activity = PendingIntent.getActivity(this, 0,
 				new Intent(this, mNotificationActivity).addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED), 0);
 
-		final String text = mSimlarCallState.createNotificationText(this);
+		final String text = mSimlarCallState.createNotificationText(this, mGoingDown);
 
 		final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
 		notificationBuilder.setSmallIcon(R.drawable.notification_bar_icon);
@@ -471,7 +471,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		Log.i(LOGTAG, "SimlarCallState updated: " + mSimlarCallState);
 
-		if (mSimlarCallState.isRinging()) {
+		if (mSimlarCallState.isRinging() && !mGoingDown) {
 			mSoundEffectManager.start(SoundEffectType.RINGTONE);
 			mVibratorManager.start();
 		} else {
@@ -486,7 +486,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 
 		// make sure WLAN is not suspended while calling
-		if (mSimlarCallState.isNewCall()) {
+		if (mSimlarCallState.isNewCall() && !mGoingDown) {
 			mSoundEffectManager.prepare(SoundEffectType.ENCRYPTION_HANDSHAKE);
 			notifySimlarStatusChanged(SimlarStatus.ONGOING_CALL);
 
