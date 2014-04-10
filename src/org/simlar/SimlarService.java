@@ -188,7 +188,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	@Override
 	public void onCreate()
 	{
-		Log.i(LOGTAG, "started on device: " + Build.DEVICE);
+		Log.i(LOGTAG, "started with simlar version=" + Version.getVersionName(this)
+				+ " on device: " + Build.MANUFACTURER + " " + Build.MODEL + " (" + Build.DEVICE + ") with android version=" + Build.VERSION.RELEASE);
 
 		FileHelper.init(this);
 		mVibratorManager = new VibratorManager(this.getApplicationContext());
