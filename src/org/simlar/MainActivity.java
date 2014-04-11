@@ -174,9 +174,6 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	{
 		// Handle item selection
 		switch (item.getItemId()) {
-		case R.id.action_settings:
-			showSettings();
-			return true;
 		case R.id.action_upload_logfile:
 			uploadLogFile();
 			return true;
@@ -235,11 +232,6 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	{
 		PreferencesHelper.resetPreferencesFile(this);
 		mCommunicator.getService().terminate();
-	}
-
-	private void showSettings()
-	{
-		// TODO implement Settings
 	}
 
 	private void show_about()
