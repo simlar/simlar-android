@@ -32,7 +32,6 @@
     <string name="simlarservice_on_destroy">Simlar terminated</string>
     <string name="alert_title_uploading_log_file_failed">Error</string>
     <string name="alert_text_uploading_log_file_failed">Logfile creation failed => abort sending</string>
-    <string name="chooser_send_email">Send email to developer</string>
     <string name="alert_title_upload_log_file">Really report bug?</string>
     <string name="alert_text_upload_log_file">Thank you for reporting a bug.\n\nThis will upload a log file to a development server and afterwards ask you to write an email describing the bug.\n\nDo you really want to continue?</string>
     <string name="alert_button_continue">Continue</string>
@@ -57,7 +56,8 @@
     <string name="contacts_adapter_simlar_status_error">Error: Connection Error</string>
     <string name="contacts_adapter_simlar_status_error_unknown">Error: unknown</string>
 
-    <string name="progress_uploading_log_file">Please wait while uploading log file&#8230;</string>
+    <string name="upload_log_file_send_email_to_developer">Send email to developer</string>
+    <string name="upload_log_file_progress">Please wait while uploading log file&#8230;</string>
     <string name="progress_finishing">Please wait while shutting down&#8230;</string>
 
     <string name="network_quality_good">good</string>
