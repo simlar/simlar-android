@@ -22,8 +22,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.simlar"
-    android:versionCode="9"
-    android:versionName="0.0.1 alpha 2014-03-05" >
+    android:versionCode="10"
+    android:versionName="0.0.1 alpha 2014-04-11" >
 
     <uses-sdk
         android:minSdkVersion="8"
