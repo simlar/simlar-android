@@ -217,8 +217,8 @@ public final class UploadLogFile
 				if (!result.success) {
 					Log.e(LOGTAG, "aborting uploading log file: " + result.errorMessage);
 					(new AlertDialog.Builder(mContext))
-							.setTitle(R.string.alert_title_uploading_log_file_failed)
-							.setMessage(mContext.getString(R.string.alert_text_uploading_log_file_failed) + ": " + result.errorMessage)
+							.setTitle(R.string.main_activity_alert_uploading_log_file_failed_title)
+							.setMessage(mContext.getString(R.string.main_activity_alert_uploading_log_file_failed_text) + ": " + result.errorMessage)
 							.create().show();
 					return;
 				}

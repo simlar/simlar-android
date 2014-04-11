@@ -24,20 +24,9 @@
 
     <string name="app_name">Simlar</string>
     <string name="app_homepage">www.simlar.org</string>
-    <string name="action_upload_logfile">Report bug and upload logfile</string>
-    <string name="action_enable_linphone_debug_mode">Enable debug mode</string>
-    <string name="action_delete_account">Delete my credentials and quit</string>
-    <string name="action_show_about">About</string>
-    <string name="action_quit">Quit Simlar</string>
     <string name="simlarservice_on_destroy">Simlar terminated</string>
-    <string name="alert_title_uploading_log_file_failed">Error</string>
-    <string name="alert_text_uploading_log_file_failed">Logfile creation failed => abort sending</string>
-    <string name="alert_title_upload_log_file">Really report bug?</string>
-    <string name="alert_text_upload_log_file">Thank you for reporting a bug.\n\nThis will upload a log file to a development server and afterwards ask you to write an email describing the bug.\n\nDo you really want to continue?</string>
-    <string name="alert_button_continue">Continue</string>
-    <string name="alert_button_cancel">Cancel</string>
-    <string name="alert_title_enable_linphone_debug_mode">Really enable debug mode?</string>
-    <string name="alert_text_enable_linphone_debug_mode">Enabling debug mode will increase log file entries a lot. Please only do so if you have been asked to do it by a Simlar developer or really know what you are doing. It will be automatically disabled when you quit Simlar.</string>
+    <string name="button_continue">Continue</string>
+    <string name="button_cancel">Cancel</string>
 
     <string name="notification_simlar_status_unknown">%1$s unknown status</string>
     <string name="notification_simlar_status_offline">%1$s offline</string>
@@ -55,6 +44,18 @@
     <string name="contacts_adapter_simlar_status_offline">Offline</string>
     <string name="contacts_adapter_simlar_status_error">Error: Connection Error</string>
     <string name="contacts_adapter_simlar_status_error_unknown">Error: unknown</string>
+
+    <string name="main_activity_menu_upload_logfile">Report bug and upload logfile</string>
+    <string name="main_activity_menu_enable_linphone_debug_mode">Enable debug mode</string>
+    <string name="main_activity_menu_delete_account">Delete my credentials and quit</string>
+    <string name="main_activity_menu_show_about">About</string>
+    <string name="main_activity_menu_quit">Quit Simlar</string>
+    <string name="main_activity_alert_upload_log_file_title">Really report bug?</string>
+    <string name="main_activity_alert_upload_log_file_text">Thank you for reporting a bug.\n\nThis will upload a log file to a development server and afterwards ask you to write an email describing the bug.\n\nDo you really want to continue?</string>
+    <string name="main_activity_alert_uploading_log_file_failed_title">Error</string>
+    <string name="main_activity_alert_uploading_log_file_failed_text">Logfile creation failed => abort sending</string>
+    <string name="main_activity_alert_enable_linphone_debug_mode_title">Really enable debug mode?</string>
+    <string name="main_activity_alert_enable_linphone_debug_mode_text">Enabling debug mode will increase log file entries a lot. Please only do so if you have been asked to do it by a Simlar developer or really know what you are doing. It will be automatically disabled when you quit Simlar.</string>
 
     <string name="upload_log_file_send_email_to_developer">Send email to developer</string>
     <string name="upload_log_file_progress">Please wait while uploading log file&#8230;</string>

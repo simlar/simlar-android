@@ -199,10 +199,10 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 		final String logFileName = "simlar_" + PreferencesHelper.getMySimlarIdOrEmptyString() + "_"
 				+ (new SimpleDateFormat("yyyy-MM-dd_HHmmss", Locale.US)).format(new Date()) + ".log";
 		(new AlertDialog.Builder(this))
-				.setTitle(R.string.alert_title_upload_log_file)
-				.setMessage(R.string.alert_text_upload_log_file)
-				.setNegativeButton(R.string.alert_button_cancel, null)
-				.setPositiveButton(R.string.alert_button_continue, new DialogInterface.OnClickListener() {
+				.setTitle(R.string.main_activity_alert_upload_log_file_title)
+				.setMessage(R.string.main_activity_alert_upload_log_file_text)
+				.setNegativeButton(R.string.button_cancel, null)
+				.setPositiveButton(R.string.button_continue, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int id)
 					{
@@ -215,10 +215,10 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	private void enableLinphoneDebugMode()
 	{
 		(new AlertDialog.Builder(this))
-				.setTitle(R.string.alert_title_enable_linphone_debug_mode)
-				.setMessage(R.string.alert_text_enable_linphone_debug_mode)
-				.setNegativeButton(R.string.alert_button_cancel, null)
-				.setPositiveButton(R.string.alert_button_continue, new DialogInterface.OnClickListener() {
+				.setTitle(R.string.main_activity_alert_enable_linphone_debug_mode_title)
+				.setMessage(R.string.main_activity_alert_enable_linphone_debug_mode_text)
+				.setNegativeButton(R.string.button_cancel, null)
+				.setPositiveButton(R.string.button_continue, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int id)
 					{
