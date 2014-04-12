@@ -386,6 +386,28 @@ public final class ContactsProvider
 				break;
 			}
 		}
+
+		public boolean clearCache()
+		{
+			switch (mState) {
+			case UNINITIALIZED:
+				return true;
+			case REQUESTING_CONTACTS_STATUS_FROM_SERVER:
+				return false;
+			case PARSING_PHONES_ADDRESS_BOOK:
+				return false;
+			case INITIALIZED:
+			case ERROR:
+				break;
+			default:
+				Log.e(LOGTAG, "unknown state=" + mState);
+				break;
+			}
+
+			mState = State.UNINITIALIZED;
+			mContacts.clear();
+			return true;
+		}
 	}
 
 	public static void preLoadContacts(final Context context)
@@ -401,5 +423,10 @@ public final class ContactsProvider
 	public static void getNameAndPhotoId(final String simlarId, final Context context, final ContactListener listener)
 	{
 		mImpl.getNameAndPhotoId(simlarId, context, listener);
+	}
+
+	public static boolean clearCache()
+	{
+		return mImpl.clearCache();
 	}
 }

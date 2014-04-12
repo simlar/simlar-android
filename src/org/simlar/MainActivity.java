@@ -178,6 +178,9 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	{
 		// Handle item selection
 		switch (item.getItemId()) {
+		case R.id.action_reload_contacts:
+			reloadContacts();
+			return true;
 		case R.id.action_upload_logfile:
 			uploadLogFile();
 			return true;
@@ -196,6 +199,14 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void reloadContacts()
+	{
+		Log.i(LOGTAG, "reloadContacts");
+		ContactsProvider.clearCache();
+		mAdapter.clear();
+		loadContacts();
 	}
 
 	private void uploadLogFile()
