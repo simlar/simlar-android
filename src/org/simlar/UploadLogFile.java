@@ -164,7 +164,7 @@ public final class UploadLogFile
 		mContext = context;
 
 		mProgressDialog = new ProgressDialog(mContext);
-		mProgressDialog.setMessage(mContext.getString(R.string.progress_uploading_log_file));
+		mProgressDialog.setMessage(mContext.getString(R.string.upload_log_file_progress));
 		mProgressDialog.setIndeterminate(true);
 		mProgressDialog.setCancelable(false);
 	}
@@ -217,8 +217,8 @@ public final class UploadLogFile
 				if (!result.success) {
 					Log.e(LOGTAG, "aborting uploading log file: " + result.errorMessage);
 					(new AlertDialog.Builder(mContext))
-							.setTitle(R.string.alert_title_uploading_log_file_failed)
-							.setMessage(mContext.getString(R.string.alert_text_uploading_log_file_failed) + ": " + result.errorMessage)
+							.setTitle(R.string.main_activity_alert_uploading_log_file_failed_title)
+							.setMessage(mContext.getString(R.string.main_activity_alert_uploading_log_file_failed_text) + ": " + result.errorMessage)
 							.create().show();
 					return;
 				}
@@ -231,7 +231,7 @@ public final class UploadLogFile
 				sendIntent.putExtra(Intent.EXTRA_SUBJECT, EMAIL_SUBJECT + result.fileName);
 				sendIntent.putExtra(Intent.EXTRA_TEXT, EMAIL_TEXT + UPLOAD_SFTP_LINK + result.fileName);
 				try {
-					mContext.startActivity(Intent.createChooser(sendIntent, mContext.getString(R.string.chooser_send_email)));
+					mContext.startActivity(Intent.createChooser(sendIntent, mContext.getString(R.string.upload_log_file_send_email_to_developer)));
 				} catch (final android.content.ActivityNotFoundException e) {
 					Log.e(LOGTAG, "ActivityNotFoundException chooser_send_email: " + e.getMessage(), e);
 				}

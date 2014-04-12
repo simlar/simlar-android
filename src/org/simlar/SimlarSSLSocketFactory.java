@@ -138,7 +138,7 @@ public final class SimlarSSLSocketFactory extends SSLSocketFactory
 
 			// Create a TrustManager that trusts the CAs in our KeyStore
 			final String tmAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
-			TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmAlgorithm);
+			final TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmAlgorithm);
 			tmf.init(keyStore);
 
 			// Create an SSLContext that uses our TrustManager
