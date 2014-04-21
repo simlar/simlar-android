@@ -85,8 +85,6 @@ public final class CallActivity extends Activity implements SensorEventListener
 		void onBoundToSimlarService()
 		{
 			CallActivity.this.onSimlarCallStateChanged();
-			CallActivity.this.setButtonMicophoneMute();
-			CallActivity.this.setButtonSpeakerMute();
 		}
 
 		@Override
@@ -251,6 +249,9 @@ public final class CallActivity extends Activity implements SensorEventListener
 			setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
 		}
 
+		setButtonMicrophoneMute();
+		setButtonSpeakerMute();
+
 		if (simlarCallState.isEndedCall()) {
 			if (simlarCallState.hasErrorMessage()) {
 				finishDelayed(5000);
@@ -336,7 +337,7 @@ public final class CallActivity extends Activity implements SensorEventListener
 	public void toggleMicrophoneMuted(final View view)
 	{
 		mCommunicator.getService().setVolumes(mCommunicator.getService().getVolumes().toggleMicrophoneMuted());
-		setButtonMicophoneMute();
+		setButtonMicrophoneMute();
 	}
 
 	@SuppressWarnings("unused")
@@ -346,18 +347,26 @@ public final class CallActivity extends Activity implements SensorEventListener
 		setButtonSpeakerMute();
 	}
 
-	void setButtonMicophoneMute()
+	private void setButtonMicrophoneMute()
 	{
-		if (mCommunicator.getService().getVolumes().getMicrophoneMuted()) {
+		switch (mCommunicator.getService().getVolumes().getMicrophoneStatus()) {
+		case DISABLED:
+			mButtonMicro.setImageResource(R.drawable.micro_out_grey);
+			mButtonMicro.setContentDescription(getString(R.string.call_activity_microphone_disabled));
+			break;
+		case MUTED:
 			mButtonMicro.setImageResource(R.drawable.micro_off);
 			mButtonMicro.setContentDescription(getString(R.string.call_activity_microphone_mute));
-		} else {
+			break;
+		case ON:
+		default:
 			mButtonMicro.setImageResource(R.drawable.micro_on);
 			mButtonMicro.setContentDescription(getString(R.string.call_activity_microphone_on));
+			break;
 		}
 	}
 
-	void setButtonSpeakerMute()
+	private void setButtonSpeakerMute()
 	{
 		if (mCommunicator.getService().getVolumes().getExternalSpeaker()) {
 			mButtonSpeaker.setImageResource(R.drawable.speaker_on);
@@ -396,7 +405,7 @@ public final class CallActivity extends Activity implements SensorEventListener
 		final float distance = event.values[0];
 
 		if (distance > event.sensor.getMaximumRange()) {
-			Log.w(LOGTAG, "proximity sensors distance=" + distance + " out of range");
+			Log.w(LOGTAG, "proximity sensors distance=" + distance + " out of range=" + event.sensor.getMaximumRange());
 			return;
 		}
 

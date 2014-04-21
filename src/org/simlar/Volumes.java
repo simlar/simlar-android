@@ -28,28 +28,34 @@ public final class Volumes
 	private final float mPlayGain;
 	private final float mMicGain;
 	private final boolean mExternalSpeaker;
-	private final boolean mMicrophoneMuted;
+	private final MicrophoneStatus mMicrophoneStatus;
+
+	public enum MicrophoneStatus {
+		DISABLED,
+		MUTED,
+		ON
+	}
 
 	public Volumes()
 	{
 		mPlayGain = 0.0f;
 		mMicGain = 0.0f;
 		mExternalSpeaker = false;
-		mMicrophoneMuted = false;
+		mMicrophoneStatus = MicrophoneStatus.ON;
 	}
 
-	public Volumes(final float playGain, final float micGain, final boolean externalSpeaker, final boolean microphoneMuted)
+	public Volumes(final float playGain, final float micGain, final boolean externalSpeaker, final MicrophoneStatus microphoneStatus)
 	{
 		mPlayGain = playGain;
 		mMicGain = micGain;
 		mExternalSpeaker = externalSpeaker;
-		mMicrophoneMuted = microphoneMuted;
+		mMicrophoneStatus = microphoneStatus;
 	}
 
 	@Override
 	public String toString()
 	{
-		return "playGain: " + mPlayGain + " micGain: " + mMicGain + " micMuted: " + mMicrophoneMuted + " externalSpeaker: " + mExternalSpeaker;
+		return "playGain: " + mPlayGain + " micGain: " + mMicGain + " micStatus: " + mMicrophoneStatus + " externalSpeaker: " + mExternalSpeaker;
 	}
 
 	public float getPlayGain()
@@ -67,19 +73,37 @@ public final class Volumes
 		return mExternalSpeaker;
 	}
 
+	public MicrophoneStatus getMicrophoneStatus()
+	{
+		return mMicrophoneStatus;
+	}
+
 	public boolean getMicrophoneMuted()
 	{
-		return mMicrophoneMuted;
+		return mMicrophoneStatus != MicrophoneStatus.ON;
 	}
 
 	public Volumes toggleExternalSpeaker()
 	{
-		return new Volumes(mPlayGain, mMicGain, !mExternalSpeaker, mMicrophoneMuted);
+		return new Volumes(mPlayGain, mMicGain, !mExternalSpeaker, mMicrophoneStatus);
 	}
 
 	public Volumes toggleMicrophoneMuted()
 	{
-		return new Volumes(mPlayGain, mMicGain, mExternalSpeaker, !mMicrophoneMuted);
+		switch (mMicrophoneStatus) {
+		case DISABLED:
+			return this;
+		case MUTED:
+			return new Volumes(mPlayGain, mMicGain, mExternalSpeaker, MicrophoneStatus.ON);
+		case ON:
+		default:
+			return new Volumes(mPlayGain, mMicGain, mExternalSpeaker, MicrophoneStatus.MUTED);
+		}
+	}
+
+	public Volumes setMicrophoneStatus(final MicrophoneStatus microphoneStatus)
+	{
+		return new Volumes(mPlayGain, mMicGain, mExternalSpeaker, microphoneStatus);
 	}
 
 	public int getProgressSpeaker()
@@ -94,12 +118,12 @@ public final class Volumes
 
 	public Volumes setProgressSpeaker(final int progress)
 	{
-		return new Volumes(progress2Gain(progress), mMicGain, mExternalSpeaker, mMicrophoneMuted);
+		return new Volumes(progress2Gain(progress), mMicGain, mExternalSpeaker, mMicrophoneStatus);
 	}
 
 	public Volumes setProgressMicrophone(final int progress)
 	{
-		return new Volumes(mPlayGain, progress2Gain(progress), mExternalSpeaker, mMicrophoneMuted);
+		return new Volumes(mPlayGain, progress2Gain(progress), mExternalSpeaker, mMicrophoneStatus);
 	}
 
 	// GAIN_MIN ... GAIN_MAX -> 0 ... 100

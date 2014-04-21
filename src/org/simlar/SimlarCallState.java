@@ -37,6 +37,7 @@ public final class SimlarCallState
 	private boolean mEncrypted = true;
 	private String mAuthenticationToken = null;
 	private boolean mAuthenticationTokenVerified = false;
+	private boolean mOngoingEncryptionHandshake = false;
 	private NetworkQuality mQuality = NetworkQuality.UNKNOWN;
 	private int mDuration = 0;
 	private long mCallStartTime = -1;
@@ -103,6 +104,12 @@ public final class SimlarCallState
 		mDisplayPhotoId = photoId;
 		mLinphoneCallState = callState;
 
+		if (isBeforeEncryption()) {
+			mOngoingEncryptionHandshake = true;
+		} else if (isEndedCall()) {
+			mOngoingEncryptionHandshake = false;
+		}
+
 		if (updateCallStatusMessageId) {
 			mCallStatusMessageId = msgId;
 		}
@@ -146,6 +153,8 @@ public final class SimlarCallState
 			return false;
 		}
 
+		mOngoingEncryptionHandshake = false;
+
 		mEncrypted = encrypted;
 		mAuthenticationToken = authenticationToken;
 		mAuthenticationTokenVerified = authenticationTokenVerified;
@@ -185,6 +194,14 @@ public final class SimlarCallState
 		return " SAS=" + mAuthenticationToken + (mAuthenticationTokenVerified ? " (verified)" : " (not verified)");
 	}
 
+	private String formatOngoingEncryptionHandshake()
+	{
+		if (mOngoingEncryptionHandshake) {
+			return " ongoingEncryptionHandshake";
+		}
+		return "";
+	}
+
 	private String formatQuality()
 	{
 		if (!mQuality.isKnown()) {
@@ -201,7 +218,7 @@ public final class SimlarCallState
 			return "";
 		}
 
-		return "[" + mLinphoneCallState.toString() + "] " + mDisplayName + formatPhotoId()
+		return "[" + mLinphoneCallState.toString() + "] " + mDisplayName + formatPhotoId() + formatOngoingEncryptionHandshake()
 				+ formatCallStatusMessageId() + formatEncryption() + formatQuality();
 	}
 
@@ -217,7 +234,15 @@ public final class SimlarCallState
 
 	public String getCallStatusDisplayMessage(final Context context)
 	{
-		return hasCallStatusMessage() ? context.getString(mCallStatusMessageId) : null;
+		if (!hasCallStatusMessage()) {
+			return null;
+		}
+
+		if (mOngoingEncryptionHandshake) {
+			return context.getString(R.string.call_activity_encrypting);
+		}
+
+		return context.getString(mCallStatusMessageId);
 	}
 
 	public String getErrorDisplayMessage(final Context context, final String displayName)
@@ -289,9 +314,22 @@ public final class SimlarCallState
 		return State.IncomingReceived.equals(mLinphoneCallState);
 	}
 
+	public boolean isBeforeEncryption()
+	{
+		return State.Connected.equals(mLinphoneCallState);
+	}
+
 	public boolean hasCallStatusMessage()
 	{
-		return !isEmpty() && (isCallOutgoingConnecting(mLinphoneCallState) || isCallOutgoingRinging(mLinphoneCallState)) && mCallStatusMessageId > 0;
+		if (isEmpty()) {
+			return false;
+		}
+
+		if ((isCallOutgoingConnecting(mLinphoneCallState) || isCallOutgoingRinging(mLinphoneCallState)) && mCallStatusMessageId > 0) {
+			return true;
+		}
+
+		return mOngoingEncryptionHandshake;
 	}
 
 	public boolean hasErrorMessage()

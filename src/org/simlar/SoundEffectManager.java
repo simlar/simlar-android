@@ -24,12 +24,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
@@ -44,6 +46,7 @@ final class SoundEffectManager
 
 	public enum SoundEffectType {
 		RINGTONE,
+		ENCRYPTION_HANDSHAKE,
 		UNENCRYPTED_CALL_ALARM
 	}
 
@@ -52,18 +55,20 @@ final class SoundEffectManager
 		final SoundEffectType mType;
 		final Handler mHandler = new Handler();
 		private MediaPlayer mMediaPlayer;
+		private long mPlayRequestTime;
+		private long mPlayStart = -1;
 
-		public SoundEffectPlayer(final SoundEffectType type)
+		public SoundEffectPlayer(final SoundEffectType type, final long now)
 		{
 			mType = type;
 			mMediaPlayer = initializeMediaPlayer();
+			mPlayRequestTime = now;
 
 			if (mMediaPlayer == null) {
 				Log.e(LOGTAG, "[" + type + "] failed to create media player");
 				return;
 			}
 
-			mMediaPlayer.setOnPreparedListener(this);
 			mMediaPlayer.setOnErrorListener(this);
 		}
 
@@ -77,7 +82,14 @@ final class SoundEffectManager
 					mediaPlayer.setDataSource(mContext, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE));
 					mediaPlayer.setLooping(false);
 					return mediaPlayer;
+				case ENCRYPTION_HANDSHAKE:
+					mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+					mediaPlayer.setDataSource(mContext,
+							Uri.parse("android.resource://" + mContext.getPackageName() + "/" + R.raw.encryption_handshake));
+					mediaPlayer.setLooping(true);
+					return mediaPlayer;
 				case UNENCRYPTED_CALL_ALARM:
+					mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
 					mediaPlayer.setDataSource(mContext, Uri.parse("android.resource://" + mContext.getPackageName() + "/" + R.raw.unencrypted_call));
 					mediaPlayer.setLooping(true);
 					return mediaPlayer;
@@ -91,7 +103,7 @@ final class SoundEffectManager
 			}
 		}
 
-		public void startMediaPlayer()
+		public void prepare(final boolean start)
 		{
 			if (mMediaPlayer == null) {
 				Log.e(LOGTAG, "[" + mType + "] not initialized");
@@ -99,7 +111,16 @@ final class SoundEffectManager
 			}
 
 			Log.i(LOGTAG, "[" + mType + "] preparing");
+			if (start) {
+				mMediaPlayer.setOnPreparedListener(this);
+			}
 			mMediaPlayer.prepareAsync();
+		}
+
+		public void startPrepared(final long now)
+		{
+			mPlayRequestTime = now;
+			onPrepared(mMediaPlayer);
 		}
 
 		@Override
@@ -110,6 +131,9 @@ final class SoundEffectManager
 				return;
 			}
 
+			if (mPlayStart == -1) {
+				mPlayStart = SystemClock.elapsedRealtime();
+			}
 			final long playStartTime = SystemClock.elapsedRealtime();
 			Log.i(LOGTAG, "[" + mType + "] start playing at time: " + playStartTime);
 			mMediaPlayer.start();
@@ -145,6 +169,10 @@ final class SoundEffectManager
 				mMediaPlayer.reset();
 				mMediaPlayer.release();
 				mMediaPlayer = null;
+				final long now = SystemClock.elapsedRealtime();
+				Log.i(LOGTAG, "[" + mType + "] play time=" + (now - mPlayStart)
+						+ "ms delay=" + (mPlayRequestTime - mPlayStart)
+						+ "ms sum=" + (now - mPlayRequestTime) + "ms");
 			}
 		}
 
@@ -169,6 +197,8 @@ final class SoundEffectManager
 
 	public void start(final SoundEffectType type)
 	{
+		final long now = SystemClock.elapsedRealtime();
+
 		if (type == null) {
 			Log.e(LOGTAG, "start with type null");
 			return;
@@ -179,8 +209,43 @@ final class SoundEffectManager
 			return;
 		}
 
-		mPlayers.put(type, new SoundEffectPlayer(type));
-		mPlayers.get(type).startMediaPlayer();
+		mPlayers.put(type, new SoundEffectPlayer(type, now));
+		mPlayers.get(type).prepare(true);
+	}
+
+	public void prepare(final SoundEffectType type)
+	{
+		if (type == null) {
+			Log.e(LOGTAG, "start with type null");
+			return;
+		}
+
+		if (mPlayers.containsKey(type)) {
+			Log.i(LOGTAG, "[" + type + "] already prepared or playing");
+			return;
+		}
+
+		mPlayers.put(type, new SoundEffectPlayer(type, -1));
+		mPlayers.get(type).prepare(false);
+	}
+
+	public void startPrepared(final SoundEffectType type)
+	{
+		final long now = SystemClock.elapsedRealtime();
+
+		Log.i(LOGTAG, "[" + type + "] playing prepared requested");
+
+		if (type == null) {
+			Log.e(LOGTAG, "start with type null");
+			return;
+		}
+
+		if (!mPlayers.containsKey(type)) {
+			Log.e(LOGTAG, "[" + type + "] not prepared");
+			return;
+		}
+
+		mPlayers.get(type).startPrepared(now);
 	}
 
 	public void stop(final SoundEffectType type)
@@ -211,6 +276,22 @@ final class SoundEffectManager
 	{
 		for (final SoundEffectType type : SoundEffectType.values()) {
 			stop(type);
+		}
+	}
+
+	@SuppressLint("InlinedApi")
+	public void setInCallMode(final boolean enabled)
+	{
+		Log.i(LOGTAG, "setInCallMode: " + enabled);
+
+		if (enabled) {
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+				((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE)).setMode(AudioManager.MODE_IN_COMMUNICATION);
+			} else {
+				((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE)).setMode(AudioManager.MODE_IN_CALL);
+			}
+		} else {
+			((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE)).setMode(AudioManager.MODE_NORMAL);
 		}
 	}
 }

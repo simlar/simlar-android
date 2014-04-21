@@ -72,6 +72,7 @@
     <string name="call_activity_sound_settings">Sound Settings</string>
     <string name="call_activity_microphone_mute">Microphone mute</string>
     <string name="call_activity_microphone_on">Microphone on</string>
+    <string name="call_activity_microphone_disabled">Microphone disabled</string>
     <string name="call_activity_loudspeaker_on">loudspeaker</string>
     <string name="call_activity_loudspeaker_off">loudspeaker off</string>
     <string name="call_activity_terminate_call">Terminate Call</string>
@@ -83,6 +84,7 @@
     <string name="call_activity_button_authentication_token_wrong">Wrong</string>
     <string name="call_activity_outgoing_connecting">Connecting&#8230;</string>
     <string name="call_activity_outgoing_ringing">Ringing&#8230;</string>
+    <string name="call_activity_encrypting">Encrypting&#8230;</string>
     <string name="call_activity_call_ended_because_declined">%1$s declined your call.</string>
     <string name="call_activity_call_ended_because_user_offline">%1$s is offline.</string>
     <string name="call_activity_call_ended_because_incompatible_media">%1$s has incompatible media type.</string>

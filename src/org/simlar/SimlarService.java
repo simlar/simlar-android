@@ -29,6 +29,7 @@ import org.linphone.core.LinphoneCall.State;
 import org.linphone.core.LinphoneCore.RegistrationState;
 import org.simlar.PreferencesHelper.NotInitedException;
 import org.simlar.SoundEffectManager.SoundEffectType;
+import org.simlar.Volumes.MicrophoneStatus;
 
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -495,8 +496,15 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			mSoundEffectManager.stop(SoundEffectType.RINGTONE);
 		}
 
+		if (mSimlarCallState.isBeforeEncryption()) {
+			mLinphoneThread.setMicrophoneStatus(MicrophoneStatus.DISABLED);
+			mSoundEffectManager.setInCallMode(true);
+			mSoundEffectManager.startPrepared(SoundEffectType.ENCRYPTION_HANDSHAKE);
+		}
+
 		// make sure WLAN is not suspended while calling
 		if (mSimlarCallState.isNewCall()) {
+			mSoundEffectManager.prepare(SoundEffectType.ENCRYPTION_HANDSHAKE);
 			notifySimlarStatusChanged(SimlarStatus.ONGOING_CALL);
 
 			mCallConnectionDetails = new CallConnectionDetails();
@@ -534,6 +542,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			releaseWifiLock();
 
 			mSoundEffectManager.stopAll();
+			mSoundEffectManager.setInCallMode(false);
 			if (mHasAudioFocus) {
 				final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 				if (audioManager.abandonAudioFocus(null) == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
@@ -566,6 +575,9 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 
 		Log.i(LOGTAG, "SimlarCallState updated encryption: " + mSimlarCallState);
+
+		mLinphoneThread.setMicrophoneStatus(MicrophoneStatus.ON);
+		mSoundEffectManager.stop(SoundEffectType.ENCRYPTION_HANDSHAKE);
 
 		if (encrypted) {
 			// just to be sure
