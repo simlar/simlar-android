@@ -751,7 +751,9 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 					if (!result.containsKey(simlarNumber.getSimlarId())) {
 						result.put(simlarNumber.getSimlarId(), new ContactData(name, simlarNumber.getGuiTelephoneNumber(), ContactStatus.UNKNOWN,
 								photoUri));
-						Log.d(LOGTAG, "adding contact " + name + " " + number + " => " + simlarNumber.getSimlarId());
+
+						/// ATTENTIION this logs the users telephone book
+						//Log.d(LOGTAG, "adding contact " + name + " " + number + " => " + simlarNumber.getSimlarId());
 					}
 				}
 				contacts.close();
