@@ -34,6 +34,8 @@ public final class VolumesControlActivity extends Activity
 	final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorVolumes();
 
 	Volumes mVolumes = null;
+	private SeekBar mSeekBarSpeaker;
+	private SeekBar mSeekBarMicrophone;
 
 	private final class SimlarServiceCommunicatorVolumes extends SimlarServiceCommunicator
 	{
@@ -74,10 +76,10 @@ public final class VolumesControlActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_volumes_control);
 
-		SeekBar seekBarSpeaker = (SeekBar) findViewById(R.id.seekBarSpeaker);
-		SeekBar seekBarMicrophone = (SeekBar) findViewById(R.id.seekBarMicrophone);
+		mSeekBarSpeaker = (SeekBar) findViewById(R.id.seekBarSpeaker);
+		mSeekBarMicrophone = (SeekBar) findViewById(R.id.seekBarMicrophone);
 
-		seekBarSpeaker.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+		mSeekBarSpeaker.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar)
@@ -102,7 +104,7 @@ public final class VolumesControlActivity extends Activity
 			}
 		});
 
-		seekBarMicrophone.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+		mSeekBarMicrophone.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
 			@Override
 			public void onStopTrackingTouch(final SeekBar seekBar)
@@ -154,10 +156,7 @@ public final class VolumesControlActivity extends Activity
 	{
 		mVolumes = mCommunicator.getService().getVolumes();
 
-		SeekBar seekBarSpeaker = (SeekBar) findViewById(R.id.seekBarSpeaker);
-		SeekBar seekBarMicrophone = (SeekBar) findViewById(R.id.seekBarMicrophone);
-
-		seekBarSpeaker.setProgress(mVolumes.getProgressSpeaker());
-		seekBarMicrophone.setProgress(mVolumes.getProgessMicrophone());
+		mSeekBarSpeaker.setProgress(mVolumes.getProgressSpeaker());
+		mSeekBarMicrophone.setProgress(mVolumes.getProgessMicrophone());
 	}
 }
