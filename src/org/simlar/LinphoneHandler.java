@@ -174,7 +174,7 @@ public final class LinphoneHandler
 
 			// enable echo cancellation
 			mLinphoneCore.enableEchoCancellation(true);
-			mLinphoneCore.enableEchoLimiter(true);
+			mLinphoneCore.enableEchoLimiter(false);
 
 			// disable video
 			mLinphoneCore.enableVideo(false, false);
@@ -352,7 +352,26 @@ public final class LinphoneHandler
 		mLinphoneCore.enableSpeaker(volumes.getExternalSpeaker());
 		mLinphoneCore.muteMic(volumes.getMicrophoneMuted());
 
+		setEchoLimiter(volumes.getEchoLimiter());
+
 		Log.i(LOGTAG, "volumes set " + volumes);
+	}
+
+	private void setEchoLimiter(final boolean enable)
+	{
+		final LinphoneCall currentCall = getCurrentCall();
+		if (currentCall == null) {
+			Log.w(LOGTAG, "EchoLimiter no current call");
+			return;
+		}
+
+		if (currentCall.isEchoLimiterEnabled() == enable) {
+			Log.i(LOGTAG, "EchoLimiter already: " + Boolean.toString(enable));
+			return;
+		}
+
+		Log.i(LOGTAG, "set EchoLimiter: " + Boolean.toString(enable));
+		currentCall.enableEchoLimiter(enable);
 	}
 
 	public static void enableDebugMode(final boolean enabled)

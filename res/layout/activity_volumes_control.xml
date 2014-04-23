@@ -82,4 +82,13 @@
         </RelativeLayout>
     </LinearLayout>
 
+    <CheckBox
+        android:id="@+id/checkBoxEchoLimiter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayoutMicrophone"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"
+        android:text="@string/volumes_control_activity_software_echo_limiter" />
+
 </RelativeLayout>

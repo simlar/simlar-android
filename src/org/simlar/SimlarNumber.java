@@ -88,6 +88,11 @@ public final class SimlarNumber
 		}
 	}
 
+	public boolean isValid()
+	{
+		return (!Util.isNullOrEmpty(mPlainSimlarId) || mPhoneNumber != null);
+	}
+
 	public String getSimlarId()
 	{
 		if (!Util.isNullOrEmpty(mPlainSimlarId)) {
@@ -99,6 +104,15 @@ public final class SimlarNumber
 		}
 
 		return "*" + Long.toString(mPhoneNumber.getCountryCode()) + Long.toString(mPhoneNumber.getNationalNumber()) + "*";
+	}
+
+	public String getTelephoneNumber()
+	{
+		if (mPhoneNumber == null) {
+			return "";
+		}
+
+		return PhoneNumberUtil.getInstance().format(mPhoneNumber, PhoneNumberFormat.E164);
 	}
 
 	public String getGuiTelephoneNumber()
