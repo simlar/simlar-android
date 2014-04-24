@@ -38,11 +38,11 @@
     <string name="main_activity_menu_tell_a_friend">Tell a friend</string>
     <string name="main_activity_menu_show_about">About</string>
     <string name="main_activity_alert_upload_log_file_title">Really report bug?</string>
-    <string name="main_activity_alert_upload_log_file_text">This will upload a log file to a development server and afterwards ask you to write an email describing the bug.\n\nDo you really want to continue?</string>
+    <string name="main_activity_alert_upload_log_file_text">This will upload a log file. Afterwards you will be asked to write an email describing the bug.\n\nDo you want to continue?</string>
     <string name="main_activity_alert_uploading_log_file_failed_title">Error</string>
     <string name="main_activity_alert_uploading_log_file_failed_text">Log file creation failed => abort sending</string>
     <string name="main_activity_alert_enable_linphone_debug_mode_title">Really enable debug mode?</string>
-    <string name="main_activity_alert_enable_linphone_debug_mode_text">Enabling debug mode will increase log file entries a lot. Only do so if you have been asked to do it by a Simlar developer or really know what you are doing. It will be automatically disabled when you quit Simlar.</string>
+    <string name="main_activity_alert_enable_linphone_debug_mode_text">This will increase log file entries a lot. Only do so if you have been asked for it by a Simlar developer. Or you really know what you are doing.</string>
     <string name="main_activity_tell_a_friend_chooser_title">Choose</string>
     <string name="main_activity_tell_a_friend_title">Have a look at Simlar</string>
     <string name="main_activity_tell_a_friend_text">Have a look at simlar.org It\'s an app that makes encrypted phone calls as easy as possible.</string>
