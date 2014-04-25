@@ -37,16 +37,13 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
 import android.os.AsyncTask;
@@ -57,7 +54,6 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
-import android.provider.ContactsContract;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -721,50 +717,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			@Override
 			protected Map<String, ContactData> doInBackground(final Void... params)
 			{
-				Log.i(LOGTAG, "loading contacts from telephone book");
-				final Map<String, ContactData> result = new HashMap<String, SimlarService.ContactData>();
-
-				final String[] projection = new String[] {
-						ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
-						ContactsContract.CommonDataKinds.Phone.NUMBER,
-						ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-						ContactsContract.CommonDataKinds.Phone.PHOTO_ID
-				};
-
-				final Cursor contacts = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projection, null, null, null);
-				while (contacts.moveToNext())
-				{
-					final long contactId = contacts.getLong(0);
-					final String number = contacts.getString(1);
-					final String name = contacts.getString(2);
-					final boolean hasPhotoId = contacts.getLong(3) != 0;
-					String photoUri = null;
-
-					if (Util.isNullOrEmpty(number)) {
-						continue;
-					}
-
-					final SimlarNumber simlarNumber = new SimlarNumber(number);
-					if (Util.isNullOrEmpty(simlarNumber.getSimlarId())) {
-						continue;
-					}
-
-					if (hasPhotoId) {
-						photoUri = Uri.withAppendedPath(ContentUris.withAppendedId(
-								ContactsContract.Contacts.CONTENT_URI, contactId), ContactsContract.Contacts.Photo.CONTENT_DIRECTORY).toString();
-					}
-
-					if (!result.containsKey(simlarNumber.getSimlarId())) {
-						result.put(simlarNumber.getSimlarId(), new ContactData(name, simlarNumber.getGuiTelephoneNumber(), ContactStatus.UNKNOWN,
-								photoUri));
-
-						/// ATTENTIION this logs the users telephone book
-						//Log.d(LOGTAG, "adding contact " + name + " " + number + " => " + simlarNumber.getSimlarId());
-					}
-				}
-				contacts.close();
-
-				return result;
+				return ContactsProvider.loadContactsFromTelephonebook(SimlarService.this);
 			}
 
 			@Override
