@@ -121,7 +121,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 	}
 
-	public class ContactData
+	public static class ContactData
 	{
 		public final String name;
 		public final String guiTelephoneNumber;
