@@ -177,8 +177,8 @@ public final class UploadLogFile
 		}
 
 		Log.i(LOGTAG, "uploading log file started: " + fileName);
-		Log.i(LOGTAG, "simlar version: " + Version.getVersionName(mContext));
-		Log.i(LOGTAG, "running on device: " + Build.DEVICE);
+		Log.i(LOGTAG, "simlar version=" + Version.getVersionName(mContext)
+				+ " on device: " + Build.MANUFACTURER + " " + Build.MODEL + " (" + Build.DEVICE + ") with android version=" + Build.VERSION.RELEASE);
 
 		new AsyncTask<File, Void, PostResult>() {
 			@Override
