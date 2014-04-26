@@ -191,6 +191,8 @@ public final class CreateAccountActivity extends Activity
 
 		mEditRegistrationCode.addTextChangedListener(new EditRegistrationCodeListener());
 
+		registerSmsReceiver();
+
 		if (PreferencesHelper.getCreateAccountStatus() == CreateAccountStatus.WAITING_FOR_SMS) {
 			onWaitingForSmsTimedOut();
 		} else {
@@ -232,6 +234,14 @@ public final class CreateAccountActivity extends Activity
 		super.onPause();
 	}
 
+	@Override
+	protected void onDestroy()
+	{
+		Log.i(LOGTAG, "onPause");
+		unregisterReceiver(mSmsReceiver);
+		super.onDestroy();
+	}
+
 	private void createAccountRequest(final String telephoneNumber)
 	{
 		if (Util.isNullOrEmpty(telephoneNumber)) {
@@ -242,10 +252,6 @@ public final class CreateAccountActivity extends Activity
 		Log.i(LOGTAG, "createAccountRequest: " + telephoneNumber);
 		final String smsText = getString(R.string.create_account_activity_sms_text) + " ";
 		final String expextedSimlarId = SimlarNumber.createSimlarId(telephoneNumber);
-
-		final IntentFilter filter = new IntentFilter();
-		filter.addAction("android.provider.Telephony.SMS_RECEIVED");
-		registerReceiver(mSmsReceiver, filter);
 
 		new AsyncTask<String, Void, CreateAccount.RequestResult>() {
 
@@ -279,6 +285,13 @@ public final class CreateAccountActivity extends Activity
 		}.execute(telephoneNumber, smsText);
 	}
 
+	private void registerSmsReceiver()
+	{
+		final IntentFilter filter = new IntentFilter();
+		filter.addAction("android.provider.Telephony.SMS_RECEIVED");
+		registerReceiver(mSmsReceiver, filter);
+	}
+
 	void waitForSms()
 	{
 		Log.i(LOGTAG, "waiting for sms");
@@ -308,7 +321,6 @@ public final class CreateAccountActivity extends Activity
 	private void onWaitingForSmsTimedOut()
 	{
 		Log.w(LOGTAG, "waiting for sms timedout");
-		unregisterReceiver(mSmsReceiver);
 
 		mProgressWaitingForSMS.setVisibility(View.INVISIBLE);
 		mWaitingForSmsText.setText(R.string.create_account_activity_waiting_for_sms);
@@ -336,7 +348,6 @@ public final class CreateAccountActivity extends Activity
 		}
 		final String registrationCode = message.split(simlarTag)[1];
 
-		unregisterReceiver(mSmsReceiver);
 		mHandler.removeCallbacksAndMessages(null);
 		mProgressWaitingForSMS.setVisibility(View.INVISIBLE);
 		mWaitingForSmsText.setText(R.string.create_account_activity_waiting_for_sms);

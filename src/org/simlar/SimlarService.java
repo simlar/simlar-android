@@ -281,6 +281,10 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	public void connect()
 	{
+		if (mLinphoneThread == null) {
+			return;
+		}
+
 		notifySimlarStatusChanged(SimlarStatus.CONNECTING);
 
 		try {
@@ -601,16 +605,28 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	public void call(final String simlarId)
 	{
+		if (mLinphoneThread == null) {
+			return;
+		}
+
 		mLinphoneThread.call(simlarId);
 	}
 
 	public void pickUp()
 	{
+		if (mLinphoneThread == null) {
+			return;
+		}
+
 		mLinphoneThread.pickUp();
 	}
 
 	public void terminateCall()
 	{
+		if (mLinphoneThread == null) {
+			return;
+		}
+
 		mLinphoneThread.terminateAllCalls();
 	}
 
@@ -735,7 +751,9 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 					if (!result.containsKey(simlarNumber.getSimlarId())) {
 						result.put(simlarNumber.getSimlarId(), new ContactData(name, simlarNumber.getGuiTelephoneNumber(), ContactStatus.UNKNOWN,
 								photoUri));
-						Log.d(LOGTAG, "adding contact " + name + " " + number + " => " + simlarNumber.getSimlarId());
+
+						/// ATTENTIION this logs the users telephone book
+						//Log.d(LOGTAG, "adding contact " + name + " " + number + " => " + simlarNumber.getSimlarId());
 					}
 				}
 				contacts.close();
@@ -855,11 +873,19 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	public Volumes getVolumes()
 	{
+		if (mLinphoneThread == null) {
+			return new Volumes();
+		}
+
 		return mLinphoneThread.getVolumes();
 	}
 
 	public void setVolumes(final Volumes volumes)
 	{
+		if (mLinphoneThread == null) {
+			return;
+		}
+
 		mLinphoneThread.setVolumes(volumes);
 	}
 

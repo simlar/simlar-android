@@ -24,6 +24,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
@@ -34,6 +37,9 @@ public final class VolumesControlActivity extends Activity
 	final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorVolumes();
 
 	Volumes mVolumes = null;
+	private SeekBar mSeekBarSpeaker;
+	private SeekBar mSeekBarMicrophone;
+	private CheckBox mCheckBoxEchoLimiter;
 
 	private final class SimlarServiceCommunicatorVolumes extends SimlarServiceCommunicator
 	{
@@ -74,10 +80,11 @@ public final class VolumesControlActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_volumes_control);
 
-		SeekBar seekBarSpeaker = (SeekBar) findViewById(R.id.seekBarSpeaker);
-		SeekBar seekBarMicrophone = (SeekBar) findViewById(R.id.seekBarMicrophone);
+		mSeekBarSpeaker = (SeekBar) findViewById(R.id.seekBarSpeaker);
+		mSeekBarMicrophone = (SeekBar) findViewById(R.id.seekBarMicrophone);
+		mCheckBoxEchoLimiter = (CheckBox) findViewById(R.id.checkBoxEchoLimiter);
 
-		seekBarSpeaker.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+		mSeekBarSpeaker.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar)
@@ -102,7 +109,7 @@ public final class VolumesControlActivity extends Activity
 			}
 		});
 
-		seekBarMicrophone.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+		mSeekBarMicrophone.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
 			@Override
 			public void onStopTrackingTouch(final SeekBar seekBar)
@@ -123,6 +130,24 @@ public final class VolumesControlActivity extends Activity
 				}
 
 				mVolumes = mVolumes.setProgressMicrophone(progress);
+				mCommunicator.getService().setVolumes(mVolumes);
+			}
+		});
+
+		mCheckBoxEchoLimiter.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked)
+			{
+				Log.i(LOGTAG, "CheckBoxEchoLimiter.onCheckedChanged: " + isChecked);
+				if (mVolumes == null || mCommunicator == null) {
+					return;
+				}
+
+				if (mVolumes.getEchoLimiter() == isChecked) {
+					return;
+				}
+
+				mVolumes = mVolumes.toggleEchoLimiter();
 				mCommunicator.getService().setVolumes(mVolumes);
 			}
 		});
@@ -154,10 +179,8 @@ public final class VolumesControlActivity extends Activity
 	{
 		mVolumes = mCommunicator.getService().getVolumes();
 
-		SeekBar seekBarSpeaker = (SeekBar) findViewById(R.id.seekBarSpeaker);
-		SeekBar seekBarMicrophone = (SeekBar) findViewById(R.id.seekBarMicrophone);
-
-		seekBarSpeaker.setProgress(mVolumes.getProgressSpeaker());
-		seekBarMicrophone.setProgress(mVolumes.getProgessMicrophone());
+		mSeekBarSpeaker.setProgress(mVolumes.getProgressSpeaker());
+		mSeekBarMicrophone.setProgress(mVolumes.getProgessMicrophone());
+		mCheckBoxEchoLimiter.setChecked(mVolumes.getEchoLimiter());
 	}
 }
