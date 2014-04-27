@@ -201,7 +201,7 @@ public final class SimlarCallState
 			return context.getString(R.string.call_activity_encrypting);
 		}
 
-		return String.format(context.getString(mCallEndReason.getDisplayMessageId()));
+		return String.format(context.getString(mCallEndReason.getDisplayMessageId()), mDisplayName);
 	}
 
 	public String getErrorDisplayMessage(final Context context, final String displayName)
