@@ -645,6 +645,10 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	void handleTerminate()
 	{
 		Log.i(LOGTAG, "handleTerminate");
+		if (mGoingDown) {
+			Log.w(LOGTAG, "handleTerminate: alreaday going down");
+			return;
+		}
 		mGoingDown = true;
 		SimlarServiceBroadcast.sendSimlarStatusChanged(this);
 

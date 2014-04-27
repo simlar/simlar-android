@@ -289,6 +289,7 @@ public final class CreateAccountActivity extends Activity
 	{
 		final IntentFilter filter = new IntentFilter();
 		filter.addAction("android.provider.Telephony.SMS_RECEIVED");
+		filter.setPriority(1002); // TextSecure uses 1001
 		registerReceiver(mSmsReceiver, filter);
 	}
 
