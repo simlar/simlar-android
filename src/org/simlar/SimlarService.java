@@ -20,13 +20,9 @@
 
 package org.simlar;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.linphone.core.LinphoneCall.State;
 import org.linphone.core.LinphoneCore.RegistrationState;
-import org.simlar.ContactsProvider.ContactData;
-import org.simlar.ContactsProvider.FullContactData;
+import org.simlar.ContactsProvider.ContactListener;
 import org.simlar.PreferencesHelper.NotInitedException;
 import org.simlar.SoundEffectManager.SoundEffectType;
 import org.simlar.Volumes.MicrophoneStatus;
@@ -46,7 +42,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
-import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
@@ -66,9 +61,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	LinphoneThread mLinphoneThread = null;
 	final Handler mHandler = new Handler();
 	private final IBinder mBinder = new SimlarServiceBinder();
-	Map<String, ContactData> mContacts = new HashMap<String, ContactData>();
 	private SimlarStatus mSimlarStatus = SimlarStatus.OFFLINE;
-	private final SimlarCallState mSimlarCallState = new SimlarCallState();
+	final SimlarCallState mSimlarCallState = new SimlarCallState();
 	private CallConnectionDetails mCallConnectionDetails = new CallConnectionDetails();
 	private WakeLock mWakeLock = null;
 	private WifiLock mWifiLock = null;
@@ -421,10 +415,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	@Override
 	public void onCallStateChanged(final String number, final State callState, final String message)
 	{
-		final FullContactData contact = getContact(number);
-		if (!mSimlarCallState.updateCallStateChanged(contact.getNameOrNumber(), contact.photoId,
-				LinphoneCallState.fromLinphoneCallState(callState), CallEndReason.fromMessage(message)))
-		{
+		if (!mSimlarCallState.updateCallStateChanged(number, LinphoneCallState.fromLinphoneCallState(callState), CallEndReason.fromMessage(message))) {
 			Log.d(LOGTAG, "SimlarCallState staying the same: " + mSimlarCallState);
 			return;
 		}
@@ -506,7 +497,18 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			}
 		}
 
-		SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
+		ContactsProvider.getNameAndPhotoId(number, this, new ContactListener() {
+			@Override
+			public void onGetNameAndPhotoId(String name, String photoId)
+			{
+				mSimlarCallState.updateContactNameAndImage(name, photoId);
+
+				NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+				nm.notify(NOTIFICATION_ID, createNotification(getSimlarStatus()));
+
+				SimlarServiceBroadcast.sendSimlarCallStateChanged(SimlarService.this);
+			}
+		});
 	}
 
 	@Override
@@ -655,36 +657,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				stopSelf();
 			}
 		});
-	}
-
-	void loadContactsFromTelephonebook()
-	{
-		new AsyncTask<Void, Void, Map<String, ContactData>>() {
-			@Override
-			protected Map<String, ContactData> doInBackground(final Void... params)
-			{
-				return ContactsProvider.loadContacts(SimlarService.this);
-			}
-
-			@Override
-			protected void onPostExecute(final Map<String, ContactData> result)
-			{
-				mContacts = result;
-
-				if (RegistrationState.RegistrationOk.equals(mLinphoneThread.getRegistrationState())) {
-					notifySimlarStatusChanged(SimlarStatus.ONLINE);
-				}
-			}
-		}.execute();
-	}
-
-	private FullContactData getContact(final String simlarId)
-	{
-		if (Util.isNullOrEmpty(simlarId) || !mContacts.containsKey(simlarId)) {
-			return new FullContactData(simlarId, "", "", ContactStatus.UNKNOWN, "");
-		}
-
-		return new FullContactData(simlarId, mContacts.get(simlarId));
 	}
 
 	public void verifyAuthenticationTokenOfCurrentCall(final boolean verified)

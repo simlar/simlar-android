@@ -42,6 +42,11 @@ public final class ContactsProvider
 		void onGetContacts(final Set<FullContactData> contacts);
 	}
 
+	public static interface ContactListener
+	{
+		void onGetNameAndPhotoId(final String name, final String photoId);
+	}
+
 	public static class ContactData
 	{
 		public final String name;
@@ -120,6 +125,44 @@ public final class ContactsProvider
 			protected void onPostExecute(final Set<FullContactData> contacts)
 			{
 				listener.onGetContacts(contacts);
+			}
+		}.execute();
+	}
+
+	static void getNameAndPhotoId(final String simlarId, final Context context, final ContactListener listener)
+	{
+		if (context == null) {
+			Log.e(LOGTAG, "no context");
+			return;
+		}
+
+		if (listener == null) {
+			Log.e(LOGTAG, "no listener");
+			return;
+		}
+
+		if (Util.isNullOrEmpty(simlarId)) {
+			Log.w(LOGTAG, "empty simlarId");
+			listener.onGetNameAndPhotoId(null, null);
+			return;
+		}
+
+		new AsyncTask<Void, Void, ContactData>() {
+			@Override
+			protected ContactData doInBackground(final Void... params)
+			{
+				return ContactsProvider.loadContacts(context).get(simlarId);
+			}
+
+			@Override
+			protected void onPostExecute(final ContactData contact)
+			{
+				if (contact == null) {
+					listener.onGetNameAndPhotoId(simlarId, null);
+					return;
+				}
+
+				listener.onGetNameAndPhotoId(contact.name, contact.photoId);
 			}
 		}.execute();
 	}
