@@ -34,7 +34,6 @@
     <string name="notification_simlar_status_connecting">%1$s connecting</string>
     <string name="notification_simlar_status_online">%1$s online</string>
     <string name="notification_simlar_status_error">%1$s registration failed</string>
-    <string name="notification_simlar_status_error_loading_contacts">%1$s error loading contacts</string>
 
     <string name="main_activity_contactlist_loading_contacts">Loading contacts</string>
     <string name="main_activity_contactlist_error_loading_contacts">Error: Failed to load contacts. Does your internet work?</string>

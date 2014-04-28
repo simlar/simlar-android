@@ -349,7 +349,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	{
 		Log.i(LOGTAG, "onRegistrationStateChanged: " + state);
 
-		SimlarStatus status = SimlarStatus.fromRegistrationState(state);
+		final SimlarStatus status = SimlarStatus.fromRegistrationState(state);
 
 		if (mCreatingAccount) {
 			if (status.isRegistrationAtSipServerFailed()) {
@@ -364,11 +364,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 				SimlarServiceBroadcast.sendTestRegistrationSuccess(this);
 			}
-		}
-
-		if (RegistrationState.RegistrationOk.equals(state)) {
-			loadContactsFromTelephonebook();
-			status = SimlarStatus.LOADING_CONTACTS;
 		}
 
 		if (mGoingDown && !status.isConnectedToSipServer()) {
