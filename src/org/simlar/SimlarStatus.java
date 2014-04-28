@@ -85,32 +85,6 @@ public enum SimlarStatus {
 		}
 	}
 
-	public int getContactTextId(boolean isGoingDown)
-	{
-		if (isGoingDown) {
-			return R.string.contacts_adapter_simlar_status_going_down;
-		}
-
-		switch (this) {
-		case OFFLINE:
-			return R.string.contacts_adapter_simlar_status_offline;
-		case CONNECTING:
-			return R.string.contacts_adapter_simlar_status_connecting;
-		case LOADING_CONTACTS:
-			return R.string.contacts_adapter_simlar_status_loading_contacts;
-		case ONLINE:
-		case ONGOING_CALL:
-			return R.string.contacts_adapter_simlar_status_no_contacts_found;
-		case ERROR:
-			return R.string.contacts_adapter_simlar_status_error;
-		case ERROR_LOADING_CONTACTS:
-			return R.string.contacts_adapter_simlar_status_error_loading_contacts;
-		case UNKNOWN:
-		default:
-			return R.string.contacts_adapter_simlar_status_error_unknown;
-		}
-	}
-
 	public boolean isConnectedToSipServer()
 	{
 		switch (this) {

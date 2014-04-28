@@ -21,9 +21,7 @@
 package org.simlar;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.linphone.core.LinphoneCall.State;
 import org.linphone.core.LinphoneCore.RegistrationState;
@@ -683,17 +681,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				}
 			}
 		}.execute();
-	}
-
-	public Set<FullContactData> getContacts()
-	{
-		final Set<FullContactData> contacts = new HashSet<FullContactData>();
-		for (final Map.Entry<String, ContactData> entry : mContacts.entrySet()) {
-			if (entry.getValue().isRegistered()) {
-				contacts.add(new FullContactData(entry.getKey(), entry.getValue()));
-			}
-		}
-		return contacts;
 	}
 
 	private FullContactData getContact(final String simlarId)

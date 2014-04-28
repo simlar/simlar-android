@@ -21,7 +21,9 @@
 package org.simlar;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import android.content.ContentUris;
 import android.content.Context;
@@ -89,6 +91,25 @@ public final class ContactsProvider
 		}
 	}
 
+	public static Set<FullContactData> loadRegisteredContacts(final Context context)
+	{
+		final Map<String, ContactData> contacts = loadContactsFromTelephonebook(context);
+		if (!updateContactStatus(contacts)) {
+			Log.w(LOGTAG, "unable to get contact status, most probably we are offline");
+			return null;
+		}
+
+		final Set<FullContactData> registeredContacts = new HashSet<FullContactData>();
+		for (final Map.Entry<String, ContactData> c : contacts.entrySet()) {
+			if (c.getValue().isRegistered()) {
+				registeredContacts.add(new FullContactData(c.getKey(), c.getValue()));
+			}
+		}
+
+		Log.i(LOGTAG, "found " + registeredContacts.size() + " registered contacts");
+		return registeredContacts;
+	}
+
 	public static Map<String, ContactData> loadContacts(final Context context)
 	{
 		final Map<String, ContactData> contacts = loadContactsFromTelephonebook(context);
@@ -146,9 +167,13 @@ public final class ContactsProvider
 		return result;
 	}
 
-	private static void updateContactStatus(final Map<String, ContactData> contacts)
+	private static boolean updateContactStatus(final Map<String, ContactData> contacts)
 	{
 		final Map<String, ContactStatus> statusMap = GetContactsStatus.httpPostGetContactsStatus(contacts.keySet());
+		if (statusMap == null) {
+			return false;
+		}
+
 		Log.i(LOGTAG, "contact status received for " + statusMap.size() + " contacts");
 
 		for (final Map.Entry<String, ContactStatus> entry : statusMap.entrySet()) {
@@ -164,5 +189,7 @@ public final class ContactsProvider
 
 			contacts.get(entry.getKey()).status = entry.getValue();
 		}
+
+		return true;
 	}
 }
