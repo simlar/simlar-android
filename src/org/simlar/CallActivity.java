@@ -27,7 +27,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -207,11 +206,7 @@ public final class CallActivity extends Activity implements SensorEventListener
 
 		Log.i(LOGTAG, "onSimlarCallStateChanged " + simlarCallState);
 
-		if (!Util.isNullOrEmpty(simlarCallState.getContactPhotoId())) {
-			mImageViewContactImage.setImageURI(Uri.parse(simlarCallState.getContactPhotoId()));
-		} else {
-			mImageViewContactImage.setImageResource(R.drawable.contact_picture);
-		}
+		mImageViewContactImage.setImageBitmap(simlarCallState.getContactPhotoBitmap(this, R.drawable.contact_picture));
 		mTextViewContactName.setText(simlarCallState.getContactName());
 
 		mTextViewCallStatus.setText(simlarCallState.getCallStatusDisplayMessage(this));

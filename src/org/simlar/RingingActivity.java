@@ -23,7 +23,6 @@ package org.simlar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -129,18 +128,15 @@ public final class RingingActivity extends Activity
 
 		Log.i(LOGTAG, "onSimlarCallStateChanged " + simlarCallState);
 
-		final ImageView contactImage = (ImageView) findViewById(R.id.contactImage);
-		final TextView contactName = (TextView) findViewById(R.id.contactName);
-
-		if (!Util.isNullOrEmpty(simlarCallState.getContactPhotoId())) {
-			contactImage.setImageURI(Uri.parse(simlarCallState.getContactPhotoId()));
-		}
-
-		contactName.setText(simlarCallState.getContactName());
-
 		if (simlarCallState.isEndedCall()) {
 			finish();
 		}
+
+		final ImageView contactImage = (ImageView) findViewById(R.id.contactImage);
+		final TextView contactName = (TextView) findViewById(R.id.contactName);
+
+		contactImage.setImageBitmap(simlarCallState.getContactPhotoBitmap(this, R.drawable.contact_picture));
+		contactName.setText(simlarCallState.getContactName());
 	}
 
 	@SuppressWarnings("unused")
