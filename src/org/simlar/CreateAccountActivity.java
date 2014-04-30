@@ -20,6 +20,9 @@
 
 package org.simlar;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -352,12 +355,13 @@ public final class CreateAccountActivity extends Activity
 
 		Log.i(LOGTAG, "received sms: sender=" + sender + " message=" + message);
 
-		final String simlarTag = getString(R.string.create_account_activity_sms_text) + " ";
-		if (!message.startsWith(simlarTag)) {
+		final String regex = getString(R.string.create_account_activity_sms_text).replace("*CODE*", "(\\d{6})");
+		final Matcher matcher = Pattern.compile(regex).matcher(message);
+		if (!matcher.find()) {
 			Log.e(LOGTAG, "unable to parse sms message: " + message);
 			return;
 		}
-		final String registrationCode = message.split(simlarTag)[1];
+		final String registrationCode = matcher.group(1);
 
 		mHandler.removeCallbacksAndMessages(null);
 		mProgressWaitingForSMS.setVisibility(View.INVISIBLE);

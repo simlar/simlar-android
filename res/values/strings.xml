@@ -121,7 +121,7 @@
 
     <string name="create_account_activity_title">Creating Account</string>
     <string name="create_account_activity_request">Request Account Creation</string>
-    <string name="create_account_activity_sms_text">Simlar Registration Code:</string>
+    <string name="create_account_activity_sms_text">Simlar Registration Code: *CODE*. You only need this code and sms if the simlar app asks for it at first usage</string>
     <string name="create_account_activity_waiting_for_sms">Waiting for SMS</string>
     <string name="create_account_activity_waiting_for_sms_manual">Manual input of registration code</string>
     <string name="create_account_activity_confirm">Confirm Account Creation</string>
