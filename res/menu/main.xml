@@ -45,6 +45,12 @@
         android:title="@string/main_activity_menu_delete_account"/>
 
     <item
+        android:id="@+id/action_tell_a_friend"
+        android:orderInCategory="8"
+        android:showAsAction="never"
+        android:title="@string/main_activity_menu_tell_a_friend"/>
+
+    <item
         android:id="@+id/action_show_about"
         android:orderInCategory="9"
         android:showAsAction="never"

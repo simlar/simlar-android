@@ -150,6 +150,9 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 		case R.id.action_delete_account:
 			deleteAccountAndQuit();
 			return true;
+		case R.id.action_tell_a_friend:
+			tellAFriend();
+			return true;
 		case R.id.action_show_about:
 			show_about();
 			return true;
@@ -233,6 +236,15 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	{
 		PreferencesHelper.resetPreferencesFile(this);
 		finish();
+	}
+
+	private void tellAFriend()
+	{
+		final Intent sendIntent = new Intent(Intent.ACTION_SEND);
+		sendIntent.setType("text/plain");
+		sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.main_activity_tell_a_friend_subject));
+		sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.main_activity_tell_a_friend_text));
+		startActivity(Intent.createChooser(sendIntent, getString(R.string.main_activity_tell_a_friend_chooser_title)));
 	}
 
 	private void show_about()

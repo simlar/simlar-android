@@ -35,6 +35,7 @@
     <string name="main_activity_menu_enable_debug_mode">Debug-Modus einschalten</string>
     <string name="main_activity_menu_disable_debug_mode">Debug-Modus ausschalten</string>
     <string name="main_activity_menu_delete_account">Einstellungen löschen</string>
+    <string name="main_activity_menu_tell_a_friend">Einen Freund einladen</string>
     <string name="main_activity_menu_show_about">Über Simlar</string>
     <string name="main_activity_alert_upload_log_file_title">Fehlerbericht senden?</string>
     <string name="main_activity_alert_upload_log_file_text">Danke, dass du einen Fehlerbericht senden möchtest.\n\nEs wird automatisch eine Logdatei auf an Simlar übertragen.\n\nAnschließend hast du die Gelegenheit, den Simlar-Entwicklern eine E-Mail mit einer Fehlerbeschreibung zu senden.\n\nWillst du fortfahren?</string>
@@ -42,6 +43,10 @@
     <string name="main_activity_alert_uploading_log_file_failed_text">Erstellung der Logdatei fehlgeschlagen => Senden abgebrochen</string>
     <string name="main_activity_alert_enable_linphone_debug_mode_title">Debug-Modus wirklich aktivieren?</string>
     <string name="main_activity_alert_enable_linphone_debug_mode_text">Der Debug-Modus erweitert die Ausgaben innerhalb der Logdatei erheblich. Aktiviere ihn nur, wenn du von einem Simlar-Entwickler dazu aufgefordert wurdest oder wirklich weißt, was du tust.</string>
+    <string name="main_activity_tell_a_friend_chooser_title">Einen Freund einladen mit</string>
+    <!-- TextSecure messages do not have a subject. WhatsApp puts the subject just in front of the message text. Emails simply use this subject as usual. -->
+    <string name="main_activity_tell_a_friend_subject">Simlar</string>
+    <string name="main_activity_tell_a_friend_text">Lass uns kostenlos und sicher über das Internet telefonieren mit Simlar: https://www.simlar.org/download</string>
 
     <string name="upload_log_file_send_email_to_developer">Entwickler per E-Mail kontaktieren</string>
     <string name="upload_log_file_progress">Bitte warten. Die Logdatei wird hochgeladen&#8230;</string>
