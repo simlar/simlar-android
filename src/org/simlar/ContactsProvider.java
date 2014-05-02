@@ -107,7 +107,7 @@ public final class ContactsProvider
 
 	private static final class ContactsProviderImpl
 	{
-		private Map<String, ContactData> mContacts = null;
+		private Map<String, ContactData> mContacts = new HashMap<String, ContactsProvider.ContactData>();
 		private State mState = State.UNINITIALIZED;
 		private final Set<FullContactsListener> mFullContactsListeners = new HashSet<FullContactsListener>();
 		private final Map<ContactListener, String> mContactListener = new HashMap<ContactsProvider.ContactListener, String>();
@@ -173,6 +173,14 @@ public final class ContactsProvider
 
 		void onContactsLoadedFromTelephoneBook(final Map<String, ContactData> contacts)
 		{
+			if (contacts == null) {
+				Log.e(LOGTAG, "onContactsLoadedFromTelephoneBook called with empty contacts");
+				mState = State.ERROR;
+				notifyContactListeners();
+				notifyFullContactsListeners(null);
+				return;
+			}
+
 			mContacts = contacts;
 			mState = State.REQUESTING_CONTACTS_STATUS_FROM_SERVER;
 
