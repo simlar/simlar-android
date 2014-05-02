@@ -103,7 +103,7 @@ public final class SimlarCallState
 		}
 
 		if (Util.isNullOrEmpty(name)) {
-			Log.e(LOGTAG, "ERROR updateCallSimlarIdChanged: simlarId not set");
+			Log.e(LOGTAG, "ERROR updateContactNameAndImage: name not set");
 		}
 
 		mContactName = name;
