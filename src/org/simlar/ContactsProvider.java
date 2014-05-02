@@ -127,12 +127,22 @@ public final class ContactsProvider
 		private void loadContacts(final Context context)
 		{
 			Log.i(LOGTAG, "start creating contacts cache");
+			final String mySimlarId = PreferencesHelper.getMySimlarIdOrEmptyString();
+
+			if (Util.isNullOrEmpty(mySimlarId)) {
+				Log.e(LOGTAG, "loadContacts: no simlarId for myself, probably PreferencesHelpre not inited => aborting");
+				mState = State.ERROR;
+				notifyContactListeners();
+				notifyFullContactsListeners(null);
+				return;
+			}
+
 			mState = State.PARSING_PHONES_ADDRESS_BOOK;
 			new AsyncTask<Void, Void, Map<String, ContactData>>() {
 				@Override
 				protected Map<String, ContactData> doInBackground(final Void... params)
 				{
-					return loadContactsFromTelephonebook(context);
+					return loadContactsFromTelephonebook(context, mySimlarId);
 				}
 
 				@Override
@@ -143,17 +153,30 @@ public final class ContactsProvider
 			}.execute();
 		}
 
-		void onContactsLoadedFromTelephoneBook(final Map<String, ContactData> contacts)
+		private void notifyContactListeners()
 		{
-			mContacts = contacts;
-			mState = State.REQUESTING_CONTACTS_STATUS_FROM_SERVER;
-
 			for (final Map.Entry<ContactListener, String> entry : mContactListener.entrySet())
 			{
 				final ContactData cd = createContactData(entry.getValue());
 				entry.getKey().onGetNameAndPhotoId(cd.name, cd.photoId);
 			}
 			mContactListener.clear();
+		}
+
+		private void notifyFullContactsListeners(final Set<FullContactData> contacts)
+		{
+			for (final FullContactsListener listener : mFullContactsListeners) {
+				listener.onGetContacts(contacts);
+			}
+			mFullContactsListeners.clear();
+		}
+
+		void onContactsLoadedFromTelephoneBook(final Map<String, ContactData> contacts)
+		{
+			mContacts = contacts;
+			mState = State.REQUESTING_CONTACTS_STATUS_FROM_SERVER;
+
+			notifyContactListeners();
 
 			new AsyncTask<String, Void, Map<String, ContactStatus>>() {
 				@Override
@@ -199,10 +222,7 @@ public final class ContactsProvider
 				mState = State.ERROR;
 			}
 
-			for (final FullContactsListener listener : mFullContactsListeners) {
-				listener.onGetContacts(contacts);
-			}
-			mFullContactsListeners.clear();
+			notifyFullContactsListeners(contacts);
 		}
 
 		private Set<FullContactData> createFullContactDataSet()
@@ -218,7 +238,7 @@ public final class ContactsProvider
 			return registeredContacts;
 		}
 
-		static Map<String, ContactData> loadContactsFromTelephonebook(final Context context)
+		static Map<String, ContactData> loadContactsFromTelephonebook(final Context context, final String mySimlarId)
 		{
 			Log.i(LOGTAG, "loading contacts from telephone book");
 			final Map<String, ContactData> result = new HashMap<String, ContactData>();
@@ -245,7 +265,12 @@ public final class ContactsProvider
 				}
 
 				final SimlarNumber simlarNumber = new SimlarNumber(number);
-				if (Util.isNullOrEmpty(simlarNumber.getSimlarId())) {
+				final String simlarId = simlarNumber.getSimlarId();
+				if (Util.isNullOrEmpty(simlarId)) {
+					continue;
+				}
+
+				if (Util.equalString(simlarId, mySimlarId)) {
 					continue;
 				}
 
@@ -254,12 +279,12 @@ public final class ContactsProvider
 							ContactsContract.Contacts.CONTENT_URI, contactId), ContactsContract.Contacts.Photo.CONTENT_DIRECTORY).toString();
 				}
 
-				if (!result.containsKey(simlarNumber.getSimlarId())) {
-					result.put(simlarNumber.getSimlarId(), new ContactData(name, simlarNumber.getGuiTelephoneNumber(), ContactStatus.UNKNOWN,
+				if (!result.containsKey(simlarId)) {
+					result.put(simlarId, new ContactData(name, simlarNumber.getGuiTelephoneNumber(), ContactStatus.UNKNOWN,
 							photoUri));
 
 					/// ATTENTIION this logs the users telephone book
-					// Log.d(LOGTAG, "adding contact " + name + " " + number + " => " + simlarNumber.getSimlarId());
+					// Log.d(LOGTAG, "adding contact " + name + " " + number + " => " + simlarId);
 				}
 			}
 			contacts.close();
