@@ -25,7 +25,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
-import org.simlar.SimlarService.FullContactData;
+import org.simlar.ContactsProvider.FullContactData;
 
 import android.content.Context;
 import android.os.Build;
@@ -41,8 +41,6 @@ public final class ContactsAdapter extends ArrayAdapter<FullContactData>
 	private static final String LOGTAG = ContactsAdapter.class.getSimpleName();
 
 	private final int mLayout;
-	private EmptyTextListener mEmptyTextListener = null;
-	private final SimlarServiceCommunicator mCommunicator;
 
 	public final class SortByName implements Comparator<FullContactData>
 	{
@@ -71,17 +69,16 @@ public final class ContactsAdapter extends ArrayAdapter<FullContactData>
 		}
 	}
 
-	public static ContactsAdapter createContactsAdapter(final Context context, final SimlarServiceCommunicator communicator)
+	public static ContactsAdapter createContactsAdapter(final Context context)
 	{
 		Log.i(LOGTAG, "creating ContactsAdapter");
-		return new ContactsAdapter(context, R.layout.contacts, new ArrayList<FullContactData>(), communicator);
+		return new ContactsAdapter(context, R.layout.contacts, new ArrayList<FullContactData>());
 	}
 
-	private ContactsAdapter(final Context context, final int layout, final List<FullContactData> values, final SimlarServiceCommunicator communicator)
+	private ContactsAdapter(final Context context, final int layout, final List<FullContactData> values)
 	{
 		super(context, layout, values);
 		mLayout = layout;
-		mCommunicator = communicator;
 	}
 
 	@Override
@@ -145,40 +142,5 @@ public final class ContactsAdapter extends ArrayAdapter<FullContactData>
 	{
 		super.add(contact);
 		sort(new SortByName());
-	}
-
-	void onSimlarStatusChanged()
-	{
-		if (mCommunicator.getService() == null) {
-			Log.e(LOGTAG, "ERROR onSimlarStatusChanged: no service bound");
-			return;
-		}
-
-		clear();
-		final SimlarStatus status = mCommunicator.getService().getSimlarStatus();
-		Log.i(LOGTAG, "onSimlarStatusChanged " + status + " (isGoingDown=" + mCommunicator.getService().isGoingDown() + ")");
-
-		if (status.shouldShowContacts(mCommunicator.getService().isGoingDown())) {
-			addAll(mCommunicator.getService().getContacts());
-		}
-
-		if (mEmptyTextListener == null) {
-			Log.e(LOGTAG, "no empty text listener");
-			return;
-		}
-
-		mEmptyTextListener.onEmptyTextNeeded(status.getContactTextId(mCommunicator.getService().isGoingDown()));
-		this.notifyDataSetChanged();
-	}
-
-	public void call(final int position)
-	{
-		mCommunicator.getService().call(getItem(position).simlarId);
-	}
-
-	public void setEmptyTextListener(final EmptyTextListener listener)
-	{
-		Log.i(LOGTAG, "setEmptyTextListener " + listener.getClass().getSimpleName());
-		mEmptyTextListener = listener;
 	}
 }

@@ -20,13 +20,9 @@
 
 package org.simlar;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import org.linphone.core.LinphoneCall.State;
 import org.linphone.core.LinphoneCore.RegistrationState;
+import org.simlar.ContactsProvider.ContactListener;
 import org.simlar.PreferencesHelper.NotInitedException;
 import org.simlar.SoundEffectManager.SoundEffectType;
 import org.simlar.Volumes.MicrophoneStatus;
@@ -37,19 +33,14 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.Cursor;
-import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
-import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
@@ -57,7 +48,6 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
-import android.provider.ContactsContract;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -70,9 +60,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	LinphoneThread mLinphoneThread = null;
 	final Handler mHandler = new Handler();
 	private final IBinder mBinder = new SimlarServiceBinder();
-	Map<String, ContactData> mContacts = new HashMap<String, ContactData>();
 	private SimlarStatus mSimlarStatus = SimlarStatus.OFFLINE;
-	private final SimlarCallState mSimlarCallState = new SimlarCallState();
+	final SimlarCallState mSimlarCallState = new SimlarCallState();
 	private CallConnectionDetails mCallConnectionDetails = new CallConnectionDetails();
 	private WakeLock mWakeLock = null;
 	private WifiLock mWifiLock = null;
@@ -121,55 +110,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 	}
 
-	public class ContactData
-	{
-		public final String name;
-		public final String guiTelephoneNumber;
-
-		public ContactStatus status;
-		public final String photoId;
-
-		public ContactData(final String name, final String guiTelephoneNumber, final ContactStatus status, final String photoId)
-		{
-			this.name = name;
-			this.guiTelephoneNumber = guiTelephoneNumber;
-			this.status = status;
-			this.photoId = photoId;
-		}
-
-		public boolean isRegistered()
-		{
-			return status.isRegistered();
-		}
-	}
-
-	public final class FullContactData extends ContactData
-	{
-		public final String simlarId;
-
-		public FullContactData(final String simlarId, final String name, final String guiTelephoneNumber, final ContactStatus status,
-				final String photoId)
-		{
-			super(name, guiTelephoneNumber, status, photoId);
-			this.simlarId = simlarId;
-		}
-
-		public FullContactData(final String simlarId, final ContactData cd)
-		{
-			super(cd.name, cd.guiTelephoneNumber, cd.status, cd.photoId);
-			this.simlarId = simlarId;
-		}
-
-		public String getNameOrNumber()
-		{
-			if (Util.isNullOrEmpty(name)) {
-				return simlarId;
-			}
-
-			return name;
-		}
-	}
-
 	@Override
 	public IBinder onBind(final Intent arg0)
 	{
@@ -209,6 +149,10 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 		registerReceiver(mNetworkChangeReceiver, intentFilter);
 
+		PreferencesHelper.readPrefencesFromFile(this);
+
+		ContactsProvider.preLoadContacts(this);
+
 		startKeepAwake();
 
 		mHandler.post(new Runnable() {
@@ -230,7 +174,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		Log.i(LOGTAG, "registerActivityToNotification: " + activity.getSimpleName());
 		mNotificationActivity = activity;
 
-		NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		nm.notify(NOTIFICATION_ID, createNotification(mSimlarStatus));
 	}
 
@@ -256,7 +200,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
 		notificationBuilder.setSmallIcon(status.getNotificationIcon());
-		notificationBuilder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.app_logo));
+		notificationBuilder.setLargeIcon(mSimlarCallState.getContactPhotoBitmap(this, R.drawable.app_logo));
 		notificationBuilder.setContentTitle(getString(R.string.app_name));
 		notificationBuilder.setContentText(text);
 		notificationBuilder.setTicker(text);
@@ -402,7 +346,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	{
 		Log.i(LOGTAG, "onRegistrationStateChanged: " + state);
 
-		SimlarStatus status = SimlarStatus.fromRegistrationState(state);
+		final SimlarStatus status = SimlarStatus.fromRegistrationState(state);
 
 		if (mCreatingAccount) {
 			if (status.isRegistrationAtSipServerFailed()) {
@@ -417,11 +361,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 				SimlarServiceBroadcast.sendTestRegistrationSuccess(this);
 			}
-		}
-
-		if (RegistrationState.RegistrationOk.equals(state)) {
-			loadContactsFromTelephonebook();
-			status = SimlarStatus.LOADING_CONTACTS;
 		}
 
 		if (mGoingDown && !status.isConnectedToSipServer()) {
@@ -441,7 +380,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	{
 		Log.i(LOGTAG, "notifySimlarStatusChanged: " + status);
 
-		NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		nm.notify(NOTIFICATION_ID, createNotification(status));
 
 		mSimlarStatus = status;
@@ -479,10 +418,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	@Override
 	public void onCallStateChanged(final String number, final State callState, final String message)
 	{
-		final FullContactData contact = getContact(number);
-		if (!mSimlarCallState.updateCallStateChanged(contact.getNameOrNumber(), contact.photoId,
-				LinphoneCallState.fromLinphoneCallState(callState), CallEndReason.fromMessage(message)))
-		{
+		if (!mSimlarCallState.updateCallStateChanged(number, LinphoneCallState.fromLinphoneCallState(callState), CallEndReason.fromMessage(message))) {
 			Log.d(LOGTAG, "SimlarCallState staying the same: " + mSimlarCallState);
 			return;
 		}
@@ -564,7 +500,18 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			}
 		}
 
-		SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
+		ContactsProvider.getNameAndPhotoId(number, this, new ContactListener() {
+			@Override
+			public void onGetNameAndPhotoId(String name, String photoId)
+			{
+				mSimlarCallState.updateContactNameAndImage(name, photoId);
+
+				final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+				nm.notify(NOTIFICATION_ID, createNotification(getSimlarStatus()));
+
+				SimlarServiceBroadcast.sendSimlarCallStateChanged(SimlarService.this);
+			}
+		});
 	}
 
 	@Override
@@ -713,138 +660,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				stopSelf();
 			}
 		});
-	}
-
-	void loadContactsFromTelephonebook()
-	{
-		new AsyncTask<Void, Void, Map<String, ContactData>>() {
-			@Override
-			protected Map<String, ContactData> doInBackground(final Void... params)
-			{
-				Log.i(LOGTAG, "loading contacts from telephone book");
-				final Map<String, ContactData> result = new HashMap<String, SimlarService.ContactData>();
-
-				final String[] projection = new String[] {
-						ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
-						ContactsContract.CommonDataKinds.Phone.NUMBER,
-						ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-						ContactsContract.CommonDataKinds.Phone.PHOTO_ID
-				};
-
-				final Cursor contacts = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projection, null, null, null);
-				while (contacts.moveToNext())
-				{
-					final long contactId = contacts.getLong(0);
-					final String number = contacts.getString(1);
-					final String name = contacts.getString(2);
-					final boolean hasPhotoId = contacts.getLong(3) != 0;
-					String photoUri = null;
-
-					if (Util.isNullOrEmpty(number)) {
-						continue;
-					}
-
-					final SimlarNumber simlarNumber = new SimlarNumber(number);
-					if (Util.isNullOrEmpty(simlarNumber.getSimlarId())) {
-						continue;
-					}
-
-					if (hasPhotoId) {
-						photoUri = Uri.withAppendedPath(ContentUris.withAppendedId(
-								ContactsContract.Contacts.CONTENT_URI, contactId), ContactsContract.Contacts.Photo.CONTENT_DIRECTORY).toString();
-					}
-
-					if (!result.containsKey(simlarNumber.getSimlarId())) {
-						result.put(simlarNumber.getSimlarId(), new ContactData(name, simlarNumber.getGuiTelephoneNumber(), ContactStatus.UNKNOWN,
-								photoUri));
-
-						/// ATTENTIION this logs the users telephone book
-						//Log.d(LOGTAG, "adding contact " + name + " " + number + " => " + simlarNumber.getSimlarId());
-					}
-				}
-				contacts.close();
-
-				return result;
-			}
-
-			@Override
-			protected void onPostExecute(final Map<String, ContactData> result)
-			{
-				mContacts = result;
-				requestRegisteredContacts();
-			}
-		}.execute();
-	}
-
-	@SuppressWarnings("unchecked")
-	public void requestRegisteredContacts()
-	{
-		new AsyncTask<Set<String>, Void, Map<String, ContactStatus>>() {
-
-			@Override
-			protected Map<String, ContactStatus> doInBackground(final Set<String>... params)
-			{
-				return GetContactsStatus.httpPostGetContactsStatus(params[0]);
-			}
-
-			@Override
-			protected void onPostExecute(final Map<String, ContactStatus> result)
-			{
-				if (result == null) {
-					Log.i(LOGTAG, "getting contacts status failed");
-					notifySimlarStatusChanged(SimlarStatus.ERROR_LOADING_CONTACTS);
-					return;
-				}
-
-				for (final String simlarId : result.keySet()) {
-					updateContactData(simlarId, result.get(simlarId));
-				}
-
-				if (RegistrationState.RegistrationOk.equals(mLinphoneThread.getRegistrationState())) {
-					notifySimlarStatusChanged(SimlarStatus.ONLINE);
-				}
-			}
-		}.execute(mContacts.keySet());
-	}
-
-	void updateContactData(final String simlarId, final ContactStatus status)
-	{
-		if (Util.isNullOrEmpty(simlarId)) {
-			return;
-		}
-
-		final ContactData cd = mContacts.get(simlarId);
-		if (cd == null) {
-			Log.w(LOGTAG, "updateContactData: new simlerId=" + simlarId);
-			mContacts.put(simlarId, new ContactData(null, null, status, null));
-			return;
-		}
-
-		if (!status.isValid()) {
-			return;
-		}
-
-		cd.status = status;
-	}
-
-	public Set<FullContactData> getContacts()
-	{
-		final Set<FullContactData> contacts = new HashSet<FullContactData>();
-		for (final Map.Entry<String, ContactData> entry : mContacts.entrySet()) {
-			if (entry.getValue().isRegistered()) {
-				contacts.add(new FullContactData(entry.getKey(), entry.getValue()));
-			}
-		}
-		return contacts;
-	}
-
-	private FullContactData getContact(final String simlarId)
-	{
-		if (Util.isNullOrEmpty(simlarId) || !mContacts.containsKey(simlarId)) {
-			return new FullContactData(simlarId, "", "", ContactStatus.UNKNOWN, "");
-		}
-
-		return new FullContactData(simlarId, mContacts.get(simlarId));
 	}
 
 	public void verifyAuthenticationTokenOfCurrentCall(final boolean verified)

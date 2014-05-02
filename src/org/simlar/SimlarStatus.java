@@ -26,11 +26,9 @@ public enum SimlarStatus {
 	UNKNOWN,
 	OFFLINE,
 	CONNECTING,
-	LOADING_CONTACTS,
 	ONLINE,
 	ONGOING_CALL,
-	ERROR,
-	ERROR_LOADING_CONTACTS;
+	ERROR;
 
 	public static SimlarStatus fromRegistrationState(final org.linphone.core.LinphoneCore.RegistrationState state)
 	{
@@ -53,15 +51,12 @@ public enum SimlarStatus {
 		case OFFLINE:
 			return R.string.notification_simlar_status_offline;
 		case CONNECTING:
-		case LOADING_CONTACTS:
 			return R.string.notification_simlar_status_connecting;
 		case ONLINE:
 		case ONGOING_CALL:
 			return R.string.notification_simlar_status_online;
 		case ERROR:
 			return R.string.notification_simlar_status_error;
-		case ERROR_LOADING_CONTACTS:
-			return R.string.notification_simlar_status_error_loading_contacts;
 		case UNKNOWN:
 		default:
 			return R.string.notification_simlar_status_unknown;
@@ -73,51 +68,21 @@ public enum SimlarStatus {
 		switch (this) {
 		case ONLINE:
 		case ONGOING_CALL:
-		case ERROR_LOADING_CONTACTS:
 			return R.drawable.status_online;
 		case UNKNOWN:
 		case OFFLINE:
 		case CONNECTING:
-		case LOADING_CONTACTS:
 		case ERROR:
 		default:
 			return R.drawable.status_offline;
 		}
 	}
 
-	public int getContactTextId(boolean isGoingDown)
-	{
-		if (isGoingDown) {
-			return R.string.contacts_adapter_simlar_status_going_down;
-		}
-
-		switch (this) {
-		case OFFLINE:
-			return R.string.contacts_adapter_simlar_status_offline;
-		case CONNECTING:
-			return R.string.contacts_adapter_simlar_status_connecting;
-		case LOADING_CONTACTS:
-			return R.string.contacts_adapter_simlar_status_loading_contacts;
-		case ONLINE:
-		case ONGOING_CALL:
-			return R.string.contacts_adapter_simlar_status_no_contacts_found;
-		case ERROR:
-			return R.string.contacts_adapter_simlar_status_error;
-		case ERROR_LOADING_CONTACTS:
-			return R.string.contacts_adapter_simlar_status_error_loading_contacts;
-		case UNKNOWN:
-		default:
-			return R.string.contacts_adapter_simlar_status_error_unknown;
-		}
-	}
-
 	public boolean isConnectedToSipServer()
 	{
 		switch (this) {
-		case LOADING_CONTACTS:
 		case ONLINE:
 		case ONGOING_CALL:
-		case ERROR_LOADING_CONTACTS:
 			return true;
 		case OFFLINE:
 		case CONNECTING:
@@ -133,10 +98,8 @@ public enum SimlarStatus {
 		switch (this) {
 		case ERROR:
 			return true;
-		case LOADING_CONTACTS:
 		case ONLINE:
 		case ONGOING_CALL:
-		case ERROR_LOADING_CONTACTS:
 		case OFFLINE:
 		case CONNECTING:
 		case UNKNOWN:
@@ -156,8 +119,6 @@ public enum SimlarStatus {
 		case ONGOING_CALL:
 			return true;
 		case ERROR:
-		case LOADING_CONTACTS:
-		case ERROR_LOADING_CONTACTS:
 		case OFFLINE:
 		case CONNECTING:
 		case UNKNOWN:

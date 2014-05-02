@@ -23,6 +23,10 @@ package org.simlar;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Set;
+
+import org.simlar.ContactsProvider.FullContactData;
+import org.simlar.ContactsProvider.FullContactsListener;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -40,8 +44,9 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	static final String LOGTAG = MainActivity.class.getSimpleName();
 
 	ContactsAdapter mAdapter = null;
+	ContactsListFragment mContactList = null;
 
-	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorContacts();
+	final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorContacts();
 
 	private final class SimlarServiceCommunicatorContacts extends SimlarServiceCommunicator
 	{
@@ -51,47 +56,19 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 		}
 
 		@Override
-		void onBoundToSimlarService()
-		{
-			if (mAdapter == null) {
-				Log.w(LOGTAG, "no contact adapter");
-				return;
-			}
-
-			mAdapter.onSimlarStatusChanged();
-		}
-
-		@Override
-		void onSimlarStatusChanged()
-		{
-			if (mAdapter == null) {
-				Log.w(LOGTAG, "no contact adapter");
-				return;
-			}
-
-			mAdapter.onSimlarStatusChanged();
-		}
-
-		@Override
 		void onServiceFinishes()
 		{
 			MainActivity.this.finish();
 		}
 	}
 
-	public static final class ContactsListFragment extends android.support.v4.app.ListFragment implements EmptyTextListener
+	public final class ContactsListFragment extends android.support.v4.app.ListFragment
 	{
-		public void setAdapter(final ContactsAdapter adapter)
-		{
-			setListAdapter(adapter);
-			adapter.setEmptyTextListener(this);
-		}
-
 		@Override
 		public void onActivityCreated(final Bundle savedInstanceState)
 		{
 			super.onActivityCreated(savedInstanceState);
-			setEmptyText(getString(R.string.contacts_adapter_simlar_status_no_contacts_found));
+			setEmptyText(getString(R.string.main_activity_contactlist_no_contacts_found));
 		}
 
 		@Override
@@ -110,13 +87,13 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 		@Override
 		public void onListItemClick(final ListView l, final View v, final int position, final long id)
 		{
-			((ContactsAdapter) getListAdapter()).call(position);
-		}
+			final String simlarId = ((ContactsAdapter) getListAdapter()).getItem(position).simlarId;
+			if (Util.isNullOrEmpty(simlarId)) {
+				Log.e(LOGTAG, "onListItemClick: no simlarId found");
+				return;
+			}
 
-		@Override
-		public void onEmptyTextNeeded(final int textId)
-		{
-			setEmptyText(getString(textId));
+			mCommunicator.getService().call(simlarId);
 		}
 	}
 
@@ -127,17 +104,37 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		mAdapter = ContactsAdapter.createContactsAdapter(this, mCommunicator);
+		FileHelper.init(this);
+
+		mAdapter = ContactsAdapter.createContactsAdapter(this);
 
 		final FragmentManager fm = getSupportFragmentManager();
-		ContactsListFragment list = (ContactsListFragment) fm.findFragmentById(android.R.id.content);
-		if (list == null) {
-			list = new ContactsListFragment();
-			fm.beginTransaction().add(android.R.id.content, list).commit();
+		mContactList = (ContactsListFragment) fm.findFragmentById(android.R.id.content);
+		if (mContactList == null) {
+			mContactList = new ContactsListFragment();
+			fm.beginTransaction().add(android.R.id.content, mContactList).commit();
 		}
-		list.setAdapter(mAdapter);
+		mContactList.setListAdapter(mAdapter);
 
 		Log.i(LOGTAG, "onCreate ended");
+	}
+
+	void loadContacts()
+	{
+		mContactList.setEmptyText(getString(R.string.main_activity_contactlist_loading_contacts));
+		ContactsProvider.getContacts(this, new FullContactsListener() {
+			@Override
+			public void onGetContacts(Set<FullContactData> contacts)
+			{
+				mAdapter.clear();
+				if (contacts == null) {
+					mContactList.setEmptyText(getString(R.string.main_activity_contactlist_error_loading_contacts));
+				} else {
+					mAdapter.addAll(contacts);
+					mContactList.setEmptyText(getString(R.string.main_activity_contactlist_no_contacts_found));
+				}
+			}
+		});
 	}
 
 	@Override
@@ -148,7 +145,14 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 
 		mCommunicator.startServiceAndRegister(this, MainActivity.class);
 
-		Log.i(LOGTAG, "onResume ended");
+		if (!PreferencesHelper.readPrefencesFromFile(this)) {
+			Log.i(LOGTAG, "we are not registered yet");
+			return;
+		}
+
+		if (mAdapter.isEmpty()) {
+			loadContacts();
+		}
 	}
 
 	@Override
@@ -174,6 +178,9 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	{
 		// Handle item selection
 		switch (item.getItemId()) {
+		case R.id.action_reload_contacts:
+			reloadContacts();
+			return true;
 		case R.id.action_upload_logfile:
 			uploadLogFile();
 			return true;
@@ -192,6 +199,14 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void reloadContacts()
+	{
+		Log.i(LOGTAG, "reloadContacts");
+		ContactsProvider.clearCache();
+		mAdapter.clear();
+		loadContacts();
 	}
 
 	private void uploadLogFile()
