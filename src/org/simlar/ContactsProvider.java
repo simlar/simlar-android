@@ -132,6 +132,7 @@ public final class ContactsProvider
 			if (Util.isNullOrEmpty(mySimlarId)) {
 				Log.e(LOGTAG, "loadContacts: no simlarId for myself, probably PreferencesHelpre not inited => aborting");
 				mState = State.ERROR;
+				mContacts.clear();
 				notifyContactListeners();
 				notifyFullContactsListeners(null);
 				return;
@@ -176,6 +177,7 @@ public final class ContactsProvider
 			if (contacts == null) {
 				Log.e(LOGTAG, "onContactsLoadedFromTelephoneBook called with empty contacts");
 				mState = State.ERROR;
+				mContacts.clear();
 				notifyContactListeners();
 				notifyFullContactsListeners(null);
 				return;
@@ -227,6 +229,7 @@ public final class ContactsProvider
 				contacts = createFullContactDataSet();
 				mState = State.INITIALIZED;
 			} else {
+				mContacts.clear();
 				mState = State.ERROR;
 			}
 
