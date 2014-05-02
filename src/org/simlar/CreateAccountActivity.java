@@ -196,7 +196,9 @@ public final class CreateAccountActivity extends Activity
 		if (PreferencesHelper.getCreateAccountStatus() == CreateAccountStatus.WAITING_FOR_SMS) {
 			onWaitingForSmsTimedOut();
 		} else {
-			createAccountRequest(getIntent().getStringExtra(INTENT_EXTRA_NUMBER));
+			final String telephoneNumber = getIntent().getStringExtra(INTENT_EXTRA_NUMBER);
+			getIntent().removeExtra(INTENT_EXTRA_NUMBER);
+			createAccountRequest(telephoneNumber);
 		}
 	}
 
