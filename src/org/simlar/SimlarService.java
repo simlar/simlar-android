@@ -503,7 +503,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			{
 				mSimlarCallState.updateContactNameAndImage(name, photoId);
 
-				NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+				final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 				nm.notify(NOTIFICATION_ID, createNotification(getSimlarStatus()));
 
 				SimlarServiceBroadcast.sendSimlarCallStateChanged(SimlarService.this);
