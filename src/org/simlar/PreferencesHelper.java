@@ -111,7 +111,7 @@ public final class PreferencesHelper
 
 	public static boolean readPrefencesFromFile(final Context context)
 	{
-		SharedPreferences settings = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
+		final SharedPreferences settings = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
 
 		mMySimlarId = settings.getString(PREFERENCES_USER, null);
 		mPassword = settings.getString(PREFERENCES_PASSWORD, null);
@@ -142,8 +142,8 @@ public final class PreferencesHelper
 
 	public static void saveToFilePreferences(final Context context)
 	{
-		SharedPreferences settings = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
-		SharedPreferences.Editor editor = settings.edit();
+		final SharedPreferences settings = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
+		final SharedPreferences.Editor editor = settings.edit();
 		editor.putString(PREFERENCES_USER, mMySimlarId);
 		editor.putString(PREFERENCES_PASSWORD, mPassword);
 		editor.putInt(PREFERENCES_REGION, SimlarNumber.getDefaultRegion());
@@ -153,16 +153,16 @@ public final class PreferencesHelper
 	public static void saveToFileCreateAccountStatus(final Context context, final CreateAccountStatus status)
 	{
 		mCreateAccountStatus = status;
-		SharedPreferences settings = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
-		SharedPreferences.Editor editor = settings.edit();
+		final SharedPreferences settings = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
+		final SharedPreferences.Editor editor = settings.edit();
 		editor.putInt(PREFERENCES_CREATE_ACCOUNT_STATUS, status.toInt());
 		editor.commit();
 	}
 
 	public static void resetPreferencesFile(final Context context)
 	{
-		SharedPreferences settings = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
-		SharedPreferences.Editor editor = settings.edit();
+		final SharedPreferences settings = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
+		final SharedPreferences.Editor editor = settings.edit();
 		editor.putString(PREFERENCES_USER, null);
 		editor.putString(PREFERENCES_PASSWORD, null);
 		editor.putInt(PREFERENCES_REGION, -1);
