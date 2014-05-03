@@ -23,7 +23,6 @@ package org.simlar;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -86,17 +85,17 @@ public final class GetContactsStatus
 		parser.setInput(inputStream, null);
 		parser.nextTag();
 
-		final String xmlRootElement = parser.getName().toLowerCase(Locale.US);
-		if (xmlRootElement.equals("error")
+		final String xmlRootElement = parser.getName();
+		if (xmlRootElement.equalsIgnoreCase("error")
 				&& parser.getAttributeCount() >= 2
-				&& parser.getAttributeName(0).toLowerCase(Locale.US).equals("id")
-				&& parser.getAttributeName(1).toLowerCase(Locale.US).equals("message"))
+				&& parser.getAttributeName(0).equalsIgnoreCase("id")
+				&& parser.getAttributeName(1).equalsIgnoreCase("message"))
 		{
 			Log.e(LOGTAG, "server returned error: " + parser.getAttributeValue(1));
 			return null;
 		}
 
-		if (!xmlRootElement.equals("contacts")) {
+		if (!xmlRootElement.equalsIgnoreCase("contacts")) {
 			Log.e(LOGTAG, "unable to parse response");
 			return null;
 		}
@@ -107,10 +106,10 @@ public final class GetContactsStatus
 				continue;
 			}
 
-			if (!parser.getName().toLowerCase(Locale.US).equals("contact")
+			if (!parser.getName().equalsIgnoreCase("contact")
 					|| parser.getAttributeCount() < 2
-					|| !parser.getAttributeName(0).toLowerCase(Locale.US).equals("id")
-					|| !parser.getAttributeName(1).toLowerCase(Locale.US).equals("status"))
+					|| !parser.getAttributeName(0).equalsIgnoreCase("id")
+					|| !parser.getAttributeName(1).equalsIgnoreCase("status"))
 			{
 				continue;
 			}
