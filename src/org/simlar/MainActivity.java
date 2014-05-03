@@ -133,6 +133,8 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 					mAdapter.addAll(contacts);
 					mContactList.setEmptyText(getString(R.string.main_activity_contactlist_no_contacts_found));
 				}
+
+				GooglePlayServicesHelper.registerGcmIfNeeded(MainActivity.this);
 			}
 		});
 	}
@@ -142,6 +144,10 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	{
 		Log.i(LOGTAG, "onResume ");
 		super.onResume();
+
+		if (!GooglePlayServicesHelper.checkPlayServices(this)) {
+			return;
+		}
 
 		mCommunicator.startServiceAndRegister(this, MainActivity.class);
 

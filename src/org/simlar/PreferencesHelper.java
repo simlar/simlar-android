@@ -32,11 +32,15 @@ public final class PreferencesHelper
 	private static final String PREFERENCES_PASSWORD = "password";
 	private static final String PREFERENCES_REGION = "region";
 	private static final String PREFERENCES_CREATE_ACCOUNT_STATUS = "create_account_status";
+	private static final String PREFERENCES_GCM_REGRISTRATION_ID = "gcm_registration_id";
+	private static final String PREFERENCES_SIMLAR_VERSION_CODE = "simlar_version_code";
 
 	private static String mMySimlarId = null;
 	private static String mPassword = null;
 	private static String mPasswordHash = null;
 	private static CreateAccountStatus mCreateAccountStatus = CreateAccountStatus.NONE;
+	private static String mGcmRegistrationId = null;
+	private static int mSimlarVersionCode = -1;
 
 	public static void init(final String mySimlarId, final String password)
 	{
@@ -109,14 +113,26 @@ public final class PreferencesHelper
 		return mCreateAccountStatus;
 	}
 
+	public static String getGcmRegistrationId()
+	{
+		return mGcmRegistrationId;
+	}
+
+	public static int getSimlarVersionCode()
+	{
+		return mSimlarVersionCode;
+	}
+
 	public static boolean readPrefencesFromFile(final Context context)
 	{
-		SharedPreferences settings = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
+		final SharedPreferences settings = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
 
 		mMySimlarId = settings.getString(PREFERENCES_USER, null);
 		mPassword = settings.getString(PREFERENCES_PASSWORD, null);
 		final int region = settings.getInt(PREFERENCES_REGION, -1);
 		mCreateAccountStatus = CreateAccountStatus.fromInt(settings.getInt(PREFERENCES_CREATE_ACCOUNT_STATUS, 0));
+		mGcmRegistrationId = settings.getString(PREFERENCES_GCM_REGRISTRATION_ID, null);
+		mSimlarVersionCode = settings.getInt(PREFERENCES_SIMLAR_VERSION_CODE, -1);
 
 		if (Util.isNullOrEmpty(mMySimlarId)) {
 			return false;
@@ -142,8 +158,8 @@ public final class PreferencesHelper
 
 	public static void saveToFilePreferences(final Context context)
 	{
-		SharedPreferences settings = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
-		SharedPreferences.Editor editor = settings.edit();
+		final SharedPreferences settings = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
+		final SharedPreferences.Editor editor = settings.edit();
 		editor.putString(PREFERENCES_USER, mMySimlarId);
 		editor.putString(PREFERENCES_PASSWORD, mPassword);
 		editor.putInt(PREFERENCES_REGION, SimlarNumber.getDefaultRegion());
@@ -153,20 +169,33 @@ public final class PreferencesHelper
 	public static void saveToFileCreateAccountStatus(final Context context, final CreateAccountStatus status)
 	{
 		mCreateAccountStatus = status;
-		SharedPreferences settings = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
-		SharedPreferences.Editor editor = settings.edit();
+		final SharedPreferences settings = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
+		final SharedPreferences.Editor editor = settings.edit();
 		editor.putInt(PREFERENCES_CREATE_ACCOUNT_STATUS, status.toInt());
+		editor.commit();
+	}
+
+	public static void saveToFileGcmRegistrationId(final Context context, final String gcmRegistrationId, final int simlarVersionCode)
+	{
+		mGcmRegistrationId = gcmRegistrationId;
+		mSimlarVersionCode = simlarVersionCode;
+		final SharedPreferences settings = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
+		final SharedPreferences.Editor editor = settings.edit();
+		editor.putString(PREFERENCES_GCM_REGRISTRATION_ID, gcmRegistrationId);
+		editor.putInt(PREFERENCES_SIMLAR_VERSION_CODE, simlarVersionCode);
 		editor.commit();
 	}
 
 	public static void resetPreferencesFile(final Context context)
 	{
-		SharedPreferences settings = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
-		SharedPreferences.Editor editor = settings.edit();
+		final SharedPreferences settings = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
+		final SharedPreferences.Editor editor = settings.edit();
 		editor.putString(PREFERENCES_USER, null);
 		editor.putString(PREFERENCES_PASSWORD, null);
 		editor.putInt(PREFERENCES_REGION, -1);
 		editor.putInt(PREFERENCES_CREATE_ACCOUNT_STATUS, -1);
+		editor.putString(PREFERENCES_GCM_REGRISTRATION_ID, null);
+		editor.putInt(PREFERENCES_SIMLAR_VERSION_CODE, -1);
 		editor.commit();
 	}
 }
