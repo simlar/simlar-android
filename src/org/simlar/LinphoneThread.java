@@ -111,8 +111,9 @@ public final class LinphoneThread
 				public void run()
 				{
 					mLinphoneThreadHandler.removeCallbacksAndMessages(null);
-					mLinphoneHandler.destroy();
+					mLinphoneThreadHandler = null;
 					Looper.myLooper().quit();
+					mLinphoneHandler.destroy();
 					mMainThreadHandler.post(new Runnable() {
 						@Override
 						public void run()
