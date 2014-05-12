@@ -27,7 +27,6 @@ import org.simlar.PreferencesHelper.NotInitedException;
 import org.simlar.SoundEffectManager.SoundEffectType;
 import org.simlar.Volumes.MicrophoneStatus;
 
-import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -47,7 +46,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
-import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
@@ -57,6 +55,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 {
 	static final String LOGTAG = SimlarService.class.getSimpleName();
 	private static final int NOTIFICATION_ID = 1;
+	private static final long TERMINATE_CHECKER_INTERVAL = 20 * 1000; // milliseconds
+	public static final String INTENT_EXTRA_SIMLAR_ID = "SimlarServiceSimlarId";
 
 	LinphoneThread mLinphoneThread = null;
 	final Handler mHandler = new Handler();
@@ -65,17 +65,16 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	final SimlarCallState mSimlarCallState = new SimlarCallState();
 	private CallConnectionDetails mCallConnectionDetails = new CallConnectionDetails();
 	private WakeLock mWakeLock = null;
+	private WakeLock mDisplayWakeLock = null;
 	private WifiLock mWifiLock = null;
 	private boolean mGoingDown = false;
 	private boolean mTerminatePrivateAlreadyCalled = false;
-	private boolean mCreatingAccount = false;
 	private Class<?> mNotificationActivity = null;
 	private VibratorManager mVibratorManager = null;
 	private SoundEffectManager mSoundEffectManager = null;
 	private boolean mHasAudioFocus = false;
 	private final NetworkChangeReceiver mNetworkChangeReceiver = new NetworkChangeReceiver();
-	private PendingIntent mkeepAwakePendingIntent = null;
-	private final KeepAwakeReceiver mKeepAwakeReceiver = new KeepAwakeReceiver();
+	private String mSimlarIdToCall = null;
 
 	public final class SimlarServiceBinder extends Binder
 	{
@@ -98,19 +97,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 	}
 
-	private final class KeepAwakeReceiver extends BroadcastReceiver
-	{
-		public KeepAwakeReceiver()
-		{
-		}
-
-		@Override
-		public void onReceive(Context context, Intent intent)
-		{
-			SimlarService.this.keepAwake();
-		}
-	}
-
 	@Override
 	public IBinder onBind(final Intent intent)
 	{
@@ -128,7 +114,17 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		acquireWifiLock();
 
 		// releasing wakelock of gcm's WakefulBroadcastReceiver if needed
-		WakefulBroadcastReceiver.completeWakefulIntent(intent);
+		if (intent != null) {
+			WakefulBroadcastReceiver.completeWakefulIntent(intent);
+			mSimlarIdToCall = intent.getStringExtra(INTENT_EXTRA_SIMLAR_ID);
+			intent.removeExtra(INTENT_EXTRA_SIMLAR_ID);
+		} else {
+			Log.w(LOGTAG, "onStartCommand: with no intent");
+			mSimlarIdToCall = null;
+		}
+		Log.i(LOGTAG, "onStartCommand simlarIdToCall=" + mSimlarIdToCall);
+
+		handlePendingCall();
 
 		// We want this service to continue running until it is explicitly stopped, so return sticky.
 		return START_STICKY;
@@ -145,11 +141,12 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mSoundEffectManager = new SoundEffectManager(this.getApplicationContext());
 
 		mWakeLock = ((PowerManager) this.getSystemService(Context.POWER_SERVICE))
-				.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "SimlarWakeLock");
+				.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SimlarWakeLock");
+		mDisplayWakeLock = createDisplayWakeLock();
 		mWifiLock = ((WifiManager) this.getSystemService(Context.WIFI_SERVICE))
 				.createWifiLock(WifiManager.WIFI_MODE_FULL, "SimlarWifiLock");
 
-		startForeground(NOTIFICATION_ID, createNotification(SimlarStatus.OFFLINE));
+		startForeground(NOTIFICATION_ID, createNotification());
 
 		mLinphoneThread = new LinphoneThread(this, this);
 
@@ -161,8 +158,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		ContactsProvider.preLoadContacts(this);
 
-		startKeepAwake();
-
 		mHandler.post(new Runnable() {
 			@Override
 			public void run()
@@ -170,6 +165,46 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				initializeCredentials();
 			}
 		});
+
+		terminateChecker();
+	}
+
+	@SuppressWarnings("deprecation")
+	private WakeLock createDisplayWakeLock()
+	{
+		return ((PowerManager) getSystemService(Context.POWER_SERVICE))
+				.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "SimlarDisplayWakeLock");
+	}
+
+	void terminateChecker()
+	{
+		mHandler.postDelayed(new Runnable() {
+			@Override
+			public void run()
+			{
+				if (terminateCheck()) {
+					return;
+				}
+
+				terminateChecker();
+			}
+		}, TERMINATE_CHECKER_INTERVAL);
+	}
+
+	protected boolean terminateCheck()
+	{
+		if (mGoingDown) {
+			return true;
+		}
+
+		if (mSimlarStatus == SimlarStatus.ONGOING_CALL) {
+			return false;
+		}
+
+		Log.i(LOGTAG, "terminateChecker triggered on status=" + mSimlarStatus);
+		handleTerminate();
+
+		return true;
 	}
 
 	public void registerActivityToNotification(final Class<?> activity)
@@ -183,31 +218,31 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mNotificationActivity = activity;
 
 		final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		nm.notify(NOTIFICATION_ID, createNotification(mSimlarStatus));
+		nm.notify(NOTIFICATION_ID, createNotification());
 	}
 
-	Notification createNotification(final SimlarStatus status)
+	Notification createNotification()
 	{
-		String text = null;
-
-		if (mNotificationActivity == null || (status != SimlarStatus.ONGOING_CALL && !mCreatingAccount)) {
-			mNotificationActivity = MainActivity.class;
+		if (mNotificationActivity == null) {
+			if (mSimlarStatus == SimlarStatus.ONGOING_CALL) {
+				if (mSimlarCallState.isRinging()) {
+					mNotificationActivity = RingingActivity.class;
+				} else {
+					mNotificationActivity = CallActivity.class;
+				}
+			} else {
+				mNotificationActivity = MainActivity.class;
+			}
+			Log.i(LOGTAG, "no activity registered based on mSimlarStatus=" + mSimlarStatus + " we now take: " + mNotificationActivity.getSimpleName());
 		}
 
 		final PendingIntent activity = PendingIntent.getActivity(this, 0,
 				new Intent(this, mNotificationActivity).addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED), 0);
 
-		if (mCreatingAccount) {
-			text = getString(R.string.notification_simlar_status_creating_account);
-			if (!Util.isNullOrEmpty(PreferencesHelper.getMySimlarIdOrEmptyString())) {
-				text += ": " + String.format(getString(status.getNotificationTextId()), PreferencesHelper.getMySimlarIdOrEmptyString());
-			}
-		} else {
-			text = String.format(getString(status.getNotificationTextId()), PreferencesHelper.getMySimlarIdOrEmptyString());
-		}
+		final String text = String.format(getString(mSimlarStatus.getNotificationTextId()), PreferencesHelper.getMySimlarIdOrEmptyString());
 
 		final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
-		notificationBuilder.setSmallIcon(status.getNotificationIcon());
+		notificationBuilder.setSmallIcon(mSimlarStatus.getNotificationIcon());
 		notificationBuilder.setLargeIcon(mSimlarCallState.getContactPhotoBitmap(this, R.drawable.app_logo));
 		notificationBuilder.setContentTitle(getString(R.string.app_name));
 		notificationBuilder.setContentText(text);
@@ -222,13 +257,12 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	{
 		notifySimlarStatusChanged(SimlarStatus.OFFLINE);
 
-		if (PreferencesHelper.readPrefencesFromFile(this)) {
-			connect();
-		} else {
-			mCreatingAccount = true;
-			notifySimlarStatusChanged(mSimlarStatus);
-			startActivity(new Intent(this, VerifyNumberActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+		if (!PreferencesHelper.readPrefencesFromFile(this)) {
+			Log.e(LOGTAG, "failed to initialize credentials");
+			return;
 		}
+
+		connect();
 	}
 
 	public void connect()
@@ -256,10 +290,9 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		unregisterReceiver(mNetworkChangeReceiver);
 
-		stopKeepAwake();
-
 		// just in case
 		releaseWakeLock();
+		releaseDisplayWakeLock();
 		releaseWifiLock();
 
 		// Tell the user we stopped.
@@ -275,6 +308,13 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 	}
 
+	private void acquireDisplayWakeLock()
+	{
+		if (!mDisplayWakeLock.isHeld()) {
+			mDisplayWakeLock.acquire();
+		}
+	}
+
 	private void acquireWifiLock()
 	{
 		if (!mWifiLock.isHeld()) {
@@ -282,10 +322,17 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 	}
 
-	void releaseWakeLock()
+	private void releaseWakeLock()
 	{
 		if (mWakeLock.isHeld()) {
 			mWakeLock.release();
+		}
+	}
+
+	private void releaseDisplayWakeLock()
+	{
+		if (mDisplayWakeLock.isHeld()) {
+			mDisplayWakeLock.release();
 		}
 	}
 
@@ -311,65 +358,12 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 	}
 
-	private void startKeepAwake()
-	{
-		final Intent startIntent = new Intent("org.simlar.keepAwake");
-		mkeepAwakePendingIntent = PendingIntent.getBroadcast(this, 0, startIntent, 0);
-
-		((AlarmManager) getSystemService(Context.ALARM_SERVICE))
-				.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 600000, 600000, mkeepAwakePendingIntent);
-
-		IntentFilter filter = new IntentFilter();
-		filter.addAction("org.simlar.keepAwake");
-		registerReceiver(mKeepAwakeReceiver, filter);
-	}
-
-	private void stopKeepAwake()
-	{
-		unregisterReceiver(mKeepAwakeReceiver);
-		((AlarmManager) getSystemService(Context.ALARM_SERVICE)).cancel(mkeepAwakePendingIntent);
-	}
-
-	void keepAwake()
-	{
-		// idea from linphones KeepAliveHandler
-
-		checkNetworkConnectivityAndRefreshRegisters();
-
-		// make sure iterate will have enough time before device eventually goes to sleep
-		acquireWakeLock();
-		mHandler.postDelayed(new Runnable() {
-			@Override
-			public void run()
-			{
-				if (!getSimlarCallState().isNewCall()) {
-					releaseWakeLock();
-				}
-			}
-		}, 4000);
-	}
-
 	@Override
 	public void onRegistrationStateChanged(final RegistrationState state)
 	{
 		Log.i(LOGTAG, "onRegistrationStateChanged: " + state);
 
 		final SimlarStatus status = SimlarStatus.fromRegistrationState(state);
-
-		if (mCreatingAccount) {
-			if (status.isRegistrationAtSipServerFailed()) {
-				Log.i(LOGTAG, "creating account: registration failed");
-				//mLinphoneThread.unregister();
-				SimlarServiceBroadcast.sendTestRegistrationFailed(this);
-			}
-
-			if (status.isConnectedToSipServer()) {
-				Log.i(LOGTAG, "creating account: registration succes");
-				mCreatingAccount = false;
-
-				SimlarServiceBroadcast.sendTestRegistrationSuccess(this);
-			}
-		}
 
 		if (mGoingDown && !status.isConnectedToSipServer()) {
 			mHandler.post(new Runnable() {
@@ -388,12 +382,31 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	{
 		Log.i(LOGTAG, "notifySimlarStatusChanged: " + status);
 
-		final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		nm.notify(NOTIFICATION_ID, createNotification(status));
-
 		mSimlarStatus = status;
 
+		final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		nm.notify(NOTIFICATION_ID, createNotification());
+
 		SimlarServiceBroadcast.sendSimlarStatusChanged(this);
+
+		handlePendingCall();
+	}
+
+	private void handlePendingCall()
+	{
+		if (getSimlarStatus() != SimlarStatus.ONLINE || Util.isNullOrEmpty(mSimlarIdToCall) || mGoingDown) {
+			return;
+		}
+
+		final String simlarId = mSimlarIdToCall;
+		mSimlarIdToCall = null;
+		mHandler.post(new Runnable() {
+			@Override
+			public void run()
+			{
+				call(simlarId);
+			}
+		});
 	}
 
 	@Override
@@ -475,10 +488,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				Log.i(LOGTAG, "starting RingingActivity");
 				startActivity(new Intent(SimlarService.this, RingingActivity.class).addFlags(
 						Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-			} else {
-				Log.i(LOGTAG, "starting CallActivity");
-				startActivity(new Intent(SimlarService.this, CallActivity.class).addFlags(
-						Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
 			}
 		}
 
@@ -500,6 +509,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				SimlarServiceBroadcast.sendCallConnectionDetailsChanged(this);
 			}
 
+			acquireDisplayWakeLock();
 			terminate();
 		}
 
@@ -510,7 +520,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				mSimlarCallState.updateContactNameAndImage(name, photoId);
 
 				final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-				nm.notify(NOTIFICATION_ID, createNotification(getSimlarStatus()));
+				nm.notify(NOTIFICATION_ID, createNotification());
 
 				SimlarServiceBroadcast.sendSimlarCallStateChanged(SimlarService.this);
 			}

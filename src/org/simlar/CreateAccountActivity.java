@@ -68,34 +68,37 @@ public final class CreateAccountActivity extends Activity
 
 	private final class SimlarServiceCommunicatorCreateAccount extends SimlarServiceCommunicator
 	{
+		private boolean mTestRegistrationSuccess = false;
+
 		public SimlarServiceCommunicatorCreateAccount()
 		{
 			super(LOGTAG);
 		}
 
 		@Override
-		void onTestRegistrationFailed()
-		{
-			Log.i(LOGTAG, "onTestRegistrationFailed");
-			mProgressFirstLogIn.setVisibility(View.INVISIBLE);
-			onError(R.string.create_account_activity_error_sip_not_possible);
-		}
-
-		@Override
-		void onTestRegistrationSuccess()
+		void onSimlarStatusChanged()
 		{
 			Log.i(LOGTAG, "onTestRegistrationSuccess");
-			mProgressFirstLogIn.setVisibility(View.INVISIBLE);
-			setResult(RESULT_OK);
-			finish();
+			final SimlarStatus status = mService.getSimlarStatus();
+
+			if (status.isConnectedToSipServer() || status.isRegistrationAtSipServerFailed()) {
+				mTestRegistrationSuccess = status.isConnectedToSipServer();
+				mService.terminate();
+			}
 		}
 
 		@Override
 		void onServiceFinishes()
 		{
 			Log.i(LOGTAG, "onServiceFinishes");
-			setResult(RESULT_OK);
-			finish();
+			mProgressFirstLogIn.setVisibility(View.INVISIBLE);
+
+			if (mTestRegistrationSuccess) {
+				setResult(RESULT_OK);
+				finish();
+			} else {
+				onError(R.string.create_account_activity_error_sip_not_possible);
+			}
 		}
 	}
 
@@ -196,7 +199,9 @@ public final class CreateAccountActivity extends Activity
 		if (PreferencesHelper.getCreateAccountStatus() == CreateAccountStatus.WAITING_FOR_SMS) {
 			onWaitingForSmsTimedOut();
 		} else {
-			createAccountRequest(getIntent().getStringExtra(INTENT_EXTRA_NUMBER));
+			final String telephoneNumber = getIntent().getStringExtra(INTENT_EXTRA_NUMBER);
+			getIntent().removeExtra(INTENT_EXTRA_NUMBER);
+			createAccountRequest(telephoneNumber);
 		}
 	}
 
@@ -223,14 +228,19 @@ public final class CreateAccountActivity extends Activity
 		Log.i(LOGTAG, "onResume ");
 		super.onResume();
 
-		mCommunicator.register(this, VerifyNumberActivity.class);
+		if (mProgressFirstLogIn.getVisibility() == View.VISIBLE) {
+			mCommunicator.register(this, VerifyNumberActivity.class);
+		}
 	}
 
 	@Override
 	protected void onPause()
 	{
 		Log.i(LOGTAG, "onPause");
-		mCommunicator.unregister(this);
+
+		if (mProgressFirstLogIn.getVisibility() == View.VISIBLE) {
+			mCommunicator.unregister(this);
+		}
 		super.onPause();
 	}
 
@@ -405,7 +415,7 @@ public final class CreateAccountActivity extends Activity
 	void connectToServer()
 	{
 		mProgressFirstLogIn.setVisibility(View.VISIBLE);
-		mCommunicator.getService().connect();
+		mCommunicator.startServiceAndRegister(this, VerifyNumberActivity.class, null);
 	}
 
 	void onError(final int resId)

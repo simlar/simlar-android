@@ -36,8 +36,6 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ListView;
 
 public final class MainActivity extends android.support.v4.app.FragmentActivity
 {
@@ -45,57 +43,6 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 
 	ContactsAdapter mAdapter = null;
 	ContactsListFragment mContactList = null;
-
-	final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorContacts();
-
-	private final class SimlarServiceCommunicatorContacts extends SimlarServiceCommunicator
-	{
-		public SimlarServiceCommunicatorContacts()
-		{
-			super(LOGTAG);
-		}
-
-		@Override
-		void onServiceFinishes()
-		{
-			MainActivity.this.finish();
-		}
-	}
-
-	public final class ContactsListFragment extends android.support.v4.app.ListFragment
-	{
-		@Override
-		public void onActivityCreated(final Bundle savedInstanceState)
-		{
-			super.onActivityCreated(savedInstanceState);
-			setEmptyText(getString(R.string.main_activity_contactlist_no_contacts_found));
-		}
-
-		@Override
-		public void onViewCreated(final View view, final Bundle savedInstanceState)
-		{
-			final ListView listView = getListView();
-
-			if (listView == null) {
-				Log.e(LOGTAG, "no list view");
-				return;
-			}
-
-			listView.setDivider(null);
-		}
-
-		@Override
-		public void onListItemClick(final ListView l, final View v, final int position, final long id)
-		{
-			final String simlarId = ((ContactsAdapter) getListAdapter()).getItem(position).simlarId;
-			if (Util.isNullOrEmpty(simlarId)) {
-				Log.e(LOGTAG, "onListItemClick: no simlarId found");
-				return;
-			}
-
-			mCommunicator.getService().call(simlarId);
-		}
-	}
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState)
@@ -139,6 +86,12 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 		});
 	}
 
+	private void startAccountCreation()
+	{
+		startActivity(new Intent(this, VerifyNumberActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+		finish();
+	}
+
 	@Override
 	protected void onResume()
 	{
@@ -149,10 +102,9 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 			return;
 		}
 
-		mCommunicator.startServiceAndRegister(this, MainActivity.class);
-
 		if (!PreferencesHelper.readPrefencesFromFile(this)) {
-			Log.i(LOGTAG, "we are not registered yet");
+			Log.i(LOGTAG, "as we are not registered yet => creating account");
+			startAccountCreation();
 			return;
 		}
 
@@ -165,9 +117,6 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	protected void onPause()
 	{
 		Log.i(LOGTAG, "onPause");
-
-		mCommunicator.unregister(this);
-
 		super.onPause();
 	}
 
@@ -252,7 +201,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	private void deleteAccountAndQuit()
 	{
 		PreferencesHelper.resetPreferencesFile(this);
-		mCommunicator.getService().terminate();
+		finish();
 	}
 
 	private void show_about()
@@ -263,7 +212,6 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	private void quit()
 	{
 		Log.i(LOGTAG, "quit");
-		mCommunicator.getService().terminate();
-		Log.i(LOGTAG, "quit ended");
+		finish();
 	}
 }

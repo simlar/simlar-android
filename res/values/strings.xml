@@ -30,7 +30,6 @@
 
     <string name="notification_simlar_status_unknown">%1$s unknown status</string>
     <string name="notification_simlar_status_offline">%1$s offline</string>
-    <string name="notification_simlar_status_creating_account">creating account</string>
     <string name="notification_simlar_status_connecting">%1$s connecting</string>
     <string name="notification_simlar_status_online">%1$s online</string>
     <string name="notification_simlar_status_error">%1$s registration failed</string>
@@ -53,7 +52,6 @@
 
     <string name="upload_log_file_send_email_to_developer">Send email to developer</string>
     <string name="upload_log_file_progress">Please wait while uploading log file&#8230;</string>
-    <string name="progress_finishing">Please wait while shutting down&#8230;</string>
 
     <string name="google_play_services_helper_alert_unavailable_title">Google Play Services unavailable</string>
     <string name="google_play_services_helper_alert_unavailable_text">Your device does not have Google Play Service installed. This is mandatory for running simlar. So please install them to run simlar.</string>

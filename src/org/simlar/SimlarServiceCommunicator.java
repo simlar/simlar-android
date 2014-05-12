@@ -117,14 +117,6 @@ public class SimlarServiceCommunicator
 				onServiceFinishes();
 				return;
 			}
-			case TEST_REGISTRATION_FAILED: {
-				onTestRegistrationFailed();
-				return;
-			}
-			case TEST_REGISTRATION_SUCCESS: {
-				onTestRegistrationSuccess();
-				return;
-			}
 			default:
 				Log.e(mLogtag, "Error in onReceive: unknown type");
 				return;
@@ -143,19 +135,22 @@ public class SimlarServiceCommunicator
 
 	public void register(final Context context, final Class<?> activity)
 	{
-		startServiceAndRegister(context, activity, true);
+		startServiceAndRegister(context, activity, true, null);
 	}
 
-	public void startServiceAndRegister(final Context context, final Class<?> activity)
+	public void startServiceAndRegister(final Context context, final Class<?> activity, final String simlarId)
 	{
-		startServiceAndRegister(context, activity, false);
+		startServiceAndRegister(context, activity, false, simlarId);
 	}
 
-	private void startServiceAndRegister(final Context context, final Class<?> activity, final boolean onlyRegister)
+	private void startServiceAndRegister(final Context context, final Class<?> activity, final boolean onlyRegister, final String simlarId)
 	{
 		mActivity = activity;
 		final Intent intent = new Intent(context, SimlarService.class);
 		if (!onlyRegister) {
+			if (!Util.isNullOrEmpty(simlarId)) {
+				intent.putExtra(SimlarService.INTENT_EXTRA_SIMLAR_ID, simlarId);
+			}
 			context.startService(intent);
 		}
 		context.bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
@@ -187,14 +182,6 @@ public class SimlarServiceCommunicator
 	}
 
 	void onServiceFinishes()
-	{
-	}
-
-	void onTestRegistrationFailed()
-	{
-	}
-
-	void onTestRegistrationSuccess()
 	{
 	}
 
