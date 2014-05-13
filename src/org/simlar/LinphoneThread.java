@@ -671,6 +671,9 @@ public final class LinphoneThread
 		@Override
 		public void configuringStatus(final LinphoneCore lc, final RemoteProvisioningState state, final String message)
 		{
+			if (RemoteProvisioningState.ConfiguringSkipped.equals(state)) {
+				return;
+			}
 			Lg.w(LOGTAG, "configuringStatus remoteProvisioningState=", state, " message=", message);
 		}
 	}
