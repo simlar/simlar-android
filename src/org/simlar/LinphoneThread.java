@@ -415,14 +415,14 @@ public final class LinphoneThread
 			// LinphoneCall.State is immutable
 
 			final String number = getNumber(call);
-			Log.i(LOGTAG, "callState changed number=" + number + " state=" + state + " message=" + message);
+			final LinphoneCall.State fixedState = fixLinphoneCallState(state);
+			Log.i(LOGTAG, "callState changed number=" + number + " state=" + fixedState + " message=" + message);
 
 			mMainThreadHandler.post(new Runnable() {
-
 				@Override
 				public void run()
 				{
-					mListener.onCallStateChanged(number, fixLinphoneCallState(state), message);
+					mListener.onCallStateChanged(number, fixedState, message);
 				}
 			});
 		}
