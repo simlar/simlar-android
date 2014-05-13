@@ -19,7 +19,12 @@ cd "${BUILD_DIR}"
 if [ "${BRANCH}" == "" ] ; then
 	git clone git://git.linphone.org/linphone-android.git --recursive
 else
-	git clone -b "${BRANCH}" git://git.linphone.org/linphone-android.git --recursive
+	git clone git://git.linphone.org/linphone-android.git
+	cd linphone-android
+	git checkout "${BRANCH}"
+	git submodule sync
+	git submodule update --recursive --init
+	cd ..
 fi
 
 cd linphone-android
