@@ -22,33 +22,37 @@
 
 <resources>
 
-    <string name="app_name">Simlar</string>
     <string name="app_homepage">www.simlar.org</string>
+    <string name="app_name">Simlar</string>
     <string name="button_continue">Continue</string>
     <string name="button_cancel">Cancel</string>
 
     <string name="main_activity_contactlist_loading_contacts">Loading contacts</string>
-    <string name="main_activity_contactlist_error_loading_contacts">Error: Failed to load contacts. Does your internet work?</string>
+    <string name="main_activity_contactlist_error_loading_contacts">Error: Failed to load contacts. Are you online?</string>
     <string name="main_activity_contactlist_no_contacts_found">No contacts found.</string>
     <string name="main_activity_menu_reload_contacts">Reload contacts</string>
-    <string name="main_activity_menu_upload_logfile">Report bug and upload logfile</string>
+    <string name="main_activity_menu_upload_logfile">Report bug</string>
     <string name="main_activity_menu_enable_debug_mode">Enable debug mode</string>
     <string name="main_activity_menu_disable_debug_mode">Disable debug mode</string>
     <string name="main_activity_menu_delete_account">Delete my credentials and quit</string>
+    <string name="main_activity_menu_tell_a_friend">Tell a friend</string>
     <string name="main_activity_menu_show_about">About</string>
     <string name="main_activity_alert_upload_log_file_title">Really report bug?</string>
-    <string name="main_activity_alert_upload_log_file_text">Thank you for reporting a bug.\n\nThis will upload a log file to a development server and afterwards ask you to write an email describing the bug.\n\nDo you really want to continue?</string>
+    <string name="main_activity_alert_upload_log_file_text">This will upload a log file to a development server and afterwards ask you to write an email describing the bug.\n\nDo you really want to continue?</string>
     <string name="main_activity_alert_uploading_log_file_failed_title">Error</string>
-    <string name="main_activity_alert_uploading_log_file_failed_text">Logfile creation failed => abort sending</string>
+    <string name="main_activity_alert_uploading_log_file_failed_text">Log file creation failed => abort sending</string>
     <string name="main_activity_alert_enable_linphone_debug_mode_title">Really enable debug mode?</string>
-    <string name="main_activity_alert_enable_linphone_debug_mode_text">Enabling debug mode will increase log file entries a lot. Please only do so if you have been asked to do it by a Simlar developer or really know what you are doing. It will be automatically disabled when you quit Simlar.</string>
+    <string name="main_activity_alert_enable_linphone_debug_mode_text">Enabling debug mode will increase log file entries a lot. Only do so if you have been asked to do it by a Simlar developer or really know what you are doing. It will be automatically disabled when you quit Simlar.</string>
+    <string name="main_activity_tell_a_friend_chooser_title">Choose</string>
+    <string name="main_activity_tell_a_friend_title">Have a look at Simlar</string>
+    <string name="main_activity_tell_a_friend_text">Have a look at simlar.org It\'s an app that makes encrypted phone calls as easy as possible.</string>
 
     <string name="upload_log_file_send_email_to_developer">Send email to developer</string>
-    <string name="upload_log_file_progress">Please wait while uploading log file&#8230;</string>
+    <string name="upload_log_file_progress">Uploading log file&#8230;</string>
 
     <string name="google_play_services_helper_alert_unavailable_title">Google Play Services unavailable</string>
-    <string name="google_play_services_helper_alert_unavailable_text">Your device does not have Google Play Service installed. This is mandatory for running simlar. So please install them to run simlar.</string>
-    <string name="google_play_services_helper_alert_unavailable_button_close_simlar">Close simlar</string>
+    <string name="google_play_services_helper_alert_unavailable_text">Your device doesn\'t have Google Play Services installed. This is mandatory for running Simlar. Install them to run Simlar.</string>
+    <string name="google_play_services_helper_alert_unavailable_button_close_simlar">Close Simlar</string>
 
     <string name="linphone_call_state_notification_initializing">initializing</string>
     <string name="linphone_call_state_notification_calling">calling %1$s</string>
@@ -70,17 +74,17 @@
     <string name="call_activity_microphone_mute">Microphone mute</string>
     <string name="call_activity_microphone_on">Microphone on</string>
     <string name="call_activity_microphone_disabled">Microphone disabled</string>
-    <string name="call_activity_loudspeaker_on">loudspeaker</string>
-    <string name="call_activity_loudspeaker_off">loudspeaker off</string>
-    <string name="call_activity_terminate_call">Terminate Call</string>
+    <string name="call_activity_loudspeaker_on">Loudspeaker</string>
+    <string name="call_activity_loudspeaker_off">Loudspeaker off</string>
+    <string name="call_activity_terminate_call">Terminate call</string>
     <string name="call_activity_not_encrypted">WARNING: This call is NOT encrypted!</string>
     <string name="call_activity_button_accept_unencrypted_call">Quiet alarm</string>
     <string name="call_activity_no_authentication_token">&#8230;</string>
-    <string name="call_activity_please_verify_authentication_token">Please compare the following code with the person you are speaking to:</string>
+    <string name="call_activity_please_verify_authentication_token">Compare the following code with the person you are speaking to:</string>
     <string name="call_activity_button_authentication_token_verify">safe connection</string>
-    <string name="call_activity_button_authentication_token_wrong">I do not care</string>
-    <string name="call_activity_connecting_to_server">Connecting to simlar-server&#8230;</string>
-    <string name="call_activity_connecting_to_server_timed_out">Connecting to simlar-server timed out</string>
+    <string name="call_activity_button_authentication_token_wrong">I don\'t care</string>
+    <string name="call_activity_connecting_to_server">Connecting to server&#8230;</string>
+    <string name="call_activity_connecting_to_server_timed_out">Connecting to server timed out</string>
     <string name="call_activity_outgoing_connecting">Connecting to client&#8230;</string>
     <string name="call_activity_outgoing_ringing">Ringing&#8230;</string>
     <string name="call_activity_encrypting">Encrypting&#8230;</string>
@@ -104,34 +108,34 @@
     <string name="connection_details_activity_milli_seconds">ms</string>
     <string name="connection_details_activity_percent">&#65285;</string>
 
-    <string name="verify_number_activity_title">Verify your telephone number</string>
+    <string name="verify_number_activity_title">Creating account</string>
     <string name="verify_number_activity_verify_your_number">Verify your telephone number:</string>
     <string name="verify_number_activity_put_in_your_number">Put in your telephone number:</string>
-    <string name="verify_number_activity_button_register">Create Account</string>
-    <string name="verify_number_activity_sms_announcement">In order to register Simlar will send an SMS to this number during the next step.</string>
-    <string name="verify_number_activity_alert_wrong_number_text">The number you have entered does not seem to be a telephone number. Please check it again</string>
+    <string name="verify_number_activity_button_register">Continue</string>
+    <string name="verify_number_activity_sms_announcement">In order to register, Simlar will send an SMS to this number during the next step.</string>
+    <string name="verify_number_activity_alert_wrong_number_text">The number you have entered doesn\'t seem to be a telephone number. Check it again.</string>
 
-    <string name="volumes_control_activity_title">VolumesControlActivity</string>
+    <string name="volumes_control_activity_title">Volumes Control Activity</string>
     <string name="volumes_control_activity_software_echo_limiter">Software Echo Limiter</string>
 
     <string name="about_activity_title">About Simlar</string>
-    <string name="about_activity_copyright">© 2013 The Simlar Authors. All rights reserved.</string>
+    <string name="about_activity_copyright">&#169; 2013&#8211;2014 The Simlar authors. All rights reserved.</string>
     <string name="about_activity_license">License: GNU General Public License, see http://www.gnu.org/licenses/old-licenses/gpl-2.0.html</string>
 
-    <string name="create_account_activity_title">Creating Account</string>
-    <string name="create_account_activity_request">Request Account Creation</string>
-    <string name="create_account_activity_sms_text">Simlar Registration Code: *CODE*. You only need this code and sms if the simlar app asks for it at first usage</string>
+    <string name="create_account_activity_title">Creating account</string>
+    <string name="create_account_activity_request">Request account creation</string>
+    <string name="create_account_activity_sms_text">Simlar registration code: *CODE*. You only need this code and SMS if the app asks for it during the registration.</string>
     <string name="create_account_activity_waiting_for_sms">Waiting for SMS</string>
     <string name="create_account_activity_waiting_for_sms_manual">Manual input of registration code</string>
-    <string name="create_account_activity_confirm">Confirm Account Creation</string>
-    <string name="create_account_activity_first_login">First Login</string>
-    <string name="create_account_activity_error_wrong_telephonenumber">It\'s not possible to create a Simlar account with the number you provided:\n%1$s\n\nTry another number and contact the mailing list</string>
-    <string name="create_account_activity_error_sms">We are currently not able to send a SMS to the number you provided:\n%1$s\n\nTry another number or contact the mailing list</string>
-    <string name="create_account_activity_error_sms_timeout">Waiting for SMS timed out.\n\nIs this really your number?\n%1$s\n\n Or put in the registration code manually</string>
-    <string name="create_account_activity_error_not_possible">Account creation is not possible at moment.\n\nPlease try again later</string>
-    <string name="create_account_activity_error_registration_code">The registration code is invalid.\n\nPlease try again</string>
-    <string name="create_account_activity_error_too_many_confirms">Account confirmation is not possible anymore.\n\nPlease start again</string>
-    <string name="create_account_activity_error_sip_not_possible">Could not connect to sip server.\n\nPlease try again later</string>
+    <string name="create_account_activity_confirm">Confirm account creation</string>
+    <string name="create_account_activity_first_login">First login</string>
+    <string name="create_account_activity_error_wrong_telephonenumber">It\'s not possible to create a Simlar account with the number you provided:\n%1$s\n\nTry another number and contact the mailing list.</string>
+    <string name="create_account_activity_error_sms">We are currently not able to send an SMS to the number you provided:\n%1$s\n\nCheck your number or try again later.</string>
+    <string name="create_account_activity_error_sms_timeout">Waiting for SMS timed out.\n\nIs this really your number?\n%1$s\n\nIf you received the registration SMS, put in the code manually:</string>
+    <string name="create_account_activity_error_not_possible">Account creation is not possible at the moment.\n\nTry again later.</string>
+    <string name="create_account_activity_error_registration_code">The registration code is invalid.\n\nTry again.</string>
+    <string name="create_account_activity_error_too_many_confirms">Account confirmation is not possible anymore.\n\nStart again.</string>
+    <string name="create_account_activity_error_sip_not_possible">Couldn\'t connect to server.\n\nTry again later.</string>
     <string name="create_account_activity_button_cancel">Cancel</string>
     <string name="create_account_activity_button_confirm">Confirm</string>
 
