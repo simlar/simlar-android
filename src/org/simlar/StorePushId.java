@@ -9,7 +9,6 @@ import org.simlar.PreferencesHelper.NotInitedException;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-import android.util.Log;
 import android.util.Xml;
 
 public final class StorePushId
@@ -20,7 +19,7 @@ public final class StorePushId
 
 	public static boolean httpPostStorePushId(final String pushId)
 	{
-		Log.i(LOGTAG, "httpPostStorePushId requested");
+		Lg.i(LOGTAG, "httpPostStorePushId requested");
 
 		try {
 			final Map<String, String> parameters = new HashMap<String, String>();
@@ -39,21 +38,21 @@ public final class StorePushId
 			try {
 				success = parseXml(result, pushId);
 			} catch (final XmlPullParserException e) {
-				Log.e(LOGTAG, "parsing xml failed: " + e.getMessage(), e);
+				Lg.ex(LOGTAG, e, "parsing xml failed");
 			} catch (final IOException e) {
-				Log.e(LOGTAG, "IOException: " + e.getMessage(), e);
+				Lg.ex(LOGTAG, e, "IOException in InputStream of HttpsPost");
 			}
 
 			try {
 				result.close();
 			} catch (final IOException e) {
-				Log.e(LOGTAG, "IOException: " + e.getMessage(), e);
+				Lg.ex(LOGTAG, e, "IOException during close");
 			}
 
 			return success;
 
 		} catch (final NotInitedException e) {
-			Log.e(LOGTAG, "PreferencesHelper.NotInitedException", e);
+			Lg.ex(LOGTAG, e, "PreferencesHelper.NotInitedException");
 			return false;
 		}
 	}
@@ -70,7 +69,7 @@ public final class StorePushId
 				&& parser.getAttributeName(0).equalsIgnoreCase("id")
 				&& parser.getAttributeName(1).equalsIgnoreCase("message"))
 		{
-			Log.e(LOGTAG, "server returned error: " + parser.getAttributeValue(1));
+			Lg.e(LOGTAG, "server returned error: ", parser.getAttributeValue(1));
 			return false;
 		}
 
@@ -84,7 +83,7 @@ public final class StorePushId
 			return true;
 		}
 
-		Log.e(LOGTAG, "parse error: " + parser.getPositionDescription());
+		Lg.e(LOGTAG, "parse error: ", parser.getPositionDescription());
 		return false;
 	}
 }
