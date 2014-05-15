@@ -23,7 +23,6 @@ package org.simlar;
 import org.linphone.core.LinphoneCall;
 
 import android.content.Context;
-import android.util.Log;
 
 /// TODO: think about renaming to SimlarCallState
 public enum LinphoneCallState
@@ -56,7 +55,7 @@ public enum LinphoneCallState
 	public static LinphoneCallState fromLinphoneCallState(final LinphoneCall.State state)
 	{
 		if (state == null) {
-			Log.e(LOGTAG, "ERROR fromLinphoneCallState: state is null");
+			Lg.e(LOGTAG, "ERROR: fromLinphoneCallState: state is null");
 			return UNKONWN;
 		}
 
@@ -65,7 +64,7 @@ public enum LinphoneCallState
 			return ALL[value];
 		}
 
-		Log.e(LOGTAG, "ERROR: fromLinphoneCallState failed state=" + state);
+		Lg.e(LOGTAG, "ERROR: fromLinphoneCallState failed state=", state);
 		return UNKONWN;
 	}
 
@@ -149,7 +148,7 @@ public enum LinphoneCallState
 		case RESUMING:
 			return String.format(context.getString(R.string.linphone_call_state_notification_resuming), simlarId);
 		case REFERED:
-			Log.w(LOGTAG, "createNotificationText falling back to initializing for SimlarCallState=" + this.toString());
+			Lg.w(LOGTAG, "createNotificationText falling back to initializing for SimlarCallState=", this);
 			//$FALL-THROUGH$
 		case UNKONWN:
 		case IDLE:
