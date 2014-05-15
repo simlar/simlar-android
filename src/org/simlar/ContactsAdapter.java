@@ -29,7 +29,6 @@ import org.simlar.ContactsProvider.FullContactData;
 
 import android.content.Context;
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,7 +70,7 @@ public final class ContactsAdapter extends ArrayAdapter<FullContactData>
 
 	public static ContactsAdapter createContactsAdapter(final Context context)
 	{
-		Log.i(LOGTAG, "creating ContactsAdapter");
+		Lg.i(LOGTAG, "creating ContactsAdapter");
 		return new ContactsAdapter(context, R.layout.contacts, new ArrayList<FullContactData>());
 	}
 
