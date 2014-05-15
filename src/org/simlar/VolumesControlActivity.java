@@ -22,7 +22,6 @@ package org.simlar;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -58,13 +57,13 @@ public final class VolumesControlActivity extends Activity
 		void onSimlarCallStateChanged()
 		{
 			if (getService() == null) {
-				Log.e(LOGTAG, "service is null");
+				Lg.e(LOGTAG, "service is null");
 				return;
 			}
 
 			final SimlarCallState simlarCallState = getService().getSimlarCallState();
 			if (simlarCallState == null || simlarCallState.isEmpty()) {
-				Log.e(LOGTAG, "ERROR: onSimlarCallStateChanged simlarCallState null or empty");
+				Lg.e(LOGTAG, "ERROR: onSimlarCallStateChanged simlarCallState null or empty");
 				return;
 			}
 
@@ -99,7 +98,7 @@ public final class VolumesControlActivity extends Activity
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
 			{
-				Log.i(LOGTAG, "seekBarSpeaker changed: " + progress);
+				Lg.i(LOGTAG, "seekBarSpeaker changed: ", Integer.valueOf(progress));
 				if (mVolumes == null || mCommunicator == null) {
 					return;
 				}
@@ -124,7 +123,7 @@ public final class VolumesControlActivity extends Activity
 			@Override
 			public void onProgressChanged(final SeekBar seekBar, final int progress, final boolean fromUser)
 			{
-				Log.i(LOGTAG, "seekBarMicrophone changed: " + progress);
+				Lg.i(LOGTAG, "seekBarMicrophone changed: ", Integer.valueOf(progress));
 				if (mVolumes == null || mCommunicator == null) {
 					return;
 				}
@@ -138,7 +137,7 @@ public final class VolumesControlActivity extends Activity
 			@Override
 			public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked)
 			{
-				Log.i(LOGTAG, "CheckBoxEchoLimiter.onCheckedChanged: " + isChecked);
+				Lg.i(LOGTAG, "CheckBoxEchoLimiter.onCheckedChanged: ", Boolean.valueOf(isChecked));
 				if (mVolumes == null || mCommunicator == null) {
 					return;
 				}
@@ -162,7 +161,7 @@ public final class VolumesControlActivity extends Activity
 	@Override
 	protected void onResume()
 	{
-		Log.i(LOGTAG, "onResume ");
+		Lg.i(LOGTAG, "onResume");
 		super.onResume();
 		mCommunicator.register(this, CallActivity.class);
 	}
@@ -170,7 +169,7 @@ public final class VolumesControlActivity extends Activity
 	@Override
 	protected void onPause()
 	{
-		Log.i(LOGTAG, "onPause");
+		Lg.i(LOGTAG, "onPause");
 		mCommunicator.unregister(this);
 		super.onPause();
 	}
