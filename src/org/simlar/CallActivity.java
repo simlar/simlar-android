@@ -30,7 +30,6 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
@@ -96,7 +95,7 @@ public final class CallActivity extends Activity implements SensorEventListener
 	@Override
 	protected void onCreate(final Bundle savedInstanceState)
 	{
-		Log.i(LOGTAG, "onCreate ");
+		Lg.i(LOGTAG, "onCreate");
 		super.onCreate(savedInstanceState);
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -145,7 +144,7 @@ public final class CallActivity extends Activity implements SensorEventListener
 	@Override
 	protected void onResume()
 	{
-		Log.i(LOGTAG, "onResume ");
+		Lg.i(LOGTAG, "onResume");
 		super.onResume();
 		mCommunicator.register(this, CallActivity.class);
 		mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY), SensorManager.SENSOR_DELAY_NORMAL);
@@ -154,7 +153,7 @@ public final class CallActivity extends Activity implements SensorEventListener
 	@Override
 	protected void onPause()
 	{
-		Log.i(LOGTAG, "onPause");
+		Lg.i(LOGTAG, "onPause");
 		mCommunicator.unregister(this);
 		mSensorManager.unregisterListener(this);
 		super.onPause();
@@ -163,7 +162,7 @@ public final class CallActivity extends Activity implements SensorEventListener
 	@Override
 	protected void onStop()
 	{
-		Log.i(LOGTAG, "onStop");
+		Lg.i(LOGTAG, "onStop");
 		mHandler.removeCallbacksAndMessages(null);
 		mTextViewCallTimer.setVisibility(View.INVISIBLE);
 		super.onStop();
@@ -196,17 +195,17 @@ public final class CallActivity extends Activity implements SensorEventListener
 	void onSimlarCallStateChanged()
 	{
 		if (mCommunicator.getService() == null) {
-			Log.e(LOGTAG, "ERROR: onSimlarCallStateChanged but not bound to service");
+			Lg.e(LOGTAG, "ERROR: onSimlarCallStateChanged but not bound to service");
 			return;
 		}
 
 		final SimlarCallState simlarCallState = mCommunicator.getService().getSimlarCallState();
 		if (simlarCallState == null || simlarCallState.isEmpty()) {
-			Log.e(LOGTAG, "ERROR: onSimlarCallStateChanged simlarCallState null or empty");
+			Lg.e(LOGTAG, "ERROR: onSimlarCallStateChanged simlarCallState null or empty");
 			return;
 		}
 
-		Log.i(LOGTAG, "onSimlarCallStateChanged " + simlarCallState);
+		Lg.i(LOGTAG, "onSimlarCallStateChanged ", simlarCallState);
 
 		mImageViewContactImage.setImageBitmap(simlarCallState.getContactPhotoBitmap(this, R.drawable.contact_picture));
 		mTextViewContactName.setText(simlarCallState.getContactName());
@@ -252,7 +251,7 @@ public final class CallActivity extends Activity implements SensorEventListener
 	void iterateTimer()
 	{
 		final String text = Util.formatMilliSeconds(SystemClock.elapsedRealtime() - mCallStartTime);
-		Log.i(LOGTAG, "iterateTimer: " + text);
+		Lg.i(LOGTAG, "iterateTimer: ", text);
 
 		mTextViewCallTimer.setText(text);
 
@@ -268,7 +267,7 @@ public final class CallActivity extends Activity implements SensorEventListener
 
 	private void finishDelayed(final int milliSeconds)
 	{
-		Log.i(LOGTAG, "finishing activity in " + milliSeconds + " ms");
+		Lg.i(LOGTAG, "finishing activity in ", Integer.valueOf(milliSeconds), " ms");
 
 		new Handler().postDelayed(new Runnable() {
 			@Override
@@ -388,18 +387,18 @@ public final class CallActivity extends Activity implements SensorEventListener
 		final float distance = event.values[0];
 
 		if (distance > event.sensor.getMaximumRange()) {
-			Log.w(LOGTAG, "proximity sensors distance=" + distance + " out of range=" + event.sensor.getMaximumRange());
+			Lg.w(LOGTAG, "proximity sensors distance=", Float.valueOf(distance), " out of range=", Float.valueOf(event.sensor.getMaximumRange()));
 			return;
 		}
 
 		final WindowManager.LayoutParams params = getWindow().getAttributes();
 		if (distance <= PROXIMITY_DISTANCE_THRESHOLD) {
-			Log.i(LOGTAG, "proximity sensors distance=" + distance + " below threshold=" + PROXIMITY_DISTANCE_THRESHOLD
-					+ " => dimming screen in order to disable touch events");
+			Lg.i(LOGTAG, "proximity sensors distance=", Float.valueOf(distance), " below threshold=", Float.valueOf(PROXIMITY_DISTANCE_THRESHOLD),
+					" => dimming screen in order to disable touch events");
 			params.screenBrightness = 0.1f;
 		} else {
-			Log.i(LOGTAG, "proximity sensors distance=" + distance + " above threshold=" + PROXIMITY_DISTANCE_THRESHOLD
-					+ " => enabling touch events (no screen dimming)");
+			Lg.i(LOGTAG, "proximity sensors distance=", Float.valueOf(distance), " above threshold=", Float.valueOf(PROXIMITY_DISTANCE_THRESHOLD),
+					" => enabling touch events (no screen dimming)");
 			params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
 		}
 		getWindow().setAttributes(params);
