@@ -32,8 +32,6 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import android.util.Log;
-
 public final class HttpsPost
 {
 	private static final String LOGTAG = HttpsPost.class.getSimpleName();
@@ -63,7 +61,7 @@ public final class HttpsPost
 							.append(PARAMETER_EQUALS_CHAR)
 							.append(URLEncoder.encode(parameters.get(parameterName), "UTF-8"));
 				} catch (final UnsupportedEncodingException e) {
-					Log.e(LOGTAG, "UnsupportedEncodingException", e);
+					Lg.ex(LOGTAG, e, "UnsupportedEncodingException");
 				}
 
 				firstParameter = false;
@@ -90,15 +88,15 @@ public final class HttpsPost
 				connection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + DATA_BOUNDARY);
 			}
 
-			Log.d(LOGTAG, "created connection for: " + urlPath);
+			Lg.d(LOGTAG, "created connection for: ", urlPath);
 			return connection;
 		} catch (final MalformedURLException e) {
-			Log.e(LOGTAG, "MalformedURLException: " + e.getMessage(), e);
+			Lg.ex(LOGTAG, e, "MalformedURLException");
 		} catch (final IOException e) {
-			Log.e(LOGTAG, "IOException: " + e.getMessage(), e);
+			Lg.ex(LOGTAG, e, "IOException while creating connection");
 		}
 
-		Log.e(LOGTAG, "failed to create connection for: " + urlPath);
+		Lg.e(LOGTAG, "failed to create connection for: ", urlPath);
 		return null;
 	}
 
@@ -107,10 +105,10 @@ public final class HttpsPost
 		for (int i = 0; i <= MAX_RETRIES; ++i) {
 			if (i != 0) {
 				try {
-					Log.i(LOGTAG, "sleeping 500ms before retrying post: " + urlPath);
+					Lg.i(LOGTAG, "sleeping 500ms before retrying post: ", urlPath);
 					Thread.sleep(500);
 				} catch (final InterruptedException e) {
-					Log.e(LOGTAG, "sleep interrupted: " + e.getMessage(), e);
+					Lg.ex(LOGTAG, e, "sleep interrupted");
 				}
 			}
 
@@ -136,15 +134,15 @@ public final class HttpsPost
 			out.close();
 
 			if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-				Log.e(LOGTAG, "server response error(" + connection.getResponseCode() + "): " + connection.getResponseMessage());
+				Lg.e(LOGTAG, "server response error(", Integer.valueOf(connection.getResponseCode()), "): ", connection.getResponseMessage());
 				return null;
 			}
 
-			Log.i(LOGTAG, "used CipherSuite: " + connection.getCipherSuite());
+			Lg.i(LOGTAG, "used CipherSuite: ", connection.getCipherSuite());
 			return connection.getInputStream();
 
 		} catch (final IOException e) {
-			Log.e(LOGTAG, "IOException: " + e.getMessage(), e);
+			Lg.ex(LOGTAG, e, "IOException while posting");
 			return null;
 		}
 	}
