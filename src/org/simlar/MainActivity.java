@@ -33,7 +33,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -49,7 +48,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	{
 		Lg.init(this);
 
-		Log.i(LOGTAG, "onCreate " + savedInstanceState);
+		Lg.i(LOGTAG, "onCreate ", savedInstanceState);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
@@ -65,7 +64,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 		}
 		mContactList.setListAdapter(mAdapter);
 
-		Log.i(LOGTAG, "onCreate ended");
+		Lg.i(LOGTAG, "onCreate ended");
 	}
 
 	void loadContacts()
@@ -97,7 +96,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	@Override
 	protected void onResume()
 	{
-		Log.i(LOGTAG, "onResume ");
+		Lg.i(LOGTAG, "onResume");
 		super.onResume();
 
 		if (!GooglePlayServicesHelper.checkPlayServices(this)) {
@@ -105,7 +104,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 		}
 
 		if (!PreferencesHelper.readPrefencesFromFile(this)) {
-			Log.i(LOGTAG, "as we are not registered yet => creating account");
+			Lg.i(LOGTAG, "as we are not registered yet => creating account");
 			startAccountCreation();
 			return;
 		}
@@ -118,7 +117,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	@Override
 	protected void onPause()
 	{
-		Log.i(LOGTAG, "onPause");
+		Lg.i(LOGTAG, "onPause");
 		super.onPause();
 	}
 
@@ -166,7 +165,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 
 	private void reloadContacts()
 	{
-		Log.i(LOGTAG, "reloadContacts");
+		Lg.i(LOGTAG, "reloadContacts");
 		ContactsProvider.clearCache();
 		mAdapter.clear();
 		loadContacts();
