@@ -40,7 +40,6 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 public final class SimlarSSLSocketFactory extends SSLSocketFactory
 {
@@ -72,7 +71,7 @@ public final class SimlarSSLSocketFactory extends SSLSocketFactory
 
 		for (final String pref : preferred) {
 			if (sup.contains(pref)) {
-				return new String[]{ pref };
+				return new String[] { pref };
 			}
 		}
 
@@ -84,7 +83,7 @@ public final class SimlarSSLSocketFactory extends SSLSocketFactory
 		final String[] cypherSuites = getPreferred(PREFERRED_CYPHPER_SUITES,
 				HttpsURLConnection.getDefaultSSLSocketFactory().getSupportedCipherSuites(),
 				HttpsURLConnection.getDefaultSSLSocketFactory().getDefaultCipherSuites());
-		Log.i(LOGTAG, "using cipher suites: " + TextUtils.join(", ", cypherSuites));
+		Lg.i(LOGTAG, "using cipher suites: ", TextUtils.join(", ", cypherSuites));
 		return cypherSuites;
 	}
 
@@ -93,10 +92,10 @@ public final class SimlarSSLSocketFactory extends SSLSocketFactory
 		try {
 			final String[] deviceSupports = ((SSLSocket) HttpsURLConnection.getDefaultSSLSocketFactory().createSocket()).getSupportedProtocols();
 			final String[] protocols = getPreferred(PREFERRED_PROTOCOLS, deviceSupports, deviceSupports);
-			Log.i(LOGTAG, "using protocols: " + TextUtils.join(", ", protocols));
+			Lg.i(LOGTAG, "using protocols: ", TextUtils.join(", ", protocols));
 			return protocols;
 		} catch (final IOException e) {
-			Log.e(LOGTAG, "failed to create protocols: " + e.getMessage(), e);
+			Lg.ex(LOGTAG, e, "failed to create protocols");
 			return null;
 		}
 	}
@@ -104,7 +103,7 @@ public final class SimlarSSLSocketFactory extends SSLSocketFactory
 	private static Certificate loadCertificate()
 	{
 		if (!FileHelper.isInitialized()) {
-			Log.e(LOGTAG, "Error: FileHelper not initialized");
+			Lg.e(LOGTAG, "Error: FileHelper not initialized");
 			return null;
 		}
 
@@ -114,7 +113,7 @@ public final class SimlarSSLSocketFactory extends SSLSocketFactory
 			caInput = new BufferedInputStream(new FileInputStream(FileHelper.getRootCaFileName()));
 			return cf.generateCertificate(caInput);
 		} catch (final Exception e) {
-			Log.e(LOGTAG, "Exception during loadCertificate: " + e.getMessage(), e);
+			Lg.ex(LOGTAG, e, "Exception during loadCertificate");
 			return null;
 		} finally {
 			try {
@@ -122,7 +121,7 @@ public final class SimlarSSLSocketFactory extends SSLSocketFactory
 					caInput.close();
 				}
 			} catch (final IOException e) {
-				e.printStackTrace();
+				Lg.ex(LOGTAG, e, "IOException during loadCertificate");
 			}
 		}
 	}
@@ -146,7 +145,7 @@ public final class SimlarSSLSocketFactory extends SSLSocketFactory
 			context.init(null, tmf.getTrustManagers(), null);
 			return context.getSocketFactory();
 		} catch (final Exception e) {
-			Log.e(LOGTAG, "Exception during createSSLSocketFactory: " + e.getMessage(), e);
+			Lg.ex(LOGTAG, e, "Exception during createSSLSocketFactory");
 			return null;
 		}
 	}
