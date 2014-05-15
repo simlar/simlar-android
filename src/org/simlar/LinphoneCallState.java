@@ -22,6 +22,7 @@ package org.simlar;
 
 import org.linphone.core.LinphoneCall;
 
+import android.content.Context;
 import android.util.Log;
 
 /// TODO: think about renaming to SimlarCallState
@@ -106,5 +107,50 @@ public enum LinphoneCallState
 	public boolean isBeforeEncryption()
 	{
 		return this == LinphoneCallState.CONNECTED;
+	}
+
+	public boolean isIdle()
+	{
+		return this == LinphoneCallState.IDLE;
+	}
+
+	public String createNotificationText(final Context context, final String simlarId)
+	{
+		if (Util.isNullOrEmpty(simlarId)) {
+			return context.getString(R.string.linphone_call_state_notification_initializing);
+		}
+
+		switch (this) {
+		case CALL_END:
+		case ERROR:
+		case RELEASED:
+			return String.format(context.getString(R.string.linphone_call_state_notification_ended), simlarId);
+		case INCOMING_RECEIVED:
+		case INCOMING_EARLY_MEDIA:
+			return String.format(context.getString(R.string.linphone_call_state_notification_receiving_call), simlarId);
+		case CONNECTED:
+		case STREAMS_RUNNING:
+		case UPDATED_BY_REMOTE:
+		case UPDATING:
+			return String.format(context.getString(R.string.linphone_call_state_notification_talking), simlarId);
+		case OUTGOING_INIT:
+		case OUTGOING_EARLY_MEDIA:
+		case OUTGOING_PROGRESS:
+		case OUTGOING_RINGING:
+			return String.format(context.getString(R.string.linphone_call_state_notification_calling), simlarId);
+		case PAUSED:
+		case PAUSED_BY_REMOTE:
+		case PAUSING:
+			return String.format(context.getString(R.string.linphone_call_state_notification_paused), simlarId);
+		case RESUMING:
+			return String.format(context.getString(R.string.linphone_call_state_notification_resuming), simlarId);
+		case REFERED:
+			Log.w(LOGTAG, "createNotificationText falling back to initializing for SimlarCallState=" + this.toString());
+			//$FALL-THROUGH$
+		case UNKONWN:
+		case IDLE:
+		default:
+			return context.getString(R.string.linphone_call_state_notification_initializing);
+		}
 	}
 }

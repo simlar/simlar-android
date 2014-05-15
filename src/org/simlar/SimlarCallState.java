@@ -207,6 +207,8 @@ public final class SimlarCallState
 
 		if (mOngoingEncryptionHandshake) {
 			return context.getString(R.string.call_activity_encrypting);
+		} else if (mLinphoneCallState.isIdle()) {
+			return context.getString(R.string.call_activity_connecting_to_server);
 		} else if (mLinphoneCallState.isTalking()) {
 			return context.getString(R.string.call_activity_talking);
 		} else if (mLinphoneCallState.isCallOutgoingConnecting()) {
@@ -275,5 +277,16 @@ public final class SimlarCallState
 	public long getStartTime()
 	{
 		return mDuration > 0 ? mCallStartTime : -1;
+	}
+
+	public void connectingToSimlarServerTimedOut()
+	{
+		mLinphoneCallState = LinphoneCallState.CALL_END;
+		mCallEndReason = CallEndReason.SERVER_CONNECTION_TIMEOUT;
+	}
+
+	public String createNotificationText(final Context context)
+	{
+		return mLinphoneCallState.createNotificationText(context, mSimlarId);
 	}
 }

@@ -28,12 +28,6 @@
     <string name="button_continue">Continue</string>
     <string name="button_cancel">Cancel</string>
 
-    <string name="notification_simlar_status_unknown">%1$s unknown status</string>
-    <string name="notification_simlar_status_offline">%1$s offline</string>
-    <string name="notification_simlar_status_connecting">%1$s connecting</string>
-    <string name="notification_simlar_status_online">%1$s online</string>
-    <string name="notification_simlar_status_error">%1$s registration failed</string>
-
     <string name="main_activity_contactlist_loading_contacts">Loading contacts</string>
     <string name="main_activity_contactlist_error_loading_contacts">Error: Failed to load contacts. Does your internet work?</string>
     <string name="main_activity_contactlist_no_contacts_found">No contacts found.</string>
@@ -57,6 +51,14 @@
     <string name="google_play_services_helper_alert_unavailable_text">Your device does not have Google Play Service installed. This is mandatory for running simlar. So please install them to run simlar.</string>
     <string name="google_play_services_helper_alert_unavailable_button_close_simlar">Close simlar</string>
 
+    <string name="linphone_call_state_notification_initializing">initializing</string>
+    <string name="linphone_call_state_notification_calling">calling %1$s</string>
+    <string name="linphone_call_state_notification_receiving_call">%1$s is calling you</string>
+    <string name="linphone_call_state_notification_talking">talking to %1$s</string>
+    <string name="linphone_call_state_notification_ended">call with %1$s ended</string>
+    <string name="linphone_call_state_notification_paused">paused call with %1$s</string>
+    <string name="linphone_call_state_notification_resuming">resuming call with %1$s ended</string>
+
     <string name="network_quality_good">good</string>
     <string name="network_quality_average">average</string>
     <string name="network_quality_poor">poor</string>
@@ -78,7 +80,9 @@
     <string name="call_activity_please_verify_authentication_token">Please compare code with your calling partner:</string>
     <string name="call_activity_button_authentication_token_verify">Right</string>
     <string name="call_activity_button_authentication_token_wrong">Wrong</string>
-    <string name="call_activity_outgoing_connecting">Connecting&#8230;</string>
+    <string name="call_activity_connecting_to_server">Connecting to simlar-server&#8230;</string>
+    <string name="call_activity_connecting_to_server_timed_out">Connecting to simlar-server timed out</string>
+    <string name="call_activity_outgoing_connecting">Connecting to client&#8230;</string>
     <string name="call_activity_outgoing_ringing">Ringing&#8230;</string>
     <string name="call_activity_encrypting">Encrypting&#8230;</string>
     <string name="call_activity_talking">Talking&#8230;</string>

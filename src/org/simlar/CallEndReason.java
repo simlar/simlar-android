@@ -25,7 +25,8 @@ public enum CallEndReason {
 	DECLINED,
 	OFFLINE,
 	UNSUPPORTED_MEDIA,
-	BUSY;
+	BUSY,
+	SERVER_CONNECTION_TIMEOUT;
 
 	public static CallEndReason fromMessage(final String message)
 	{
@@ -58,6 +59,8 @@ public enum CallEndReason {
 			return R.string.call_activity_call_ended_because_incompatible_media;
 		case BUSY:
 			return R.string.call_activity_call_ended_because_user_busy;
+		case SERVER_CONNECTION_TIMEOUT:
+			return R.string.call_activity_connecting_to_server_timed_out;
 		case NONE:
 		default:
 			return R.string.call_activity_call_ended_normally;
