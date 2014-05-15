@@ -3,7 +3,6 @@ package org.simlar;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.util.Log;
 
 public final class Version
 {
@@ -47,7 +46,7 @@ public final class Version
 		try {
 			return context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
 		} catch (final NameNotFoundException e) {
-			Log.e(LOGTAG, "NameNotFoundException in Version.getPackageInfo: " + e.getMessage(), e);
+			Lg.ex(LOGTAG, e, "NameNotFoundException in Version.getPackageInfo:");
 			return createEmptyPackageInfo();
 		}
 	}
