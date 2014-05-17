@@ -204,7 +204,6 @@ public final class VerifyNumberActivity extends Activity
 		final SimlarNumber simlarNumber = new SimlarNumber(number);
 		if (!simlarNumber.isValid()) {
 			(new AlertDialog.Builder(this))
-					.setTitle(R.string.verify_number_activity_alert_wrong_number_title)
 					.setMessage(R.string.verify_number_activity_alert_wrong_number_text)
 					.create().show();
 			return;
