@@ -40,6 +40,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 public final class VerifyNumberActivity extends Activity
 {
@@ -114,6 +115,9 @@ public final class VerifyNumberActivity extends Activity
 		mEditNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
 		if (!Util.isNullOrEmpty(number)) {
 			mEditNumber.setText(number);
+
+			final TextView text = (TextView) findViewById(R.id.textViewCheckOrVerifyYourNumber);
+			text.setText(getString(R.string.verify_number_activity_verify_your_number));
 		} else {
 			new Handler().postDelayed(new Runnable() {
 				@Override

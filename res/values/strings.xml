@@ -105,8 +105,8 @@
     <string name="connection_details_activity_percent">&#65285;</string>
 
     <string name="verify_number_activity_title">Verify your telephone number</string>
-    <string name="verify_number_activity_welcome">Welcome to Simlar.</string>
-    <string name="verify_number_activity_please_put_in_your_number">It is necessary to create an account based on your telephone number. This enables others to find you and you to find others.</string>
+    <string name="verify_number_activity_verify_your_number">Verify your telephone number:</string>
+    <string name="verify_number_activity_put_in_your_number">Put in your telephone number:</string>
     <string name="verify_number_activity_button_cancel">Cancel</string>
     <string name="verify_number_activity_button_register">Create Account</string>
     <string name="verify_number_activity_checkbox_privacy_statement_and_terms_and_conditions">I have read and accept the <a href="http://www.simlar.org/datenschutzerklaerung/">privacy statement</a> and the <a href="http://www.simlar.org/nutzungsbedingungen/">terms of use</a>.</string>

@@ -29,24 +29,17 @@
     tools:context=".VerifyNumberActivity" >
 
     <TextView
-        android:id="@+id/textViewWelcome"
+        android:id="@+id/textViewCheckOrVerifyYourNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/verify_number_activity_welcome" />
-
-    <TextView
-        android:id="@+id/textViewDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewWelcome"
-        android:text="@string/verify_number_activity_please_put_in_your_number" />
+        android:text="@string/verify_number_activity_put_in_your_number" />
 
     <LinearLayout
         android:id="@+id/linearLayoutCompletePhoneNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textViewDescription"
-        android:layout_below="@+id/textViewDescription"
+        android:layout_alignLeft="@+id/textViewCheckOrVerifyYourNumber"
+        android:layout_below="@+id/textViewCheckOrVerifyYourNumber"
         android:layout_marginTop="33dp" >
 
         <TextView
