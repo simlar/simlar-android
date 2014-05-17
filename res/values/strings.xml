@@ -24,7 +24,6 @@
 
     <string name="app_name">Simlar</string>
     <string name="app_homepage">www.simlar.org</string>
-    <string name="simlarservice_on_destroy">Simlar terminated</string>
     <string name="button_continue">Continue</string>
     <string name="button_cancel">Cancel</string>
 
@@ -36,7 +35,6 @@
     <string name="main_activity_menu_enable_linphone_debug_mode">Enable debug mode</string>
     <string name="main_activity_menu_delete_account">Delete my credentials and quit</string>
     <string name="main_activity_menu_show_about">About</string>
-    <string name="main_activity_menu_quit">Quit Simlar</string>
     <string name="main_activity_alert_upload_log_file_title">Really report bug?</string>
     <string name="main_activity_alert_upload_log_file_text">Thank you for reporting a bug.\n\nThis will upload a log file to a development server and afterwards ask you to write an email describing the bug.\n\nDo you really want to continue?</string>
     <string name="main_activity_alert_uploading_log_file_failed_title">Error</string>

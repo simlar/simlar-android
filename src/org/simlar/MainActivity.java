@@ -148,9 +148,6 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 		case R.id.action_show_about:
 			show_about();
 			return true;
-		case R.id.action_quit:
-			quit();
-			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -207,11 +204,5 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	private void show_about()
 	{
 		startActivity(new Intent(this, AboutActivity.class));
-	}
-
-	private void quit()
-	{
-		Log.i(LOGTAG, "quit");
-		finish();
 	}
 }

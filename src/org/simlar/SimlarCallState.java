@@ -285,8 +285,8 @@ public final class SimlarCallState
 		mCallEndReason = CallEndReason.SERVER_CONNECTION_TIMEOUT;
 	}
 
-	public String createNotificationText(final Context context)
+	public String createNotificationText(final Context context, boolean goingDown)
 	{
-		return mLinphoneCallState.createNotificationText(context, mSimlarId);
+		return mLinphoneCallState.createNotificationText(context, getContactName(), goingDown);
 	}
 }

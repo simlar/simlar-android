@@ -88,6 +88,14 @@ public final class LinphoneThread
 
 			Log.i(LOGTAG, "handler initialized");
 
+			mMainThreadHandler.post(new Runnable() {
+				@Override
+				public void run()
+				{
+					mListener.onInitialized();
+				}
+			});
+
 			Looper.loop();
 		}
 
@@ -103,8 +111,9 @@ public final class LinphoneThread
 				public void run()
 				{
 					mLinphoneThreadHandler.removeCallbacksAndMessages(null);
-					mLinphoneHandler.destroy();
+					mLinphoneThreadHandler = null;
 					Looper.myLooper().quit();
+					mLinphoneHandler.destroy();
 					mMainThreadHandler.post(new Runnable() {
 						@Override
 						public void run()
@@ -351,7 +360,7 @@ public final class LinphoneThread
 		// LinphoneCoreListener overloaded member functions
 		//
 		@Override
-		public void registrationState(LinphoneCore lc, final LinphoneProxyConfig cfg, final RegistrationState state, final String message)
+		public void registrationState(final LinphoneCore lc, final LinphoneProxyConfig cfg, final RegistrationState state, final String message)
 		{
 			// LinphoneProxyConfig is probably mutable => use it only in the calling thread
 			// RegistrationState is immutable
@@ -383,7 +392,7 @@ public final class LinphoneThread
 		}
 
 		@Override
-		public void displayStatus(LinphoneCore lc, final String message)
+		public void displayStatus(final LinphoneCore lc, final String message)
 		{
 			Log.d(LOGTAG, "displayStatus message=" + message);
 		}
@@ -401,62 +410,62 @@ public final class LinphoneThread
 		}
 
 		@Override
-		public void callState(LinphoneCore lc, final LinphoneCall call, final LinphoneCall.State state, final String message)
+		public void callState(final LinphoneCore lc, final LinphoneCall call, final LinphoneCall.State state, final String message)
 		{
 			// LinphoneCall is mutable => use it only in the calling thread
 			// LinphoneCall.State is immutable
 
 			final String number = getNumber(call);
-			Log.i(LOGTAG, "callState changed number=" + number + " state=" + state + " message=" + message);
+			final LinphoneCall.State fixedState = fixLinphoneCallState(state);
+			Log.i(LOGTAG, "callState changed number=" + number + " state=" + fixedState + " message=" + message);
 
 			mMainThreadHandler.post(new Runnable() {
-
 				@Override
 				public void run()
 				{
-					mListener.onCallStateChanged(number, fixLinphoneCallState(state), message);
+					mListener.onCallStateChanged(number, fixedState, message);
 				}
 			});
 		}
 
 		@Override
-		public void messageReceived(LinphoneCore lc, final LinphoneChatRoom cr, final LinphoneChatMessage message)
+		public void messageReceived(final LinphoneCore lc, final LinphoneChatRoom cr, final LinphoneChatMessage message)
 		{
 			Log.i(LOGTAG, "messageReceived " + message);
 		}
 
 		@Override
-		public void show(LinphoneCore lc)
+		public void show(final LinphoneCore lc)
 		{
 			Log.i(LOGTAG, "show called");
 		}
 
 		@Override
-		public void authInfoRequested(LinphoneCore lc, final String realm, final String username)
+		public void authInfoRequested(final LinphoneCore lc, final String realm, final String username)
 		{
 			Log.w(LOGTAG, "authInfoRequested realm=" + realm + " username=" + username);
 		}
 
 		@Override
-		public void displayMessage(LinphoneCore lc, final String message)
+		public void displayMessage(final LinphoneCore lc, final String message)
 		{
 			Log.i(LOGTAG, "displayMessage message=" + message);
 		}
 
 		@Override
-		public void displayWarning(LinphoneCore lc, final String message)
+		public void displayWarning(final LinphoneCore lc, final String message)
 		{
 			Log.w(LOGTAG, "displayWarning message=" + message);
 		}
 
 		@Override
-		public void globalState(LinphoneCore lc, final GlobalState state, final String message)
+		public void globalState(final LinphoneCore lc, final GlobalState state, final String message)
 		{
 			Log.i(LOGTAG, "globalState state=" + state + " message=" + message);
 		}
 
 		@Override
-		public void newSubscriptionRequest(LinphoneCore lc, final LinphoneFriend lf, final String url)
+		public void newSubscriptionRequest(final LinphoneCore lc, final LinphoneFriend lf, final String url)
 		{
 			// LinphoneFriend is mutable => use it only in the calling thread
 
@@ -464,7 +473,7 @@ public final class LinphoneThread
 		}
 
 		@Override
-		public void notifyPresenceReceived(LinphoneCore lc, final LinphoneFriend lf)
+		public void notifyPresenceReceived(final LinphoneCore lc, final LinphoneFriend lf)
 		{
 			// LinphoneFriend is mutable => use it only in the calling thread
 			// OnlineStatus is immutable
@@ -474,13 +483,13 @@ public final class LinphoneThread
 		}
 
 		@Override
-		public void textReceived(LinphoneCore lc, final LinphoneChatRoom cr, final LinphoneAddress from, final String message)
+		public void textReceived(final LinphoneCore lc, final LinphoneChatRoom cr, final LinphoneAddress from, final String message)
 		{
 			Log.i(LOGTAG, "textReceived chatroom=" + cr + " from=" + from + " message=" + message);
 		}
 
 		@Override
-		public void callStatsUpdated(LinphoneCore lc, final LinphoneCall call, final LinphoneCallStats stats)
+		public void callStatsUpdated(final LinphoneCore lc, final LinphoneCall call, final LinphoneCallStats stats)
 		{
 			// LinphoneCall is mutable => use it only in the calling thread
 			// LinphoneCallStats maybe mutable => use it only in the calling thread
@@ -515,13 +524,13 @@ public final class LinphoneThread
 		}
 
 		@Override
-		public void ecCalibrationStatus(LinphoneCore lc, final EcCalibratorStatus status, final int delay_ms, final Object data)
+		public void ecCalibrationStatus(final LinphoneCore lc, final EcCalibratorStatus status, final int delay_ms, final Object data)
 		{
 			Log.i(LOGTAG, "ecCalibrationStatus status=" + status + " delay_ms=" + delay_ms);
 		}
 
 		@Override
-		public void callEncryptionChanged(LinphoneCore lc, final LinphoneCall call, final boolean encrypted, final String authenticationToken)
+		public void callEncryptionChanged(final LinphoneCore lc, final LinphoneCall call, final boolean encrypted, final String authenticationToken)
 		{
 			// LinphoneCall is mutable => use it only in the calling thread
 
@@ -544,43 +553,43 @@ public final class LinphoneThread
 		}
 
 		@Override
-		public void notifyReceived(LinphoneCore lc, final LinphoneCall call, final LinphoneAddress from, final byte[] event)
+		public void notifyReceived(final LinphoneCore lc, final LinphoneCall call, final LinphoneAddress from, final byte[] event)
 		{
 			Log.w(LOGTAG, "notifyReceived number=" + getNumber(call) + " from=" + from);
 		}
 
 		@Override
-		public void dtmfReceived(LinphoneCore lc, final LinphoneCall call, final int dtmf)
+		public void dtmfReceived(final LinphoneCore lc, final LinphoneCall call, final int dtmf)
 		{
 			Log.w(LOGTAG, "dtmfReceived number=" + getNumber(call) + " dtmf=" + dtmf);
 		}
 
 		@Override
-		public void transferState(LinphoneCore lc, final LinphoneCall call, final LinphoneCall.State state)
+		public void transferState(final LinphoneCore lc, final LinphoneCall call, final LinphoneCall.State state)
 		{
 			Log.w(LOGTAG, "transferState number=" + getNumber(call) + " State=" + state);
 		}
 
 		@Override
-		public void infoReceived(LinphoneCore lc, final LinphoneCall call, final LinphoneInfoMessage info)
+		public void infoReceived(final LinphoneCore lc, final LinphoneCall call, final LinphoneInfoMessage info)
 		{
 			Log.w(LOGTAG, "infoReceived number=" + getNumber(call) + " LinphoneInfoMessage=" + info.getContent().getDataAsString());
 		}
 
 		@Override
-		public void subscriptionStateChanged(LinphoneCore lc, final LinphoneEvent ev, final SubscriptionState state)
+		public void subscriptionStateChanged(final LinphoneCore lc, final LinphoneEvent ev, final SubscriptionState state)
 		{
 			Log.w(LOGTAG, "subscriptionStateChanged ev=" + ev.getEventName() + " SubscriptionState=" + state);
 		}
 
 		@Override
-		public void notifyReceived(LinphoneCore lc, LinphoneEvent ev, final String eventName, final LinphoneContent content)
+		public void notifyReceived(final LinphoneCore lc, final LinphoneEvent ev, final String eventName, final LinphoneContent content)
 		{
 			Log.w(LOGTAG, "notifyReceived ev=" + ev.getEventName() + " eventName=" + eventName + " content=" + content);
 		}
 
 		@Override
-		public void publishStateChanged(LinphoneCore lc, final LinphoneEvent ev, final PublishState state)
+		public void publishStateChanged(final LinphoneCore lc, final LinphoneEvent ev, final PublishState state)
 		{
 			Log.w(LOGTAG, "publishStateChanged ev=" + ev.getEventName() + " state=" + state);
 		}
@@ -599,7 +608,7 @@ public final class LinphoneThread
 		mImpl.finish();
 	}
 
-	public void join(long millis) throws InterruptedException
+	public void join(final long millis) throws InterruptedException
 	{
 		mImpl.join(millis);
 	}

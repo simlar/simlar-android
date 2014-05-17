@@ -49,7 +49,6 @@ import android.os.PowerManager.WakeLock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
-import android.widget.Toast;
 
 public final class SimlarService extends Service implements LinphoneThreadListener
 {
@@ -137,6 +136,14 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		handlePendingCall();
 
+		if (mGoingDown) {
+			Log.i(LOGTAG, "onStartCommand called while service is going down => recovering");
+			mGoingDown = false;
+			if (mLinphoneThread == null) {
+				startLinphone();
+			}
+		}
+
 		// We want this service to continue running until it is explicitly stopped, so return sticky.
 		return START_STICKY;
 	}
@@ -159,8 +166,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		startForeground(NOTIFICATION_ID, createNotification());
 
-		mLinphoneThread = new LinphoneThread(this, this);
-
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 		registerReceiver(mNetworkChangeReceiver, intentFilter);
@@ -169,14 +174,14 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		ContactsProvider.preLoadContacts(this);
 
-		mHandler.post(new Runnable() {
-			@Override
-			public void run()
-			{
-				initializeCredentials();
-			}
-		});
+		startLinphone();
+	}
 
+	private void startLinphone()
+	{
+		Log.i(LOGTAG, "startLinphone");
+		mLinphoneThread = new LinphoneThread(this, this);
+		mTerminatePrivateAlreadyCalled = false;
 		terminateChecker();
 	}
 
@@ -255,7 +260,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		final PendingIntent activity = PendingIntent.getActivity(this, 0,
 				new Intent(this, mNotificationActivity).addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED), 0);
 
-		final String text = mSimlarCallState.createNotificationText(this);
+		final String text = mSimlarCallState.createNotificationText(this, mGoingDown);
 
 		final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
 		notificationBuilder.setSmallIcon(R.drawable.notification_bar_icon);
@@ -267,18 +272,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		notificationBuilder.setContentIntent(activity);
 		notificationBuilder.setWhen(System.currentTimeMillis());
 		return notificationBuilder.build();
-	}
-
-	void initializeCredentials()
-	{
-		notifySimlarStatusChanged(SimlarStatus.OFFLINE);
-
-		if (!PreferencesHelper.readPrefencesFromFile(this)) {
-			Log.e(LOGTAG, "failed to initialize credentials");
-			return;
-		}
-
-		connect();
 	}
 
 	public void connect()
@@ -310,9 +303,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		releaseWakeLock();
 		releaseDisplayWakeLock();
 		releaseWifiLock();
-
-		// Tell the user we stopped.
-		Toast.makeText(this, R.string.simlarservice_on_destroy, Toast.LENGTH_SHORT).show();
 
 		Log.i(LOGTAG, "onDestroy ended");
 	}
@@ -372,6 +362,19 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		if (ni.isConnected()) {
 			mLinphoneThread.refreshRegisters();
 		}
+	}
+
+	@Override
+	public void onInitialized()
+	{
+		notifySimlarStatusChanged(SimlarStatus.OFFLINE);
+
+		if (!PreferencesHelper.readPrefencesFromFile(this)) {
+			Log.e(LOGTAG, "failed to initialize credentials");
+			return;
+		}
+
+		connect();
 	}
 
 	@Override
@@ -464,7 +467,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		Log.i(LOGTAG, "SimlarCallState updated: " + mSimlarCallState);
 
-		if (mSimlarCallState.isRinging()) {
+		if (mSimlarCallState.isRinging() && !mGoingDown) {
 			mSoundEffectManager.start(SoundEffectType.RINGTONE);
 			mVibratorManager.start();
 		} else {
@@ -479,7 +482,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 
 		// make sure WLAN is not suspended while calling
-		if (mSimlarCallState.isNewCall()) {
+		if (mSimlarCallState.isNewCall() && !mGoingDown) {
 			mSoundEffectManager.prepare(SoundEffectType.ENCRYPTION_HANDSHAKE);
 			notifySimlarStatusChanged(SimlarStatus.ONGOING_CALL);
 
@@ -673,23 +676,30 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	@Override
 	public void onJoin()
 	{
-		try {
-			mLinphoneThread.join(2000);
-		} catch (final InterruptedException e) {
-			Log.e(LOGTAG, "join interrupted: " + e.getMessage(), e);
+		if (mLinphoneThread != null) {
+			try {
+				mLinphoneThread.join(2000);
+			} catch (final InterruptedException e) {
+				Log.e(LOGTAG, "join interrupted: " + e.getMessage(), e);
+			}
+			mLinphoneThread = null;
 		}
+
 		SimlarServiceBroadcast.sendServiceFinishes(this);
 
-		// make sure the notification update is done before destruction by firing destruction event to the handler
-		mHandler.post(new Runnable() {
-			@Override
-			public void run()
-			{
-				Log.i(LOGTAG, "onJoin: calling stopSelf");
-				stopForeground(true);
-				stopSelf();
-			}
-		});
+		// make sure we remove the terminateChecker by removing all events
+		mHandler.removeCallbacksAndMessages(null);
+
+		if (mGoingDown) {
+			Log.i(LOGTAG, "onJoin: calling stopSelf");
+			stopForeground(true);
+			// as notification icon stays in some circumstances
+			((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
+			stopSelf();
+		} else {
+			Log.i(LOGTAG, "onJoin: recovering calling startLinphone");
+			startLinphone();
+		}
 	}
 
 	public void verifyAuthenticationTokenOfCurrentCall(final boolean verified)
