@@ -140,7 +140,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 			uploadLogFile();
 			return true;
 		case R.id.action_enable_debug_mode:
-			enableLinphoneDebugMode();
+			toggleDebugMode();
 			return true;
 		case R.id.action_delete_account:
 			deleteAccountAndQuit();
@@ -151,6 +151,15 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	@Override
+	public boolean onPrepareOptionsMenu(final Menu menu)
+	{
+		menu.findItem(R.id.action_enable_debug_mode).setTitle(Lg.isDebugModeEnabled()
+				? R.string.main_activity_menu_disable_debug_mode
+				: R.string.main_activity_menu_enable_debug_mode);
+		return true;
 	}
 
 	private void reloadContacts()
@@ -179,8 +188,13 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 				.create().show();
 	}
 
-	private void enableLinphoneDebugMode()
+	private void toggleDebugMode()
 	{
+		if (Lg.isDebugModeEnabled()) {
+			Lg.setDebugMode(false);
+			return;
+		}
+
 		(new AlertDialog.Builder(this))
 				.setTitle(R.string.main_activity_alert_enable_linphone_debug_mode_title)
 				.setMessage(R.string.main_activity_alert_enable_linphone_debug_mode_text)
@@ -189,7 +203,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 					@Override
 					public void onClick(DialogInterface dialog, int id)
 					{
-						LinphoneHandler.enableDebugMode(true);
+						Lg.setDebugMode(true);
 					}
 				})
 				.create().show();
