@@ -20,6 +20,7 @@
 
 package org.simlar;
 
+import android.content.Context;
 import android.util.Log;
 
 public final class Lg
@@ -50,9 +51,20 @@ public final class Lg
 		Log.println(priority, tag, message.toString());
 	}
 
-	public static void setDebugMode(final boolean enabled)
+	public static void init(final Context context)
+	{
+		setDebugMode(PreferencesHelper.readFromFileDebugMode(context));
+	}
+
+	private static void setDebugMode(final boolean enabled)
 	{
 		mLevel = enabled ? LOG_LEVEL_DEBUG : LOG_LEVEL_NORMAL;
+	}
+
+	public static void saveDebugMode(final Context context, final boolean enabled)
+	{
+		setDebugMode(enabled);
+		PreferencesHelper.saveToFileDebugMode(context, enabled);
 	}
 
 	public static boolean isDebugModeEnabled()

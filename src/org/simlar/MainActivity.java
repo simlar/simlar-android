@@ -47,6 +47,8 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	@Override
 	protected void onCreate(final Bundle savedInstanceState)
 	{
+		Lg.init(this);
+
 		Log.i(LOGTAG, "onCreate " + savedInstanceState);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
@@ -191,7 +193,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	private void toggleDebugMode()
 	{
 		if (Lg.isDebugModeEnabled()) {
-			Lg.setDebugMode(false);
+			Lg.saveDebugMode(this, false);
 			return;
 		}
 
@@ -203,7 +205,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 					@Override
 					public void onClick(DialogInterface dialog, int id)
 					{
-						Lg.setDebugMode(true);
+						Lg.saveDebugMode(MainActivity.this, true);
 					}
 				})
 				.create().show();

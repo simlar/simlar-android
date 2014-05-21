@@ -37,6 +37,8 @@ public final class GcmBroadcastReceiver extends WakefulBroadcastReceiver
 	@Override
 	public void onReceive(final Context context, final Intent intent)
 	{
+		Lg.init(context);
+
 		final Bundle extras = intent.getExtras();
 		if (extras.isEmpty()) {
 			Log.e(LOGTAG, "received Google Cloud Messaging Event with empty extras");

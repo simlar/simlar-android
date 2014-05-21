@@ -34,6 +34,7 @@ public final class PreferencesHelper
 	private static final String PREFERENCES_CREATE_ACCOUNT_STATUS = "create_account_status";
 	private static final String PREFERENCES_GCM_REGRISTRATION_ID = "gcm_registration_id";
 	private static final String PREFERENCES_SIMLAR_VERSION_CODE = "simlar_version_code";
+	private static final String PREFERENCES_DEBUG_MODE = "debug_mode";
 
 	private static String mMySimlarId = null;
 	private static String mPassword = null;
@@ -186,6 +187,20 @@ public final class PreferencesHelper
 		editor.commit();
 	}
 
+	public static boolean readFromFileDebugMode(final Context context)
+	{
+		final SharedPreferences settings = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
+		return settings.getBoolean(PREFERENCES_DEBUG_MODE, false);
+	}
+
+	public static void saveToFileDebugMode(final Context context, final boolean enabled)
+	{
+		final SharedPreferences settings = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
+		final SharedPreferences.Editor editor = settings.edit();
+		editor.putBoolean(PREFERENCES_DEBUG_MODE, enabled);
+		editor.commit();
+	}
+
 	public static void resetPreferencesFile(final Context context)
 	{
 		final SharedPreferences settings = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
@@ -196,6 +211,7 @@ public final class PreferencesHelper
 		editor.putInt(PREFERENCES_CREATE_ACCOUNT_STATUS, -1);
 		editor.putString(PREFERENCES_GCM_REGRISTRATION_ID, null);
 		editor.putInt(PREFERENCES_SIMLAR_VERSION_CODE, -1);
+		editor.putBoolean(PREFERENCES_DEBUG_MODE, false);
 		editor.commit();
 	}
 }
