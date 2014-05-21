@@ -56,7 +56,7 @@ public final class PreferencesHelper
 		mPasswordHash = md5(mMySimlarId + ":sip.simlar.org:" + mPassword);
 	}
 
-	public static String md5(final String str)
+	private static String md5(final String str)
 	{
 		try {
 			final MessageDigest digest = MessageDigest.getInstance("md5");
