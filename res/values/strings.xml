@@ -32,7 +32,7 @@
     <string name="main_activity_contactlist_no_contacts_found">No contacts found.</string>
     <string name="main_activity_menu_reload_contacts">Reload contacts</string>
     <string name="main_activity_menu_upload_logfile">Report bug and upload logfile</string>
-    <string name="main_activity_menu_enable_linphone_debug_mode">Enable debug mode</string>
+    <string name="main_activity_menu_enable_debug_mode">Enable debug mode</string>
     <string name="main_activity_menu_delete_account">Delete my credentials and quit</string>
     <string name="main_activity_menu_show_about">About</string>
     <string name="main_activity_alert_upload_log_file_title">Really report bug?</string>

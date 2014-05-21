@@ -139,7 +139,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 		case R.id.action_upload_logfile:
 			uploadLogFile();
 			return true;
-		case R.id.action_enable_linphone_debug_mode:
+		case R.id.action_enable_debug_mode:
 			enableLinphoneDebugMode();
 			return true;
 		case R.id.action_delete_account:
