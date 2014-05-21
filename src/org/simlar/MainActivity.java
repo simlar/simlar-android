@@ -154,12 +154,27 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 		}
 	}
 
+	private static void updateMenu(final boolean visible, final int itemResource, final int stringResource, final Menu menu)
+	{
+		if (visible) {
+			if (menu.findItem(itemResource) == null) {
+				menu.add(Menu.NONE, itemResource, Menu.NONE, stringResource);
+			}
+		} else {
+			while (menu.findItem(itemResource) != null) {
+				menu.removeItem(itemResource);
+			}
+		}
+	}
+
 	@Override
 	public boolean onPrepareOptionsMenu(final Menu menu)
 	{
 		menu.findItem(R.id.action_enable_debug_mode).setTitle(Lg.isDebugModeEnabled()
 				? R.string.main_activity_menu_disable_debug_mode
 				: R.string.main_activity_menu_enable_debug_mode);
+
+		updateMenu(Lg.isDebugModeEnabled(), R.id.action_upload_logfile, R.string.main_activity_menu_upload_logfile, menu);
 		return true;
 	}
 
