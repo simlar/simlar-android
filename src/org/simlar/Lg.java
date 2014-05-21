@@ -51,6 +51,39 @@ public final class Lg
 		Log.println(priority, tag, message.toString());
 	}
 
+	public static class Anonymizer
+	{
+		private final Object mMessagePart;
+
+		public Anonymizer(final Object messagePart)
+		{
+			mMessagePart = messagePart;
+		}
+
+		@Override
+		public String toString()
+		{
+			if (mMessagePart == null) {
+				return "";
+			}
+
+			return anonymize(mMessagePart.toString());
+		}
+
+		static String anonymize(final String string)
+		{
+			if (Util.isNullOrEmpty(string)) {
+				return "";
+			}
+
+			final StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < string.length(); ++i) {
+				sb.append((i % 2 == 0) ? string.charAt(i) : '*');
+			}
+			return sb.toString();
+		}
+	}
+
 	public static void init(final Context context)
 	{
 		setDebugMode(PreferencesHelper.readFromFileDebugMode(context));
