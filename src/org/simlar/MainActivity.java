@@ -126,6 +126,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	{
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
+		updateMenu(Version.hasDebugTag(), R.id.action_delete_account, R.string.main_activity_menu_delete_account, menu);
 		return true;
 	}
 
