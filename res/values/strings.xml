@@ -125,9 +125,9 @@
     <string name="create_account_activity_waiting_for_sms_manual">Manual input of registration code</string>
     <string name="create_account_activity_confirm">Confirm Account Creation</string>
     <string name="create_account_activity_first_login">First Login</string>
-    <string name="create_account_activity_error_wrong_telephonenumber">It is not possible to create a simlar account with the number you provided.\n\nPlease try another number and contact the mailinglist</string>
-    <string name="create_account_activity_error_sms">We are currently not able to send a SMS to the number you provided.\n\nPlease try another number and contact the mailinglist</string>
-    <string name="create_account_activity_error_sms_timeout">Waiting for sms timed out.\n\nPlease put in the registration code manually</string>
+    <string name="create_account_activity_error_wrong_telephonenumber">It\'s not possible to create a Simlar account with the number you provided:\n%1$s\n\nTry another number and contact the mailing list</string>
+    <string name="create_account_activity_error_sms">We are currently not able to send a SMS to the number you provided:\n%1$s\n\nTry another number or contact the mailing list</string>
+    <string name="create_account_activity_error_sms_timeout">Waiting for SMS timed out.\n\nIs this really your number?\n%1$s\n\n Or put in the registration code manually</string>
     <string name="create_account_activity_error_not_possible">Account creation is not possible at moment.\n\nPlease try again later</string>
     <string name="create_account_activity_error_registration_code">The registration code is invalid.\n\nPlease try again</string>
     <string name="create_account_activity_error_too_many_confirms">Account confirmation is not possible anymore.\n\nPlease start again</string>
