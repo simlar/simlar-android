@@ -207,7 +207,7 @@
                     style="@style/buttonWhiteWithIcon"
                     android:layout_width="match_parent"
                     android:layout_marginTop="10dp"
-                    android:drawableLeft="@drawable/call_activity_verify_sas_cancel"
+                    android:drawableLeft="@drawable/button_cancel"
                     android:onClick="wrongAuthenticationToken"
                     android:text="@string/call_activity_button_authentication_token_wrong" />
             </LinearLayout>
