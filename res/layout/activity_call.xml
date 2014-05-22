@@ -198,7 +198,7 @@
                     android:id="@+id/buttonAuthenticationTokenVerify"
                     style="@style/buttonWhiteWithIcon"
                     android:layout_width="match_parent"
-                    android:drawableLeft="@drawable/call_activity_verify_sas_ok"
+                    android:drawableLeft="@drawable/button_ok"
                     android:onClick="verifyAuthenticationToken"
                     android:text="@string/call_activity_button_authentication_token_verify" />
 
