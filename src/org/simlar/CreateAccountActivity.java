@@ -48,7 +48,7 @@ import android.widget.TextView;
 public final class CreateAccountActivity extends Activity
 {
 	static final String LOGTAG = CreateAccountActivity.class.getSimpleName();
-	public static final String INTENT_EXTRA_NUMBER = "telephonNumber";
+	public static final String INTENT_EXTRA_NUMBER = "CreateAccountActivityTelephonNumber";
 	private static final int SECONDS_TO_WAIT_FOR_SMS = 90;
 	private static final String SIMLAR_SMS_SOURCE = "+4922199999930";
 
