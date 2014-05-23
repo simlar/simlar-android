@@ -156,8 +156,13 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/linearLayoutConnectionQuality"
+            android:layout_marginLeft="@dimen/activity_call_inner_side_margin"
+            android:layout_marginRight="@dimen/activity_call_inner_side_margin"
             android:background="@drawable/border_round_corners"
             android:orientation="vertical"
+            android:padding="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
             tools:ignore="UselessParent" >
 
             <TextView
@@ -167,7 +172,8 @@
                 android:layout_gravity="center"
                 android:gravity="center_horizontal"
                 android:text="@string/call_activity_please_verify_authentication_token"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/textViewAuthenticationToken"
@@ -181,38 +187,29 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="12dp"
                 android:baselineAligned="false"
                 android:gravity="center_horizontal"
-                android:padding="8dp" >
+                android:orientation="vertical"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp" >
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical" >
+                <Button
+                    android:id="@+id/buttonAuthenticationTokenVerify"
+                    style="@style/buttonWhiteWithIcon"
+                    android:layout_width="match_parent"
+                    android:drawableLeft="@drawable/call_activity_verify_sas_ok"
+                    android:onClick="verifyAuthenticationToken"
+                    android:text="@string/call_activity_button_authentication_token_verify" />
 
-                    <Button
-                        android:id="@+id/buttonAuthenticationTokenWrong"
-                        style="@style/buttonWhite"
-                        android:onClick="wrongAuthenticationToken"
-                        android:text="@string/call_activity_button_authentication_token_wrong" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical" >
-
-                    <Button
-                        android:id="@+id/buttonAuthenticationTokenVerify"
-                        style="@style/buttonWhite"
-                        android:onClick="verifyAuthenticationToken"
-                        android:text="@string/call_activity_button_authentication_token_verify" />
-                </LinearLayout>
+                <Button
+                    android:id="@+id/buttonAuthenticationTokenWrong"
+                    style="@style/buttonWhiteWithIcon"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:drawableLeft="@drawable/call_activity_verify_sas_cancel"
+                    android:onClick="wrongAuthenticationToken"
+                    android:text="@string/call_activity_button_authentication_token_wrong" />
             </LinearLayout>
         </LinearLayout>
 
@@ -224,6 +221,8 @@
             android:layout_alignParentRight="true"
             android:layout_below="@+id/linearLayoutConnectionQuality"
             android:layout_centerInParent="false"
+            android:layout_marginLeft="@dimen/activity_call_inner_side_margin"
+            android:layout_marginRight="@dimen/activity_call_inner_side_margin"
             android:background="@drawable/border_round_corners"
             android:orientation="vertical"
             android:paddingBottom="20dp"
@@ -261,8 +260,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
                 android:layout_centerHorizontal="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginLeft="@dimen/activity_call_inner_side_margin"
+                android:layout_marginRight="@dimen/activity_call_inner_side_margin"
                 android:background="@drawable/border_round_corners"
                 android:baselineAligned="false"
                 android:gravity="center_vertical|center_horizontal"

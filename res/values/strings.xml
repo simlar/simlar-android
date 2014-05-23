@@ -75,9 +75,9 @@
     <string name="call_activity_not_encrypted">WARNING: This call is NOT encrypted!</string>
     <string name="call_activity_button_accept_unencrypted_call">Quiet alarm</string>
     <string name="call_activity_no_authentication_token">&#8230;</string>
-    <string name="call_activity_please_verify_authentication_token">Please compare code with your calling partner:</string>
-    <string name="call_activity_button_authentication_token_verify">Right</string>
-    <string name="call_activity_button_authentication_token_wrong">Wrong</string>
+    <string name="call_activity_please_verify_authentication_token">Please compare the following code with the person you are speaking to:</string>
+    <string name="call_activity_button_authentication_token_verify">safe connection</string>
+    <string name="call_activity_button_authentication_token_wrong">I do not care</string>
     <string name="call_activity_connecting_to_server">Connecting to simlar-server&#8230;</string>
     <string name="call_activity_connecting_to_server_timed_out">Connecting to simlar-server timed out</string>
     <string name="call_activity_outgoing_connecting">Connecting to client&#8230;</string>
@@ -121,7 +121,7 @@
 
     <string name="create_account_activity_title">Creating Account</string>
     <string name="create_account_activity_request">Request Account Creation</string>
-    <string name="create_account_activity_sms_text">Simlar Registration Code:</string>
+    <string name="create_account_activity_sms_text">Simlar Registration Code: *CODE*. You only need this code and sms if the simlar app asks for it at first usage</string>
     <string name="create_account_activity_waiting_for_sms">Waiting for SMS</string>
     <string name="create_account_activity_waiting_for_sms_manual">Manual input of registration code</string>
     <string name="create_account_activity_confirm">Confirm Account Creation</string>
