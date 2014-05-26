@@ -139,4 +139,10 @@
 
     <string name="ringing_activity_title">is calling you</string>
     <string name="ringing_activity_phone_is_ringing">your phone is ringing</string>
+
+    <string name="activity_agree_title">Create Account</string>
+    <string name="agree_activity_welcome">Welcome to Simlar!</string>
+    <string name="agree_activity_accept">I agree</string>
+    <string name="agree_activity_cancel">Cancel</string>
+    <string name="agree_activity_privacy_statement_and_terms_and_conditions">Do you agree to the\n<a href="http://www.simlar.org/datenschutzerklaerung/">privacy statement</a>\n and\n<a href="http://www.simlar.org/nutzungsbedingungen/">terms of use</a>?</string>
 </resources>
