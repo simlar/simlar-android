@@ -109,7 +109,7 @@
     <string name="verify_number_activity_put_in_your_number">Put in your telephone number:</string>
     <string name="verify_number_activity_button_cancel">Cancel</string>
     <string name="verify_number_activity_button_register">Create Account</string>
-    <string name="verify_number_activity_checkbox_privacy_statement_and_terms_and_conditions">I have read and accept the <a href="http://www.simlar.org/datenschutzerklaerung/">privacy statement</a> and the <a href="http://www.simlar.org/nutzungsbedingungen/">terms of use</a>.</string>
+    <string name="verify_number_activity_sms_announcement">In order to register Simlar will send an SMS to this number during the next step.</string>
     <string name="verify_number_activity_alert_wrong_number_text">The number you have entered does not seem to be a telephone number. Please check it again</string>
 
     <string name="volumes_control_activity_title">VolumesControlActivity</string>
