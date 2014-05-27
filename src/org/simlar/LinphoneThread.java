@@ -53,7 +53,7 @@ public final class LinphoneThread
 {
 	static final String LOGTAG = LinphoneThread.class.getSimpleName();
 
-	final private LinphoneThreadImpl mImpl;
+	private final LinphoneThreadImpl mImpl;
 
 	private static final class LinphoneThreadImpl extends Thread implements LinphoneCoreListener
 	{
