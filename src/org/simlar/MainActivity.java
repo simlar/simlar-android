@@ -126,7 +126,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	{
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
-		updateMenu(Version.hasDebugTag(), R.id.action_delete_account, R.string.main_activity_menu_delete_account, menu);
+		updateMenu(Version.hasDebugTag(), R.id.action_delete_account, R.string.main_activity_menu_delete_account, Menu.NONE, menu);
 		return true;
 	}
 
@@ -155,11 +155,11 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 		}
 	}
 
-	private static void updateMenu(final boolean visible, final int itemResource, final int stringResource, final Menu menu)
+	private static void updateMenu(final boolean visible, final int itemResource, final int stringResource, final int order, final Menu menu)
 	{
 		if (visible) {
 			if (menu.findItem(itemResource) == null) {
-				menu.add(Menu.NONE, itemResource, Menu.NONE, stringResource);
+				menu.add(Menu.NONE, itemResource, order, stringResource);
 			}
 		} else {
 			while (menu.findItem(itemResource) != null) {
@@ -175,7 +175,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 				? R.string.main_activity_menu_disable_debug_mode
 				: R.string.main_activity_menu_enable_debug_mode);
 
-		updateMenu(Lg.isDebugModeEnabled(), R.id.action_upload_logfile, R.string.main_activity_menu_upload_logfile, menu);
+		updateMenu(Lg.isDebugModeEnabled(), R.id.action_upload_logfile, R.string.main_activity_menu_upload_logfile, 3, menu);
 		return true;
 	}
 
