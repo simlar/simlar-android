@@ -102,7 +102,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp" >
+            android:layout_marginBottom="5dp" >
 
             <LinearLayout
                 android:id="@+id/linearLayoutConnectionQualityText"
@@ -160,7 +160,7 @@
             android:layout_marginRight="@dimen/activity_call_inner_side_margin"
             android:background="@drawable/border_round_corners"
             android:orientation="vertical"
-            android:padding="10dp"
+            android:padding="9dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             tools:ignore="UselessParent" >
@@ -170,29 +170,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="4dp"
                 android:gravity="center_horizontal"
                 android:text="@string/call_activity_please_verify_authentication_token"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="13sp" />
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/textViewAuthenticationToken"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="5dp"
                 android:text="@string/call_activity_no_authentication_token"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:textSize="24sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="8dp"
                 android:baselineAligned="false"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:paddingLeft="30dp"
-                android:paddingRight="30dp" >
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp" >
 
                 <Button
                     android:id="@+id/buttonAuthenticationTokenVerify"
@@ -206,7 +207,8 @@
                     android:id="@+id/buttonAuthenticationTokenWrong"
                     style="@style/buttonWhiteWithIcon"
                     android:layout_width="match_parent"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="8dp"
                     android:drawableLeft="@drawable/button_cancel"
                     android:onClick="wrongAuthenticationToken"
                     android:text="@string/call_activity_button_authentication_token_wrong" />
@@ -241,7 +243,6 @@
             <Button
                 android:id="@+id/buttonAcceptUnencryptedCall"
                 style="@style/buttonWhite"
-                android:layout_marginTop="10dp"
                 android:onClick="acceptUnencryptedCall"
                 android:padding="8dp"
                 android:text="@string/call_activity_button_accept_unencrypted_call" />
