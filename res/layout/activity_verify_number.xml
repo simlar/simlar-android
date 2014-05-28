@@ -118,19 +118,10 @@
                 android:id="@+id/buttonRegister"
                 style="@style/buttonWhiteWithIcon"
                 android:layout_width="match_parent"
+                android:layout_marginBottom="20dp"
                 android:drawableLeft="@drawable/button_ok"
                 android:onClick="createAccount"
                 android:text="@string/verify_number_activity_button_register" />
-
-            <Button
-                android:id="@+id/buttonCancel"
-                style="@style/buttonWhiteWithIcon"
-                android:layout_width="match_parent"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="10dp"
-                android:drawableLeft="@drawable/button_cancel"
-                android:onClick="cancelAccountCreation"
-                android:text="@string/verify_number_activity_button_cancel" />
         </LinearLayout>
     </RelativeLayout>
 

@@ -217,10 +217,4 @@ public final class VerifyNumberActivity extends Activity
 			}
 		}
 	}
-
-	@SuppressWarnings("unused")
-	public void cancelAccountCreation(final View view)
-	{
-		finish();
-	}
 }
