@@ -126,7 +126,7 @@
     <string name="create_account_activity_waiting_for_sms_manual">Manual input of registration code</string>
     <string name="create_account_activity_confirm">Confirm Account Creation</string>
     <string name="create_account_activity_first_login">First Login</string>
-    <string name="create_account_activity_wrong_telephonenumber">It is not possible to create a simlar account with the number you provided.\n\nPlease try another number and contact the mailinglist</string>
+    <string name="create_account_activity_error_wrong_telephonenumber">It is not possible to create a simlar account with the number you provided.\n\nPlease try another number and contact the mailinglist</string>
     <string name="create_account_activity_error_sms">We are currently not able to send a SMS to the number you provided.\n\nPlease try another number and contact the mailinglist</string>
     <string name="create_account_activity_error_sms_timeout">Waiting for sms timed out.\n\nPlease put in the registration code manually</string>
     <string name="create_account_activity_error_not_possible">Account creation is not possible at moment.\n\nPlease try again later</string>

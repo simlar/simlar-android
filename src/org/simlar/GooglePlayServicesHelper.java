@@ -43,6 +43,10 @@ public final class GooglePlayServicesHelper
 
 	public static void registerGcmIfNeeded(final Context context)
 	{
+		// Why do we check the version code here?
+		// See: http://developer.android.com/google/gcm/adv.html
+		//        Keeping the Registration State in Sync
+
 		final int versionCode = Version.getVersionCode(context);
 		if (versionCode < 1) {
 			Log.e(LOGTAG, "unable to read simlar version code");
