@@ -35,7 +35,6 @@ import android.os.Handler;
 import android.telephony.SmsMessage;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -81,7 +80,7 @@ public final class CreateAccountActivity extends Activity
 		@Override
 		void onSimlarStatusChanged()
 		{
-			Log.i(LOGTAG, "onTestRegistrationSuccess");
+			Lg.i(LOGTAG, "onTestRegistrationSuccess");
 			final SimlarStatus status = mService.getSimlarStatus();
 
 			if (status.isConnectedToSipServer() || status.isRegistrationAtSipServerFailed()) {
@@ -93,7 +92,7 @@ public final class CreateAccountActivity extends Activity
 		@Override
 		void onServiceFinishes()
 		{
-			Log.i(LOGTAG, "onServiceFinishes");
+			Lg.i(LOGTAG, "onServiceFinishes");
 			mProgressFirstLogIn.setVisibility(View.INVISIBLE);
 
 			if (mTestRegistrationSuccess) {
@@ -164,7 +163,7 @@ public final class CreateAccountActivity extends Activity
 	@Override
 	protected void onCreate(final Bundle savedInstanceState)
 	{
-		Log.i(LOGTAG, "onCreate");
+		Lg.i(LOGTAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_account);
 
@@ -228,7 +227,7 @@ public final class CreateAccountActivity extends Activity
 	@Override
 	protected void onResume()
 	{
-		Log.i(LOGTAG, "onResume ");
+		Lg.i(LOGTAG, "onResume");
 		super.onResume();
 
 		if (mProgressFirstLogIn.getVisibility() == View.VISIBLE) {
@@ -239,7 +238,7 @@ public final class CreateAccountActivity extends Activity
 	@Override
 	protected void onPause()
 	{
-		Log.i(LOGTAG, "onPause");
+		Lg.i(LOGTAG, "onPause");
 
 		if (mProgressFirstLogIn.getVisibility() == View.VISIBLE) {
 			mCommunicator.unregister(this);
@@ -250,7 +249,7 @@ public final class CreateAccountActivity extends Activity
 	@Override
 	protected void onDestroy()
 	{
-		Log.i(LOGTAG, "onPause");
+		Lg.i(LOGTAG, "onPause");
 		unregisterReceiver(mSmsReceiver);
 		super.onDestroy();
 	}
@@ -258,13 +257,13 @@ public final class CreateAccountActivity extends Activity
 	private void createAccountRequest(final String telephoneNumber)
 	{
 		if (Util.isNullOrEmpty(telephoneNumber)) {
-			Log.e(LOGTAG, "createAccountRequest without telephoneNumber");
+			Lg.e(LOGTAG, "createAccountRequest without telephoneNumber");
 			return;
 		}
 
-		Log.i(LOGTAG, "createAccountRequest: " + telephoneNumber);
+		Lg.i(LOGTAG, "createAccountRequest: ", new Lg.Anonymizer(telephoneNumber));
 		final String smsText = getString(R.string.create_account_activity_sms_text) + " ";
-		final String expextedSimlarId = SimlarNumber.createSimlarId(telephoneNumber);
+		final String expectedSimlarId = SimlarNumber.createSimlarId(telephoneNumber);
 
 		new AsyncTask<String, Void, CreateAccount.RequestResult>() {
 
@@ -284,9 +283,10 @@ public final class CreateAccountActivity extends Activity
 					return;
 				}
 
-				if (!result.getSimlarId().equals(expextedSimlarId)) {
-					Log.e(LOGTAG, "received simlarId not equal to expected: telephonenumber=" + telephoneNumber + " expected=" + expextedSimlarId
-							+ " actual=" + result.getSimlarId());
+				if (!result.getSimlarId().equals(expectedSimlarId)) {
+					Lg.e(LOGTAG, "received simlarId not equal to expected: telephonenumber=", new Lg.Anonymizer(telephoneNumber),
+							" expected=", new Lg.Anonymizer(expectedSimlarId),
+							" actual=", new Lg.Anonymizer(result.getSimlarId()));
 				}
 
 				PreferencesHelper.init(result.getSimlarId(), result.getPassword());
@@ -308,7 +308,7 @@ public final class CreateAccountActivity extends Activity
 
 	void waitForSms()
 	{
-		Log.i(LOGTAG, "waiting for sms");
+		Lg.i(LOGTAG, "waiting for sms");
 		mProgressWaitingForSMS.setVisibility(View.VISIBLE);
 
 		mSecondsToStillWaitForSms = SECONDS_TO_WAIT_FOR_SMS;
@@ -334,7 +334,7 @@ public final class CreateAccountActivity extends Activity
 
 	private void onWaitingForSmsTimedOut()
 	{
-		Log.w(LOGTAG, "waiting for sms timedout");
+		Lg.w(LOGTAG, "waiting for sms timed out");
 
 		mProgressWaitingForSMS.setVisibility(View.INVISIBLE);
 		mWaitingForSmsText.setText(R.string.create_account_activity_waiting_for_sms);
@@ -349,16 +349,16 @@ public final class CreateAccountActivity extends Activity
 		}
 
 		if (!sender.equals(SIMLAR_SMS_SOURCE)) {
-			Log.i(LOGTAG, "ignoring SMS from: " + sender);
+			Lg.i(LOGTAG, "ignoring sms from: ", new Lg.Anonymizer(sender));
 			return;
 		}
 
-		Log.i(LOGTAG, "received sms: sender=" + sender + " message=" + message);
+		Lg.i(LOGTAG, "received sms: sender=", sender, " message=", message);
 
 		final String regex = getString(R.string.create_account_activity_sms_text).replace("*CODE*", "(\\d{6})");
 		final Matcher matcher = Pattern.compile(regex).matcher(message);
 		if (!matcher.find()) {
-			Log.e(LOGTAG, "unable to parse sms message: " + message);
+			Lg.e(LOGTAG, "unable to parse sms message: ", message);
 			return;
 		}
 		final String registrationCode = matcher.group(1);
@@ -372,13 +372,13 @@ public final class CreateAccountActivity extends Activity
 
 	void confirmRegistrationCode(final String registrationCode)
 	{
-		Log.i(LOGTAG, "confirmRegistrationCode: " + registrationCode);
+		Lg.i(LOGTAG, "confirmRegistrationCode: ", registrationCode);
 
 		mProgressConfirm.setVisibility(View.VISIBLE);
 
 		final String simlarId = PreferencesHelper.getMySimlarIdOrEmptyString();
 		if (Util.isNullOrEmpty(registrationCode) || Util.isNullOrEmpty(simlarId)) {
-			Log.e(LOGTAG, "failed to parse confirm result");
+			Lg.e(LOGTAG, "Error: registrationCode or simlarId empty");
 			onError(R.string.create_account_activity_error_not_possible);
 			return;
 		}
@@ -397,13 +397,14 @@ public final class CreateAccountActivity extends Activity
 				mProgressConfirm.setVisibility(View.INVISIBLE);
 
 				if (result.isError()) {
-					Log.e(LOGTAG, "failed to parse confirm result");
+					Lg.e(LOGTAG, "failed to parse confirm result");
 					onError(result.getErrorMessage());
 					return;
 				}
 
 				if (!result.getSimlarId().equals(simlarId)) {
-					Log.e(LOGTAG, "confirm response received simlarId=" + result.getSimlarId() + " not equal to requested simlarId=" + simlarId);
+					Lg.e(LOGTAG, "confirm response received simlarId=", new Lg.Anonymizer(result.getSimlarId()),
+							" not equal to requested simlarId=", new Lg.Anonymizer(simlarId));
 					onError(R.string.create_account_activity_error_not_possible);
 					return;
 				}

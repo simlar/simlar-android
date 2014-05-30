@@ -32,7 +32,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
-import android.util.Log;
 
 public final class ContactsProvider
 {
@@ -126,11 +125,11 @@ public final class ContactsProvider
 
 		private void loadContacts(final Context context)
 		{
-			Log.i(LOGTAG, "start creating contacts cache");
+			Lg.i(LOGTAG, "start creating contacts cache");
 			final String mySimlarId = PreferencesHelper.getMySimlarIdOrEmptyString();
 
 			if (Util.isNullOrEmpty(mySimlarId)) {
-				Log.e(LOGTAG, "loadContacts: no simlarId for myself, probably PreferencesHelpre not inited => aborting");
+				Lg.e(LOGTAG, "loadContacts: no simlarId for myself, probably PreferencesHelpre not inited => aborting");
 				mState = State.ERROR;
 				mContacts.clear();
 				notifyContactListeners();
@@ -175,7 +174,7 @@ public final class ContactsProvider
 		void onContactsLoadedFromTelephoneBook(final Map<String, ContactData> contacts)
 		{
 			if (contacts == null) {
-				Log.e(LOGTAG, "onContactsLoadedFromTelephoneBook called with empty contacts");
+				Lg.e(LOGTAG, "onContactsLoadedFromTelephoneBook called with empty contacts");
 				mState = State.ERROR;
 				mContacts.clear();
 				notifyContactListeners();
@@ -245,13 +244,13 @@ public final class ContactsProvider
 				}
 			}
 
-			Log.i(LOGTAG, "found " + registeredContacts.size() + " registered contacts");
+			Lg.i(LOGTAG, "found ", Integer.valueOf(registeredContacts.size()), " registered contacts");
 			return registeredContacts;
 		}
 
 		static Map<String, ContactData> loadContactsFromTelephonebook(final Context context, final String mySimlarId)
 		{
-			Log.i(LOGTAG, "loading contacts from telephone book");
+			Lg.i(LOGTAG, "loading contacts from telephone book");
 			final Map<String, ContactData> result = new HashMap<String, ContactData>();
 
 			final String[] projection = new String[] {
@@ -300,7 +299,7 @@ public final class ContactsProvider
 			}
 			contacts.close();
 
-			Log.i(LOGTAG, "found " + result.size() + " contacts from telephone book");
+			Lg.i(LOGTAG, "found ", Integer.valueOf(result.size()), " contacts from telephone book");
 
 			return result;
 		}
@@ -311,16 +310,16 @@ public final class ContactsProvider
 				return false;
 			}
 
-			Log.i(LOGTAG, "contact status received for " + statusMap.size() + " contacts");
+			Lg.i(LOGTAG, "contact status received for ", Integer.valueOf(statusMap.size()), " contacts");
 
 			for (final Map.Entry<String, ContactStatus> entry : statusMap.entrySet()) {
 				if (!mContacts.containsKey(entry.getKey())) {
-					Log.e(LOGTAG, "received contact status " + entry.getValue() + " for unknown contact " + entry.getKey());
+					Lg.e(LOGTAG, "received contact status ", entry.getValue(), " for unknown contact ", entry.getKey());
 					continue;
 				}
 
 				if (!entry.getValue().isValid()) {
-					Log.e(LOGTAG, "received invalid contact status " + entry.getValue() + " for contact " + entry.getKey());
+					Lg.e(LOGTAG, "received invalid contact status ", entry.getValue(), " for contact ", entry.getKey());
 					continue;
 				}
 
@@ -333,7 +332,7 @@ public final class ContactsProvider
 		void preLoadContacts(final Context context)
 		{
 			if (context == null) {
-				Log.e(LOGTAG, "no context");
+				Lg.e(LOGTAG, "no context");
 				return;
 			}
 
@@ -347,7 +346,7 @@ public final class ContactsProvider
 				loadContacts(context);
 				break;
 			default:
-				Log.e(LOGTAG, "unknown state=" + mState);
+				Lg.e(LOGTAG, "unknown state=", mState);
 				break;
 			}
 		}
@@ -355,18 +354,18 @@ public final class ContactsProvider
 		void getContacts(final Context context, final FullContactsListener listener)
 		{
 			if (context == null) {
-				Log.e(LOGTAG, "no context");
+				Lg.e(LOGTAG, "no context");
 				return;
 			}
 
 			if (listener == null) {
-				Log.e(LOGTAG, "no listener");
+				Lg.e(LOGTAG, "no listener");
 				return;
 			}
 
 			switch (mState) {
 			case INITIALIZED:
-				Log.i(LOGTAG, "using cached data for all contacts");
+				Lg.i(LOGTAG, "using cached data for all contacts");
 				listener.onGetContacts(createFullContactDataSet());
 				break;
 			case PARSING_PHONES_ADDRESS_BOOK:
@@ -379,7 +378,7 @@ public final class ContactsProvider
 				loadContacts(context);
 				break;
 			default:
-				Log.e(LOGTAG, "unknown state=" + mState);
+				Lg.e(LOGTAG, "unknown state=", mState);
 				break;
 			}
 		}
@@ -387,17 +386,17 @@ public final class ContactsProvider
 		void getNameAndPhotoId(final String simlarId, final Context context, final ContactListener listener)
 		{
 			if (context == null) {
-				Log.e(LOGTAG, "no context");
+				Lg.e(LOGTAG, "no context");
 				return;
 			}
 
 			if (listener == null) {
-				Log.e(LOGTAG, "no listener");
+				Lg.e(LOGTAG, "no listener");
 				return;
 			}
 
 			if (Util.isNullOrEmpty(simlarId)) {
-				Log.i(LOGTAG, "empty simlarId");
+				Lg.i(LOGTAG, "empty simlarId");
 				listener.onGetNameAndPhotoId(null, null);
 				return;
 			}
@@ -405,7 +404,7 @@ public final class ContactsProvider
 			switch (mState) {
 			case INITIALIZED:
 			case REQUESTING_CONTACTS_STATUS_FROM_SERVER:
-				Log.i(LOGTAG, "using cached data for name and photoId");
+				Lg.i(LOGTAG, "using cached data for name and photoId");
 				final ContactData cd = createContactData(simlarId);
 				listener.onGetNameAndPhotoId(cd.name, cd.photoId);
 				break;
@@ -418,7 +417,7 @@ public final class ContactsProvider
 				loadContacts(context);
 				break;
 			default:
-				Log.e(LOGTAG, "unknown state=" + mState);
+				Lg.e(LOGTAG, "unknown state=", mState);
 				break;
 			}
 		}
@@ -436,7 +435,7 @@ public final class ContactsProvider
 			case ERROR:
 				break;
 			default:
-				Log.e(LOGTAG, "unknown state=" + mState);
+				Lg.e(LOGTAG, "unknown state=", mState);
 				break;
 			}
 

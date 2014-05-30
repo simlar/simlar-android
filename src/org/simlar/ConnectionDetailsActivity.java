@@ -22,7 +22,6 @@ package org.simlar;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.widget.TextView;
 
@@ -89,7 +88,7 @@ public final class ConnectionDetailsActivity extends Activity
 	@Override
 	protected void onResume()
 	{
-		Log.i(LOGTAG, "onResume ");
+		Lg.i(LOGTAG, "onResume");
 		super.onResume();
 		mCommunicator.register(this, CallActivity.class);
 	}
@@ -97,7 +96,7 @@ public final class ConnectionDetailsActivity extends Activity
 	@Override
 	protected void onPause()
 	{
-		Log.i(LOGTAG, "onPause");
+		Lg.i(LOGTAG, "onPause");
 		mCommunicator.unregister(this);
 		super.onPause();
 	}
@@ -105,14 +104,14 @@ public final class ConnectionDetailsActivity extends Activity
 	public void onCallConnectionDetailsChanged()
 	{
 		if (mCommunicator.getService() == null) {
-			Log.e(LOGTAG, "ERROR: onSimlarCallStateChanged but not bound to service");
+			Lg.e(LOGTAG, "ERROR: onSimlarCallStateChanged but not bound to service");
 			return;
 		}
 
 		final CallConnectionDetails callConnectionDetails = mCommunicator.getService().getCallConnectionDetails();
 
 		if (callConnectionDetails == null) {
-			Log.e(LOGTAG, "ERROR: onCallConnectionDetailsChanged but callConnectionDetails null or empty");
+			Lg.e(LOGTAG, "ERROR: onCallConnectionDetailsChanged but callConnectionDetails null or empty");
 			return;
 		}
 
