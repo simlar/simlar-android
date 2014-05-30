@@ -3,12 +3,11 @@ package org.simlar;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.util.Log;
 
 public final class Version
 {
 	private static final String LOGTAG = CreateAccount.class.getSimpleName();
-	private static final String SPECIAL_TAG = "";
+	private static final String DEBUG_TAG = "";
 
 	public static String getVersionName(final Context context)
 	{
@@ -17,12 +16,17 @@ public final class Version
 			return "";
 		}
 
-		return SPECIAL_TAG + versionName;
+		return DEBUG_TAG + versionName;
 	}
 
 	public static int getVersionCode(final Context context)
 	{
 		return getPackageInfo(context).versionCode;
+	}
+
+	public static boolean hasDebugTag()
+	{
+		return !Util.isNullOrEmpty(DEBUG_TAG);
 	}
 
 	private static PackageInfo createEmptyPackageInfo()
@@ -42,7 +46,7 @@ public final class Version
 		try {
 			return context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
 		} catch (final NameNotFoundException e) {
-			Log.e(LOGTAG, "NameNotFoundException in Version.getPackageInfo: " + e.getMessage(), e);
+			Lg.ex(LOGTAG, e, "NameNotFoundException in Version.getPackageInfo:");
 			return createEmptyPackageInfo();
 		}
 	}

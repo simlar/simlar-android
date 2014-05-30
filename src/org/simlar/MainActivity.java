@@ -33,7 +33,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -47,7 +46,9 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	@Override
 	protected void onCreate(final Bundle savedInstanceState)
 	{
-		Log.i(LOGTAG, "onCreate " + savedInstanceState);
+		Lg.init(this);
+
+		Lg.i(LOGTAG, "onCreate ", savedInstanceState);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
@@ -63,7 +64,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 		}
 		mContactList.setListAdapter(mAdapter);
 
-		Log.i(LOGTAG, "onCreate ended");
+		Lg.i(LOGTAG, "onCreate ended");
 	}
 
 	void loadContacts()
@@ -95,7 +96,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	@Override
 	protected void onResume()
 	{
-		Log.i(LOGTAG, "onResume ");
+		Lg.i(LOGTAG, "onResume");
 		super.onResume();
 
 		if (!GooglePlayServicesHelper.checkPlayServices(this)) {
@@ -103,7 +104,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 		}
 
 		if (!PreferencesHelper.readPrefencesFromFile(this)) {
-			Log.i(LOGTAG, "as we are not registered yet => creating account");
+			Lg.i(LOGTAG, "as we are not registered yet => creating account");
 			startAccountCreation();
 			return;
 		}
@@ -116,7 +117,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	@Override
 	protected void onPause()
 	{
-		Log.i(LOGTAG, "onPause");
+		Lg.i(LOGTAG, "onPause");
 		super.onPause();
 	}
 
@@ -139,8 +140,8 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 		case R.id.action_upload_logfile:
 			uploadLogFile();
 			return true;
-		case R.id.action_enable_linphone_debug_mode:
-			enableLinphoneDebugMode();
+		case R.id.action_enable_debug_mode:
+			toggleDebugMode();
 			return true;
 		case R.id.action_delete_account:
 			deleteAccountAndQuit();
@@ -153,9 +154,18 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 		}
 	}
 
+	@Override
+	public boolean onPrepareOptionsMenu(final Menu menu)
+	{
+		menu.findItem(R.id.action_enable_debug_mode).setTitle(Lg.isDebugModeEnabled()
+				? R.string.main_activity_menu_disable_debug_mode
+				: R.string.main_activity_menu_enable_debug_mode);
+		return true;
+	}
+
 	private void reloadContacts()
 	{
-		Log.i(LOGTAG, "reloadContacts");
+		Lg.i(LOGTAG, "reloadContacts");
 		ContactsProvider.clearCache();
 		mAdapter.clear();
 		loadContacts();
@@ -179,8 +189,13 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 				.create().show();
 	}
 
-	private void enableLinphoneDebugMode()
+	private void toggleDebugMode()
 	{
+		if (Lg.isDebugModeEnabled()) {
+			Lg.saveDebugMode(this, false);
+			return;
+		}
+
 		(new AlertDialog.Builder(this))
 				.setTitle(R.string.main_activity_alert_enable_linphone_debug_mode_title)
 				.setMessage(R.string.main_activity_alert_enable_linphone_debug_mode_text)
@@ -189,7 +204,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 					@Override
 					public void onClick(DialogInterface dialog, int id)
 					{
-						LinphoneHandler.enableDebugMode(true);
+						Lg.saveDebugMode(MainActivity.this, true);
 					}
 				})
 				.create().show();
