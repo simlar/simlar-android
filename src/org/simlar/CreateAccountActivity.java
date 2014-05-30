@@ -263,7 +263,7 @@ public final class CreateAccountActivity extends Activity
 
 		Lg.i(LOGTAG, "createAccountRequest: ", new Lg.Anonymizer(telephoneNumber));
 		final String smsText = getString(R.string.create_account_activity_sms_text) + " ";
-		final String expextedSimlarId = SimlarNumber.createSimlarId(telephoneNumber);
+		final String expectedSimlarId = SimlarNumber.createSimlarId(telephoneNumber);
 
 		new AsyncTask<String, Void, CreateAccount.RequestResult>() {
 
@@ -283,9 +283,9 @@ public final class CreateAccountActivity extends Activity
 					return;
 				}
 
-				if (!result.getSimlarId().equals(expextedSimlarId)) {
+				if (!result.getSimlarId().equals(expectedSimlarId)) {
 					Lg.e(LOGTAG, "received simlarId not equal to expected: telephonenumber=", new Lg.Anonymizer(telephoneNumber),
-							" expected=", new Lg.Anonymizer(expextedSimlarId),
+							" expected=", new Lg.Anonymizer(expectedSimlarId),
 							" actual=", new Lg.Anonymizer(result.getSimlarId()));
 				}
 
