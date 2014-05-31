@@ -24,7 +24,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
@@ -67,7 +66,7 @@ public final class RingingActivity extends Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
-		Log.i(LOGTAG, "onCreate ");
+		Lg.i(LOGTAG, "onCreate");
 		super.onCreate(savedInstanceState);
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -94,7 +93,7 @@ public final class RingingActivity extends Activity
 	@Override
 	protected void onResume()
 	{
-		Log.i(LOGTAG, "onResume ");
+		Lg.i(LOGTAG, "onResume");
 		super.onResume();
 		mCommunicator.register(this, RingingActivity.class);
 	}
@@ -102,7 +101,7 @@ public final class RingingActivity extends Activity
 	@Override
 	protected void onPause()
 	{
-		Log.i(LOGTAG, "onPause");
+		Lg.i(LOGTAG, "onPause");
 		mCommunicator.unregister(this);
 		super.onPause();
 	}
@@ -116,17 +115,17 @@ public final class RingingActivity extends Activity
 	void onSimlarCallStateChanged()
 	{
 		if (mCommunicator.getService() == null) {
-			Log.e(LOGTAG, "ERROR: onSimlarCallStateChanged but not bound to service");
+			Lg.e(LOGTAG, "ERROR: onSimlarCallStateChanged but not bound to service");
 			return;
 		}
 
 		final SimlarCallState simlarCallState = mCommunicator.getService().getSimlarCallState();
 		if (simlarCallState == null || simlarCallState.isEmpty()) {
-			Log.e(LOGTAG, "ERROR: onSimlarCallStateChanged simlarCallState null or empty");
+			Lg.e(LOGTAG, "ERROR: onSimlarCallStateChanged simlarCallState null or empty");
 			return;
 		}
 
-		Log.i(LOGTAG, "onSimlarCallStateChanged " + simlarCallState);
+		Lg.i(LOGTAG, "onSimlarCallStateChanged ", simlarCallState);
 
 		if (simlarCallState.isEndedCall()) {
 			finish();

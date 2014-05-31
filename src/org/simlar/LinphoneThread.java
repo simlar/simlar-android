@@ -47,7 +47,6 @@ import org.simlar.Volumes.MicrophoneStatus;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 public final class LinphoneThread
 {
@@ -81,12 +80,12 @@ public final class LinphoneThread
 		@Override
 		public void run()
 		{
-			Log.i(LOGTAG, "run");
+			Lg.i(LOGTAG, "run");
 			Looper.prepare();
 
 			mLinphoneThreadHandler = new Handler();
 
-			Log.i(LOGTAG, "handler initialized");
+			Lg.i(LOGTAG, "handler initialized");
 
 			mMainThreadHandler.post(new Runnable() {
 				@Override
@@ -102,7 +101,7 @@ public final class LinphoneThread
 		public void finish()
 		{
 			if (mLinphoneThreadHandler == null) {
-				Log.e(LOGTAG, "handler is null, probably thread not started");
+				Lg.e(LOGTAG, "handler is null, probably thread not started");
 				return;
 			}
 
@@ -129,7 +128,7 @@ public final class LinphoneThread
 		public void register(final String mySimlarId, final String password)
 		{
 			if (mLinphoneThreadHandler == null) {
-				Log.e(LOGTAG, "handler is null, probably thread not started");
+				Lg.e(LOGTAG, "handler is null, probably thread not started");
 				return;
 			}
 
@@ -158,14 +157,14 @@ public final class LinphoneThread
 					}
 				});
 			} catch (final NotInitedException e) {
-				Log.e(LOGTAG, "PreferencesHelper.NotInitedException", e);
+				Lg.ex(LOGTAG, e, "PreferencesHelper.NotInitedException");
 			}
 		}
 
 		void linphoneIterator()
 		{
 			if (mLinphoneHandler == null) {
-				Log.e(LOGTAG, "linphoneIterator no handler => quitting");
+				Lg.e(LOGTAG, "linphoneIterator no handler => quitting");
 				return;
 			}
 
@@ -183,7 +182,7 @@ public final class LinphoneThread
 		public void unregister()
 		{
 			if (mLinphoneThreadHandler == null) {
-				Log.e(LOGTAG, "handler is null, probably thread not started");
+				Lg.e(LOGTAG, "handler is null, probably thread not started");
 				return;
 			}
 
@@ -199,12 +198,12 @@ public final class LinphoneThread
 		public void refreshRegisters()
 		{
 			if (mLinphoneThreadHandler == null) {
-				Log.e(LOGTAG, "handler is null, probably thread not started");
+				Lg.e(LOGTAG, "handler is null, probably thread not started");
 				return;
 			}
 
 			if (mLinphoneHandler == null) {
-				Log.e(LOGTAG, "refreshRegisters no handler => quitting");
+				Lg.e(LOGTAG, "refreshRegisters no handler => quitting");
 				return;
 			}
 
@@ -220,17 +219,17 @@ public final class LinphoneThread
 		public void call(final String number)
 		{
 			if (mLinphoneThreadHandler == null) {
-				Log.e(LOGTAG, "handler is null, probably thread not started");
+				Lg.e(LOGTAG, "handler is null, probably thread not started");
 				return;
 			}
 
 			if (Util.isNullOrEmpty(number)) {
-				Log.e(LOGTAG, "call: empty number aborting");
+				Lg.e(LOGTAG, "call: empty number aborting");
 				return;
 			}
 
 			if (mRegistrationState != RegistrationState.RegistrationOk) {
-				Log.i(LOGTAG, "call: not registered");
+				Lg.i(LOGTAG, "call: not registered");
 				return;
 			}
 
@@ -246,7 +245,7 @@ public final class LinphoneThread
 		public void pickUp()
 		{
 			if (mLinphoneThreadHandler == null) {
-				Log.e(LOGTAG, "handler is null, probably thread not started");
+				Lg.e(LOGTAG, "handler is null, probably thread not started");
 				return;
 			}
 
@@ -262,7 +261,7 @@ public final class LinphoneThread
 		public void terminateAllCalls()
 		{
 			if (mLinphoneThreadHandler == null) {
-				Log.e(LOGTAG, "handler is null, probably thread not started");
+				Lg.e(LOGTAG, "handler is null, probably thread not started");
 				return;
 			}
 
@@ -278,7 +277,7 @@ public final class LinphoneThread
 		public void verifyAuthenticationToken(final String token, final boolean verified)
 		{
 			if (mLinphoneThreadHandler == null) {
-				Log.e(LOGTAG, "handler is null, probably thread not started");
+				Lg.e(LOGTAG, "handler is null, probably thread not started");
 				return;
 			}
 
@@ -294,12 +293,12 @@ public final class LinphoneThread
 		public void setVolumes(final Volumes volumes)
 		{
 			if (mLinphoneThreadHandler == null) {
-				Log.e(LOGTAG, "handler is null, probably thread not started");
+				Lg.e(LOGTAG, "handler is null, probably thread not started");
 				return;
 			}
 
 			if (volumes == null) {
-				Log.e(LOGTAG, "volumes is null");
+				Lg.e(LOGTAG, "volumes is null");
 				return;
 			}
 
@@ -314,7 +313,45 @@ public final class LinphoneThread
 			});
 		}
 
-		private static String getNumber(final LinphoneCall call)
+		private static class CallLogger extends Lg.Anonymizer
+		{
+			private final LinphoneCall mCall;
+
+			public CallLogger(final LinphoneCall call)
+			{
+				super(call);
+				mCall = call;
+			}
+
+			@Override
+			public String toString()
+			{
+				return anonymize(getNumber(mCall));
+			}
+		}
+
+		private static class FriendLogger extends Lg.Anonymizer
+		{
+			private final LinphoneFriend mFriend;
+
+			public FriendLogger(final LinphoneFriend friend)
+			{
+				super(friend);
+				mFriend = friend;
+			}
+
+			@Override
+			public String toString()
+			{
+				if (mFriend == null || mFriend.getAddress() == null) {
+					return "";
+				}
+
+				return anonymize(mFriend.getAddress().getUserName());
+			}
+		}
+
+		static String getNumber(final LinphoneCall call)
 		{
 			if (call == null || call.getRemoteAddress() == null) {
 				return "";
@@ -326,13 +363,13 @@ public final class LinphoneThread
 		private static boolean isOnline(final PresenceModel presenceModel)
 		{
 			if (presenceModel == null) {
-				Log.w(LOGTAG, "isOnline: no PresenceModel");
+				Lg.w(LOGTAG, "isOnline: no PresenceModel");
 				return false;
 			}
 
 			final PresenceService service = presenceModel.getNthService(0);
 			if (service == null) {
-				Log.w(LOGTAG, "isOnline: no PresenceService");
+				Lg.w(LOGTAG, "isOnline: no PresenceService");
 				return false;
 			}
 
@@ -344,14 +381,14 @@ public final class LinphoneThread
 			//Log.i(LOGTAG, "NbServices" + presenceModel.getNbServices());
 
 			for (long i = presenceModel.getNbServices() - 1; i >= 0; --i) {
-				Log.w(LOGTAG, "Service " + presenceModel.getNthService(i).getBasicStatus());
+				Lg.w(LOGTAG, "Service ", presenceModel.getNthService(i).getBasicStatus());
 				if (presenceModel.getNthService(i).getContact() == null) {
 					status = presenceModel.getNthService(i).getBasicStatus();
-					Log.w(LOGTAG, "using serivce no " + i);
+					Lg.w(LOGTAG, "using serivce no ", Long.valueOf(i));
 				}
 			}
 
-			Log.i(LOGTAG, "PresenceBasicStatus: " + status);
+			Lg.i(LOGTAG, "PresenceBasicStatus: ", status);
 
 			return status.equals(PresenceBasicStatus.Open);
 		}
@@ -372,17 +409,18 @@ public final class LinphoneThread
 				public void run()
 				{
 					if (Util.equals(mRegistrationState, state)) {
-						Log.d(LOGTAG, "registration state for " + identity + " not changed : " + state + " " + message);
+						Lg.d(LOGTAG, "registration state for ", new Lg.Anonymizer(identity), " not changed: state=", state, " message=", message);
 						return;
 					}
 
 					if (RegistrationState.RegistrationOk.equals(mRegistrationState) && RegistrationState.RegistrationProgress.equals(state)
 							&& message.equals("Refresh registration")) {
-						Log.i(LOGTAG, "registration state for " + identity + " ignored: " + state + "as it is because of refreshRegisters");
+						Lg.i(LOGTAG, "registration state for ", new Lg.Anonymizer(identity), " ignored: ", state,
+								" as it is caused by refreshRegisters");
 						return;
 					}
 
-					Log.i(LOGTAG, "registration state for " + identity + " changed: " + state + " " + message);
+					Lg.i(LOGTAG, "registration state for ", new Lg.Anonymizer(identity), " changed: ", state, " ", message);
 					mRegistrationState = state;
 
 					mListener.onRegistrationStateChanged(state);
@@ -394,14 +432,14 @@ public final class LinphoneThread
 		@Override
 		public void displayStatus(final LinphoneCore lc, final String message)
 		{
-			Log.d(LOGTAG, "displayStatus message=" + message);
+			Lg.d(LOGTAG, "displayStatus message=", message);
 		}
 
 		LinphoneCall.State fixLinphoneCallState(final LinphoneCall.State callState)
 		{
 			if (LinphoneCall.State.CallReleased.equals(callState) || LinphoneCall.State.Error.equals(callState)) {
 				if (mLinphoneHandler == null || mLinphoneHandler.hasNoCurrentCalls()) {
-					Log.i(LOGTAG, "fixLinphoneCallState: " + callState + " -> " + LinphoneCall.State.CallEnd);
+					Lg.i(LOGTAG, "fixLinphoneCallState: ", callState, " -> ", LinphoneCall.State.CallEnd);
 					return LinphoneCall.State.CallEnd;
 				}
 			}
@@ -417,7 +455,7 @@ public final class LinphoneThread
 
 			final String number = getNumber(call);
 			final LinphoneCall.State fixedState = fixLinphoneCallState(state);
-			Log.i(LOGTAG, "callState changed number=" + number + " state=" + fixedState + " message=" + message);
+			Lg.i(LOGTAG, "callState changed number=", new CallLogger(call), " state=", fixedState, " message=", message);
 
 			mMainThreadHandler.post(new Runnable() {
 				@Override
@@ -431,37 +469,37 @@ public final class LinphoneThread
 		@Override
 		public void messageReceived(final LinphoneCore lc, final LinphoneChatRoom cr, final LinphoneChatMessage message)
 		{
-			Log.i(LOGTAG, "messageReceived " + message);
+			Lg.i(LOGTAG, "messageReceived ", message);
 		}
 
 		@Override
 		public void show(final LinphoneCore lc)
 		{
-			Log.i(LOGTAG, "show called");
+			Lg.i(LOGTAG, "show called");
 		}
 
 		@Override
 		public void authInfoRequested(final LinphoneCore lc, final String realm, final String username)
 		{
-			Log.w(LOGTAG, "authInfoRequested realm=" + realm + " username=" + username);
+			Lg.w(LOGTAG, "authInfoRequested realm=", realm, " username=", new Lg.Anonymizer(username));
 		}
 
 		@Override
 		public void displayMessage(final LinphoneCore lc, final String message)
 		{
-			Log.i(LOGTAG, "displayMessage message=" + message);
+			Lg.i(LOGTAG, "displayMessage message=", message);
 		}
 
 		@Override
 		public void displayWarning(final LinphoneCore lc, final String message)
 		{
-			Log.w(LOGTAG, "displayWarning message=" + message);
+			Lg.w(LOGTAG, "displayWarning message=", message);
 		}
 
 		@Override
 		public void globalState(final LinphoneCore lc, final GlobalState state, final String message)
 		{
-			Log.i(LOGTAG, "globalState state=" + state + " message=" + message);
+			Lg.i(LOGTAG, "globalState state=", state, " message=", message);
 		}
 
 		@Override
@@ -469,7 +507,7 @@ public final class LinphoneThread
 		{
 			// LinphoneFriend is mutable => use it only in the calling thread
 
-			Log.w(LOGTAG, "[" + lf.getAddress().getUserName() + "] wants to see your presence status => always accepting");
+			Lg.w(LOGTAG, "[", new FriendLogger(lf), "] wants to see your presence status => always accepting");
 		}
 
 		@Override
@@ -478,14 +516,13 @@ public final class LinphoneThread
 			// LinphoneFriend is mutable => use it only in the calling thread
 			// OnlineStatus is immutable
 
-			Log.w(LOGTAG,
-					"presence received: username=" + lf.getAddress().getUserName() + " online=" + Boolean.toString(isOnline(lf.getPresenceModel())));
+			Lg.w(LOGTAG, "presence received: username=", new FriendLogger(lf), " online=", Boolean.valueOf(isOnline(lf.getPresenceModel())));
 		}
 
 		@Override
 		public void textReceived(final LinphoneCore lc, final LinphoneChatRoom cr, final LinphoneAddress from, final String message)
 		{
-			Log.i(LOGTAG, "textReceived chatroom=" + cr + " from=" + from + " message=" + message);
+			Lg.i(LOGTAG, "textReceived chatroom=", cr, " from=", new Lg.Anonymizer(from), " message=", message);
 		}
 
 		@Override
@@ -508,10 +545,12 @@ public final class LinphoneThread
 			// set quality to unusable if up or download bandwidth is zero
 			final float quality = (upload > 0 && download > 0) ? call.getCurrentQuality() : 0;
 
-			Log.i(LOGTAG, "callStatsUpdated: number=" + getNumber(call) + " quality=" + quality + " duration=" + duration
-					+ " codec=" + codec + " iceState=" + iceState
-					+ " upload=" + upload + " download=" + download + " jitter=" + jitter + " loss=" + packetLoss
-					+ " latePackets=" + latePackets + " roundTripDelay=" + roundTripDelay);
+			Lg.i(LOGTAG, "callStatsUpdated: number=", new CallLogger(call), " quality=", Float.valueOf(quality),
+					" duration=", Integer.valueOf(duration),
+					" codec=", codec, " iceState=", iceState,
+					" upload=", Integer.valueOf(upload), " download=", Integer.valueOf(download),
+					" jitter=", Integer.valueOf(jitter), " loss=", Integer.valueOf(packetLoss),
+					" latePackets=", Long.valueOf(latePackets), " roundTripDelay=", Integer.valueOf(roundTripDelay));
 
 			mMainThreadHandler.post(new Runnable() {
 				@Override
@@ -526,7 +565,7 @@ public final class LinphoneThread
 		@Override
 		public void ecCalibrationStatus(final LinphoneCore lc, final EcCalibratorStatus status, final int delay_ms, final Object data)
 		{
-			Log.i(LOGTAG, "ecCalibrationStatus status=" + status + " delay_ms=" + delay_ms);
+			Lg.i(LOGTAG, "ecCalibrationStatus status=", status, " delay_ms=", Integer.valueOf(delay_ms));
 		}
 
 		@Override
@@ -536,11 +575,11 @@ public final class LinphoneThread
 
 			final boolean isTokenVerified = call.isAuthenticationTokenVerified();
 
-			Log.i(LOGTAG, "callEncryptionChanged number=" + getNumber(call) + " encrypted=" + encrypted + " authenticationToken="
-					+ authenticationToken);
+			Lg.i(LOGTAG, "callEncryptionChanged number=", new CallLogger(call), " encrypted=", Boolean.valueOf(encrypted),
+					" authenticationToken=", authenticationToken);
 
 			if (!encrypted) {
-				Log.e(LOGTAG, "unencrypted call: number=" + getNumber(call) + " with UserAgent " + call.getRemoteUserAgent());
+				Lg.e(LOGTAG, "unencrypted call: number=", new CallLogger(call), " with UserAgent ", call.getRemoteUserAgent());
 			}
 
 			mMainThreadHandler.post(new Runnable() {
@@ -555,43 +594,43 @@ public final class LinphoneThread
 		@Override
 		public void notifyReceived(final LinphoneCore lc, final LinphoneCall call, final LinphoneAddress from, final byte[] event)
 		{
-			Log.w(LOGTAG, "notifyReceived number=" + getNumber(call) + " from=" + from);
+			Lg.w(LOGTAG, "notifyReceived number=", new CallLogger(call), " from=", from);
 		}
 
 		@Override
 		public void dtmfReceived(final LinphoneCore lc, final LinphoneCall call, final int dtmf)
 		{
-			Log.w(LOGTAG, "dtmfReceived number=" + getNumber(call) + " dtmf=" + dtmf);
+			Lg.w(LOGTAG, "dtmfReceived number=", new CallLogger(call), " dtmf=", Integer.valueOf(dtmf));
 		}
 
 		@Override
 		public void transferState(final LinphoneCore lc, final LinphoneCall call, final LinphoneCall.State state)
 		{
-			Log.w(LOGTAG, "transferState number=" + getNumber(call) + " State=" + state);
+			Lg.w(LOGTAG, "transferState number=", new CallLogger(call), " State=", state);
 		}
 
 		@Override
 		public void infoReceived(final LinphoneCore lc, final LinphoneCall call, final LinphoneInfoMessage info)
 		{
-			Log.w(LOGTAG, "infoReceived number=" + getNumber(call) + " LinphoneInfoMessage=" + info.getContent().getDataAsString());
+			Lg.w(LOGTAG, "infoReceived number=", new CallLogger(call), " LinphoneInfoMessage=", info.getContent().getDataAsString());
 		}
 
 		@Override
 		public void subscriptionStateChanged(final LinphoneCore lc, final LinphoneEvent ev, final SubscriptionState state)
 		{
-			Log.w(LOGTAG, "subscriptionStateChanged ev=" + ev.getEventName() + " SubscriptionState=" + state);
+			Lg.w(LOGTAG, "subscriptionStateChanged ev=", ev.getEventName(), " SubscriptionState=", state);
 		}
 
 		@Override
 		public void notifyReceived(final LinphoneCore lc, final LinphoneEvent ev, final String eventName, final LinphoneContent content)
 		{
-			Log.w(LOGTAG, "notifyReceived ev=" + ev.getEventName() + " eventName=" + eventName + " content=" + content);
+			Lg.w(LOGTAG, "notifyReceived ev=", ev.getEventName(), " eventName=", eventName, " content=", content);
 		}
 
 		@Override
 		public void publishStateChanged(final LinphoneCore lc, final LinphoneEvent ev, final PublishState state)
 		{
-			Log.w(LOGTAG, "publishStateChanged ev=" + ev.getEventName() + " state=" + state);
+			Lg.w(LOGTAG, "publishStateChanged ev=", ev.getEventName(), " state=", state);
 		}
 	}
 
@@ -656,7 +695,7 @@ public final class LinphoneThread
 	public void setMicrophoneStatus(final MicrophoneStatus microphoneStatus)
 	{
 		if (mImpl.mVolumes == null) {
-			Log.e(LOGTAG, "volumes not initialized");
+			Lg.e(LOGTAG, "volumes not initialized");
 			return;
 		}
 

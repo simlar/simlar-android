@@ -29,7 +29,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.SystemClock;
 import android.provider.MediaStore;
-import android.util.Log;
 
 public final class SimlarCallState
 {
@@ -59,7 +58,7 @@ public final class SimlarCallState
 			return false;
 		}
 
-		Log.w(LOGTAG, "new CallEndReason=" + reason);
+		Lg.w(LOGTAG, "new CallEndReason=", reason);
 		mCallEndReason = reason;
 		return true;
 	}
@@ -71,11 +70,11 @@ public final class SimlarCallState
 		}
 
 		if (Util.isNullOrEmpty(simlarId) && callState != LinphoneCallState.IDLE) {
-			Log.e(LOGTAG, "ERROR updateCallStateChanged: simlarId not set state=" + callState);
+			Lg.e(LOGTAG, "ERROR updateCallStateChanged: simlarId not set state=", callState);
 		}
 
 		if (callState == LinphoneCallState.UNKONWN) {
-			Log.e(LOGTAG, "ERROR updateCallStateChanged: callState=" + callState);
+			Lg.e(LOGTAG, "ERROR updateCallStateChanged: callState=", callState);
 		}
 
 		mSimlarId = simlarId;
@@ -110,7 +109,7 @@ public final class SimlarCallState
 		}
 
 		if (Util.isNullOrEmpty(name)) {
-			Log.e(LOGTAG, "ERROR updateContactNameAndImage: name not set");
+			Lg.e(LOGTAG, "ERROR updateContactNameAndImage: name not set");
 		}
 
 		mContactName = name;
@@ -163,8 +162,8 @@ public final class SimlarCallState
 	@Override
 	public String toString()
 	{
-		return "SimlarCallState [" + (mSimlarId != null ? "mSimlarId=" + mSimlarId + ", " : "")
-				+ (mContactName != null ? "mContactName=" + mContactName + ", " : "")
+		return "SimlarCallState [" + (mSimlarId != null ? "mSimlarId=" + new Lg.Anonymizer(mSimlarId) + ", " : "")
+				+ (mContactName != null ? "mContactName=" + new Lg.Anonymizer(mContactName) + ", " : "")
 				+ (mContactPhotoId != null ? "mContactPhotoId=" + mContactPhotoId + ", " : "")
 				+ (mLinphoneCallState != null ? "mLinphoneCallState=" + mLinphoneCallState + ", " : "")
 				+ (mCallEndReason != null ? "mCallEndReason=" + mCallEndReason + ", " : "") + "mEncrypted=" + mEncrypted + ", "
@@ -191,9 +190,9 @@ public final class SimlarCallState
 		try {
 			return MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(mContactPhotoId));
 		} catch (final FileNotFoundException e) {
-			Log.e(LOGTAG, "getContactPhotoBitmap FileNotFoundException", e);
+			Lg.ex(LOGTAG, e, "getContactPhotoBitmap FileNotFoundException");
 		} catch (IOException e) {
-			Log.e(LOGTAG, "getContactPhotoBitmap IOException", e);
+			Lg.ex(LOGTAG, e, "getContactPhotoBitmap IOException");
 		}
 
 		return BitmapFactory.decodeResource(context.getResources(), defaultResourceId);
@@ -219,7 +218,7 @@ public final class SimlarCallState
 			return String.format(context.getString(mCallEndReason.getDisplayMessageId()), getContactName());
 		}
 
-		Log.w(LOGTAG, "getCallStatusDisplayMessage mLinphoneCallState=" + mLinphoneCallState);
+		Lg.w(LOGTAG, "getCallStatusDisplayMessage mLinphoneCallState=", mLinphoneCallState);
 
 		return null;
 	}

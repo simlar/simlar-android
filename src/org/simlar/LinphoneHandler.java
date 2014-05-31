@@ -35,7 +35,6 @@ import org.linphone.core.PayloadType;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
-import android.util.Log;
 
 public final class LinphoneHandler
 {
@@ -53,13 +52,13 @@ public final class LinphoneHandler
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void doDestroy()
 	{
-		Log.i(LOGTAG, "doDestroy called");
+		Lg.i(LOGTAG, "doDestroy called");
 		destroy();
 	}
 
 	public void destroy()
 	{
-		Log.i(LOGTAG, "destroy called => forcing unregister");
+		Lg.i(LOGTAG, "destroy called => forcing unregister");
 
 		if (mLinphoneCore != null) {
 			final LinphoneCore tmp = mLinphoneCore;
@@ -67,10 +66,10 @@ public final class LinphoneHandler
 			try {
 				tmp.destroy();
 			} catch (final RuntimeException e) {
-				Log.e(LOGTAG, "RuntimeException during mLinphoneCore.destroy()", e);
+				Lg.ex(LOGTAG, e, "RuntimeException during mLinphoneCore.destroy()");
 			}
 		}
-		Log.i(LOGTAG, "destroy ended");
+		Lg.i(LOGTAG, "destroy ended");
 	}
 
 	private void enableAudioCodec(final String codec, final int rate, final int channels, final boolean enable)
@@ -79,12 +78,13 @@ public final class LinphoneHandler
 		if (pt != null) {
 			try {
 				mLinphoneCore.enablePayloadType(pt, enable);
-				Log.v(LOGTAG, "AudioCodec: codec=" + codec + " rate=" + rate + " channels=" + channels + " enable=" + enable);
+				Lg.v(LOGTAG, "AudioCodec: codec=", codec, " rate=", Integer.valueOf(rate), " channels=", Integer.valueOf(channels),
+						" enable=", Boolean.valueOf(enable));
 			} catch (final LinphoneCoreException e) {
-				Log.e(LOGTAG, "LinphoneCoreException during enabling Audio Codec: " + e.getMessage(), e);
+				Lg.ex(LOGTAG, e, "LinphoneCoreException during enabling Audio Codec");
 			}
 		} else {
-			Log.w(LOGTAG, "AudioCodec: payload not found for codec=" + codec + " rate=" + rate);
+			Lg.w(LOGTAG, "AudioCodec: payload not found for codec=", codec, " rate=", Integer.valueOf(rate));
 		}
 	}
 
@@ -97,32 +97,32 @@ public final class LinphoneHandler
 			final String rootCaFile, final String zrtpSecretsCacheFile)
 	{
 		if (listener == null) {
-			Log.e(LOGTAG, "Error: initialize without listener");
+			Lg.e(LOGTAG, "Error: initialize without listener");
 			return;
 		}
 
 		if (mLinphoneCore != null) {
-			Log.e(LOGTAG, "Error: already initialized");
+			Lg.e(LOGTAG, "Error: already initialized");
 			return;
 		}
 
 		if (Util.isNullOrEmpty(linphoneInitialConfigFile)) {
-			Log.e(LOGTAG, "Error: linphoneInitialConfigFile not set");
+			Lg.e(LOGTAG, "Error: linphoneInitialConfigFile not set");
 			return;
 		}
 
 		if (Util.isNullOrEmpty(rootCaFile)) {
-			Log.e(LOGTAG, "Error: rootCaFile not set");
+			Lg.e(LOGTAG, "Error: rootCaFile not set");
 			return;
 		}
 
 		if (Util.isNullOrEmpty(zrtpSecretsCacheFile)) {
-			Log.e(LOGTAG, "Error: zrtpSecretsCacheFile not set");
+			Lg.e(LOGTAG, "Error: zrtpSecretsCacheFile not set");
 			return;
 		}
 
 		try {
-			Log.i(LOGTAG, "initialize linphone");
+			Lg.i(LOGTAG, "initialize linphone");
 
 			enableDebugMode(false);
 
@@ -142,7 +142,7 @@ public final class LinphoneHandler
 			transports.tcp = 0;
 			transports.tls = (int) (Math.random() * (0xFFFF - 1024)) + 1024;
 			mLinphoneCore.setSignalingTransportPorts(transports);
-			Log.i(LOGTAG, "using random port: " + transports.tls);
+			Lg.i(LOGTAG, "using random port: ", Integer.valueOf(transports.tls));
 
 			// set audio port range
 			mLinphoneCore.setAudioPortRange(6000, 8000);
@@ -182,13 +182,13 @@ public final class LinphoneHandler
 
 			// set number of threads for MediaStreamer
 			final int cpuCount = Runtime.getRuntime().availableProcessors();
-			Log.i(LOGTAG, "Threads for MediaStreamer: " + cpuCount);
+			Lg.i(LOGTAG, "Threads for MediaStreamer: ", Integer.valueOf(cpuCount));
 			mLinphoneCore.setCpuCount(cpuCount);
 
 			// make sure we only handle one call
 			mLinphoneCore.setMaxCalls(1);
 		} catch (final LinphoneCoreException e) {
-			Log.e(LOGTAG, "LinphoneCoreException during initialize: " + e.getMessage(), e);
+			Lg.ex(LOGTAG, e, "LinphoneCoreException during initialize");
 		}
 	}
 
@@ -200,33 +200,33 @@ public final class LinphoneHandler
 	public void refreshRegisters()
 	{
 		if (!isInitialized()) {
-			Log.i(LOGTAG, "refreshRegisters called but linphoneCore not initialized");
+			Lg.i(LOGTAG, "refreshRegisters called but linphoneCore not initialized");
 			return;
 		}
 
-		Log.i(LOGTAG, "refreshRegisters");
+		Lg.i(LOGTAG, "refreshRegisters");
 		mLinphoneCore.refreshRegisters();
 	}
 
 	public void setCredentials(final String mySimlarId, final String password)
 	{
 		if (mLinphoneCore == null) {
-			Log.e(LOGTAG, "setCredentials called with: mLinphoneCore == null");
+			Lg.e(LOGTAG, "setCredentials called with: mLinphoneCore == null");
 			return;
 		}
 
 		if (Util.isNullOrEmpty(mySimlarId)) {
-			Log.e(LOGTAG, "setCredentials called with empty mySimlarId");
+			Lg.e(LOGTAG, "setCredentials called with empty mySimlarId");
 			return;
 		}
 
 		if (Util.isNullOrEmpty(password)) {
-			Log.e(LOGTAG, "setCredentials called with empty password");
+			Lg.e(LOGTAG, "setCredentials called with empty password");
 			return;
 		}
 
 		try {
-			Log.i(LOGTAG, "registering: " + mySimlarId);
+			Lg.i(LOGTAG, "registering: ", new Lg.Anonymizer(mySimlarId));
 
 			mLinphoneCore.clearAuthInfos();
 			mLinphoneCore.addAuthInfo(LinphoneCoreFactory.instance().createAuthInfo(mySimlarId, password, DOMAIN, DOMAIN));
@@ -240,20 +240,20 @@ public final class LinphoneHandler
 			mLinphoneCore.addProxyConfig(proxyCfg);
 			mLinphoneCore.setDefaultProxyConfig(proxyCfg);
 		} catch (final LinphoneCoreException e) {
-			Log.e(LOGTAG, "LinphoneCoreException during setCredentials: " + e.getMessage(), e);
+			Lg.ex(LOGTAG, e, "LinphoneCoreException during setCredentials");
 		}
 	}
 
 	public void unregister()
 	{
-		Log.i(LOGTAG, "unregister triggered");
+		Lg.i(LOGTAG, "unregister triggered");
 
 		final LinphoneProxyConfig proxyConfig = mLinphoneCore.getDefaultProxyConfig();
 		proxyConfig.edit();
 		try {
 			proxyConfig.enableRegister(false);
 		} catch (final LinphoneCoreException e) {
-			Log.e(LOGTAG, "LinphoneCoreException during unregister: " + e.getMessage(), e);
+			Lg.ex(LOGTAG, e, "LinphoneCoreException during unregister");
 		}
 		proxyConfig.done();
 	}
@@ -261,24 +261,24 @@ public final class LinphoneHandler
 	public void call(final String number)
 	{
 		if (Util.isNullOrEmpty(number)) {
-			Log.e(LOGTAG, "call: empty number aborting");
+			Lg.e(LOGTAG, "call: empty number aborting");
 			return;
 		}
 
-		Log.i(LOGTAG, "calling " + number);
+		Lg.i(LOGTAG, "calling ", new Lg.Anonymizer(number));
 		try {
 			final LinphoneCall call = mLinphoneCore.invite("sip:" + number + "@" + DOMAIN);
 			if (call == null) {
-				Log.i(LOGTAG, "Could not place call to: " + number);
-				Log.i(LOGTAG, "Aborting");
+				Lg.i(LOGTAG, "Could not place call to: ", new Lg.Anonymizer(number));
+				Lg.i(LOGTAG, "Aborting");
 				return;
 			}
 		} catch (final LinphoneCoreException e) {
-			Log.e(LOGTAG, "LinphoneCoreException during invite: " + e.getMessage(), e);
+			Lg.ex(LOGTAG, e, "LinphoneCoreException during invite");
 			return;
 		}
 
-		Log.i(LOGTAG, "Call to " + number + " is in progress...");
+		Lg.i(LOGTAG, "Call to ", new Lg.Anonymizer(number), " is in progress...");
 	}
 
 	private LinphoneCall getCurrentCall()
@@ -296,33 +296,33 @@ public final class LinphoneHandler
 			return;
 		}
 
-		Log.i(LOGTAG, "Picking up call: " + currentCall.getRemoteAddress().asStringUriOnly());
+		Lg.i(LOGTAG, "Picking up call: ", new Lg.Anonymizer(currentCall.getRemoteAddress().asStringUriOnly()));
 		final LinphoneCallParams params = mLinphoneCore.createDefaultCallParameters();
 		try {
 			mLinphoneCore.acceptCallWithParams(currentCall, params);
 		} catch (final LinphoneCoreException e) {
-			Log.e(LOGTAG, "LinphoneCoreException during acceptCallWithParams: " + e.getMessage(), e);
+			Lg.ex(LOGTAG, e, "LinphoneCoreException during acceptCallWithParams");
 		}
 	}
 
 	public void terminateAllCalls()
 	{
-		Log.i(LOGTAG, "terminating all calls");
+		Lg.i(LOGTAG, "terminating all calls");
 		mLinphoneCore.terminateAllCalls();
 	}
 
 	public void verifyAuthenticationToken(final String token, final boolean verified)
 	{
 		if (Util.isNullOrEmpty(token)) {
-			Log.e(LOGTAG, "ERROR in verifyAuthenticationToken: empty token");
+			Lg.e(LOGTAG, "ERROR in verifyAuthenticationToken: empty token");
 			return;
 		}
 
 		final LinphoneCall call = mLinphoneCore.getCurrentCall();
 
 		if (!token.equals(call.getAuthenticationToken())) {
-			Log.e(LOGTAG, "ERROR in verifyAuthenticationToken: token(" + token +
-					") does not match current calls token(" + call.getAuthenticationToken() + ")");
+			Lg.e(LOGTAG, "ERROR in verifyAuthenticationToken: token(", token,
+					") does not match token of current call(", call.getAuthenticationToken(), ")");
 			return;
 		}
 
@@ -340,12 +340,12 @@ public final class LinphoneHandler
 	public void setVolumes(final Volumes volumes)
 	{
 		if (mLinphoneCore == null) {
-			Log.e(LOGTAG, "setVolumes: mLinphoneCore is null => aborting");
+			Lg.e(LOGTAG, "setVolumes: mLinphoneCore is null => aborting");
 			return;
 		}
 
 		if (volumes == null) {
-			Log.e(LOGTAG, "setVolumes: volumes is null => aborting");
+			Lg.e(LOGTAG, "setVolumes: volumes is null => aborting");
 			return;
 		}
 
@@ -357,23 +357,23 @@ public final class LinphoneHandler
 
 		setEchoLimiter(volumes.getEchoLimiter());
 
-		Log.i(LOGTAG, "volumes set " + volumes);
+		Lg.i(LOGTAG, "volumes set ", volumes);
 	}
 
 	private void setEchoLimiter(final boolean enable)
 	{
 		final LinphoneCall currentCall = getCurrentCall();
 		if (currentCall == null) {
-			Log.w(LOGTAG, "EchoLimiter no current call");
+			Lg.w(LOGTAG, "EchoLimiter no current call");
 			return;
 		}
 
 		if (currentCall.isEchoLimiterEnabled() == enable) {
-			Log.i(LOGTAG, "EchoLimiter already: " + Boolean.toString(enable));
+			Lg.i(LOGTAG, "EchoLimiter already: ", Boolean.toString(enable));
 			return;
 		}
 
-		Log.i(LOGTAG, "set EchoLimiter: " + Boolean.toString(enable));
+		Lg.i(LOGTAG, "set EchoLimiter: ", Boolean.toString(enable));
 		currentCall.enableEchoLimiter(enable);
 	}
 

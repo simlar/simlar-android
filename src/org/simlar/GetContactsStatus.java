@@ -31,7 +31,6 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Xml;
 
 public final class GetContactsStatus
@@ -42,7 +41,7 @@ public final class GetContactsStatus
 
 	public static Map<String, ContactStatus> httpPostGetContactsStatus(final Set<String> contacts)
 	{
-		Log.i(LOGTAG, "httpPostGetContactsStatus requested");
+		Lg.i(LOGTAG, "httpPostGetContactsStatus requested");
 
 		try {
 			final Map<String, String> parameters = new HashMap<String, String>();
@@ -60,21 +59,21 @@ public final class GetContactsStatus
 			try {
 				parsedResult = parseXml(result);
 			} catch (final XmlPullParserException e) {
-				Log.e(LOGTAG, "parsing xml failed: " + e.getMessage(), e);
+				Lg.ex(LOGTAG, e, "parsing xml failed");
 			} catch (final IOException e) {
-				Log.e(LOGTAG, "IOException: " + e.getMessage(), e);
+				Lg.ex(LOGTAG, e, "IOException: ");
 			}
 
 			try {
 				result.close();
 			} catch (final IOException e) {
-				Log.e(LOGTAG, "IOException: " + e.getMessage(), e);
+				Lg.ex(LOGTAG, e, "IOException: ");
 			}
 
 			return parsedResult;
 
 		} catch (final NotInitedException e) {
-			Log.e(LOGTAG, "PreferencesHelper.NotInitedException", e);
+			Lg.ex(LOGTAG, e, "PreferencesHelper.NotInitedException");
 			return null;
 		}
 	}
@@ -91,12 +90,12 @@ public final class GetContactsStatus
 				&& parser.getAttributeName(0).equalsIgnoreCase("id")
 				&& parser.getAttributeName(1).equalsIgnoreCase("message"))
 		{
-			Log.e(LOGTAG, "server returned error: " + parser.getAttributeValue(1));
+			Lg.e(LOGTAG, "server returned error: ", parser.getAttributeValue(1));
 			return null;
 		}
 
 		if (!xmlRootElement.equalsIgnoreCase("contacts")) {
-			Log.e(LOGTAG, "unable to parse response");
+			Lg.e(LOGTAG, "unable to parse response");
 			return null;
 		}
 
@@ -117,9 +116,6 @@ public final class GetContactsStatus
 			final String id = parser.getAttributeValue(0);
 			final ContactStatus status = ContactStatus.fromInt(Integer.parseInt(parser.getAttributeValue(1)));
 
-			if (status.isRegistered()) {
-				Log.i(LOGTAG, "id=" + id + " " + status);
-			}
 			parsedResult.put(id, status);
 		}
 		return parsedResult;
