@@ -22,31 +22,31 @@
 
     <item
         android:id="@+id/action_reload_contacts"
-        android:orderInCategory="100"
+        android:orderInCategory="1"
         android:showAsAction="never"
         android:title="@string/main_activity_menu_reload_contacts"/>
 
     <item
-        android:id="@+id/action_upload_logfile"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/main_activity_menu_upload_logfile"/>
-
-    <item
         android:id="@+id/action_enable_debug_mode"
-        android:orderInCategory="100"
+        android:orderInCategory="2"
         android:showAsAction="never"
         android:title="@string/main_activity_menu_enable_debug_mode"/>
 
     <item
+        android:id="@+id/action_upload_logfile"
+        android:orderInCategory="3"
+        android:showAsAction="never"
+        android:title="@string/main_activity_menu_upload_logfile"/>
+
+    <item
         android:id="@+id/action_delete_account"
-        android:orderInCategory="100"
+        android:orderInCategory="4"
         android:showAsAction="never"
         android:title="@string/main_activity_menu_delete_account"/>
 
     <item
         android:id="@+id/action_show_about"
-        android:orderInCategory="100"
+        android:orderInCategory="9"
         android:showAsAction="never"
         android:title="@string/main_activity_menu_show_about"/>
 
