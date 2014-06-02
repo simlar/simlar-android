@@ -215,7 +215,7 @@ public final class SimlarCallState
 		} else if (mLinphoneCallState.isCallOutgoingRinging()) {
 			return context.getString(R.string.call_activity_outgoing_ringing);
 		} else if (mLinphoneCallState.isPossibleCallEndedMessage()) {
-			return String.format(context.getString(mCallEndReason.getDisplayMessageId()), getContactName());
+			return context.getString(mCallEndReason.getDisplayMessageId());
 		}
 
 		Lg.w(LOGTAG, "getCallStatusDisplayMessage mLinphoneCallState=", mLinphoneCallState);

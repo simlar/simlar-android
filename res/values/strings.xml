@@ -85,11 +85,11 @@
     <string name="call_activity_outgoing_ringing">Ringing&#8230;</string>
     <string name="call_activity_encrypting">Encrypting&#8230;</string>
     <string name="call_activity_talking">Talking&#8230;</string>
-    <string name="call_activity_call_ended_because_declined">%1$s declined your call.</string>
-    <string name="call_activity_call_ended_because_user_offline">%1$s is offline.</string>
-    <string name="call_activity_call_ended_because_incompatible_media">%1$s has incompatible media type.</string>
-    <string name="call_activity_call_ended_because_user_busy">%1$s is busy.</string>
-    <string name="call_activity_call_ended_normally">%1$s call ended.</string>
+    <string name="call_activity_call_ended_because_declined">Call declined</string>
+    <string name="call_activity_call_ended_because_user_offline">Temporarily not available</string>
+    <string name="call_activity_call_ended_because_incompatible_media">Incompatible media type</string>
+    <string name="call_activity_call_ended_because_user_busy">Busy</string>
+    <string name="call_activity_call_ended_normally">Call ended</string>
 
     <string name="connection_details_activity_label_quality">Quality: </string>
     <string name="connection_details_activity_label_codec">Codec: </string>

@@ -22,6 +22,7 @@
 
 <resources>
     <color name="background_white">@android:color/white</color>
+    <color name="button_white">#E9F4F4</color>
     <color name="text_black">@android:color/black</color>
     <color name="border">#808284</color>
 
