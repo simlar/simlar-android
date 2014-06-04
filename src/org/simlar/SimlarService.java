@@ -266,7 +266,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		notificationBuilder.setLargeIcon(mSimlarCallState.getContactPhotoBitmap(this, R.drawable.app_logo));
 		notificationBuilder.setContentTitle(getString(R.string.app_name));
 		notificationBuilder.setContentText(text);
-		notificationBuilder.setTicker(text);
 		notificationBuilder.setOngoing(true);
 		notificationBuilder.setContentIntent(activity);
 		notificationBuilder.setWhen(System.currentTimeMillis());
