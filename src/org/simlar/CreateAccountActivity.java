@@ -67,6 +67,7 @@ public final class CreateAccountActivity extends Activity
 
 	private final BroadcastReceiver mSmsReceiver = new SmsReceicer();
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCreateAccount();
+	private String mTelephoneNumber = "";
 
 	private final class SimlarServiceCommunicatorCreateAccount extends SimlarServiceCommunicator
 	{
@@ -199,11 +200,12 @@ public final class CreateAccountActivity extends Activity
 		registerSmsReceiver();
 
 		if (PreferencesHelper.getCreateAccountStatus() == CreateAccountStatus.WAITING_FOR_SMS) {
+			mTelephoneNumber = PreferencesHelper.getVerifiedTelephoneNumber();
 			onWaitingForSmsTimedOut();
 		} else {
-			final String telephoneNumber = getIntent().getStringExtra(INTENT_EXTRA_NUMBER);
+			mTelephoneNumber = getIntent().getStringExtra(INTENT_EXTRA_NUMBER);
 			getIntent().removeExtra(INTENT_EXTRA_NUMBER);
-			createAccountRequest(telephoneNumber);
+			createAccountRequest();
 		}
 	}
 
@@ -254,16 +256,17 @@ public final class CreateAccountActivity extends Activity
 		super.onDestroy();
 	}
 
-	private void createAccountRequest(final String telephoneNumber)
+	private void createAccountRequest()
 	{
-		if (Util.isNullOrEmpty(telephoneNumber)) {
-			Lg.e(LOGTAG, "createAccountRequest without telephoneNumber");
+		if (Util.isNullOrEmpty(mTelephoneNumber)) {
+			Lg.e(LOGTAG, "createAccountRequest without telephone number");
 			return;
 		}
 
-		Lg.i(LOGTAG, "createAccountRequest: ", new Lg.Anonymizer(telephoneNumber));
+		Lg.i(LOGTAG, "createAccountRequest: ", new Lg.Anonymizer(mTelephoneNumber));
 		final String smsText = getString(R.string.create_account_activity_sms_text) + " ";
-		final String expectedSimlarId = SimlarNumber.createSimlarId(telephoneNumber);
+		final String expectedSimlarId = SimlarNumber.createSimlarId(mTelephoneNumber);
+		final String telephoneNumber = mTelephoneNumber;
 
 		new AsyncTask<String, Void, CreateAccount.RequestResult>() {
 
@@ -291,11 +294,11 @@ public final class CreateAccountActivity extends Activity
 
 				PreferencesHelper.init(result.getSimlarId(), result.getPassword());
 				PreferencesHelper.saveToFilePreferences(CreateAccountActivity.this);
-				PreferencesHelper.saveToFileCreateAccountStatus(CreateAccountActivity.this, CreateAccountStatus.WAITING_FOR_SMS);
+				PreferencesHelper.saveToFileCreateAccountStatus(CreateAccountActivity.this, CreateAccountStatus.WAITING_FOR_SMS, telephoneNumber);
 				waitForSms();
 			}
 
-		}.execute(telephoneNumber, smsText);
+		}.execute(mTelephoneNumber, smsText);
 	}
 
 	private void registerSmsReceiver()
@@ -426,7 +429,13 @@ public final class CreateAccountActivity extends Activity
 	void onError(final int resId)
 	{
 		mLayoutProgress.setVisibility(View.GONE);
-		mDetails.setText(resId);
+		if (resId == R.string.create_account_activity_error_wrong_telephonenumber ||
+				resId == R.string.create_account_activity_error_sms ||
+				resId == R.string.create_account_activity_error_sms_timeout) {
+			mDetails.setText(String.format(getString(resId), mTelephoneNumber));
+		} else {
+			mDetails.setText(resId);
+		}
 		mDetails.setVisibility(View.VISIBLE);
 		mButtonCancel.setVisibility(View.VISIBLE);
 

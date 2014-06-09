@@ -125,6 +125,12 @@
             android:launchMode="singleTop"
             android:theme="@style/dialogTheme" >
         </activity>
+        <activity
+            android:name="org.simlar.AgreeActivity"
+            android:label="@string/activity_agree_title"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>

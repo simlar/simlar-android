@@ -36,6 +36,7 @@ public final class PreferencesHelper
 	private static final String PREFERENCES_SIMLAR_VERSION_CODE = "simlar_version_code";
 	private static final String PREFERENCES_DEBUG_MODE = "debug_mode";
 	private static final boolean PREFERENCES_DEBUG_MODE_DEFAULT = Version.hasDebugTag();
+	private static final String PREFERENCES_VERIFIED_TELEPHONE_NUMBER = "verified_telephone_number";
 
 	private static String mMySimlarId = null;
 	private static String mPassword = null;
@@ -43,6 +44,7 @@ public final class PreferencesHelper
 	private static CreateAccountStatus mCreateAccountStatus = CreateAccountStatus.NONE;
 	private static String mGcmRegistrationId = null;
 	private static int mSimlarVersionCode = -1;
+	private static String mVerifiedTelephoneNumber = null;
 
 	public static void init(final String mySimlarId, final String password)
 	{
@@ -115,6 +117,11 @@ public final class PreferencesHelper
 		return mCreateAccountStatus;
 	}
 
+	public static String getVerifiedTelephoneNumber()
+	{
+		return mVerifiedTelephoneNumber;
+	}
+
 	public static String getGcmRegistrationId()
 	{
 		return mGcmRegistrationId;
@@ -135,6 +142,7 @@ public final class PreferencesHelper
 		mCreateAccountStatus = CreateAccountStatus.fromInt(settings.getInt(PREFERENCES_CREATE_ACCOUNT_STATUS, 0));
 		mGcmRegistrationId = settings.getString(PREFERENCES_GCM_REGRISTRATION_ID, null);
 		mSimlarVersionCode = settings.getInt(PREFERENCES_SIMLAR_VERSION_CODE, -1);
+		mVerifiedTelephoneNumber = settings.getString(PREFERENCES_VERIFIED_TELEPHONE_NUMBER, null);
 
 		if (Util.isNullOrEmpty(mMySimlarId)) {
 			return false;
@@ -170,10 +178,17 @@ public final class PreferencesHelper
 
 	public static void saveToFileCreateAccountStatus(final Context context, final CreateAccountStatus status)
 	{
+		saveToFileCreateAccountStatus(context, status, null);
+	}
+
+	public static void saveToFileCreateAccountStatus(final Context context, final CreateAccountStatus status, final String verifiedTelephoneNumber)
+	{
 		mCreateAccountStatus = status;
+		mVerifiedTelephoneNumber = verifiedTelephoneNumber;
 		final SharedPreferences settings = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
 		final SharedPreferences.Editor editor = settings.edit();
 		editor.putInt(PREFERENCES_CREATE_ACCOUNT_STATUS, status.toInt());
+		editor.putString(PREFERENCES_VERIFIED_TELEPHONE_NUMBER, verifiedTelephoneNumber);
 		editor.commit();
 	}
 

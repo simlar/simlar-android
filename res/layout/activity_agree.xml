@@ -1,5 +1,5 @@
 <!--
-  Copyright (C) 2013 The Simlar Authors.
+  Copyright (C) 2013 - 2014 The Simlar Authors.
 
   This file is part of Simlar. (http://www.simlar.org)
 
@@ -27,10 +27,10 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".VerifyNumberActivity" >
+    tools:context=".AgreeActivity" >
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
@@ -43,70 +43,26 @@
         android:paddingRight="20dp" >
 
         <TextView
-            android:id="@+id/textViewCheckOrVerifyYourNumber"
+            android:id="@+id/textViewWelcome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="center_horizontal"
-            android:text="@string/verify_number_activity_put_in_your_number"
-            android:textSize="20sp" />
-
-        <LinearLayout
-            android:id="@+id/linearLayoutCompletePhoneNumber"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/textViewCheckOrVerifyYourNumber"
-            android:layout_below="@+id/textViewCheckOrVerifyYourNumber"
-            android:layout_marginTop="33dp" >
-
-            <TextView
-                android:id="@+id/textViewPlus"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="+"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                tools:ignore="HardcodedText" />
-
-            <Spinner
-                android:id="@+id/spinnerCountryCodes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <EditText
-                android:id="@+id/editTextPhoneNumber"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="5"
-                android:ems="8"
-                android:inputType="phone" >
-
-                <requestFocus />
-            </EditText>
-        </LinearLayout>
+            android:text="@string/agree_activity_welcome"
+            android:textSize="25sp" />
 
         <TextView
-            android:id="@+id/textViewSmsAnnouncement"
+            android:id="@+id/textViewTermsAndConditions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/linearLayoutCompletePhoneNumber"
-            android:layout_alignRight="@+id/linearLayoutCompletePhoneNumber"
-            android:layout_below="@+id/linearLayoutCompletePhoneNumber"
             android:layout_marginTop="20dp"
             android:gravity="center_horizontal"
-            android:paddingLeft="2dp"
-            android:paddingRight="4dp"
-            android:text="@string/verify_number_activity_sms_announcement"
+            android:text="@string/agree_activity_privacy_statement_and_terms_and_conditions"
             android:textSize="20sp" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/linearLayoutCompletePhoneNumber"
-            android:layout_alignRight="@+id/linearLayoutCompletePhoneNumber"
-            android:layout_below="@+id/textViewSmsAnnouncement"
             android:layout_marginTop="33dp"
             android:baselineAligned="false"
             android:gravity="center_horizontal"
@@ -118,11 +74,20 @@
                 android:id="@+id/buttonRegister"
                 style="@style/buttonWhiteWithIcon"
                 android:layout_width="match_parent"
-                android:layout_marginBottom="20dp"
-                android:drawableLeft="@drawable/button_icon_ok"
+                android:drawableLeft="@drawable/button_ok"
                 android:onClick="createAccount"
-                android:text="@string/verify_number_activity_button_register" />
+                android:text="@string/agree_activity_accept" />
+
+            <Button
+                android:id="@+id/buttonCancel"
+                style="@style/buttonWhiteWithIcon"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="15dp"
+                android:drawableLeft="@drawable/button_cancel"
+                android:onClick="cancelAccountCreation"
+                android:text="@string/agree_activity_cancel" />
         </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
 
 </RelativeLayout>
