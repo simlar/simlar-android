@@ -7,7 +7,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 public final class Version
 {
 	private static final String LOGTAG = CreateAccount.class.getSimpleName();
-	private static final String DEBUG_TAG = "angry-smurf268:debug: ";
+	private static final String DEBUG_TAG = "angry-smurf268: ";
 
 	private Version()
 	{
