@@ -28,9 +28,11 @@ import java.util.Set;
 import org.simlar.ContactsProvider.FullContactData;
 import org.simlar.ContactsProvider.FullContactsListener;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
@@ -71,6 +73,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	{
 		mContactList.setEmptyText(getString(R.string.main_activity_contactlist_loading_contacts));
 		ContactsProvider.getContacts(this, new FullContactsListener() {
+			@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 			@Override
 			public void onGetContacts(Set<FullContactData> contacts)
 			{
