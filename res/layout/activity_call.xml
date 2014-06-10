@@ -44,7 +44,8 @@
         android:gravity="bottom"
         android:paddingLeft="10dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/calling_title_text_white" />
+        android:textColor="@color/calling_title_text_white"
+        android:textIsSelectable="true" />
 
     <LinearLayout
         android:id="@+id/linearLayoutCallStatus"
