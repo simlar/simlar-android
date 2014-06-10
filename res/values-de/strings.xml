@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  Copyright (C) 2013 The Simlar Authors.
+
+  This file is part of Simlar. (http://www.simlar.org)
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-->
+
+<resources>
+
+    <string name="app_homepage">www.simlar.org</string>
+    <string name="app_name">Simlar</string>
+    <string name="button_continue">Weiter</string>
+    <string name="button_cancel">Abbrechen</string>
+
+    <string name="main_activity_contactlist_loading_contacts">Kontakte werden geladen</string>
+    <string name="main_activity_contactlist_error_loading_contacts">Kontakte konnten nicht geladen werden. Möglicherweise funktioniert dein Internet nicht.</string>
+    <string name="main_activity_contactlist_no_contacts_found">Keiner deiner Kontakte hat Simlar installiert. Empfiehl Simlar deinen Freunden!</string>
+    <string name="main_activity_menu_reload_contacts">Kontakte neu laden</string>
+    <string name="main_activity_menu_upload_logfile">Fehler melden</string>
+    <string name="main_activity_menu_enable_debug_mode">Debug-Modus einschalten</string>
+    <string name="main_activity_menu_disable_debug_mode">Debug-Modus ausschalten</string>
+    <string name="main_activity_menu_delete_account">Einstellungen löschen</string>
+    <string name="main_activity_menu_show_about">Über Simlar</string>
+    <string name="main_activity_alert_upload_log_file_title">Fehlerbericht senden?</string>
+    <string name="main_activity_alert_upload_log_file_text">Vielen Dank, dass du einen Fehlerbericht senden willst.\n\nEs wird automatisch eine Logdatei auf den Simlar-Server übertragen.\n\nAnschließend hast du die Gelegenheit, den Simlar-Entwicklern eine E-Mail mit einer Fehlerbeschreibung zu senden.\n\nWillst du fortfahren?</string>
+    <string name="main_activity_alert_uploading_log_file_failed_title">Fehler</string>
+    <string name="main_activity_alert_uploading_log_file_failed_text">Erstellung der Logdatei fehlgeschlagen => Senden abgebrochen</string>
+    <string name="main_activity_alert_enable_linphone_debug_mode_title">Debug-Modus wirklich aktivieren?</string>
+    <string name="main_activity_alert_enable_linphone_debug_mode_text">Der Debug-Modus erweitert die Ausgaben innerhalb der Logdatei erheblich. Aktiviere ihn nur, wenn du von einem Simlar-Entwickler dazu aufgefordert wurdest oder wirklich weißt, was du tust.</string>
+
+    <string name="upload_log_file_send_email_to_developer">Entwickler per E-Mail kontaktieren</string>
+    <string name="upload_log_file_progress">Bitte warten. Die Logdatei wird hochgeladen&#8230;</string>
+
+    <string name="google_play_services_helper_alert_unavailable_title">Google Play Services nicht verfügbar</string>
+    <string name="google_play_services_helper_alert_unavailable_text">Installiere die Google Play Services, damit du Simlar benutzen kannst.</string>
+    <string name="google_play_services_helper_alert_unavailable_button_close_simlar">Simlar beenden</string>
+
+    <string name="linphone_call_state_notification_initializing">Vorbereitung</string>
+    <string name="linphone_call_state_notification_calling">rufe %1$s an</string>
+    <string name="linphone_call_state_notification_receiving_call">%1$s ruft an</string>
+    <string name="linphone_call_state_notification_talking">spreche mit %1$s</string>
+    <string name="linphone_call_state_notification_ended">Anruf mit %1$s beendet</string>
+    <string name="linphone_call_state_notification_paused">Anruf mit %1$s pausiert</string>
+    <string name="linphone_call_state_notification_resuming">Anruf mit %1$s zurückholen</string>
+
+    <string name="network_quality_good">sehr gut</string>
+    <string name="network_quality_average">gut</string>
+    <string name="network_quality_poor">schlecht</string>
+    <string name="network_quality_very_poor">sehr schlecht</string>
+    <string name="network_quality_unusable">nicht nutzbar</string>
+    <string name="network_quality_unknown">unbekannt</string>
+
+    <string name="call_activity_label_quality">Netzwerkqualität: </string>
+    <string name="call_activity_sound_settings">Ton-Einstellungen</string>
+    <string name="call_activity_microphone_mute">Mikrofon aus</string>
+    <string name="call_activity_microphone_on">Mikrofon an</string>
+    <string name="call_activity_microphone_disabled">Mikrofon deaktiviert</string>
+    <string name="call_activity_loudspeaker_on">Lautsprecher aktiviert</string>
+    <string name="call_activity_loudspeaker_off">Lautsprecher deaktiviert</string>
+    <string name="call_activity_terminate_call">Anruf beenden</string>
+    <string name="call_activity_not_encrypted">ACHTUNG: Dieses Gespräch ist nicht verschlüsselt</string>
+    <string name="call_activity_button_accept_unencrypted_call">Alarm leise schalten</string>
+    <string name="call_activity_no_authentication_token">&#8230;</string>
+    <string name="call_activity_please_verify_authentication_token">Hat Dein Gesprächspartner den gleichen Sicherheitscode?</string>
+    <string name="call_activity_button_authentication_token_verify">Sichere Verbindung</string>
+    <string name="call_activity_button_authentication_token_wrong">Ist mir egal</string>
+    <string name="call_activity_connecting_to_server">Verbinde mit Simlar-Server&#8230;</string>
+    <string name="call_activity_connecting_to_server_timed_out">Verbindung zu Simlar-Server fehlgeschlagen</string>
+    <string name="call_activity_outgoing_connecting">Verbinde mit Kontakt&#8230;</string>
+    <string name="call_activity_outgoing_ringing">Klingelt&#8230;</string>
+    <string name="call_activity_encrypting">Verschlüssele&#8230;</string>
+    <string name="call_activity_talking">Spreche&#8230;</string>
+    <string name="call_activity_call_ended_because_declined">Anruf abgelehnt</string>
+    <string name="call_activity_call_ended_because_user_offline">Aktuell nicht erreichbar</string>
+    <string name="call_activity_call_ended_because_incompatible_media">Verbindung nicht möglich</string>
+    <string name="call_activity_call_ended_because_user_busy">Besetzt</string>
+    <string name="call_activity_call_ended_normally">Gespräch beendet</string>
+
+    <string name="connection_details_activity_label_quality">Qualität: </string>
+    <!-- The following labels are not translated as they are intended for a technical audience. -->
+    <string name="connection_details_activity_label_codec">Codec: </string>
+    <string name="connection_details_activity_label_ice_state">ICE State: </string>
+    <string name="connection_details_activity_label_upload">Up: </string>
+    <string name="connection_details_activity_label_download">Down: </string>
+    <string name="connection_details_activity_label_packet_loss">Loss: </string>
+    <string name="connection_details_activity_label_late_packets">Late: </string>
+    <string name="connection_details_activity_label_round_trip_delay">Delay: </string>
+    <string name="connection_details_activity_label_jitter">Jitter: </string>
+    <string name="connection_details_activity_kbytes_per_second">kb/s</string>
+    <string name="connection_details_activity_milli_seconds">ms</string>
+    <string name="connection_details_activity_percent">&#65285;</string>
+
+    <string name="verify_number_activity_title">Anmeldung</string>
+    <string name="verify_number_activity_verify_your_number">Überprüfe deine Telefonnummer:</string>
+    <string name="verify_number_activity_put_in_your_number">Gib deine Telefonnummer ein:</string>
+    <string name="verify_number_activity_button_register">Weiter</string>
+    <string name="verify_number_activity_sms_announcement">Um die Anmeldung abzuschließen, schickt Simlar im nachsten Schritt eine SMS an diese Nummer.</string>
+    <string name="verify_number_activity_alert_wrong_number_text">Deine eingegebene Rufnummer wurde nicht erkannt. Kontrolliere deine Eingabe.</string>
+
+    <string name="volumes_control_activity_title">Lautstärkeregelung</string>
+    <string name="volumes_control_activity_software_echo_limiter">Echo verringern</string>
+
+    <string name="about_activity_title">Über Simlar</string>
+    <string name="about_activity_copyright">&#169; 2013&#8211;2014 Die Simlar-Autoren. Alle Rechte vorbehalten.</string>
+    <string name="about_activity_license">Lizenz: GNU General Public License, siehe http://www.gnu.org/licenses/old-licenses/gpl-2.0.html</string>
+
+    <string name="create_account_activity_title">Anmeldung</string>
+    <string name="create_account_activity_request">Fordere Zugang an</string>
+    <string name="create_account_activity_sms_text">Simlar Betstätigunscode: *CODE*. Du benötigst diesen Code und diese SMS nur, falls die App während der Anmeldung danach fragt.</string>
+    <string name="create_account_activity_waiting_for_sms">Warte auf SMS</string>
+    <string name="create_account_activity_waiting_for_sms_manual">Manuelle Eingabe des Bestätigungscodes</string>
+    <string name="create_account_activity_confirm">Bestätige Registrierung</string>
+    <string name="create_account_activity_first_login">Überprüfe Zugang</string>
+    <string name="create_account_activity_error_wrong_telephonenumber">Mit der angegebenen Rufnummer ist eine Registrierung nicht möglich:\n%1$s\n\nProbiere eine andere Rufnummer oder schreibe an support@simlar.org</string>
+    <string name="create_account_activity_error_sms">Simlar kann keine SMS an deine angegebene Telefonnummer schicken:\n%1$s\n\n Überprüfe deine Eingabe oder versuche es später nochmal</string>
+    <string name="create_account_activity_error_sms_timeout">Das automatische Auslesen der SMS wurde abgebrochen.\n\nÜberprüfe deine Nummer:\n\n%1$s\n\nOder warte auf die SMS und gib den Bestätigungscode manuell ein.</string>
+    <string name="create_account_activity_error_not_possible">Anmeldung momentan nicht möglich.\n\nÜberprüfe deine Intertverbindung und versuch es erneut.</string>
+    <string name="create_account_activity_error_registration_code">Falscher Bestätigungscode.\n\nVersuch es erneut.</string>
+    <string name="create_account_activity_error_too_many_confirms">Die Registrierung ist fehlgeschlagen.\n\nVersuch es erneut.</string>
+    <string name="create_account_activity_error_sip_not_possible">Der Simlar-Server konnte nicht erreicht werden.\n\nVersuch es später erneut.</string>
+    <string name="create_account_activity_button_cancel">Abbrechen</string>
+    <string name="create_account_activity_button_confirm">Bestätigen</string>
+
+    <string name="ringing_activity_title">ruft an</string>
+    <string name="ringing_activity_phone_is_ringing">klingelt</string>
+
+    <string name="activity_agree_title">Anmeldung</string>
+    <string name="agree_activity_welcome">Willkommen bei Simlar!</string>
+    <string name="agree_activity_accept">Stimme zu</string>
+    <string name="agree_activity_cancel">Abbrechen</string>
+    <string name="agree_activity_privacy_statement_and_terms_and_conditions">Stimmst du der\n<a href="http://www.simlar.org/datenschutzerklaerung/">Datenschutzerklärung</a>\n und den\n<a href="http://www.simlar.org/nutzungsbedingungen/">Nutzungsbedingungen</a> zu?</string>
+</resources>
