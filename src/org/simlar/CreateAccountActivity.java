@@ -29,7 +29,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.telephony.SmsMessage;
@@ -168,10 +167,7 @@ public final class CreateAccountActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_account);
 
-		// versions before HONEYCOMB do not support FinishOnTouchOutsides
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			setFinishOnTouchOutside(false);
-		}
+		Util.setFinishOnTouchOutsideCompatible(this, false);
 
 		mLayoutProgress = findViewById(R.id.linearLayoutProgress);
 		mProgressRequest = (ProgressBar) findViewById(R.id.progressBarRequest);
