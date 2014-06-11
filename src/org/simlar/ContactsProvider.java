@@ -108,6 +108,7 @@ public final class ContactsProvider
 	{
 		private Map<String, ContactData> mContacts = new HashMap<String, ContactsProvider.ContactData>();
 		private State mState = State.UNINITIALIZED;
+		boolean mFakeData = false;
 		private final Set<FullContactsListener> mFullContactsListeners = new HashSet<FullContactsListener>();
 		private final Map<ContactListener, String> mContactListener = new HashMap<ContactsProvider.ContactListener, String>();
 
@@ -142,6 +143,9 @@ public final class ContactsProvider
 				@Override
 				protected Map<String, ContactData> doInBackground(final Void... params)
 				{
+					if (mFakeData) {
+						return createFakeData();
+					}
 					return loadContactsFromTelephonebook(context, mySimlarId);
 				}
 
@@ -246,6 +250,23 @@ public final class ContactsProvider
 
 			Lg.i(LOGTAG, "found ", Integer.valueOf(registeredContacts.size()), " registered contacts");
 			return registeredContacts;
+		}
+
+		static Map<String, ContactData> createFakeData()
+		{
+			Lg.i(LOGTAG, "creating fake telephone book");
+
+			final Map<String, ContactData> result = new HashMap<String, ContactData>();
+			result.put("*0002*", new ContactData("Barney Gumble", "+49 171 111111", ContactStatus.UNKNOWN, ""));
+			result.put("*0004*", new ContactData("Bender Rodriguez", "+49 172 222222", ContactStatus.UNKNOWN, ""));
+			result.put("*0005*", new ContactData("Eric Cartman", "+49 173 333333", ContactStatus.UNKNOWN, ""));
+			result.put("*0006*", new ContactData("Glenn Quagmire", "+49 174 444444", ContactStatus.UNKNOWN, ""));
+			result.put("*0007*", new ContactData("H. M. Murdock", "+49 175 555555", ContactStatus.UNKNOWN, ""));
+			result.put("*0008*", new ContactData("Leslie Knope", "+49 176 666666", ContactStatus.UNKNOWN, ""));
+			result.put("*0001*", new ContactData("Mona Lisa", "+49 177 777777", ContactStatus.UNKNOWN, ""));
+			result.put("*0003*", new ContactData("Rosemarie", "+49 178 888888", ContactStatus.UNKNOWN, ""));
+			result.put("*0009*", new ContactData("Stan Smith", "+49 179 999999", ContactStatus.UNKNOWN, ""));
+			return result;
 		}
 
 		static Map<String, ContactData> loadContactsFromTelephonebook(final Context context, final String mySimlarId)
@@ -463,5 +484,15 @@ public final class ContactsProvider
 	public static boolean clearCache()
 	{
 		return mImpl.clearCache();
+	}
+
+	public static void toggleFakeMode()
+	{
+		mImpl.mFakeData = !mImpl.mFakeData;
+	}
+
+	public static boolean getFakeMode()
+	{
+		return mImpl.mFakeData;
 	}
 }
