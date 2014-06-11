@@ -35,6 +35,8 @@
     <string name="main_activity_menu_enable_debug_mode">Debug-Modus einschalten</string>
     <string name="main_activity_menu_disable_debug_mode">Debug-Modus ausschalten</string>
     <string name="main_activity_menu_delete_account">Einstellungen löschen</string>
+    <string name="main_activity_menu_fake_telephone_book">Screenshot Telefonbuch</string>
+    <string name="main_activity_menu_fake_telephone_book_disable">Normales Telefonbuch</string>
     <string name="main_activity_menu_tell_a_friend">Einen Freund einladen</string>
     <string name="main_activity_menu_show_about">Über Simlar</string>
     <string name="main_activity_alert_upload_log_file_title">Fehlerbericht senden?</string>

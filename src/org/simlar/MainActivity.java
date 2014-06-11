@@ -130,6 +130,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		updateMenu(Version.hasDebugTag(), R.id.action_delete_account, R.string.main_activity_menu_delete_account, Menu.NONE, menu);
+		updateMenu(Version.hasDebugTag(), R.id.action_fake_telephone_book, R.string.main_activity_menu_fake_telephone_book, Menu.NONE, menu);
 		return true;
 	}
 
@@ -149,6 +150,9 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 			return true;
 		case R.id.action_delete_account:
 			deleteAccountAndQuit();
+			return true;
+		case R.id.action_fake_telephone_book:
+			fakeTelephoneBook();
 			return true;
 		case R.id.action_tell_a_friend:
 			tellAFriend();
@@ -181,6 +185,12 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 				? R.string.main_activity_menu_disable_debug_mode
 				: R.string.main_activity_menu_enable_debug_mode);
 
+		if (Version.hasDebugTag()) {
+			menu.findItem(R.id.action_fake_telephone_book).setTitle(ContactsProvider.getFakeMode()
+					? R.string.main_activity_menu_fake_telephone_book_disable
+					: R.string.main_activity_menu_fake_telephone_book);
+		}
+
 		updateMenu(Lg.isDebugModeEnabled(), R.id.action_upload_logfile, R.string.main_activity_menu_upload_logfile, 3, menu);
 		return true;
 	}
@@ -191,6 +201,12 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 		ContactsProvider.clearCache();
 		mAdapter.clear();
 		loadContacts();
+	}
+
+	private void fakeTelephoneBook()
+	{
+		ContactsProvider.toggleFakeMode();
+		reloadContacts();
 	}
 
 	private void uploadLogFile()

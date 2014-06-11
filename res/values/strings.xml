@@ -35,6 +35,8 @@
     <string name="main_activity_menu_enable_debug_mode">Enable debug mode</string>
     <string name="main_activity_menu_disable_debug_mode">Disable debug mode</string>
     <string name="main_activity_menu_delete_account">Delete my credentials and quit</string>
+    <string name="main_activity_menu_fake_telephone_book">Screenshot telephone book</string>
+    <string name="main_activity_menu_fake_telephone_book_disable">Regular telephone book</string>
     <string name="main_activity_menu_tell_a_friend">Invite a friend</string>
     <string name="main_activity_menu_show_about">About</string>
     <string name="main_activity_alert_upload_log_file_title">Really report bug?</string>
