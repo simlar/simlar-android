@@ -107,6 +107,20 @@ public final class RingingActivity extends Activity
 	}
 
 	@Override
+	public void onStop()
+	{
+		Lg.i(LOGTAG, "onStop");
+		super.onStop();
+	}
+
+	@Override
+	public void onDestroy()
+	{
+		Lg.i(LOGTAG, "onDestroy");
+		super.onDestroy();
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
 		return true;
