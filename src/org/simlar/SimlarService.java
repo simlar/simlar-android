@@ -589,6 +589,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	@Override
 	public void onCallStateChanged(final String number, final State callState, final String message)
 	{
+		final boolean oldCallStateRinging = mSimlarCallState.isRinging();
 		if (!mSimlarCallState.updateCallStateChanged(number, LinphoneCallState.fromLinphoneCallState(callState), CallEndReason.fromMessage(message))) {
 			Lg.d(LOGTAG, "SimlarCallState staying the same: ", mSimlarCallState);
 			return;
@@ -672,6 +673,9 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			}
 
 			acquireDisplayWakeLock();
+			if (oldCallStateRinging) {
+				getMissedCalls();
+			}
 			terminate();
 		}
 
