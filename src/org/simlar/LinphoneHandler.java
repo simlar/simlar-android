@@ -281,7 +281,7 @@ public final class LinphoneHandler
 		Lg.i(LOGTAG, "Call to ", new Lg.Anonymizer(number), " is in progress...");
 	}
 
-	private LinphoneCall getCurrentCall()
+	public LinphoneCall getCurrentCall()
 	{
 		if (mLinphoneCore == null) {
 			return null;

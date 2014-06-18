@@ -29,6 +29,7 @@ import org.linphone.core.LinphoneContent;
 import org.linphone.core.LinphoneCore;
 import org.linphone.core.LinphoneCore.EcCalibratorStatus;
 import org.linphone.core.LinphoneCore.GlobalState;
+import org.linphone.core.LinphoneCore.MediaEncryption;
 import org.linphone.core.LinphoneCore.RegistrationState;
 import org.linphone.core.LinphoneCoreListener;
 import org.linphone.core.LinphoneEvent;
@@ -56,6 +57,7 @@ public final class LinphoneThread
 
 	private static final class LinphoneThreadImpl extends Thread implements LinphoneCoreListener
 	{
+		private static final long ZRTP_HANDSHAKE_CHECK = 12000;
 		Handler mLinphoneThreadHandler = null;
 		final Handler mMainThreadHandler = new Handler();
 
@@ -464,6 +466,32 @@ public final class LinphoneThread
 					mListener.onCallStateChanged(number, fixedState, message);
 				}
 			});
+
+			if (LinphoneCall.State.Connected.equals(fixedState)) {
+				mLinphoneThreadHandler.postDelayed(new Runnable() {
+					@Override
+					public void run()
+					{
+						final LinphoneCall currentCall = mLinphoneHandler.getCurrentCall();
+						if (currentCall == null) {
+							return;
+						}
+
+						final boolean encrypted = MediaEncryption.ZRTP.equals(currentCall.getCurrentParamsCopy().getMediaEncryption());
+						final String authenticationToken = currentCall.getAuthenticationToken();
+						final boolean authenticationTokenVerified = currentCall.isAuthenticationTokenVerified();
+
+						Lg.i(LOGTAG, "status of zrtp: encrypted=", Boolean.valueOf(encrypted));
+						mMainThreadHandler.post(new Runnable() {
+							@Override
+							public void run()
+							{
+								mListener.onCallEncryptionChanged(encrypted, authenticationToken, authenticationTokenVerified);
+							}
+						});
+					}
+				}, ZRTP_HANDSHAKE_CHECK);
+			}
 		}
 
 		@Override
