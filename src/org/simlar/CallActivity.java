@@ -169,6 +169,13 @@ public final class CallActivity extends Activity implements SensorEventListener
 	}
 
 	@Override
+	public void onDestroy()
+	{
+		Lg.i(LOGTAG, "onDestroy");
+		super.onDestroy();
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(final Menu menu)
 	{
 		return true;
