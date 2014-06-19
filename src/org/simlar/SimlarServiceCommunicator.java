@@ -154,7 +154,7 @@ public class SimlarServiceCommunicator
 			}
 			context.startService(intent);
 		}
-		context.bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+		context.bindService(intent, mConnection, 0);
 		LocalBroadcastManager.getInstance(context).registerReceiver(mReceiver, new IntentFilter(SimlarServiceBroadcast.BROADCAST_NAME));
 	}
 
