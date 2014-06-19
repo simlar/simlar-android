@@ -52,6 +52,7 @@ public final class CallActivity extends Activity implements SensorEventListener
 	private SensorManager mSensorManager;
 	private long mCallStartTime = -1;
 	private final Handler mHandler = new Handler();
+	private Runnable mCallTimer = null;
 
 	// gui elements
 	private ImageView mImageViewContactImage;
@@ -163,8 +164,7 @@ public final class CallActivity extends Activity implements SensorEventListener
 	protected void onStop()
 	{
 		Lg.i(LOGTAG, "onStop");
-		mHandler.removeCallbacksAndMessages(null);
-		mTextViewCallTimer.setVisibility(View.INVISIBLE);
+		stopCallTimer();
 		super.onStop();
 	}
 
@@ -247,9 +247,18 @@ public final class CallActivity extends Activity implements SensorEventListener
 
 	private void startCallTimer()
 	{
-		if (mTextViewCallTimer.getVisibility() == View.VISIBLE) {
+		if (mCallTimer != null) {
 			return;
 		}
+
+		mCallTimer = new Runnable() {
+			@Override
+			public void run()
+			{
+				iterateTimer();
+			}
+		};
+
 		mTextViewCallTimer.setVisibility(View.VISIBLE);
 
 		iterateTimer();
@@ -262,14 +271,15 @@ public final class CallActivity extends Activity implements SensorEventListener
 
 		mTextViewCallTimer.setText(text);
 
-		mHandler.postDelayed(new Runnable() {
-			@Override
-			public void run()
-			{
-				iterateTimer();
-			}
-		}, 1000);
+		if (mCallTimer != null) {
+			mHandler.postDelayed(mCallTimer, 1000);
+		}
+	}
 
+	private void stopCallTimer()
+	{
+		mHandler.removeCallbacks(mCallTimer);
+		mCallTimer = null;
 	}
 
 	private void finishDelayed(final int milliSeconds)
