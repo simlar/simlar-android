@@ -37,7 +37,7 @@
     <string name="main_activity_menu_delete_account">Einstellungen löschen</string>
     <string name="main_activity_menu_show_about">Über Simlar</string>
     <string name="main_activity_alert_upload_log_file_title">Fehlerbericht senden?</string>
-    <string name="main_activity_alert_upload_log_file_text">Vielen Dank, dass du einen Fehlerbericht senden willst.\n\nEs wird automatisch eine Logdatei auf den Simlar-Server übertragen.\n\nAnschließend hast du die Gelegenheit, den Simlar-Entwicklern eine E-Mail mit einer Fehlerbeschreibung zu senden.\n\nWillst du fortfahren?</string>
+    <string name="main_activity_alert_upload_log_file_text">Danke, dass du einen Fehlerbericht senden möchtest.\n\nEs wird automatisch eine Logdatei auf an Simlar übertragen.\n\nAnschließend hast du die Gelegenheit, den Simlar-Entwicklern eine E-Mail mit einer Fehlerbeschreibung zu senden.\n\nWillst du fortfahren?</string>
     <string name="main_activity_alert_uploading_log_file_failed_title">Fehler</string>
     <string name="main_activity_alert_uploading_log_file_failed_text">Erstellung der Logdatei fehlgeschlagen => Senden abgebrochen</string>
     <string name="main_activity_alert_enable_linphone_debug_mode_title">Debug-Modus wirklich aktivieren?</string>
@@ -79,8 +79,8 @@
     <string name="call_activity_please_verify_authentication_token">Hat Dein Gesprächspartner den gleichen Sicherheitscode?</string>
     <string name="call_activity_button_authentication_token_verify">Sichere Verbindung</string>
     <string name="call_activity_button_authentication_token_wrong">Ist mir egal</string>
-    <string name="call_activity_connecting_to_server">Verbinde mit Simlar-Server&#8230;</string>
-    <string name="call_activity_connecting_to_server_timed_out">Verbindung zu Simlar-Server fehlgeschlagen</string>
+    <string name="call_activity_connecting_to_server">Verbinde mit Server&#8230;</string>
+    <string name="call_activity_connecting_to_server_timed_out">Verbindung zu Server fehlgeschlagen</string>
     <string name="call_activity_outgoing_connecting">Verbinde mit Kontakt&#8230;</string>
     <string name="call_activity_outgoing_ringing">Klingelt&#8230;</string>
     <string name="call_activity_encrypting">Verschlüssele&#8230;</string>
@@ -121,7 +121,7 @@
 
     <string name="create_account_activity_title">Anmeldung</string>
     <string name="create_account_activity_request">Fordere Zugang an</string>
-    <string name="create_account_activity_sms_text">Simlar Betstätigunscode: *CODE*. Du benötigst diesen Code und diese SMS nur, falls die App während der Anmeldung danach fragt.</string>
+    <string name="create_account_activity_sms_text">Willkommen bei Simlar! Falls die App bei der Anmeldung nach einem Code fragt, benutze: *CODE*. Sonst brauchst Du diese SMS nicht.</string>
     <string name="create_account_activity_waiting_for_sms">Warte auf SMS</string>
     <string name="create_account_activity_waiting_for_sms_manual">Manuelle Eingabe des Bestätigungscodes</string>
     <string name="create_account_activity_confirm">Bestätige Registrierung</string>
@@ -132,7 +132,7 @@
     <string name="create_account_activity_error_not_possible">Anmeldung momentan nicht möglich.\n\nÜberprüfe deine Intertverbindung und versuch es erneut.</string>
     <string name="create_account_activity_error_registration_code">Falscher Bestätigungscode.\n\nVersuch es erneut.</string>
     <string name="create_account_activity_error_too_many_confirms">Die Registrierung ist fehlgeschlagen.\n\nVersuch es erneut.</string>
-    <string name="create_account_activity_error_sip_not_possible">Der Simlar-Server konnte nicht erreicht werden.\n\nVersuch es später erneut.</string>
+    <string name="create_account_activity_error_sip_not_possible">Der Server konnte nicht erreicht werden.\n\nVersuch es später erneut.</string>
     <string name="create_account_activity_button_cancel">Abbrechen</string>
     <string name="create_account_activity_button_confirm">Bestätigen</string>
 
