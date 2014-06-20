@@ -147,7 +147,13 @@ public final class CallActivity extends Activity implements SensorEventListener
 	{
 		Lg.i(LOGTAG, "onResume");
 		super.onResume();
-		mCommunicator.register(this, CallActivity.class);
+
+		if (!mCommunicator.register(this, CallActivity.class)) {
+			Lg.w(LOGTAG, "SimlarService is not running, starting MainActivity");
+			startActivity(new Intent(this, MainActivity.class));
+			finish();
+		}
+
 		mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY), SensorManager.SENSOR_DELAY_NORMAL);
 	}
 

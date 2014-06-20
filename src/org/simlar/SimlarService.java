@@ -74,6 +74,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private boolean mHasAudioFocus = false;
 	private final NetworkChangeReceiver mNetworkChangeReceiver = new NetworkChangeReceiver();
 	private String mSimlarIdToCall = null;
+	private static volatile boolean mRunning = false;
 
 	public final class SimlarServiceBinder extends Binder
 	{
@@ -153,6 +154,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	{
 		Lg.i(LOGTAG, "started with simlar version=", Version.getVersionName(this),
 				" on device: ", Build.MANUFACTURER, " ", Build.MODEL, " (", Build.DEVICE, ") with android version=", Build.VERSION.RELEASE);
+
+		mRunning = true;
 
 		FileHelper.init(this);
 		mVibratorManager = new VibratorManager(this.getApplicationContext());
@@ -302,6 +305,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		releaseWakeLock();
 		releaseDisplayWakeLock();
 		releaseWifiLock();
+
+		mRunning = false;
 
 		Lg.i(LOGTAG, "onDestroy ended");
 	}
@@ -752,5 +757,16 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	public CallConnectionDetails getCallConnectionDetails()
 	{
 		return mCallConnectionDetails;
+	}
+
+	public static boolean isRunning()
+	{
+		return mRunning;
+	}
+
+	public static void startService(final Context context, final Intent intent)
+	{
+		context.startService(intent);
+		mRunning = true;
 	}
 }

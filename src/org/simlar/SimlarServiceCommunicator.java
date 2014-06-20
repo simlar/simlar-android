@@ -133,9 +133,14 @@ public class SimlarServiceCommunicator
 		}
 	}
 
-	public void register(final Context context, final Class<? extends Activity> activity)
+	public boolean register(final Context context, final Class<? extends Activity> activity)
 	{
+		if (!SimlarService.isRunning()) {
+			return false;
+		}
+
 		startServiceAndRegister(context, activity, true, null);
+		return true;
 	}
 
 	public void startServiceAndRegister(final Context context, final Class<? extends Activity> activity, final String simlarId)
@@ -152,7 +157,8 @@ public class SimlarServiceCommunicator
 			if (!Util.isNullOrEmpty(simlarId)) {
 				intent.putExtra(SimlarService.INTENT_EXTRA_SIMLAR_ID, simlarId);
 			}
-			context.startService(intent);
+
+			SimlarService.startService(context, intent);
 		}
 		context.bindService(intent, mConnection, 0);
 		LocalBroadcastManager.getInstance(context).registerReceiver(mReceiver, new IntentFilter(SimlarServiceBroadcast.BROADCAST_NAME));
@@ -161,7 +167,7 @@ public class SimlarServiceCommunicator
 	public void unregister(final Context context)
 	{
 		LocalBroadcastManager.getInstance(context).unregisterReceiver(mReceiver);
-		if (mService != null) {
+		if (mService != null && SimlarService.isRunning()) {
 			context.unbindService(mConnection);
 		}
 	}
