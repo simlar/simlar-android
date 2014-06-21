@@ -26,6 +26,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.simlar.FileHelper.NotInitedException;
+
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
@@ -252,19 +254,30 @@ public final class ContactsProvider
 			return registeredContacts;
 		}
 
+		private static String createFakePhotoString()
+		{
+			try {
+				return "file://" + FileHelper.getFakePhonebookPicture();
+			} catch (final NotInitedException e) {
+				Lg.ex(LOGTAG, e, "PreferencesHelper.NotInitedException");
+				return "";
+			}
+		}
+
 		static Map<String, ContactData> createFakeData()
 		{
 			Lg.i(LOGTAG, "creating fake telephone book");
 
 			final Map<String, ContactData> result = new HashMap<String, ContactData>();
+			final String fakePhoto = createFakePhotoString();
 			result.put("*0002*", new ContactData("Barney Gumble", "+49 171 111111", ContactStatus.UNKNOWN, ""));
 			result.put("*0004*", new ContactData("Bender Rodriguez", "+49 172 222222", ContactStatus.UNKNOWN, ""));
 			result.put("*0005*", new ContactData("Eric Cartman", "+49 173 333333", ContactStatus.UNKNOWN, ""));
 			result.put("*0006*", new ContactData("Glenn Quagmire", "+49 174 444444", ContactStatus.UNKNOWN, ""));
 			result.put("*0007*", new ContactData("H. M. Murdock", "+49 175 555555", ContactStatus.UNKNOWN, ""));
 			result.put("*0008*", new ContactData("Leslie Knope", "+49 176 666666", ContactStatus.UNKNOWN, ""));
-			result.put("*0001*", new ContactData("Mona Lisa", "+49 177 777777", ContactStatus.UNKNOWN, ""));
-			result.put("*0003*", new ContactData("Rosemarie", "+49 178 888888", ContactStatus.UNKNOWN, ""));
+			result.put("*0001*", new ContactData("Mona Lisa", "+49 177 777777", ContactStatus.UNKNOWN, fakePhoto));
+			result.put("*0003*", new ContactData("Rosemarie", "+49 178 888888", ContactStatus.UNKNOWN, fakePhoto));
 			result.put("*0009*", new ContactData("Stan Smith", "+49 179 999999", ContactStatus.UNKNOWN, ""));
 			return result;
 		}

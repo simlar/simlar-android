@@ -34,6 +34,7 @@ public final class FileHelper
 	private static String mRootCaFileName = null;
 	private static String mZrtpSecretsCacheFileName = null;
 	private static String mLinphoneInitialConfigFile = null;
+	private static String mFakePhonebookPicture = null;
 
 	public static void init(final Context context)
 	{
@@ -48,18 +49,21 @@ public final class FileHelper
 		mRootCaFileName = basePath + "/rootca.pem";
 		mZrtpSecretsCacheFileName = basePath + "/zrtp_secrets";
 		mLinphoneInitialConfigFile = basePath + "/linphonerc";
+		mFakePhonebookPicture = basePath + "/fake_phonebook_picture.png";
 
 		// Always overwrite to make updates of this file work
 		copyFileFromPackage(context, R.raw.rootca, new File(mRootCaFileName).getName());
 		copyFileFromPackage(context, R.raw.ringback, new File(basePath + "/ringback.wav").getName());
 		copyFileFromPackage(context, R.raw.linphonerc, new File(mLinphoneInitialConfigFile).getName());
+		copyFileFromPackage(context, R.raw.fake_phonebook_picture, new File(mFakePhonebookPicture).getName());
 	}
 
 	public static boolean isInitialized()
 	{
 		return !Util.isNullOrEmpty(mRootCaFileName) &&
 				!Util.isNullOrEmpty(mZrtpSecretsCacheFileName) &&
-				!Util.isNullOrEmpty(mLinphoneInitialConfigFile);
+				!Util.isNullOrEmpty(mLinphoneInitialConfigFile) &&
+				!Util.isNullOrEmpty(mFakePhonebookPicture);
 	}
 
 	private static void copyFileFromPackage(final Context context, final int ressourceId, final String target)
@@ -104,5 +108,13 @@ public final class FileHelper
 			throw new NotInitedException();
 		}
 		return mLinphoneInitialConfigFile;
+	}
+
+	public static String getFakePhonebookPicture() throws NotInitedException
+	{
+		if (Util.isNullOrEmpty(mFakePhonebookPicture)) {
+			throw new NotInitedException();
+		}
+		return mFakePhonebookPicture;
 	}
 }
