@@ -138,7 +138,7 @@
     <string name="ringing_activity_title">is calling you</string>
     <string name="ringing_activity_phone_is_ringing">your phone is ringing</string>
 
-    <string name="activity_agree_title">Create Account</string>
+    <string name="agree_activity_title">Create Account</string>
     <string name="agree_activity_welcome">Welcome to Simlar!</string>
     <string name="agree_activity_accept">I agree</string>
     <string name="agree_activity_cancel">Cancel</string>
