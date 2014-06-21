@@ -75,6 +75,7 @@
         android:layout_below="@+id/textViewHomepage"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
+        android:gravity="center_horizontal"
         android:text="@string/about_activity_copyright"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -86,6 +87,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:autoLink="web"
+        android:gravity="center_horizontal"
         android:text="@string/about_activity_license"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -96,6 +98,7 @@
         android:layout_below="@+id/textViewLicense"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
         android:text="@string/about_activity_privacy_statement_and_terms_of_use"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
