@@ -53,6 +53,7 @@ public final class CallActivity extends Activity implements SensorEventListener
 	private long mCallStartTime = -1;
 	private final Handler mHandler = new Handler();
 	private Runnable mCallTimer = null;
+	private boolean mFinishDelayedCalled = false;
 
 	// gui elements
 	private ImageView mImageViewContactImage;
@@ -290,6 +291,12 @@ public final class CallActivity extends Activity implements SensorEventListener
 
 	private void finishDelayed(final int milliSeconds)
 	{
+		if (mFinishDelayedCalled) {
+			return;
+		}
+
+		mFinishDelayedCalled = true;
+
 		Lg.i(LOGTAG, "finishing activity in ", Integer.valueOf(milliSeconds), " ms");
 
 		new Handler().postDelayed(new Runnable() {
