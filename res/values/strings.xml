@@ -124,6 +124,7 @@
     <string name="about_activity_title">About Simlar</string>
     <string name="about_activity_copyright">&#169; 2013&#8211;2014 The Simlar authors. All rights reserved.</string>
     <string name="about_activity_license">License: GNU General Public License, see http://www.gnu.org/licenses/old-licenses/gpl-2.0.html</string>
+    <string name="about_activity_privacy_statement_and_terms_of_use"><a href="https://www.simlar.org/datenschutzerklaerung/">privacy statement</a> and <a href="https://www.simlar.org/nutzungsbedingungen/">terms of use</a></string>
 
     <string name="create_account_activity_title">Creating account</string>
     <string name="create_account_activity_request">Request account creation</string>
