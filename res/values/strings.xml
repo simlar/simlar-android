@@ -35,7 +35,6 @@
     <string name="main_activity_menu_enable_debug_mode">Enable debug mode</string>
     <string name="main_activity_menu_disable_debug_mode">Disable debug mode</string>
     <string name="main_activity_menu_delete_account">Delete my credentials and quit</string>
-    <string name="main_activity_menu_tell_a_friend">Tell a friend</string>
     <string name="main_activity_menu_show_about">About</string>
     <string name="main_activity_alert_upload_log_file_title">Really report bug?</string>
     <string name="main_activity_alert_upload_log_file_text">This will upload a log file. Afterwards you will be asked to write an email describing the bug.\n\nDo you want to continue?</string>
@@ -43,9 +42,6 @@
     <string name="main_activity_alert_uploading_log_file_failed_text">Log file creation failed => abort sending</string>
     <string name="main_activity_alert_enable_linphone_debug_mode_title">Really enable debug mode?</string>
     <string name="main_activity_alert_enable_linphone_debug_mode_text">This will increase log file entries a lot. Only do so if you have been asked for it by a Simlar developer. Or you really know what you are doing.</string>
-    <string name="main_activity_tell_a_friend_chooser_title">Choose</string>
-    <string name="main_activity_tell_a_friend_title">Have a look at Simlar</string>
-    <string name="main_activity_tell_a_friend_text">Have a look at simlar.org It\'s an app that makes encrypted phone calls as easy as possible.</string>
 
     <string name="upload_log_file_send_email_to_developer">Send email to developer</string>
     <string name="upload_log_file_progress">Uploading log file&#8230;</string>
@@ -142,9 +138,9 @@
     <string name="ringing_activity_title">is calling you</string>
     <string name="ringing_activity_phone_is_ringing">your phone is ringing</string>
 
-    <string name="activity_agree_title">Create Account</string>
+    <string name="agree_activity_title">Create Account</string>
     <string name="agree_activity_welcome">Welcome to Simlar!</string>
     <string name="agree_activity_accept">I agree</string>
     <string name="agree_activity_cancel">Cancel</string>
-    <string name="agree_activity_privacy_statement_and_terms_and_conditions">Do you agree to the\n<a href="http://www.simlar.org/datenschutzerklaerung/">privacy statement</a>\n and\n<a href="http://www.simlar.org/nutzungsbedingungen/">terms of use</a>?</string>
+    <string name="agree_activity_privacy_statement_and_terms_of_use">Do you agree to the\n<a href="http://www.simlar.org/datenschutzerklaerung/">privacy statement</a>\n and\n<a href="http://www.simlar.org/nutzungsbedingungen/">terms of use</a>?</string>
 </resources>

@@ -22,6 +22,7 @@ package org.simlar;
 
 import java.util.Comparator;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -83,23 +84,7 @@ public final class VerifyNumberActivity extends Activity
 		final Integer regionCode = Integer.valueOf(SimlarNumber.readRegionCodeFromSimCardOrConfiguration(this));
 		final String number = SimlarNumber.readLocalPhoneNumberFromSimCard(this);
 
-		//Country Code Selector
-		final ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item);
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			adapter.addAll(SimlarNumber.getSupportedCountryCodes());
-		} else {
-			for (final Integer countryCode : SimlarNumber.getSupportedCountryCodes()) {
-				adapter.add(countryCode);
-			}
-		}
-		adapter.sort(new Comparator<Integer>() {
-			@Override
-			public int compare(final Integer lhs, final Integer rhs)
-			{
-				return lhs.compareTo(rhs);
-			}
-		});
-
+		final ArrayAdapter<Integer> adapter = createCountryCodeSelector();
 		mSpinner = (Spinner) findViewById(R.id.spinnerCountryCodes);
 		mSpinner.setAdapter(adapter);
 
@@ -128,6 +113,28 @@ public final class VerifyNumberActivity extends Activity
 
 		mButtonAccept = (Button) findViewById(R.id.buttonRegister);
 		updateButtonAccept();
+	}
+
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	private ArrayAdapter<Integer> createCountryCodeSelector()
+	{
+		final ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			adapter.addAll(SimlarNumber.getSupportedCountryCodes());
+		} else {
+			for (final Integer countryCode : SimlarNumber.getSupportedCountryCodes()) {
+				adapter.add(countryCode);
+			}
+		}
+		adapter.sort(new Comparator<Integer>() {
+			@Override
+			public int compare(final Integer lhs, final Integer rhs)
+			{
+				return lhs.compareTo(rhs);
+			}
+		});
+
+		return adapter;
 	}
 
 	void showSoftInputForEditNumber()

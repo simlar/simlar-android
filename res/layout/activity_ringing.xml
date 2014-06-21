@@ -32,7 +32,7 @@
         android:layout_height="70dip"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:background="@null"
+        android:background="@color/calling_title_background_black"
         android:contentDescription="@string/ringing_activity_phone_is_ringing"
         android:src="@drawable/contact_picture" />
 

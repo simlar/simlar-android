@@ -33,7 +33,7 @@ public final class AboutActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_about);
 
-		TextView version = (TextView) findViewById(R.id.textViewVersion);
+		final TextView version = (TextView) findViewById(R.id.textViewVersion);
 		version.setText(Version.getVersionName(this));
 	}
 

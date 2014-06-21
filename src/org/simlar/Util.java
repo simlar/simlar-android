@@ -28,6 +28,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.widget.ImageView;
@@ -89,6 +91,7 @@ public final class Util
 		}
 	}
 
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	@SuppressWarnings("deprecation")
 	public static void setBackgroundCompatible(final ImageView imageView, final Drawable drawable)
 	{
@@ -122,5 +125,14 @@ public final class Util
 		}
 
 		return new SimpleDateFormat("mm:ss", Locale.US);
+	}
+
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	public static void setFinishOnTouchOutsideCompatible(final Activity activity, final boolean finish)
+	{
+		// versions before HONEYCOMB do not support FinishOnTouchOutsides
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			activity.setFinishOnTouchOutside(finish);
+		}
 	}
 }
