@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:gravity="center_horizontal"
-            android:text="@string/agree_activity_privacy_statement_and_terms_and_conditions"
+            android:text="@string/agree_activity_privacy_statement_and_terms_of_use"
             android:textSize="20sp" />
 
         <LinearLayout
