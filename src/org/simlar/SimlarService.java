@@ -609,6 +609,10 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			return;
 		}
 
+		mNotificationActivity = MainActivity.class;
+		final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		nm.notify(NOTIFICATION_ID, createNotification());
+
 		if (mSimlarStatus == SimlarStatus.ONGOING_CALL) {
 			mLinphoneThread.terminateAllCalls();
 		} else {
