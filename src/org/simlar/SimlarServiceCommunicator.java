@@ -87,7 +87,7 @@ public class SimlarServiceCommunicator
 				return;
 			}
 
-			SimlarServiceBroadcast fsb = (SimlarServiceBroadcast) intent.getSerializableExtra(SimlarServiceBroadcast.INTENT_EXTRA);
+			final SimlarServiceBroadcast fsb = (SimlarServiceBroadcast) intent.getSerializableExtra(SimlarServiceBroadcast.INTENT_EXTRA);
 			if (fsb == null) {
 				Lg.e(mLogtag, "Error in onReceive: no SimlarServiceBroadcast");
 				return;
