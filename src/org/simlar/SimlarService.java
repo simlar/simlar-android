@@ -68,7 +68,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private WifiLock mWifiLock = null;
 	private boolean mGoingDown = false;
 	private boolean mTerminatePrivateAlreadyCalled = false;
-	private Class<? extends Activity> mNotificationActivity = null;
+	private static volatile Class<? extends Activity> mNotificationActivity = null;
 	private VibratorManager mVibratorManager = null;
 	private SoundEffectManager mSoundEffectManager = null;
 	private boolean mHasAudioFocus = false;
@@ -762,6 +762,11 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	public static boolean isRunning()
 	{
 		return mRunning;
+	}
+
+	public static Class<? extends Activity> getActivity()
+	{
+		return mNotificationActivity;
 	}
 
 	public static void startService(final Context context, final Intent intent)
