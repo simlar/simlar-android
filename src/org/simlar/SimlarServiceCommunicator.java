@@ -40,6 +40,7 @@ public class SimlarServiceCommunicator
 	Class<? extends Activity> mActivity = null;
 	private final ServiceConnection mConnection = new SimlarServiceConnection();
 	private final BroadcastReceiver mReceiver = new SimlarServiceReceiver();
+	private Context mContext = null;
 
 	private final class SimlarServiceConnection implements ServiceConnection
 	{
@@ -115,6 +116,7 @@ public class SimlarServiceCommunicator
 			}
 			case SERVICE_FINISHES: {
 				onServiceFinishes();
+				unregister();
 				return;
 			}
 			default:
@@ -151,6 +153,7 @@ public class SimlarServiceCommunicator
 	private void startServiceAndRegister(final Context context, final Class<? extends Activity> activity, final boolean onlyRegister,
 			final String simlarId)
 	{
+		mContext = context;
 		mActivity = activity;
 		final Intent intent = new Intent(context, SimlarService.class);
 		if (!onlyRegister) {
@@ -164,12 +167,19 @@ public class SimlarServiceCommunicator
 		LocalBroadcastManager.getInstance(context).registerReceiver(mReceiver, new IntentFilter(SimlarServiceBroadcast.BROADCAST_NAME));
 	}
 
-	public void unregister(final Context context)
+	public void unregister()
 	{
-		LocalBroadcastManager.getInstance(context).unregisterReceiver(mReceiver);
-		if (mService != null && SimlarService.isRunning()) {
-			context.unbindService(mConnection);
+		if (mContext == null) {
+			Lg.i(mLogtag, "unregister skipped: no context");
+			return;
 		}
+
+		LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mReceiver);
+		if (mService != null && SimlarService.isRunning()) {
+			mContext.unbindService(mConnection);
+		}
+
+		mContext = null;
 	}
 
 	void onBoundToSimlarService()

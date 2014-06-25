@@ -106,7 +106,7 @@ public final class RingingActivity extends Activity
 	protected void onPause()
 	{
 		Lg.i(LOGTAG, "onPause");
-		mCommunicator.unregister(this);
+		mCommunicator.unregister();
 		super.onPause();
 	}
 

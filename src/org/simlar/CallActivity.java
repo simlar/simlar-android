@@ -162,7 +162,7 @@ public final class CallActivity extends Activity implements SensorEventListener
 	protected void onPause()
 	{
 		Lg.i(LOGTAG, "onPause");
-		mCommunicator.unregister(this);
+		mCommunicator.unregister();
 		mSensorManager.unregisterListener(this);
 		super.onPause();
 	}
