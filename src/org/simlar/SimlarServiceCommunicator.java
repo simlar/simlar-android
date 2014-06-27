@@ -22,6 +22,7 @@ package org.simlar;
 
 import org.simlar.SimlarService.SimlarServiceBinder;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -36,7 +37,7 @@ public class SimlarServiceCommunicator
 	private static final String DEFAULT_LOGTAG = "SimlarServiceCommunicator";
 	final String mLogtag;
 	SimlarService mService = null;
-	Class<?> mActivity = null;
+	Class<? extends Activity> mActivity = null;
 	private final ServiceConnection mConnection = new SimlarServiceConnection();
 	private final BroadcastReceiver mReceiver = new SimlarServiceReceiver();
 
@@ -132,17 +133,18 @@ public class SimlarServiceCommunicator
 		}
 	}
 
-	public void register(final Context context, final Class<?> activity)
+	public void register(final Context context, final Class<? extends Activity> activity)
 	{
 		startServiceAndRegister(context, activity, true, null);
 	}
 
-	public void startServiceAndRegister(final Context context, final Class<?> activity, final String simlarId)
+	public void startServiceAndRegister(final Context context, final Class<? extends Activity> activity, final String simlarId)
 	{
 		startServiceAndRegister(context, activity, false, simlarId);
 	}
 
-	private void startServiceAndRegister(final Context context, final Class<?> activity, final boolean onlyRegister, final String simlarId)
+	private void startServiceAndRegister(final Context context, final Class<? extends Activity> activity, final boolean onlyRegister,
+			final String simlarId)
 	{
 		mActivity = activity;
 		final Intent intent = new Intent(context, SimlarService.class);
