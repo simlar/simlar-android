@@ -4,6 +4,7 @@
 set -eu -o pipefail
 
 ## Example
+# ldpi    48px * .75 = 36px
 # mdpi    48px * 1   = 48px
 # hdpi    48px * 1.5 = 72px
 # xhdpi   48px * 2   = 96px
@@ -13,10 +14,12 @@ set -eu -o pipefail
 rm -rf res/drawable-xhdpi/*
 rm -rf res/drawable-hdpi/*
 rm -rf res/drawable-mdpi/*
+rm -rf res/drawable-ldpi/*
 
 find res/drawable-xxhdpi/ -type f -printf "%f\n" | sort | while read IMAGE; do
 	git grep -q ${IMAGE%.*} || echo "WARNING: file not used: ${IMAGE}"
 	convert res/drawable-xxhdpi/"${IMAGE}" -resize 66.67% res/drawable-xhdpi/"${IMAGE}"
 	convert res/drawable-xxhdpi/"${IMAGE}" -resize 50%    res/drawable-hdpi/"${IMAGE}"
 	convert res/drawable-xxhdpi/"${IMAGE}" -resize 33.33% res/drawable-mdpi/"${IMAGE}"
+	convert res/drawable-xxhdpi/"${IMAGE}" -resize 25%    res/drawable-ldpi/"${IMAGE}"
 done
