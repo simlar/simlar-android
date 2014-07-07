@@ -257,11 +257,11 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			Lg.i(LOGTAG, "no activity registered based on mSimlarStatus=", mSimlarStatus, " we now take: ", mNotificationActivity.getSimpleName());
 		}
 
+		/// Note: we do not want the TaskStackBuilder here
 		final PendingIntent activity = PendingIntent.getActivity(this, 0,
 				new Intent(this, mNotificationActivity).addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED), 0);
 
 		final String text = mSimlarCallState.createNotificationText(this, mGoingDown);
-
 		final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
 		notificationBuilder.setSmallIcon(R.drawable.ic_notification_ongoing_call);
 		notificationBuilder.setLargeIcon(mSimlarCallState.getContactPhotoBitmap(this, R.drawable.ic_launcher));
