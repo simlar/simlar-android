@@ -37,7 +37,7 @@ public final class SimlarCallState
 	private String mSimlarId = null;
 	private String mContactName = null;
 	private String mContactPhotoId = null;
-	private LinphoneCallState mLinphoneCallState = LinphoneCallState.UNKONWN;
+	private LinphoneCallState mLinphoneCallState = LinphoneCallState.UNKNOWN;
 	private CallEndReason mCallEndReason = CallEndReason.NONE;
 	private boolean mEncrypted = true;
 	private String mAuthenticationToken = null;
@@ -73,7 +73,7 @@ public final class SimlarCallState
 			Lg.e(LOGTAG, "ERROR updateCallStateChanged: simlarId not set state=", callState);
 		}
 
-		if (callState == LinphoneCallState.UNKONWN) {
+		if (callState == LinphoneCallState.UNKNOWN) {
 			Lg.e(LOGTAG, "ERROR updateCallStateChanged: callState=", callState);
 		}
 
@@ -156,7 +156,7 @@ public final class SimlarCallState
 
 	public boolean isEmpty()
 	{
-		return mLinphoneCallState == LinphoneCallState.UNKONWN;
+		return mLinphoneCallState == LinphoneCallState.UNKNOWN;
 	}
 
 	@Override
