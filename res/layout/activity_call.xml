@@ -249,6 +249,32 @@
                 android:text="@string/call_activity_button_accept_unencrypted_call" />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/linearLayoutCallEndReason"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/linearLayoutConnectionQuality"
+            android:layout_centerInParent="false"
+            android:layout_marginLeft="@dimen/activity_call_inner_side_margin"
+            android:layout_marginRight="@dimen/activity_call_inner_side_margin"
+            android:background="@drawable/border_round_corners"
+            android:orientation="vertical"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp"
+            android:visibility="gone" >
+
+            <TextView
+                android:id="@+id/textViewCallEndReason"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal"
+                android:text="@string/call_activity_call_ended_normally"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+        </LinearLayout>
+
         <RelativeLayout
             android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
