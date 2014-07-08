@@ -91,18 +91,27 @@ public final class SimlarCallState
 		mSimlarId = simlarId;
 		mLinphoneCallState = callState;
 
+		final GuiCallState oldGuiCallState = mGuiCallState;
 		if (mLinphoneCallState.isNewCallJustStarted()) {
 			mGuiCallState = GuiCallState.CONNECTING_TO_SERVER;
 		} else if (mLinphoneCallState.isPossibleCallEndedMessage()) {
 			mGuiCallState = GuiCallState.ENDED;
 		} else if (mLinphoneCallState.isCallOutgoingConnecting()) {
 			mGuiCallState = GuiCallState.WAITING_FOR_CONTACT;
-		} else if (mLinphoneCallState.isCallOutgoingConnecting()) {
+		} else if (mLinphoneCallState.isCallOutgoingRinging()) {
 			mGuiCallState = GuiCallState.RINGING;
 		} else if (mLinphoneCallState.isBeforeEncryption()) {
 			mGuiCallState = GuiCallState.ENCRYPTING;
 		}
 		// NOTE: talking is set after encryption
+
+		if (oldGuiCallState != mGuiCallState) {
+			if (mGuiCallState == GuiCallState.ENDED) {
+				mCallStartTime = -1;
+			} else {
+				mCallStartTime = SystemClock.elapsedRealtime();
+			}
+		}
 
 		if (mLinphoneCallState.isNewCallJustStarted()) {
 			mSimlarId = null;
@@ -114,7 +123,6 @@ public final class SimlarCallState
 			mAuthenticationTokenVerified = false;
 			mQuality = NetworkQuality.UNKNOWN;
 			mDuration = 0;
-			mCallStartTime = -1;
 		}
 
 		return true;
@@ -146,9 +154,7 @@ public final class SimlarCallState
 
 		if (callDuration != mDuration) {
 			mDuration = callDuration;
-			if (mDuration <= 0) {
-				mCallStartTime = -1;
-			} else {
+			if (mDuration > 0) {
 				mCallStartTime = SystemClock.elapsedRealtime() - mDuration * 1000L;
 			}
 		}
@@ -165,6 +171,7 @@ public final class SimlarCallState
 
 		if (mGuiCallState == GuiCallState.ENCRYPTING) {
 			mGuiCallState = GuiCallState.TALKING;
+			mCallStartTime = SystemClock.elapsedRealtime();
 		}
 
 		mEncrypted = encrypted;
@@ -297,7 +304,7 @@ public final class SimlarCallState
 
 	public long getStartTime()
 	{
-		return mDuration > 0 ? mCallStartTime : -1;
+		return mCallStartTime;
 	}
 
 	public void connectingToSimlarServerTimedOut()
