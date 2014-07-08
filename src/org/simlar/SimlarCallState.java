@@ -302,6 +302,11 @@ public final class SimlarCallState
 		return mLinphoneCallState.isBeforeEncryption();
 	}
 
+	public boolean isWaitingForContact()
+	{
+		return mLinphoneCallState.isCallOutgoingConnecting();
+	}
+
 	public long getStartTime()
 	{
 		return mCallStartTime;

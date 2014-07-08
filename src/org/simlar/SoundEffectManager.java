@@ -45,6 +45,7 @@ final class SoundEffectManager
 
 	public enum SoundEffectType {
 		RINGTONE,
+		WAITING_FOR_CONTACT,
 		ENCRYPTION_HANDSHAKE,
 		UNENCRYPTED_CALL_ALARM
 	}
@@ -80,6 +81,12 @@ final class SoundEffectManager
 					mediaPlayer.setAudioStreamType(AudioManager.STREAM_RING);
 					mediaPlayer.setDataSource(mContext, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE));
 					mediaPlayer.setLooping(false);
+					return mediaPlayer;
+				case WAITING_FOR_CONTACT:
+					mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+					mediaPlayer.setDataSource(mContext,
+							Uri.parse("android.resource://" + mContext.getPackageName() + "/" + R.raw.waiting_for_contact));
+					mediaPlayer.setLooping(true);
 					return mediaPlayer;
 				case ENCRYPTION_HANDSHAKE:
 					mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
