@@ -71,6 +71,9 @@ public final class CallActivity extends Activity implements SensorEventListener
 	private LinearLayout mLayoutUnencryptedCall;
 	private Button mButtonAcceptUnencryptedCall;
 
+	private LinearLayout mLayoutCallEndReason;
+	private TextView mTextViewCallEndReason;
+
 	private ImageButton mButtonMicro;
 	private ImageButton mButtonSpeaker;
 
@@ -124,6 +127,9 @@ public final class CallActivity extends Activity implements SensorEventListener
 
 		mLayoutUnencryptedCall = (LinearLayout) findViewById(R.id.linearLayoutUnencryptedCall);
 		mButtonAcceptUnencryptedCall = (Button) findViewById(R.id.buttonAcceptUnencryptedCall);
+
+		mLayoutCallEndReason = (LinearLayout) findViewById(R.id.linearLayoutCallEndReason);
+		mTextViewCallEndReason = (TextView) findViewById(R.id.textViewCallEndReason);
 
 		mButtonMicro = (ImageButton) findViewById(R.id.buttonMicro);
 		mButtonSpeaker = (ImageButton) findViewById(R.id.buttonSpeaker);
@@ -248,6 +254,11 @@ public final class CallActivity extends Activity implements SensorEventListener
 		setButtonSpeakerMute();
 
 		if (simlarCallState.isEndedCall()) {
+			mLayoutConnectionQuality.setVisibility(View.INVISIBLE);
+			mLayoutAuthenticationToken.setVisibility(View.GONE);
+			mLayoutUnencryptedCall.setVisibility(View.GONE);
+			mLayoutCallEndReason.setVisibility(View.VISIBLE);
+			mTextViewCallEndReason.setText(simlarCallState.getCallStatusDisplayMessage(this));
 			finishDelayed(5000);
 		}
 	}
