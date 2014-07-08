@@ -259,6 +259,7 @@ public final class CallActivity extends Activity implements SensorEventListener
 			mLayoutUnencryptedCall.setVisibility(View.GONE);
 			mLayoutCallEndReason.setVisibility(View.VISIBLE);
 			mTextViewCallEndReason.setText(simlarCallState.getCallStatusDisplayMessage(this));
+			stopCallTimer();
 			finishDelayed(5000);
 		}
 	}
