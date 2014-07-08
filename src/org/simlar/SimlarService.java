@@ -27,6 +27,7 @@ import org.simlar.PreferencesHelper.NotInitedException;
 import org.simlar.SoundEffectManager.SoundEffectType;
 import org.simlar.Volumes.MicrophoneStatus;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -67,7 +68,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private WifiLock mWifiLock = null;
 	private boolean mGoingDown = false;
 	private boolean mTerminatePrivateAlreadyCalled = false;
-	private Class<?> mNotificationActivity = null;
+	private Class<? extends Activity> mNotificationActivity = null;
 	private VibratorManager mVibratorManager = null;
 	private SoundEffectManager mSoundEffectManager = null;
 	private boolean mHasAudioFocus = false;
@@ -227,7 +228,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		return true;
 	}
 
-	public void registerActivityToNotification(final Class<?> activity)
+	public void registerActivityToNotification(final Class<? extends Activity> activity)
 	{
 		if (activity == null) {
 			Lg.e(LOGTAG, "registerActivityToNotification with empty activity");
@@ -262,8 +263,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		final String text = mSimlarCallState.createNotificationText(this, mGoingDown);
 
 		final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
-		notificationBuilder.setSmallIcon(R.drawable.notification_bar_icon);
-		notificationBuilder.setLargeIcon(mSimlarCallState.getContactPhotoBitmap(this, R.drawable.app_logo));
+		notificationBuilder.setSmallIcon(R.drawable.ic_notification_ongoing_call);
+		notificationBuilder.setLargeIcon(mSimlarCallState.getContactPhotoBitmap(this, R.drawable.ic_launcher));
 		notificationBuilder.setContentTitle(getString(R.string.app_name));
 		notificationBuilder.setContentText(text);
 		notificationBuilder.setOngoing(true);

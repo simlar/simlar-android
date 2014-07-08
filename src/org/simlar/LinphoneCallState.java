@@ -47,7 +47,7 @@ public enum LinphoneCallState
 	INCOMING_EARLY_MEDIA, // 16
 	UPDATING, // 17
 	RELEASED, // 18
-	UNKONWN;
+	UNKNOWN;
 
 	private static final String LOGTAG = LinphoneCallState.class.getSimpleName();
 	private static final LinphoneCallState[] ALL = LinphoneCallState.values();
@@ -56,7 +56,7 @@ public enum LinphoneCallState
 	{
 		if (state == null) {
 			Lg.e(LOGTAG, "ERROR: fromLinphoneCallState: state is null");
-			return UNKONWN;
+			return UNKNOWN;
 		}
 
 		final int value = state.value();
@@ -65,7 +65,7 @@ public enum LinphoneCallState
 		}
 
 		Lg.e(LOGTAG, "ERROR: fromLinphoneCallState failed state=", state);
-		return UNKONWN;
+		return UNKNOWN;
 	}
 
 	boolean isPossibleCallEndedMessage()
@@ -150,7 +150,7 @@ public enum LinphoneCallState
 		case REFERED:
 			Lg.w(LOGTAG, "createNotificationText falling back to initializing for SimlarCallState=", this);
 			//$FALL-THROUGH$
-		case UNKONWN:
+		case UNKNOWN:
 		case IDLE:
 		default:
 			return context.getString(R.string.linphone_call_state_notification_initializing);
