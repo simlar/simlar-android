@@ -38,9 +38,10 @@
         android:layout_marginRight="@dimen/activity_call_inner_side_margin"
         android:background="@drawable/border_round_corners"
         android:orientation="vertical"
-        android:padding="10dp"
+        android:paddingBottom="10dp"
         android:paddingLeft="20dp"
-        android:paddingRight="20dp" >
+        android:paddingRight="20dp"
+        android:paddingTop="10dp" >
 
         <TextView
             android:id="@+id/textViewCheckOrVerifyYourNumber"
@@ -107,6 +108,7 @@
             android:layout_alignLeft="@+id/linearLayoutCompletePhoneNumber"
             android:layout_alignRight="@+id/linearLayoutCompletePhoneNumber"
             android:layout_below="@+id/textViewSmsAnnouncement"
+            android:layout_marginBottom="20dp"
             android:layout_marginTop="33dp"
             android:baselineAligned="false"
             android:gravity="center_horizontal"
@@ -118,7 +120,6 @@
                 android:id="@+id/buttonRegister"
                 style="@style/buttonWhiteWithIcon"
                 android:layout_width="match_parent"
-                android:layout_marginBottom="20dp"
                 android:drawableLeft="@drawable/button_icon_ok"
                 android:onClick="createAccount"
                 android:text="@string/verify_number_activity_button_register" />
