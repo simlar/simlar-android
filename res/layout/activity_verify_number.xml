@@ -38,16 +38,16 @@
         android:layout_marginRight="@dimen/activity_call_inner_side_margin"
         android:background="@drawable/border_round_corners"
         android:orientation="vertical"
-        android:paddingBottom="10dp"
+        android:paddingBottom="@dimen/activity_verify_number_vertical_space_small"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:paddingTop="10dp" >
+        android:paddingTop="@dimen/activity_verify_number_vertical_space_small" >
 
         <TextView
             android:id="@+id/textViewCheckOrVerifyYourNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/activity_verify_number_vertical_space_small"
             android:gravity="center_horizontal"
             android:text="@string/verify_number_activity_put_in_your_number"
             android:textSize="20sp" />
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/textViewCheckOrVerifyYourNumber"
             android:layout_below="@+id/textViewCheckOrVerifyYourNumber"
-            android:layout_marginTop="33dp" >
+            android:layout_marginTop="@dimen/activity_verify_number_vertical_space_large" >
 
             <TextView
                 android:id="@+id/textViewPlus"
@@ -95,7 +95,7 @@
             android:layout_alignLeft="@+id/linearLayoutCompletePhoneNumber"
             android:layout_alignRight="@+id/linearLayoutCompletePhoneNumber"
             android:layout_below="@+id/linearLayoutCompletePhoneNumber"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/activity_verify_number_vertical_space_medium"
             android:gravity="center_horizontal"
             android:paddingLeft="2dp"
             android:paddingRight="4dp"
@@ -108,8 +108,8 @@
             android:layout_alignLeft="@+id/linearLayoutCompletePhoneNumber"
             android:layout_alignRight="@+id/linearLayoutCompletePhoneNumber"
             android:layout_below="@+id/textViewSmsAnnouncement"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="33dp"
+            android:layout_marginBottom="@dimen/activity_verify_number_vertical_space_medium"
+            android:layout_marginTop="@dimen/activity_verify_number_vertical_space_large"
             android:baselineAligned="false"
             android:gravity="center_horizontal"
             android:orientation="vertical"
