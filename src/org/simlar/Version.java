@@ -9,6 +9,11 @@ public final class Version
 	private static final String LOGTAG = CreateAccount.class.getSimpleName();
 	private static final String DEBUG_TAG = "";
 
+	private Version()
+	{
+		throw new AssertionError("This class was not meant to be instantiated");
+	}
+
 	public static String getVersionName(final Context context)
 	{
 		final String versionName = getPackageInfo(context).versionName;

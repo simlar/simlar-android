@@ -45,6 +45,11 @@ public final class HttpsPost
 
 	public static final String DATA_BOUNDARY = "*****";
 
+	private HttpsPost()
+	{
+		throw new AssertionError("This class was not meant to be instantiated");
+	}
+
 	private static String createQueryStringForParameters(final Map<String, String> parameters)
 	{
 		final StringBuilder parametersAsQueryString = new StringBuilder();

@@ -29,6 +29,11 @@ public final class Lg
 	private static final int LOG_LEVEL_DEBUG = Log.INFO;
 	private static volatile int mLevel = LOG_LEVEL_NORMAL;
 
+	private Lg()
+	{
+		throw new AssertionError("This class was not meant to be instantiated");
+	}
+
 	private static void println(final int priority, final String tag, final Throwable exception, final Object... messageParts)
 	{
 		if (priority < mLevel) {

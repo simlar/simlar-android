@@ -17,6 +17,11 @@ public final class StorePushId
 	private static final String URL_PATH = "store-push-id.php";
 	private static final int DEVICE_TYPE_ANDROID = 1;
 
+	private StorePushId()
+	{
+		throw new AssertionError("This class was not meant to be instantiated");
+	}
+
 	public static boolean httpPostStorePushId(final String pushId)
 	{
 		Lg.i(LOGTAG, "httpPostStorePushId requested");

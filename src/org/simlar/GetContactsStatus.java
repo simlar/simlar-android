@@ -39,6 +39,11 @@ public final class GetContactsStatus
 
 	private static final String URL_PATH = "get-contacts-status.php";
 
+	private GetContactsStatus()
+	{
+		throw new AssertionError("This class was not meant to be instantiated");
+	}
+
 	public static Map<String, ContactStatus> httpPostGetContactsStatus(final Set<String> contacts)
 	{
 		Lg.i(LOGTAG, "httpPostGetContactsStatus requested");

@@ -41,6 +41,11 @@ public final class ContactsProvider
 
 	private static final ContactsProviderImpl mImpl = new ContactsProviderImpl();
 
+	private ContactsProvider()
+	{
+		throw new AssertionError("This class was not meant to be instantiated");
+	}
+
 	public static interface FullContactsListener
 	{
 		void onGetContacts(final Set<FullContactData> contacts);

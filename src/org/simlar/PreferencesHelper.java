@@ -46,6 +46,11 @@ public final class PreferencesHelper
 	private static int mSimlarVersionCode = -1;
 	private static String mVerifiedTelephoneNumber = null;
 
+	private PreferencesHelper()
+	{
+		throw new AssertionError("This class was not meant to be instantiated");
+	}
+
 	public static void init(final String mySimlarId, final String password)
 	{
 		mMySimlarId = mySimlarId;
