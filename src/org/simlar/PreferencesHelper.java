@@ -72,7 +72,7 @@ public final class PreferencesHelper
 			digest.update(str.getBytes());
 			final StringBuilder sb = new StringBuilder();
 			for (final byte b : digest.digest()) {
-				sb.append(String.format("%02x", new Byte(b)));
+				sb.append(String.format("%02x", Byte.valueOf(b)));
 			}
 			return sb.toString();
 		} catch (final Exception e) {
