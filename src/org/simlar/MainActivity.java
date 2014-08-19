@@ -158,7 +158,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 			tellAFriend();
 			return true;
 		case R.id.action_show_about:
-			show_about();
+			showAbout();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -263,7 +263,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 		startActivity(Intent.createChooser(sendIntent, getString(R.string.main_activity_tell_a_friend_chooser_title)));
 	}
 
-	private void show_about()
+	private void showAbout()
 	{
 		startActivity(new Intent(this, AboutActivity.class));
 	}
