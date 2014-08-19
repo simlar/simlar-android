@@ -41,6 +41,7 @@ public final class ContactsAdapter extends ArrayAdapter<FullContactData>
 	private static final String LOGTAG = ContactsAdapter.class.getSimpleName();
 
 	private final int mLayout;
+	private final LayoutInflater mInflater;
 
 	public final class SortByName implements Comparator<FullContactData>
 	{
@@ -93,6 +94,7 @@ public final class ContactsAdapter extends ArrayAdapter<FullContactData>
 	{
 		super(context, layout, values);
 		mLayout = layout;
+		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
 	@Override
@@ -101,8 +103,7 @@ public final class ContactsAdapter extends ArrayAdapter<FullContactData>
 		final View rowView;
 		final RowViewHolder holder;
 		if (convertView == null) {
-			final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			rowView = inflater.inflate(mLayout, parent, false);
+			rowView = mInflater.inflate(mLayout, parent, false);
 			if (rowView == null) {
 				Lg.e(LOGTAG, "no row view found");
 				return null;
