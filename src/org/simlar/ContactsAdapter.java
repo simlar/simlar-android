@@ -69,6 +69,20 @@ public final class ContactsAdapter extends ArrayAdapter<FullContactData>
 		}
 	}
 
+	private static class RowViewHolder
+	{
+		public RowViewHolder(final View rowView)
+		{
+			this.letterView = (TextView) rowView.findViewById(R.id.letter);
+			this.nameView = (TextView) rowView.findViewById(R.id.name);
+			this.numberView = (TextView) rowView.findViewById(R.id.number);
+		}
+
+		public final TextView letterView;
+		public final TextView nameView;
+		public final TextView numberView;
+	}
+
 	public static ContactsAdapter createContactsAdapter(final Context context)
 	{
 		Lg.i(LOGTAG, "creating ContactsAdapter");
@@ -84,29 +98,42 @@ public final class ContactsAdapter extends ArrayAdapter<FullContactData>
 	@Override
 	public View getView(final int position, final View convertView, final ViewGroup parent)
 	{
-		final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		final View rowView = inflater.inflate(mLayout, parent, false);
+		final View rowView;
+		final RowViewHolder holder;
+		if (convertView == null) {
+			final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			rowView = inflater.inflate(mLayout, parent, false);
+			if (rowView == null) {
+				Lg.e(LOGTAG, "no row view found");
+				return null;
+			}
+			holder = new RowViewHolder(rowView);
+			rowView.setTag(holder);
+		} else {
+			rowView = convertView;
+			holder = (RowViewHolder) rowView.getTag();
+		}
+
 		final FullContactData contact = getItem(position);
 		if (contact == null) {
 			return rowView;
 		}
 
-		final TextView letterView = (TextView) rowView.findViewById(R.id.letter);
 		if (position > 0) {
 			final FullContactData prevContact = getItem(position - 1);
 			if (contact.getNameOrNumber().charAt(0) != prevContact.getNameOrNumber().charAt(0)) {
-				letterView.setText(Character.toString(contact.getNameOrNumber().charAt(0)));
+				holder.letterView.setVisibility(View.VISIBLE);
+				holder.letterView.setText(Character.toString(contact.getNameOrNumber().charAt(0)));
 			} else {
-				letterView.setVisibility(View.GONE);
+				holder.letterView.setVisibility(View.GONE);
 			}
 		} else {
-			letterView.setText(Character.toString(contact.getNameOrNumber().charAt(0)));
+			holder.letterView.setVisibility(View.VISIBLE);
+			holder.letterView.setText(Character.toString(contact.getNameOrNumber().charAt(0)));
 		}
 
-		final TextView nameView = (TextView) rowView.findViewById(R.id.name);
-		nameView.setText(contact.getNameOrNumber());
-		final TextView numberView = (TextView) rowView.findViewById(R.id.number);
-		numberView.setText(contact.guiTelephoneNumber);
+		holder.nameView.setText(contact.getNameOrNumber());
+		holder.numberView.setText(contact.guiTelephoneNumber);
 
 		return rowView;
 	}
