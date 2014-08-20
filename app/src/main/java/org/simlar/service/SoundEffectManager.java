@@ -51,6 +51,7 @@ final class SoundEffectManager
 		RINGTONE,
 		WAITING_FOR_CONTACT,
 		ENCRYPTION_HANDSHAKE,
+		ENCRYPTION_HANDSHAKE_SUCCESS,
 		CALL_INTERRUPTION
 	}
 
@@ -61,6 +62,7 @@ final class SoundEffectManager
 		private MediaPlayer mMediaPlayer;
 		private long mPlayRequestTime;
 		private long mPlayStart = -1;
+		private boolean mRepeat = true;
 
 		SoundEffectPlayer(final SoundEffectType type, final long now)
 		{
@@ -109,6 +111,14 @@ final class SoundEffectManager
 						mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
 						mediaPlayer.setDataSource(mContext, createSoundUri(R.raw.encryption_handshake));
 						mediaPlayer.setLooping(true);
+						return mediaPlayer;
+					}
+					case ENCRYPTION_HANDSHAKE_SUCCESS -> {
+						mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+						mediaPlayer.setDataSource(mContext,
+								Uri.parse("android.resource://" + mContext.getPackageName() + "/" + R.raw.encryption_handshake_success));
+						mediaPlayer.setLooping(false);
+						mRepeat = false;
 						return mediaPlayer;
 					}
 					case CALL_INTERRUPTION -> {
@@ -163,17 +173,19 @@ final class SoundEffectManager
 			Lg.i("[", mType, "] start playing at time: ", playStartTime);
 			mMediaPlayer.start();
 
-			mMediaPlayer.setOnCompletionListener(mp2 -> {
-				final long now = SystemClock.elapsedRealtime();
-				final long delay = Math.max(0, playStartTime + MIN_PLAY_TIME - now);
-				Lg.i("[", mType, "] MediaPlayer onCompletion at: ", now, " restarting with delay: ", delay);
+			if (mRepeat) {
+				mMediaPlayer.setOnCompletionListener(mp2 -> {
+					final long now = SystemClock.elapsedRealtime();
+					final long delay = Math.max(0, playStartTime + MIN_PLAY_TIME - now);
+					Lg.i("[", mType, "] MediaPlayer onCompletion at: ", now, " restarting with delay: ", delay);
 
-				if (delay > 0) {
-					mHandler.postDelayed(() -> onPrepared(mp2), delay);
-				} else {
-					onPrepared(mp2);
-				}
-			});
+					if (delay > 0) {
+						mHandler.postDelayed(() -> onPrepared(mp2), delay);
+					} else {
+						onPrepared(mp2);
+					}
+				});
+			}
 		}
 
 		void stopMediaPlayer()
