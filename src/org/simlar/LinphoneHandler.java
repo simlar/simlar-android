@@ -185,6 +185,10 @@ public final class LinphoneHandler
 			Lg.i(LOGTAG, "Threads for MediaStreamer: ", Integer.valueOf(cpuCount));
 			mLinphoneCore.setCpuCount(cpuCount);
 
+			// We do not want a call response with "486 busy here" if you are not on the phone. So we take a high value of 1 hour.
+			// The Simlar sip server is responsible for terminating a call. Right now it does that after 2 minutes.
+			mLinphoneCore.setIncomingTimeout(3600);
+
 			// make sure we only handle one call
 			mLinphoneCore.setMaxCalls(1);
 		} catch (final LinphoneCoreException e) {
@@ -281,7 +285,7 @@ public final class LinphoneHandler
 		Lg.i(LOGTAG, "Call to ", new Lg.Anonymizer(number), " is in progress...");
 	}
 
-	private LinphoneCall getCurrentCall()
+	public LinphoneCall getCurrentCall()
 	{
 		if (mLinphoneCore == null) {
 			return null;
