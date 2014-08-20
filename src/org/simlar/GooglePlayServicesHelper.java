@@ -40,6 +40,11 @@ public final class GooglePlayServicesHelper
 	private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 	static final String GOOGLE_PUSH_SENDER_ID = "772399062899";
 
+	private GooglePlayServicesHelper()
+	{
+		throw new AssertionError("This class was not meant to be instantiated");
+	}
+
 	public static void registerGcmIfNeeded(final Context context)
 	{
 		// Why do we check the version code here?

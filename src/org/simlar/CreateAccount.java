@@ -36,6 +36,11 @@ public final class CreateAccount
 
 	private static final String URL_PATH = "create-account.php";
 
+	private CreateAccount()
+	{
+		throw new AssertionError("This class was not meant to be instantiated");
+	}
+
 	public static class Result
 	{
 		public static final int SUCCESS = 0;

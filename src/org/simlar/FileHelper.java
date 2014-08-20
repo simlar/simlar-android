@@ -36,6 +36,11 @@ public final class FileHelper
 	private static String mLinphoneInitialConfigFile = null;
 	private static String mFakePhonebookPicture = null;
 
+	private FileHelper()
+	{
+		throw new AssertionError("This class was not meant to be instantiated");
+	}
+
 	public static void init(final Context context)
 	{
 		if (isInitialized()) {

@@ -38,6 +38,11 @@ public final class Util
 {
 	private static final int MAX_BUFFER_SIZE = 1 * 1024 * 1024;
 
+	private Util()
+	{
+		throw new AssertionError("This class was not meant to be instantiated");
+	}
+
 	public static boolean isNullOrEmpty(final String string)
 	{
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
