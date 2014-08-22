@@ -38,14 +38,25 @@ public final class SimlarCallState
 	private String mContactName = null;
 	private String mContactPhotoId = null;
 	private LinphoneCallState mLinphoneCallState = LinphoneCallState.UNKNOWN;
+	private GuiCallState mGuiCallState = GuiCallState.UNKNOWN;
 	private CallEndReason mCallEndReason = CallEndReason.NONE;
 	private boolean mEncrypted = true;
 	private String mAuthenticationToken = null;
 	private boolean mAuthenticationTokenVerified = false;
-	private boolean mOngoingEncryptionHandshake = false;
 	private NetworkQuality mQuality = NetworkQuality.UNKNOWN;
 	private int mDuration = 0;
 	private long mCallStartTime = -1;
+
+	private enum GuiCallState
+	{
+		UNKNOWN,
+		CONNECTING_TO_SERVER,
+		WAITING_FOR_CONTACT,
+		RINGING,
+		ENCRYPTING,
+		TALKING,
+		ENDED;
+	}
 
 	private boolean updateCallEndReason(final CallEndReason reason)
 	{
@@ -80,10 +91,26 @@ public final class SimlarCallState
 		mSimlarId = simlarId;
 		mLinphoneCallState = callState;
 
-		if (isBeforeEncryption()) {
-			mOngoingEncryptionHandshake = true;
-		} else if (isEndedCall()) {
-			mOngoingEncryptionHandshake = false;
+		final GuiCallState oldGuiCallState = mGuiCallState;
+		if (mLinphoneCallState.isNewCallJustStarted()) {
+			mGuiCallState = GuiCallState.CONNECTING_TO_SERVER;
+		} else if (mLinphoneCallState.isPossibleCallEndedMessage()) {
+			mGuiCallState = GuiCallState.ENDED;
+		} else if (mLinphoneCallState.isCallOutgoingConnecting()) {
+			mGuiCallState = GuiCallState.WAITING_FOR_CONTACT;
+		} else if (mLinphoneCallState.isCallOutgoingRinging()) {
+			mGuiCallState = GuiCallState.RINGING;
+		} else if (mLinphoneCallState.isBeforeEncryption()) {
+			mGuiCallState = GuiCallState.ENCRYPTING;
+		}
+		// NOTE: talking is set after encryption
+
+		if (oldGuiCallState != mGuiCallState) {
+			if (mGuiCallState == GuiCallState.ENDED) {
+				mCallStartTime = -1;
+			} else {
+				mCallStartTime = SystemClock.elapsedRealtime();
+			}
 		}
 
 		if (mLinphoneCallState.isNewCallJustStarted()) {
@@ -96,7 +123,6 @@ public final class SimlarCallState
 			mAuthenticationTokenVerified = false;
 			mQuality = NetworkQuality.UNKNOWN;
 			mDuration = 0;
-			mCallStartTime = -1;
 		}
 
 		return true;
@@ -128,9 +154,7 @@ public final class SimlarCallState
 
 		if (callDuration != mDuration) {
 			mDuration = callDuration;
-			if (mDuration <= 0) {
-				mCallStartTime = -1;
-			} else {
+			if (mDuration > 0) {
 				mCallStartTime = SystemClock.elapsedRealtime() - mDuration * 1000L;
 			}
 		}
@@ -145,7 +169,10 @@ public final class SimlarCallState
 			return false;
 		}
 
-		mOngoingEncryptionHandshake = false;
+		if (mGuiCallState == GuiCallState.ENCRYPTING) {
+			mGuiCallState = GuiCallState.TALKING;
+			mCallStartTime = SystemClock.elapsedRealtime();
+		}
 
 		mEncrypted = encrypted;
 		mAuthenticationToken = authenticationToken;
@@ -162,14 +189,15 @@ public final class SimlarCallState
 	@Override
 	public String toString()
 	{
-		return "SimlarCallState [" + (mSimlarId != null ? "mSimlarId=" + new Lg.Anonymizer(mSimlarId) + ", " : "")
-				+ (mContactName != null ? "mContactName=" + new Lg.Anonymizer(mContactName) + ", " : "")
+		return "SimlarCallState [" + (mSimlarId != null ? "mSimlarId=" + mSimlarId + ", " : "")
+				+ (mContactName != null ? "mContactName=" + mContactName + ", " : "")
 				+ (mContactPhotoId != null ? "mContactPhotoId=" + mContactPhotoId + ", " : "")
 				+ (mLinphoneCallState != null ? "mLinphoneCallState=" + mLinphoneCallState + ", " : "")
+				+ (mGuiCallState != null ? "mGuiCallState=" + mGuiCallState + ", " : "")
 				+ (mCallEndReason != null ? "mCallEndReason=" + mCallEndReason + ", " : "") + "mEncrypted=" + mEncrypted + ", "
 				+ (mAuthenticationToken != null ? "mAuthenticationToken=" + mAuthenticationToken + ", " : "") + "mAuthenticationTokenVerified="
-				+ mAuthenticationTokenVerified + ", mOngoingEncryptionHandshake=" + mOngoingEncryptionHandshake + ", "
-				+ (mQuality != null ? "mQuality=" + mQuality + ", " : "") + "mDuration=" + mDuration + ", mCallStartTime=" + mCallStartTime + "]";
+				+ mAuthenticationTokenVerified + ", " + (mQuality != null ? "mQuality=" + mQuality + ", " : "") + "mDuration=" + mDuration
+				+ ", mCallStartTime=" + mCallStartTime + "]";
 	}
 
 	public String getContactName()
@@ -204,23 +232,24 @@ public final class SimlarCallState
 			return null;
 		}
 
-		if (mOngoingEncryptionHandshake) {
-			return context.getString(R.string.call_activity_encrypting);
-		} else if (mLinphoneCallState.isIdle()) {
+		switch (mGuiCallState) {
+		case CONNECTING_TO_SERVER:
 			return context.getString(R.string.call_activity_connecting_to_server);
-		} else if (mLinphoneCallState.isTalking()) {
-			return context.getString(R.string.call_activity_talking);
-		} else if (mLinphoneCallState.isCallOutgoingConnecting()) {
+		case WAITING_FOR_CONTACT:
 			return context.getString(R.string.call_activity_outgoing_connecting);
-		} else if (mLinphoneCallState.isCallOutgoingRinging()) {
+		case RINGING:
 			return context.getString(R.string.call_activity_outgoing_ringing);
-		} else if (mLinphoneCallState.isPossibleCallEndedMessage()) {
+		case ENCRYPTING:
+			return context.getString(R.string.call_activity_encrypting);
+		case TALKING:
+			return context.getString(R.string.call_activity_talking);
+		case ENDED:
 			return context.getString(mCallEndReason.getDisplayMessageId());
+		case UNKNOWN:
+		default:
+			Lg.w(LOGTAG, "getCallStatusDisplayMessage mLinphoneCallState=", mLinphoneCallState);
+			return "";
 		}
-
-		Lg.w(LOGTAG, "getCallStatusDisplayMessage mLinphoneCallState=", mLinphoneCallState);
-
-		return null;
 	}
 
 	public boolean isEncrypted()
@@ -275,7 +304,7 @@ public final class SimlarCallState
 
 	public long getStartTime()
 	{
-		return mDuration > 0 ? mCallStartTime : -1;
+		return mCallStartTime;
 	}
 
 	public void connectingToSimlarServerTimedOut()

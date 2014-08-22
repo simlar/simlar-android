@@ -88,12 +88,12 @@
     <string name="call_activity_button_authentication_token_wrong">Ist mir egal</string>
     <string name="call_activity_connecting_to_server">Verbinde mit Server&#8230;</string>
     <string name="call_activity_connecting_to_server_timed_out">Verbindung zu Server fehlgeschlagen</string>
-    <string name="call_activity_outgoing_connecting">Verbinde mit Kontakt&#8230;</string>
+    <string name="call_activity_outgoing_connecting">Warte auf Kontakt&#8230;</string>
     <string name="call_activity_outgoing_ringing">Klingelt&#8230;</string>
     <string name="call_activity_encrypting">Verschlüssele&#8230;</string>
     <string name="call_activity_talking">Spreche&#8230;</string>
     <string name="call_activity_call_ended_because_declined">Anruf abgelehnt</string>
-    <string name="call_activity_call_ended_because_user_offline">Aktuell nicht erreichbar</string>
+    <string name="call_activity_call_ended_because_user_offline">Kontakt ist offline</string>
     <string name="call_activity_call_ended_because_incompatible_media">Verbindung nicht möglich</string>
     <string name="call_activity_call_ended_because_user_busy">Besetzt</string>
     <string name="call_activity_call_ended_normally">Gespräch beendet</string>

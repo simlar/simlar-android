@@ -88,12 +88,12 @@
     <string name="call_activity_button_authentication_token_wrong">I don\'t care</string>
     <string name="call_activity_connecting_to_server">Connecting to server&#8230;</string>
     <string name="call_activity_connecting_to_server_timed_out">Connecting to server timed out</string>
-    <string name="call_activity_outgoing_connecting">Connecting to client&#8230;</string>
+    <string name="call_activity_outgoing_connecting">Waiting for contact&#8230;</string>
     <string name="call_activity_outgoing_ringing">Ringing&#8230;</string>
     <string name="call_activity_encrypting">Encrypting&#8230;</string>
     <string name="call_activity_talking">Talking&#8230;</string>
     <string name="call_activity_call_ended_because_declined">Call declined</string>
-    <string name="call_activity_call_ended_because_user_offline">Temporarily not available</string>
+    <string name="call_activity_call_ended_because_user_offline">Contact is offline</string>
     <string name="call_activity_call_ended_because_incompatible_media">Incompatible media type</string>
     <string name="call_activity_call_ended_because_user_busy">Busy</string>
     <string name="call_activity_call_ended_normally">Call ended</string>
