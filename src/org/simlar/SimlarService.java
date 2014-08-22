@@ -479,6 +479,12 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			mSoundEffectManager.stop(SoundEffectType.RINGTONE);
 		}
 
+		if (mSimlarCallState.isWaitingForContact() && !mGoingDown) {
+			mSoundEffectManager.start(SoundEffectType.WAITING_FOR_CONTACT);
+		} else {
+			mSoundEffectManager.stop(SoundEffectType.WAITING_FOR_CONTACT);
+		}
+
 		if (mSimlarCallState.isBeforeEncryption()) {
 			mLinphoneThread.setMicrophoneStatus(MicrophoneStatus.DISABLED);
 			mSoundEffectManager.setInCallMode(true);
