@@ -37,7 +37,7 @@
     <string name="main_activity_menu_delete_account">Delete my credentials and quit</string>
     <string name="main_activity_menu_fake_telephone_book">Screenshot telephone book</string>
     <string name="main_activity_menu_fake_telephone_book_disable">Regular telephone book</string>
-    <string name="main_activity_menu_tell_a_friend">Invite a friend</string>
+    <string name="main_activity_menu_tell_a_friend">Invite friends</string>
     <string name="main_activity_menu_show_about">About</string>
     <string name="main_activity_alert_upload_log_file_title">Really report bug?</string>
     <string name="main_activity_alert_upload_log_file_text">This will upload a log file. Afterwards you will be asked to write an email describing the bug.\n\nDo you want to continue?</string>
@@ -45,10 +45,10 @@
     <string name="main_activity_alert_uploading_log_file_failed_text">Log file creation failed => abort sending</string>
     <string name="main_activity_alert_enable_linphone_debug_mode_title">Really enable debug mode?</string>
     <string name="main_activity_alert_enable_linphone_debug_mode_text">This will increase log file entries a lot. Only do so if you have been asked for it by a Simlar developer. Or you really know what you are doing.</string>
-    <string name="main_activity_tell_a_friend_chooser_title">Invite a friend with</string>
+    <string name="main_activity_tell_a_friend_chooser_title">Invite friends</string>
     <!-- TextSecure messages do not have a subject. WhatsApp puts the subject just in front of the message text. Emails simply use this subject as usual. -->
     <string name="main_activity_tell_a_friend_subject">Simlar</string>
-    <string name="main_activity_tell_a_friend_text">Let\'s make free and secure calls over the internet with Simlar: https://www.simlar.org/download</string>
+    <string name="main_activity_tell_a_friend_text">Let\'s make free and encrypted calls with Simlar: https://www.simlar.org/download</string>
 
     <string name="upload_log_file_send_email_to_developer">Send email to developer</string>
     <string name="upload_log_file_progress">Uploading log file&#8230;</string>
