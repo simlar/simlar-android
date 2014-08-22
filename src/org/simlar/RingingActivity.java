@@ -95,15 +95,33 @@ public final class RingingActivity extends Activity
 	{
 		Lg.i(LOGTAG, "onResume");
 		super.onResume();
-		mCommunicator.register(this, RingingActivity.class);
+		if (!mCommunicator.register(this, RingingActivity.class)) {
+			Lg.w(LOGTAG, "SimlarService is not running, starting MainActivity");
+			startActivity(new Intent(this, MainActivity.class));
+			finish();
+		}
 	}
 
 	@Override
 	protected void onPause()
 	{
 		Lg.i(LOGTAG, "onPause");
-		mCommunicator.unregister(this);
+		mCommunicator.unregister();
 		super.onPause();
+	}
+
+	@Override
+	public void onStop()
+	{
+		Lg.i(LOGTAG, "onStop");
+		super.onStop();
+	}
+
+	@Override
+	public void onDestroy()
+	{
+		Lg.i(LOGTAG, "onDestroy");
+		super.onDestroy();
 	}
 
 	@Override

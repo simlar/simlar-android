@@ -68,12 +68,13 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private WifiLock mWifiLock = null;
 	private boolean mGoingDown = false;
 	private boolean mTerminatePrivateAlreadyCalled = false;
-	private Class<? extends Activity> mNotificationActivity = null;
+	private static volatile Class<? extends Activity> mNotificationActivity = null;
 	private VibratorManager mVibratorManager = null;
 	private SoundEffectManager mSoundEffectManager = null;
 	private boolean mHasAudioFocus = false;
 	private final NetworkChangeReceiver mNetworkChangeReceiver = new NetworkChangeReceiver();
 	private String mSimlarIdToCall = null;
+	private static volatile boolean mRunning = false;
 
 	public final class SimlarServiceBinder extends Binder
 	{
@@ -153,6 +154,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	{
 		Lg.i(LOGTAG, "started with simlar version=", Version.getVersionName(this),
 				" on device: ", Build.MANUFACTURER, " ", Build.MODEL, " (", Build.DEVICE, ") with android version=", Build.VERSION.RELEASE);
+
+		mRunning = true;
 
 		FileHelper.init(this);
 		mVibratorManager = new VibratorManager(this.getApplicationContext());
@@ -257,11 +260,11 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			Lg.i(LOGTAG, "no activity registered based on mSimlarStatus=", mSimlarStatus, " we now take: ", mNotificationActivity.getSimpleName());
 		}
 
+		/// Note: we do not want the TaskStackBuilder here
 		final PendingIntent activity = PendingIntent.getActivity(this, 0,
 				new Intent(this, mNotificationActivity).addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED), 0);
 
 		final String text = mSimlarCallState.createNotificationText(this, mGoingDown);
-
 		final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
 		notificationBuilder.setSmallIcon(R.drawable.ic_notification_ongoing_call);
 		notificationBuilder.setLargeIcon(mSimlarCallState.getContactPhotoBitmap(this, R.drawable.ic_launcher));
@@ -302,6 +305,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		releaseWakeLock();
 		releaseDisplayWakeLock();
 		releaseWifiLock();
+
+		mRunning = false;
 
 		Lg.i(LOGTAG, "onDestroy ended");
 	}
@@ -501,6 +506,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 			if (mSimlarCallState.isRinging()) {
 				Lg.i(LOGTAG, "starting RingingActivity");
+				mNotificationActivity = RingingActivity.class;
 				startActivity(new Intent(SimlarService.this, RingingActivity.class).addFlags(
 						Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
 			}
@@ -604,6 +610,10 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			return;
 		}
 
+		mNotificationActivity = MainActivity.class;
+		final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		nm.notify(NOTIFICATION_ID, createNotification());
+
 		if (mSimlarStatus == SimlarStatus.ONGOING_CALL) {
 			mLinphoneThread.terminateAllCalls();
 		} else {
@@ -690,11 +700,14 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mHandler.removeCallbacksAndMessages(null);
 
 		if (mGoingDown) {
-			Lg.i(LOGTAG, "onJoin: calling stopSelf");
-			stopForeground(true);
-			// as notification icon stays in some circumstances
+			Lg.i(LOGTAG, "onJoin: canceling notification");
 			((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
+			Lg.i(LOGTAG, "onJoin: calling stopSelf");
 			stopSelf();
+			Lg.i(LOGTAG, "onJoin: stopSelf called");
+			// calling stopForeground before stopSelf could trigger a restart
+			stopForeground(true);
+			Lg.i(LOGTAG, "onJoin: stopForeground called");
 		} else {
 			Lg.i(LOGTAG, "onJoin: recovering calling startLinphone");
 			startLinphone();
@@ -752,5 +765,21 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	public CallConnectionDetails getCallConnectionDetails()
 	{
 		return mCallConnectionDetails;
+	}
+
+	public static boolean isRunning()
+	{
+		return mRunning;
+	}
+
+	public static Class<? extends Activity> getActivity()
+	{
+		return mNotificationActivity;
+	}
+
+	public static void startService(final Context context, final Intent intent)
+	{
+		context.startService(intent);
+		mRunning = true;
 	}
 }

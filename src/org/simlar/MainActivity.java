@@ -29,6 +29,7 @@ import org.simlar.ContactsProvider.FullContactData;
 import org.simlar.ContactsProvider.FullContactsListener;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -101,6 +102,16 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	{
 		Lg.i(LOGTAG, "onResume");
 		super.onResume();
+
+		if (SimlarService.isRunning()) {
+			final Class<? extends Activity> activity = SimlarService.getActivity();
+			if (activity != this.getClass()) {
+				Lg.i(LOGTAG, "as service is running => starting: ", activity.getSimpleName());
+				startActivity(new Intent(this, activity));
+				finish();
+				return;
+			}
+		}
 
 		if (!GooglePlayServicesHelper.checkPlayServices(this)) {
 			return;

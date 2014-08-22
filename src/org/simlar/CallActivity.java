@@ -52,6 +52,8 @@ public final class CallActivity extends Activity implements SensorEventListener
 	private SensorManager mSensorManager;
 	private long mCallStartTime = -1;
 	private final Handler mHandler = new Handler();
+	private Runnable mCallTimer = null;
+	private boolean mFinishDelayedCalled = false;
 
 	// gui elements
 	private ImageView mImageViewContactImage;
@@ -146,7 +148,13 @@ public final class CallActivity extends Activity implements SensorEventListener
 	{
 		Lg.i(LOGTAG, "onResume");
 		super.onResume();
-		mCommunicator.register(this, CallActivity.class);
+
+		if (!mCommunicator.register(this, CallActivity.class)) {
+			Lg.w(LOGTAG, "SimlarService is not running, starting MainActivity");
+			startActivity(new Intent(this, MainActivity.class));
+			finish();
+		}
+
 		mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY), SensorManager.SENSOR_DELAY_NORMAL);
 	}
 
@@ -154,7 +162,7 @@ public final class CallActivity extends Activity implements SensorEventListener
 	protected void onPause()
 	{
 		Lg.i(LOGTAG, "onPause");
-		mCommunicator.unregister(this);
+		mCommunicator.unregister();
 		mSensorManager.unregisterListener(this);
 		super.onPause();
 	}
@@ -163,9 +171,15 @@ public final class CallActivity extends Activity implements SensorEventListener
 	protected void onStop()
 	{
 		Lg.i(LOGTAG, "onStop");
-		mHandler.removeCallbacksAndMessages(null);
-		mTextViewCallTimer.setVisibility(View.INVISIBLE);
+		stopCallTimer();
 		super.onStop();
+	}
+
+	@Override
+	public void onDestroy()
+	{
+		Lg.i(LOGTAG, "onDestroy");
+		super.onDestroy();
 	}
 
 	@Override
@@ -240,9 +254,18 @@ public final class CallActivity extends Activity implements SensorEventListener
 
 	private void startCallTimer()
 	{
-		if (mTextViewCallTimer.getVisibility() == View.VISIBLE) {
+		if (mCallTimer != null) {
 			return;
 		}
+
+		mCallTimer = new Runnable() {
+			@Override
+			public void run()
+			{
+				iterateTimer();
+			}
+		};
+
 		mTextViewCallTimer.setVisibility(View.VISIBLE);
 
 		iterateTimer();
@@ -255,18 +278,25 @@ public final class CallActivity extends Activity implements SensorEventListener
 
 		mTextViewCallTimer.setText(text);
 
-		mHandler.postDelayed(new Runnable() {
-			@Override
-			public void run()
-			{
-				iterateTimer();
-			}
-		}, 1000);
+		if (mCallTimer != null) {
+			mHandler.postDelayed(mCallTimer, 1000);
+		}
+	}
 
+	private void stopCallTimer()
+	{
+		mHandler.removeCallbacks(mCallTimer);
+		mCallTimer = null;
 	}
 
 	private void finishDelayed(final int milliSeconds)
 	{
+		if (mFinishDelayedCalled) {
+			return;
+		}
+
+		mFinishDelayedCalled = true;
+
 		Lg.i(LOGTAG, "finishing activity in ", Integer.valueOf(milliSeconds), " ms");
 
 		new Handler().postDelayed(new Runnable() {

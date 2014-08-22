@@ -163,14 +163,16 @@ public final class VolumesControlActivity extends Activity
 	{
 		Lg.i(LOGTAG, "onResume");
 		super.onResume();
-		mCommunicator.register(this, CallActivity.class);
+		if (!mCommunicator.register(this, CallActivity.class)) {
+			finish();
+		}
 	}
 
 	@Override
 	protected void onPause()
 	{
 		Lg.i(LOGTAG, "onPause");
-		mCommunicator.unregister(this);
+		mCommunicator.unregister();
 		super.onPause();
 	}
 

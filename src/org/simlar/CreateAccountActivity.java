@@ -239,7 +239,7 @@ public final class CreateAccountActivity extends Activity
 		Lg.i(LOGTAG, "onPause");
 
 		if (mProgressFirstLogIn.getVisibility() == View.VISIBLE) {
-			mCommunicator.unregister(this);
+			mCommunicator.unregister();
 		}
 		super.onPause();
 	}
