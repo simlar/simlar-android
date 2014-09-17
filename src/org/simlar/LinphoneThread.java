@@ -20,6 +20,8 @@
 
 package org.simlar;
 
+import java.nio.ByteBuffer;
+
 import org.linphone.core.LinphoneAddress;
 import org.linphone.core.LinphoneCall;
 import org.linphone.core.LinphoneCallStats;
@@ -675,6 +677,25 @@ public final class LinphoneThread
 				return;
 			}
 			Lg.w(LOGTAG, "configuringStatus remoteProvisioningState=", state, " message=", message);
+		}
+
+		@Override
+		public void fileTransferProgressIndication(LinphoneCore lc, LinphoneChatMessage message, LinphoneContent content, int progress)
+		{
+			Lg.w(LOGTAG, "fileTransferProgressIndication: message=", message, " progress=", Integer.valueOf(progress));
+		}
+
+		@Override
+		public void fileTransferRecv(LinphoneCore lc, LinphoneChatMessage message, LinphoneContent content, byte[] buffer, int size)
+		{
+			Lg.w(LOGTAG, "fileTransferRecv: message=", message, " size=", Integer.valueOf(size));
+		}
+
+		@Override
+		public int fileTransferSend(LinphoneCore lc, LinphoneChatMessage message, LinphoneContent content, ByteBuffer buffer, int size)
+		{
+			Lg.w(LOGTAG, "fileTransferSend: message=", message, " size=", Integer.valueOf(size));
+			return 0;
 		}
 	}
 
