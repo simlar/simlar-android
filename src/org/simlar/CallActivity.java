@@ -20,6 +20,7 @@
 
 package org.simlar;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.hardware.Sensor;
@@ -27,11 +28,13 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -423,6 +426,14 @@ public final class CallActivity extends Activity implements SensorEventListener
 	{
 	}
 
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+	public void showNavigationBar(final boolean visible)
+	{
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+			getWindow().getDecorView().setSystemUiVisibility(visible ? View.SYSTEM_UI_FLAG_VISIBLE : View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+		}
+	}
+
 	@Override
 	public void onSensorChanged(final SensorEvent event)
 	{
@@ -433,16 +444,25 @@ public final class CallActivity extends Activity implements SensorEventListener
 			/// do not return, e.g. the galaxy s2 won't work otherwise
 		}
 
-		final WindowManager.LayoutParams params = getWindow().getAttributes();
+		final Window window = getWindow();
+		final View view = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+
+		final WindowManager.LayoutParams params = window.getAttributes();
 		if (distance <= PROXIMITY_DISTANCE_THRESHOLD) {
 			Lg.i(LOGTAG, "proximity sensors distance=", Float.valueOf(distance), " below threshold=", Float.valueOf(PROXIMITY_DISTANCE_THRESHOLD),
 					" => dimming screen in order to disable touch events");
 			params.screenBrightness = 0.1f;
+			view.setVisibility(View.INVISIBLE);
+			showNavigationBar(false);
+			window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		} else {
 			Lg.i(LOGTAG, "proximity sensors distance=", Float.valueOf(distance), " above threshold=", Float.valueOf(PROXIMITY_DISTANCE_THRESHOLD),
 					" => enabling touch events (no screen dimming)");
 			params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
+			view.setVisibility(View.VISIBLE);
+			showNavigationBar(true);
+			window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		}
-		getWindow().setAttributes(params);
+		window.setAttributes(params);
 	}
 }
