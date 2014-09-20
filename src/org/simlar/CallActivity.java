@@ -430,7 +430,7 @@ public final class CallActivity extends Activity implements SensorEventListener
 
 		if (distance > event.sensor.getMaximumRange()) {
 			Lg.w(LOGTAG, "proximity sensors distance=", Float.valueOf(distance), " out of range=", Float.valueOf(event.sensor.getMaximumRange()));
-			return;
+			/// do not return, e.g. the galaxy s2 won't work otherwise
 		}
 
 		final WindowManager.LayoutParams params = getWindow().getAttributes();
