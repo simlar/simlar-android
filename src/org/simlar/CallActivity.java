@@ -20,21 +20,14 @@
 
 package org.simlar;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.media.AudioManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -43,16 +36,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public final class CallActivity extends Activity implements SensorEventListener
+public final class CallActivity extends Activity
 {
 	static final String LOGTAG = CallActivity.class.getSimpleName();
 
 	public static final String INTENT_EXTRA_SIMLAR_ID = "simlarId";
 
-	private static final float PROXIMITY_DISTANCE_THRESHOLD = 4.0f;
-
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCall();
-	private SensorManager mSensorManager;
+	private ProximityScreenLockerFallback mProximityScreenLocker;
 	private long mCallStartTime = -1;
 	private final Handler mHandler = new Handler();
 	private Runnable mCallTimer = null;
@@ -114,7 +105,7 @@ public final class CallActivity extends Activity implements SensorEventListener
 				WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
 				WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+		mProximityScreenLocker = new ProximityScreenLockerFallback(this);
 
 		mImageViewContactImage = (ImageView) findViewById(R.id.contactImage);
 		mTextViewContactName = (TextView) findViewById(R.id.contactName);
@@ -164,7 +155,7 @@ public final class CallActivity extends Activity implements SensorEventListener
 			finish();
 		}
 
-		mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY), SensorManager.SENSOR_DELAY_NORMAL);
+		mProximityScreenLocker.acquire();
 	}
 
 	@Override
@@ -172,7 +163,7 @@ public final class CallActivity extends Activity implements SensorEventListener
 	{
 		Lg.i(LOGTAG, "onPause");
 		mCommunicator.unregister();
-		mSensorManager.unregisterListener(this);
+		mProximityScreenLocker.release(false);
 		super.onPause();
 	}
 
@@ -416,53 +407,5 @@ public final class CallActivity extends Activity implements SensorEventListener
 	{
 		// prevent switch to MainActivity
 		moveTaskToBack(true);
-	}
-
-	//
-	// SensorEventListener overloaded member functions
-	//
-	@Override
-	public void onAccuracyChanged(final Sensor sensor, final int accuracy)
-	{
-	}
-
-	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-	public void showNavigationBar(final boolean visible)
-	{
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-			getWindow().getDecorView().setSystemUiVisibility(visible ? View.SYSTEM_UI_FLAG_VISIBLE : View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-		}
-	}
-
-	@Override
-	public void onSensorChanged(final SensorEvent event)
-	{
-		final float distance = event.values[0];
-
-		if (distance > event.sensor.getMaximumRange()) {
-			Lg.w(LOGTAG, "proximity sensors distance=", Float.valueOf(distance), " out of range=", Float.valueOf(event.sensor.getMaximumRange()));
-			/// do not return, e.g. the galaxy s2 won't work otherwise
-		}
-
-		final Window window = getWindow();
-		final View view = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
-
-		final WindowManager.LayoutParams params = window.getAttributes();
-		if (distance <= PROXIMITY_DISTANCE_THRESHOLD) {
-			Lg.i(LOGTAG, "proximity sensors distance=", Float.valueOf(distance), " below threshold=", Float.valueOf(PROXIMITY_DISTANCE_THRESHOLD),
-					" => dimming screen in order to disable touch events");
-			params.screenBrightness = 0.1f;
-			view.setVisibility(View.INVISIBLE);
-			showNavigationBar(false);
-			window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		} else {
-			Lg.i(LOGTAG, "proximity sensors distance=", Float.valueOf(distance), " above threshold=", Float.valueOf(PROXIMITY_DISTANCE_THRESHOLD),
-					" => enabling touch events (no screen dimming)");
-			params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
-			view.setVisibility(View.VISIBLE);
-			showNavigationBar(true);
-			window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		}
-		window.setAttributes(params);
 	}
 }
