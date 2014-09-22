@@ -105,7 +105,10 @@ public final class CallActivity extends Activity
 				WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
 				WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-		mProximityScreenLocker = new ProximityScreenLockerFallback(this);
+		mProximityScreenLocker = ProximityScreenLockerNative.create(this);
+		if (mProximityScreenLocker == null) {
+			mProximityScreenLocker = new ProximityScreenLockerFallback(this);
+		}
 
 		mImageViewContactImage = (ImageView) findViewById(R.id.contactImage);
 		mTextViewContactName = (TextView) findViewById(R.id.contactName);
