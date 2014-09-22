@@ -33,7 +33,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
-public class ProximityScreenLockerFallback implements SensorEventListener
+public class ProximityScreenLockerFallback implements ProximityScreenLocker, SensorEventListener
 {
 	private static final String LOGTAG = ProximityScreenLockerFallback.class.getSimpleName();
 
@@ -48,11 +48,13 @@ public class ProximityScreenLockerFallback implements SensorEventListener
 		mSensorManager = (SensorManager) mActivity.getSystemService(Context.SENSOR_SERVICE);
 	}
 
+	@Override
 	public void acquire()
 	{
 		mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY), SensorManager.SENSOR_DELAY_NORMAL);
 	}
 
+	@Override
 	public void release(final boolean immediately)
 	{
 		mSensorManager.unregisterListener(this);

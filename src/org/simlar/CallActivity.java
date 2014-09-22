@@ -43,7 +43,7 @@ public final class CallActivity extends Activity
 	public static final String INTENT_EXTRA_SIMLAR_ID = "simlarId";
 
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCall();
-	private ProximityScreenLockerFallback mProximityScreenLocker;
+	private ProximityScreenLocker mProximityScreenLocker;
 	private long mCallStartTime = -1;
 	private final Handler mHandler = new Handler();
 	private Runnable mCallTimer = null;
