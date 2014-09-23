@@ -72,7 +72,7 @@ public final class PreferencesHelper
 			digest.update(str.getBytes());
 			final StringBuilder sb = new StringBuilder();
 			for (final byte b : digest.digest()) {
-				sb.append(String.format("%02x", new Byte(b)));
+				sb.append(String.format("%02x", Byte.valueOf(b)));
 			}
 			return sb.toString();
 		} catch (final Exception e) {
@@ -178,7 +178,7 @@ public final class PreferencesHelper
 		editor.putString(PREFERENCES_USER, mMySimlarId);
 		editor.putString(PREFERENCES_PASSWORD, mPassword);
 		editor.putInt(PREFERENCES_REGION, SimlarNumber.getDefaultRegion());
-		editor.commit();
+		editor.apply();
 	}
 
 	public static void saveToFileCreateAccountStatus(final Context context, final CreateAccountStatus status)
@@ -194,7 +194,7 @@ public final class PreferencesHelper
 		final SharedPreferences.Editor editor = settings.edit();
 		editor.putInt(PREFERENCES_CREATE_ACCOUNT_STATUS, status.toInt());
 		editor.putString(PREFERENCES_VERIFIED_TELEPHONE_NUMBER, verifiedTelephoneNumber);
-		editor.commit();
+		editor.apply();
 	}
 
 	public static void saveToFileGcmRegistrationId(final Context context, final String gcmRegistrationId, final int simlarVersionCode)
@@ -205,7 +205,7 @@ public final class PreferencesHelper
 		final SharedPreferences.Editor editor = settings.edit();
 		editor.putString(PREFERENCES_GCM_REGRISTRATION_ID, gcmRegistrationId);
 		editor.putInt(PREFERENCES_SIMLAR_VERSION_CODE, simlarVersionCode);
-		editor.commit();
+		editor.apply();
 	}
 
 	public static boolean readFromFileDebugMode(final Context context)
@@ -219,7 +219,7 @@ public final class PreferencesHelper
 		final SharedPreferences settings = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
 		final SharedPreferences.Editor editor = settings.edit();
 		editor.putBoolean(PREFERENCES_DEBUG_MODE, enabled);
-		editor.commit();
+		editor.apply();
 	}
 
 	public static void resetPreferencesFile(final Context context)
@@ -233,6 +233,6 @@ public final class PreferencesHelper
 		editor.putString(PREFERENCES_GCM_REGRISTRATION_ID, null);
 		editor.putInt(PREFERENCES_SIMLAR_VERSION_CODE, -1);
 		editor.putBoolean(PREFERENCES_DEBUG_MODE, PREFERENCES_DEBUG_MODE_DEFAULT);
-		editor.commit();
+		editor.apply();
 	}
 }

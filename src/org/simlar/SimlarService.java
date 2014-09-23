@@ -355,8 +355,12 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	void checkNetworkConnectivityAndRefreshRegisters()
 	{
-		final NetworkInfo ni = ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+		if (mLinphoneThread == null) {
+			Lg.w(LOGTAG, "checkNetworkConnectivityAndRefreshRegisters triggered but no linphone thread");
+			return;
+		}
 
+		final NetworkInfo ni = ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
 		if (ni == null) {
 			Lg.e(LOGTAG, "no NetworkInfo found");
 			return;
