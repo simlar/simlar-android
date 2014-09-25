@@ -189,8 +189,8 @@ public final class SimlarCallState
 	@Override
 	public String toString()
 	{
-		return "SimlarCallState [" + (mSimlarId != null ? "mSimlarId=" + mSimlarId + ", " : "")
-				+ (mContactName != null ? "mContactName=" + mContactName + ", " : "")
+		return "SimlarCallState [" + (mSimlarId != null ? "mSimlarId=" + new Lg.Anonymizer(mSimlarId) + ", " : "")
+				+ (mContactName != null ? "mContactName=" + new Lg.Anonymizer(mContactName) + ", " : "")
 				+ (mContactPhotoId != null ? "mContactPhotoId=" + mContactPhotoId + ", " : "")
 				+ (mLinphoneCallState != null ? "mLinphoneCallState=" + mLinphoneCallState + ", " : "")
 				+ (mGuiCallState != null ? "mGuiCallState=" + mGuiCallState + ", " : "")
