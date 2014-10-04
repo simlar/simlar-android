@@ -27,6 +27,7 @@ import org.simlar.PreferencesHelper.NotInitedException;
 import org.simlar.SoundEffectManager.SoundEffectType;
 import org.simlar.Volumes.MicrophoneStatus;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -164,8 +165,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mWakeLock = ((PowerManager) this.getSystemService(Context.POWER_SERVICE))
 				.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SimlarWakeLock");
 		mDisplayWakeLock = createDisplayWakeLock();
-		mWifiLock = ((WifiManager) this.getSystemService(Context.WIFI_SERVICE))
-				.createWifiLock(WifiManager.WIFI_MODE_FULL, "SimlarWifiLock");
+		mWifiLock = createWifiWakeLock();
 
 		startForeground(NOTIFICATION_ID, createNotification());
 
@@ -193,6 +193,14 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	{
 		return ((PowerManager) getSystemService(Context.POWER_SERVICE))
 				.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "SimlarDisplayWakeLock");
+	}
+
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
+	private WifiLock createWifiWakeLock()
+	{
+		return Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB_MR1
+				? ((WifiManager) this.getSystemService(Context.WIFI_SERVICE)).createWifiLock(WifiManager.WIFI_MODE_FULL, "SimlarWifiLock")
+				: ((WifiManager) this.getSystemService(Context.WIFI_SERVICE)).createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "SimlarWifiLock");
 	}
 
 	void terminateChecker()
