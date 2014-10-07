@@ -43,11 +43,9 @@ public class ProximityScreenLockerNative implements ProximityScreenLocker
 		final PowerManager.WakeLock proximityWakeLock = initProximitySensor(context);
 
 		if (proximityWakeLock == null) {
-			Lg.i(LOGTAG, "native screen locking is not supported");
 			return null;
 		}
 
-		Lg.i(LOGTAG, "native screen locking is supported");
 		return new ProximityScreenLockerNative(proximityWakeLock);
 	}
 
