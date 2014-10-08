@@ -16,6 +16,12 @@ declare -r ANDROID_MANIFEST="$(dirname $(readlink -f $0))/AndroidManifest.xml"
 declare -r SIMLAR_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_BUGFIX}"
 echo "creating tag: '${SIMLAR_VERSION}'"
 
+if ! git diff --quiet ; then
+	git status
+	echo "git is dirty => aborting"
+	exit 1
+fi
+
 git checkout master
 git fetch
 git fetch --tags
