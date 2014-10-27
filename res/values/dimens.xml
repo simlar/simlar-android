@@ -26,4 +26,9 @@
 
     <!-- CallActivity -->
     <dimen name="activity_call_inner_side_margin">5dp</dimen>
+
+    <!-- VerifyNumberActivity -->
+    <dimen name="activity_verify_number_vertical_space_small">7dp</dimen>
+    <dimen name="activity_verify_number_vertical_space_medium">15dp</dimen>
+    <dimen name="activity_verify_number_vertical_space_large">25dp</dimen>
 </resources>
