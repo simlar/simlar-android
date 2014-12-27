@@ -23,6 +23,7 @@ package org.simlar;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 public final class ConnectionDetailsActivity extends Activity
@@ -67,6 +68,8 @@ public final class ConnectionDetailsActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_connection_details);
+
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 
 		mTextViewQuality = (TextView) findViewById(R.id.textViewQuality);
 		mTextViewUpload = (TextView) findViewById(R.id.textViewUpload);
