@@ -152,6 +152,35 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayoutVerifiedAuthenticationToken"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linearLayoutConnectionQuality"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/round_corners"
+            android:orientation="horizontal"
+            android:visibility="gone" >
+
+            <TextView
+                android:id="@+id/textViewLabelVerifiedAuthenticationToken"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:text="@string/call_activity_verified_authentication_token"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/textViewVerifiedAuthenticationToken"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:paddingRight="5dp"
+                android:text="@string/call_activity_no_authentication_token"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/linearLayoutAuthenticationToken"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

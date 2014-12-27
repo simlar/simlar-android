@@ -83,6 +83,7 @@
     <string name="call_activity_not_encrypted">WARNING: This call is NOT encrypted!</string>
     <string name="call_activity_button_accept_unencrypted_call">Quiet alarm</string>
     <string name="call_activity_no_authentication_token">&#8230;</string>
+    <string name="call_activity_verified_authentication_token">Verified Code: </string>
     <string name="call_activity_please_verify_authentication_token">Has the person you are speaking to the same code?</string>
     <string name="call_activity_button_authentication_token_verify">safe connection</string>
     <string name="call_activity_button_authentication_token_wrong">I don\'t care</string>
