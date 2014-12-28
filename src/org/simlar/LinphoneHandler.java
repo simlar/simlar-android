@@ -248,10 +248,13 @@ public final class LinphoneHandler
 
 	public LinphoneCall getCurrentCall()
 	{
-		if (mLinphoneCore == null) {
+		/// NOTE LinphoneCore.getCurrentCall() does not return paused calls
+
+		if (hasNoCurrentCalls()) {
 			return null;
 		}
-		return mLinphoneCore.getCurrentCall();
+
+		return mLinphoneCore.getCalls()[0];
 	}
 
 	public void pickUp()
