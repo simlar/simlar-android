@@ -290,14 +290,17 @@ final class SoundEffectManager
 	{
 		Lg.i(LOGTAG, "setInCallMode: ", Boolean.valueOf(enabled));
 
+		final AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
 		if (enabled) {
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-				((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE)).setMode(AudioManager.MODE_IN_COMMUNICATION);
+				audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
 			} else {
-				((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE)).setMode(AudioManager.MODE_IN_CALL);
+				audioManager.setMode(AudioManager.MODE_IN_CALL);
 			}
 		} else {
-			((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE)).setMode(AudioManager.MODE_NORMAL);
+			audioManager.setMode(AudioManager.MODE_NORMAL);
 		}
+
+		audioManager.setStreamSolo(AudioManager.STREAM_VOICE_CALL, enabled);
 	}
 }
