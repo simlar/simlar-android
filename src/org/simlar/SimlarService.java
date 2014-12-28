@@ -121,6 +121,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				break;
 			case TelephonyManager.CALL_STATE_RINGING:
 				Lg.i(LOGTAG, "onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=RINGING");
+				SimlarService.this.onTelephonyCallStateRinging();
 				break;
 			default:
 				Lg.i(LOGTAG, "onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=", Integer.valueOf(state));
@@ -146,6 +147,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			return;
 		}
 
+		mSoundEffectManager.stop(SoundEffectType.CALL_INTERRUPTION);
+
 		mLinphoneThread.pauseAllCalls();
 	}
 
@@ -159,7 +162,18 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			return;
 		}
 
+		mSoundEffectManager.stop(SoundEffectType.CALL_INTERRUPTION);
+
 		mLinphoneThread.resumeCall();
+	}
+
+	public void onTelephonyCallStateRinging()
+	{
+		if (mSimlarStatus != SimlarStatus.ONGOING_CALL) {
+			return;
+		}
+
+		mSoundEffectManager.start(SoundEffectType.CALL_INTERRUPTION);
 	}
 
 	@Override
