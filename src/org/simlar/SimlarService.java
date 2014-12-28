@@ -103,8 +103,15 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	private final class TelephonyCallStateListener extends PhoneStateListener
 	{
+		private boolean mInCall;
+
 		public TelephonyCallStateListener()
 		{
+		}
+
+		public boolean isInCall()
+		{
+			return mInCall;
 		}
 
 		@Override
@@ -113,14 +120,17 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			switch (state) {
 			case TelephonyManager.CALL_STATE_IDLE:
 				Lg.i(LOGTAG, "onTelephonyCallStateChanged: state=IDLE");
+				mInCall = false;
 				SimlarService.this.onTelephonyCallStateIdle();
 				break;
 			case TelephonyManager.CALL_STATE_OFFHOOK:
 				Lg.i(LOGTAG, "onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=OFFHOOK");
+				mInCall = true;
 				SimlarService.this.onTelephonyCallStateOffHook();
 				break;
 			case TelephonyManager.CALL_STATE_RINGING:
 				Lg.i(LOGTAG, "onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=RINGING");
+				mInCall = false; /// TODO Think about
 				SimlarService.this.onTelephonyCallStateRinging();
 				break;
 			default:
@@ -559,11 +569,17 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		Lg.i(LOGTAG, "SimlarCallState updated: ", mSimlarCallState);
 
 		if (mSimlarCallState.isRinging() && !mGoingDown) {
-			mSoundEffectManager.start(SoundEffectType.RINGTONE);
-			mVibratorManager.start();
+			if (mTelephonyCallStateListener.isInCall()) {
+				Lg.i(LOGTAG, "incoming call while gsm call is active");
+				mSoundEffectManager.start(SoundEffectType.CALL_INTERRUPTION);
+			} else {
+				mSoundEffectManager.start(SoundEffectType.RINGTONE);
+				mVibratorManager.start();
+			}
 		} else {
 			mVibratorManager.stop();
 			mSoundEffectManager.stop(SoundEffectType.RINGTONE);
+			mSoundEffectManager.stop(SoundEffectType.CALL_INTERRUPTION);
 		}
 
 		if (mSimlarCallState.isWaitingForContact() && !mGoingDown) {
