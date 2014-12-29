@@ -24,9 +24,9 @@ cd "${BUILD_DIR}/linphone-android"
 rm -f liblinphone-sdk-*.zip
 
 make BUILD_GPLV3_ZRTP=1
-make linphone-sdk
+make liblinphone-android-sdk
 cd ../..
 
-unzip -o $(find "${BUILD_DIR}/linphone-android" -maxdepth 1 -name liblinphone-sdk\*.zip)
+unzip -o $(find "${BUILD_DIR}/linphone-android" -maxdepth 1 -name liblinphone-android-sdk\*.zip)
 
 echo "liblinphone build successfull with git hash: ${GIT_HASH}"

@@ -83,6 +83,7 @@
     <string name="call_activity_not_encrypted">WARNING: This call is NOT encrypted!</string>
     <string name="call_activity_button_accept_unencrypted_call">Quiet alarm</string>
     <string name="call_activity_no_authentication_token">&#8230;</string>
+    <string name="call_activity_verified_authentication_token">Verified Code: </string>
     <string name="call_activity_please_verify_authentication_token">Has the person you are speaking to the same code?</string>
     <string name="call_activity_button_authentication_token_verify">safe connection</string>
     <string name="call_activity_button_authentication_token_wrong">I don\'t care</string>
@@ -122,8 +123,9 @@
     <string name="volumes_control_activity_software_echo_limiter">Software Echo Limiter</string>
 
     <string name="about_activity_title">About Simlar</string>
-    <string name="about_activity_copyright">&#169; 2013&#8211;2014 The Simlar authors. All rights reserved.</string>
-    <string name="about_activity_license">License: GNU General Public License, see http://www.gnu.org/licenses/old-licenses/gpl-2.0.html</string>
+    <string name="about_activity_copyright">&#169; 2013&#8211;2014 The Simlar authors\nAll rights reserved.</string>
+    <string name="about_activity_license">License: GNU General Public License\nhttp://www.gnu.org/licenses/old-licenses/gpl-2.0.html</string>
+    <string name="about_activity_privacy_statement_and_terms_of_use"><a href="https://www.simlar.org/datenschutzerklaerung/">privacy statement</a>\nand\n<a href="https://www.simlar.org/nutzungsbedingungen/">terms of use</a></string>
 
     <string name="create_account_activity_title">Creating account</string>
     <string name="create_account_activity_request">Request account creation</string>
@@ -151,4 +153,6 @@
     <string name="agree_activity_accept">I agree</string>
     <string name="agree_activity_cancel">Cancel</string>
     <string name="agree_activity_privacy_statement_and_terms_of_use">Do you agree to the\n<a href="https://www.simlar.org/datenschutzerklaerung/">privacy statement</a>\n and\n<a href="https://www.simlar.org/nutzungsbedingungen/">terms of use</a>?</string>
+
+    <string name="missed_call_notification">missed call</string>
 </resources>

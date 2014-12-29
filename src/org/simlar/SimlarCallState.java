@@ -20,15 +20,9 @@
 
 package org.simlar;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.SystemClock;
-import android.provider.MediaStore;
 
 public final class SimlarCallState
 {
@@ -211,19 +205,7 @@ public final class SimlarCallState
 
 	public Bitmap getContactPhotoBitmap(final Context context, final int defaultResourceId)
 	{
-		if (Util.isNullOrEmpty(mContactPhotoId)) {
-			return BitmapFactory.decodeResource(context.getResources(), defaultResourceId);
-		}
-
-		try {
-			return MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(mContactPhotoId));
-		} catch (final FileNotFoundException e) {
-			Lg.ex(LOGTAG, e, "getContactPhotoBitmap FileNotFoundException");
-		} catch (IOException e) {
-			Lg.ex(LOGTAG, e, "getContactPhotoBitmap IOException");
-		}
-
-		return BitmapFactory.decodeResource(context.getResources(), defaultResourceId);
+		return ContactsProvider.getContactPhotoBitmap(context, defaultResourceId, mContactPhotoId);
 	}
 
 	public String getCallStatusDisplayMessage(final Context context)

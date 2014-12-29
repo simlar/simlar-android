@@ -30,7 +30,6 @@ import org.linphone.core.LinphoneCoreException;
 import org.linphone.core.LinphoneCoreFactory;
 import org.linphone.core.LinphoneCoreListener;
 import org.linphone.core.LinphoneProxyConfig;
-import org.linphone.core.PayloadType;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -72,29 +71,13 @@ public final class LinphoneHandler
 		Lg.i(LOGTAG, "destroy ended");
 	}
 
-	private void enableAudioCodec(final String codec, final int rate, final int channels, final boolean enable)
-	{
-		final PayloadType pt = mLinphoneCore.findPayloadType(codec, rate, channels);
-		if (pt != null) {
-			try {
-				mLinphoneCore.enablePayloadType(pt, enable);
-				Lg.v(LOGTAG, "AudioCodec: codec=", codec, " rate=", Integer.valueOf(rate), " channels=", Integer.valueOf(channels),
-						" enable=", Boolean.valueOf(enable));
-			} catch (final LinphoneCoreException e) {
-				Lg.ex(LOGTAG, e, "LinphoneCoreException during enabling Audio Codec");
-			}
-		} else {
-			Lg.w(LOGTAG, "AudioCodec: payload not found for codec=", codec, " rate=", Integer.valueOf(rate));
-		}
-	}
-
 	public boolean isInitialized()
 	{
 		return mLinphoneCore != null;
 	}
 
 	public void initialize(final LinphoneCoreListener listener, final Context context, final String linphoneInitialConfigFile,
-			final String rootCaFile, final String zrtpSecretsCacheFile)
+			final String rootCaFile, final String zrtpSecretsCacheFile, final String pauseSoundFile)
 	{
 		if (listener == null) {
 			Lg.e(LOGTAG, "Error: initialize without listener");
@@ -121,6 +104,11 @@ public final class LinphoneHandler
 			return;
 		}
 
+		if (Util.isNullOrEmpty(pauseSoundFile)) {
+			Lg.e(LOGTAG, "Error: pauseSoundFile not set");
+			return;
+		}
+
 		try {
 			Lg.i(LOGTAG, "initialize linphone");
 
@@ -128,7 +116,7 @@ public final class LinphoneHandler
 
 			// First instantiate the core Linphone object given only a listener.
 			// The listener will react to events in Linphone core.
-			mLinphoneCore = LinphoneCoreFactory.instance().createLinphoneCore(listener, "", linphoneInitialConfigFile, null);
+			mLinphoneCore = LinphoneCoreFactory.instance().createLinphoneCore(listener, "", linphoneInitialConfigFile, null, context);
 			mLinphoneCore.setContext(context);
 			mLinphoneCore.setUserAgent("Simlar", Version.getVersionName(context));
 
@@ -154,23 +142,8 @@ public final class LinphoneHandler
 			mLinphoneCore.setMediaEncryption(MediaEncryption.ZRTP);
 			mLinphoneCore.setZrtpSecretsCache(zrtpSecretsCacheFile);
 
-			// Audio Codecs
-			enableAudioCodec("speex", 32000, 1, false);
-			enableAudioCodec("speex", 16000, 1, false);
-			enableAudioCodec("speex", 8000, 1, false);
-			enableAudioCodec("iLBC", 8000, 1, false);
-			enableAudioCodec("GSM", 8000, 1, false);
-			enableAudioCodec("G722", 8000, 1, false);
-			//enableDisableAudioCodec("G729", 8000, 1, true);
-			enableAudioCodec("PCMU", 8000, 1, true);
-			enableAudioCodec("PCMA", 8000, 1, true);
-			enableAudioCodec("AMR", 8000, 1, false);
-			//enableDisableAudioCodec("AMR-WB", 16000, 1, true);
-			enableAudioCodec("SILK", 24000, 1, false);
-			enableAudioCodec("SILK", 16000, 1, true);
-			enableAudioCodec("SILK", 12000, 1, false);
-			enableAudioCodec("SILK", 8000, 1, true);
-			enableAudioCodec("OPUS", 48000, 1, true);
+			// pause sound file
+			mLinphoneCore.setPlayFile(pauseSoundFile);
 
 			// enable echo cancellation
 			mLinphoneCore.enableEchoCancellation(true);
@@ -237,7 +210,7 @@ public final class LinphoneHandler
 
 			// create linphone proxy config
 			mLinphoneCore.clearProxyConfigs();
-			LinphoneProxyConfig proxyCfg = LinphoneCoreFactory.instance().createProxyConfig(
+			LinphoneProxyConfig proxyCfg = mLinphoneCore.createProxyConfig(
 					"sip:" + mySimlarId + "@" + DOMAIN, "sip:" + DOMAIN, null, true);
 			proxyCfg.setExpires(60); // connection times out after 1 minute. This overrides kamailio setting which is 3600 (1 hour).
 			proxyCfg.enablePublish(false);
@@ -254,11 +227,7 @@ public final class LinphoneHandler
 
 		final LinphoneProxyConfig proxyConfig = mLinphoneCore.getDefaultProxyConfig();
 		proxyConfig.edit();
-		try {
-			proxyConfig.enableRegister(false);
-		} catch (final LinphoneCoreException e) {
-			Lg.ex(LOGTAG, e, "LinphoneCoreException during unregister");
-		}
+		proxyConfig.enableRegister(false);
 		proxyConfig.done();
 	}
 
@@ -287,10 +256,13 @@ public final class LinphoneHandler
 
 	public LinphoneCall getCurrentCall()
 	{
-		if (mLinphoneCore == null) {
+		/// NOTE LinphoneCore.getCurrentCall() does not return paused calls
+
+		if (hasNoCurrentCalls()) {
 			return null;
 		}
-		return mLinphoneCore.getCurrentCall();
+
+		return mLinphoneCore.getCalls()[0];
 	}
 
 	public void pickUp()
@@ -339,6 +311,29 @@ public final class LinphoneHandler
 			return true;
 		}
 		return mLinphoneCore.getCallsNb() == 0;
+	}
+
+	public void pauseAllCalls()
+	{
+		Lg.i(LOGTAG, "pausing all calls");
+		mLinphoneCore.pauseAllCalls();
+	}
+
+	public void resumeCall()
+	{
+		if (mLinphoneCore == null) {
+			Lg.e(LOGTAG, "resumeCall: mLinphoneCore is null => aborting");
+			return;
+		}
+
+		final LinphoneCall call = mLinphoneCore.getCurrentCall();
+		if (call == null) {
+			Lg.e(LOGTAG, "resuming call but no current call");
+			return;
+		}
+
+		Lg.i(LOGTAG, "resuming call");
+		mLinphoneCore.resumeCall(call);
 	}
 
 	public void setVolumes(final Volumes volumes)

@@ -22,6 +22,7 @@ package org.simlar;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.widget.TextView;
 
@@ -35,6 +36,10 @@ public final class AboutActivity extends Activity
 
 		final TextView version = (TextView) findViewById(R.id.textViewVersion);
 		version.setText(Version.getVersionName(this));
+
+		// make hrefs work in privacy statement and terms of use
+		final TextView privacyStatementAndTermsOfUse = (TextView) findViewById(R.id.textViewPrivacyStatementAndTermsOfUse);
+		privacyStatementAndTermsOfUse.setMovementMethod(LinkMovementMethod.getInstance());
 	}
 
 	@Override
