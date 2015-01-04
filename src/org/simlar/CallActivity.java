@@ -59,6 +59,9 @@ public final class CallActivity extends Activity
 	private TextView mTextViewQuality;
 	private ImageButton mButtonConnectionDetails;
 
+	private LinearLayout mLayoutVerifiedAuthenticationToken;
+	private TextView mTextViewVerifiedAuthenticationToken;
+
 	private LinearLayout mLayoutAuthenticationToken;
 	private TextView mTextViewAuthenticationToken;
 
@@ -116,6 +119,9 @@ public final class CallActivity extends Activity
 		mTextViewQuality = (TextView) findViewById(R.id.textViewQuality);
 		mButtonConnectionDetails = (ImageButton) findViewById(R.id.buttonConnectionDetails);
 
+		mLayoutVerifiedAuthenticationToken = (LinearLayout) findViewById(R.id.linearLayoutVerifiedAuthenticationToken);
+		mTextViewVerifiedAuthenticationToken = (TextView) findViewById(R.id.textViewVerifiedAuthenticationToken);
+
 		mLayoutAuthenticationToken = (LinearLayout) findViewById(R.id.linearLayoutAuthenticationToken);
 		mTextViewAuthenticationToken = (TextView) findViewById(R.id.textViewAuthenticationToken);
 
@@ -133,7 +139,8 @@ public final class CallActivity extends Activity
 		mTextViewCallTimer.setVisibility(View.INVISIBLE);
 
 		mLayoutConnectionQuality.setVisibility(View.INVISIBLE);
-		mLayoutAuthenticationToken.setVisibility(View.INVISIBLE);
+		mLayoutVerifiedAuthenticationToken.setVisibility(View.GONE);
+		mLayoutAuthenticationToken.setVisibility(View.GONE);
 		mLayoutUnencryptedCall.setVisibility(View.GONE);
 
 		final String simlarIdToCall = getIntent().getStringExtra(INTENT_EXTRA_SIMLAR_ID);
@@ -197,13 +204,17 @@ public final class CallActivity extends Activity
 		}
 		mLayoutUnencryptedCall.setVisibility(View.GONE);
 
-		if (authenticationTokenVerified || Util.isNullOrEmpty(authenticationToken)) {
-			mLayoutAuthenticationToken.setVisibility(View.GONE);
-			return;
+		if (!Util.isNullOrEmpty(authenticationToken)) {
+			if (authenticationTokenVerified) {
+				mLayoutVerifiedAuthenticationToken.setVisibility(View.VISIBLE);
+				mTextViewVerifiedAuthenticationToken.setText(authenticationToken);
+				mLayoutAuthenticationToken.setVisibility(View.GONE);
+			} else {
+				mLayoutVerifiedAuthenticationToken.setVisibility(View.GONE);
+				mLayoutAuthenticationToken.setVisibility(View.VISIBLE);
+				mTextViewAuthenticationToken.setText(authenticationToken);
+			}
 		}
-
-		mLayoutAuthenticationToken.setVisibility(View.VISIBLE);
-		mTextViewAuthenticationToken.setText(authenticationToken);
 	}
 
 	void onSimlarCallStateChanged()
@@ -249,6 +260,7 @@ public final class CallActivity extends Activity
 
 		if (simlarCallState.isEndedCall()) {
 			mLayoutConnectionQuality.setVisibility(View.INVISIBLE);
+			mLayoutVerifiedAuthenticationToken.setVisibility(View.GONE);
 			mLayoutAuthenticationToken.setVisibility(View.GONE);
 			mLayoutUnencryptedCall.setVisibility(View.GONE);
 			mLayoutCallEndReason.setVisibility(View.VISIBLE);
