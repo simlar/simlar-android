@@ -23,6 +23,7 @@ package org.simlar;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -78,6 +79,8 @@ public final class VolumesControlActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_volumes_control);
+
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 
 		mSeekBarSpeaker = (SeekBar) findViewById(R.id.seekBarSpeaker);
 		mSeekBarMicrophone = (SeekBar) findViewById(R.id.seekBarMicrophone);
