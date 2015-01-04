@@ -512,14 +512,13 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 			if (!mHasAudioFocus) {
 				// We acquire AUDIOFOCUS_GAIN_TRANSIENT instead of AUDIOFOCUS_GAIN because we want the music to resume after ringing or call
-				final AudioManager audioManger = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-				if (audioManger.requestAudioFocus(null, AudioManager.STREAM_VOICE_CALL, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT) == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+				final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+				if (audioManager.requestAudioFocus(null, AudioManager.STREAM_VOICE_CALL, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT) == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
 					mHasAudioFocus = true;
 					Lg.i(LOGTAG, "audio focus granted");
 				} else {
 					Lg.e(LOGTAG, "audio focus not granted");
 				}
-
 			}
 
 			if (mSimlarCallState.isRinging()) {
