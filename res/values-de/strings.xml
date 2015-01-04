@@ -124,8 +124,9 @@
     <string name="volumes_control_activity_software_echo_limiter">Echo verringern</string>
 
     <string name="about_activity_title">Über Simlar</string>
-    <string name="about_activity_copyright">&#169; 2013&#8211;2014 Die Simlar-Autoren. Alle Rechte vorbehalten.</string>
-    <string name="about_activity_license">Lizenz: GNU General Public License, siehe http://www.gnu.org/licenses/old-licenses/gpl-2.0.html</string>
+    <string name="about_activity_copyright">&#169; 2013&#8211;2014 Die Simlar-Autoren\nAlle Rechte vorbehalten.</string>
+    <string name="about_activity_license">Lizenz: GNU General Public License\nhttp://www.gnu.org/licenses/old-licenses/gpl-2.0.html</string>
+    <string name="about_activity_privacy_statement_and_terms_of_use"><a href="https://www.simlar.org/datenschutzerklaerung/">Datenschutzerklärung</a>\nund\n<a href="https://www.simlar.org/nutzungsbedingungen/">Nutzungsbedingungen</a></string>
 
     <string name="create_account_activity_title">Anmeldung</string>
     <string name="create_account_activity_request">Fordere Zugang an</string>
