@@ -20,6 +20,8 @@
 
 package org.simlar;
 
+import java.nio.ByteBuffer;
+
 import org.linphone.core.LinphoneAddress;
 import org.linphone.core.LinphoneCall;
 import org.linphone.core.LinphoneCallStats;
@@ -31,6 +33,7 @@ import org.linphone.core.LinphoneCore.EcCalibratorStatus;
 import org.linphone.core.LinphoneCore.GlobalState;
 import org.linphone.core.LinphoneCore.MediaEncryption;
 import org.linphone.core.LinphoneCore.RegistrationState;
+import org.linphone.core.LinphoneCore.RemoteProvisioningState;
 import org.linphone.core.LinphoneCoreListener;
 import org.linphone.core.LinphoneEvent;
 import org.linphone.core.LinphoneFriend;
@@ -507,9 +510,9 @@ public final class LinphoneThread
 		}
 
 		@Override
-		public void authInfoRequested(final LinphoneCore lc, final String realm, final String username)
+		public void authInfoRequested(final LinphoneCore lc, final String realm, final String username, final String domain)
 		{
-			Lg.w(LOGTAG, "authInfoRequested realm=", realm, " username=", new Lg.Anonymizer(username));
+			Lg.w(LOGTAG, "authInfoRequested realm=", realm, " username=", new Lg.Anonymizer(username), " domain=", domain);
 		}
 
 		@Override
@@ -659,6 +662,40 @@ public final class LinphoneThread
 		public void publishStateChanged(final LinphoneCore lc, final LinphoneEvent ev, final PublishState state)
 		{
 			Lg.w(LOGTAG, "publishStateChanged ev=", ev.getEventName(), " state=", state);
+		}
+
+		@Override
+		public void isComposingReceived(final LinphoneCore lc, final LinphoneChatRoom cr)
+		{
+			Lg.w(LOGTAG, "isComposingReceived PeerAddress=", cr.getPeerAddress());
+		}
+
+		@Override
+		public void configuringStatus(final LinphoneCore lc, final RemoteProvisioningState state, final String message)
+		{
+			if (RemoteProvisioningState.ConfiguringSkipped.equals(state)) {
+				return;
+			}
+			Lg.w(LOGTAG, "configuringStatus remoteProvisioningState=", state, " message=", message);
+		}
+
+		@Override
+		public void fileTransferProgressIndication(LinphoneCore lc, LinphoneChatMessage message, LinphoneContent content, int progress)
+		{
+			Lg.w(LOGTAG, "fileTransferProgressIndication: message=", message, " progress=", Integer.valueOf(progress));
+		}
+
+		@Override
+		public void fileTransferRecv(LinphoneCore lc, LinphoneChatMessage message, LinphoneContent content, byte[] buffer, int size)
+		{
+			Lg.w(LOGTAG, "fileTransferRecv: message=", message, " size=", Integer.valueOf(size));
+		}
+
+		@Override
+		public int fileTransferSend(LinphoneCore lc, LinphoneChatMessage message, LinphoneContent content, ByteBuffer buffer, int size)
+		{
+			Lg.w(LOGTAG, "fileTransferSend: message=", message, " size=", Integer.valueOf(size));
+			return 0;
 		}
 	}
 
