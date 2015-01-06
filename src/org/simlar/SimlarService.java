@@ -79,6 +79,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private String mSimlarIdToCall = null;
 	private static volatile boolean mRunning = false;
 	private final TelephonyCallStateListener mTelephonyCallStateListener = new TelephonyCallStateListener();
+	private int mCurrentRingerMode = -1;
 
 	public final class SimlarServiceBinder extends Binder
 	{
@@ -149,6 +150,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	public void onTelephonyCallStateOffHook()
 	{
+		restoreRingerModeIfNeeded();
 		if (mSimlarStatus != SimlarStatus.ONGOING_CALL) {
 			return;
 		}
@@ -164,6 +166,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	public void onTelephonyCallStateIdle()
 	{
+		restoreRingerModeIfNeeded();
 		if (mSimlarStatus != SimlarStatus.ONGOING_CALL) {
 			return;
 		}
@@ -183,7 +186,36 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			return;
 		}
 
+		silenceAndStoreRingerMode();
+
 		mSoundEffectManager.start(SoundEffectType.CALL_INTERRUPTION);
+	}
+
+	private void silenceAndStoreRingerMode()
+	{
+		// steam roller tactics to silence incoming call
+		final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+		final int ringerMode = audioManager.getRingerMode();
+		if (ringerMode == AudioManager.RINGER_MODE_SILENT) {
+			return;
+		}
+
+		mCurrentRingerMode = ringerMode;
+		Lg.i(LOGTAG, "saving RingerMode: ", Integer.valueOf(mCurrentRingerMode), " and switch to ringer mode silent");
+		audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+	}
+
+	private void restoreRingerModeIfNeeded()
+	{
+		if (mCurrentRingerMode == -1 || mCurrentRingerMode == AudioManager.RINGER_MODE_SILENT) {
+			return;
+		}
+
+		final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+		/// NOTE: On lollipop getRingerMode sometimes does not report silent mode correctly, so checking it here may be dangerous.
+		Lg.i(LOGTAG, "restoring RingerMode: ", Integer.valueOf(audioManager.getRingerMode()), " -> ", Integer.valueOf(mCurrentRingerMode));
+		audioManager.setRingerMode(mCurrentRingerMode);
+		mCurrentRingerMode = -1;
 	}
 
 	@Override
@@ -633,6 +665,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				}
 				mHasAudioFocus = false;
 			}
+
+			restoreRingerModeIfNeeded();
 
 			if (mCallConnectionDetails.updateEndedCall()) {
 				SimlarServiceBroadcast.sendCallConnectionDetailsChanged(this);
