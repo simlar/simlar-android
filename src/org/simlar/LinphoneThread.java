@@ -63,6 +63,7 @@ public final class LinphoneThread
 		private static final long ZRTP_HANDSHAKE_CHECK = 12000;
 		Handler mLinphoneThreadHandler = null;
 		final Handler mMainThreadHandler = new Handler();
+		Runnable mCallEncryptionChecker = null;
 
 		// NOTICE: the linphone handler should only be used in the LINPHONE-THREAD
 		LinphoneHandler mLinphoneHandler = new LinphoneHandler();
@@ -141,6 +142,7 @@ public final class LinphoneThread
 				final String linphoneInitialConfigFile = FileHelper.getLinphoneInitialConfigFile();
 				final String rootCaFile = FileHelper.getRootCaFileName();
 				final String zrtpSecretsCacheFile = FileHelper.getZrtpSecretsCacheFileName();
+				final String pauseSoundFile = FileHelper.getPauseSoundFile();
 				final Volumes volumes = mVolumes;
 				final Context context = mContext;
 
@@ -151,7 +153,7 @@ public final class LinphoneThread
 						if (!mLinphoneHandler.isInitialized()) {
 							// LinphoneCore uses context only for getting audio manager. I think this is still thread safe.
 							mLinphoneHandler.initialize(LinphoneThreadImpl.this, context, linphoneInitialConfigFile, rootCaFile,
-									zrtpSecretsCacheFile);
+									zrtpSecretsCacheFile, pauseSoundFile);
 							mLinphoneHandler.setVolumes(volumes);
 							mLinphoneHandler.setCredentials(mySimlarId, password);
 							linphoneIterator();
@@ -295,6 +297,38 @@ public final class LinphoneThread
 			});
 		}
 
+		public void pauseAllCalls()
+		{
+			if (mLinphoneThreadHandler == null) {
+				Lg.e(LOGTAG, "handler is null, probably thread not started");
+				return;
+			}
+
+			mLinphoneThreadHandler.post(new Runnable() {
+				@Override
+				public void run()
+				{
+					mLinphoneHandler.pauseAllCalls();
+				}
+			});
+		}
+
+		public void resumeCall()
+		{
+			if (mLinphoneThreadHandler == null) {
+				Lg.e(LOGTAG, "handler is null, probably thread not started");
+				return;
+			}
+
+			mLinphoneThreadHandler.post(new Runnable() {
+				@Override
+				public void run()
+				{
+					mLinphoneHandler.resumeCall();
+				}
+			});
+		}
+
 		public void setVolumes(final Volumes volumes)
 		{
 			if (mLinphoneThreadHandler == null) {
@@ -398,6 +432,63 @@ public final class LinphoneThread
 			return status.equals(PresenceBasicStatus.Open);
 		}
 
+		private void startCallEncryptioncChecker()
+		{
+			if (mCallEncryptionChecker != null) {
+				return;
+			}
+
+			mCallEncryptionChecker = new Runnable() {
+				@Override
+				public void run()
+				{
+					final LinphoneCall currentCall = mLinphoneHandler.getCurrentCall();
+					if (currentCall == null) {
+						Lg.w(LOGTAG, "no current call stopping callEncryptioncChecker");
+						stopCallEncryptioncChecker();
+						return;
+					}
+
+					final boolean encrypted = MediaEncryption.ZRTP.equals(currentCall.getCurrentParamsCopy().getMediaEncryption());
+					final String authenticationToken = currentCall.getAuthenticationToken();
+					final boolean authenticationTokenVerified = currentCall.isAuthenticationTokenVerified();
+
+					Lg.i(LOGTAG, "callEncryptioncChecker status: encrypted=", Boolean.valueOf(encrypted));
+					mMainThreadHandler.post(new Runnable() {
+						@Override
+						public void run()
+						{
+							mListener.onCallEncryptionChanged(encrypted, authenticationToken, authenticationTokenVerified);
+						}
+					});
+
+					if (!encrypted) {
+						Lg.w(LOGTAG, "call not encrypted stopping callEncryptioncChecker");
+						stopCallEncryptioncChecker();
+						return;
+					}
+
+					if (mCallEncryptionChecker != null) {
+						mLinphoneThreadHandler.postDelayed(mCallEncryptionChecker, ZRTP_HANDSHAKE_CHECK);
+					}
+				}
+			};
+
+			mLinphoneThreadHandler.postDelayed(mCallEncryptionChecker, ZRTP_HANDSHAKE_CHECK);
+			Lg.i(LOGTAG, "started callEncryptioncChecker");
+		}
+
+		public void stopCallEncryptioncChecker()
+		{
+			if (mCallEncryptionChecker == null) {
+				return;
+			}
+
+			mLinphoneThreadHandler.removeCallbacks(mCallEncryptionChecker);
+			mCallEncryptionChecker = null;
+			Lg.i(LOGTAG, "stopped callEncryptioncChecker");
+		}
+
 		//
 		// LinphoneCoreListener overloaded member functions
 		//
@@ -471,29 +562,9 @@ public final class LinphoneThread
 			});
 
 			if (LinphoneCall.State.Connected.equals(fixedState)) {
-				mLinphoneThreadHandler.postDelayed(new Runnable() {
-					@Override
-					public void run()
-					{
-						final LinphoneCall currentCall = mLinphoneHandler.getCurrentCall();
-						if (currentCall == null) {
-							return;
-						}
-
-						final boolean encrypted = MediaEncryption.ZRTP.equals(currentCall.getCurrentParamsCopy().getMediaEncryption());
-						final String authenticationToken = currentCall.getAuthenticationToken();
-						final boolean authenticationTokenVerified = currentCall.isAuthenticationTokenVerified();
-
-						Lg.i(LOGTAG, "status of zrtp: encrypted=", Boolean.valueOf(encrypted));
-						mMainThreadHandler.post(new Runnable() {
-							@Override
-							public void run()
-							{
-								mListener.onCallEncryptionChanged(encrypted, authenticationToken, authenticationTokenVerified);
-							}
-						});
-					}
-				}, ZRTP_HANDSHAKE_CHECK);
+				startCallEncryptioncChecker();
+			} else if (LinphoneCall.State.CallEnd.equals(fixedState)) {
+				stopCallEncryptioncChecker();
 			}
 		}
 
@@ -750,6 +821,16 @@ public final class LinphoneThread
 	public void verifyAuthenticationToken(final String token, final boolean verified)
 	{
 		mImpl.verifyAuthenticationToken(token, verified);
+	}
+
+	public void pauseAllCalls()
+	{
+		mImpl.pauseAllCalls();
+	}
+
+	public void resumeCall()
+	{
+		mImpl.resumeCall();
 	}
 
 	public void setVolumes(final Volumes volumes)

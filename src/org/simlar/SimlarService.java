@@ -50,6 +50,8 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 
 public final class SimlarService extends Service implements LinphoneThreadListener
 {
@@ -76,6 +78,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private final NetworkChangeReceiver mNetworkChangeReceiver = new NetworkChangeReceiver();
 	private String mSimlarIdToCall = null;
 	private static volatile boolean mRunning = false;
+	private final TelephonyCallStateListener mTelephonyCallStateListener = new TelephonyCallStateListener();
+	private int mCurrentRingerMode = -1;
 
 	public final class SimlarServiceBinder extends Binder
 	{
@@ -98,11 +102,120 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 	}
 
+	private final class TelephonyCallStateListener extends PhoneStateListener
+	{
+		private boolean mInCall;
+
+		public TelephonyCallStateListener()
+		{
+		}
+
+		public boolean isInCall()
+		{
+			return mInCall;
+		}
+
+		@Override
+		public void onCallStateChanged(final int state, final String incomingNumber)
+		{
+			switch (state) {
+			case TelephonyManager.CALL_STATE_IDLE:
+				Lg.i(LOGTAG, "onTelephonyCallStateChanged: state=IDLE");
+				mInCall = false;
+				SimlarService.this.onTelephonyCallStateIdle();
+				break;
+			case TelephonyManager.CALL_STATE_OFFHOOK:
+				Lg.i(LOGTAG, "onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=OFFHOOK");
+				mInCall = true;
+				SimlarService.this.onTelephonyCallStateOffHook();
+				break;
+			case TelephonyManager.CALL_STATE_RINGING:
+				Lg.i(LOGTAG, "onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=RINGING");
+				mInCall = false; /// TODO Think about
+				SimlarService.this.onTelephonyCallStateRinging();
+				break;
+			default:
+				Lg.i(LOGTAG, "onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=", Integer.valueOf(state));
+				break;
+			}
+		}
+	}
+
 	@Override
 	public IBinder onBind(final Intent intent)
 	{
 		Lg.i(LOGTAG, "onBind");
 		return mBinder;
+	}
+
+	public void onTelephonyCallStateOffHook()
+	{
+		restoreRingerModeIfNeeded();
+		if (mSimlarStatus != SimlarStatus.ONGOING_CALL) {
+			return;
+		}
+
+		if (mLinphoneThread == null) {
+			return;
+		}
+
+		mSoundEffectManager.stop(SoundEffectType.CALL_INTERRUPTION);
+
+		mLinphoneThread.pauseAllCalls();
+	}
+
+	public void onTelephonyCallStateIdle()
+	{
+		restoreRingerModeIfNeeded();
+		if (mSimlarStatus != SimlarStatus.ONGOING_CALL) {
+			return;
+		}
+
+		if (mLinphoneThread == null) {
+			return;
+		}
+
+		mSoundEffectManager.stop(SoundEffectType.CALL_INTERRUPTION);
+
+		mLinphoneThread.resumeCall();
+	}
+
+	public void onTelephonyCallStateRinging()
+	{
+		if (mSimlarStatus != SimlarStatus.ONGOING_CALL) {
+			return;
+		}
+
+		silenceAndStoreRingerMode();
+
+		mSoundEffectManager.start(SoundEffectType.CALL_INTERRUPTION);
+	}
+
+	private void silenceAndStoreRingerMode()
+	{
+		// steam roller tactics to silence incoming call
+		final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+		final int ringerMode = audioManager.getRingerMode();
+		if (ringerMode == AudioManager.RINGER_MODE_SILENT) {
+			return;
+		}
+
+		mCurrentRingerMode = ringerMode;
+		Lg.i(LOGTAG, "saving RingerMode: ", Integer.valueOf(mCurrentRingerMode), " and switch to ringer mode silent");
+		audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+	}
+
+	private void restoreRingerModeIfNeeded()
+	{
+		if (mCurrentRingerMode == -1 || mCurrentRingerMode == AudioManager.RINGER_MODE_SILENT) {
+			return;
+		}
+
+		final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+		/// NOTE: On lollipop getRingerMode sometimes does not report silent mode correctly, so checking it here may be dangerous.
+		Lg.i(LOGTAG, "restoring RingerMode: ", Integer.valueOf(audioManager.getRingerMode()), " -> ", Integer.valueOf(mCurrentRingerMode));
+		audioManager.setRingerMode(mCurrentRingerMode);
+		mCurrentRingerMode = -1;
 	}
 
 	@Override
@@ -172,6 +285,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 		registerReceiver(mNetworkChangeReceiver, intentFilter);
+
+		((TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE)).listen(mTelephonyCallStateListener, PhoneStateListener.LISTEN_CALL_STATE);
 
 		PreferencesHelper.readPrefencesFromFile(this);
 
@@ -308,6 +423,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mSoundEffectManager.stopAll();
 
 		unregisterReceiver(mNetworkChangeReceiver);
+
+		((TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE)).listen(mTelephonyCallStateListener, PhoneStateListener.LISTEN_NONE);
 
 		// just in case
 		releaseWakeLock();
@@ -484,11 +601,17 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		Lg.i(LOGTAG, "SimlarCallState updated: ", mSimlarCallState);
 
 		if (mSimlarCallState.isRinging() && !mGoingDown) {
-			mSoundEffectManager.start(SoundEffectType.RINGTONE);
-			mVibratorManager.start();
+			if (mTelephonyCallStateListener.isInCall()) {
+				Lg.i(LOGTAG, "incoming call while gsm call is active");
+				mSoundEffectManager.start(SoundEffectType.CALL_INTERRUPTION);
+			} else {
+				mSoundEffectManager.start(SoundEffectType.RINGTONE);
+				mVibratorManager.start();
+			}
 		} else {
 			mVibratorManager.stop();
 			mSoundEffectManager.stop(SoundEffectType.RINGTONE);
+			mSoundEffectManager.stop(SoundEffectType.CALL_INTERRUPTION);
 		}
 
 		if (mSimlarCallState.isWaitingForContact() && !mGoingDown) {
@@ -542,6 +665,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				}
 				mHasAudioFocus = false;
 			}
+
+			restoreRingerModeIfNeeded();
 
 			if (mCallConnectionDetails.updateEndedCall()) {
 				SimlarServiceBroadcast.sendCallConnectionDetailsChanged(this);

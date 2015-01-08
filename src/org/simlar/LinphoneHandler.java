@@ -77,7 +77,7 @@ public final class LinphoneHandler
 	}
 
 	public void initialize(final LinphoneCoreListener listener, final Context context, final String linphoneInitialConfigFile,
-			final String rootCaFile, final String zrtpSecretsCacheFile)
+			final String rootCaFile, final String zrtpSecretsCacheFile, final String pauseSoundFile)
 	{
 		if (listener == null) {
 			Lg.e(LOGTAG, "Error: initialize without listener");
@@ -101,6 +101,11 @@ public final class LinphoneHandler
 
 		if (Util.isNullOrEmpty(zrtpSecretsCacheFile)) {
 			Lg.e(LOGTAG, "Error: zrtpSecretsCacheFile not set");
+			return;
+		}
+
+		if (Util.isNullOrEmpty(pauseSoundFile)) {
+			Lg.e(LOGTAG, "Error: pauseSoundFile not set");
 			return;
 		}
 
@@ -136,6 +141,9 @@ public final class LinphoneHandler
 			// enable zrtp
 			mLinphoneCore.setMediaEncryption(MediaEncryption.ZRTP);
 			mLinphoneCore.setZrtpSecretsCache(zrtpSecretsCacheFile);
+
+			// pause sound file
+			mLinphoneCore.setPlayFile(pauseSoundFile);
 
 			// enable echo cancellation
 			mLinphoneCore.enableEchoCancellation(true);
@@ -248,10 +256,13 @@ public final class LinphoneHandler
 
 	public LinphoneCall getCurrentCall()
 	{
-		if (mLinphoneCore == null) {
+		/// NOTE LinphoneCore.getCurrentCall() does not return paused calls
+
+		if (hasNoCurrentCalls()) {
 			return null;
 		}
-		return mLinphoneCore.getCurrentCall();
+
+		return mLinphoneCore.getCalls()[0];
 	}
 
 	public void pickUp()
@@ -300,6 +311,34 @@ public final class LinphoneHandler
 			return true;
 		}
 		return mLinphoneCore.getCallsNb() == 0;
+	}
+
+	public void pauseAllCalls()
+	{
+		if (mLinphoneCore == null) {
+			Lg.e(LOGTAG, "pauseAllCalls: mLinphoneCore is null => aborting");
+			return;
+		}
+
+		Lg.i(LOGTAG, "pausing all calls");
+		mLinphoneCore.pauseAllCalls();
+	}
+
+	public void resumeCall()
+	{
+		if (mLinphoneCore == null) {
+			Lg.e(LOGTAG, "resumeCall: mLinphoneCore is null => aborting");
+			return;
+		}
+
+		final LinphoneCall call = getCurrentCall();
+		if (call == null) {
+			Lg.e(LOGTAG, "resuming call but no current call");
+			return;
+		}
+
+		Lg.i(LOGTAG, "resuming call");
+		mLinphoneCore.resumeCall(call);
 	}
 
 	public void setVolumes(final Volumes volumes)
