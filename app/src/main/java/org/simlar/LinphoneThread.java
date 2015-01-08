@@ -60,7 +60,7 @@ public final class LinphoneThread
 
 	private static final class LinphoneThreadImpl extends Thread implements LinphoneCoreListener
 	{
-		private static final long ZRTP_HANDSHAKE_CHECK = 12000;
+		private static final long ZRTP_HANDSHAKE_CHECK = 15000;
 		Handler mLinphoneThreadHandler = null;
 		final Handler mMainThreadHandler = new Handler();
 		Runnable mCallEncryptionChecker = null;
