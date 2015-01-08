@@ -11,6 +11,7 @@ declare -r LINPHONE_PATCH_DIR="$(dirname $(readlink -f $0))/liblinphone/patches/
 declare -r MEDIASTREAMER2_PATCH_DIR="$(dirname $(readlink -f $0))/liblinphone/patches/mediastreamer2"
 declare -r BELLESIP_PATCH_DIR="$(dirname $(readlink -f $0))/liblinphone/patches/belle-sip"
 declare -r ORTP_PATCH_DIR="$(dirname $(readlink -f $0))/liblinphone/patches/ortp"
+declare -r BZRTP_PATCH_DIR="$(dirname $(readlink -f $0))/liblinphone/patches/bzrtp"
 
 declare -r BUILD_DIR="liblinphone/builds/$(date '+%Y%m%d_%H%M%S')"
 mkdir -p "${BUILD_DIR}"
@@ -59,6 +60,12 @@ if [ -d "${ORTP_PATCH_DIR}" ] ; then
 	cd submodules/linphone/oRTP/
 	git am "${ORTP_PATCH_DIR}"/*.patch
 	cd ../../..
+fi
+
+if [ -d "${BZRTP_PATCH_DIR}" ] ; then
+	cd submodules/bzrtp/
+	git am "${BZRTP_PATCH_DIR}"/*.patch
+	cd ../..
 fi
 
 cd ../../../..
