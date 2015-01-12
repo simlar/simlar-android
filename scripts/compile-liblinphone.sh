@@ -23,7 +23,7 @@ cd "${BUILD_DIR}/linphone-android"
 
 rm -f liblinphone-sdk-*.zip
 
-make BUILD_GPLV3_ZRTP=1
+make
 make liblinphone-android-sdk
 cd ../../../..
 
