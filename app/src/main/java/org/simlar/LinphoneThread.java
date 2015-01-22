@@ -66,7 +66,7 @@ public final class LinphoneThread
 		Runnable mCallEncryptionChecker = null;
 
 		// NOTICE: the linphone handler should only be used in the LINPHONE-THREAD
-		LinphoneHandler mLinphoneHandler = new LinphoneHandler();
+		final LinphoneHandler mLinphoneHandler = new LinphoneHandler();
 
 		// NOTICE: the following members should only be used in the MAIN-THREAD
 		LinphoneThreadListener mListener = null;
@@ -751,19 +751,22 @@ public final class LinphoneThread
 		}
 
 		@Override
-		public void fileTransferProgressIndication(LinphoneCore lc, LinphoneChatMessage message, LinphoneContent content, int progress)
+		public void fileTransferProgressIndication(final LinphoneCore lc, final LinphoneChatMessage message, final LinphoneContent content,
+				final int progress)
 		{
 			Lg.w(LOGTAG, "fileTransferProgressIndication: message=", message, " progress=", Integer.valueOf(progress));
 		}
 
 		@Override
-		public void fileTransferRecv(LinphoneCore lc, LinphoneChatMessage message, LinphoneContent content, byte[] buffer, int size)
+		public void fileTransferRecv(final LinphoneCore lc, final LinphoneChatMessage message, final LinphoneContent content, final byte[] buffer,
+				final int size)
 		{
 			Lg.w(LOGTAG, "fileTransferRecv: message=", message, " size=", Integer.valueOf(size));
 		}
 
 		@Override
-		public int fileTransferSend(LinphoneCore lc, LinphoneChatMessage message, LinphoneContent content, ByteBuffer buffer, int size)
+		public int fileTransferSend(final LinphoneCore lc, final LinphoneChatMessage message, final LinphoneContent content, final ByteBuffer buffer,
+				final int size)
 		{
 			Lg.w(LOGTAG, "fileTransferSend: message=", message, " size=", Integer.valueOf(size));
 			return 0;
