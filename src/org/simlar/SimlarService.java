@@ -421,11 +421,16 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	static void createMissedCallNotification(final Context context, final String name, final String photoId, final long callTime)
 	{
+		final PendingIntent activity = PendingIntent.getActivity(context, 0,
+				new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED), 0);
+
 		final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context);
 		notificationBuilder.setSmallIcon(R.drawable.ic_notification_missed_calls);
 		notificationBuilder.setLargeIcon(ContactsProvider.getContactPhotoBitmap(context, R.drawable.ic_launcher, photoId));
 		notificationBuilder.setContentTitle(context.getString(R.string.missed_call_notification));
 		notificationBuilder.setContentText(name);
+		notificationBuilder.setContentIntent(activity);
+		notificationBuilder.setAutoCancel(true);
 		if (callTime < 0) {
 			Lg.e(LOGTAG, "missed call time < 0");
 			notificationBuilder.setWhen(System.currentTimeMillis());
