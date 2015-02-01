@@ -37,6 +37,9 @@ public final class PreferencesHelper
 	private static final String PREFERENCES_DEBUG_MODE = "debug_mode";
 	private static final boolean PREFERENCES_DEBUG_MODE_DEFAULT = Version.hasDebugTag();
 	private static final String PREFERENCES_VERIFIED_TELEPHONE_NUMBER = "verified_telephone_number";
+	private static final String PREFERENCES_MISSED_CALL_NOTIFICATION_ID = "missed_call_notification_id";
+	private static final int MISSED_CALL_NOTIFICATION_ID_MIN = 2;
+	private static final int MISSED_CALL_NOTIFICATION_ID_MAX = 256;
 
 	private static String mMySimlarId = null;
 	private static String mPassword = null;
@@ -45,6 +48,7 @@ public final class PreferencesHelper
 	private static String mGcmRegistrationId = null;
 	private static int mSimlarVersionCode = -1;
 	private static String mVerifiedTelephoneNumber = null;
+	private static int mMissedCallNotificationId = MISSED_CALL_NOTIFICATION_ID_MIN;
 
 	private PreferencesHelper()
 	{
@@ -148,6 +152,7 @@ public final class PreferencesHelper
 		mGcmRegistrationId = settings.getString(PREFERENCES_GCM_REGRISTRATION_ID, null);
 		mSimlarVersionCode = settings.getInt(PREFERENCES_SIMLAR_VERSION_CODE, -1);
 		mVerifiedTelephoneNumber = settings.getString(PREFERENCES_VERIFIED_TELEPHONE_NUMBER, null);
+		mMissedCallNotificationId = settings.getInt(PREFERENCES_MISSED_CALL_NOTIFICATION_ID, MISSED_CALL_NOTIFICATION_ID_MIN);
 
 		if (Util.isNullOrEmpty(mMySimlarId)) {
 			return false;
@@ -234,5 +239,18 @@ public final class PreferencesHelper
 		editor.putInt(PREFERENCES_SIMLAR_VERSION_CODE, -1);
 		editor.putBoolean(PREFERENCES_DEBUG_MODE, PREFERENCES_DEBUG_MODE_DEFAULT);
 		editor.apply();
+	}
+
+	public static int getNextMissedCallNotificationId(final Context context)
+	{
+		final int nextId = mMissedCallNotificationId++;
+		if (mMissedCallNotificationId > MISSED_CALL_NOTIFICATION_ID_MAX) {
+			mMissedCallNotificationId = MISSED_CALL_NOTIFICATION_ID_MIN;
+		}
+		final SharedPreferences settings = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
+		final SharedPreferences.Editor editor = settings.edit();
+		editor.putInt(PREFERENCES_MISSED_CALL_NOTIFICATION_ID, mMissedCallNotificationId);
+		editor.apply();
+		return nextId;
 	}
 }
