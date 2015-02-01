@@ -488,6 +488,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	{
 		Lg.i(LOGTAG, "onDestroy");
 
+		((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(NOTIFICATION_ID);
+
 		mVibratorManager.stop();
 		mSoundEffectManager.stopAll();
 
