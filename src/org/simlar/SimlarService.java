@@ -20,12 +20,9 @@
 
 package org.simlar;
 
-import java.util.List;
-
 import org.linphone.core.LinphoneCall.State;
 import org.linphone.core.LinphoneCore.RegistrationState;
 import org.simlar.ContactsProvider.ContactListener;
-import org.simlar.GetMissedCalls.Call;
 import org.simlar.PreferencesHelper.NotInitedException;
 import org.simlar.SoundEffectManager.SoundEffectType;
 import org.simlar.Volumes.MicrophoneStatus;
@@ -45,7 +42,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
-import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
@@ -238,7 +234,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 			if (!Util.isNullOrEmpty(intent.getStringExtra(INTENT_EXTRA_GCM))) {
 				intent.removeExtra(INTENT_EXTRA_GCM);
-				getMissedCalls(this);
 			}
 
 			// make sure we have a contact name for the CallActivity
@@ -378,48 +373,24 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		nm.notify(NOTIFICATION_ID, createNotification());
 	}
 
-	private static void getMissedCalls(final Context context)
+	private static void createMissedCallNotification(final Context context, final String simlarId)
 	{
-		new AsyncTask<Void, Void, List<GetMissedCalls.Call>>() {
-			@Override
-			protected List<Call> doInBackground(Void... params)
-			{
-				return GetMissedCalls.httpPostGetMissedCalls("");
-			}
-
-			@Override
-			protected void onPostExecute(final List<GetMissedCalls.Call> missedCalls)
-			{
-				if (missedCalls == null) {
-					Lg.w(LOGTAG, "unable to get missed calls");
-					return;
-				}
-
-				createMissedCallNotifications(context, missedCalls);
-			}
-		}.execute();
-	}
-
-	static void createMissedCallNotifications(final Context context, final List<GetMissedCalls.Call> missedCalls)
-	{
-		if (missedCalls.isEmpty()) {
-			Lg.w(LOGTAG, "no missed calls found");
+		if (Util.isNullOrEmpty(simlarId)) {
+			Lg.w(LOGTAG, "no simlarId for missed call");
 			return;
 		}
 
-		for (final GetMissedCalls.Call call : missedCalls) {
-			Lg.i(LOGTAG, "missed call: ", call);
-			ContactsProvider.getNameAndPhotoId(call.getSimlarId(), context, new ContactListener() {
-				@Override
-				public void onGetNameAndPhotoId(final String name, final String photoId)
-				{
-					createMissedCallNotification(context, name, photoId, call.getTime());
-				}
-			});
-		}
+		Lg.i(LOGTAG, "missed call: ", new Lg.Anonymizer(simlarId));
+		ContactsProvider.getNameAndPhotoId(simlarId, context, new ContactListener() {
+			@Override
+			public void onGetNameAndPhotoId(final String name, final String photoId)
+			{
+				createMissedCallNotification(context, name, photoId);
+			}
+		});
 	}
 
-	static void createMissedCallNotification(final Context context, final String name, final String photoId, final long callTime)
+	static void createMissedCallNotification(final Context context, final String name, final String photoId)
 	{
 		final PendingIntent activity = PendingIntent.getActivity(context, 0,
 				new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED), 0);
@@ -431,12 +402,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		notificationBuilder.setContentText(name);
 		notificationBuilder.setContentIntent(activity);
 		notificationBuilder.setAutoCancel(true);
-		if (callTime < 0) {
-			Lg.e(LOGTAG, "missed call time < 0");
-			notificationBuilder.setWhen(System.currentTimeMillis());
-		} else {
-			notificationBuilder.setWhen(callTime);
-		}
+		notificationBuilder.setWhen(System.currentTimeMillis());
 
 		((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(
 				PreferencesHelper.getNextMissedCallNotificationId(context), notificationBuilder.build());
@@ -751,7 +717,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 			acquireDisplayWakeLock();
 			if (oldCallStateRinging) {
-				getMissedCalls(this);
+				createMissedCallNotification(this, number);
 			}
 			terminate();
 		}
