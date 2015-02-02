@@ -293,7 +293,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		((TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE)).listen(mTelephonyCallStateListener, PhoneStateListener.LISTEN_CALL_STATE);
 
-		PreferencesHelper.readPrefencesFromFile(this);
+		PreferencesHelper.readPreferencesFromFile(this);
 
 		ContactsProvider.preLoadContacts(this);
 
@@ -544,7 +544,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	{
 		notifySimlarStatusChanged(SimlarStatus.OFFLINE);
 
-		if (!PreferencesHelper.readPrefencesFromFile(this)) {
+		if (!PreferencesHelper.readPreferencesFromFile(this)) {
 			Lg.e(LOGTAG, "failed to initialize credentials");
 			return;
 		}
