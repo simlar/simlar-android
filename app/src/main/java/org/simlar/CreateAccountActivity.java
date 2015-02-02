@@ -46,7 +46,7 @@ import android.widget.TextView;
 public final class CreateAccountActivity extends Activity
 {
 	static final String LOGTAG = CreateAccountActivity.class.getSimpleName();
-	public static final String INTENT_EXTRA_NUMBER = "CreateAccountActivityTelephonNumber";
+	public static final String INTENT_EXTRA_NUMBER = "CreateAccountActivityTelephoneNumber";
 	private static final int SECONDS_TO_WAIT_FOR_SMS = 90;
 	private static final String SIMLAR_SMS_SOURCE = "+4922199999930";
 
@@ -64,7 +64,7 @@ public final class CreateAccountActivity extends Activity
 	private int mSecondsToStillWaitForSms = 0;
 	private final Handler mHandler = new Handler();
 
-	private final BroadcastReceiver mSmsReceiver = new SmsReceicer();
+	private final BroadcastReceiver mSmsReceiver = new SmsReceiver();
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCreateAccount();
 	private String mTelephoneNumber = "";
 
@@ -132,9 +132,9 @@ public final class CreateAccountActivity extends Activity
 		}
 	}
 
-	private final class SmsReceicer extends BroadcastReceiver
+	private final class SmsReceiver extends BroadcastReceiver
 	{
-		public SmsReceicer()
+		public SmsReceiver()
 		{
 			super();
 		}
