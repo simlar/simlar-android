@@ -38,7 +38,7 @@ final class VibratorManager
 	private Context mContext = null;
 	private boolean mHasOnGoingAlarm = false;
 	private VibratorManagerImpl mImpl = null;
-	private RingerModeReceiver mRingerModeReceiver = new RingerModeReceiver();
+	private final RingerModeReceiver mRingerModeReceiver = new RingerModeReceiver();
 
 	private final class RingerModeReceiver extends BroadcastReceiver
 	{
