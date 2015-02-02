@@ -825,7 +825,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	{
 		Lg.i(LOGTAG, "handleTerminate");
 		if (mGoingDown) {
-			Lg.w(LOGTAG, "handleTerminate: alreaday going down");
+			Lg.w(LOGTAG, "handleTerminate: already going down");
 			return;
 		}
 		mGoingDown = true;
@@ -905,7 +905,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	public void verifyAuthenticationTokenOfCurrentCall(final boolean verified)
 	{
 		if (mLinphoneThread == null) {
-			Lg.e(LOGTAG, "ERROR: verifyAuthenticationToken called but no linphonehandler");
+			Lg.e(LOGTAG, "ERROR: verifyAuthenticationToken called but no linphone thread");
 			return;
 		}
 
