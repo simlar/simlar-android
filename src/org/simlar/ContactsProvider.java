@@ -20,6 +20,8 @@
 
 package org.simlar;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,9 +33,12 @@ import org.simlar.FileHelper.NotInitedException;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
 
 public final class ContactsProvider
 {
@@ -512,5 +517,22 @@ public final class ContactsProvider
 	public static boolean getFakeMode()
 	{
 		return mImpl.mFakeData;
+	}
+
+	public static Bitmap getContactPhotoBitmap(final Context context, final int defaultResourceId, final String contactPhotoId)
+	{
+		if (Util.isNullOrEmpty(contactPhotoId)) {
+			return BitmapFactory.decodeResource(context.getResources(), defaultResourceId);
+		}
+
+		try {
+			return MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(contactPhotoId));
+		} catch (final FileNotFoundException e) {
+			Lg.ex(LOGTAG, e, "getContactPhotoBitmap FileNotFoundException");
+		} catch (IOException e) {
+			Lg.ex(LOGTAG, e, "getContactPhotoBitmap IOException");
+		}
+
+		return BitmapFactory.decodeResource(context.getResources(), defaultResourceId);
 	}
 }

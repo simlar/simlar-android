@@ -59,6 +59,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private static final int NOTIFICATION_ID = 1;
 	private static final long TERMINATE_CHECKER_INTERVAL = 20 * 1000; // milliseconds
 	public static final String INTENT_EXTRA_SIMLAR_ID = "SimlarServiceSimlarId";
+	public static final String INTENT_EXTRA_GCM = "SimlarServiceGCM";
 
 	LinphoneThread mLinphoneThread = null;
 	final Handler mHandler = new Handler();
@@ -230,10 +231,14 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		// releasing wakelock of gcm's WakefulBroadcastReceiver if needed
 		if (intent != null) {
 			WakefulBroadcastReceiver.completeWakefulIntent(intent);
-			mSimlarIdToCall = intent.getStringExtra(INTENT_EXTRA_SIMLAR_ID);
-			intent.removeExtra(INTENT_EXTRA_SIMLAR_ID);
+
+			if (!Util.isNullOrEmpty(intent.getStringExtra(INTENT_EXTRA_GCM))) {
+				intent.removeExtra(INTENT_EXTRA_GCM);
+			}
 
 			// make sure we have a contact name for the CallActivity
+			mSimlarIdToCall = intent.getStringExtra(INTENT_EXTRA_SIMLAR_ID);
+			intent.removeExtra(INTENT_EXTRA_SIMLAR_ID);
 			if (!Util.isNullOrEmpty(mSimlarIdToCall)) {
 				ContactsProvider.getNameAndPhotoId(mSimlarIdToCall, this, new ContactListener() {
 					@Override
@@ -368,6 +373,41 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		nm.notify(NOTIFICATION_ID, createNotification());
 	}
 
+	private static void createMissedCallNotification(final Context context, final String simlarId)
+	{
+		if (Util.isNullOrEmpty(simlarId)) {
+			Lg.w(LOGTAG, "no simlarId for missed call");
+			return;
+		}
+
+		Lg.i(LOGTAG, "missed call: ", new Lg.Anonymizer(simlarId));
+		ContactsProvider.getNameAndPhotoId(simlarId, context, new ContactListener() {
+			@Override
+			public void onGetNameAndPhotoId(final String name, final String photoId)
+			{
+				createMissedCallNotification(context, name, photoId);
+			}
+		});
+	}
+
+	static void createMissedCallNotification(final Context context, final String name, final String photoId)
+	{
+		final PendingIntent activity = PendingIntent.getActivity(context, 0,
+				new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED), 0);
+
+		final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context);
+		notificationBuilder.setSmallIcon(R.drawable.ic_notification_missed_calls);
+		notificationBuilder.setLargeIcon(ContactsProvider.getContactPhotoBitmap(context, R.drawable.ic_launcher, photoId));
+		notificationBuilder.setContentTitle(context.getString(R.string.missed_call_notification));
+		notificationBuilder.setContentText(name);
+		notificationBuilder.setContentIntent(activity);
+		notificationBuilder.setAutoCancel(true);
+		notificationBuilder.setWhen(System.currentTimeMillis());
+
+		((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(
+				PreferencesHelper.getNextMissedCallNotificationId(context), notificationBuilder.build());
+	}
+
 	Notification createNotification()
 	{
 		if (mNotificationActivity == null) {
@@ -418,6 +458,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	public synchronized void onDestroy()
 	{
 		Lg.i(LOGTAG, "onDestroy");
+
+		((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(NOTIFICATION_ID);
 
 		mVibratorManager.stop();
 		mSoundEffectManager.stopAll();
@@ -588,6 +630,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	@Override
 	public void onCallStateChanged(final String number, final State callState, final String message)
 	{
+		final boolean oldCallStateRinging = mSimlarCallState.isRinging();
 		if (!mSimlarCallState.updateCallStateChanged(number, LinphoneCallState.fromLinphoneCallState(callState), CallEndReason.fromMessage(message))) {
 			Lg.d(LOGTAG, "SimlarCallState staying the same: ", mSimlarCallState);
 			return;
@@ -673,6 +716,9 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			}
 
 			acquireDisplayWakeLock();
+			if (oldCallStateRinging) {
+				createMissedCallNotification(this, number);
+			}
 			terminate();
 		}
 
@@ -843,7 +889,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		if (mGoingDown) {
 			Lg.i(LOGTAG, "onJoin: canceling notification");
-			((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
+			((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(NOTIFICATION_ID);
 			Lg.i(LOGTAG, "onJoin: calling stopSelf");
 			stopSelf();
 			Lg.i(LOGTAG, "onJoin: stopSelf called");

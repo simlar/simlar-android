@@ -154,4 +154,6 @@
     <string name="agree_activity_accept">Stimme zu</string>
     <string name="agree_activity_cancel">Abbrechen</string>
     <string name="agree_activity_privacy_statement_and_terms_of_use">Stimmst du der\n<a href="https://www.simlar.org/datenschutzerklaerung/">Datenschutzerklärung</a>\n und den\n<a href="https://www.simlar.org/nutzungsbedingungen/">Nutzungsbedingungen</a> zu?</string>
+
+    <string name="missed_call_notification">Verpasster Anruf</string>
 </resources>
