@@ -20,9 +20,12 @@
 
 package org.simlar;
 
+import java.util.List;
+
 import org.linphone.core.LinphoneCall.State;
 import org.linphone.core.LinphoneCore.RegistrationState;
 import org.simlar.ContactsProvider.ContactListener;
+import org.simlar.GetMissedCalls.Call;
 import org.simlar.PreferencesHelper.NotInitedException;
 import org.simlar.SoundEffectManager.SoundEffectType;
 import org.simlar.Volumes.MicrophoneStatus;
@@ -42,6 +45,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
+import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
@@ -59,6 +63,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private static final int NOTIFICATION_ID = 1;
 	private static final long TERMINATE_CHECKER_INTERVAL = 20 * 1000; // milliseconds
 	public static final String INTENT_EXTRA_SIMLAR_ID = "SimlarServiceSimlarId";
+	public static final String INTENT_EXTRA_GCM = "SimlarServiceGCM";
 
 	LinphoneThread mLinphoneThread = null;
 	final Handler mHandler = new Handler();
@@ -230,10 +235,15 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		// releasing wakelock of gcm's WakefulBroadcastReceiver if needed
 		if (intent != null) {
 			WakefulBroadcastReceiver.completeWakefulIntent(intent);
-			mSimlarIdToCall = intent.getStringExtra(INTENT_EXTRA_SIMLAR_ID);
-			intent.removeExtra(INTENT_EXTRA_SIMLAR_ID);
+
+			if (!Util.isNullOrEmpty(intent.getStringExtra(INTENT_EXTRA_GCM))) {
+				intent.removeExtra(INTENT_EXTRA_GCM);
+				getMissedCalls();
+			}
 
 			// make sure we have a contact name for the CallActivity
+			mSimlarIdToCall = intent.getStringExtra(INTENT_EXTRA_SIMLAR_ID);
+			intent.removeExtra(INTENT_EXTRA_SIMLAR_ID);
 			if (!Util.isNullOrEmpty(mSimlarIdToCall)) {
 				ContactsProvider.getNameAndPhotoId(mSimlarIdToCall, this, new ContactListener() {
 					@Override
@@ -366,6 +376,29 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		nm.notify(NOTIFICATION_ID, createNotification());
+	}
+
+	private static void getMissedCalls()
+	{
+		new AsyncTask<Void, Void, List<GetMissedCalls.Call>>() {
+			@Override
+			protected List<Call> doInBackground(Void... params)
+			{
+				return GetMissedCalls.httpPostGetMissedCalls("");
+			}
+
+			@Override
+			protected void onPostExecute(final List<GetMissedCalls.Call> missedCalls)
+			{
+				if (missedCalls == null) {
+					Lg.w(LOGTAG, "unable to get missed calls");
+					return;
+				}
+				for (final GetMissedCalls.Call call : missedCalls) {
+					Lg.i(LOGTAG, "missed call: ", call);
+				}
+			}
+		}.execute();
 	}
 
 	Notification createNotification()

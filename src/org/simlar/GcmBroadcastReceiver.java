@@ -61,6 +61,7 @@ public final class GcmBroadcastReceiver extends WakefulBroadcastReceiver
 			} else {
 				Lg.w(LOGTAG, "received unknown push notification: ", extras);
 			}
+			intent.putExtra(SimlarService.INTENT_EXTRA_GCM, SimlarService.INTENT_EXTRA_GCM);
 			startWakefulService(context, intent.setComponent(new ComponentName(context.getPackageName(), SimlarService.class.getName())));
 			setResultCode(Activity.RESULT_OK);
 		} else if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
