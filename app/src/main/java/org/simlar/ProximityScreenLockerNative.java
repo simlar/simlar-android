@@ -19,7 +19,7 @@
  */
 
 ///
-/// This class capsulates the undocumented native proximity screen off wake lock.
+/// This class capsules the undocumented native proximity screen off wake lock.
 ///
 
 package org.simlar;
