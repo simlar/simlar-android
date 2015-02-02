@@ -142,7 +142,7 @@ public final class ContactsProvider
 			final String mySimlarId = PreferencesHelper.getMySimlarIdOrEmptyString();
 
 			if (Util.isNullOrEmpty(mySimlarId)) {
-				Lg.e(LOGTAG, "loadContacts: no simlarId for myself, probably PreferencesHelpre not inited => aborting");
+				Lg.e(LOGTAG, "loadContacts: no simlarId for myself, probably PreferencesHelper not inited => aborting");
 				mState = State.ERROR;
 				mContacts.clear();
 				notifyContactListeners();
@@ -337,7 +337,7 @@ public final class ContactsProvider
 					result.put(simlarId, new ContactData(name, simlarNumber.getGuiTelephoneNumber(), ContactStatus.UNKNOWN,
 							photoUri));
 
-					/// ATTENTIION this logs the users telephone book
+					/// ATTENTION this logs the users telephone book
 					// Log.d(LOGTAG, "adding contact " + name + " " + number + " => " + simlarId);
 				}
 			}
