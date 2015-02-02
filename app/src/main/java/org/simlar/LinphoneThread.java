@@ -423,7 +423,7 @@ public final class LinphoneThread
 				Lg.w(LOGTAG, "Service ", presenceModel.getNthService(i).getBasicStatus());
 				if (presenceModel.getNthService(i).getContact() == null) {
 					status = presenceModel.getNthService(i).getBasicStatus();
-					Lg.w(LOGTAG, "using serivce no ", Long.valueOf(i));
+					Lg.w(LOGTAG, "using service no ", Long.valueOf(i));
 				}
 			}
 
@@ -444,8 +444,8 @@ public final class LinphoneThread
 				{
 					final LinphoneCall currentCall = mLinphoneHandler.getCurrentCall();
 					if (currentCall == null) {
-						Lg.w(LOGTAG, "no current call stopping callEncryptioncChecker");
-						stopCallEncryptioncChecker();
+						Lg.w(LOGTAG, "no current call stopping callEncryptionChecker");
+						stopCallEncryptionChecker();
 						return;
 					}
 
@@ -453,7 +453,7 @@ public final class LinphoneThread
 					final String authenticationToken = currentCall.getAuthenticationToken();
 					final boolean authenticationTokenVerified = currentCall.isAuthenticationTokenVerified();
 
-					Lg.i(LOGTAG, "callEncryptioncChecker status: encrypted=", Boolean.valueOf(encrypted));
+					Lg.i(LOGTAG, "callEncryptionChecker status: encrypted=", Boolean.valueOf(encrypted));
 					mMainThreadHandler.post(new Runnable() {
 						@Override
 						public void run()
@@ -463,8 +463,8 @@ public final class LinphoneThread
 					});
 
 					if (!encrypted) {
-						Lg.w(LOGTAG, "call not encrypted stopping callEncryptioncChecker");
-						stopCallEncryptioncChecker();
+						Lg.w(LOGTAG, "call not encrypted stopping callEncryptionChecker");
+						stopCallEncryptionChecker();
 						return;
 					}
 
@@ -475,10 +475,10 @@ public final class LinphoneThread
 			};
 
 			mLinphoneThreadHandler.postDelayed(mCallEncryptionChecker, ZRTP_HANDSHAKE_CHECK);
-			Lg.i(LOGTAG, "started callEncryptioncChecker");
+			Lg.i(LOGTAG, "started callEncryptionChecker");
 		}
 
-		public void stopCallEncryptioncChecker()
+		public void stopCallEncryptionChecker()
 		{
 			if (mCallEncryptionChecker == null) {
 				return;
@@ -486,7 +486,7 @@ public final class LinphoneThread
 
 			mLinphoneThreadHandler.removeCallbacks(mCallEncryptionChecker);
 			mCallEncryptionChecker = null;
-			Lg.i(LOGTAG, "stopped callEncryptioncChecker");
+			Lg.i(LOGTAG, "stopped callEncryptionChecker");
 		}
 
 		//
@@ -564,7 +564,7 @@ public final class LinphoneThread
 			if (LinphoneCall.State.Connected.equals(fixedState)) {
 				startCallEncryptionChecker();
 			} else if (LinphoneCall.State.CallEnd.equals(fixedState)) {
-				stopCallEncryptioncChecker();
+				stopCallEncryptionChecker();
 			}
 		}
 
@@ -624,7 +624,7 @@ public final class LinphoneThread
 		@Override
 		public void textReceived(final LinphoneCore lc, final LinphoneChatRoom cr, final LinphoneAddress from, final String message)
 		{
-			Lg.i(LOGTAG, "textReceived chatroom=", cr, " from=", new Lg.Anonymizer(from), " message=", message);
+			Lg.i(LOGTAG, "textReceived chatRoom=", cr, " from=", new Lg.Anonymizer(from), " message=", message);
 		}
 
 		@Override
@@ -640,7 +640,7 @@ public final class LinphoneThread
 			final int upload = Math.round(stats.getUploadBandwidth() / 8.0f * 10.0f); // upload bandwidth in 100 Bytes / second
 			final int download = Math.round(stats.getDownloadBandwidth() / 8.0f * 10.0f); // download bandwidth in 100 Bytes / second
 			final int jitter = Math.round((stats.getReceiverInterarrivalJitter() + stats.getSenderInterarrivalJitter()) * 1000f);
-			final int packetLoss = Math.round((stats.getReceiverLossRate() + stats.getSenderLossRate()) / 2.0f * 10.0f); // sum of up and down stream loss in pro mille
+			final int packetLoss = Math.round((stats.getReceiverLossRate() + stats.getSenderLossRate()) / 2.0f * 10.0f); // sum of up and down stream loss in per mille
 			final long latePackets = stats.getLatePacketsCumulativeNumber();
 			final int roundTripDelay = Math.round(stats.getRoundTripDelay() * 1000f);
 
