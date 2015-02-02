@@ -33,6 +33,9 @@ public final class GcmBroadcastReceiver extends WakefulBroadcastReceiver
 {
 	static final String LOGTAG = GcmBroadcastReceiver.class.getSimpleName();
 
+	private static final String COLLAPSE_KEY = "collapse_key";
+	private static final String COLLAPSE_KEY_CALL = "call";
+
 	@Override
 	public void onReceive(final Context context, final Intent intent)
 	{
@@ -53,7 +56,11 @@ public final class GcmBroadcastReceiver extends WakefulBroadcastReceiver
 		final String messageType = gcm.getMessageType(intent);
 
 		if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
-			Lg.i(LOGTAG, "received: ", extras);
+			if (COLLAPSE_KEY_CALL.equalsIgnoreCase(extras.getString(COLLAPSE_KEY))) {
+				Lg.i(LOGTAG, "received call push notification");
+			} else {
+				Lg.w(LOGTAG, "received unknown push notification: ", extras);
+			}
 			startWakefulService(context, intent.setComponent(new ComponentName(context.getPackageName(), SimlarService.class.getName())));
 			setResultCode(Activity.RESULT_OK);
 		} else if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
