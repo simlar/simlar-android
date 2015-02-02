@@ -61,7 +61,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 {
 	static final String LOGTAG = SimlarService.class.getSimpleName();
 	private static final int NOTIFICATION_ID = 1;
-	private static volatile int mNotificationIdMissedCalls = 2;
 	private static final long TERMINATE_CHECKER_INTERVAL = 20 * 1000; // milliseconds
 	public static final String INTENT_EXTRA_SIMLAR_ID = "SimlarServiceSimlarId";
 	public static final String INTENT_EXTRA_GCM = "SimlarServiceGCM";
@@ -434,8 +433,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			notificationBuilder.setWhen(callTime);
 		}
 
-		((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(mNotificationIdMissedCalls++,
-				notificationBuilder.build());
+		((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(
+				PreferencesHelper.getNextMissedCallNotificationId(context), notificationBuilder.build());
 	}
 
 	Notification createNotification()
