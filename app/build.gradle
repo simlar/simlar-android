@@ -21,6 +21,6 @@ android {
 dependencies {
     compile 'com.android.support:support-v4:20.0.0'
     compile 'com.google.android.gms:play-services:+'
-    compile 'com.googlecode.libphonenumber:libphonenumber:6.2'
+    compile 'com.googlecode.libphonenumber:libphonenumber:7.0.2'
     compile files('libs/liblinphone.jar')
 }
