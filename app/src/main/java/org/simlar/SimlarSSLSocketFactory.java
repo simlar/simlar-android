@@ -45,10 +45,10 @@ public final class SimlarSSLSocketFactory extends SSLSocketFactory
 {
 	private static final String LOGTAG = SimlarSSLSocketFactory.class.getSimpleName();
 
-	private static final String[] PREFERRED_CYPHPER_SUITES = { "TLS_DHE_RSA_WITH_AES_256_CBC_SHA", "DHE-RSA-AES256-SHA" };
+	private static final String[] PREFERRED_CIPHER_SUITES = { "TLS_DHE_RSA_WITH_AES_256_CBC_SHA", "DHE-RSA-AES256-SHA" };
 	private static final String[] PREFERRED_PROTOCOLS = { "TLSv1.2", "TLSv1.1", "TLSv1" };
 
-	private static final String[] CYPHPER_SUITES = createCypherSuite();
+	private static final String[] CIPHER_SUITES = createCipherSuites();
 	private static final String[] PROTOCOLS = createProtocols();
 
 	private final SSLSocketFactory mSSLSocketFactory = createSSLSocketFactory();
@@ -78,13 +78,13 @@ public final class SimlarSSLSocketFactory extends SSLSocketFactory
 		return defaults;
 	}
 
-	private static String[] createCypherSuite()
+	private static String[] createCipherSuites()
 	{
-		final String[] cypherSuites = getPreferred(PREFERRED_CYPHPER_SUITES,
+		final String[] cipherSuites = getPreferred(PREFERRED_CIPHER_SUITES,
 				HttpsURLConnection.getDefaultSSLSocketFactory().getSupportedCipherSuites(),
 				HttpsURLConnection.getDefaultSSLSocketFactory().getDefaultCipherSuites());
-		Lg.i(LOGTAG, "using cipher suites: ", TextUtils.join(", ", cypherSuites));
-		return cypherSuites;
+		Lg.i(LOGTAG, "using cipher suites: ", TextUtils.join(", ", cipherSuites));
+		return cipherSuites;
 	}
 
 	private static String[] createProtocols()
@@ -158,20 +158,20 @@ public final class SimlarSSLSocketFactory extends SSLSocketFactory
 	@Override
 	public String[] getDefaultCipherSuites()
 	{
-		return CYPHPER_SUITES;
+		return CIPHER_SUITES;
 	}
 
 	@Override
 	public String[] getSupportedCipherSuites()
 	{
-		return CYPHPER_SUITES;
+		return CIPHER_SUITES;
 	}
 
 	@Override
 	public Socket createSocket(final Socket s, final String host, final int port, final boolean autoClose) throws IOException
 	{
 		final SSLSocket socket = (SSLSocket) mSSLSocketFactory.createSocket(s, host, port, autoClose);
-		socket.setEnabledCipherSuites(CYPHPER_SUITES);
+		socket.setEnabledCipherSuites(CIPHER_SUITES);
 		socket.setEnabledProtocols(PROTOCOLS);
 		return socket;
 	}
@@ -180,7 +180,7 @@ public final class SimlarSSLSocketFactory extends SSLSocketFactory
 	public Socket createSocket(final String host, final int port) throws IOException, UnknownHostException
 	{
 		final SSLSocket socket = (SSLSocket) mSSLSocketFactory.createSocket(host, port);
-		socket.setEnabledCipherSuites(CYPHPER_SUITES);
+		socket.setEnabledCipherSuites(CIPHER_SUITES);
 		socket.setEnabledProtocols(PROTOCOLS);
 		return socket;
 	}
@@ -190,7 +190,7 @@ public final class SimlarSSLSocketFactory extends SSLSocketFactory
 			UnknownHostException
 	{
 		final SSLSocket socket = (SSLSocket) mSSLSocketFactory.createSocket(host, port, localHost, localPort);
-		socket.setEnabledCipherSuites(CYPHPER_SUITES);
+		socket.setEnabledCipherSuites(CIPHER_SUITES);
 		socket.setEnabledProtocols(PROTOCOLS);
 		return socket;
 	}
@@ -199,7 +199,7 @@ public final class SimlarSSLSocketFactory extends SSLSocketFactory
 	public Socket createSocket(final InetAddress host, final int port) throws IOException
 	{
 		final SSLSocket socket = (SSLSocket) mSSLSocketFactory.createSocket(host, port);
-		socket.setEnabledCipherSuites(CYPHPER_SUITES);
+		socket.setEnabledCipherSuites(CIPHER_SUITES);
 		socket.setEnabledProtocols(PROTOCOLS);
 		return socket;
 	}
@@ -208,7 +208,7 @@ public final class SimlarSSLSocketFactory extends SSLSocketFactory
 	public Socket createSocket(final InetAddress address, final int port, final InetAddress localAddress, final int localPort) throws IOException
 	{
 		final SSLSocket socket = (SSLSocket) mSSLSocketFactory.createSocket(address, port, localAddress, localPort);
-		socket.setEnabledCipherSuites(CYPHPER_SUITES);
+		socket.setEnabledCipherSuites(CIPHER_SUITES);
 		socket.setEnabledProtocols(PROTOCOLS);
 		return socket;
 	}
