@@ -432,7 +432,7 @@ public final class LinphoneThread
 			return status.equals(PresenceBasicStatus.Open);
 		}
 
-		private void startCallEncryptioncChecker()
+		private void startCallEncryptionChecker()
 		{
 			if (mCallEncryptionChecker != null) {
 				return;
@@ -562,7 +562,7 @@ public final class LinphoneThread
 			});
 
 			if (LinphoneCall.State.Connected.equals(fixedState)) {
-				startCallEncryptioncChecker();
+				startCallEncryptionChecker();
 			} else if (LinphoneCall.State.CallEnd.equals(fixedState)) {
 				stopCallEncryptioncChecker();
 			}
