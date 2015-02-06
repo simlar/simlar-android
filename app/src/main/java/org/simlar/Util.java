@@ -82,7 +82,7 @@ final class Util
 	public static void copyStream(final InputStream is, final OutputStream os) throws IOException
 	{
 		final byte[] buffer = new byte[MAX_BUFFER_SIZE];
-		int length = 0;
+		int length;
 		while ((length = is.read(buffer)) != -1) {
 			os.write(buffer, 0, length);
 		}
