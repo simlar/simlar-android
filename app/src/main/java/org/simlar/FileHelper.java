@@ -92,7 +92,6 @@ final class FileHelper
 
 	public static final class NotInitedException extends Exception
 	{
-		private static final long serialVersionUID = -6789607195211210408L;
 	}
 
 	public static String getRootCaFileName() throws NotInitedException
