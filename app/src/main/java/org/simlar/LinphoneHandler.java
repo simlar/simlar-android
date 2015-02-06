@@ -62,6 +62,7 @@ final class LinphoneHandler
 		Lg.i(LOGTAG, "destroy ended");
 	}
 
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	public boolean isInitialized()
 	{
 		return mLinphoneCore != null;
