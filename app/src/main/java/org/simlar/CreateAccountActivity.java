@@ -31,6 +31,7 @@ import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.telephony.SmsMessage;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -206,7 +207,7 @@ public final class CreateAccountActivity extends Activity
 
 	/// Workaround to close soft keyboard on older android versions
 	@Override
-	public boolean onKeyUp(final int keyCode, final KeyEvent event)
+	public boolean onKeyUp(final int keyCode, @NonNull final KeyEvent event)
 	{
 		if (keyCode == KeyEvent.KEYCODE_ENTER) {
 			((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);
