@@ -20,6 +20,7 @@
 
 package org.simlar;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -85,6 +86,7 @@ final class VibratorManager
 			mVibrator.cancel();
 		}
 
+		@SuppressLint("NewApi")
 		public boolean hasVibrator()
 		{
 			return mVibrator != null && (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB || mVibrator.hasVibrator());
