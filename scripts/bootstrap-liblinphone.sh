@@ -6,14 +6,14 @@ set -eu -o pipefail
 declare -r BRANCH=${1:-""}
 
 declare -r COMPILE_SCRIPT="$(dirname $(readlink -f $0))/compile-liblinphone.sh"
-declare -r LINPHONE_ANDROID_PATCH_DIR="$(dirname $(readlink -f $0))/patches/linphone-android"
-declare -r LINPHONE_PATCH_DIR="$(dirname $(readlink -f $0))/patches/linphone"
-declare -r MEDIASTREAMER2_PATCH_DIR="$(dirname $(readlink -f $0))/patches/mediastreamer2"
-declare -r BELLESIP_PATCH_DIR="$(dirname $(readlink -f $0))/patches/belle-sip"
-declare -r ORTP_PATCH_DIR="$(dirname $(readlink -f $0))/patches/ortp"
+declare -r LINPHONE_ANDROID_PATCH_DIR="$(dirname $(readlink -f $0))/liblinphone/patches/linphone-android"
+declare -r LINPHONE_PATCH_DIR="$(dirname $(readlink -f $0))/liblinphone/patches/linphone"
+declare -r MEDIASTREAMER2_PATCH_DIR="$(dirname $(readlink -f $0))/liblinphone/patches/mediastreamer2"
+declare -r BELLESIP_PATCH_DIR="$(dirname $(readlink -f $0))/liblinphone/patches/belle-sip"
+declare -r ORTP_PATCH_DIR="$(dirname $(readlink -f $0))/liblinphone/patches/ortp"
 
-declare -r BUILD_DIR="liblinphone_build_$(date '+%Y%m%d_%H%M%S')"
-mkdir "${BUILD_DIR}"
+declare -r BUILD_DIR="liblinphone/builds/$(date '+%Y%m%d_%H%M%S')"
+mkdir -p "${BUILD_DIR}"
 cd "${BUILD_DIR}"
 
 if [ "${BRANCH}" == "" ] ; then
@@ -61,6 +61,6 @@ if [ -d "${ORTP_PATCH_DIR}" ] ; then
 	cd ../../..
 fi
 
-cd ../..
+cd ../../../..
 
 "${COMPILE_SCRIPT}" "${BUILD_DIR}" "${GIT_HASH}"
