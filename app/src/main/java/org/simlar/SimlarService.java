@@ -909,7 +909,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			return;
 		}
 
-		if (mSimlarCallState == null || Util.isNullOrEmpty(mSimlarCallState.getAuthenticationToken())) {
+		if (Util.isNullOrEmpty(mSimlarCallState.getAuthenticationToken())) {
 			Lg.e(LOGTAG, "ERROR: verifyAuthenticationToken called but no token available");
 			return;
 		}
