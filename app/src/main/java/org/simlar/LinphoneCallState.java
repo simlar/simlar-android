@@ -108,11 +108,6 @@ public enum LinphoneCallState
 		return this == LinphoneCallState.CONNECTED;
 	}
 
-	public boolean isIdle()
-	{
-		return this == LinphoneCallState.IDLE;
-	}
-
 	public String createNotificationText(final Context context, final String simlarId, boolean goingDown)
 	{
 		if (Util.isNullOrEmpty(simlarId)) {
