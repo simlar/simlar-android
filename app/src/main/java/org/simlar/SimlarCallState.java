@@ -122,10 +122,10 @@ public final class SimlarCallState
 		return true;
 	}
 
-	public boolean updateContactNameAndImage(final String name, final String photoId)
+	public void updateContactNameAndImage(final String name, final String photoId)
 	{
 		if (Util.equalString(mContactName, name) && Util.equals(name, photoId)) {
-			return false;
+			return;
 		}
 
 		if (Util.isNullOrEmpty(name)) {
@@ -134,8 +134,6 @@ public final class SimlarCallState
 
 		mContactName = name;
 		mContactPhotoId = photoId;
-
-		return true;
 	}
 
 	public boolean updateCallStats(final NetworkQuality quality, final int callDuration)
