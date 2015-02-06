@@ -87,15 +87,7 @@ final class VibratorManager
 
 		public boolean hasVibrator()
 		{
-			if (mVibrator == null) {
-				return false;
-			}
-
-			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-				return true;
-			}
-
-			return mVibrator.hasVibrator();
+			return mVibrator != null && (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB || mVibrator.hasVibrator());
 		}
 	}
 
