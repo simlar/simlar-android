@@ -12,7 +12,7 @@ set -eu -o pipefail
 # xxxhdpj 48px * 4   = 192px
 
 #declare -r RES_DIR="res"
-declare -r RES_DIR="app/src/main/res/"
+declare -r RES_DIR="$(dirname $(readlink -f $0))/../app/src/main/res/"
 
 rm -rf "${RES_DIR}"/drawable-xhdpi/*
 rm -rf "${RES_DIR}"/drawable-hdpi/*
