@@ -11,4 +11,4 @@ simlar-android.iml
 
 ## bootstrap liblinphone
 build.log
-liblinphone_build_*
+liblinphone/builds/
