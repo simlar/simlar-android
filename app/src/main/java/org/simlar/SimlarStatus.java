@@ -74,23 +74,4 @@ public enum SimlarStatus {
 			return false;
 		}
 	}
-
-	public boolean shouldShowContacts(boolean isGoingDown)
-	{
-		if (isGoingDown) {
-			return false;
-		}
-
-		switch (this) {
-		case ONLINE:
-		case ONGOING_CALL:
-			return true;
-		case ERROR:
-		case OFFLINE:
-		case CONNECTING:
-		case UNKNOWN:
-		default:
-			return false;
-		}
-	}
 }
