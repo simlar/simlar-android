@@ -32,7 +32,7 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public final class HttpsPost
+final class HttpsPost
 {
 	private static final String LOGTAG = HttpsPost.class.getSimpleName();
 

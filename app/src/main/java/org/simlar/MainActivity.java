@@ -41,10 +41,10 @@ import android.view.MenuItem;
 
 public final class MainActivity extends android.support.v4.app.FragmentActivity
 {
-	static final String LOGTAG = MainActivity.class.getSimpleName();
+	private static final String LOGTAG = MainActivity.class.getSimpleName();
 
-	ContactsAdapter mAdapter = null;
-	ContactsListFragment mContactList = null;
+	private ContactsAdapter mAdapter = null;
+	private ContactsListFragment mContactList = null;
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState)

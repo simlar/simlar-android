@@ -31,7 +31,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 public final class GcmBroadcastReceiver extends WakefulBroadcastReceiver
 {
-	static final String LOGTAG = GcmBroadcastReceiver.class.getSimpleName();
+	private static final String LOGTAG = GcmBroadcastReceiver.class.getSimpleName();
 
 	private static final String COLLAPSE_KEY = "collapse_key";
 	private static final String COLLAPSE_KEY_CALL = "call";

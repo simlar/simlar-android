@@ -31,11 +31,11 @@ import android.os.Vibrator;
 
 final class VibratorManager
 {
-	static final String LOGTAG = VibratorManager.class.getSimpleName();
+	private static final String LOGTAG = VibratorManager.class.getSimpleName();
 	public static final long VIBRATE_LENGTH = 1000; // ms
 	public static final long VIBRATE_PAUSE = 1000; // ms
 
-	Context mContext = null;
+	private Context mContext = null;
 	private boolean mHasOnGoingAlarm = false;
 	private VibratorManagerImpl mImpl = null;
 	private RingerModeReceiver mRingerModeReceiver = new RingerModeReceiver();
@@ -173,7 +173,7 @@ final class VibratorManager
 		Lg.i(LOGTAG, "stopped");
 	}
 
-	public void onRingerModeChanged()
+	void onRingerModeChanged()
 	{
 		Lg.i(LOGTAG, "onRingerModeChanged");
 

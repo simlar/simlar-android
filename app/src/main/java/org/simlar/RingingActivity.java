@@ -33,7 +33,7 @@ import android.widget.TextView;
 
 public final class RingingActivity extends Activity
 {
-	static final String LOGTAG = RingingActivity.class.getSimpleName();
+	private static final String LOGTAG = RingingActivity.class.getSimpleName();
 
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorRinging();
 

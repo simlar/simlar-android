@@ -22,7 +22,7 @@ package org.simlar;
 
 import android.app.Activity;
 
-public class ProximityScreenLockerHelper
+class ProximityScreenLockerHelper
 {
 	private static final String LOGTAG = ProximityScreenLockerHelper.class.getSimpleName();
 

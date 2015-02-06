@@ -32,12 +32,12 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 
-public class SimlarServiceCommunicator
+class SimlarServiceCommunicator
 {
 	private static final String DEFAULT_LOGTAG = "SimlarServiceCommunicator";
-	final String mLogtag;
+	private final String mLogtag;
 	SimlarService mService = null;
-	Class<? extends Activity> mActivity = null;
+	private Class<? extends Activity> mActivity = null;
 	private final ServiceConnection mConnection = new SimlarServiceConnection();
 	private final BroadcastReceiver mReceiver = new SimlarServiceReceiver();
 	private Context mContext = null;

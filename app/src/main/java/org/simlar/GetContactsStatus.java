@@ -33,7 +33,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.text.TextUtils;
 import android.util.Xml;
 
-public final class GetContactsStatus
+final class GetContactsStatus
 {
 	private static final String LOGTAG = GetContactsStatus.class.getSimpleName();
 

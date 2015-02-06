@@ -37,10 +37,10 @@ import android.os.SystemClock;
 
 final class SoundEffectManager
 {
-	static final String LOGTAG = SoundEffectManager.class.getSimpleName();
-	static final long MIN_PLAY_TIME = VibratorManager.VIBRATE_LENGTH + VibratorManager.VIBRATE_PAUSE;
+	private static final String LOGTAG = SoundEffectManager.class.getSimpleName();
+	private static final long MIN_PLAY_TIME = VibratorManager.VIBRATE_LENGTH + VibratorManager.VIBRATE_PAUSE;
 
-	final Context mContext;
+	private final Context mContext;
 	private final Map<SoundEffectType, SoundEffectPlayer> mPlayers = new HashMap<SoundEffectType, SoundEffectPlayer>();
 
 	public enum SoundEffectType {

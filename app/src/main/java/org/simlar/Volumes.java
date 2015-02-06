@@ -46,8 +46,8 @@ public final class Volumes
 		mEchoLimiter = false;
 	}
 
-	public Volumes(final float playGain, final float micGain, final boolean externalSpeaker, final MicrophoneStatus microphoneStatus,
-			final boolean echoLimiter)
+	private Volumes(final float playGain, final float micGain, final boolean externalSpeaker, final MicrophoneStatus microphoneStatus,
+	                final boolean echoLimiter)
 	{
 		mPlayGain = playGain;
 		mMicGain = micGain;

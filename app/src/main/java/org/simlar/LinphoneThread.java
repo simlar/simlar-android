@@ -54,7 +54,7 @@ import android.os.Looper;
 
 public final class LinphoneThread
 {
-	static final String LOGTAG = LinphoneThread.class.getSimpleName();
+	private static final String LOGTAG = LinphoneThread.class.getSimpleName();
 
 	private final LinphoneThreadImpl mImpl;
 

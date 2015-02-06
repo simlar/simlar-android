@@ -39,7 +39,7 @@ import android.os.Build;
 
 public final class UploadLogFile
 {
-	static final String LOGTAG = UploadLogFile.class.getSimpleName();
+	private static final String LOGTAG = UploadLogFile.class.getSimpleName();
 	private static final String EMAIL_ADDRESS = "support@simlar.org";
 	private static final String EMAIL_SUBJECT = "bug report to log file ";
 	private static final String EMAIL_TEXT = "\r\n\r\n"
@@ -53,8 +53,8 @@ public final class UploadLogFile
 	private static final String LINE_END = "\r\n";
 	private static final String TWO_HYPHENS = "--";
 
-	Context mContext = null;
-	ProgressDialog mProgressDialog = null;
+	private Context mContext = null;
+	private ProgressDialog mProgressDialog = null;
 
 	private final class PostResult
 	{

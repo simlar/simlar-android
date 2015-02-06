@@ -55,17 +55,17 @@ import android.telephony.TelephonyManager;
 
 public final class SimlarService extends Service implements LinphoneThreadListener
 {
-	static final String LOGTAG = SimlarService.class.getSimpleName();
+	private static final String LOGTAG = SimlarService.class.getSimpleName();
 	private static final int NOTIFICATION_ID = 1;
 	private static final long TERMINATE_CHECKER_INTERVAL = 20 * 1000; // milliseconds
 	public static final String INTENT_EXTRA_SIMLAR_ID = "SimlarServiceSimlarId";
 	public static final String INTENT_EXTRA_GCM = "SimlarServiceGCM";
 
-	LinphoneThread mLinphoneThread = null;
-	final Handler mHandler = new Handler();
+	private LinphoneThread mLinphoneThread = null;
+	private final Handler mHandler = new Handler();
 	private final IBinder mBinder = new SimlarServiceBinder();
 	private SimlarStatus mSimlarStatus = SimlarStatus.OFFLINE;
-	final SimlarCallState mSimlarCallState = new SimlarCallState();
+	private final SimlarCallState mSimlarCallState = new SimlarCallState();
 	private CallConnectionDetails mCallConnectionDetails = new CallConnectionDetails();
 	private WakeLock mWakeLock = null;
 	private WakeLock mDisplayWakeLock = null;
@@ -149,7 +149,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		return mBinder;
 	}
 
-	public void onTelephonyCallStateOffHook()
+	void onTelephonyCallStateOffHook()
 	{
 		restoreRingerModeIfNeeded();
 		if (mSimlarStatus != SimlarStatus.ONGOING_CALL) {
@@ -165,7 +165,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mLinphoneThread.pauseAllCalls();
 	}
 
-	public void onTelephonyCallStateIdle()
+	void onTelephonyCallStateIdle()
 	{
 		restoreRingerModeIfNeeded();
 		if (mSimlarStatus != SimlarStatus.ONGOING_CALL) {
@@ -181,7 +181,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mLinphoneThread.resumeCall();
 	}
 
-	public void onTelephonyCallStateRinging()
+	void onTelephonyCallStateRinging()
 	{
 		if (mSimlarStatus != SimlarStatus.ONGOING_CALL) {
 			return;
@@ -338,7 +338,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}, TERMINATE_CHECKER_INTERVAL);
 	}
 
-	protected boolean terminateCheck()
+	boolean terminateCheck()
 	{
 		if (mGoingDown) {
 			return true;
@@ -390,7 +390,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		});
 	}
 
-	static void createMissedCallNotification(final Context context, final String name, final String photoId)
+	private static void createMissedCallNotification(final Context context, final String name, final String photoId)
 	{
 		final PendingIntent activity = PendingIntent.getActivity(context, 0,
 				new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED), 0);
@@ -439,7 +439,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		return notificationBuilder.build();
 	}
 
-	public void connect()
+	void connect()
 	{
 		if (mLinphoneThread == null) {
 			return;
@@ -774,7 +774,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mSoundEffectManager.stop(SoundEffectType.UNENCRYPTED_CALL_ALARM);
 	}
 
-	public void call(final String simlarId)
+	void call(final String simlarId)
 	{
 		if (mLinphoneThread == null) {
 			return;

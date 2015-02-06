@@ -32,7 +32,7 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat;
 import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 
-public final class SimlarNumber
+final class SimlarNumber
 {
 	private static final String LOGTAG = SimlarNumber.class.getSimpleName();
 	private static String mDefaultRegion = null;
@@ -153,7 +153,7 @@ public final class SimlarNumber
 		return new SimlarNumber(telephoneNumber).getSimlarId();
 	}
 
-	public static String readRegionFromSimCardOrConfiguration(final Context c)
+	private static String readRegionFromSimCardOrConfiguration(final Context c)
 	{
 		// try to read country code from sim
 		final TelephonyManager tm = (TelephonyManager) c.getSystemService(Context.TELEPHONY_SERVICE);

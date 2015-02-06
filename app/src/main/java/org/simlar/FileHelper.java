@@ -27,7 +27,7 @@ import java.io.InputStream;
 
 import android.content.Context;
 
-public final class FileHelper
+final class FileHelper
 {
 	private static final String LOGTAG = FileHelper.class.getSimpleName();
 
