@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "org.simlar"
         minSdkVersion 9
-        targetSdkVersion 23
+        targetSdkVersion 21
     }
 
     buildTypes {
