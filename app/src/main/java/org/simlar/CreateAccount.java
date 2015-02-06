@@ -124,7 +124,7 @@ public final class CreateAccount
 	{
 		Lg.i(LOGTAG, "httpPostRequest: ", new Lg.Anonymizer(telephoneNumber));
 
-		final Map<String, String> parameters = new HashMap<String, String>();
+		final Map<String, String> parameters = new HashMap<>();
 		parameters.put("command", "request");
 		parameters.put("telephoneNumber", telephoneNumber);
 		parameters.put("smsText", smsText);
@@ -136,7 +136,7 @@ public final class CreateAccount
 	{
 		Lg.i(LOGTAG, "httpPostConfirm: simlarId=", new Lg.Anonymizer(simlarId), " registrationCode=", registrationCode);
 
-		final Map<String, String> parameters = new HashMap<String, String>();
+		final Map<String, String> parameters = new HashMap<>();
 		parameters.put("command", "confirm");
 		parameters.put("simlarId", simlarId);
 		parameters.put("registrationCode", registrationCode);

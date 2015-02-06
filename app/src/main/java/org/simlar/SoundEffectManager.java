@@ -41,7 +41,7 @@ final class SoundEffectManager
 	private static final long MIN_PLAY_TIME = VibratorManager.VIBRATE_LENGTH + VibratorManager.VIBRATE_PAUSE;
 
 	private final Context mContext;
-	private final Map<SoundEffectType, SoundEffectPlayer> mPlayers = new HashMap<SoundEffectType, SoundEffectPlayer>();
+	private final Map<SoundEffectType, SoundEffectPlayer> mPlayers = new HashMap<>();
 
 	public enum SoundEffectType {
 		RINGTONE,

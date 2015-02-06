@@ -111,11 +111,11 @@ public final class ContactsProvider
 
 	private static final class ContactsProviderImpl
 	{
-		private Map<String, ContactData> mContacts = new HashMap<String, ContactsProvider.ContactData>();
+		private Map<String, ContactData> mContacts = new HashMap<>();
 		private State mState = State.UNINITIALIZED;
 		boolean mFakeData = false;
-		private final Set<FullContactsListener> mFullContactsListeners = new HashSet<FullContactsListener>();
-		private final Map<ContactListener, String> mContactListener = new HashMap<ContactsProvider.ContactListener, String>();
+		private final Set<FullContactsListener> mFullContactsListeners = new HashSet<>();
+		private final Map<ContactListener, String> mContactListener = new HashMap<>();
 
 		private enum State {
 			UNINITIALIZED,
@@ -200,7 +200,7 @@ public final class ContactsProvider
 				@Override
 				protected Map<String, ContactStatus> doInBackground(final String... params)
 				{
-					return GetContactsStatus.httpPostGetContactsStatus(new HashSet<String>(Arrays.asList(params)));
+					return GetContactsStatus.httpPostGetContactsStatus(new HashSet<>(Arrays.asList(params)));
 				}
 
 				@Override
@@ -246,7 +246,7 @@ public final class ContactsProvider
 
 		private Set<FullContactData> createFullContactDataSet()
 		{
-			final Set<FullContactData> registeredContacts = new HashSet<FullContactData>();
+			final Set<FullContactData> registeredContacts = new HashSet<>();
 			for (final Map.Entry<String, ContactData> c : mContacts.entrySet()) {
 				if (c.getValue().isRegistered()) {
 					registeredContacts.add(new FullContactData(c.getKey(), c.getValue()));
@@ -271,7 +271,7 @@ public final class ContactsProvider
 		{
 			Lg.i(LOGTAG, "creating fake telephone book");
 
-			final Map<String, ContactData> result = new HashMap<String, ContactData>();
+			final Map<String, ContactData> result = new HashMap<>();
 			final String fakePhoto = createFakePhotoString();
 			result.put("*0002*", new ContactData("Barney Gumble", "+49 171 111111", ContactStatus.UNKNOWN, ""));
 			result.put("*0004*", new ContactData("Bender Rodriguez", "+49 172 222222", ContactStatus.UNKNOWN, ""));
@@ -288,7 +288,7 @@ public final class ContactsProvider
 		static Map<String, ContactData> loadContactsFromTelephoneBook(final Context context, final String mySimlarId)
 		{
 			Lg.i(LOGTAG, "loading contacts from telephone book");
-			final Map<String, ContactData> result = new HashMap<String, ContactData>();
+			final Map<String, ContactData> result = new HashMap<>();
 
 			final String[] projection = new String[] {
 					ContactsContract.CommonDataKinds.Phone.CONTACT_ID,

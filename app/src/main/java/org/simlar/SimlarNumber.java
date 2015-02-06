@@ -194,7 +194,7 @@ final class SimlarNumber
 
 	public static Set<Integer> getSupportedCountryCodes()
 	{
-		final Set<Integer> supportedCountryCodes = new HashSet<Integer>();
+		final Set<Integer> supportedCountryCodes = new HashSet<>();
 
 		final PhoneNumberUtil pnUtil = PhoneNumberUtil.getInstance();
 		for (final String region : pnUtil.getSupportedRegions()) {

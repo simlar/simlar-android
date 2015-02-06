@@ -118,7 +118,7 @@ public final class VerifyNumberActivity extends Activity
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private ArrayAdapter<Integer> createCountryCodeSelector()
 	{
-		final ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item);
+		final ArrayAdapter<Integer> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			adapter.addAll(SimlarNumber.getSupportedCountryCodes());
 		} else {
