@@ -71,7 +71,8 @@
         <service
             android:name="org.simlar.SimlarService"
             android:exported="false"
-            android:stopWithTask="false" />
+            android:stopWithTask="false"
+            tools:ignore="UnusedAttribute"/>
 
         <activity
             android:name="org.simlar.MainActivity"
