@@ -35,13 +35,14 @@ public enum CallEndReason {
 		}
 
 		// see linphone-android/submodules/belle-sip/src/message.c: well_known_codes
-		if (message.equals("Call declined.")) {
+		switch (message) {
+		case "Call declined.":
 			return DECLINED;
-		} else if (message.equals("Not Found")) {
+		case "Not Found":
 			return OFFLINE;
-		} else if (message.equals("Unsupported media type")) {
+		case "Unsupported media type":
 			return UNSUPPORTED_MEDIA;
-		} else if (message.equals("Busy here")) {
+		case "Busy here":
 			return BUSY;
 		}
 
