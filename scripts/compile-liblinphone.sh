@@ -25,7 +25,7 @@ rm -f liblinphone-sdk-*.zip
 
 make BUILD_GPLV3_ZRTP=1
 make liblinphone-android-sdk
-cd ../..
+cd ../../../..
 
 unzip -o $(find "${BUILD_DIR}/linphone-android" -maxdepth 1 -name liblinphone-android-sdk\*.zip)
 
