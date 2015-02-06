@@ -22,6 +22,7 @@ final class StorePushId
 		throw new AssertionError("This class was not meant to be instantiated");
 	}
 
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	public static boolean httpPostStorePushId(final String pushId)
 	{
 		Lg.i(LOGTAG, "httpPostStorePushId requested");
