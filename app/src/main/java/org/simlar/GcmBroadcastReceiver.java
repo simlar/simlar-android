@@ -55,7 +55,8 @@ public final class GcmBroadcastReceiver extends WakefulBroadcastReceiver
 
 		final String messageType = gcm.getMessageType(intent);
 
-		if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
+		switch (messageType) {
+		case GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE:
 			if (COLLAPSE_KEY_CALL.equalsIgnoreCase(extras.getString(COLLAPSE_KEY))) {
 				Lg.i(LOGTAG, "received call push notification");
 			} else {
@@ -64,12 +65,16 @@ public final class GcmBroadcastReceiver extends WakefulBroadcastReceiver
 			intent.putExtra(SimlarService.INTENT_EXTRA_GCM, SimlarService.INTENT_EXTRA_GCM);
 			startWakefulService(context, intent.setComponent(new ComponentName(context.getPackageName(), SimlarService.class.getName())));
 			setResultCode(Activity.RESULT_OK);
-		} else if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
+			break;
+		case GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR:
 			Lg.e(LOGTAG, "send error: ", extras);
-		} else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED.equals(messageType)) {
+			break;
+		case GoogleCloudMessaging.MESSAGE_TYPE_DELETED:
 			Lg.e(LOGTAG, "deleted messages on server: ", extras);
-		} else {
+			break;
+		default:
 			Lg.e(LOGTAG, "received Google Cloud Messaging Event with unknown message type: ", messageType);
+			break;
 		}
 	}
 }
