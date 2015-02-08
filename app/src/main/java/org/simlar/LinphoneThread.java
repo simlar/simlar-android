@@ -170,10 +170,6 @@ public final class LinphoneThread
 
 		void linphoneIterator()
 		{
-			if (mLinphoneHandler == null) {
-				Lg.e(LOGTAG, "linphoneIterator no handler => quitting");
-				return;
-			}
 
 			mLinphoneHandler.linphoneCoreIterate();
 
@@ -206,11 +202,6 @@ public final class LinphoneThread
 		{
 			if (mLinphoneThreadHandler == null) {
 				Lg.e(LOGTAG, "handler is null, probably thread not started");
-				return;
-			}
-
-			if (mLinphoneHandler == null) {
-				Lg.e(LOGTAG, "refreshRegisters no handler => quitting");
 				return;
 			}
 
@@ -534,7 +525,7 @@ public final class LinphoneThread
 		LinphoneCall.State fixLinphoneCallState(final LinphoneCall.State callState)
 		{
 			if (LinphoneCall.State.CallReleased.equals(callState) || LinphoneCall.State.Error.equals(callState)) {
-				if (mLinphoneHandler == null || mLinphoneHandler.hasNoCurrentCalls()) {
+				if (mLinphoneHandler.hasNoCurrentCalls()) {
 					Lg.i(LOGTAG, "fixLinphoneCallState: ", callState, " -> ", LinphoneCall.State.CallEnd);
 					return LinphoneCall.State.CallEnd;
 				}
