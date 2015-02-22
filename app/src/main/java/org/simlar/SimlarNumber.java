@@ -66,23 +66,23 @@ public final class SimlarNumber
 			final PhoneNumber pn = PhoneNumberUtil.getInstance().parse(telephoneNumber, mDefaultRegion);
 
 			if (pn == null) {
-				Lg.w(LOGTAG, "parseNumberWithLibPhonenumber failed: pn is null");
+				Lg.w(LOGTAG, "parsing number with LibPhoneNumber failed: pn is null");
 				return null;
 			}
 
 			if (!pn.hasCountryCode()) {
-				Lg.w(LOGTAG, "parseNumberWithLibPhonenumber failed: no country code");
+				Lg.w(LOGTAG, "parsing number with LibPhoneNumber failed: no country code");
 				return null;
 			}
 
 			if (!pn.hasNationalNumber()) {
-				Lg.w(LOGTAG, "parseNumberWithLibPhonenumber failed: no national number");
+				Lg.w(LOGTAG, "parsing number with LibPhoneNumber failed: no national number");
 				return null;
 			}
 
 			return pn;
 		} catch (final NumberParseException e) {
-			// we do not want a stacktrace in the logs for each unparsable number
+			// we do not want a stacktrace in the logs for each not parsable number
 			Lg.i(LOGTAG, "NumberParseException (telephoneNumber=", telephoneNumber, " mDefaultRegion=", mDefaultRegion, "): ", e.getMessage());
 			return null;
 		}
