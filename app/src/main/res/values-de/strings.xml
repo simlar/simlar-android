@@ -109,7 +109,7 @@
     <string name="connection_details_activity_label_late_packets">Late: </string>
     <string name="connection_details_activity_label_round_trip_delay">Delay: </string>
     <string name="connection_details_activity_label_jitter">Jitter: </string>
-    <string name="connection_details_activity_kbytes_per_second">kb/s</string>
+    <string name="connection_details_activity_kilobytes_per_second">kb/s</string>
     <string name="connection_details_activity_milli_seconds">ms</string>
     <string name="connection_details_activity_percent">&#65285;</string>
 

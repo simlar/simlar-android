@@ -126,8 +126,8 @@ public final class ConnectionDetailsActivity extends Activity
 
 		if (callConnectionDetails.hasConnectionInfo()) {
 			mTextViewQuality.setText(getString(callConnectionDetails.getQualityDescription()));
-			mTextViewUpload.setText(callConnectionDetails.getUpload() + " " + getString(R.string.connection_details_activity_kbytes_per_second));
-			mTextViewDownload.setText(callConnectionDetails.getDownload() + " " + getString(R.string.connection_details_activity_kbytes_per_second));
+			mTextViewUpload.setText(callConnectionDetails.getUpload() + " " + getString(R.string.connection_details_activity_kilobytes_per_second));
+			mTextViewDownload.setText(callConnectionDetails.getDownload() + " " + getString(R.string.connection_details_activity_kilobytes_per_second));
 			mTextViewIceState.setText(callConnectionDetails.getIceState());
 			mTextViewCodec.setText(callConnectionDetails.getCodec());
 			mTextViewJitter.setText(callConnectionDetails.getJitter());
