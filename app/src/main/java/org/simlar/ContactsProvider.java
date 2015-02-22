@@ -267,7 +267,7 @@ public final class ContactsProvider
 		private static String createFakePhotoString()
 		{
 			try {
-				return "file://" + FileHelper.getFakePhonebookPicture();
+				return "file://" + FileHelper.getFakePhoneBookPicture();
 			} catch (final NotInitedException e) {
 				Lg.ex(LOGTAG, e, "PreferencesHelper.NotInitedException");
 				return "";

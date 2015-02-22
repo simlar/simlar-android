@@ -34,7 +34,7 @@ public final class FileHelper
 	private static String mRootCaFileName = null;
 	private static String mZrtpSecretsCacheFileName = null;
 	private static String mLinphoneInitialConfigFile = null;
-	private static String mFakePhonebookPicture = null;
+	private static String mFakePhoneBookPicture = null;
 	private static String mPauseSoundFile = null;
 
 	private FileHelper()
@@ -55,14 +55,14 @@ public final class FileHelper
 		mRootCaFileName = basePath + "/rootca.pem";
 		mZrtpSecretsCacheFileName = basePath + "/zrtp_secrets";
 		mLinphoneInitialConfigFile = basePath + "/linphonerc";
-		mFakePhonebookPicture = basePath + "/fake_phonebook_picture.png";
+		mFakePhoneBookPicture = basePath + "/fake_phonebook_picture.png";
 		mPauseSoundFile = basePath + "/pause.wav";
 
 		// Always overwrite to make updates of this file work
 		copyFileFromPackage(context, R.raw.rootca, new File(mRootCaFileName).getName());
 		copyFileFromPackage(context, R.raw.ringback, new File(basePath + "/ringback.wav").getName());
 		copyFileFromPackage(context, R.raw.linphonerc, new File(mLinphoneInitialConfigFile).getName());
-		copyFileFromPackage(context, R.raw.fake_phonebook_picture, new File(mFakePhonebookPicture).getName());
+		copyFileFromPackage(context, R.raw.fake_phonebook_picture, new File(mFakePhoneBookPicture).getName());
 		copyFileFromPackage(context, R.raw.pause, new File(mPauseSoundFile).getName());
 	}
 
@@ -71,7 +71,7 @@ public final class FileHelper
 		return !Util.isNullOrEmpty(mRootCaFileName) &&
 				!Util.isNullOrEmpty(mZrtpSecretsCacheFileName) &&
 				!Util.isNullOrEmpty(mLinphoneInitialConfigFile) &&
-				!Util.isNullOrEmpty(mFakePhonebookPicture) &&
+				!Util.isNullOrEmpty(mFakePhoneBookPicture) &&
 				!Util.isNullOrEmpty(mPauseSoundFile);
 	}
 
@@ -119,12 +119,12 @@ public final class FileHelper
 		return mLinphoneInitialConfigFile;
 	}
 
-	public static String getFakePhonebookPicture() throws NotInitedException
+	public static String getFakePhoneBookPicture() throws NotInitedException
 	{
-		if (Util.isNullOrEmpty(mFakePhonebookPicture)) {
+		if (Util.isNullOrEmpty(mFakePhoneBookPicture)) {
 			throw new NotInitedException();
 		}
-		return mFakePhonebookPicture;
+		return mFakePhoneBookPicture;
 	}
 
 	public static String getPauseSoundFile() throws NotInitedException
