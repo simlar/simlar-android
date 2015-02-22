@@ -283,7 +283,7 @@ public final class CreateAccountActivity extends Activity
 				}
 
 				if (!result.getSimlarId().equals(expectedSimlarId)) {
-					Lg.e(LOGTAG, "received simlarId not equal to expected: telephonenumber=", new Lg.Anonymizer(telephoneNumber),
+					Lg.e(LOGTAG, "received simlarId not equal to expected: telephoneNumber=", new Lg.Anonymizer(telephoneNumber),
 							" expected=", new Lg.Anonymizer(expectedSimlarId),
 							" actual=", new Lg.Anonymizer(result.getSimlarId()));
 				}
