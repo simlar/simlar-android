@@ -425,7 +425,7 @@ public final class CreateAccountActivity extends Activity
 	void onError(final int resId)
 	{
 		mLayoutProgress.setVisibility(View.GONE);
-		if (resId == R.string.create_account_activity_error_wrong_telephonenumber ||
+		if (resId == R.string.create_account_activity_error_wrong_telephone_number ||
 				resId == R.string.create_account_activity_error_sms ||
 				resId == R.string.create_account_activity_error_sms_timeout) {
 			mDetails.setText(String.format(getString(resId), mTelephoneNumber));

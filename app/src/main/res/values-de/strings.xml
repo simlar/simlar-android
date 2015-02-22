@@ -136,7 +136,7 @@
     <string name="create_account_activity_waiting_for_sms_manual">Manuelle Eingabe des Bestätigungscodes</string>
     <string name="create_account_activity_confirm">Bestätige Registrierung</string>
     <string name="create_account_activity_first_login">Überprüfe Zugang</string>
-    <string name="create_account_activity_error_wrong_telephonenumber">Mit der angegebenen Rufnummer ist eine Registrierung nicht möglich:\n%1$s\n\nProbiere eine andere Rufnummer oder schreibe an support@simlar.org</string>
+    <string name="create_account_activity_error_wrong_telephone_number">Mit der angegebenen Rufnummer ist eine Registrierung nicht möglich:\n%1$s\n\nProbiere eine andere Rufnummer oder schreibe an support@simlar.org</string>
     <string name="create_account_activity_error_sms">Simlar kann keine SMS an deine angegebene Telefonnummer schicken:\n%1$s\n\n Überprüfe deine Eingabe oder versuche es später nochmal</string>
     <string name="create_account_activity_error_sms_timeout">Das automatische Auslesen der SMS wurde abgebrochen.\n\nÜberprüfe deine Nummer:\n\n%1$s\n\nOder warte auf die SMS und gib den Bestätigungscode manuell ein.</string>
     <string name="create_account_activity_error_not_possible">Anmeldung momentan nicht möglich.\n\nÜberprüfe deine Intertverbindung und versuch es erneut.</string>

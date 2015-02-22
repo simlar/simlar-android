@@ -79,7 +79,7 @@ public final class CreateAccount
 		{
 			switch (mErrorId) {
 			case 22:
-				return R.string.create_account_activity_error_wrong_telephonenumber;
+				return R.string.create_account_activity_error_wrong_telephone_number;
 			case 23: // Too many requests
 				return R.string.create_account_activity_error_not_possible;
 			case 24:
