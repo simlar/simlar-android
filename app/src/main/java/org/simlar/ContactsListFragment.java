@@ -33,7 +33,7 @@ public final class ContactsListFragment extends android.support.v4.app.ListFragm
 	public void onActivityCreated(final Bundle savedInstanceState)
 	{
 		super.onActivityCreated(savedInstanceState);
-		setEmptyText(getString(R.string.main_activity_contactlist_no_contacts_found));
+		setEmptyText(getString(R.string.main_activity_contact_list_no_contacts_found));
 	}
 
 	@Override
