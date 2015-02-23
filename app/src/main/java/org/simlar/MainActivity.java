@@ -209,9 +209,10 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 	private void reloadContacts()
 	{
 		Lg.i(LOGTAG, "reloadContacts");
-		ContactsProvider.clearCache();
-		mAdapter.clear();
-		loadContacts();
+		if (ContactsProvider.clearCache()) {
+			mAdapter.clear();
+			loadContacts();
+		}
 	}
 
 	private void fakeTelephoneBook()
