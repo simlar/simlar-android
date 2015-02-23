@@ -55,14 +55,14 @@ public final class FileHelper
 		mRootCaFileName = basePath + "/rootca.pem";
 		mZrtpSecretsCacheFileName = basePath + "/zrtp_secrets";
 		mLinphoneInitialConfigFile = basePath + "/linphonerc";
-		mFakePhoneBookPicture = basePath + "/fake_phonebook_picture.png";
+		mFakePhoneBookPicture = basePath + "/fake_phone_book_picture.png";
 		mPauseSoundFile = basePath + "/pause.wav";
 
 		// Always overwrite to make updates of this file work
 		copyFileFromPackage(context, R.raw.rootca, new File(mRootCaFileName).getName());
 		copyFileFromPackage(context, R.raw.ringback, new File(basePath + "/ringback.wav").getName());
 		copyFileFromPackage(context, R.raw.linphonerc, new File(mLinphoneInitialConfigFile).getName());
-		copyFileFromPackage(context, R.raw.fake_phonebook_picture, new File(mFakePhoneBookPicture).getName());
+		copyFileFromPackage(context, R.raw.fake_phone_book_picture, new File(mFakePhoneBookPicture).getName());
 		copyFileFromPackage(context, R.raw.pause, new File(mPauseSoundFile).getName());
 	}
 
