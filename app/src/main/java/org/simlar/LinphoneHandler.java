@@ -31,9 +31,7 @@ import org.linphone.core.LinphoneCoreFactory;
 import org.linphone.core.LinphoneCoreListener;
 import org.linphone.core.LinphoneProxyConfig;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
 
 final class LinphoneHandler
 {
@@ -46,13 +44,6 @@ final class LinphoneHandler
 
 	public LinphoneHandler()
 	{
-	}
-
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private void doDestroy()
-	{
-		Lg.i(LOGTAG, "doDestroy called");
-		destroy();
 	}
 
 	public void destroy()
