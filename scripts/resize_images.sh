@@ -14,6 +14,7 @@ set -eu -o pipefail
 #declare -r RES_DIR="res"
 declare -r RES_DIR="$(dirname $(readlink -f $0))/../app/src/main/res/"
 
+rm -rf "${RES_DIR}"/drawable-xxxhdpi/*
 rm -rf "${RES_DIR}"/drawable-xhdpi/*
 rm -rf "${RES_DIR}"/drawable-hdpi/*
 rm -rf "${RES_DIR}"/drawable-mdpi/*
@@ -21,6 +22,7 @@ rm -rf "${RES_DIR}"/drawable-ldpi/*
 
 find "${RES_DIR}"/drawable-xxhdpi/ -type f -printf "%f\n" | sort | while read IMAGE; do
 	git grep -q ${IMAGE%.*} || echo "WARNING: file not used: ${IMAGE}"
+	convert "${RES_DIR}"/drawable-xxhdpi/"${IMAGE}" -resize 133.33% "${RES_DIR}"/drawable-xxxhdpi/"${IMAGE}"
 	convert "${RES_DIR}"/drawable-xxhdpi/"${IMAGE}" -resize 66.67% "${RES_DIR}"/drawable-xhdpi/"${IMAGE}"
 	convert "${RES_DIR}"/drawable-xxhdpi/"${IMAGE}" -resize 50%    "${RES_DIR}"/drawable-hdpi/"${IMAGE}"
 	convert "${RES_DIR}"/drawable-xxhdpi/"${IMAGE}" -resize 33.33% "${RES_DIR}"/drawable-mdpi/"${IMAGE}"
