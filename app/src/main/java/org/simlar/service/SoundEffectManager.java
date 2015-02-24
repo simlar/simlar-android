@@ -234,7 +234,6 @@ final class SoundEffectManager
 		player.prepare(true);
 	}
 
-	@SuppressWarnings("SameParameterValue")
 	public void prepare(final SoundEffectType type)
 	{
 		if (type == null) {
@@ -257,7 +256,6 @@ final class SoundEffectManager
 		player.prepare(false);
 	}
 
-	@SuppressWarnings("SameParameterValue")
 	public void startPrepared(final SoundEffectType type)
 	{
 		final long now = SystemClock.elapsedRealtime();
