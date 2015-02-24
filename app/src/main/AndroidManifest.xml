@@ -117,7 +117,6 @@
         </activity>
         <activity
             android:name="org.simlar.CreateAccountActivity"
-            android:label="@string/create_account_activity_title"
             android:launchMode="singleTop"
             android:theme="@style/dialogTheme" >
         </activity>
