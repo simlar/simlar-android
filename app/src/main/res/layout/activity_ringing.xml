@@ -62,6 +62,14 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/calling_title_text_white"/>
 
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/logo_big"
+        android:contentDescription="@string/ringing_activity_phone_is_ringing"/>
+
     <ImageButton
         android:id="@+id/ButtonTerminateCall"
         android:layout_width="wrap_content"
