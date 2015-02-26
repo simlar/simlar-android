@@ -20,5 +20,7 @@ allprojects {
 idea {
     module {
         excludeDirs += file('build/intermediates/dex-cache')
+        excludeDirs += file('liblinphone')
+        excludeDirs += file('scripts')
     }
 }
