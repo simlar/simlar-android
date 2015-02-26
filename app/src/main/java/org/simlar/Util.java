@@ -32,7 +32,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.widget.ImageView;
+import android.view.View;
 
 final class Util
 {
@@ -90,12 +90,12 @@ final class Util
 
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	@SuppressWarnings("deprecation")
-	public static void setBackgroundCompatible(final ImageView imageView, final Drawable drawable)
+	public static void setBackgroundCompatible(final View view, final Drawable drawable)
 	{
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-			imageView.setBackground(drawable);
+			view.setBackground(drawable);
 		} else {
-			imageView.setBackgroundDrawable(drawable);
+			view.setBackgroundDrawable(drawable);
 		}
 	}
 
