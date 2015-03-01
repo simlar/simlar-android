@@ -53,10 +53,6 @@
     <string name="upload_log_file_send_email_to_developer">Entwickler per E-Mail kontaktieren</string>
     <string name="upload_log_file_progress">Bitte warten. Die Logdatei wird hochgeladen&#8230;</string>
 
-    <string name="google_play_services_helper_alert_unavailable_title">Google Play Services nicht verfügbar</string>
-    <string name="google_play_services_helper_alert_unavailable_text">Installiere die Google Play Services, damit du Simlar benutzen kannst.</string>
-    <string name="google_play_services_helper_alert_unavailable_button_close_simlar">Simlar beenden</string>
-
     <string name="linphone_call_state_notification_initializing">Vorbereitung</string>
     <string name="linphone_call_state_notification_calling">rufe %1$s an</string>
     <string name="linphone_call_state_notification_receiving_call">%1$s ruft an</string>
