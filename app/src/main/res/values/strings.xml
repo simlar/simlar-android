@@ -39,6 +39,7 @@
     <string name="main_activity_menu_fake_telephone_book_disable">Regular telephone book</string>
     <string name="main_activity_menu_tell_a_friend">Invite friends</string>
     <string name="main_activity_menu_show_about">About</string>
+    <string name="main_activity_menu_quit">Quit Simlar</string>
     <string name="main_activity_alert_upload_log_file_title">Really report bug?</string>
     <string name="main_activity_alert_upload_log_file_text">This will upload a log file. Afterwards you will be asked to write an email describing the bug.\n\nDo you want to continue?</string>
     <string name="main_activity_alert_uploading_log_file_failed_title">Error</string>

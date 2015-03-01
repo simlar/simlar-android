@@ -39,6 +39,7 @@
     <string name="main_activity_menu_fake_telephone_book_disable">Normales Telefonbuch</string>
     <string name="main_activity_menu_tell_a_friend">Freunde einladen</string>
     <string name="main_activity_menu_show_about">Über Simlar</string>
+    <string name="main_activity_menu_quit">Simlar beenden</string>
     <string name="main_activity_alert_upload_log_file_title">Fehlerbericht senden?</string>
     <string name="main_activity_alert_upload_log_file_text">Danke, dass du einen Fehlerbericht senden möchtest.\n\nEs wird automatisch eine Logdatei an Simlar übertragen.\n\nAnschließend hast du die Gelegenheit, den Simlar-Entwicklern eine E-Mail mit einer Fehlerbeschreibung zu senden.\n\nWillst du fortfahren?</string>
     <string name="main_activity_alert_uploading_log_file_failed_title">Fehler</string>

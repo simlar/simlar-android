@@ -165,6 +165,7 @@ public final class MainActivity extends ActionBarActivity
 		getMenuInflater().inflate(R.menu.main, menu);
 		updateMenu(Version.showDeveloperMenu(), R.id.action_delete_account, R.string.main_activity_menu_delete_account, Menu.NONE, menu);
 		updateMenu(Version.showDeveloperMenu(), R.id.action_fake_telephone_book, R.string.main_activity_menu_fake_telephone_book, Menu.NONE, menu);
+		updateMenu(!GooglePlayServicesHelper.gcmEnabled(), R.id.action_quit, R.string.main_activity_menu_quit, Menu.NONE, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -193,6 +194,9 @@ public final class MainActivity extends ActionBarActivity
 			return true;
 		case R.id.action_show_about:
 			showAbout();
+			return true;
+		case R.id.action_quit:
+			quit();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -305,5 +309,16 @@ public final class MainActivity extends ActionBarActivity
 	private void showAbout()
 	{
 		startActivity(new Intent(this, AboutActivity.class));
+	}
+
+	private void quit()
+	{
+		Lg.i(LOGTAG, "quit");
+		if (mCommunicator == null) {
+			finish();
+		} else {
+			mCommunicator.getService().terminate();
+			Lg.i(LOGTAG, "quit ended");
+		}
 	}
 }
