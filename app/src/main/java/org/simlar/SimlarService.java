@@ -305,7 +305,10 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		Lg.i(LOGTAG, "startLinphone");
 		mLinphoneThread = new LinphoneThread(this, this);
 		mTerminatePrivateAlreadyCalled = false;
-		terminateChecker();
+
+		if (GooglePlayServicesHelper.gcmEnabled()) {
+			terminateChecker();
+		}
 	}
 
 	@SuppressWarnings("deprecation")
@@ -730,7 +733,10 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			if (oldCallStateRinging) {
 				createMissedCallNotification(this, number);
 			}
-			terminate();
+
+			if (GooglePlayServicesHelper.gcmEnabled()) {
+				terminate();
+			}
 		}
 
 		ContactsProvider.getNameAndPhotoId(number, this, new ContactListener()
@@ -816,7 +822,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		if (mSimlarStatus == SimlarStatus.ONGOING_CALL) {
 			mLinphoneThread.terminateAllCalls();
-		} else {
+		} else if (GooglePlayServicesHelper.gcmEnabled()) {
 			terminate();
 		}
 	}
