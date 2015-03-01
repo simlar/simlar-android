@@ -26,6 +26,7 @@
     <string name="app_name">Simlar</string>
     <string name="button_continue">Weiter</string>
     <string name="button_cancel">Abbrechen</string>
+    <string name="simlar_service_on_destroy">Simlar wurde beendet</string>
 
     <string name="main_activity_contact_list_loading_contacts">Kontakte werden geladen</string>
     <string name="main_activity_contact_list_error_loading_contacts">Kontakte konnten nicht geladen werden. Möglicherweise funktioniert dein Internet nicht.</string>

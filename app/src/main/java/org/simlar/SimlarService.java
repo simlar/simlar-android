@@ -51,6 +51,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.widget.Toast;
 
 public final class SimlarService extends Service implements LinphoneThreadListener
 {
@@ -484,6 +485,10 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		releaseWifiLock();
 
 		mRunning = false;
+
+		if (!GooglePlayServicesHelper.gcmEnabled()) {
+			Toast.makeText(this, R.string.simlar_service_on_destroy, Toast.LENGTH_SHORT).show();
+		}
 
 		Lg.i(LOGTAG, "onDestroy ended");
 	}
