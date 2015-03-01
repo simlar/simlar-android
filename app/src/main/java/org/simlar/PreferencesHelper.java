@@ -130,11 +130,13 @@ final class PreferencesHelper
 		return mVerifiedTelephoneNumber;
 	}
 
+	@SuppressWarnings("unused") // is only used in flavour push
 	public static String getGcmRegistrationId()
 	{
 		return mGcmRegistrationId;
 	}
 
+	@SuppressWarnings("unused") // is only used in flavour push
 	public static int getSimlarVersionCode()
 	{
 		return mSimlarVersionCode;
@@ -201,6 +203,7 @@ final class PreferencesHelper
 		editor.apply();
 	}
 
+	@SuppressWarnings("unused") // is only used in flavour push
 	public static void saveToFileGcmRegistrationId(final Context context, final String gcmRegistrationId, final int simlarVersionCode)
 	{
 		mGcmRegistrationId = gcmRegistrationId;

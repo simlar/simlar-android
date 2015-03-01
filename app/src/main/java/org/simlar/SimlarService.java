@@ -58,6 +58,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private static final int NOTIFICATION_ID = 1;
 	private static final long TERMINATE_CHECKER_INTERVAL = 20 * 1000; // milliseconds
 	public static final String INTENT_EXTRA_SIMLAR_ID = "SimlarServiceSimlarId";
+	@SuppressWarnings("WeakerAccess") // is only used in flavour push
 	public static final String INTENT_EXTRA_GCM = "SimlarServiceGCM";
 
 	private LinphoneThread mLinphoneThread = null;
