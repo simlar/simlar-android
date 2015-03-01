@@ -440,7 +440,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		final String text = mSimlarCallState.createNotificationText(this, mGoingDown);
 		final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
-		notificationBuilder.setSmallIcon(R.drawable.ic_notification_ongoing_call);
+		notificationBuilder.setSmallIcon(GooglePlayServicesHelper.gcmEnabled() ? R.drawable.ic_notification_ongoing_call : mSimlarStatus.getNotificationIcon());
 		notificationBuilder.setLargeIcon(mSimlarCallState.getContactPhotoBitmap(this, R.drawable.ic_launcher));
 		notificationBuilder.setContentTitle(getString(R.string.app_name));
 		notificationBuilder.setContentText(text);

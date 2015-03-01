@@ -74,4 +74,19 @@ public enum SimlarStatus {
 			return false;
 		}
 	}
+
+	public int getNotificationIcon()
+	{
+		switch (this) {
+		case ONLINE:
+		case ONGOING_CALL:
+			return R.drawable.ic_notification_ongoing_call;
+		case UNKNOWN:
+		case OFFLINE:
+		case CONNECTING:
+		case ERROR:
+		default:
+			return R.drawable.ic_notification_offline;
+		}
+	}
 }
