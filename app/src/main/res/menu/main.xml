@@ -26,6 +26,12 @@
     tools:context=".MainActivity">
 
     <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_action_search"
+        app:showAsAction="always"
+        android:title="@string/main_activity_actionbar_search"/>
+
+    <item
         android:id="@+id/action_reload_contacts"
         android:orderInCategory="1"
         android:title="@string/main_activity_menu_reload_contacts"
