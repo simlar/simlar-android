@@ -438,16 +438,24 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		final PendingIntent activity = PendingIntent.getActivity(this, 0,
 				new Intent(this, mNotificationActivity).addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED), 0);
 
-		final String text = mSimlarCallState.createNotificationText(this, mGoingDown);
 		final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
 		notificationBuilder.setSmallIcon(GooglePlayServicesHelper.gcmEnabled() ? R.drawable.ic_notification_ongoing_call : mSimlarStatus.getNotificationIcon());
 		notificationBuilder.setLargeIcon(mSimlarCallState.getContactPhotoBitmap(this, R.drawable.ic_launcher));
 		notificationBuilder.setContentTitle(getString(R.string.app_name));
-		notificationBuilder.setContentText(text);
+		notificationBuilder.setContentText(createNotificationText());
 		notificationBuilder.setOngoing(true);
 		notificationBuilder.setContentIntent(activity);
 		notificationBuilder.setWhen(System.currentTimeMillis());
 		return notificationBuilder.build();
+	}
+
+	private String createNotificationText()
+	{
+		if (GooglePlayServicesHelper.gcmEnabled() || mSimlarStatus == SimlarStatus.ONGOING_CALL) {
+			return mSimlarCallState.createNotificationText(this, mGoingDown);
+		} else {
+			return getString(mSimlarStatus.getNotificationTextId());
+		}
 	}
 
 	void connect()
@@ -585,6 +593,12 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 
 		notifySimlarStatusChanged(status);
+
+		if (!GooglePlayServicesHelper.gcmEnabled()) {
+			Lg.i(LOGTAG, "updating notification based on registration state");
+			final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+			nm.notify(NOTIFICATION_ID, createNotification());
+		}
 	}
 
 	void notifySimlarStatusChanged(final SimlarStatus status)
