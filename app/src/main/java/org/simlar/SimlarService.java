@@ -671,7 +671,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			mSoundEffectManager.startPrepared(SoundEffectType.ENCRYPTION_HANDSHAKE);
 		}
 
-		// make sure WLAN is not suspended while calling
 		if (mSimlarCallState.isNewCall() && !mGoingDown) {
 			mSoundEffectManager.prepare(SoundEffectType.ENCRYPTION_HANDSHAKE);
 			notifySimlarStatusChanged(SimlarStatus.ONGOING_CALL);
