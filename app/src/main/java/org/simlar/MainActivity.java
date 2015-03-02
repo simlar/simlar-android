@@ -142,7 +142,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 		getMenuInflater().inflate(R.menu.main, menu);
 		updateMenu(Version.hasDebugTag(), R.id.action_delete_account, R.string.main_activity_menu_delete_account, Menu.NONE, menu);
 		updateMenu(Version.hasDebugTag(), R.id.action_fake_telephone_book, R.string.main_activity_menu_fake_telephone_book, Menu.NONE, menu);
-		return true;
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
