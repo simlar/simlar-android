@@ -317,8 +317,19 @@ public final class MainActivity extends ActionBarActivity
 		if (mCommunicator == null) {
 			finish();
 		} else {
-			mCommunicator.getService().terminate();
-			Lg.i(LOGTAG, "quit ended");
+			(new AlertDialog.Builder(this))
+					.setTitle(R.string.main_activity_alert_quit_simlar_title)
+					.setMessage(R.string.main_activity_alert_quit_simlar_text)
+					.setNegativeButton(R.string.button_cancel, null)
+					.setPositiveButton(R.string.button_continue, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(final DialogInterface dialog, final int id)
+						{
+							Lg.i(LOGTAG, "user decided to terminate simlar");
+							mCommunicator.getService().terminate();
+						}
+					})
+					.create().show();
 		}
 	}
 }
