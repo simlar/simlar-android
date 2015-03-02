@@ -45,6 +45,22 @@ public final class MainActivity extends ActionBarActivity
 	private ContactsAdapter mAdapter = null;
 	private ContactsListFragment mContactList = null;
 
+	private final SimlarServiceCommunicator mCommunicator = GooglePlayServicesHelper.gcmEnabled() ? null : new SimlarServiceCommunicatorContacts();
+
+	private final class SimlarServiceCommunicatorContacts extends SimlarServiceCommunicator
+	{
+		public SimlarServiceCommunicatorContacts()
+		{
+			super(LOGTAG);
+		}
+
+		@Override
+		void onServiceFinishes()
+		{
+			MainActivity.this.finish();
+		}
+	}
+
 	@Override
 	protected void onCreate(final Bundle savedInstanceState)
 	{
@@ -101,7 +117,7 @@ public final class MainActivity extends ActionBarActivity
 		Lg.i(LOGTAG, "onResume");
 		super.onResume();
 
-		if (SimlarService.isRunning()) {
+		if (GooglePlayServicesHelper.gcmEnabled() && SimlarService.isRunning()) {
 			final Class<? extends Activity> activity = SimlarService.getActivity();
 			if (activity != this.getClass()) {
 				Lg.i(LOGTAG, "as service is running => starting: ", activity.getSimpleName());
@@ -121,6 +137,10 @@ public final class MainActivity extends ActionBarActivity
 			return;
 		}
 
+		if (mCommunicator != null) {
+			mCommunicator.startServiceAndRegister(this, MainActivity.class, null);
+		}
+
 		if (mAdapter.isEmpty()) {
 			loadContacts();
 		}
@@ -130,6 +150,11 @@ public final class MainActivity extends ActionBarActivity
 	protected void onPause()
 	{
 		Lg.i(LOGTAG, "onPause");
+
+		if (mCommunicator != null) {
+			mCommunicator.unregister();
+		}
+
 		super.onPause();
 	}
 
@@ -261,7 +286,11 @@ public final class MainActivity extends ActionBarActivity
 	private void deleteAccountAndQuit()
 	{
 		PreferencesHelper.resetPreferencesFile(this);
-		finish();
+		if (mCommunicator == null) {
+			finish();
+		} else {
+			mCommunicator.getService().terminate();
+		}
 	}
 
 	private void tellAFriend()
