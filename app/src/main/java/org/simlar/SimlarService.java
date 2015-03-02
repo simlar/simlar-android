@@ -225,9 +225,11 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	{
 		Lg.i(LOGTAG, "onStartCommand intent=", intent, " startId=", startId);
 
-		Lg.i(LOGTAG, "acquiring simlar wake lock");
-		acquireWakeLock();
-		acquireWifiLock();
+		if (GooglePlayServicesHelper.gcmEnabled()) {
+			Lg.i(LOGTAG, "acquiring simlar wake lock");
+			acquireWakeLock();
+			acquireWifiLock();
+		}
 
 		// releasing wakelock of gcm's WakefulBroadcastReceiver if needed
 		if (intent != null) {
@@ -709,6 +711,12 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 			mCallConnectionDetails = new CallConnectionDetails();
 
+			if (!GooglePlayServicesHelper.gcmEnabled()) {
+				Lg.i(LOGTAG, "acquiring simlar wake lock because of new call");
+				acquireWakeLock();
+				acquireWifiLock();
+			}
+
 			if (!mHasAudioFocus) {
 				// We acquire AUDIOFOCUS_GAIN_TRANSIENT instead of AUDIOFOCUS_GAIN because we want the music to resume after ringing or call
 				final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -755,6 +763,9 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 			if (GooglePlayServicesHelper.gcmEnabled()) {
 				terminate();
+			} else {
+				releaseWakeLock();
+				releaseWifiLock();
 			}
 		}
 
