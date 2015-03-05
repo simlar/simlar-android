@@ -27,7 +27,7 @@ git fetch
 git fetch --tags
 git pull --rebase
 
-"${UPDATE_MANIFEST_SCRIPT}" "${SIMLAR_VERSION}" "${ANDROID_MANIFEST}"
+"${UPDATE_MANIFEST_SCRIPT}" "${ANDROID_MANIFEST}"
 
 git add "${ANDROID_MANIFEST}"
 git commit -m "[Release] Version: ${SIMLAR_VERSION}"
