@@ -8,6 +8,8 @@ android {
         applicationId "org.simlar"
         minSdkVersion 9
         targetSdkVersion 21
+        def gitVersion = "git -C ${rootDir} describe --tags --always --dirty".execute().text.trim()
+        versionName "$gitVersion"
     }
 
     buildTypes {
