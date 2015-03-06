@@ -9,7 +9,7 @@ import org.simlar.utils.Util;
 
 public final class Version
 {
-	private static final boolean DEVELOPER_MENU = false;
+	private static final boolean DEVELOPER_MENU = true;
 
 	private Version()
 	{
