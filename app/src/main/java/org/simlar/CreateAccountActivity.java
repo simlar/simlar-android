@@ -86,7 +86,12 @@ public final class CreateAccountActivity extends Activity
 
 			if (status.isConnectedToSipServer() || status.isRegistrationAtSipServerFailed()) {
 				mTestRegistrationSuccess = status.isConnectedToSipServer();
-				mService.terminate();
+				if (GooglePlayServicesHelper.gcmEnabled()) {
+					mService.terminate();
+				} else {
+					unregister();
+					handleRegistrationResult();
+				}
 			}
 		}
 
@@ -94,6 +99,11 @@ public final class CreateAccountActivity extends Activity
 		void onServiceFinishes()
 		{
 			Lg.i(LOGTAG, "onServiceFinishes");
+			handleRegistrationResult();
+		}
+
+		private void handleRegistrationResult()
+		{
 			mProgressFirstLogIn.setVisibility(View.INVISIBLE);
 
 			if (mTestRegistrationSuccess) {
