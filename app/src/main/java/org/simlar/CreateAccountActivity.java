@@ -98,7 +98,7 @@ public final class CreateAccountActivity extends Activity
 
 			if (mTestRegistrationSuccess) {
 				setResult(RESULT_OK);
-				finish();
+				CreateAccountActivity.this.finish();
 			} else {
 				onError(R.string.create_account_activity_error_sip_not_possible);
 			}
