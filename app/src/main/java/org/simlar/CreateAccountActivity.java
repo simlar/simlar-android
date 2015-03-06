@@ -81,8 +81,8 @@ public final class CreateAccountActivity extends Activity
 		@Override
 		void onSimlarStatusChanged()
 		{
-			Lg.i(LOGTAG, "onTestRegistrationSuccess");
 			final SimlarStatus status = mService.getSimlarStatus();
+			Lg.i(LOGTAG, "onSimlarStatusChanged: ", status);
 
 			if (status.isConnectedToSipServer() || status.isRegistrationAtSipServerFailed()) {
 				mTestRegistrationSuccess = status.isConnectedToSipServer();
