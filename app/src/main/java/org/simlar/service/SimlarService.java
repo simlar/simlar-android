@@ -834,7 +834,6 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 			mLinphoneManager.setMicrophoneStatus(MicrophoneStatus.DISABLED);
 			mSoundEffectManager.setInCallMode(true);
 			mSoundEffectManager.startPrepared(SoundEffectType.ENCRYPTION_HANDSHAKE);
-			mSoundEffectManager.prepare(SoundEffectType.ENCRYPTION_HANDSHAKE_SUCCESS);
 		}
 
 		if (mSimlarCallState.isNewCall() && !mGoingDown) {
@@ -924,9 +923,6 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 
 		mLinphoneManager.setMicrophoneStatus(MicrophoneStatus.ON);
 		mSoundEffectManager.stop(SoundEffectType.ENCRYPTION_HANDSHAKE);
-
-		Lg.w("here sometimes happens shit now play success sound to often");
-		mSoundEffectManager.startPrepared(SoundEffectType.ENCRYPTION_HANDSHAKE_SUCCESS);
 
 		SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
 	}
