@@ -11,15 +11,18 @@ set -eu -o pipefail
 # xxhdpj  48px * 3   = 144px
 # xxxhdpj 48px * 4   = 192px
 
-rm -rf res/drawable-xhdpi/*
-rm -rf res/drawable-hdpi/*
-rm -rf res/drawable-mdpi/*
-rm -rf res/drawable-ldpi/*
+#declare -r RES_DIR="res"
+declare -r RES_DIR="app/src/main/res/"
 
-find res/drawable-xxhdpi/ -type f -printf "%f\n" | sort | while read IMAGE; do
+rm -rf "${RES_DIR}"/drawable-xhdpi/*
+rm -rf "${RES_DIR}"/drawable-hdpi/*
+rm -rf "${RES_DIR}"/drawable-mdpi/*
+rm -rf "${RES_DIR}"/drawable-ldpi/*
+
+find "${RES_DIR}"/drawable-xxhdpi/ -type f -printf "%f\n" | sort | while read IMAGE; do
 	git grep -q ${IMAGE%.*} || echo "WARNING: file not used: ${IMAGE}"
-	convert res/drawable-xxhdpi/"${IMAGE}" -resize 66.67% res/drawable-xhdpi/"${IMAGE}"
-	convert res/drawable-xxhdpi/"${IMAGE}" -resize 50%    res/drawable-hdpi/"${IMAGE}"
-	convert res/drawable-xxhdpi/"${IMAGE}" -resize 33.33% res/drawable-mdpi/"${IMAGE}"
-	convert res/drawable-xxhdpi/"${IMAGE}" -resize 25%    res/drawable-ldpi/"${IMAGE}"
+	convert "${RES_DIR}"/drawable-xxhdpi/"${IMAGE}" -resize 66.67% "${RES_DIR}"/drawable-xhdpi/"${IMAGE}"
+	convert "${RES_DIR}"/drawable-xxhdpi/"${IMAGE}" -resize 50%    "${RES_DIR}"/drawable-hdpi/"${IMAGE}"
+	convert "${RES_DIR}"/drawable-xxhdpi/"${IMAGE}" -resize 33.33% "${RES_DIR}"/drawable-mdpi/"${IMAGE}"
+	convert "${RES_DIR}"/drawable-xxhdpi/"${IMAGE}" -resize 25%    "${RES_DIR}"/drawable-ldpi/"${IMAGE}"
 done

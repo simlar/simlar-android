@@ -1,7 +1,13 @@
-## general android and eclipse
-bin/
-gen/
-obj/
+## Android Studio
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+app/build/
+app/app.iml
+simlar-android.iml
 
 ## bootstrap liblinphone
 build.log
