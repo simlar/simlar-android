@@ -11,7 +11,7 @@ declare -ri VERSION_BUGFIX=${3?${USAGE}}
 
 declare -r BUILD_SCRIPT="$(dirname $(readlink -f $0))/build-for-upload.sh"
 declare -r UPDATE_MANIFEST_SCRIPT="$(dirname $(readlink -f $0))/update-android-manifest.sh"
-declare -r ANDROID_MANIFEST="$(dirname $(readlink -f $0))/AndroidManifest.xml"
+declare -r ANDROID_MANIFEST="$(dirname $(readlink -f $0))/../app/src/main/AndroidManifest.xml"
 
 declare -r SIMLAR_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_BUGFIX}"
 echo "creating tag: '${SIMLAR_VERSION}'"

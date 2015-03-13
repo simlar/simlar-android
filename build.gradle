@@ -1,4 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+apply plugin: 'idea'
+
 buildscript {
     repositories {
         jcenter()
@@ -11,5 +14,14 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+    }
+}
+
+idea {
+    module {
+        excludeDirs += file('build/intermediates/dex-cache')
+        excludeDirs += file('app/src/main/res/raw/')
+        excludeDirs += file('liblinphone')
+        excludeDirs += file('scripts')
     }
 }

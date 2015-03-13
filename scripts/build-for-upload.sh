@@ -6,6 +6,7 @@ set -eu -o pipefail
 declare -r SIMLAR_KEYSTORE=${SIMLAR_KEYSTORE:-""}
 declare -r KEYSTORE=${1:-"${SIMLAR_KEYSTORE}"}
 
+declare -r GRADLEW="$(dirname $(readlink -f $0))/../gradlew"
 
 if [ -z "${KEYSTORE}" ] ; then
 	echo "Please set give parameter keystore, e.g.:"
@@ -17,24 +18,17 @@ fi
 
 echo "using keystore ${KEYSTORE}"
 
-function remove_ant_files()
-{
-	rm -f ant.properties build.xml local.properties
-}
+cd "$(dirname $(readlink -f $0))/../"
 
-remove_ant_files
 rm -f Simlar.apk
+rm -f Simlar-alwaysOnline.apk
 
-android update project --path . -n Simlar
+"${GRADLEW}" clean
+"${GRADLEW}" assembleRelease
 
-ant clean
-ant release
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore "${KEYSTORE}" app/build/outputs/apk/app-release-unsigned.apk simlar
+zipalign -v 4 app/build/outputs/apk/app-release-unsigned.apk Simlar.apk
 
-jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore "${KEYSTORE}" bin/Simlar-release-unsigned.apk simlar
-zipalign -v 4 bin/Simlar-release-unsigned.apk Simlar.apk
+"${GRADLEW}" clean
 
-ant clean
-
-remove_ant_files
-
-echo "successfully created: Simlar.apk"
+echo "successfully created: Simlar-alwaysOnline.apk and Simlar.apk"
