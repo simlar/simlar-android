@@ -63,5 +63,4 @@ public final class ContactsListFragment extends android.support.v4.app.ListFragm
 				.putExtra(CallActivity.INTENT_EXTRA_SIMLAR_ID, simlarId)
 				.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
 	}
-
 }
