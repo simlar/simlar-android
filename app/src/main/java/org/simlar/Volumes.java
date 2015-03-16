@@ -126,7 +126,7 @@ public final class Volumes
 		return gain2Progress(mPlayGain);
 	}
 
-	public int getProgessMicrophone()
+	public int getProgressMicrophone()
 	{
 		return gain2Progress(mMicGain);
 	}

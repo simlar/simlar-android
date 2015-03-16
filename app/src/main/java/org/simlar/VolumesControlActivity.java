@@ -184,7 +184,7 @@ public final class VolumesControlActivity extends Activity
 		mVolumes = mCommunicator.getService().getVolumes();
 
 		mSeekBarSpeaker.setProgress(mVolumes.getProgressSpeaker());
-		mSeekBarMicrophone.setProgress(mVolumes.getProgessMicrophone());
+		mSeekBarMicrophone.setProgress(mVolumes.getProgressMicrophone());
 		mCheckBoxEchoLimiter.setChecked(mVolumes.getEchoLimiter());
 	}
 }

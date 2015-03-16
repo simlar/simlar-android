@@ -75,11 +75,11 @@ public final class FileHelper
 				!Util.isNullOrEmpty(mPauseSoundFile);
 	}
 
-	private static void copyFileFromPackage(final Context context, final int ressourceId, final String target)
+	private static void copyFileFromPackage(final Context context, final int resourceId, final String target)
 	{
 		try {
 			final FileOutputStream outputStream = context.openFileOutput(target, 0);
-			final InputStream inputStream = context.getResources().openRawResource(ressourceId);
+			final InputStream inputStream = context.getResources().openRawResource(resourceId);
 			Util.copyStream(inputStream, outputStream);
 			outputStream.flush();
 			outputStream.close();

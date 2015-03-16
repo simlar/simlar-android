@@ -117,7 +117,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 			return;
 		}
 
-		if (!PreferencesHelper.readPrefencesFromFile(this)) {
+		if (!PreferencesHelper.readPreferencesFromFile(this)) {
 			Lg.i(LOGTAG, "as we are not registered yet => creating account");
 			startAccountCreation();
 			return;
