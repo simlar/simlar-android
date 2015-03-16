@@ -26,43 +26,43 @@
     <item
         android:id="@+id/action_reload_contacts"
         android:orderInCategory="1"
-        app:showAsAction="never"
-        android:title="@string/main_activity_menu_reload_contacts"/>
+        android:title="@string/main_activity_menu_reload_contacts"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_enable_debug_mode"
         android:orderInCategory="2"
-        app:showAsAction="never"
-        android:title="@string/main_activity_menu_enable_debug_mode"/>
+        android:title="@string/main_activity_menu_enable_debug_mode"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_upload_logfile"
         android:orderInCategory="3"
-        app:showAsAction="never"
-        android:title="@string/main_activity_menu_upload_logfile"/>
+        android:title="@string/main_activity_menu_upload_logfile"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_delete_account"
         android:orderInCategory="4"
-        app:showAsAction="never"
-        android:title="@string/main_activity_menu_delete_account"/>
+        android:title="@string/main_activity_menu_delete_account"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_fake_telephone_book"
         android:orderInCategory="5"
-        app:showAsAction="never"
-        android:title="@string/main_activity_menu_fake_telephone_book"/>
+        android:title="@string/main_activity_menu_fake_telephone_book"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_tell_a_friend"
         android:orderInCategory="8"
-        app:showAsAction="never"
-        android:title="@string/main_activity_menu_tell_a_friend"/>
+        android:title="@string/main_activity_menu_tell_a_friend"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_show_about"
         android:orderInCategory="9"
-        app:showAsAction="never"
-        android:title="@string/main_activity_menu_show_about"/>
+        android:title="@string/main_activity_menu_show_about"
+        app:showAsAction="never"/>
 
 </menu>
