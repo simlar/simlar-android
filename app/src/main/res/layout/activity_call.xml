@@ -19,12 +19,12 @@
 -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/contactLayout"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@color/calling_title_background_black"
-    tools:context=".CallActivity" >
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/contactLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/calling_title_background_black"
+                tools:context=".CallActivity">
 
     <ImageView
         android:id="@+id/contactImage"
@@ -34,7 +34,7 @@
         android:layout_alignParentTop="true"
         android:background="@null"
         android:src="@drawable/contact_picture"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription"/>
 
     <TextView
         android:id="@+id/contactName"
@@ -45,7 +45,7 @@
         android:paddingLeft="10dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/calling_title_text_white"
-        android:textIsSelectable="true" />
+        android:textIsSelectable="true"/>
 
     <LinearLayout
         android:id="@+id/linearLayoutCallStatus"
@@ -54,7 +54,7 @@
         android:layout_below="@+id/contactName"
         android:layout_toRightOf="@+id/contactImage"
         android:gravity="top"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/textViewCallStatus"
@@ -65,7 +65,7 @@
             android:paddingLeft="10dp"
             android:text="@string/call_activity_outgoing_connecting"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/calling_title_text_white" />
+            android:textColor="@color/calling_title_text_white"/>
 
         <TextView
             android:id="@+id/textViewCallTimer"
@@ -77,7 +77,7 @@
             android:text="00:00"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/calling_title_text_white"
-            tools:ignore="HardcodedText" />
+            tools:ignore="HardcodedText"/>
     </LinearLayout>
 
     <RelativeLayout
@@ -88,7 +88,7 @@
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin" >
+        android:paddingTop="@dimen/activity_vertical_margin">
 
         <ImageView
             android:id="@+id/logo"
@@ -96,21 +96,21 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:src="@drawable/logo_big"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"/>
 
         <LinearLayout
             android:id="@+id/linearLayoutConnectionQuality"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="5dp" >
+            android:layout_marginBottom="5dp">
 
             <LinearLayout
                 android:id="@+id/linearLayoutConnectionQualityText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:background="#EFEFEF" >
+                android:background="#EFEFEF">
 
                 <TextView
                     android:id="@+id/textViewLabelQuality"
@@ -118,7 +118,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="5dp"
                     android:text="@string/call_activity_label_quality"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
 
                 <TextView
                     android:id="@+id/textViewQuality"
@@ -128,7 +128,7 @@
                     android:paddingRight="5dp"
                     android:text="@string/network_quality_good"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
             </LinearLayout>
 
             <LinearLayout
@@ -137,7 +137,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_toRightOf="@+id/linearLayoutConnectionQualityText"
-                tools:ignore="ObsoleteLayoutParam" >
+                tools:ignore="ObsoleteLayoutParam">
 
                 <ImageButton
                     android:id="@+id/buttonConnectionDetails"
@@ -147,7 +147,7 @@
                     android:background="@null"
                     android:contentDescription="@string/call_activity_sound_settings"
                     android:onClick="showConnectionDetails"
-                    android:src="@drawable/button_info" />
+                    android:src="@drawable/button_info"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -159,7 +159,7 @@
             android:layout_centerHorizontal="true"
             android:background="#EFEFEF"
             android:orientation="horizontal"
-            android:visibility="gone" >
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/textViewLabelVerifiedAuthenticationToken"
@@ -167,7 +167,7 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="5dp"
                 android:text="@string/call_activity_verified_authentication_token"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceSmall"/>
 
             <TextView
                 android:id="@+id/textViewVerifiedAuthenticationToken"
@@ -177,7 +177,7 @@
                 android:paddingRight="5dp"
                 android:text="@string/call_activity_no_authentication_token"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
         </LinearLayout>
 
         <LinearLayout
@@ -194,7 +194,7 @@
             android:padding="9dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            tools:ignore="UselessParent" >
+            tools:ignore="UselessParent">
 
             <TextView
                 android:id="@+id/textViewLabelAuthenticationToken"
@@ -205,7 +205,7 @@
                 android:gravity="center_horizontal"
                 android:text="@string/call_activity_please_verify_authentication_token"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="18sp" />
+                android:textSize="18sp"/>
 
             <TextView
                 android:id="@+id/textViewAuthenticationToken"
@@ -214,7 +214,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
                 android:text="@string/call_activity_no_authentication_token"
-                android:textSize="24sp" />
+                android:textSize="24sp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -224,7 +224,7 @@
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
                 android:paddingLeft="10dp"
-                android:paddingRight="10dp" >
+                android:paddingRight="10dp">
 
                 <Button
                     android:id="@+id/buttonAuthenticationTokenVerify"
@@ -232,7 +232,7 @@
                     android:layout_width="match_parent"
                     android:drawableLeft="@drawable/button_ok"
                     android:onClick="verifyAuthenticationToken"
-                    android:text="@string/call_activity_button_authentication_token_verify" />
+                    android:text="@string/call_activity_button_authentication_token_verify"/>
 
                 <Button
                     android:id="@+id/buttonAuthenticationTokenWrong"
@@ -242,7 +242,7 @@
                     android:layout_marginTop="8dp"
                     android:drawableLeft="@drawable/button_cancel"
                     android:onClick="wrongAuthenticationToken"
-                    android:text="@string/call_activity_button_authentication_token_wrong" />
+                    android:text="@string/call_activity_button_authentication_token_wrong"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -260,7 +260,7 @@
             android:orientation="vertical"
             android:paddingBottom="20dp"
             android:paddingTop="20dp"
-            android:visibility="gone" >
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/textViewUnencryptedCall"
@@ -269,14 +269,14 @@
                 android:layout_gravity="center"
                 android:gravity="center_horizontal"
                 android:text="@string/call_activity_not_encrypted"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
 
             <Button
                 android:id="@+id/buttonAcceptUnencryptedCall"
                 style="@style/buttonWhite"
                 android:onClick="acceptUnencryptedCall"
                 android:padding="8dp"
-                android:text="@string/call_activity_button_accept_unencrypted_call" />
+                android:text="@string/call_activity_button_accept_unencrypted_call"/>
         </LinearLayout>
 
         <LinearLayout
@@ -293,7 +293,7 @@
             android:orientation="vertical"
             android:paddingBottom="20dp"
             android:paddingTop="20dp"
-            android:visibility="gone" >
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/textViewCallEndReason"
@@ -302,7 +302,7 @@
                 android:layout_gravity="center"
                 android:gravity="center_horizontal"
                 android:text="@string/call_activity_call_ended_normally"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:textAppearance="?android:attr/textAppearanceLarge"/>
         </LinearLayout>
 
         <RelativeLayout
@@ -312,7 +312,7 @@
             android:layout_above="@+id/ButtonTerminateCall"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -323,7 +323,7 @@
                 android:background="@drawable/border_round_corners"
                 android:baselineAligned="false"
                 android:gravity="center_vertical|center_horizontal"
-                tools:ignore="UselessParent" >
+                tools:ignore="UselessParent">
 
                 <ImageButton
                     android:id="@+id/buttonSoundSettings"
@@ -331,14 +331,14 @@
                     android:layout_marginRight="25dp"
                     android:contentDescription="@string/call_activity_sound_settings"
                     android:onClick="showSoundSettingsDialog"
-                    android:src="@drawable/sound_settings" />
+                    android:src="@drawable/sound_settings"/>
 
                 <ImageButton
                     android:id="@+id/buttonMicro"
                     style="@style/buttonWhiteBorderLess"
                     android:contentDescription="@string/call_activity_microphone_mute"
                     android:onClick="toggleMicrophoneMuted"
-                    android:src="@drawable/micro_on" />
+                    android:src="@drawable/micro_on"/>
 
                 <ImageButton
                     android:id="@+id/buttonSpeaker"
@@ -346,7 +346,7 @@
                     android:layout_marginLeft="25dp"
                     android:contentDescription="@string/call_activity_loudspeaker_off"
                     android:onClick="toggleSpeakerMuted"
-                    android:src="@drawable/speaker_off" />
+                    android:src="@drawable/speaker_off"/>
             </LinearLayout>
         </RelativeLayout>
 
@@ -360,7 +360,7 @@
             android:background="@drawable/button_red"
             android:contentDescription="@string/call_activity_terminate_call"
             android:onClick="terminateCall"
-            android:src="@drawable/hang_up_phone" />
+            android:src="@drawable/hang_up_phone"/>
     </RelativeLayout>
 
 </RelativeLayout>
