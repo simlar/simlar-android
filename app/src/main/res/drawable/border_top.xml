@@ -21,16 +21,19 @@
 -->
 
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-<!-- This is the line -->
-<item>
-      <shape>
-            <solid android:color="@color/text_black" />
-      </shape>
-</item>
-<!-- This is the main color -->
-<item android:top="1dp" android:right="1dp" android:left="1dp">
-     <shape>
-           <solid android:color="@color/background_white" />
-     </shape>
-</item>
+    <!-- This is the line -->
+    <item>
+        <shape>
+            <solid android:color="@color/text_black"/>
+        </shape>
+    </item>
+    <!-- This is the main color -->
+    <item
+        android:left="1dp"
+        android:right="1dp"
+        android:top="1dp">
+        <shape>
+            <solid android:color="@color/background_white"/>
+        </shape>
+    </item>
 </layer-list>

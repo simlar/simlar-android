@@ -21,6 +21,6 @@
 -->
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="true" android:drawable="@drawable/ringing_hang_up_pressed"/>
+    <item android:drawable="@drawable/ringing_hang_up_pressed" android:state_pressed="true"/>
     <item android:drawable="@drawable/ringing_hang_up_normal"/>
 </selector>
