@@ -32,10 +32,14 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public final class RingingActivity extends ActionBarActivity
 {
 	private static final String LOGTAG = RingingActivity.class.getSimpleName();
 
+	private final List<View> mCircles = new ArrayList<>();
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorRinging();
 
 	private final class SimlarServiceCommunicatorRinging extends SimlarServiceCommunicator
@@ -83,10 +87,15 @@ public final class RingingActivity extends ActionBarActivity
 		final ImageView logo = (ImageView) findViewById(R.id.logo);
 		logo.startAnimation(logoAnimation);
 
+		createCircles();
+		animateCircles();
+	}
+
+	void createCircles()
+	{
 		final int diameter = Math.round(250.0f * getResources().getDisplayMetrics().density);
 		final RelativeLayout mainLayout = (RelativeLayout) findViewById(R.id.layoutRingingActivity);
 
-		final long animationStartTime = AnimationUtils.currentAnimationTimeMillis() + 100;
 		for (int i = 0; i < 3; i++) {
 			final View circle = new View(this);
 			Util.setBackgroundCompatible(circle, getResources().getDrawable(R.drawable.circle));
@@ -96,9 +105,40 @@ public final class RingingActivity extends ActionBarActivity
 			circle.setLayoutParams(layoutParams);
 			mainLayout.addView(circle);
 
+			mCircles.add(circle);
+		}
+	}
+
+	void animateCircles()
+	{
+		final long animationStartTime = AnimationUtils.currentAnimationTimeMillis() + 100;
+		int i = 0;
+		for (final View circle : mCircles) {
 			final Animation circleAnimation = AnimationUtils.loadAnimation(this, R.anim.ringing_circle);
-			circleAnimation.setStartTime(animationStartTime + i * 250);
+			circleAnimation.setStartTime(animationStartTime + (i++) * 250);
+			circleAnimation.setFillAfter(true);
 			circle.setAnimation(circleAnimation);
+
+			if (i == mCircles.size()) {
+				circleAnimation.setAnimationListener(new Animation.AnimationListener()
+				{
+					@Override
+					public void onAnimationStart(Animation animation)
+					{
+					}
+
+					@Override
+					public void onAnimationEnd(Animation animation)
+					{
+						RingingActivity.this.animateCircles();
+					}
+
+					@Override
+					public void onAnimationRepeat(Animation animation)
+					{
+					}
+				});
+			}
 		}
 	}
 
