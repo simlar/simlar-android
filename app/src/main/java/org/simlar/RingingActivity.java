@@ -26,6 +26,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -75,6 +77,10 @@ public final class RingingActivity extends ActionBarActivity
 				WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
 				WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
 				WindowManager.LayoutParams.FLAG_IGNORE_CHEEK_PRESSES);
+
+		final Animation animation = AnimationUtils.loadAnimation(this, R.anim.rotate_logo);
+		final ImageView image = (ImageView) findViewById(R.id.logo);
+		image.startAnimation(animation);
 	}
 
 	@Override
