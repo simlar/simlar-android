@@ -78,9 +78,9 @@ public final class RingingActivity extends ActionBarActivity
 				WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
 				WindowManager.LayoutParams.FLAG_IGNORE_CHEEK_PRESSES);
 
-		final Animation animation = AnimationUtils.loadAnimation(this, R.anim.rotate_logo);
-		final ImageView image = (ImageView) findViewById(R.id.logo);
-		image.startAnimation(animation);
+		final Animation logoAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate_logo);
+		final ImageView logo = (ImageView) findViewById(R.id.logo);
+		logo.startAnimation(logoAnimation);
 	}
 
 	@Override
