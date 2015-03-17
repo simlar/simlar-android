@@ -21,7 +21,6 @@
 package org.simlar;
 
 import android.content.Intent;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -76,16 +75,6 @@ public final class RingingActivity extends ActionBarActivity
 				WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
 				WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
 				WindowManager.LayoutParams.FLAG_IGNORE_CHEEK_PRESSES);
-
-		final AnimationDrawable animation = new AnimationDrawable();
-		animation.addFrame(getResources().getDrawable(R.drawable.ringing_b), 250);
-		animation.addFrame(getResources().getDrawable(R.drawable.ringing_c), 250);
-		animation.addFrame(getResources().getDrawable(R.drawable.ringing_d), 250);
-		animation.setOneShot(false);
-
-		Util.setBackgroundCompatible((ImageView) findViewById(R.id.RingingAnimate), animation);
-
-		animation.start();
 	}
 
 	@Override
