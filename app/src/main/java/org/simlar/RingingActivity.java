@@ -29,6 +29,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public final class RingingActivity extends ActionBarActivity
@@ -81,6 +82,24 @@ public final class RingingActivity extends ActionBarActivity
 		final Animation logoAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate_logo);
 		final ImageView logo = (ImageView) findViewById(R.id.logo);
 		logo.startAnimation(logoAnimation);
+
+		final int diameter = Math.round(250.0f * getResources().getDisplayMetrics().density);
+		final RelativeLayout mainLayout = (RelativeLayout) findViewById(R.id.layoutRingingActivity);
+
+		final long animationStartTime = AnimationUtils.currentAnimationTimeMillis() + 100;
+		for (int i = 0; i < 3; i++) {
+			final View circle = new View(this);
+			Util.setBackgroundCompatible(circle, getResources().getDrawable(R.drawable.circle));
+
+			final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(diameter, diameter);
+			layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+			circle.setLayoutParams(layoutParams);
+			mainLayout.addView(circle);
+
+			final Animation circleAnimation = AnimationUtils.loadAnimation(this, R.anim.ringing_circle);
+			circleAnimation.setStartTime(animationStartTime + i * 250);
+			circle.setAnimation(circleAnimation);
+		}
 	}
 
 	@Override
