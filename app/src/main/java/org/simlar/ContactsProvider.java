@@ -42,7 +42,7 @@ import android.provider.MediaStore;
 
 public final class ContactsProvider
 {
-	static final String LOGTAG = ContactsProvider.class.getSimpleName();
+	private static final String LOGTAG = ContactsProvider.class.getSimpleName();
 
 	private static final ContactsProviderImpl mImpl = new ContactsProviderImpl();
 

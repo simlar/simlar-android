@@ -28,7 +28,7 @@ import android.widget.TextView;
 
 public final class ConnectionDetailsActivity extends Activity
 {
-	static final String LOGTAG = ConnectionDetailsActivity.class.getSimpleName();
+	private static final String LOGTAG = ConnectionDetailsActivity.class.getSimpleName();
 
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorConnectionDetails();
 
@@ -106,7 +106,7 @@ public final class ConnectionDetailsActivity extends Activity
 		super.onPause();
 	}
 
-	public void onCallConnectionDetailsChanged()
+	void onCallConnectionDetailsChanged()
 	{
 		if (mCommunicator.getService() == null) {
 			Lg.e(LOGTAG, "ERROR: onSimlarCallStateChanged but not bound to service");

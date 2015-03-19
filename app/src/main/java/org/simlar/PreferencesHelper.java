@@ -25,7 +25,7 @@ import java.security.MessageDigest;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public final class PreferencesHelper
+final class PreferencesHelper
 {
 	private static final String PREFERENCES_FILE = "settings";
 	private static final String PREFERENCES_USER = "user";

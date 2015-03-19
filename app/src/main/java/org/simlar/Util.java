@@ -34,7 +34,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.widget.ImageView;
 
-public final class Util
+final class Util
 {
 	private static final int MAX_BUFFER_SIZE = 1 * 1024 * 1024;
 

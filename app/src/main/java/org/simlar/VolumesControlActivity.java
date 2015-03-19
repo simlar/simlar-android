@@ -32,11 +32,11 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 
 public final class VolumesControlActivity extends Activity
 {
-	static final String LOGTAG = VolumesControlActivity.class.getSimpleName();
+	private static final String LOGTAG = VolumesControlActivity.class.getSimpleName();
 
-	final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorVolumes();
+	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorVolumes();
 
-	Volumes mVolumes = null;
+	private Volumes mVolumes = null;
 	private SeekBar mSeekBarSpeaker;
 	private SeekBar mSeekBarMicrophone;
 	private CheckBox mCheckBoxEchoLimiter;

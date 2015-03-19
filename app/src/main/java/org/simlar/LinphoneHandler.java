@@ -35,7 +35,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 
-public final class LinphoneHandler
+final class LinphoneHandler
 {
 	private static final String LOGTAG = LinphoneHandler.class.getSimpleName();
 
@@ -381,7 +381,7 @@ public final class LinphoneHandler
 		currentCall.enableEchoLimiter(enable);
 	}
 
-	public static void enableDebugMode(final boolean enabled)
+	private static void enableDebugMode(final boolean enabled)
 	{
 		LinphoneCoreFactory.instance().setDebugMode(enabled, "DEBUG");
 	}

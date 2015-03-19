@@ -11,7 +11,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.util.Xml;
 
-public final class StorePushId
+final class StorePushId
 {
 	private static final String LOGTAG = StorePushId.class.getSimpleName();
 	private static final String URL_PATH = "store-push-id.php";

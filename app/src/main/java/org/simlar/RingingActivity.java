@@ -33,7 +33,7 @@ import android.widget.TextView;
 
 public final class RingingActivity extends Activity
 {
-	static final String LOGTAG = RingingActivity.class.getSimpleName();
+	private static final String LOGTAG = RingingActivity.class.getSimpleName();
 
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorRinging();
 
@@ -125,7 +125,7 @@ public final class RingingActivity extends Activity
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
+	public boolean onCreateOptionsMenu(final Menu menu)
 	{
 		return true;
 	}
@@ -157,7 +157,7 @@ public final class RingingActivity extends Activity
 	}
 
 	@SuppressWarnings("unused")
-	public void pickUp(View view)
+	public void pickUp(final View view)
 	{
 		mCommunicator.getService().pickUp();
 		startActivity(new Intent(this, CallActivity.class));
@@ -165,7 +165,7 @@ public final class RingingActivity extends Activity
 	}
 
 	@SuppressWarnings("unused")
-	public void terminateCall(View view)
+	public void terminateCall(final View view)
 	{
 		mCommunicator.getService().terminateCall();
 		finish();

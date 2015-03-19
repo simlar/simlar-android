@@ -23,7 +23,7 @@ package org.simlar;
 import android.content.Context;
 import android.util.Log;
 
-public final class Lg
+final class Lg
 {
 	private static final int LOG_LEVEL_NORMAL = Log.WARN;
 	private static final int LOG_LEVEL_DEBUG = Log.INFO;

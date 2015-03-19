@@ -38,7 +38,7 @@ import android.widget.TextView;
 
 public final class CallActivity extends Activity
 {
-	static final String LOGTAG = CallActivity.class.getSimpleName();
+	private static final String LOGTAG = CallActivity.class.getSimpleName();
 
 	public static final String INTENT_EXTRA_SIMLAR_ID = "simlarId";
 

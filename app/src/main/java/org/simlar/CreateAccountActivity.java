@@ -45,20 +45,20 @@ import android.widget.TextView;
 
 public final class CreateAccountActivity extends Activity
 {
-	static final String LOGTAG = CreateAccountActivity.class.getSimpleName();
+	private static final String LOGTAG = CreateAccountActivity.class.getSimpleName();
 	public static final String INTENT_EXTRA_NUMBER = "CreateAccountActivityTelephoneNumber";
 	private static final int SECONDS_TO_WAIT_FOR_SMS = 90;
 	private static final String SIMLAR_SMS_SOURCE = "+4922199999930";
 
 	private View mLayoutProgress = null;
-	ProgressBar mProgressRequest = null;
-	ProgressBar mProgressWaitingForSMS = null;
-	ProgressBar mProgressConfirm = null;
-	ProgressBar mProgressFirstLogIn = null;
+	private ProgressBar mProgressRequest = null;
+	private ProgressBar mProgressWaitingForSMS = null;
+	private ProgressBar mProgressConfirm = null;
+	private ProgressBar mProgressFirstLogIn = null;
 	private TextView mWaitingForSmsText = null;
 	private EditText mEditRegistrationCode = null;
 	private TextView mDetails = null;
-	Button mButtonConfirm = null;
+	private Button mButtonConfirm = null;
 	private Button mButtonCancel = null;
 
 	private int mSecondsToStillWaitForSms = 0;

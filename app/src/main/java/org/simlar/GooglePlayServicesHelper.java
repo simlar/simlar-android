@@ -34,11 +34,11 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-public final class GooglePlayServicesHelper
+final class GooglePlayServicesHelper
 {
-	static final String LOGTAG = GooglePlayServicesHelper.class.getSimpleName();
+	private static final String LOGTAG = GooglePlayServicesHelper.class.getSimpleName();
 	private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-	static final String GOOGLE_PUSH_SENDER_ID = "772399062899";
+	private static final String GOOGLE_PUSH_SENDER_ID = "772399062899";
 
 	private GooglePlayServicesHelper()
 	{

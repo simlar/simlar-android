@@ -43,7 +43,7 @@ public final class ContactsAdapter extends ArrayAdapter<FullContactData>
 	private final int mLayout;
 	private final LayoutInflater mInflater;
 
-	public final class SortByName implements Comparator<FullContactData>
+	private final class SortByName implements Comparator<FullContactData>
 	{
 		@Override
 		public int compare(final FullContactData lhs, final FullContactData rhs)
