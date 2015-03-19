@@ -21,7 +21,7 @@
 package org.simlar;
 
 public enum ContactStatus {
-	NOTREGISTERED,
+	NOT_REGISTERED,
 	REGISTERED,
 	UNKNOWN;
 
@@ -29,7 +29,7 @@ public enum ContactStatus {
 	{
 		switch (i) {
 		case 0:
-			return NOTREGISTERED;
+			return NOT_REGISTERED;
 		case 1:
 			return REGISTERED;
 		default:

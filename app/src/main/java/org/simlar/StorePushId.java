@@ -80,9 +80,9 @@ public final class StorePushId
 
 		if (xmlRootElement.equalsIgnoreCase("success")
 				&& parser.getAttributeCount() >= 2
-				&& parser.getAttributeName(0).equalsIgnoreCase("devicetype")
+				&& parser.getAttributeName(0).equalsIgnoreCase("deviceType")
 				&& parser.getAttributeValue(0).equals(Integer.toString(DEVICE_TYPE_ANDROID))
-				&& parser.getAttributeName(1).equalsIgnoreCase("pushid")
+				&& parser.getAttributeName(1).equalsIgnoreCase("pushId")
 				&& parser.getAttributeValue(1).equals(pushId))
 		{
 			return true;

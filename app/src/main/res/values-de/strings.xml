@@ -27,9 +27,9 @@
     <string name="button_continue">Weiter</string>
     <string name="button_cancel">Abbrechen</string>
 
-    <string name="main_activity_contactlist_loading_contacts">Kontakte werden geladen</string>
-    <string name="main_activity_contactlist_error_loading_contacts">Kontakte konnten nicht geladen werden. Möglicherweise funktioniert dein Internet nicht.</string>
-    <string name="main_activity_contactlist_no_contacts_found">Keiner deiner Kontakte hat Simlar installiert. Empfiehl Simlar deinen Freunden!</string>
+    <string name="main_activity_contact_list_loading_contacts">Kontakte werden geladen</string>
+    <string name="main_activity_contact_list_error_loading_contacts">Kontakte konnten nicht geladen werden. Möglicherweise funktioniert dein Internet nicht.</string>
+    <string name="main_activity_contact_list_no_contacts_found">Keiner deiner Kontakte hat Simlar installiert. Empfiehl Simlar deinen Freunden!</string>
     <string name="main_activity_menu_reload_contacts">Kontakte neu laden</string>
     <string name="main_activity_menu_upload_logfile">Fehler melden</string>
     <string name="main_activity_menu_enable_debug_mode">Debug-Modus einschalten</string>
@@ -109,7 +109,7 @@
     <string name="connection_details_activity_label_late_packets">Late: </string>
     <string name="connection_details_activity_label_round_trip_delay">Delay: </string>
     <string name="connection_details_activity_label_jitter">Jitter: </string>
-    <string name="connection_details_activity_kbytes_per_second">kb/s</string>
+    <string name="connection_details_activity_kilobytes_per_second">kb/s</string>
     <string name="connection_details_activity_milli_seconds">ms</string>
     <string name="connection_details_activity_percent">&#65285;</string>
 
@@ -136,7 +136,7 @@
     <string name="create_account_activity_waiting_for_sms_manual">Manuelle Eingabe des Bestätigungscodes</string>
     <string name="create_account_activity_confirm">Bestätige Registrierung</string>
     <string name="create_account_activity_first_login">Überprüfe Zugang</string>
-    <string name="create_account_activity_error_wrong_telephonenumber">Mit der angegebenen Rufnummer ist eine Registrierung nicht möglich:\n%1$s\n\nProbiere eine andere Rufnummer oder schreibe an support@simlar.org</string>
+    <string name="create_account_activity_error_wrong_telephone_number">Mit der angegebenen Rufnummer ist eine Registrierung nicht möglich:\n%1$s\n\nProbiere eine andere Rufnummer oder schreibe an support@simlar.org</string>
     <string name="create_account_activity_error_sms">Simlar kann keine SMS an deine angegebene Telefonnummer schicken:\n%1$s\n\n Überprüfe deine Eingabe oder versuche es später nochmal</string>
     <string name="create_account_activity_error_sms_timeout">Das automatische Auslesen der SMS wurde abgebrochen.\n\nÜberprüfe deine Nummer:\n\n%1$s\n\nOder warte auf die SMS und gib den Bestätigungscode manuell ein.</string>
     <string name="create_account_activity_error_not_possible">Anmeldung momentan nicht möglich.\n\nÜberprüfe deine Intertverbindung und versuch es erneut.</string>

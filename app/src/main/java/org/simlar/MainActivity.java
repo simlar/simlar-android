@@ -72,7 +72,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 
 	void loadContacts()
 	{
-		mContactList.setEmptyText(getString(R.string.main_activity_contactlist_loading_contacts));
+		mContactList.setEmptyText(getString(R.string.main_activity_contact_list_loading_contacts));
 		ContactsProvider.getContacts(this, new FullContactsListener() {
 			@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 			@Override
@@ -80,10 +80,10 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 			{
 				mAdapter.clear();
 				if (contacts == null) {
-					mContactList.setEmptyText(getString(R.string.main_activity_contactlist_error_loading_contacts));
+					mContactList.setEmptyText(getString(R.string.main_activity_contact_list_error_loading_contacts));
 				} else {
 					mAdapter.addAll(contacts);
-					mContactList.setEmptyText(getString(R.string.main_activity_contactlist_no_contacts_found));
+					mContactList.setEmptyText(getString(R.string.main_activity_contact_list_no_contacts_found));
 				}
 
 				GooglePlayServicesHelper.registerGcmIfNeeded(MainActivity.this);

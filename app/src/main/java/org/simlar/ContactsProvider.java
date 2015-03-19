@@ -158,7 +158,7 @@ public final class ContactsProvider
 					if (mFakeData) {
 						return createFakeData();
 					}
-					return loadContactsFromTelephonebook(context, mySimlarId);
+					return loadContactsFromTelephoneBook(context, mySimlarId);
 				}
 
 				@Override
@@ -267,7 +267,7 @@ public final class ContactsProvider
 		private static String createFakePhotoString()
 		{
 			try {
-				return "file://" + FileHelper.getFakePhonebookPicture();
+				return "file://" + FileHelper.getFakePhoneBookPicture();
 			} catch (final NotInitedException e) {
 				Lg.ex(LOGTAG, e, "PreferencesHelper.NotInitedException");
 				return "";
@@ -292,7 +292,7 @@ public final class ContactsProvider
 			return result;
 		}
 
-		static Map<String, ContactData> loadContactsFromTelephonebook(final Context context, final String mySimlarId)
+		static Map<String, ContactData> loadContactsFromTelephoneBook(final Context context, final String mySimlarId)
 		{
 			Lg.i(LOGTAG, "loading contacts from telephone book");
 			final Map<String, ContactData> result = new HashMap<String, ContactData>();

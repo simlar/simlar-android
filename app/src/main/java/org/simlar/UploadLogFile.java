@@ -87,7 +87,7 @@ public final class UploadLogFile
 		DataOutputStream outputStream = null;
 		FileInputStream fileInputStream = null;
 		InputStream inputStream = null;
-		ByteArrayOutputStream baos = null;
+		ByteArrayOutputStream responseStream = null;
 		try {
 			outputStream = new DataOutputStream(connection.getOutputStream());
 			outputStream.writeBytes(TWO_HYPHENS + HttpsPost.DATA_BOUNDARY + LINE_END);
@@ -109,9 +109,9 @@ public final class UploadLogFile
 						connection.getResponseMessage());
 			} else {
 				inputStream = connection.getInputStream();
-				baos = new ByteArrayOutputStream();
-				Util.copyStream(inputStream, baos);
-				final String response = new String(baos.toByteArray());
+				responseStream = new ByteArrayOutputStream();
+				Util.copyStream(inputStream, responseStream);
+				final String response = new String(responseStream.toByteArray());
 				Lg.i(LOGTAG, "used CipherSuite: ", connection.getCipherSuite());
 				Lg.i(LOGTAG, "Response ", response);
 
@@ -148,11 +148,11 @@ public final class UploadLogFile
 			Lg.ex(LOGTAG, e, "Exception during inputStream.close()");
 		}
 		try {
-			if (baos != null) {
-				baos.close();
+			if (responseStream != null) {
+				responseStream.close();
 			}
 		} catch (final IOException e) {
-			Lg.ex(LOGTAG, e, "Exception during baos.close()");
+			Lg.ex(LOGTAG, e, "Exception during responseStream.close()");
 		}
 
 		return result;

@@ -283,7 +283,7 @@ public final class CreateAccountActivity extends Activity
 				}
 
 				if (!result.getSimlarId().equals(expectedSimlarId)) {
-					Lg.e(LOGTAG, "received simlarId not equal to expected: telephonenumber=", new Lg.Anonymizer(telephoneNumber),
+					Lg.e(LOGTAG, "received simlarId not equal to expected: telephoneNumber=", new Lg.Anonymizer(telephoneNumber),
 							" expected=", new Lg.Anonymizer(expectedSimlarId),
 							" actual=", new Lg.Anonymizer(result.getSimlarId()));
 				}
@@ -425,7 +425,7 @@ public final class CreateAccountActivity extends Activity
 	void onError(final int resId)
 	{
 		mLayoutProgress.setVisibility(View.GONE);
-		if (resId == R.string.create_account_activity_error_wrong_telephonenumber ||
+		if (resId == R.string.create_account_activity_error_wrong_telephone_number ||
 				resId == R.string.create_account_activity_error_sms ||
 				resId == R.string.create_account_activity_error_sms_timeout) {
 			mDetails.setText(String.format(getString(resId), mTelephoneNumber));
