@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
@@ -177,7 +176,7 @@ public final class SimlarSSLSocketFactory extends SSLSocketFactory
 	}
 
 	@Override
-	public Socket createSocket(final String host, final int port) throws IOException, UnknownHostException
+	public Socket createSocket(final String host, final int port) throws IOException
 	{
 		final SSLSocket socket = (SSLSocket) mSSLSocketFactory.createSocket(host, port);
 		socket.setEnabledCipherSuites(CIPHER_SUITES);
@@ -186,8 +185,7 @@ public final class SimlarSSLSocketFactory extends SSLSocketFactory
 	}
 
 	@Override
-	public Socket createSocket(final String host, final int port, final InetAddress localHost, final int localPort) throws IOException,
-			UnknownHostException
+	public Socket createSocket(final String host, final int port, final InetAddress localHost, final int localPort) throws IOException
 	{
 		final SSLSocket socket = (SSLSocket) mSSLSocketFactory.createSocket(host, port, localHost, localPort);
 		socket.setEnabledCipherSuites(CIPHER_SUITES);

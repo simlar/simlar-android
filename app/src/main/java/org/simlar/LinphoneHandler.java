@@ -307,10 +307,7 @@ final class LinphoneHandler
 
 	public boolean hasNoCurrentCalls()
 	{
-		if (mLinphoneCore == null) {
-			return true;
-		}
-		return mLinphoneCore.getCallsNb() == 0;
+		return mLinphoneCore == null || mLinphoneCore.getCallsNb() == 0;
 	}
 
 	public void pauseAllCalls()

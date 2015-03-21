@@ -472,8 +472,10 @@ public final class ContactsProvider
 			case UNINITIALIZED:
 				return true;
 			case REQUESTING_CONTACTS_STATUS_FROM_SERVER:
+				Lg.w(LOGTAG, "clearCache while requesting contacts from server => aborting");
 				return false;
 			case PARSING_PHONES_ADDRESS_BOOK:
+				Lg.w(LOGTAG, "clearCache while parsing phone book => aborting");
 				return false;
 			case INITIALIZED:
 			case ERROR:

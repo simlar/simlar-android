@@ -31,6 +31,7 @@ import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.telephony.SmsMessage;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -80,8 +81,8 @@ public final class CreateAccountActivity extends Activity
 		@Override
 		void onSimlarStatusChanged()
 		{
-			Lg.i(LOGTAG, "onTestRegistrationSuccess");
 			final SimlarStatus status = mService.getSimlarStatus();
+			Lg.i(LOGTAG, "onSimlarStatusChanged: ", status);
 
 			if (status.isConnectedToSipServer() || status.isRegistrationAtSipServerFailed()) {
 				mTestRegistrationSuccess = status.isConnectedToSipServer();
@@ -97,7 +98,7 @@ public final class CreateAccountActivity extends Activity
 
 			if (mTestRegistrationSuccess) {
 				setResult(RESULT_OK);
-				finish();
+				CreateAccountActivity.this.finish();
 			} else {
 				onError(R.string.create_account_activity_error_sip_not_possible);
 			}
@@ -152,9 +153,8 @@ public final class CreateAccountActivity extends Activity
 			}
 
 			final Object[] pdus = (Object[]) extras.get("pdus");
-			for (int i = 0; i < pdus.length; i++)
-			{
-				final SmsMessage sms = SmsMessage.createFromPdu((byte[]) pdus[i]);
+			for (final Object pdu : pdus) {
+				final SmsMessage sms = SmsMessage.createFromPdu((byte[]) pdu);
 				onSmsReceived(sms.getOriginatingAddress(), sms.getMessageBody());
 			}
 		}
@@ -207,7 +207,7 @@ public final class CreateAccountActivity extends Activity
 
 	/// Workaround to close soft keyboard on older android versions
 	@Override
-	public boolean onKeyUp(final int keyCode, final KeyEvent event)
+	public boolean onKeyUp(final int keyCode, @NonNull final KeyEvent event)
 	{
 		if (keyCode == KeyEvent.KEYCODE_ENTER) {
 			((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);

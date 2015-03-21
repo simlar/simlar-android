@@ -49,7 +49,7 @@ public final class SimlarCallState
 		RINGING,
 		ENCRYPTING,
 		TALKING,
-		ENDED;
+		ENDED
 	}
 
 	private boolean updateCallEndReason(final CallEndReason reason)

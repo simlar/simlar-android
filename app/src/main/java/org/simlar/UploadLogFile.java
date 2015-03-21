@@ -168,6 +168,13 @@ public final class UploadLogFile
 		mProgressDialog.setCancelable(false);
 	}
 
+	private static void deleteFile(final File file)
+	{
+		if (!file.delete()) {
+			Lg.w(LOGTAG, "deleting file failed: ", file.getName());
+		}
+	}
+
 	public void upload(final String fileName)
 	{
 		if (mContext == null) {
@@ -184,7 +191,7 @@ public final class UploadLogFile
 			protected PostResult doInBackground(File... logFiles)
 			{
 				final File logFile = logFiles[0];
-				logFile.delete();
+				deleteFile(logFile);
 
 				try {
 					final Process p = Runtime.getRuntime().exec("logcat -d -v threadtime -f " + logFile.getAbsolutePath());
@@ -194,7 +201,7 @@ public final class UploadLogFile
 					Lg.ex(LOGTAG, e, "Exception during log file creation");
 					return new PostResult(false, "Log file creation failed");
 				} finally {
-					logFile.delete();
+					deleteFile(logFile);
 				}
 			}
 

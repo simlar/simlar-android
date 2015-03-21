@@ -318,9 +318,11 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
 	private WifiLock createWifiWakeLock()
 	{
-		return Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB_MR1
-				? ((WifiManager) this.getSystemService(Context.WIFI_SERVICE)).createWifiLock(WifiManager.WIFI_MODE_FULL, "SimlarWifiLock")
-				: ((WifiManager) this.getSystemService(Context.WIFI_SERVICE)).createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "SimlarWifiLock");
+		final int lockType = Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB_MR1
+				? WifiManager.WIFI_MODE_FULL
+				: WifiManager.WIFI_MODE_FULL_HIGH_PERF;
+
+		return ((WifiManager) this.getSystemService(Context.WIFI_SERVICE)).createWifiLock(lockType, "SimlarWifiLock");
 	}
 
 	void terminateChecker()
@@ -669,7 +671,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			mSoundEffectManager.startPrepared(SoundEffectType.ENCRYPTION_HANDSHAKE);
 		}
 
-		// make sure WLAN is not suspended while calling
 		if (mSimlarCallState.isNewCall() && !mGoingDown) {
 			mSoundEffectManager.prepare(SoundEffectType.ENCRYPTION_HANDSHAKE);
 			notifySimlarStatusChanged(SimlarStatus.ONGOING_CALL);
@@ -909,7 +910,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			return;
 		}
 
-		if (mSimlarCallState == null || Util.isNullOrEmpty(mSimlarCallState.getAuthenticationToken())) {
+		if (Util.isNullOrEmpty(mSimlarCallState.getAuthenticationToken())) {
 			Lg.e(LOGTAG, "ERROR: verifyAuthenticationToken called but no token available");
 			return;
 		}

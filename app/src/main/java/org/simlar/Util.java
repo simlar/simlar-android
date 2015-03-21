@@ -76,21 +76,13 @@ final class Util
 
 	public static boolean equals(final Object lhs, final Object rhs)
 	{
-		if (lhs == rhs) {
-			return true;
-		}
-
-		if (lhs != null) {
-			return lhs.equals(rhs);
-		}
-
-		return rhs.equals(lhs);
+		return lhs == rhs || lhs != null && lhs.equals(rhs);
 	}
 
 	public static void copyStream(final InputStream is, final OutputStream os) throws IOException
 	{
 		final byte[] buffer = new byte[MAX_BUFFER_SIZE];
-		int length = 0;
+		int length;
 		while ((length = is.read(buffer)) != -1) {
 			os.write(buffer, 0, length);
 		}

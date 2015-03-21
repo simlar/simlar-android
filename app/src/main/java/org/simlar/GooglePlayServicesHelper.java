@@ -128,6 +128,8 @@ final class GooglePlayServicesHelper
 			return true;
 		}
 
+		Lg.w(LOGTAG, "google play services not available: ", GooglePlayServicesUtil.getErrorString(resultCode));
+
 		if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
 			Lg.w(LOGTAG, "This device has no or too old google play services installed. Asking user");
 			showDialogAndFinishParent(activity, GooglePlayServicesUtil.getErrorDialog(resultCode, activity, PLAY_SERVICES_RESOLUTION_REQUEST));

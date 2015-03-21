@@ -206,10 +206,6 @@ final class SimlarNumber
 
 	private static boolean hasSimlarIdFormat(final String telephoneNumber)
 	{
-		if (Util.isNullOrEmpty(telephoneNumber)) {
-			return false;
-		}
-
-		return telephoneNumber.matches("\\*\\d*\\*");
+		return !Util.isNullOrEmpty(telephoneNumber) && telephoneNumber.matches("\\*\\d*\\*");
 	}
 }
