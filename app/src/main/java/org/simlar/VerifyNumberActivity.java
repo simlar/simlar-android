@@ -81,7 +81,7 @@ public final class VerifyNumberActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_verify_number);
 
-		final Integer regionCode = Integer.valueOf(SimlarNumber.readRegionCodeFromSimCardOrConfiguration(this));
+		final int regionCode = SimlarNumber.readRegionCodeFromSimCardOrConfiguration(this);
 		final String number = SimlarNumber.readLocalPhoneNumberFromSimCard(this);
 
 		final ArrayAdapter<Integer> adapter = createCountryCodeSelector();
@@ -89,7 +89,7 @@ public final class VerifyNumberActivity extends Activity
 		mSpinner.setAdapter(adapter);
 
 		Lg.i(LOGTAG, "proposing country code: ", regionCode);
-		if (regionCode.intValue() > 0) {
+		if (regionCode > 0) {
 			mSpinner.setSelection(adapter.getPosition(regionCode));
 		}
 
