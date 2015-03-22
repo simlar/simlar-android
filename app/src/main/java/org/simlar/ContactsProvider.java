@@ -93,13 +93,6 @@ public final class ContactsProvider
 	{
 		public final String simlarId;
 
-		public FullContactData(final String simlarId, final String name, final String guiTelephoneNumber, final ContactStatus status,
-				final String photoId)
-		{
-			super(name, guiTelephoneNumber, status, photoId);
-			this.simlarId = simlarId;
-		}
-
 		public FullContactData(final String simlarId, final ContactData cd)
 		{
 			super(cd.name, cd.guiTelephoneNumber, cd.status, cd.photoId);

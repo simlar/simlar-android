@@ -846,9 +846,4 @@ public final class LinphoneThread
 	{
 		return mImpl.mVolumes;
 	}
-
-	public RegistrationState getRegistrationState()
-	{
-		return mImpl.mRegistrationState;
-	}
 }

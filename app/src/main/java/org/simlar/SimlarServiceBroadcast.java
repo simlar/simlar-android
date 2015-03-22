@@ -28,8 +28,6 @@ import android.support.v4.content.LocalBroadcastManager;
 
 public final class SimlarServiceBroadcast implements Serializable
 {
-	private static final long serialVersionUID = -7496021571744376633L;
-
 	public static final String BROADCAST_NAME = "SimlarServiceBroadcast";
 	public static final String INTENT_EXTRA = "SimlarServiceBroadcast";
 

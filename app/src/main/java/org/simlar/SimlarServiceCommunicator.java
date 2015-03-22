@@ -121,7 +121,6 @@ class SimlarServiceCommunicator
 			}
 			default:
 				Lg.e(mLogtag, "Error in onReceive: unknown type");
-				return;
 			}
 		}
 	}

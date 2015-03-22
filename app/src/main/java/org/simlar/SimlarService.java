@@ -923,11 +923,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		return mSimlarStatus;
 	}
 
-	public boolean isGoingDown()
-	{
-		return mGoingDown;
-	}
-
 	public SimlarCallState getSimlarCallState()
 	{
 		return mSimlarCallState;

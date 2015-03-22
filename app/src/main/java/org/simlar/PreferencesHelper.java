@@ -86,7 +86,6 @@ final class PreferencesHelper
 
 	public static final class NotInitedException extends Exception
 	{
-		private static final long serialVersionUID = -1402138076439560953L;
 	}
 
 	public static String getMySimlarId() throws NotInitedException

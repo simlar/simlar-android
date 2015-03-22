@@ -118,11 +118,6 @@ public final class CreateAccount
 		{
 			super(result);
 		}
-
-		public String getRegistrationCode()
-		{
-			return mResult2;
-		}
 	}
 
 	public static RequestResult httpPostRequest(final String telephoneNumber, final String smsText)
