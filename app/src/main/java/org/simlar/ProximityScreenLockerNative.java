@@ -80,7 +80,7 @@ public class ProximityScreenLockerNative implements ProximityScreenLocker
 		try {
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
 				final Method method = powerManager.getClass().getDeclaredMethod("isWakeLockLevelSupported", int.class);
-				return ((Boolean) method.invoke(powerManager, Integer.valueOf(proximityScreenOffWakeLock))).booleanValue();
+				return ((Boolean) method.invoke(powerManager, proximityScreenOffWakeLock)).booleanValue();
 			}
 
 			final Method method = powerManager.getClass().getDeclaredMethod("getSupportedWakeLockFlags");
@@ -153,7 +153,7 @@ public class ProximityScreenLockerNative implements ProximityScreenLocker
 		}
 
 		try {
-			mPowerLockReleaseMethod.invoke(mProximityWakeLock, Integer.valueOf(immediately ? 0 : 1));
+			mPowerLockReleaseMethod.invoke(mProximityWakeLock, immediately ? 0 : 1);
 			return true;
 		} catch (final IllegalAccessException ex) {
 			Lg.ex(LOGTAG, ex, "IllegalAccessException calling native release method");

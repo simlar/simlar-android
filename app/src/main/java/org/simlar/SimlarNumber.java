@@ -198,7 +198,7 @@ final class SimlarNumber
 
 		final PhoneNumberUtil pnUtil = PhoneNumberUtil.getInstance();
 		for (final String region : pnUtil.getSupportedRegions()) {
-			supportedCountryCodes.add(Integer.valueOf(pnUtil.getCountryCodeForRegion(region)));
+			supportedCountryCodes.add(pnUtil.getCountryCodeForRegion(region));
 		}
 
 		return supportedCountryCodes;
