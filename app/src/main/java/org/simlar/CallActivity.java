@@ -315,7 +315,7 @@ public final class CallActivity extends Activity
 
 		mFinishDelayedCalled = true;
 
-		Lg.i(LOGTAG, "finishing activity in ", Integer.valueOf(milliSeconds), " ms");
+		Lg.i(LOGTAG, "finishing activity in ", milliSeconds, " ms");
 
 		new Handler().postDelayed(new Runnable() {
 			@Override

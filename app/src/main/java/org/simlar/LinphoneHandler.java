@@ -121,7 +121,7 @@ final class LinphoneHandler
 			transports.tcp = 0;
 			transports.tls = (int) (Math.random() * (0xFFFF - 1024)) + 1024;
 			mLinphoneCore.setSignalingTransportPorts(transports);
-			Lg.i(LOGTAG, "using random port: ", Integer.valueOf(transports.tls));
+			Lg.i(LOGTAG, "using random port: ", transports.tls);
 
 			// set audio port range
 			mLinphoneCore.setAudioPortRange(6000, 8000);
@@ -146,7 +146,7 @@ final class LinphoneHandler
 
 			// set number of threads for MediaStreamer
 			final int cpuCount = Runtime.getRuntime().availableProcessors();
-			Lg.i(LOGTAG, "Threads for MediaStreamer: ", Integer.valueOf(cpuCount));
+			Lg.i(LOGTAG, "Threads for MediaStreamer: ", cpuCount);
 			mLinphoneCore.setCpuCount(cpuCount);
 
 			// We do not want a call response with "486 busy here" if you are not on the phone. So we take a high value of 1 hour.

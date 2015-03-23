@@ -178,7 +178,7 @@ public final class VerifyNumberActivity extends Activity
 	void updateButtonAccept()
 	{
 		final boolean enabled = !Util.isNullOrEmpty(mEditNumber.getText().toString());
-		Lg.i(LOGTAG, "updateButtonAccept enabled=", Boolean.valueOf(enabled));
+		Lg.i(LOGTAG, "updateButtonAccept enabled=", enabled);
 		mButtonAccept.setEnabled(enabled);
 	}
 
@@ -215,7 +215,7 @@ public final class VerifyNumberActivity extends Activity
 	@Override
 	protected void onActivityResult(final int requestCode, final int resultCode, final Intent data)
 	{
-		Lg.i(LOGTAG, "onActivityResult requestCode=", Integer.valueOf(requestCode), " resultCode=", Integer.valueOf(resultCode));
+		Lg.i(LOGTAG, "onActivityResult requestCode=", requestCode, " resultCode=", resultCode);
 		if (requestCode == RESULT_CREATE_ACCOUNT_ACTIVITY) {
 			if (resultCode == RESULT_OK) {
 				Lg.i(LOGTAG, "finishing on CreateAccount request");

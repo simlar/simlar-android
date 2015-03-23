@@ -253,7 +253,7 @@ public final class ContactsProvider
 				}
 			}
 
-			Lg.i(LOGTAG, "found ", Integer.valueOf(registeredContacts.size()), " registered contacts");
+			Lg.i(LOGTAG, "found ", registeredContacts.size(), " registered contacts");
 			return registeredContacts;
 		}
 
@@ -336,7 +336,7 @@ public final class ContactsProvider
 			}
 			contacts.close();
 
-			Lg.i(LOGTAG, "found ", Integer.valueOf(result.size()), " contacts from telephone book");
+			Lg.i(LOGTAG, "found ", result.size(), " contacts from telephone book");
 
 			return result;
 		}
@@ -347,7 +347,7 @@ public final class ContactsProvider
 				return false;
 			}
 
-			Lg.i(LOGTAG, "contact status received for ", Integer.valueOf(statusMap.size()), " contacts");
+			Lg.i(LOGTAG, "contact status received for ", statusMap.size(), " contacts");
 
 			for (final Map.Entry<String, ContactStatus> entry : statusMap.entrySet()) {
 				if (!mContacts.containsKey(entry.getKey())) {
