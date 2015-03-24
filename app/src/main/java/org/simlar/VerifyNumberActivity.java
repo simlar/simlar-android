@@ -81,7 +81,7 @@ public final class VerifyNumberActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_verify_number);
 
-		final Integer regionCode = Integer.valueOf(SimlarNumber.readRegionCodeFromSimCardOrConfiguration(this));
+		final int regionCode = SimlarNumber.readRegionCodeFromSimCardOrConfiguration(this);
 		final String number = SimlarNumber.readLocalPhoneNumberFromSimCard(this);
 
 		final ArrayAdapter<Integer> adapter = createCountryCodeSelector();
@@ -89,7 +89,7 @@ public final class VerifyNumberActivity extends Activity
 		mSpinner.setAdapter(adapter);
 
 		Lg.i(LOGTAG, "proposing country code: ", regionCode);
-		if (regionCode.intValue() > 0) {
+		if (regionCode > 0) {
 			mSpinner.setSelection(adapter.getPosition(regionCode));
 		}
 
@@ -118,7 +118,7 @@ public final class VerifyNumberActivity extends Activity
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private ArrayAdapter<Integer> createCountryCodeSelector()
 	{
-		final ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item);
+		final ArrayAdapter<Integer> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			adapter.addAll(SimlarNumber.getSupportedCountryCodes());
 		} else {
@@ -178,7 +178,7 @@ public final class VerifyNumberActivity extends Activity
 	void updateButtonAccept()
 	{
 		final boolean enabled = !Util.isNullOrEmpty(mEditNumber.getText().toString());
-		Lg.i(LOGTAG, "updateButtonAccept enabled=", Boolean.valueOf(enabled));
+		Lg.i(LOGTAG, "updateButtonAccept enabled=", enabled);
 		mButtonAccept.setEnabled(enabled);
 	}
 
@@ -215,7 +215,7 @@ public final class VerifyNumberActivity extends Activity
 	@Override
 	protected void onActivityResult(final int requestCode, final int resultCode, final Intent data)
 	{
-		Lg.i(LOGTAG, "onActivityResult requestCode=", Integer.valueOf(requestCode), " resultCode=", Integer.valueOf(resultCode));
+		Lg.i(LOGTAG, "onActivityResult requestCode=", requestCode, " resultCode=", resultCode);
 		if (requestCode == RESULT_CREATE_ACCOUNT_ACTIVITY) {
 			if (resultCode == RESULT_OK) {
 				Lg.i(LOGTAG, "finishing on CreateAccount request");

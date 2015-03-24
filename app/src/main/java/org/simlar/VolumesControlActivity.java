@@ -101,7 +101,7 @@ public final class VolumesControlActivity extends Activity
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
 			{
-				Lg.i(LOGTAG, "seekBarSpeaker changed: ", Integer.valueOf(progress));
+				Lg.i(LOGTAG, "seekBarSpeaker changed: ", progress);
 				if (mVolumes == null) {
 					return;
 				}
@@ -126,7 +126,7 @@ public final class VolumesControlActivity extends Activity
 			@Override
 			public void onProgressChanged(final SeekBar seekBar, final int progress, final boolean fromUser)
 			{
-				Lg.i(LOGTAG, "seekBarMicrophone changed: ", Integer.valueOf(progress));
+				Lg.i(LOGTAG, "seekBarMicrophone changed: ", progress);
 				if (mVolumes == null) {
 					return;
 				}
@@ -140,7 +140,7 @@ public final class VolumesControlActivity extends Activity
 			@Override
 			public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked)
 			{
-				Lg.i(LOGTAG, "CheckBoxEchoLimiter.onCheckedChanged: ", Boolean.valueOf(isChecked));
+				Lg.i(LOGTAG, "CheckBoxEchoLimiter.onCheckedChanged: ", isChecked);
 				if (mVolumes == null) {
 					return;
 				}

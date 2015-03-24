@@ -41,7 +41,7 @@ final class SoundEffectManager
 	private static final long MIN_PLAY_TIME = VibratorManager.VIBRATE_LENGTH + VibratorManager.VIBRATE_PAUSE;
 
 	private final Context mContext;
-	private final Map<SoundEffectType, SoundEffectPlayer> mPlayers = new HashMap<SoundEffectType, SoundEffectPlayer>();
+	private final Map<SoundEffectType, SoundEffectPlayer> mPlayers = new HashMap<>();
 
 	public enum SoundEffectType {
 		RINGTONE,
@@ -147,7 +147,7 @@ final class SoundEffectManager
 				mPlayStart = SystemClock.elapsedRealtime();
 			}
 			final long playStartTime = SystemClock.elapsedRealtime();
-			Lg.i(LOGTAG, "[", mType, "] start playing at time: ", Long.valueOf(playStartTime));
+			Lg.i(LOGTAG, "[", mType, "] start playing at time: ", playStartTime);
 			mMediaPlayer.start();
 
 			mMediaPlayer.setOnCompletionListener(new OnCompletionListener() {
@@ -156,7 +156,7 @@ final class SoundEffectManager
 				{
 					final long now = SystemClock.elapsedRealtime();
 					final long delay = Math.max(0, playStartTime + MIN_PLAY_TIME - now);
-					Lg.i(LOGTAG, "[", mType, "] MediaPlayer onCompletion at: ", Long.valueOf(now), " restarting with delay: ", Long.valueOf(delay));
+					Lg.i(LOGTAG, "[", mType, "] MediaPlayer onCompletion at: ", now, " restarting with delay: ", delay);
 
 					if (delay > 0) {
 						mHandler.postDelayed(new Runnable() {
@@ -182,8 +182,8 @@ final class SoundEffectManager
 				mMediaPlayer.release();
 				mMediaPlayer = null;
 				final long now = SystemClock.elapsedRealtime();
-				Lg.i(LOGTAG, "[", mType, "] play time=", Long.valueOf(now - mPlayStart),
-						"ms delay=", Long.valueOf(mPlayRequestTime - mPlayStart),
+				Lg.i(LOGTAG, "[", mType, "] play time=", now - mPlayStart,
+						"ms delay=", mPlayRequestTime - mPlayStart,
 						"ms sum=", Long.valueOf(now - mPlayRequestTime) + "ms");
 			}
 		}
@@ -191,7 +191,7 @@ final class SoundEffectManager
 		@Override
 		public boolean onError(MediaPlayer mp, int what, int extra)
 		{
-			Lg.e(LOGTAG, "[", mType, "] MediaPlayer Error what=", Integer.valueOf(what), " extra=", Integer.valueOf(extra));
+			Lg.e(LOGTAG, "[", mType, "] MediaPlayer Error what=", what, " extra=", extra);
 			mHandler.removeCallbacksAndMessages(null);
 			if (mMediaPlayer != null) {
 				mMediaPlayer.reset();
@@ -294,7 +294,7 @@ final class SoundEffectManager
 	@SuppressLint("InlinedApi")
 	public void setInCallMode(final boolean enabled)
 	{
-		Lg.i(LOGTAG, "setInCallMode: ", Boolean.valueOf(enabled));
+		Lg.i(LOGTAG, "setInCallMode: ", enabled);
 
 		final AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
 		if (enabled) {

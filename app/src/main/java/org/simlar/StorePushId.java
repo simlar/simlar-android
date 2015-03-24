@@ -27,7 +27,7 @@ final class StorePushId
 		Lg.i(LOGTAG, "httpPostStorePushId requested");
 
 		try {
-			final Map<String, String> parameters = new HashMap<String, String>();
+			final Map<String, String> parameters = new HashMap<>();
 			parameters.put("login", PreferencesHelper.getMySimlarId());
 			parameters.put("password", PreferencesHelper.getPasswordHash());
 			parameters.put("deviceType", Integer.toString(DEVICE_TYPE_ANDROID));

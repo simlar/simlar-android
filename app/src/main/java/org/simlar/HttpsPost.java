@@ -139,7 +139,7 @@ final class HttpsPost
 			out.close();
 
 			if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-				Lg.e(LOGTAG, "server response error(", Integer.valueOf(connection.getResponseCode()), "): ", connection.getResponseMessage());
+				Lg.e(LOGTAG, "server response error(", connection.getResponseCode(), "): ", connection.getResponseMessage());
 				return null;
 			}
 

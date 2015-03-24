@@ -124,7 +124,7 @@ public final class CreateAccount
 	{
 		Lg.i(LOGTAG, "httpPostRequest: ", new Lg.Anonymizer(telephoneNumber));
 
-		final Map<String, String> parameters = new HashMap<String, String>();
+		final Map<String, String> parameters = new HashMap<>();
 		parameters.put("command", "request");
 		parameters.put("telephoneNumber", telephoneNumber);
 		parameters.put("smsText", smsText);
@@ -136,7 +136,7 @@ public final class CreateAccount
 	{
 		Lg.i(LOGTAG, "httpPostConfirm: simlarId=", new Lg.Anonymizer(simlarId), " registrationCode=", registrationCode);
 
-		final Map<String, String> parameters = new HashMap<String, String>();
+		final Map<String, String> parameters = new HashMap<>();
 		parameters.put("command", "confirm");
 		parameters.put("simlarId", simlarId);
 		parameters.put("registrationCode", registrationCode);
@@ -185,7 +185,7 @@ public final class CreateAccount
 				&& parser.getAttributeName(1).equalsIgnoreCase("message"))
 		{
 			final int errorId = Integer.parseInt(parser.getAttributeValue(0));
-			Lg.i(LOGTAG, "server returned error: ", parser.getAttributeValue(1), " (", Integer.valueOf(errorId), ")");
+			Lg.i(LOGTAG, "server returned error: ", parser.getAttributeValue(1), " (", errorId, ")");
 			return new Result(errorId, null, null);
 		}
 
@@ -198,7 +198,7 @@ public final class CreateAccount
 			return new Result(Result.SUCCESS, parser.getAttributeValue(0), parser.getAttributeValue(1));
 		}
 
-		Lg.e(LOGTAG, "unable to parse response: xmlRootElement=", xmlRootElement, " AttributeCount=", Integer.valueOf(parser.getAttributeCount()));
+		Lg.e(LOGTAG, "unable to parse response: xmlRootElement=", xmlRootElement, " AttributeCount=", parser.getAttributeCount());
 		return null;
 	}
 }

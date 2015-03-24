@@ -414,7 +414,7 @@ public final class LinphoneThread
 				Lg.w(LOGTAG, "Service ", presenceModel.getNthService(i).getBasicStatus());
 				if (presenceModel.getNthService(i).getContact() == null) {
 					status = presenceModel.getNthService(i).getBasicStatus();
-					Lg.w(LOGTAG, "using service no ", Long.valueOf(i));
+					Lg.w(LOGTAG, "using service no ", i);
 				}
 			}
 
@@ -444,7 +444,7 @@ public final class LinphoneThread
 					final String authenticationToken = currentCall.getAuthenticationToken();
 					final boolean authenticationTokenVerified = currentCall.isAuthenticationTokenVerified();
 
-					Lg.i(LOGTAG, "callEncryptionChecker status: encrypted=", Boolean.valueOf(encrypted));
+					Lg.i(LOGTAG, "callEncryptionChecker status: encrypted=", encrypted);
 					mMainThreadHandler.post(new Runnable() {
 						@Override
 						public void run()
@@ -609,7 +609,7 @@ public final class LinphoneThread
 			// LinphoneFriend is mutable => use it only in the calling thread
 			// OnlineStatus is immutable
 
-			Lg.w(LOGTAG, "presence received: username=", new FriendLogger(lf), " online=", Boolean.valueOf(isOnline(lf.getPresenceModel())));
+			Lg.w(LOGTAG, "presence received: username=", new FriendLogger(lf), " online=", isOnline(lf.getPresenceModel()));
 		}
 
 		@Override
@@ -638,12 +638,12 @@ public final class LinphoneThread
 			// set quality to unusable if up or download bandwidth is zero
 			final float quality = (upload > 0 && download > 0) ? call.getCurrentQuality() : 0;
 
-			Lg.i(LOGTAG, "callStatsUpdated: number=", new CallLogger(call), " quality=", Float.valueOf(quality),
-					" duration=", Integer.valueOf(duration),
+			Lg.i(LOGTAG, "callStatsUpdated: number=", new CallLogger(call), " quality=", quality,
+					" duration=", duration,
 					" codec=", codec, " iceState=", iceState,
-					" upload=", Integer.valueOf(upload), " download=", Integer.valueOf(download),
-					" jitter=", Integer.valueOf(jitter), " loss=", Integer.valueOf(packetLoss),
-					" latePackets=", Long.valueOf(latePackets), " roundTripDelay=", Integer.valueOf(roundTripDelay));
+					" upload=", upload, " download=", download,
+					" jitter=", jitter, " loss=", packetLoss,
+					" latePackets=", latePackets, " roundTripDelay=", roundTripDelay);
 
 			mMainThreadHandler.post(new Runnable() {
 				@Override
@@ -658,7 +658,7 @@ public final class LinphoneThread
 		@Override
 		public void ecCalibrationStatus(final LinphoneCore lc, final EcCalibratorStatus status, final int delay_ms, final Object data)
 		{
-			Lg.i(LOGTAG, "ecCalibrationStatus status=", status, " delay_ms=", Integer.valueOf(delay_ms));
+			Lg.i(LOGTAG, "ecCalibrationStatus status=", status, " delay_ms=", delay_ms);
 		}
 
 		@Override
@@ -668,7 +668,7 @@ public final class LinphoneThread
 
 			final boolean isTokenVerified = call.isAuthenticationTokenVerified();
 
-			Lg.i(LOGTAG, "callEncryptionChanged number=", new CallLogger(call), " encrypted=", Boolean.valueOf(encrypted),
+			Lg.i(LOGTAG, "callEncryptionChanged number=", new CallLogger(call), " encrypted=", encrypted,
 					" authenticationToken=", authenticationToken);
 
 			if (!encrypted) {
@@ -693,7 +693,7 @@ public final class LinphoneThread
 		@Override
 		public void dtmfReceived(final LinphoneCore lc, final LinphoneCall call, final int dtmf)
 		{
-			Lg.w(LOGTAG, "dtmfReceived number=", new CallLogger(call), " dtmf=", Integer.valueOf(dtmf));
+			Lg.w(LOGTAG, "dtmfReceived number=", new CallLogger(call), " dtmf=", dtmf);
 		}
 
 		@Override
@@ -745,21 +745,21 @@ public final class LinphoneThread
 		public void fileTransferProgressIndication(final LinphoneCore lc, final LinphoneChatMessage message, final LinphoneContent content,
 				final int progress)
 		{
-			Lg.w(LOGTAG, "fileTransferProgressIndication: message=", message, " progress=", Integer.valueOf(progress));
+			Lg.w(LOGTAG, "fileTransferProgressIndication: message=", message, " progress=", progress);
 		}
 
 		@Override
 		public void fileTransferRecv(final LinphoneCore lc, final LinphoneChatMessage message, final LinphoneContent content, final byte[] buffer,
 				final int size)
 		{
-			Lg.w(LOGTAG, "fileTransferRecv: message=", message, " size=", Integer.valueOf(size));
+			Lg.w(LOGTAG, "fileTransferRecv: message=", message, " size=", size);
 		}
 
 		@Override
 		public int fileTransferSend(final LinphoneCore lc, final LinphoneChatMessage message, final LinphoneContent content, final ByteBuffer buffer,
 				final int size)
 		{
-			Lg.w(LOGTAG, "fileTransferSend: message=", message, " size=", Integer.valueOf(size));
+			Lg.w(LOGTAG, "fileTransferSend: message=", message, " size=", size);
 			return 0;
 		}
 	}

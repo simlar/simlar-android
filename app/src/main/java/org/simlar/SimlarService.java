@@ -136,7 +136,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				SimlarService.this.onTelephonyCallStateRinging();
 				break;
 			default:
-				Lg.i(LOGTAG, "onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=", Integer.valueOf(state));
+				Lg.i(LOGTAG, "onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=", state);
 				break;
 			}
 		}
@@ -202,7 +202,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 
 		mCurrentRingerMode = ringerMode;
-		Lg.i(LOGTAG, "saving RingerMode: ", Integer.valueOf(mCurrentRingerMode), " and switch to ringer mode silent");
+		Lg.i(LOGTAG, "saving RingerMode: ", mCurrentRingerMode, " and switch to ringer mode silent");
 		audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
 	}
 
@@ -214,7 +214,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		/// NOTE: On lollipop getRingerMode sometimes does not report silent mode correctly, so checking it here may be dangerous.
-		Lg.i(LOGTAG, "restoring RingerMode: ", Integer.valueOf(audioManager.getRingerMode()), " -> ", Integer.valueOf(mCurrentRingerMode));
+		Lg.i(LOGTAG, "restoring RingerMode: ", audioManager.getRingerMode(), " -> ", mCurrentRingerMode);
 		audioManager.setRingerMode(mCurrentRingerMode);
 		mCurrentRingerMode = -1;
 	}
@@ -222,7 +222,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	@Override
 	public int onStartCommand(final Intent intent, final int flags, final int startId)
 	{
-		Lg.i(LOGTAG, "onStartCommand intent=", intent, " startId=", Integer.valueOf(startId));
+		Lg.i(LOGTAG, "onStartCommand intent=", intent, " startId=", startId);
 
 		Lg.i(LOGTAG, "acquiring simlar wake lock");
 		acquireWakeLock();

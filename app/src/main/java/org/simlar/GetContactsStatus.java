@@ -49,7 +49,7 @@ final class GetContactsStatus
 		Lg.i(LOGTAG, "httpPostGetContactsStatus requested");
 
 		try {
-			final Map<String, String> parameters = new HashMap<String, String>();
+			final Map<String, String> parameters = new HashMap<>();
 			parameters.put("login", PreferencesHelper.getMySimlarId());
 			parameters.put("password", PreferencesHelper.getPasswordHash());
 			parameters.put("contacts", TextUtils.join("|", contacts));
@@ -104,7 +104,7 @@ final class GetContactsStatus
 			return null;
 		}
 
-		final Map<String, ContactStatus> parsedResult = new HashMap<String, ContactStatus>();
+		final Map<String, ContactStatus> parsedResult = new HashMap<>();
 		while (parser.next() != XmlPullParser.END_DOCUMENT) {
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
 				continue;
