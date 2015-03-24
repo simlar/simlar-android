@@ -75,13 +75,13 @@
             </intent-filter>
         </receiver>
         <service
-            android:name="org.simlar.SimlarService"
+            android:name=".SimlarService"
             android:exported="false"
             android:stopWithTask="false"
             tools:ignore="UnusedAttribute"/>
 
         <activity
-            android:name="org.simlar.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait">
@@ -92,42 +92,42 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="org.simlar.RingingActivity"
+            android:name=".RingingActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="org.simlar.CallActivity"
+            android:name=".CallActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="org.simlar.VerifyNumberActivity"
+            android:name=".VerifyNumberActivity"
             android:label="@string/verify_number_activity_title"
             android:launchMode="singleTop"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="org.simlar.VolumesControlActivity"
+            android:name=".VolumesControlActivity"
             android:label="@string/volumes_control_activity_title"
             android:theme="@style/dialogTheme">
         </activity>
         <activity
-            android:name="org.simlar.ConnectionDetailsActivity"
+            android:name=".ConnectionDetailsActivity"
             android:theme="@style/dialogTheme">
         </activity>
         <activity
-            android:name="org.simlar.AboutActivity"
+            android:name=".AboutActivity"
             android:label="@string/about_activity_title"
             android:theme="@style/dialogTheme">
         </activity>
         <activity
-            android:name="org.simlar.CreateAccountActivity"
+            android:name=".CreateAccountActivity"
             android:launchMode="singleTop"
             android:theme="@style/dialogTheme">
         </activity>
         <activity
-            android:name="org.simlar.AgreeActivity"
+            android:name=".AgreeActivity"
             android:label="@string/agree_activity_title"
             android:launchMode="singleTop"
             android:screenOrientation="portrait">
