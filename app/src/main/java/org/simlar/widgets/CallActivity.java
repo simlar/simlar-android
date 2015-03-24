@@ -56,6 +56,7 @@ import org.simlar.service.SimlarCallState;
 import org.simlar.service.SimlarService;
 import org.simlar.service.SimlarServiceCommunicator;
 import org.simlar.utils.Util;
+import org.simlar.AddToCallActivity;
 
 public final class CallActivity extends AppCompatActivity implements VolumesControlDialogFragment.Listener, VideoFragment.Listener
 {
@@ -588,7 +589,8 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	@SuppressWarnings({ "unused", "RedundantSuppression" })
 	public void showSoundSettingsDialog(final View view)
 	{
-		new VolumesControlDialogFragment().show(getSupportFragmentManager(), VolumesControlDialogFragment.class.getCanonicalName());
+		//new VolumesControlDialogFragment().show(getSupportFragmentManager(), VolumesControlDialogFragment.class.getCanonicalName());
+		startActivity(new Intent(this, AddToCallActivity.class));
 	}
 
 	private void onAudioOutputChanged(final AudioOutputType currentAudioOutput, final Set<AudioOutputType> availableAudioOutputTypes)
