@@ -20,24 +20,62 @@
 
 package org.simlar;
 
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
+
+import java.util.Set;
 
 
 public class AddToCallActivity extends ActionBarActivity
 {
+	private static final String LOGTAG = AddToCallActivity.class.getSimpleName();
+
+	private ContactsAdapter mAdapter = null;
+	private ContactsListFragment mContactList = null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
+		Lg.i(LOGTAG, "onCreate ");
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_to_call);
+
+		mAdapter = ContactsAdapter.createContactsAdapter(this);
+
+		final FragmentManager fm = getSupportFragmentManager();
+		mContactList = (ContactsListFragment) fm.findFragmentById(android.R.id.content);
+		if (mContactList == null) {
+			mContactList = new ContactsListFragment();
+			fm.beginTransaction().add(android.R.id.content, mContactList).commit();
+		}
+		mContactList.setListAdapter(mAdapter);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
 		return true;
+	}
+
+	@Override
+	protected void onResume()
+	{
+		Lg.i(LOGTAG, "onResume");
+		super.onResume();
+
+		if (mAdapter.isEmpty()) {
+			ContactsProvider.getContacts(this, new ContactsProvider.FullContactsListener()
+			{
+				@Override
+				public void onGetContacts(Set<ContactsProvider.FullContactData> contacts)
+				{
+					mAdapter.clear();
+					mAdapter.addAll(contacts);
+				}
+			});
+		}
 	}
 }
