@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
   Copyright (C) 2013 The Simlar Authors.
 
@@ -19,7 +18,6 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -->
-
 <manifest
     package="org.simlar"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -76,7 +74,6 @@
                 <category android:name="org.simlar"/>
             </intent-filter>
         </receiver>
-
         <service
             android:name="org.simlar.SimlarService"
             android:exported="false"
@@ -136,4 +133,5 @@
             android:screenOrientation="portrait">
         </activity>
     </application>
+
 </manifest>
