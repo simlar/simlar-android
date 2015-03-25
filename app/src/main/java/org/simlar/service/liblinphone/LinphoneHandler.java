@@ -143,8 +143,8 @@ final class LinphoneHandler
 			mLinphoneCore.enableEchoCancellation(true);
 			mLinphoneCore.enableEchoLimiter(false);
 
-			// disable video
-			mLinphoneCore.enableVideo(false, false);
+			// enable video
+			mLinphoneCore.enableVideo(true, true);
 			mLinphoneCore.setVideoPolicy(false, false);
 
 			// set number of threads for MediaStreamer
