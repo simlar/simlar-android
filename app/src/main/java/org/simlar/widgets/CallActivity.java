@@ -236,6 +236,15 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		if (mCurrentAudioOutputType == AudioOutputType.PHONE) {
 			mProximityScreenLocker.acquire();
 		}
+
+		final String simlarIdToAddToCall = getIntent().getStringExtra(INTENT_EXTRA_SIMLAR_ID);
+		getIntent().removeExtra(INTENT_EXTRA_SIMLAR_ID);
+		if (!Util.isNullOrEmpty(simlarIdToAddToCall)) {
+			//if (Util.equalString(simlarIdToAddToCall, )
+			Lg.w(LOGTAG, "adding to call simlarId: ", new Lg.Anonymizer(simlarIdToAddToCall));
+			//mCommunicator.startServiceAndRegister(this, CallActivity.class, simlarIdToCall);
+			mCommunicator.getService().call(simlarIdToAddToCall);
+		}
 	}
 
 	@Override
