@@ -235,6 +235,4 @@
     <string name="no_contact_permission_fragment_alert_contact_error">Kontakt konnte nicht geladen werden</string>
 
     <string name="video_fragment_initializing">initialisiere Video&#8230;</string>
-
-    <string name="add_to_call_activity_title">Kontakt wählen</string>
 </resources>

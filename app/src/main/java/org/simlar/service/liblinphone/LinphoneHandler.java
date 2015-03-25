@@ -207,8 +207,8 @@ final class LinphoneHandler
 		// The Simlar sip server is responsible for terminating a call. Right now it does that after 2 minutes.
 		mLinphoneCore.setIncTimeout(3600);
 
-		// make sure we are able handle more than one call
-		mLinphoneCore.setMaxCalls(5);
+		// make sure we only handle one call
+		mLinphoneCore.setMaxCalls(1);
 
 		// make sure DNS SRV is disabled
 		mLinphoneCore.setDnsSrvEnabled(false);

@@ -238,6 +238,4 @@
     <string name="no_contact_permission_fragment_alert_contact_error">Failed to load contact</string>
 
     <string name="video_fragment_initializing">initializing video&#8230;</string>
-
-    <string name="add_to_call_activity_title">Choose contact</string>
 </resources>

@@ -56,7 +56,6 @@ import org.simlar.service.SimlarCallState;
 import org.simlar.service.SimlarService;
 import org.simlar.service.SimlarServiceCommunicator;
 import org.simlar.utils.Util;
-import org.simlar.AddToCallActivity;
 
 public final class CallActivity extends AppCompatActivity implements VolumesControlDialogFragment.Listener, VideoFragment.Listener
 {
@@ -235,15 +234,6 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 		if (mCurrentAudioOutputType == AudioOutputType.PHONE) {
 			mProximityScreenLocker.acquire();
-		}
-
-		final String simlarIdToAddToCall = getIntent().getStringExtra(INTENT_EXTRA_SIMLAR_ID);
-		getIntent().removeExtra(INTENT_EXTRA_SIMLAR_ID);
-		if (!Util.isNullOrEmpty(simlarIdToAddToCall)) {
-			//if (Util.equalString(simlarIdToAddToCall, )
-			Lg.w(LOGTAG, "adding to call simlarId: ", new Lg.Anonymizer(simlarIdToAddToCall));
-			//mCommunicator.startServiceAndRegister(this, CallActivity.class, simlarIdToCall);
-			mCommunicator.getService().call(simlarIdToAddToCall);
 		}
 	}
 
@@ -598,8 +588,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	@SuppressWarnings({ "unused", "RedundantSuppression" })
 	public void showSoundSettingsDialog(final View view)
 	{
-		//new VolumesControlDialogFragment().show(getSupportFragmentManager(), VolumesControlDialogFragment.class.getCanonicalName());
-		startActivity(new Intent(this, AddToCallActivity.class));
+		new VolumesControlDialogFragment().show(getSupportFragmentManager(), VolumesControlDialogFragment.class.getCanonicalName());
 	}
 
 	private void onAudioOutputChanged(final AudioOutputType currentAudioOutput, final Set<AudioOutputType> availableAudioOutputTypes)

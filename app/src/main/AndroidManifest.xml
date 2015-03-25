@@ -127,10 +127,6 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             tools:ignore="DiscouragedApi,LockedOrientationActivity" />
-        <activity
-            android:name=".AddToCallActivity"
-            android:label="@string/add_to_call_activity_title"
-            android:theme="@style/dialogTheme" />
     </application>
 
 </manifest>
