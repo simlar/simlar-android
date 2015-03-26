@@ -38,7 +38,6 @@ public final class SimlarCallState
 	private String mAuthenticationToken = null;
 	private boolean mAuthenticationTokenVerified = false;
 	private NetworkQuality mQuality = NetworkQuality.UNKNOWN;
-	private int mDuration = 0;
 	private long mCallStartTime = -1;
 
 	private enum GuiCallState
@@ -116,7 +115,7 @@ public final class SimlarCallState
 			mAuthenticationToken = null;
 			mAuthenticationTokenVerified = false;
 			mQuality = NetworkQuality.UNKNOWN;
-			mDuration = 0;
+			mCallStartTime = -1;
 		}
 
 		return true;
@@ -138,18 +137,13 @@ public final class SimlarCallState
 
 	public boolean updateCallStats(final NetworkQuality quality, final int callDuration)
 	{
-		if (quality == mQuality && callDuration == mDuration) {
+		final long callStartTime = SystemClock.elapsedRealtime() - callDuration * 1000L;
+		if (quality == mQuality && Math.abs(mCallStartTime - callStartTime) < 750) {
 			return false;
 		}
 
 		mQuality = quality;
-
-		if (callDuration != mDuration) {
-			mDuration = callDuration;
-			if (mDuration > 0) {
-				mCallStartTime = SystemClock.elapsedRealtime() - mDuration * 1000L;
-			}
-		}
+		mCallStartTime = callStartTime;
 
 		return true;
 	}
@@ -200,8 +194,7 @@ public final class SimlarCallState
 				+ (mGuiCallState != null ? "mGuiCallState=" + mGuiCallState + ", " : "")
 				+ (mCallEndReason != null ? "mCallEndReason=" + mCallEndReason + ", " : "") + "mEncrypted=" + mEncrypted + ", "
 				+ (mAuthenticationToken != null ? "mAuthenticationToken=" + mAuthenticationToken + ", " : "") + "mAuthenticationTokenVerified="
-				+ mAuthenticationTokenVerified + ", " + (mQuality != null ? "mQuality=" + mQuality + ", " : "") + "mDuration=" + mDuration
-				+ ", mCallStartTime=" + mCallStartTime + "]";
+				+ mAuthenticationTokenVerified + ", " + (mQuality != null ? "mQuality=" + mQuality + ", " : "") + "mCallStartTime=" + mCallStartTime + "]";
 	}
 
 	public String getContactName()
