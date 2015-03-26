@@ -496,7 +496,7 @@ public final class LinphoneThread
 				public void run()
 				{
 					if (Util.equals(mRegistrationState, state)) {
-						Lg.d(LOGTAG, "registration state for ", new Lg.Anonymizer(identity), " not changed: state=", state, " message=", message);
+						Lg.v(LOGTAG, "registration state for ", new Lg.Anonymizer(identity), " not changed: state=", state, " message=", message);
 						return;
 					}
 
@@ -519,7 +519,7 @@ public final class LinphoneThread
 		@Override
 		public void displayStatus(final LinphoneCore lc, final String message)
 		{
-			Lg.d(LOGTAG, "displayStatus message=", message);
+			Lg.v(LOGTAG, "displayStatus message=", message);
 		}
 
 		LinphoneCall.State fixLinphoneCallState(final LinphoneCall.State callState)
