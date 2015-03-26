@@ -231,7 +231,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 				.setNegativeButton(R.string.button_cancel, null)
 				.setPositiveButton(R.string.button_continue, new DialogInterface.OnClickListener() {
 					@Override
-					public void onClick(DialogInterface dialog, int id)
+					public void onClick(final DialogInterface dialog, final int id)
 					{
 						(new UploadLogFile(MainActivity.this)).upload(logFileName);
 					}
@@ -252,7 +252,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 				.setNegativeButton(R.string.button_cancel, null)
 				.setPositiveButton(R.string.button_continue, new DialogInterface.OnClickListener() {
 					@Override
-					public void onClick(DialogInterface dialog, int id)
+					public void onClick(final DialogInterface dialog, final int id)
 					{
 						Lg.saveDebugMode(MainActivity.this, true);
 					}
