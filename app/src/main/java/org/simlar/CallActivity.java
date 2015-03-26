@@ -141,12 +141,6 @@ public final class CallActivity extends ActionBarActivity
 		mLayoutVerifiedAuthenticationToken.setVisibility(View.GONE);
 		mLayoutAuthenticationToken.setVisibility(View.GONE);
 		mLayoutUnencryptedCall.setVisibility(View.GONE);
-
-		final String simlarIdToCall = getIntent().getStringExtra(INTENT_EXTRA_SIMLAR_ID);
-		getIntent().removeExtra(INTENT_EXTRA_SIMLAR_ID);
-		if (!Util.isNullOrEmpty(simlarIdToCall)) {
-			mCommunicator.startServiceAndRegister(this, CallActivity.class, simlarIdToCall);
-		}
 	}
 
 	@Override
@@ -155,7 +149,11 @@ public final class CallActivity extends ActionBarActivity
 		Lg.i(LOGTAG, "onResume");
 		super.onResume();
 
-		if (!mCommunicator.register(this, CallActivity.class)) {
+		final String simlarIdToCall = getIntent().getStringExtra(INTENT_EXTRA_SIMLAR_ID);
+		getIntent().removeExtra(INTENT_EXTRA_SIMLAR_ID);
+		if (!Util.isNullOrEmpty(simlarIdToCall)) {
+			mCommunicator.startServiceAndRegister(this, CallActivity.class, simlarIdToCall);
+		} else if (!mCommunicator.register(this, CallActivity.class)) {
 			Lg.w(LOGTAG, "SimlarService is not running, starting MainActivity");
 			startActivity(new Intent(this, MainActivity.class));
 			finish();
