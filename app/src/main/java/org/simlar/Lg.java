@@ -110,7 +110,6 @@ final class Lg
 		return mLevel < LOG_LEVEL_NORMAL;
 	}
 
-	@SuppressWarnings({ "unused" })
 	public static void v(final String tag, final Object... messageParts)
 	{
 		println(Log.VERBOSE, tag, null, messageParts);
