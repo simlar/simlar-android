@@ -383,7 +383,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 
 		Lg.i(LOGTAG, "missed call: ", new Lg.Anonymizer(simlarId));
-		ContactsProvider.getNameAndPhotoId(simlarId, context, new ContactListener() {
+		ContactsProvider.getNameAndPhotoId(simlarId, context, new ContactListener()
+		{
 			@Override
 			public void onGetNameAndPhotoId(final String name, final String photoId)
 			{
@@ -593,7 +594,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		final String simlarId = mSimlarIdToCall;
 		mSimlarIdToCall = null;
-		mHandler.post(new Runnable() {
+		mHandler.post(new Runnable()
+		{
 			@Override
 			public void run()
 			{
@@ -723,7 +725,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			terminate();
 		}
 
-		ContactsProvider.getNameAndPhotoId(number, this, new ContactListener() {
+		ContactsProvider.getNameAndPhotoId(number, this, new ContactListener()
+		{
 			@Override
 			public void onGetNameAndPhotoId(String name, String photoId)
 			{
