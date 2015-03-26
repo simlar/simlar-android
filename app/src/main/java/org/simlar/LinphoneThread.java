@@ -638,7 +638,7 @@ public final class LinphoneThread
 			// set quality to unusable if up or download bandwidth is zero
 			final float quality = (upload > 0 && download > 0) ? call.getCurrentQuality() : 0;
 
-			Lg.i(LOGTAG, "callStatsUpdated: number=", new CallLogger(call), " quality=", quality,
+			Lg.d(LOGTAG, "callStatsUpdated: number=", new CallLogger(call), " quality=", quality,
 					" duration=", duration,
 					" codec=", codec, " iceState=", iceState,
 					" upload=", upload, " download=", download,

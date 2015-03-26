@@ -631,7 +631,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			return;
 		}
 
-		Lg.i(LOGTAG, "CallConnectionDetails updated: ", mCallConnectionDetails);
+		Lg.d(LOGTAG, "CallConnectionDetails updated: ", mCallConnectionDetails);
 		SimlarServiceBroadcast.sendCallConnectionDetailsChanged(this);
 	}
 

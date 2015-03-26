@@ -227,7 +227,7 @@ public final class CallActivity extends ActionBarActivity
 			return;
 		}
 
-		Lg.i(LOGTAG, "onSimlarCallStateChanged ", simlarCallState);
+		Lg.d(LOGTAG, "onSimlarCallStateChanged ", simlarCallState);
 
 		mImageViewContactImage.setImageBitmap(simlarCallState.getContactPhotoBitmap(this, R.drawable.contact_picture));
 		mTextViewContactName.setText(simlarCallState.getContactName());
@@ -289,7 +289,7 @@ public final class CallActivity extends ActionBarActivity
 	void iterateTimer()
 	{
 		final String text = Util.formatMilliSeconds(SystemClock.elapsedRealtime() - mCallStartTime);
-		Lg.i(LOGTAG, "iterateTimer: ", text);
+		Lg.d(LOGTAG, "iterateTimer: ", text);
 
 		mTextViewCallTimer.setText(text);
 
