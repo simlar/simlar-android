@@ -102,23 +102,19 @@ class SimlarServiceCommunicator
 
 			// NOTE: the app crashes if the cast fails but I want it this way
 			switch (fsb.type) {
-			case SIMLAR_STATUS: {
+			case SIMLAR_STATUS:
 				onSimlarStatusChanged();
 				return;
-			}
-			case SIMLAR_CALL_STATE: {
+			case SIMLAR_CALL_STATE:
 				onSimlarCallStateChanged();
 				return;
-			}
-			case CALL_CONNECTION_DETAILS: {
+			case CALL_CONNECTION_DETAILS:
 				onCallConnectionDetailsChanged();
 				return;
-			}
-			case SERVICE_FINISHES: {
+			case SERVICE_FINISHES:
 				onServiceFinishes();
 				unregister();
 				return;
-			}
 			default:
 				Lg.e(mLogtag, "Error in onReceive: unknown type");
 			}
