@@ -26,7 +26,7 @@ import android.util.Log;
 final class Lg
 {
 	private static final int LOG_LEVEL_NORMAL = Log.WARN;
-	private static final int LOG_LEVEL_DEBUG = Log.INFO;
+	private static final int LOG_LEVEL_DEBUG = Log.DEBUG;
 	private static volatile int mLevel = LOG_LEVEL_NORMAL;
 
 	private Lg()
