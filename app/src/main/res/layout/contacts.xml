@@ -45,6 +45,16 @@
         android:background="@drawable/contact_entry_background"
         android:orientation="vertical">
 
+        <View
+            android:id="@+id/dividerLine"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:background="#CADFE1"
+            android:gravity="center"
+            android:visibility="gone"/>
+
         <TextView
             android:id="@+id/name"
             android:layout_width="match_parent"

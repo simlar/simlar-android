@@ -74,11 +74,13 @@ final class ContactsAdapter extends ArrayAdapter<FullContactData>
 		public RowViewHolder(final View rowView)
 		{
 			this.letterView = (TextView) rowView.findViewById(R.id.letter);
+			this.dividerLineView = rowView.findViewById(R.id.dividerLine);
 			this.nameView = (TextView) rowView.findViewById(R.id.name);
 			this.numberView = (TextView) rowView.findViewById(R.id.number);
 		}
 
 		public final TextView letterView;
+		public final View dividerLineView;
 		public final TextView nameView;
 		public final TextView numberView;
 	}
@@ -118,12 +120,15 @@ final class ContactsAdapter extends ArrayAdapter<FullContactData>
 			if (contact.getNameOrNumber().charAt(0) != prevContact.getNameOrNumber().charAt(0)) {
 				holder.letterView.setVisibility(View.VISIBLE);
 				holder.letterView.setText(Character.toString(contact.getNameOrNumber().charAt(0)));
+				holder.dividerLineView.setVisibility(View.GONE);
 			} else {
 				holder.letterView.setVisibility(View.GONE);
+				holder.dividerLineView.setVisibility(View.VISIBLE);
 			}
 		} else {
 			holder.letterView.setVisibility(View.VISIBLE);
 			holder.letterView.setText(Character.toString(contact.getNameOrNumber().charAt(0)));
+			holder.dividerLineView.setVisibility(View.GONE);
 		}
 
 		holder.nameView.setText(contact.getNameOrNumber());
