@@ -20,15 +20,15 @@
 
 package org.simlar;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
 
-public class AgreeActivity extends Activity
+public class AgreeActivity extends ActionBarActivity
 {
 
 	@Override
