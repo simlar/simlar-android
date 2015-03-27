@@ -28,7 +28,6 @@ import android.os.SystemClock;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -100,7 +99,6 @@ public final class CallActivity extends ActionBarActivity
 		Lg.i(LOGTAG, "onCreate");
 		super.onCreate(savedInstanceState);
 
-		supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_call);
 
 		// make sure this activity is shown even if the phone is locked
