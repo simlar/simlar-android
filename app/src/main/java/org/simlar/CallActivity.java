@@ -20,12 +20,12 @@
 
 package org.simlar;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
@@ -36,7 +36,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public final class CallActivity extends Activity
+public final class CallActivity extends ActionBarActivity
 {
 	private static final String LOGTAG = CallActivity.class.getSimpleName();
 
@@ -100,7 +100,7 @@ public final class CallActivity extends Activity
 		Lg.i(LOGTAG, "onCreate");
 		super.onCreate(savedInstanceState);
 
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_call);
 
 		// make sure this activity is shown even if the phone is locked
