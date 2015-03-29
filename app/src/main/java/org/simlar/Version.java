@@ -7,7 +7,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 final class Version
 {
 	private static final String LOGTAG = CreateAccount.class.getSimpleName();
-	private static final String DEBUG_TAG = "";
+	private static final boolean DEVELOPER_MENU = false;
 
 	private Version()
 	{
@@ -21,7 +21,7 @@ final class Version
 			return "";
 		}
 
-		return DEBUG_TAG + versionName;
+		return versionName;
 	}
 
 	public static int getVersionCode(final Context context)
@@ -29,9 +29,9 @@ final class Version
 		return getPackageInfo(context).versionCode;
 	}
 
-	public static boolean hasDebugTag()
+	public static boolean showDeveloperMenu()
 	{
-		return !Util.isNullOrEmpty(DEBUG_TAG);
+		return DEVELOPER_MENU;
 	}
 
 	private static PackageInfo createEmptyPackageInfo()

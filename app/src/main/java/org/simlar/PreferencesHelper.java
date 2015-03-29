@@ -35,7 +35,7 @@ final class PreferencesHelper
 	private static final String PREFERENCES_GCM_REGISTRATION_ID = "gcm_registration_id";
 	private static final String PREFERENCES_SIMLAR_VERSION_CODE = "simlar_version_code";
 	private static final String PREFERENCES_DEBUG_MODE = "debug_mode";
-	private static final boolean PREFERENCES_DEBUG_MODE_DEFAULT = Version.hasDebugTag();
+	private static final boolean PREFERENCES_DEBUG_MODE_DEFAULT = Version.showDeveloperMenu();
 	private static final String PREFERENCES_VERIFIED_TELEPHONE_NUMBER = "verified_telephone_number";
 	private static final String PREFERENCES_MISSED_CALL_NOTIFICATION_ID = "missed_call_notification_id";
 	private static final int MISSED_CALL_NOTIFICATION_ID_MIN = 2;
