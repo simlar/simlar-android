@@ -68,7 +68,7 @@ final class LinphoneHandler
 	}
 
 	public void initialize(final LinphoneCoreListener listener, final Context context, final String linphoneInitialConfigFile,
-			final String rootCaFile, final String zrtpSecretsCacheFile, final String pauseSoundFile)
+	                       final String rootCaFile, final String zrtpSecretsCacheFile, final String pauseSoundFile)
 	{
 		if (listener == null) {
 			Lg.e(LOGTAG, "Error: initialize without listener");
