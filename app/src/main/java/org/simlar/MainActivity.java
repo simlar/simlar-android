@@ -57,7 +57,7 @@ public final class MainActivity extends android.support.v4.app.FragmentActivity
 
 		FileHelper.init(this);
 
-		mAdapter = ContactsAdapter.createContactsAdapter(this);
+		mAdapter = new ContactsAdapter(this);
 
 		final FragmentManager fm = getSupportFragmentManager();
 		mContactList = (ContactsListFragment) fm.findFragmentById(android.R.id.content);

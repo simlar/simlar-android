@@ -23,7 +23,6 @@ package org.simlar;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.List;
 
 import org.simlar.ContactsProvider.FullContactData;
 
@@ -84,16 +83,10 @@ public final class ContactsAdapter extends ArrayAdapter<FullContactData>
 		public final TextView numberView;
 	}
 
-	public static ContactsAdapter createContactsAdapter(final Context context)
+	public ContactsAdapter(final Context context)
 	{
-		Lg.i(LOGTAG, "creating ContactsAdapter");
-		return new ContactsAdapter(context, R.layout.contacts, new ArrayList<FullContactData>());
-	}
-
-	private ContactsAdapter(final Context context, final int layout, final List<FullContactData> values)
-	{
-		super(context, layout, values);
-		mLayout = layout;
+		super(context, R.layout.contacts, new ArrayList<FullContactData>());
+		mLayout = R.layout.contacts;
 		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
