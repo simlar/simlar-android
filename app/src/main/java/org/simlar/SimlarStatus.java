@@ -60,6 +60,21 @@ public enum SimlarStatus {
 		}
 	}
 
+	public boolean isOffline()
+	{
+		switch (this) {
+		case ONLINE:
+		case ONGOING_CALL:
+		case CONNECTING:
+			return false;
+		case OFFLINE:
+		case ERROR:
+		case UNKNOWN:
+		default:
+			return true;
+		}
+	}
+
 	public boolean isRegistrationAtSipServerFailed()
 	{
 		switch (this) {

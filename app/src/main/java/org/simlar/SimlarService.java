@@ -261,6 +261,13 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			mSimlarIdToCall = intent.getStringExtra(INTENT_EXTRA_SIMLAR_ID);
 			intent.removeExtra(INTENT_EXTRA_SIMLAR_ID);
 			if (!Util.isNullOrEmpty(mSimlarIdToCall)) {
+				if (!GooglePlayServicesHelper.gcmEnabled()) {
+					if (mSimlarStatus.isOffline()) {
+						mSimlarCallState.updateCallStateChanged(mSimlarIdToCall, LinphoneCallState.CALL_END, CallEndReason.SERVER_CONNECTION_TIMEOUT);
+					} else {
+						mSimlarCallState.updateCallStateChanged(mSimlarIdToCall, LinphoneCallState.OUTGOING_INIT, CallEndReason.NONE);
+					}
+				}
 				ContactsProvider.getNameAndPhotoId(mSimlarIdToCall, this, new ContactListener() {
 					@Override
 					public void onGetNameAndPhotoId(final String name, final String photoId)
