@@ -173,6 +173,18 @@ public final class SimlarCallState
 		return true;
 	}
 
+	public boolean updateConnectingToServer()
+	{
+		if (mGuiCallState == GuiCallState.CONNECTING_TO_SERVER) {
+			return false;
+		}
+
+		mGuiCallState = GuiCallState.CONNECTING_TO_SERVER;
+		mCallStartTime = SystemClock.elapsedRealtime();
+
+		return true;
+	}
+
 	public boolean isEmpty()
 	{
 		return mLinphoneCallState == LinphoneCallState.UNKNOWN;

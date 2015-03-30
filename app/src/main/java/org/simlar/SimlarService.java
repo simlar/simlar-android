@@ -584,6 +584,10 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		SimlarServiceBroadcast.sendSimlarStatusChanged(this);
 
 		handlePendingCall();
+
+		if (mSimlarStatus == SimlarStatus.CONNECTING && mSimlarCallState.updateConnectingToServer()) {
+			SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
+		}
 	}
 
 	private void handlePendingCall()
