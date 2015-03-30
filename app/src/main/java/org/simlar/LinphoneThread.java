@@ -777,6 +777,7 @@ public final class LinphoneThread
 		mImpl.finish();
 	}
 
+	@SuppressWarnings("SameParameterValue")
 	public void join(final long millis) throws InterruptedException
 	{
 		mImpl.join(millis);

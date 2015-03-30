@@ -370,6 +370,7 @@ final class LinphoneHandler
 		currentCall.enableEchoLimiter(enable);
 	}
 
+	@SuppressWarnings("SameParameterValue")
 	private static void enableDebugMode(final boolean enabled)
 	{
 		LinphoneCoreFactory.instance().setDebugMode(enabled, "DEBUG");

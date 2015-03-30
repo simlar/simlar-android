@@ -106,6 +106,7 @@ public final class CallConnectionDetails
 		return " " + name + "=" + String.valueOf(value);
 	}
 
+	@SuppressWarnings("SameParameterValue")
 	private static String formatValue(final String name, final long value)
 	{
 		if (value <= 0) {

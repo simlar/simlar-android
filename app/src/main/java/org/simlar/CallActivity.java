@@ -307,6 +307,7 @@ public final class CallActivity extends Activity
 		mCallTimer = null;
 	}
 
+	@SuppressWarnings("SameParameterValue")
 	private void finishDelayed(final int milliSeconds)
 	{
 		if (mFinishDelayedCalled) {
