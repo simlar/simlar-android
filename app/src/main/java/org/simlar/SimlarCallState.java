@@ -294,6 +294,8 @@ public final class SimlarCallState
 
 	public void connectingToSimlarServerTimedOut()
 	{
+		Lg.w(LOGTAG, "connecting to simlar server timed out");
+		mGuiCallState = GuiCallState.ENDED;
 		mLinphoneCallState = LinphoneCallState.CALL_END;
 		mCallEndReason = CallEndReason.SERVER_CONNECTION_TIMEOUT;
 	}
