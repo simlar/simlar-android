@@ -35,7 +35,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public final class ContactsAdapter extends ArrayAdapter<FullContactData>
+final class ContactsAdapter extends ArrayAdapter<FullContactData>
 {
 	private static final String LOGTAG = ContactsAdapter.class.getSimpleName();
 
