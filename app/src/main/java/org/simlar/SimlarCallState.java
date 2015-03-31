@@ -107,6 +107,7 @@ public final class SimlarCallState
 		}
 
 		if (mLinphoneCallState.isNewCallJustStarted()) {
+			Lg.i(LOGTAG, "resetting call state, because of new call");
 			mSimlarId = null;
 			mContactName = null;
 			mContactPhotoId = null;
