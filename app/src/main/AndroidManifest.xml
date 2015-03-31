@@ -104,20 +104,19 @@
         <activity
             android:name="org.simlar.VolumesControlActivity"
             android:label="@string/volumes_control_activity_title"
-            android:theme="@style/dialogThemeNoTitle" >
+            android:theme="@style/dialogTheme" >
         </activity>
         <activity
             android:name="org.simlar.ConnectionDetailsActivity"
-            android:theme="@style/dialogThemeNoTitle" >
+            android:theme="@style/dialogTheme" >
         </activity>
         <activity
             android:name="org.simlar.AboutActivity"
             android:label="@string/about_activity_title"
-            android:theme="@style/dialogThemeNoTitle" >
+            android:theme="@style/dialogTheme" >
         </activity>
         <activity
             android:name="org.simlar.CreateAccountActivity"
-            android:label="@string/create_account_activity_title"
             android:launchMode="singleTop"
             android:theme="@style/dialogTheme" >
         </activity>

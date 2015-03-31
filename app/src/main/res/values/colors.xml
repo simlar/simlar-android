@@ -28,4 +28,6 @@
 
     <color name="calling_title_background_black">@android:color/black</color>
     <color name="calling_title_text_white">@android:color/white</color>
+
+    <color name="actionbar_background">#006772</color>
 </resources>
