@@ -62,6 +62,7 @@ final class LinphoneHandler
 		Lg.i(LOGTAG, "destroy ended");
 	}
 
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	public boolean isInitialized()
 	{
 		return mLinphoneCore != null;
@@ -369,6 +370,7 @@ final class LinphoneHandler
 		currentCall.enableEchoLimiter(enable);
 	}
 
+	@SuppressWarnings("SameParameterValue")
 	private static void enableDebugMode(final boolean enabled)
 	{
 		LinphoneCoreFactory.instance().setDebugMode(enabled, "DEBUG");

@@ -144,6 +144,7 @@ public final class CreateAccount
 		return new ConfirmResult(httpPost(parameters, "simlarId", "registrationCode"));
 	}
 
+	@SuppressWarnings("SameParameterValue")
 	private static Result httpPost(final Map<String, String> parameters,
 			final String responseAttribute1, final String responseAttribute2)
 	{

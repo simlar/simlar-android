@@ -124,6 +124,7 @@ final class Util
 		return new SimpleDateFormat("mm:ss", Locale.US);
 	}
 
+	@SuppressWarnings("SameParameterValue")
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public static void setFinishOnTouchOutsideCompatible(final Activity activity, final boolean finish)
 	{
