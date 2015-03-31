@@ -55,6 +55,7 @@ public final class SimlarServiceBroadcast implements Serializable
 		LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 	}
 
+	@SuppressWarnings("unused")
 	public static interface Parameters extends Serializable
 	{
 	}
