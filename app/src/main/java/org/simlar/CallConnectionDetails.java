@@ -72,11 +72,9 @@ public final class CallConnectionDetails
 
 	public boolean hasConnectionInfo()
 	{
-		if (!mQuality.isKnown() || mUpload < 0 || mDownload < 0) {
-			return false;
-		}
-
-		return !Util.isNullOrEmpty(mCodec) && !Util.isNullOrEmpty(mIceState);
+		return mQuality.isKnown() &&
+				mUpload >= 0 && mDownload >= 0 &&
+				!Util.isNullOrEmpty(mCodec) && !Util.isNullOrEmpty(mIceState);
 	}
 
 	private String formatCodec()

@@ -38,14 +38,14 @@ public final class SimlarServiceBroadcast implements Serializable
 		SERVICE_FINISHES
 	}
 
-	public final Type type;
-	public final Parameters parameters;
+	private final Type mType;
+	private final Parameters mParameters;
 
 	@SuppressWarnings("SameParameterValue")
 	private SimlarServiceBroadcast(final Type type, final Parameters parameters)
 	{
-		this.type = type;
-		this.parameters = parameters;
+		this.mType = type;
+		this.mParameters = parameters;
 	}
 
 	private void send(final Context context)
@@ -58,6 +58,17 @@ public final class SimlarServiceBroadcast implements Serializable
 	@SuppressWarnings("unused")
 	public static interface Parameters extends Serializable
 	{
+	}
+
+	public Type getType()
+	{
+		return mType;
+	}
+
+	@SuppressWarnings("unused")
+	public Parameters getParameters()
+	{
+		return mParameters;
 	}
 
 	public static void sendSimlarStatusChanged(final Context context)

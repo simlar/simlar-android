@@ -96,12 +96,12 @@ class SimlarServiceCommunicator
 			}
 
 			if (mService == null) {
-				Lg.d(mLogtag, "skip sending SimlarServiceBroadcast with type=", fsb.type, " because no service bound");
+				Lg.d(mLogtag, "skip sending SimlarServiceBroadcast with type=", fsb.getType(), " because no service bound");
 				return;
 			}
 
 			// NOTE: the app crashes if the cast fails but I want it this way
-			switch (fsb.type) {
+			switch (fsb.getType()) {
 			case SIMLAR_STATUS:
 				onSimlarStatusChanged();
 				return;

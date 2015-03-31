@@ -83,7 +83,7 @@ public final class UploadLogFile
 			return new PostResult(false, "Building connection failed");
 		}
 
-		PostResult result = null;
+		PostResult result;
 		DataOutputStream outputStream = null;
 		FileInputStream fileInputStream = null;
 		InputStream inputStream = null;
