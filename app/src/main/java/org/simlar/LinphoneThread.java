@@ -170,7 +170,6 @@ public final class LinphoneThread
 
 		void linphoneIterator()
 		{
-
 			mLinphoneHandler.linphoneCoreIterate();
 
 			mLinphoneThreadHandler.postDelayed(new Runnable() {
