@@ -23,13 +23,13 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true">
         <shape android:shape="oval">
-             <gradient android:type="radial" android:gradientRadius="250" android:startColor="#EEEEEE" android:endColor="@color/background_white"/>
+            <gradient android:endColor="@color/background_white" android:gradientRadius="250" android:startColor="#EEEEEE" android:type="radial"/>
         </shape>
     </item>
 
     <item>
         <shape android:shape="rectangle">
-             <solid android:color="@color/background_white"/>
+            <solid android:color="@color/background_white"/>
         </shape>
     </item>
 </selector>

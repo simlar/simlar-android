@@ -21,6 +21,6 @@
 -->
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_enabled="false" android:drawable="@drawable/button_ok_disabled"/>
+    <item android:drawable="@drawable/button_ok_disabled" android:state_enabled="false"/>
     <item android:drawable="@drawable/button_ok"/>
 </selector>

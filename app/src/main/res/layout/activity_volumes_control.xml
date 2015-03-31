@@ -19,14 +19,14 @@
 -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".VolumesControlActivity" >
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                tools:context=".VolumesControlActivity">
 
     <LinearLayout
         android:id="@+id/linearLayoutSpeaker"
@@ -34,24 +34,24 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="20dp" >
+        android:layout_marginTop="20dp">
 
         <ImageView
             android:id="@+id/imageButtonSpeaker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/speaker_on"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <SeekBar
                 android:id="@+id/seekBarSpeaker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true" />
+                android:layout_centerInParent="true"/>
         </RelativeLayout>
     </LinearLayout>
 
@@ -61,24 +61,24 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/linearLayoutSpeaker"
         android:layout_below="@+id/linearLayoutSpeaker"
-        android:layout_marginTop="20dp" >
+        android:layout_marginTop="20dp">
 
         <ImageView
             android:id="@+id/imageButtonMicrophone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/micro_on"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <SeekBar
                 android:id="@+id/seekBarMicrophone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true" />
+                android:layout_centerInParent="true"/>
         </RelativeLayout>
     </LinearLayout>
 
@@ -89,6 +89,6 @@
         android:layout_below="@+id/linearLayoutMicrophone"
         android:layout_centerInParent="true"
         android:layout_marginTop="20dp"
-        android:text="@string/volumes_control_activity_software_echo_limiter" />
+        android:text="@string/volumes_control_activity_software_echo_limiter"/>
 
 </RelativeLayout>
