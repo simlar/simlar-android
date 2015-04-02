@@ -21,7 +21,7 @@ declare -rx PATH=${PATH}:${ANDROID_SDK}/tools:${ANDROID_SDK}/platform-tools:${AN
 
 cd "${BUILD_DIR}/linphone-android"
 
-rm -f liblinphone-sdk-*.zip
+rm -f liblinphone-android-sdk-*.zip
 
 make
 make liblinphone-android-sdk
