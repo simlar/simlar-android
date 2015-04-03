@@ -23,13 +23,13 @@ package org.simlar;
 import java.util.Comparator;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -41,7 +41,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public final class VerifyNumberActivity extends Activity
+public final class VerifyNumberActivity extends ActionBarActivity
 {
 	private static final String LOGTAG = VerifyNumberActivity.class.getSimpleName();
 	private static final int RESULT_CREATE_ACCOUNT_ACTIVITY = 0;

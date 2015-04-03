@@ -20,18 +20,17 @@
 
 package org.simlar;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public final class RingingActivity extends Activity
+public final class RingingActivity extends ActionBarActivity
 {
 	private static final String LOGTAG = RingingActivity.class.getSimpleName();
 
@@ -69,7 +68,6 @@ public final class RingingActivity extends Activity
 		Lg.i(LOGTAG, "onCreate");
 		super.onCreate(savedInstanceState);
 
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_ringing);
 
 		// make sure this activity is shown even if the phone is locked
