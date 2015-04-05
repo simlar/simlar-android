@@ -137,14 +137,24 @@ public final class SimlarCallState
 
 	public boolean updateCallStats(final NetworkQuality quality, final int callDuration)
 	{
-		final long callStartTime = SystemClock.elapsedRealtime() - callDuration * 1000L;
-		if (quality == mQuality && Math.abs(mCallStartTime - callStartTime) < 750) {
+		if (quality == mQuality && !updateCallStartTime(callDuration)) {
 			return false;
 		}
 
 		mQuality = quality;
-		mCallStartTime = callStartTime;
 
+		return true;
+	}
+
+	private boolean updateCallStartTime(final int callDuration)
+	{
+		/// make sure to only decrease mCallStartTime so that the call duration shown in the call activity may only increase
+		final long callStartTime = SystemClock.elapsedRealtime() - callDuration * 1000L;
+		if (mCallStartTime != -1 && mCallStartTime - callStartTime < 500) {
+			return false;
+		}
+
+		mCallStartTime = callStartTime;
 		return true;
 	}
 
