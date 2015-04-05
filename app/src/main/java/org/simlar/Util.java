@@ -28,7 +28,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -89,7 +88,6 @@ final class Util
 		}
 	}
 
-	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	@SuppressWarnings("deprecation")
 	public static void setBackgroundCompatible(final View view, final Drawable drawable)
 	{
@@ -137,7 +135,6 @@ final class Util
 	}
 
 	@SuppressWarnings("SameParameterValue")
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public static void setFinishOnTouchOutsideCompatible(final Activity activity, final boolean finish)
 	{
 		// versions before HONEYCOMB do not support FinishOnTouchOutsides

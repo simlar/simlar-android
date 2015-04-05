@@ -26,7 +26,6 @@ import java.util.Comparator;
 
 import org.simlar.ContactsProvider.FullContactData;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.view.LayoutInflater;
@@ -137,7 +136,6 @@ final class ContactsAdapter extends ArrayAdapter<FullContactData>
 		return rowView;
 	}
 
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
 	public void addAll(final Collection<? extends FullContactData> contacts)
 	{
@@ -151,7 +149,6 @@ final class ContactsAdapter extends ArrayAdapter<FullContactData>
 		sort(new SortByName());
 	}
 
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
 	public void addAll(final FullContactData... contacts)
 	{
