@@ -47,6 +47,7 @@ public final class CallActivity extends ActionBarActivity
 	private final Handler mHandler = new Handler();
 	private Runnable mCallTimer = null;
 	private boolean mFinishDelayedCalled = false;
+	private boolean mHideAuthenticationToken = false;
 
 	// gui elements
 	private ImageView mImageViewContactImage;
@@ -209,7 +210,7 @@ public final class CallActivity extends ActionBarActivity
 				mLayoutAuthenticationToken.setVisibility(View.GONE);
 			} else {
 				mLayoutVerifiedAuthenticationToken.setVisibility(View.GONE);
-				mLayoutAuthenticationToken.setVisibility(View.VISIBLE);
+				mLayoutAuthenticationToken.setVisibility(mHideAuthenticationToken ? View.GONE : View.VISIBLE);
 				mTextViewAuthenticationToken.setText(authenticationToken);
 			}
 		}
@@ -336,7 +337,8 @@ public final class CallActivity extends ActionBarActivity
 	public void wrongAuthenticationToken(final View view)
 	{
 		mCommunicator.getService().verifyAuthenticationTokenOfCurrentCall(false);
-		//terminateCall(view);
+		mHideAuthenticationToken = true;
+		mLayoutAuthenticationToken.setVisibility(View.GONE);
 	}
 
 	@SuppressWarnings("unused")
