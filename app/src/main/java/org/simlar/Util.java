@@ -88,12 +88,12 @@ final class Util
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	public static void setBackgroundCompatible(final View view, final Drawable drawable)
 	{
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 			view.setBackground(drawable);
 		} else {
+			//noinspection deprecation
 			view.setBackgroundDrawable(drawable);
 		}
 	}
