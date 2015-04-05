@@ -98,7 +98,7 @@ public final class RingingActivity extends ActionBarActivity
 
 		for (int i = 0; i < 3; i++) {
 			final View circle = new View(this);
-			Util.setBackgroundCompatible(circle, getResources().getDrawable(R.drawable.circle));
+			Util.setBackgroundCompatible(circle, Util.getDrawableCompatible(getResources(), R.drawable.circle));
 
 			final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(diameter, diameter);
 			layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);

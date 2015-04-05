@@ -30,6 +30,7 @@ import java.util.TimeZone;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.View;
@@ -96,6 +97,17 @@ final class Util
 			view.setBackground(drawable);
 		} else {
 			view.setBackgroundDrawable(drawable);
+		}
+	}
+
+	@SuppressWarnings("SameParameterValue")
+	public static Drawable getDrawableCompatible(final Resources resources, final int id)
+	{
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			return resources.getDrawable(id, null);
+		} else {
+			//noinspection deprecation
+			return resources.getDrawable(id);
 		}
 	}
 
