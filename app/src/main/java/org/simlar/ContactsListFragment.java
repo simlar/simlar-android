@@ -37,6 +37,19 @@ public final class ContactsListFragment extends android.support.v4.app.ListFragm
 	}
 
 	@Override
+	public void onViewCreated(final View view, final Bundle savedInstanceState)
+	{
+		final ListView listView = getListView();
+
+		if (listView == null) {
+			Lg.e(LOGTAG, "no list view");
+			return;
+		}
+
+		listView.setDivider(null);
+	}
+
+	@Override
 	public void onListItemClick(final ListView l, final View v, final int position, final long id)
 	{
 		final String simlarId = ((ContactsAdapter) getListAdapter()).getItem(position).simlarId;
