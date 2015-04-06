@@ -620,18 +620,18 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 
 		if (!simlarCallStateChanged) {
-			Lg.d(LOGTAG, "SimlarCallState staying the same: ", mSimlarCallState);
+			Lg.v(LOGTAG, "SimlarCallState staying the same: ", mSimlarCallState);
 		} else {
 			Lg.i(LOGTAG, "SimlarCallState updated: ", mSimlarCallState);
 			SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
 		}
 
 		if (!mCallConnectionDetails.updateCallStats(quality, codec, iceState, upload, download, jitter, packetLoss, latePackets, roundTripDelay)) {
-			Lg.d(LOGTAG, "CallConnectionDetails staying the same: ", mCallConnectionDetails);
+			Lg.v(LOGTAG, "CallConnectionDetails staying the same: ", mCallConnectionDetails);
 			return;
 		}
 
-		Lg.i(LOGTAG, "CallConnectionDetails updated: ", mCallConnectionDetails);
+		Lg.d(LOGTAG, "CallConnectionDetails updated: ", mCallConnectionDetails);
 		SimlarServiceBroadcast.sendCallConnectionDetailsChanged(this);
 	}
 
@@ -640,7 +640,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	{
 		final boolean oldCallStateRinging = mSimlarCallState.isRinging();
 		if (!mSimlarCallState.updateCallStateChanged(number, LinphoneCallState.fromLinphoneCallState(callState), CallEndReason.fromMessage(message))) {
-			Lg.d(LOGTAG, "SimlarCallState staying the same: ", mSimlarCallState);
+			Lg.v(LOGTAG, "SimlarCallState staying the same: ", mSimlarCallState);
 			return;
 		}
 
@@ -748,7 +748,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	public void onCallEncryptionChanged(final boolean encrypted, final String authenticationToken, final boolean authenticationTokenVerified)
 	{
 		if (!mSimlarCallState.updateCallEncryption(encrypted, authenticationToken, authenticationTokenVerified)) {
-			Lg.d(LOGTAG, "callEncryptionChanged but no difference in SimlarCallState: ", mSimlarCallState);
+			Lg.v(LOGTAG, "callEncryptionChanged but no difference in SimlarCallState: ", mSimlarCallState);
 			return;
 		}
 

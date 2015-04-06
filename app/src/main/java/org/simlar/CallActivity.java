@@ -141,12 +141,6 @@ public final class CallActivity extends ActionBarActivity
 		mLayoutVerifiedAuthenticationToken.setVisibility(View.GONE);
 		mLayoutAuthenticationToken.setVisibility(View.GONE);
 		mLayoutUnencryptedCall.setVisibility(View.GONE);
-
-		final String simlarIdToCall = getIntent().getStringExtra(INTENT_EXTRA_SIMLAR_ID);
-		getIntent().removeExtra(INTENT_EXTRA_SIMLAR_ID);
-		if (!Util.isNullOrEmpty(simlarIdToCall)) {
-			mCommunicator.startServiceAndRegister(this, CallActivity.class, simlarIdToCall);
-		}
 	}
 
 	@Override
@@ -155,7 +149,11 @@ public final class CallActivity extends ActionBarActivity
 		Lg.i(LOGTAG, "onResume");
 		super.onResume();
 
-		if (!mCommunicator.register(this, CallActivity.class)) {
+		final String simlarIdToCall = getIntent().getStringExtra(INTENT_EXTRA_SIMLAR_ID);
+		getIntent().removeExtra(INTENT_EXTRA_SIMLAR_ID);
+		if (!Util.isNullOrEmpty(simlarIdToCall)) {
+			mCommunicator.startServiceAndRegister(this, CallActivity.class, simlarIdToCall);
+		} else if (!mCommunicator.register(this, CallActivity.class)) {
 			Lg.w(LOGTAG, "SimlarService is not running, starting MainActivity");
 			startActivity(new Intent(this, MainActivity.class));
 			finish();
@@ -229,7 +227,7 @@ public final class CallActivity extends ActionBarActivity
 			return;
 		}
 
-		Lg.i(LOGTAG, "onSimlarCallStateChanged ", simlarCallState);
+		Lg.d(LOGTAG, "onSimlarCallStateChanged ", simlarCallState);
 
 		mImageViewContactImage.setImageBitmap(simlarCallState.getContactPhotoBitmap(this, R.drawable.contact_picture));
 		mTextViewContactName.setText(simlarCallState.getContactName());
@@ -291,7 +289,7 @@ public final class CallActivity extends ActionBarActivity
 	void iterateTimer()
 	{
 		final String text = Util.formatMilliSeconds(SystemClock.elapsedRealtime() - mCallStartTime);
-		Lg.i(LOGTAG, "iterateTimer: ", text);
+		Lg.d(LOGTAG, "iterateTimer: ", text);
 
 		mTextViewCallTimer.setText(text);
 

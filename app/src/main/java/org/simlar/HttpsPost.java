@@ -93,7 +93,7 @@ final class HttpsPost
 				connection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + DATA_BOUNDARY);
 			}
 
-			Lg.d(LOGTAG, "created connection for: ", urlPath);
+			Lg.v(LOGTAG, "created connection for: ", urlPath);
 			return connection;
 		} catch (final MalformedURLException e) {
 			Lg.ex(LOGTAG, e, "MalformedURLException");

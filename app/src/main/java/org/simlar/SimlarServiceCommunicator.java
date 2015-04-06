@@ -96,7 +96,7 @@ class SimlarServiceCommunicator
 			}
 
 			if (mService == null) {
-				Lg.d(mLogtag, "skip sending SimlarServiceBroadcast with type=", fsb.getType(), " because no service bound");
+				Lg.v(mLogtag, "skip sending SimlarServiceBroadcast with type=", fsb.getType(), " because no service bound");
 				return;
 			}
 

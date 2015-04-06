@@ -26,7 +26,7 @@ import android.util.Log;
 final class Lg
 {
 	private static final int LOG_LEVEL_NORMAL = Log.WARN;
-	private static final int LOG_LEVEL_DEBUG = Log.INFO;
+	private static final int LOG_LEVEL_DEBUG = Log.DEBUG;
 	private static volatile int mLevel = LOG_LEVEL_NORMAL;
 
 	private Lg()
@@ -110,7 +110,6 @@ final class Lg
 		return mLevel < LOG_LEVEL_NORMAL;
 	}
 
-	@SuppressWarnings({ "unused" })
 	public static void v(final String tag, final Object... messageParts)
 	{
 		println(Log.VERBOSE, tag, null, messageParts);
