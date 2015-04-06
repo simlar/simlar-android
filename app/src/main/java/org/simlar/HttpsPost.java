@@ -36,7 +36,7 @@ final class HttpsPost
 {
 	private static final String LOGTAG = HttpsPost.class.getSimpleName();
 
-	private static final String SERVER_URL = "https://sip.simlar.org:6161/";
+	private static final String SERVER_URL = "https://" + ServerSettings.DOMAIN + ":6161/";
 
 	private static final int MAX_RETRIES = 5;
 

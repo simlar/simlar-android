@@ -48,7 +48,7 @@ public final class UploadLogFile
 			+ "Please do not delete the following link as it helps developers to identify your logfile"
 			+ "\r\n";
 	private static final String URL_PATH = "upload-logfile.php";
-	private static final String UPLOAD_SFTP_LINK = "sftp://root@sip.simlar.org/var/www/simlar/logfiles/";
+	private static final String UPLOAD_SFTP_LINK = "sftp://root@" + ServerSettings.DOMAIN + "/var/www/simlar/logfiles/";
 
 	private static final String LINE_END = "\r\n";
 	private static final String TWO_HYPHENS = "--";
