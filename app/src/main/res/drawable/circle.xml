@@ -27,4 +27,7 @@
         android:width="1dp"
         android:color="@color/border"/>
 
+    <solid
+        android:color="@android:color/transparent"/>
+
 </shape>
