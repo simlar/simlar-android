@@ -21,19 +21,25 @@
 package org.simlar;
 
 import android.content.Intent;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class RingingActivity extends ActionBarActivity
 {
 	private static final String LOGTAG = RingingActivity.class.getSimpleName();
 
+	private final List<View> mCircles = new ArrayList<>();
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorRinging();
 
 	private final class SimlarServiceCommunicatorRinging extends SimlarServiceCommunicator
@@ -77,15 +83,63 @@ public final class RingingActivity extends ActionBarActivity
 				WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
 				WindowManager.LayoutParams.FLAG_IGNORE_CHEEK_PRESSES);
 
-		final AnimationDrawable animation = new AnimationDrawable();
-		animation.addFrame(getResources().getDrawable(R.drawable.ringing_b), 250);
-		animation.addFrame(getResources().getDrawable(R.drawable.ringing_c), 250);
-		animation.addFrame(getResources().getDrawable(R.drawable.ringing_d), 250);
-		animation.setOneShot(false);
+		final Animation logoAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate_logo);
+		final ImageView logo = (ImageView) findViewById(R.id.logo);
+		logo.startAnimation(logoAnimation);
 
-		Util.setBackgroundCompatible((ImageView) findViewById(R.id.RingingAnimate), animation);
+		createCircles();
+		animateCircles();
+	}
 
-		animation.start();
+	void createCircles()
+	{
+		final int diameter = Math.round(250.0f * getResources().getDisplayMetrics().density);
+		final RelativeLayout mainLayout = (RelativeLayout) findViewById(R.id.layoutRingingActivity);
+
+		for (int i = 0; i < 3; i++) {
+			final View circle = new View(this);
+			Util.setBackgroundCompatible(circle, getResources().getDrawable(R.drawable.circle));
+
+			final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(diameter, diameter);
+			layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+			circle.setLayoutParams(layoutParams);
+			mainLayout.addView(circle);
+
+			mCircles.add(circle);
+		}
+	}
+
+	void animateCircles()
+	{
+		final long animationStartTime = AnimationUtils.currentAnimationTimeMillis() + 100;
+		int i = 0;
+		for (final View circle : mCircles) {
+			final Animation circleAnimation = AnimationUtils.loadAnimation(this, R.anim.ringing_circle);
+			circleAnimation.setStartTime(animationStartTime + (i++) * 250);
+			circleAnimation.setFillAfter(true);
+			circle.setAnimation(circleAnimation);
+
+			if (i == mCircles.size()) {
+				circleAnimation.setAnimationListener(new Animation.AnimationListener()
+				{
+					@Override
+					public void onAnimationStart(Animation animation)
+					{
+					}
+
+					@Override
+					public void onAnimationEnd(Animation animation)
+					{
+						RingingActivity.this.animateCircles();
+					}
+
+					@Override
+					public void onAnimationRepeat(Animation animation)
+					{
+					}
+				});
+			}
+		}
 	}
 
 	@Override

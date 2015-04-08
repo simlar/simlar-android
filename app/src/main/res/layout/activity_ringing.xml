@@ -20,6 +20,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/layoutRingingActivity"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/background"
@@ -63,13 +64,12 @@
         android:textColor="@color/calling_title_text_white"/>
 
     <ImageView
-        android:id="@+id/RingingAnimate"
+        android:id="@+id/logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:background="@null"
-        android:contentDescription="@string/ringing_activity_phone_is_ringing"
-        android:src="@null"/>
+        android:src="@drawable/logo_big"
+        android:contentDescription="@string/ringing_activity_phone_is_ringing"/>
 
     <ImageButton
         android:id="@+id/ButtonTerminateCall"
