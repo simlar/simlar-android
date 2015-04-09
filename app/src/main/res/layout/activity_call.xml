@@ -305,10 +305,9 @@
         </LinearLayout>
 
         <RelativeLayout
-            android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/ButtonTerminateCall"
+            android:layout_above="@+id/buttonTerminateCall"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:orientation="vertical">
@@ -350,7 +349,7 @@
         </RelativeLayout>
 
         <ImageButton
-            android:id="@+id/ButtonTerminateCall"
+            android:id="@+id/buttonTerminateCall"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_alignParentBottom="true"
