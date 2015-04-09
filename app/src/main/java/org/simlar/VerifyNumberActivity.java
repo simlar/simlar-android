@@ -22,7 +22,6 @@ package org.simlar;
 
 import java.util.Comparator;
 
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -115,7 +114,6 @@ public final class VerifyNumberActivity extends ActionBarActivity
 		updateButtonAccept();
 	}
 
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private ArrayAdapter<Integer> createCountryCodeSelector()
 	{
 		final ArrayAdapter<Integer> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);

@@ -28,8 +28,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.View;
@@ -88,14 +88,24 @@ final class Util
 		}
 	}
 
-	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-	@SuppressWarnings("deprecation")
 	public static void setBackgroundCompatible(final View view, final Drawable drawable)
 	{
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 			view.setBackground(drawable);
 		} else {
+			//noinspection deprecation
 			view.setBackgroundDrawable(drawable);
+		}
+	}
+
+	@SuppressWarnings("SameParameterValue")
+	public static Drawable getDrawableCompatible(final Resources resources, final int id)
+	{
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			return resources.getDrawable(id, null);
+		} else {
+			//noinspection deprecation
+			return resources.getDrawable(id);
 		}
 	}
 
@@ -125,7 +135,6 @@ final class Util
 	}
 
 	@SuppressWarnings("SameParameterValue")
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public static void setFinishOnTouchOutsideCompatible(final Activity activity, final boolean finish)
 	{
 		// versions before HONEYCOMB do not support FinishOnTouchOutsides

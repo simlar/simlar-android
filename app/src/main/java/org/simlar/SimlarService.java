@@ -27,7 +27,6 @@ import org.simlar.PreferencesHelper.NotInitedException;
 import org.simlar.SoundEffectManager.SoundEffectType;
 import org.simlar.Volumes.MicrophoneStatus;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -315,14 +314,18 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "SimlarDisplayWakeLock");
 	}
 
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
+	static private int createWifiWakeLockType()
+	{
+		if  (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
+			return WifiManager.WIFI_MODE_FULL_HIGH_PERF;
+		}
+
+		return WifiManager.WIFI_MODE_FULL;
+	}
+
 	private WifiLock createWifiWakeLock()
 	{
-		final int lockType = Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB_MR1
-				? WifiManager.WIFI_MODE_FULL
-				: WifiManager.WIFI_MODE_FULL_HIGH_PERF;
-
-		return ((WifiManager) this.getSystemService(Context.WIFI_SERVICE)).createWifiLock(lockType, "SimlarWifiLock");
+		return ((WifiManager) this.getSystemService(Context.WIFI_SERVICE)).createWifiLock(createWifiWakeLockType(), "SimlarWifiLock");
 	}
 
 	void terminateChecker()
