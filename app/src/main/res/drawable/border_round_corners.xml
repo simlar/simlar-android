@@ -24,7 +24,7 @@
        android:shape="rectangle">
 
     <stroke
-        android:width="0.5dip"
+        android:width="0.5dp"
         android:color="@color/border"/>
 
     <solid android:color="@color/background_white"/>
