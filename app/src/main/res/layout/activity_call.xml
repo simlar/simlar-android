@@ -192,8 +192,7 @@
             android:orientation="vertical"
             android:padding="9dp"
             android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            tools:ignore="UselessParent">
+            android:paddingRight="20dp">
 
             <TextView
                 android:id="@+id/textViewLabelAuthenticationToken"
@@ -304,49 +303,42 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"/>
         </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="72dp"
             android:layout_above="@+id/buttonTerminateCall"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
-            android:orientation="vertical">
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="@dimen/activity_call_inner_side_margin"
+            android:layout_marginRight="@dimen/activity_call_inner_side_margin"
+            android:background="@drawable/border_round_corners"
+            android:baselineAligned="false"
+            android:gravity="center_vertical|center_horizontal">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="72dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginLeft="@dimen/activity_call_inner_side_margin"
-                android:layout_marginRight="@dimen/activity_call_inner_side_margin"
-                android:background="@drawable/border_round_corners"
-                android:baselineAligned="false"
-                android:gravity="center_vertical|center_horizontal"
-                tools:ignore="UselessParent">
+            <ImageButton
+                android:id="@+id/buttonSoundSettings"
+                style="@style/buttonWhiteBorderLess"
+                android:layout_marginRight="25dp"
+                android:contentDescription="@string/call_activity_sound_settings"
+                android:onClick="showSoundSettingsDialog"
+                android:src="@drawable/sound_settings"/>
 
-                <ImageButton
-                    android:id="@+id/buttonSoundSettings"
-                    style="@style/buttonWhiteBorderLess"
-                    android:layout_marginRight="25dp"
-                    android:contentDescription="@string/call_activity_sound_settings"
-                    android:onClick="showSoundSettingsDialog"
-                    android:src="@drawable/sound_settings"/>
+            <ImageButton
+                android:id="@+id/buttonMicro"
+                style="@style/buttonWhiteBorderLess"
+                android:contentDescription="@string/call_activity_microphone_mute"
+                android:onClick="toggleMicrophoneMuted"
+                android:src="@drawable/micro_on"/>
 
-                <ImageButton
-                    android:id="@+id/buttonMicro"
-                    style="@style/buttonWhiteBorderLess"
-                    android:contentDescription="@string/call_activity_microphone_mute"
-                    android:onClick="toggleMicrophoneMuted"
-                    android:src="@drawable/micro_on"/>
-
-                <ImageButton
-                    android:id="@+id/buttonSpeaker"
-                    style="@style/buttonWhiteBorderLess"
-                    android:layout_marginLeft="25dp"
-                    android:contentDescription="@string/call_activity_loudspeaker_off"
-                    android:onClick="toggleSpeakerMuted"
-                    android:src="@drawable/speaker_off"/>
-            </LinearLayout>
-        </RelativeLayout>
+            <ImageButton
+                android:id="@+id/buttonSpeaker"
+                style="@style/buttonWhiteBorderLess"
+                android:layout_marginLeft="25dp"
+                android:contentDescription="@string/call_activity_loudspeaker_off"
+                android:onClick="toggleSpeakerMuted"
+                android:src="@drawable/speaker_off"/>
+        </LinearLayout>
 
         <ImageButton
             android:id="@+id/buttonTerminateCall"
