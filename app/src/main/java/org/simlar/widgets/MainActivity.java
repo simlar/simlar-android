@@ -83,6 +83,17 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 
 		setContentView(R.layout.activity_main);
 
+		Lg.d("TEST DEBUG");
+		Lg.v("TEST VERBOSE");
+		Lg.i("TEST INFO");
+		Lg.w("TEST WARNING");
+		Lg.e("TEST ERROR");
+		try {
+			Util.simulateCrash();
+		} catch (final Exception e) {
+			Lg.ex(e);
+		}
+
 		mAdapter = new ContactsAdapter(this);
 
 		final FragmentManager fm = getSupportFragmentManager();
