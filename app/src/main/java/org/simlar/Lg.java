@@ -29,6 +29,7 @@ final class Lg
 	private static final int LOG_LEVEL_NORMAL = Log.WARN;
 	private static final int LOG_LEVEL_DEBUG = Log.DEBUG;
 	private static volatile int mLevel = LOG_LEVEL_NORMAL;
+	private static volatile String mPackageName;
 
 	private Lg()
 	{
@@ -64,8 +65,8 @@ final class Lg
 
 		final int n = FILENAME_SIZE_MAX - fileName.length();
 		return (n > 0)
-				? "org.simlar.(" + fileName + ")" + String.format("%" + n + "s", ".")
-				: "org.simlar.(" + fileName.substring(-n) + ")";
+				? mPackageName + ".(" + fileName + ")" + String.format("%" + n + "s", ".")
+				: mPackageName + ".(" + fileName.substring(-n) + ")";
 	}
 
 	public static class Anonymizer
@@ -104,6 +105,7 @@ final class Lg
 	public static void init(final Context context)
 	{
 		setDebugMode(PreferencesHelper.readFromFileDebugMode(context));
+		mPackageName = context.getPackageName();
 	}
 
 	private static void setDebugMode(final boolean enabled)
