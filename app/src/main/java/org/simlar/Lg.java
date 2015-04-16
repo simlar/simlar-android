@@ -63,10 +63,17 @@ final class Lg
 		final StackTraceElement stackTraceElement = Thread.currentThread().getStackTrace()[5];
 		final String fileName = stackTraceElement.getFileName() + ":" + stackTraceElement.getLineNumber();
 
+		final StringBuilder tag = new StringBuilder();
+		tag.append(mPackageName).append(".(");
+
 		final int n = FILENAME_SIZE_MAX - fileName.length();
-		return (n > 0)
-				? mPackageName + ".(" + fileName + ")" + String.format("%" + n + "s", ".")
-				: mPackageName + ".(" + fileName.substring(-n) + ")";
+		if (n > 0) {
+			tag.append(fileName).append(")").append(String.format("%" + n + "s", "."));
+		} else {
+			tag.append(fileName.substring(-n)).append(")");
+		}
+
+		return tag.toString();
 	}
 
 	public static class Anonymizer
