@@ -25,6 +25,7 @@ import android.util.Log;
 
 final class Lg
 {
+	private static final int FILENAME_SIZE_MAX = 34;
 	private static final int LOG_LEVEL_NORMAL = Log.WARN;
 	private static final int LOG_LEVEL_DEBUG = Log.DEBUG;
 	private static volatile int mLevel = LOG_LEVEL_NORMAL;
@@ -53,7 +54,18 @@ final class Lg
 					.append(Log.getStackTraceString(exception));
 		}
 
-		Log.println(priority, tag, message.toString());
+		Log.println(priority, createTag(), message.toString());
+	}
+
+	private static String createTag()
+	{
+		final StackTraceElement stackTraceElement = Thread.currentThread().getStackTrace()[5];
+		final String fileName = stackTraceElement.getFileName() + ":" + stackTraceElement.getLineNumber();
+
+		final int n = FILENAME_SIZE_MAX - fileName.length();
+		return (n > 0)
+				? "org.simlar.(" + fileName + ")" + String.format("%" + n + "s", ".")
+				: "org.simlar.(" + fileName.substring(-n) + ")";
 	}
 
 	public static class Anonymizer
