@@ -45,6 +45,7 @@ public class VideoFragment extends android.support.v4.app.Fragment
 		void setVideoWindows(final SurfaceView videoView, final SurfaceView captureView);
 		void enableVideoWindow(final boolean enable);
 		void destroyVideoWindows();
+		void onVideoViewClick();
 	}
 
 	@Override
@@ -90,6 +91,17 @@ public class VideoFragment extends android.support.v4.app.Fragment
 			mListener.setVideoWindows(mVideoView, mCaptureView);
 		}
 
+		mVideoView.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(final View view)
+			{
+				if (mListener != null) {
+					mListener.onVideoViewClick();
+				}
+			}
+		});
+
 		return view;
 	}
 
@@ -105,7 +117,10 @@ public class VideoFragment extends android.support.v4.app.Fragment
 	{
 		Lg.i("onDestroy");
 
-		mCaptureView = null;
+		if (mCaptureView != null) {
+			mCaptureView.setOnTouchListener(null);
+			mCaptureView = null;
+		}
 		mVideoView = null;
 
 		super.onDestroy();

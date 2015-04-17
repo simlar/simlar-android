@@ -79,6 +79,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private LinearLayout mLayoutCallEndReason = null;
 	private TextView mTextViewCallEndReason = null;
 
+	private LinearLayout mLayoutCallControlButtons = null;
 	private ImageButton mButtonMicro = null;
 	private ImageButton mButtonSpeaker = null;
 
@@ -153,6 +154,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mLayoutCallEndReason = findViewById(R.id.linearLayoutCallEndReason);
 		mTextViewCallEndReason = findViewById(R.id.textViewCallEndReason);
 
+		mLayoutCallControlButtons = (LinearLayout) findViewById(R.id.linearLayoutCallControlButtons);
 		mButtonMicro = findViewById(R.id.buttonMicro);
 		mButtonSpeaker = findViewById(R.id.buttonSpeaker);
 
@@ -362,6 +364,14 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mCommunicator.getService().destroyVideoWindows();
 	}
 
+	@Override
+	public void onVideoViewClick()
+	{
+		Lg.i("onVideoViewClick");
+
+		mLayoutCallControlButtons.setVisibility(mLayoutCallControlButtons.getVisibility() != View.VISIBLE ? View.VISIBLE : View.GONE);
+	}
+
 	private void startVideo()
 	{
 		if (mVideoFragment != null) {
@@ -374,6 +384,8 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 		final FragmentManager fm = getSupportFragmentManager();
 		fm.beginTransaction().add(R.id.layoutVideoFragmentContainer, mVideoFragment).commit();
+
+		mLayoutCallControlButtons.setVisibility(View.GONE);
 	}
 
 	private void stopVideo()
@@ -388,6 +400,8 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		fm.beginTransaction().remove(mVideoFragment).commit();
 
 		mVideoFragment = null;
+
+		mLayoutCallControlButtons.setVisibility(View.VISIBLE);
 	}
 
 	private void startCallTimer()
