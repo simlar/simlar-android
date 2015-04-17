@@ -20,7 +20,9 @@
 
 package org.simlar.widgets;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -98,6 +100,12 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		public void onCallConnectionDetailsChanged()
 		{
 			CallActivity.this.onCallConnectionDetailsChanged();
+		}
+
+		@Override
+		public void onRemoteRequestedVideo()
+		{
+			CallActivity.this.onRemoteRequestedVideo();
 		}
 	}
 
@@ -286,6 +294,45 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		}
 
 		mConnectionDetailsDialogFragment.setCallConnectionDetails(mCommunicator.getService().getCallConnectionDetails());
+	}
+
+	private void onRemoteRequestedVideo()
+	{
+		Lg.i("onRemoteRequestedVideo");
+
+		(new AlertDialog.Builder(this))
+				.setTitle(R.string.call_activity_alert_accept_video_request_title)
+				.setMessage(R.string.call_activity_alert_accept_video_request_text)
+				.setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener()
+				{
+					@Override
+					public void onClick(final DialogInterface dialog, final int id)
+					{
+						CallActivity.this.acceptVideoUpdate(false);
+					}
+				})
+				.setPositiveButton(R.string.button_continue, new DialogInterface.OnClickListener()
+				{
+					@Override
+					public void onClick(final DialogInterface dialog, final int id)
+					{
+						CallActivity.this.acceptVideoUpdate(true);
+					}
+				})
+				.setOnCancelListener(new DialogInterface.OnCancelListener()
+				{
+					@Override
+					public void onCancel(DialogInterface dialog)
+					{
+						CallActivity.this.acceptVideoUpdate(false);
+					}
+				})
+				.create().show();
+	}
+
+	private void acceptVideoUpdate(final boolean accept)
+	{
+		mCommunicator.getService().acceptVideoUpdate(accept);
 	}
 
 	private void startCallTimer()
