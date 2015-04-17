@@ -267,6 +267,23 @@ public final class LinphoneThread
 			mLinphoneThreadHandler.post(() -> mLinphoneHandler.setVolumes(volumes));
 		}
 
+		public void requestVideoUpdate(final boolean enable)
+		{
+			if (mLinphoneThreadHandler == null) {
+				Lg.e("handler is null, probably thread not started");
+				return;
+			}
+
+			mLinphoneThreadHandler.post(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					mLinphoneHandler.requestVideoUpdate(enable);
+				}
+			});
+		}
+
 		@Lg.Anonymize
 		private static class CallLogger
 		{
@@ -689,5 +706,10 @@ public final class LinphoneThread
 	public Volumes getVolumes()
 	{
 		return mImpl.mVolumes;
+	}
+
+	public void requestVideoUpdate(final boolean enable)
+	{
+		mImpl.requestVideoUpdate(enable);
 	}
 }

@@ -382,4 +382,24 @@ final class LinphoneHandler
 	{
 		LinphoneCoreFactory.instance().setDebugMode(enabled, "DEBUG");
 	}
+
+	public void requestVideoUpdate(final boolean enable)
+	{
+		Lg.i("requestVideoUpdate: enable=", enable);
+
+		final LinphoneCall currentCall = getCurrentCall();
+		if (currentCall == null) {
+			Lg.w("no current call to add video to");
+			return;
+		}
+
+		final LinphoneCallParams params = currentCall.getCurrentParamsCopy();
+		if (params.getVideoEnabled() == enable) {
+			Lg.i("requestVideoUpdate already: ", enable, " => aborting");
+			return;
+		}
+
+		params.setVideoEnabled(enable);
+		mLinphoneCore.updateCall(currentCall, params);
+	}
 }

@@ -1020,6 +1020,15 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		setVolumes(getVolumes().toggleExternalSpeaker());
 	}
 
+	public void requestVideoUpdate(final boolean enable)
+	{
+		if (mLinphoneThread == null) {
+			return;
+		}
+
+		mLinphoneThread.requestVideoUpdate(enable);
+	}
+
 	public CallConnectionDetails getCallConnectionDetails()
 	{
 		return mCallConnectionDetails;
