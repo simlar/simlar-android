@@ -80,6 +80,7 @@
     <string name="network_quality_unknown">unbekannt</string>
 
     <string name="call_activity_label_quality">Netzwerkqualität: </string>
+    <string name="call_activity_toggle_video">Video Anruf</string>
     <string name="call_activity_sound_settings">Ton-Einstellungen</string>
     <string name="call_activity_microphone_mute">Mikrofon aus</string>
     <string name="call_activity_microphone_on">Mikrofon an</string>

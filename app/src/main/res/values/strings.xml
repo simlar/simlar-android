@@ -83,6 +83,7 @@
     <string name="network_quality_unknown">unknown</string>
 
     <string name="call_activity_label_quality">Network Quality: </string>
+    <string name="call_activity_toggle_video">Video Call</string>
     <string name="call_activity_sound_settings">Sound Settings</string>
     <string name="call_activity_microphone_mute">Microphone mute</string>
     <string name="call_activity_microphone_on">Microphone on</string>

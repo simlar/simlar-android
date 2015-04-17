@@ -363,6 +363,12 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	}
 
 	@SuppressWarnings("unused")
+	public void toggleVideoClicked(final View view)
+	{
+		mCommunicator.getService().requestVideoUpdate(true);
+	}
+
+	@SuppressWarnings("unused")
 	public void showSoundSettingsDialog(final View view)
 	{
 		new VolumesControlDialogFragment().show(getSupportFragmentManager(), VolumesControlDialogFragment.class.getCanonicalName());

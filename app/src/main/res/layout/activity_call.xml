@@ -293,8 +293,14 @@
             android:gravity="center_vertical|center_horizontal">
 
             <ImageButton
+                android:id="@+id/buttonToggleVideo"
                 style="@style/callActivityImageButton"
-                android:layout_marginRight="25dp"
+                android:contentDescription="@string/call_activity_toggle_video"
+                android:onClick="toggleVideoClicked"
+                android:src="@drawable/toggle_video"/>
+
+            <ImageButton
+                style="@style/callActivityImageButton"
                 android:contentDescription="@string/call_activity_sound_settings"
                 android:onClick="showSoundSettingsDialog"
                 android:src="@drawable/sound_settings"/>
@@ -309,7 +315,6 @@
             <ImageButton
                 android:id="@+id/buttonSpeaker"
                 style="@style/callActivityImageButton"
-                android:layout_marginLeft="25dp"
                 android:contentDescription="@string/call_activity_loudspeaker_off"
                 android:onClick="toggleSpeakerMuted"
                 android:src="@drawable/speaker_off"/>
