@@ -31,6 +31,7 @@ import org.linphone.core.LinphoneCoreException;
 import org.linphone.core.LinphoneCoreFactory;
 import org.linphone.core.LinphoneCoreListener;
 import org.linphone.core.LinphoneProxyConfig;
+import org.linphone.mediastream.video.capture.hwconf.AndroidCameraConfiguration;
 import org.simlar.helper.ServerSettings;
 import org.simlar.helper.Version;
 import org.simlar.helper.Volumes;
@@ -463,6 +464,38 @@ final class LinphoneHandler
 			return;
 		}
 
+		enableCamera(videoPreviewWindow != null);
 		mLinphoneCore.setPreviewWindow(videoPreviewWindow);
+	}
+
+	private void setFrontCameraAsDefault()
+	{
+		int cameraId = 0;
+		for (final AndroidCameraConfiguration.AndroidCamera androidCamera : AndroidCameraConfiguration.retrieveCameras()) {
+			if (androidCamera.frontFacing) {
+				cameraId = androidCamera.id;
+			}
+		}
+
+		mLinphoneCore.setVideoDevice(cameraId);
+	}
+
+	private void enableCamera(final boolean enable)
+	{
+		Lg.i("enableCamera: ", enable);
+
+		final LinphoneCall currentCall = getCurrentCall();
+		if (currentCall == null) {
+			Lg.w("no current call to enable camera for");
+			return;
+		}
+
+		currentCall.enableCamera(enable);
+
+		if (enable) {
+			setFrontCameraAsDefault();
+		}
+
+		mLinphoneCore.updateCall(currentCall, null);
 	}
 }
