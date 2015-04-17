@@ -77,7 +77,7 @@ public final class LinphoneThread
 		LinphoneThreadImpl(final LinphoneThreadListener listener, final Context context)
 		{
 			mListener = listener;
-			mListener.onCallStateChanged("", LinphoneCall.State.Idle, null);
+			mListener.onCallStateChanged("", LinphoneCall.State.Idle, null, false);
 			mContext = context;
 
 			start();
@@ -408,9 +408,10 @@ public final class LinphoneThread
 			final LinphoneCall.State fixedState = fixLinphoneCallState(state);
 			final boolean remoteVideo = call.getRemoteParams().getVideoEnabled();
 			final boolean localVideo = call.getCurrentParamsCopy().getVideoEnabled();
-			Lg.i("callState changed state=", fixedState, " number=", new CallLogger(call), " message=", message);
+			final boolean videoEnabled = remoteVideo && localVideo && !LinphoneCall.State.CallEnd.equals(fixedState);
+			Lg.i("callState changed state=", fixedState, " number=", new CallLogger(call), " message=", message, " videoEnabled=", videoEnabled);
 
-			mMainThreadHandler.post(() -> mListener.onCallStateChanged(number, fixedState, message));
+			mMainThreadHandler.post(() -> mListener.onCallStateChanged(number, fixedState, message, videoEnabled));
 
 			if (LinphoneCall.State.CallUpdatedByRemote.equals(fixedState) && remoteVideo && !localVideo) {
 				/// NOTE: this needs to happen directly, posting to linphone thread might take to log
