@@ -284,6 +284,23 @@ public final class LinphoneThread
 			});
 		}
 
+		public void acceptVideoUpdate(final boolean accept)
+		{
+			if (mLinphoneThreadHandler == null) {
+				Lg.e("handler is null, probably thread not started");
+				return;
+			}
+
+			mLinphoneThreadHandler.post(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					mLinphoneHandler.acceptVideoUpdate(accept);
+				}
+			});
+		}
+
 		@Lg.Anonymize
 		private static class CallLogger
 		{
@@ -728,5 +745,10 @@ public final class LinphoneThread
 	public void requestVideoUpdate(final boolean enable)
 	{
 		mImpl.requestVideoUpdate(enable);
+	}
+
+	public void acceptVideoUpdate(final boolean accept)
+	{
+		mImpl.acceptVideoUpdate(accept);
 	}
 }

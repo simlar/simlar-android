@@ -419,4 +419,26 @@ final class LinphoneHandler
 			Lg.ex(e, "LinphoneCoreException during deferCallUpdate");
 		}
 	}
+
+	public void acceptVideoUpdate(final boolean accept)
+	{
+		Lg.i("acceptVideoUpdate accept=", accept);
+
+		final LinphoneCall currentCall = getCurrentCall();
+		if (currentCall == null) {
+			Lg.w("no current call to accept video for");
+			return;
+		}
+
+		final LinphoneCallParams params = currentCall.getCurrentParamsCopy();
+		if (accept) {
+			params.setVideoEnabled(true);
+		}
+
+		try {
+			mLinphoneCore.acceptCallUpdate(currentCall, params);
+		} catch (final LinphoneCoreException e) {
+			Lg.ex(e, "LinphoneCoreException during acceptCallUpdate");
+		}
+	}
 }

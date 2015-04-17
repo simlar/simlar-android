@@ -1035,6 +1035,15 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mLinphoneThread.requestVideoUpdate(enable);
 	}
 
+	public void acceptVideoUpdate(final boolean accept)
+	{
+		if (mLinphoneThread == null) {
+			return;
+		}
+
+		mLinphoneThread.acceptVideoUpdate(accept);
+	}
+
 	public CallConnectionDetails getCallConnectionDetails()
 	{
 		return mCallConnectionDetails;
