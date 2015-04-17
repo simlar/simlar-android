@@ -372,6 +372,13 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mLayoutCallControlButtons.setVisibility(mLayoutCallControlButtons.getVisibility() != View.VISIBLE ? View.VISIBLE : View.GONE);
 	}
 
+	@Override
+	public void onCaptureViewClick()
+	{
+		Lg.i("onCaptureViewClick");
+		mCommunicator.getService().toggleCamera();
+	}
+
 	private void startVideo()
 	{
 		if (mVideoFragment != null) {

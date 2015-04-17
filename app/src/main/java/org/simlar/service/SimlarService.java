@@ -1072,6 +1072,15 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mLinphoneThread.destroyVideoWindows();
 	}
 
+	public void toggleCamera()
+	{
+		if (mLinphoneThread == null) {
+			return;
+		}
+
+		mLinphoneThread.toggleCamera();
+	}
+
 	public CallConnectionDetails getCallConnectionDetails()
 	{
 		return mCallConnectionDetails;

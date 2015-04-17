@@ -407,6 +407,23 @@ public final class LinphoneThread
 			});
 		}
 
+		public void toggleCamera()
+		{
+			if (mLinphoneThreadHandler == null) {
+				Lg.e("handler is null, probably thread not started");
+				return;
+			}
+
+			mLinphoneThreadHandler.post(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					mLinphoneHandler.toggleCamera();
+				}
+			});
+		}
+
 		@Lg.Anonymize
 		private static class CallLogger
 		{
@@ -872,5 +889,10 @@ public final class LinphoneThread
 	public void destroyVideoWindows()
 	{
 		mImpl.destroyVideoWindows();
+	}
+
+	public void toggleCamera()
+	{
+		mImpl.toggleCamera();
 	}
 }

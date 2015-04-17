@@ -498,4 +498,40 @@ final class LinphoneHandler
 
 		mLinphoneCore.updateCall(currentCall, null);
 	}
+
+	public void toggleCamera()
+	{
+		Lg.i("toggleCamera");
+
+		final AndroidCameraConfiguration.AndroidCamera[] cameras = AndroidCameraConfiguration.retrieveCameras();
+		if (cameras.length < 1) {
+			Lg.i("not enough cameras to toggle through");
+			return;
+		}
+
+		final LinphoneCall currentCall = getCurrentCall();
+		if (currentCall == null) {
+			Lg.w("no current call to toggle camera for");
+			return;
+		}
+
+		final int currentCameraId = mLinphoneCore.getVideoDevice();
+
+		for (int i = 0; i < cameras.length; i++) {
+			if (cameras[i].id == currentCameraId) {
+				int newCameraId;
+				if (i + 1 < cameras.length) {
+					newCameraId = cameras[i + 1].id;
+				} else {
+					newCameraId = cameras[0].id;
+				}
+				Lg.i("toggling cameraId: ", currentCameraId, " => ", newCameraId);
+				mLinphoneCore.setVideoDevice(newCameraId);
+				mLinphoneCore.updateCall(currentCall, null);
+				return;
+			}
+		}
+
+		Lg.e("failed to toggle camera");
+	}
 }
