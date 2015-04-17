@@ -144,7 +144,12 @@ final class LinphoneHandler
 			mLinphoneCore.enableEchoLimiter(false);
 
 			// enable video
-			mLinphoneCore.enableVideo(true, true);
+			if (mLinphoneCore.isVideoSupported()) {
+				mLinphoneCore.enableVideo(true, true);
+			} else {
+				mLinphoneCore.enableVideo(false, false);
+				Lg.e("video not supported by sdk");
+			}
 			mLinphoneCore.setVideoPolicy(false, false);
 
 			// set number of threads for MediaStreamer
