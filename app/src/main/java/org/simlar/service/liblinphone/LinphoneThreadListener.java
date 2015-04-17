@@ -37,5 +37,7 @@ public interface LinphoneThreadListener
 
 	void onCallEncryptionChanged(final String authenticationToken, final boolean authenticationTokenVerified);
 
+	void onRemoteRequestedVideo();
+
 	void onJoin();
 }

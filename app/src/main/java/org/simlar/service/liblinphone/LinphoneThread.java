@@ -389,9 +389,26 @@ public final class LinphoneThread
 
 			final String number = getNumber(call);
 			final LinphoneCall.State fixedState = fixLinphoneCallState(state);
+			final boolean remoteVideo = call.getRemoteParams().getVideoEnabled();
+			final boolean localVideo = call.getCurrentParamsCopy().getVideoEnabled();
 			Lg.i("callState changed state=", fixedState, " number=", new CallLogger(call), " message=", message);
 
 			mMainThreadHandler.post(() -> mListener.onCallStateChanged(number, fixedState, message));
+
+			if (LinphoneCall.State.CallUpdatedByRemote.equals(fixedState) && remoteVideo && !localVideo) {
+				/// NOTE: this needs to happen directly, posting to linphone thread might take to log
+				mLinphoneHandler.preventAutoAnswer();
+
+				Lg.i("remote requested video");
+				mMainThreadHandler.post(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						mListener.onRemoteRequestedVideo();
+					}
+				});
+			}
 		}
 
 		@Override

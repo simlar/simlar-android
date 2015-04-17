@@ -402,4 +402,21 @@ final class LinphoneHandler
 		params.setVideoEnabled(enable);
 		mLinphoneCore.updateCall(currentCall, params);
 	}
+
+	public void preventAutoAnswer()
+	{
+		Lg.i("preventAutoAnswer");
+
+		final LinphoneCall currentCall = getCurrentCall();
+		if (currentCall == null) {
+			Lg.w("no current call to prevent auto answer for");
+			return;
+		}
+
+		try {
+			mLinphoneCore.deferCallUpdate(currentCall);
+		} catch (final LinphoneCoreException e) {
+			Lg.ex(e, "LinphoneCoreException during deferCallUpdate");
+		}
+	}
 }

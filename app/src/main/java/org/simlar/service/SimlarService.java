@@ -813,6 +813,12 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
 	}
 
+	@Override
+	public void onRemoteRequestedVideo()
+	{
+		SimlarServiceBroadcast.sendRemoteRequestedVideo(this);
+	}
+
 	private void call(final String simlarId)
 	{
 		if (mLinphoneThread == null) {
