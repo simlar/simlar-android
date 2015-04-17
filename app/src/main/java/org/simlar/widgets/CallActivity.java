@@ -28,8 +28,10 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
@@ -46,7 +48,7 @@ import org.simlar.service.SimlarService;
 import org.simlar.service.SimlarServiceCommunicator;
 import org.simlar.utils.Util;
 
-public final class CallActivity extends AppCompatActivity implements VolumesControlDialogFragment.Listener
+public final class CallActivity extends AppCompatActivity implements VolumesControlDialogFragment.Listener, VideoFragment.Listener
 {
 	private static final String INTENT_EXTRA_SIMLAR_ID = "simlarId";
 
@@ -81,6 +83,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private ImageButton mButtonSpeaker = null;
 
 	private ConnectionDetailsDialogFragment mConnectionDetailsDialogFragment = null;
+	private VideoFragment mVideoFragment = null;
 
 	private final class SimlarServiceCommunicatorCall extends SimlarServiceCommunicator
 	{
@@ -276,6 +279,12 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		setButtonMicrophoneMute();
 		setButtonSpeakerMute();
 
+		if (simlarCallState.isVideoEnabled()) {
+			startVideo();
+		} else {
+			stopVideo();
+		}
+
 		if (simlarCallState.isEndedCall()) {
 			mLayoutConnectionQuality.setVisibility(View.INVISIBLE);
 			mLayoutVerifiedAuthenticationToken.setVisibility(View.GONE);
@@ -333,6 +342,52 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private void acceptVideoUpdate(final boolean accept)
 	{
 		mCommunicator.getService().acceptVideoUpdate(accept);
+	}
+
+	@Override
+	public void setVideoWindows(final SurfaceView videoView, final SurfaceView captureView)
+	{
+		mCommunicator.getService().setVideoWindows(videoView, captureView);
+	}
+
+	@Override
+	public void enableVideoWindow(final boolean enable)
+	{
+		mCommunicator.getService().enableVideoWindow(enable);
+	}
+
+	@Override
+	public void destroyVideoWindows()
+	{
+		mCommunicator.getService().destroyVideoWindows();
+	}
+
+	private void startVideo()
+	{
+		if (mVideoFragment != null) {
+			return;
+		}
+
+		Lg.i("adding video fragment");
+
+		mVideoFragment = new VideoFragment();
+
+		final FragmentManager fm = getSupportFragmentManager();
+		fm.beginTransaction().add(R.id.layoutVideoFragmentContainer, mVideoFragment).commit();
+	}
+
+	private void stopVideo()
+	{
+		if (mVideoFragment == null) {
+			return;
+		}
+
+		Lg.i("removing video fragment");
+
+		final FragmentManager fm = getSupportFragmentManager();
+		fm.beginTransaction().remove(mVideoFragment).commit();
+
+		mVideoFragment = null;
 	}
 
 	private void startCallTimer()
@@ -412,7 +467,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	@SuppressWarnings("unused")
 	public void toggleVideoClicked(final View view)
 	{
-		mCommunicator.getService().requestVideoUpdate(true);
+		mCommunicator.getService().requestVideoUpdate(mVideoFragment == null);
 	}
 
 	@SuppressWarnings("unused")

@@ -272,6 +272,12 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/layoutVideoFragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"/>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
