@@ -539,7 +539,7 @@ public final class LinphoneThread
 
 			final String number = getNumber(call);
 			final LinphoneCall.State fixedState = fixLinphoneCallState(state);
-			Lg.i("callState changed number=", new CallLogger(call), " state=", fixedState, " message=", message);
+			Lg.i("callState changed state=", fixedState, " number=", new CallLogger(call), " message=", message);
 
 			mMainThreadHandler.post(new Runnable() {
 				@Override
