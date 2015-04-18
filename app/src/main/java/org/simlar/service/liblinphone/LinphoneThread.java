@@ -534,6 +534,10 @@ public final class LinphoneThread
 			final boolean videoEnabled = remoteVideo && localVideo && !LinphoneCall.State.CallEnd.equals(fixedState);
 			Lg.i("callState changed state=", fixedState, " number=", new CallLogger(call), " message=", message, " videoEnabled=", videoEnabled);
 
+			if (videoEnabled) {
+				Lg.i("using video codec: ", call.getCurrentParamsCopy().getUsedVideoCodec().getMime());
+			}
+
 			mMainThreadHandler.post(() -> mListener.onCallStateChanged(number, fixedState, message, videoEnabled));
 
 			if (LinphoneCall.State.CallUpdatedByRemote.equals(fixedState) && remoteVideo && !localVideo) {
