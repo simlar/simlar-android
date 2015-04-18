@@ -26,11 +26,11 @@ import android.os.SystemClock;
 
 public final class SimlarCallState
 {
+	private LinphoneCallState mLinphoneCallState = LinphoneCallState.UNKNOWN;
+	private GuiCallState mGuiCallState = GuiCallState.UNKNOWN;
 	private String mSimlarId = null;
 	private String mContactName = null;
 	private String mContactPhotoId = null;
-	private LinphoneCallState mLinphoneCallState = LinphoneCallState.UNKNOWN;
-	private GuiCallState mGuiCallState = GuiCallState.UNKNOWN;
 	private CallEndReason mCallEndReason = CallEndReason.NONE;
 	private boolean mEncrypted = true;
 	private String mAuthenticationToken = null;
@@ -194,14 +194,19 @@ public final class SimlarCallState
 	@Override
 	public String toString()
 	{
-		return "SimlarCallState [" + (mSimlarId != null ? "mSimlarId=" + new Lg.Anonymizer(mSimlarId) + ", " : "")
-				+ (mContactName != null ? "mContactName=" + new Lg.Anonymizer(mContactName) + ", " : "")
-				+ (mContactPhotoId != null ? "mContactPhotoId=" + mContactPhotoId + ", " : "")
-				+ (mLinphoneCallState != null ? "mLinphoneCallState=" + mLinphoneCallState + ", " : "")
-				+ (mGuiCallState != null ? "mGuiCallState=" + mGuiCallState + ", " : "")
-				+ (mCallEndReason != null ? "mCallEndReason=" + mCallEndReason + ", " : "") + "mEncrypted=" + mEncrypted + ", "
-				+ (mAuthenticationToken != null ? "mAuthenticationToken=" + mAuthenticationToken + ", " : "") + "mAuthenticationTokenVerified="
-				+ mAuthenticationTokenVerified + ", " + (mQuality != null ? "mQuality=" + mQuality + ", " : "") + "mCallStartTime=" + mCallStartTime + "]";
+		return "SimlarCallState{" +
+				"mLinphoneCallState=" + mLinphoneCallState +
+				", mGuiCallState=" + mGuiCallState +
+				", mSimlarId='" + new Lg.Anonymizer(mSimlarId) + '\'' +
+				", mContactName='" + mContactName + '\'' +
+				", mContactPhotoId='" + mContactPhotoId + '\'' +
+				", mCallEndReason=" + mCallEndReason +
+				", mEncrypted=" + mEncrypted +
+				", mAuthenticationToken='" + mAuthenticationToken + '\'' +
+				", mAuthenticationTokenVerified=" + mAuthenticationTokenVerified +
+				", mQuality=" + mQuality +
+				", mCallStartTime=" + mCallStartTime +
+				'}';
 	}
 
 	public String getContactName()
