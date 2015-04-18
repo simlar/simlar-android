@@ -37,6 +37,7 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.simlar.R;
@@ -82,6 +83,10 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private LinearLayout mLayoutCallControlButtons = null;
 	private ImageButton mButtonMicro = null;
 	private ImageButton mButtonSpeaker = null;
+
+	private LinearLayout mLayoutRequestingVideo;
+	private TextView mTextViewRequestingVideo;
+	private ProgressBar mProgressBarRequestingVideo;
 
 	private ConnectionDetailsDialogFragment mConnectionDetailsDialogFragment = null;
 	private VideoFragment mVideoFragment = null;
@@ -158,6 +163,10 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mButtonMicro = findViewById(R.id.buttonMicro);
 		mButtonSpeaker = findViewById(R.id.buttonSpeaker);
 
+		mLayoutRequestingVideo = (LinearLayout) findViewById(R.id.linearLayoutRequestingVideo);
+		mTextViewRequestingVideo = (TextView) findViewById(R.id.textViewRequestingVideo);
+		mProgressBarRequestingVideo = (ProgressBar) findViewById(R.id.progressBarRequestingVideo);
+
 		//
 		// Presets
 		mTextViewCallTimer.setVisibility(View.INVISIBLE);
@@ -165,6 +174,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mLayoutConnectionQuality.setVisibility(View.INVISIBLE);
 		mLayoutVerifiedAuthenticationToken.setVisibility(View.GONE);
 		mLayoutAuthenticationToken.setVisibility(View.GONE);
+		mLayoutRequestingVideo.setVisibility(View.GONE);
 	}
 
 	@Override
@@ -283,14 +293,21 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 		if (simlarCallState.isVideoEnabled()) {
 			startVideo();
+			mLayoutRequestingVideo.setVisibility(View.GONE);
 		} else {
 			stopVideo();
+			if (simlarCallState.isVideoRequested() && !simlarCallState.isEndedCall()) {
+				showRequestingVideo();
+			} else {
+				checkContactDeniedVideo();
+			}
 		}
 
 		if (simlarCallState.isEndedCall()) {
 			mLayoutConnectionQuality.setVisibility(View.INVISIBLE);
 			mLayoutVerifiedAuthenticationToken.setVisibility(View.GONE);
 			mLayoutAuthenticationToken.setVisibility(View.GONE);
+			mLayoutRequestingVideo.setVisibility(View.GONE);
 			mLayoutCallEndReason.setVisibility(View.VISIBLE);
 			mTextViewCallEndReason.setText(simlarCallState.getCallStatusDisplayMessage(this));
 			stopCallTimer();
@@ -377,6 +394,43 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	{
 		Lg.i("onCaptureViewClick");
 		mCommunicator.getService().toggleCamera();
+	}
+
+
+	private void showRequestingVideo()
+	{
+		if (mLayoutRequestingVideo.getVisibility() == View.VISIBLE && mProgressBarRequestingVideo.getVisibility() == View.VISIBLE ) {
+			return;
+		}
+
+		Lg.i("showRequestingVideo");
+
+		mLayoutRequestingVideo.setVisibility(View.VISIBLE);
+		mTextViewRequestingVideo.setText(R.string.call_activity_requesting_video);
+		mProgressBarRequestingVideo.setVisibility(View.VISIBLE);
+	}
+
+	private void checkContactDeniedVideo()
+	{
+		if (mLayoutRequestingVideo.getVisibility() != View.VISIBLE || mProgressBarRequestingVideo.getVisibility() != View.VISIBLE ) {
+			return;
+		}
+
+		Lg.i("contact denied video");
+
+		mTextViewRequestingVideo.setText(R.string.call_activity_video_denied);
+		mProgressBarRequestingVideo.setVisibility(View.GONE);
+
+		mHandler.postDelayed(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				if (mProgressBarRequestingVideo.getVisibility() != View.VISIBLE) {
+					mLayoutRequestingVideo.setVisibility(View.GONE);
+				}
+			}
+		}, 10000);
 	}
 
 	private void startVideo()
