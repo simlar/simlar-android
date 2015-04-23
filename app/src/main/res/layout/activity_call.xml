@@ -318,7 +318,7 @@
 
             <ImageButton
                 android:id="@+id/buttonSoundSettings"
-                style="@style/buttonWhiteBorderLess"
+                style="@style/callActivityImageButton"
                 android:layout_marginRight="25dp"
                 android:contentDescription="@string/call_activity_sound_settings"
                 android:onClick="showSoundSettingsDialog"
@@ -326,14 +326,14 @@
 
             <ImageButton
                 android:id="@+id/buttonMicro"
-                style="@style/buttonWhiteBorderLess"
+                style="@style/callActivityImageButton"
                 android:contentDescription="@string/call_activity_microphone_mute"
                 android:onClick="toggleMicrophoneMuted"
                 android:src="@drawable/micro_on"/>
 
             <ImageButton
                 android:id="@+id/buttonSpeaker"
-                style="@style/buttonWhiteBorderLess"
+                style="@style/callActivityImageButton"
                 android:layout_marginLeft="25dp"
                 android:contentDescription="@string/call_activity_loudspeaker_off"
                 android:onClick="toggleSpeakerMuted"
