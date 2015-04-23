@@ -167,7 +167,6 @@ public final class SimlarCallState
 
 		if (mGuiCallState == GuiCallState.ENCRYPTING) {
 			mGuiCallState = GuiCallState.TALKING;
-			mCallStartTime = SystemClock.elapsedRealtime();
 		}
 
 		mEncrypted = encrypted;
