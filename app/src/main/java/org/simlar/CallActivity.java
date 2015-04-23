@@ -376,7 +376,7 @@ public final class CallActivity extends AppCompatActivity
 	{
 		switch (mCommunicator.getService().getVolumes().getMicrophoneStatus()) {
 		case DISABLED:
-			mButtonMicro.setImageResource(R.drawable.micro_out_grey);
+			mButtonMicro.setImageResource(R.drawable.micro_off_disabled);
 			mButtonMicro.setContentDescription(getString(R.string.call_activity_microphone_disabled));
 			break;
 		case MUTED:
