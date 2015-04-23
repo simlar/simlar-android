@@ -116,7 +116,6 @@ public final class SimlarCallState
 			mAuthenticationToken = null;
 			mAuthenticationTokenVerified = false;
 			mQuality = NetworkQuality.UNKNOWN;
-			mCallStartTime = -1;
 		}
 
 		return true;
