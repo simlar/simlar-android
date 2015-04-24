@@ -37,8 +37,6 @@ import android.widget.TextView;
 
 public final class CallActivity extends AppCompatActivity
 {
-	private static final String LOGTAG = CallActivity.class.getSimpleName();
-
 	public static final String INTENT_EXTRA_SIMLAR_ID = "simlarId";
 
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCall();
@@ -97,7 +95,7 @@ public final class CallActivity extends AppCompatActivity
 	@Override
 	protected void onCreate(final Bundle savedInstanceState)
 	{
-		Lg.i(LOGTAG, "onCreate");
+		Lg.i("onCreate");
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_call);
@@ -146,7 +144,7 @@ public final class CallActivity extends AppCompatActivity
 	@Override
 	protected void onResume()
 	{
-		Lg.i(LOGTAG, "onResume");
+		Lg.i("onResume");
 		super.onResume();
 
 		final String simlarIdToCall = getIntent().getStringExtra(INTENT_EXTRA_SIMLAR_ID);
@@ -154,7 +152,7 @@ public final class CallActivity extends AppCompatActivity
 		if (!Util.isNullOrEmpty(simlarIdToCall)) {
 			mCommunicator.startServiceAndRegister(this, CallActivity.class, simlarIdToCall);
 		} else if (!mCommunicator.register(this, CallActivity.class)) {
-			Lg.w(LOGTAG, "SimlarService is not running, starting MainActivity");
+			Lg.w("SimlarService is not running, starting MainActivity");
 			startActivity(new Intent(this, MainActivity.class));
 			finish();
 		}
@@ -165,7 +163,7 @@ public final class CallActivity extends AppCompatActivity
 	@Override
 	protected void onPause()
 	{
-		Lg.i(LOGTAG, "onPause");
+		Lg.i("onPause");
 		mCommunicator.unregister();
 		mProximityScreenLocker.release(false);
 		super.onPause();
@@ -174,7 +172,7 @@ public final class CallActivity extends AppCompatActivity
 	@Override
 	protected void onStop()
 	{
-		Lg.i(LOGTAG, "onStop");
+		Lg.i("onStop");
 		stopCallTimer();
 		super.onStop();
 	}
@@ -182,7 +180,7 @@ public final class CallActivity extends AppCompatActivity
 	@Override
 	public void onDestroy()
 	{
-		Lg.i(LOGTAG, "onDestroy");
+		Lg.i("onDestroy");
 		super.onDestroy();
 	}
 
@@ -217,17 +215,17 @@ public final class CallActivity extends AppCompatActivity
 	private void onSimlarCallStateChanged()
 	{
 		if (mCommunicator.getService() == null) {
-			Lg.e(LOGTAG, "ERROR: onSimlarCallStateChanged but not bound to service");
+			Lg.e("ERROR: onSimlarCallStateChanged but not bound to service");
 			return;
 		}
 
 		final SimlarCallState simlarCallState = mCommunicator.getService().getSimlarCallState();
 		if (simlarCallState == null || simlarCallState.isEmpty()) {
-			Lg.e(LOGTAG, "ERROR: onSimlarCallStateChanged simlarCallState null or empty");
+			Lg.e("ERROR: onSimlarCallStateChanged simlarCallState null or empty");
 			return;
 		}
 
-		Lg.d(LOGTAG, "onSimlarCallStateChanged ", simlarCallState);
+		Lg.d("onSimlarCallStateChanged ", simlarCallState);
 
 		mImageViewContactImage.setImageBitmap(simlarCallState.getContactPhotoBitmap(this, R.drawable.contact_picture));
 		mTextViewContactName.setText(simlarCallState.getContactName());
@@ -289,7 +287,7 @@ public final class CallActivity extends AppCompatActivity
 	private void iterateTimer()
 	{
 		final String text = Util.formatMilliSeconds(SystemClock.elapsedRealtime() - mCallStartTime);
-		Lg.d(LOGTAG, "iterateTimer: ", text);
+		Lg.d("iterateTimer: ", text);
 
 		mTextViewCallTimer.setText(text);
 
@@ -313,7 +311,7 @@ public final class CallActivity extends AppCompatActivity
 
 		mFinishDelayedCalled = true;
 
-		Lg.i(LOGTAG, "finishing activity in ", milliSeconds, " ms");
+		Lg.i("finishing activity in ", milliSeconds, " ms");
 
 		new Handler().postDelayed(new Runnable() {
 			@Override

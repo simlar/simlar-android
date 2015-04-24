@@ -57,7 +57,6 @@ import android.widget.Toast;
 
 public final class SimlarService extends Service implements LinphoneThreadListener
 {
-	private static final String LOGTAG = SimlarService.class.getSimpleName();
 	private static final int NOTIFICATION_ID = 1;
 	private static final long TERMINATE_CHECKER_INTERVAL = 20 * 1000; // milliseconds
 	public static final String INTENT_EXTRA_SIMLAR_ID = "SimlarServiceSimlarId";
@@ -140,22 +139,22 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		{
 			switch (state) {
 			case TelephonyManager.CALL_STATE_IDLE:
-				Lg.i(LOGTAG, "onTelephonyCallStateChanged: state=IDLE");
+				Lg.i("onTelephonyCallStateChanged: state=IDLE");
 				mInCall = false;
 				SimlarService.this.onTelephonyCallStateIdle();
 				break;
 			case TelephonyManager.CALL_STATE_OFFHOOK:
-				Lg.i(LOGTAG, "onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=OFFHOOK");
+				Lg.i("onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=OFFHOOK");
 				mInCall = true;
 				SimlarService.this.onTelephonyCallStateOffHook();
 				break;
 			case TelephonyManager.CALL_STATE_RINGING:
-				Lg.i(LOGTAG, "onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=RINGING");
+				Lg.i("onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=RINGING");
 				mInCall = false; /// TODO Think about
 				SimlarService.this.onTelephonyCallStateRinging();
 				break;
 			default:
-				Lg.i(LOGTAG, "onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=", state);
+				Lg.i("onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=", state);
 				break;
 			}
 		}
@@ -164,7 +163,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	@Override
 	public IBinder onBind(final Intent intent)
 	{
-		Lg.i(LOGTAG, "onBind");
+		Lg.i("onBind");
 		return mBinder;
 	}
 
@@ -221,7 +220,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 
 		mCurrentRingerMode = ringerMode;
-		Lg.i(LOGTAG, "saving RingerMode: ", mCurrentRingerMode, " and switch to ringer mode silent");
+		Lg.i("saving RingerMode: ", mCurrentRingerMode, " and switch to ringer mode silent");
 		audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
 	}
 
@@ -233,7 +232,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		/// NOTE: On lollipop getRingerMode sometimes does not report silent mode correctly, so checking it here may be dangerous.
-		Lg.i(LOGTAG, "restoring RingerMode: ", audioManager.getRingerMode(), " -> ", mCurrentRingerMode);
+		Lg.i("restoring RingerMode: ", audioManager.getRingerMode(), " -> ", mCurrentRingerMode);
 		audioManager.setRingerMode(mCurrentRingerMode);
 		mCurrentRingerMode = -1;
 	}
@@ -241,10 +240,10 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	@Override
 	public int onStartCommand(final Intent intent, final int flags, final int startId)
 	{
-		Lg.i(LOGTAG, "onStartCommand intent=", intent, " startId=", startId);
+		Lg.i("onStartCommand intent=", intent, " startId=", startId);
 
 		if (FlavourHelper.isGcmEnabled()) {
-			Lg.i(LOGTAG, "acquiring simlar wake lock");
+			Lg.i("acquiring simlar wake lock");
 			acquireWakeLock();
 			acquireWifiLock();
 		}
@@ -277,15 +276,15 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				});
 			}
 		} else {
-			Lg.w(LOGTAG, "onStartCommand: with no intent");
+			Lg.w("onStartCommand: with no intent");
 			mSimlarIdToCall = null;
 		}
-		Lg.i(LOGTAG, "onStartCommand simlarIdToCall=", new Lg.Anonymizer(mSimlarIdToCall));
+		Lg.i("onStartCommand simlarIdToCall=", new Lg.Anonymizer(mSimlarIdToCall));
 
 		handlePendingCall();
 
 		if (mGoingDown) {
-			Lg.i(LOGTAG, "onStartCommand called while service is going down => recovering");
+			Lg.i("onStartCommand called while service is going down => recovering");
 			mGoingDown = false;
 			if (mLinphoneThread == null) {
 				startLinphone();
@@ -299,7 +298,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	@Override
 	public void onCreate()
 	{
-		Lg.i(LOGTAG, "started with simlar version=", Version.getVersionName(this),
+		Lg.i("started with simlar version=", Version.getVersionName(this),
 				" on device: ", Build.MANUFACTURER, " ", Build.MODEL, " (", Build.DEVICE, ") with android version=", Build.VERSION.RELEASE);
 
 		mRunning = true;
@@ -330,7 +329,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	private void startLinphone()
 	{
-		Lg.i(LOGTAG, "startLinphone");
+		Lg.i("startLinphone");
 		mLinphoneThread = new LinphoneThread(this, this);
 		mTerminatePrivateAlreadyCalled = false;
 
@@ -387,7 +386,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			return false;
 		}
 
-		Lg.i(LOGTAG, "terminateChecker triggered on status=", mSimlarStatus);
+		Lg.i("terminateChecker triggered on status=", mSimlarStatus);
 
 		if (!mSimlarStatus.isConnectedToSipServer()) {
 			mSimlarCallState.connectingToSimlarServerTimedOut();
@@ -401,11 +400,11 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	public void registerActivityToNotification(final Class<? extends Activity> activity)
 	{
 		if (activity == null) {
-			Lg.e(LOGTAG, "registerActivityToNotification with empty activity");
+			Lg.e("registerActivityToNotification with empty activity");
 			return;
 		}
 
-		Lg.i(LOGTAG, "registerActivityToNotification: ", activity.getSimpleName());
+		Lg.i("registerActivityToNotification: ", activity.getSimpleName());
 		mNotificationActivity = activity;
 
 		final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -415,11 +414,11 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private static void createMissedCallNotification(final Context context, final String simlarId)
 	{
 		if (Util.isNullOrEmpty(simlarId)) {
-			Lg.w(LOGTAG, "no simlarId for missed call");
+			Lg.w("no simlarId for missed call");
 			return;
 		}
 
-		Lg.i(LOGTAG, "missed call: ", new Lg.Anonymizer(simlarId));
+		Lg.i("missed call: ", new Lg.Anonymizer(simlarId));
 		ContactsProvider.getNameAndPhotoId(simlarId, context, new ContactListener()
 		{
 			@Override
@@ -460,7 +459,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			} else {
 				mNotificationActivity = MainActivity.class;
 			}
-			Lg.i(LOGTAG, "no activity registered based on mSimlarStatus=", mSimlarStatus, " we now take: ", mNotificationActivity.getSimpleName());
+			Lg.i("no activity registered based on mSimlarStatus=", mSimlarStatus, " we now take: ", mNotificationActivity.getSimpleName());
 		}
 
 		/// Note: we do not want the TaskStackBuilder here
@@ -498,14 +497,14 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		try {
 			mLinphoneThread.register(PreferencesHelper.getMySimlarId(), PreferencesHelper.getPassword());
 		} catch (final NotInitedException e) {
-			Lg.ex(LOGTAG, e, "PreferencesHelper.NotInitedException");
+			Lg.ex(e, "PreferencesHelper.NotInitedException");
 		}
 	}
 
 	@Override
 	public synchronized void onDestroy()
 	{
-		Lg.i(LOGTAG, "onDestroy");
+		Lg.i("onDestroy");
 
 		((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(NOTIFICATION_ID);
 
@@ -529,7 +528,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			Toast.makeText(this, R.string.simlar_service_on_destroy, Toast.LENGTH_SHORT).show();
 		}
 
-		Lg.i(LOGTAG, "onDestroy ended");
+		Lg.i("onDestroy ended");
 	}
 
 	private void acquireWakeLock()
@@ -577,17 +576,17 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private void checkNetworkConnectivityAndRefreshRegisters()
 	{
 		if (mLinphoneThread == null) {
-			Lg.w(LOGTAG, "checkNetworkConnectivityAndRefreshRegisters triggered but no linphone thread");
+			Lg.w("checkNetworkConnectivityAndRefreshRegisters triggered but no linphone thread");
 			return;
 		}
 
 		final NetworkInfo ni = ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
 		if (ni == null) {
-			Lg.e(LOGTAG, "no NetworkInfo found");
+			Lg.e("no NetworkInfo found");
 			return;
 		}
 
-		Lg.i(LOGTAG, "NetworkInfo ", ni.getTypeName(), " ", ni.getState());
+		Lg.i("NetworkInfo ", ni.getTypeName(), " ", ni.getState());
 		if (ni.isConnected()) {
 			mLinphoneThread.refreshRegisters();
 		}
@@ -645,7 +644,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		notifySimlarStatusChanged(SimlarStatus.OFFLINE);
 
 		if (!PreferencesHelper.readPreferencesFromFile(this)) {
-			Lg.e(LOGTAG, "failed to initialize credentials");
+			Lg.e("failed to initialize credentials");
 			return;
 		}
 
@@ -655,7 +654,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	@Override
 	public void onRegistrationStateChanged(final RegistrationState state)
 	{
-		Lg.i(LOGTAG, "onRegistrationStateChanged: ", state);
+		Lg.i("onRegistrationStateChanged: ", state);
 
 		final SimlarStatus status = SimlarStatus.fromRegistrationState(state);
 
@@ -672,7 +671,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		notifySimlarStatusChanged(status);
 
 		if (!FlavourHelper.isGcmEnabled()) {
-			Lg.i(LOGTAG, "updating notification based on registration state");
+			Lg.i("updating notification based on registration state");
 			final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 			nm.notify(NOTIFICATION_ID, createNotification());
 		}
@@ -680,7 +679,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	private void notifySimlarStatusChanged(final SimlarStatus status)
 	{
-		Lg.i(LOGTAG, "notifySimlarStatusChanged: ", status);
+		Lg.i("notifySimlarStatusChanged: ", status);
 
 		mSimlarStatus = status;
 
@@ -718,23 +717,23 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		final boolean simlarCallStateChanged = mSimlarCallState.updateCallStats(quality, callDuration);
 
 		if (mSimlarCallState.isEmpty()) {
-			Lg.e(LOGTAG, "SimlarCallState is empty: ", mSimlarCallState);
+			Lg.e("SimlarCallState is empty: ", mSimlarCallState);
 			return;
 		}
 
 		if (!simlarCallStateChanged) {
-			Lg.v(LOGTAG, "SimlarCallState staying the same: ", mSimlarCallState);
+			Lg.v("SimlarCallState staying the same: ", mSimlarCallState);
 		} else {
-			Lg.i(LOGTAG, "SimlarCallState updated: ", mSimlarCallState);
+			Lg.i("SimlarCallState updated: ", mSimlarCallState);
 			SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
 		}
 
 		if (!mCallConnectionDetails.updateCallStats(quality, codec, iceState, upload, download, jitter, packetLoss, latePackets, roundTripDelay)) {
-			Lg.v(LOGTAG, "CallConnectionDetails staying the same: ", mCallConnectionDetails);
+			Lg.v("CallConnectionDetails staying the same: ", mCallConnectionDetails);
 			return;
 		}
 
-		Lg.d(LOGTAG, "CallConnectionDetails updated: ", mCallConnectionDetails);
+		Lg.d("CallConnectionDetails updated: ", mCallConnectionDetails);
 		SimlarServiceBroadcast.sendCallConnectionDetailsChanged(this);
 	}
 
@@ -743,20 +742,20 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	{
 		final boolean oldCallStateRinging = mSimlarCallState.isRinging();
 		if (!mSimlarCallState.updateCallStateChanged(number, LinphoneCallState.fromLinphoneCallState(callState), CallEndReason.fromMessage(message))) {
-			Lg.v(LOGTAG, "SimlarCallState staying the same: ", mSimlarCallState);
+			Lg.v("SimlarCallState staying the same: ", mSimlarCallState);
 			return;
 		}
 
 		if (mSimlarCallState.isEmpty()) {
-			Lg.e(LOGTAG, "SimlarCallState is empty: ", mSimlarCallState);
+			Lg.e("SimlarCallState is empty: ", mSimlarCallState);
 			return;
 		}
 
-		Lg.i(LOGTAG, "SimlarCallState updated: ", mSimlarCallState);
+		Lg.i("SimlarCallState updated: ", mSimlarCallState);
 
 		if (mSimlarCallState.isRinging() && !mGoingDown) {
 			if (mTelephonyCallStateListener.isInCall()) {
-				Lg.i(LOGTAG, "incoming call while gsm call is active");
+				Lg.i("incoming call while gsm call is active");
 				mSoundEffectManager.start(SoundEffectType.CALL_INTERRUPTION);
 			} else {
 				mSoundEffectManager.start(SoundEffectType.RINGTONE);
@@ -787,7 +786,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			mCallConnectionDetails = new CallConnectionDetails();
 
 			if (!FlavourHelper.isGcmEnabled()) {
-				Lg.i(LOGTAG, "acquiring simlar wake lock because of new call");
+				Lg.i("acquiring simlar wake lock because of new call");
 				acquireWakeLock();
 				acquireWifiLock();
 			}
@@ -797,14 +796,14 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 				if (audioManager.requestAudioFocus(null, AudioManager.STREAM_VOICE_CALL, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT) == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
 					mHasAudioFocus = true;
-					Lg.i(LOGTAG, "audio focus granted");
+					Lg.i("audio focus granted");
 				} else {
-					Lg.e(LOGTAG, "audio focus not granted");
+					Lg.e("audio focus not granted");
 				}
 			}
 
 			if (mSimlarCallState.isRinging()) {
-				Lg.i(LOGTAG, "starting RingingActivity");
+				Lg.i("starting RingingActivity");
 				mNotificationActivity = RingingActivity.class;
 				startActivity(new Intent(SimlarService.this, RingingActivity.class).addFlags(
 						Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
@@ -818,9 +817,9 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			if (mHasAudioFocus) {
 				final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 				if (audioManager.abandonAudioFocus(null) == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-					Lg.i(LOGTAG, "audio focus released");
+					Lg.i("audio focus released");
 				} else {
-					Lg.e(LOGTAG, "releasing audio focus not granted");
+					Lg.e("releasing audio focus not granted");
 				}
 				mHasAudioFocus = false;
 			}
@@ -863,16 +862,16 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	public void onCallEncryptionChanged(final boolean encrypted, final String authenticationToken, final boolean authenticationTokenVerified)
 	{
 		if (!mSimlarCallState.updateCallEncryption(encrypted, authenticationToken, authenticationTokenVerified)) {
-			Lg.v(LOGTAG, "callEncryptionChanged but no difference in SimlarCallState: ", mSimlarCallState);
+			Lg.v("callEncryptionChanged but no difference in SimlarCallState: ", mSimlarCallState);
 			return;
 		}
 
 		if (mSimlarCallState.isEmpty()) {
-			Lg.e(LOGTAG, "callEncryptionChanged but SimlarCallState isEmpty");
+			Lg.e("callEncryptionChanged but SimlarCallState isEmpty");
 			return;
 		}
 
-		Lg.i(LOGTAG, "SimlarCallState updated encryption: ", mSimlarCallState);
+		Lg.i("SimlarCallState updated encryption: ", mSimlarCallState);
 
 		mLinphoneThread.setMicrophoneStatus(MicrophoneStatus.ON);
 		mSoundEffectManager.stop(SoundEffectType.ENCRYPTION_HANDSHAKE);
@@ -882,7 +881,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			mVibratorManager.stop();
 			mSoundEffectManager.stop(SoundEffectType.UNENCRYPTED_CALL_ALARM);
 		} else {
-			Lg.w(LOGTAG, "unencrypted call");
+			Lg.w("unencrypted call");
 			mVibratorManager.start();
 			mSoundEffectManager.start(SoundEffectType.UNENCRYPTED_CALL_ALARM);
 		}
@@ -892,7 +891,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	public void acceptUnencryptedCall()
 	{
-		Lg.w(LOGTAG, "user accepts unencrypted call");
+		Lg.w("user accepts unencrypted call");
 		mVibratorManager.stop();
 		mSoundEffectManager.stop(SoundEffectType.UNENCRYPTED_CALL_ALARM);
 	}
@@ -934,7 +933,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	public void terminate()
 	{
-		Lg.i(LOGTAG, "terminate");
+		Lg.i("terminate");
 		mHandler.post(new Runnable() {
 			@Override
 			public void run()
@@ -946,9 +945,9 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	private void handleTerminate()
 	{
-		Lg.i(LOGTAG, "handleTerminate");
+		Lg.i("handleTerminate");
 		if (mGoingDown) {
-			Lg.w(LOGTAG, "handleTerminate: already going down");
+			Lg.w("handleTerminate: already going down");
 			return;
 		}
 		mGoingDown = true;
@@ -980,12 +979,12 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	{
 		// make sure this function is only called once
 		if (mTerminatePrivateAlreadyCalled) {
-			Lg.i(LOGTAG, "terminatePrivate already called");
+			Lg.i("terminatePrivate already called");
 			return;
 		}
 		mTerminatePrivateAlreadyCalled = true;
 
-		Lg.i(LOGTAG, "terminatePrivate");
+		Lg.i("terminatePrivate");
 		if (mLinphoneThread != null) {
 			mLinphoneThread.finish();
 		} else {
@@ -1000,7 +999,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			try {
 				mLinphoneThread.join(2000);
 			} catch (final InterruptedException e) {
-				Lg.ex(LOGTAG, e, "join interrupted");
+				Lg.ex(e, "join interrupted");
 			}
 			mLinphoneThread = null;
 		}
@@ -1011,16 +1010,16 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mHandler.removeCallbacksAndMessages(null);
 
 		if (mGoingDown) {
-			Lg.i(LOGTAG, "onJoin: canceling notification");
+			Lg.i("onJoin: canceling notification");
 			((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(NOTIFICATION_ID);
-			Lg.i(LOGTAG, "onJoin: calling stopSelf");
+			Lg.i("onJoin: calling stopSelf");
 			stopSelf();
-			Lg.i(LOGTAG, "onJoin: stopSelf called");
+			Lg.i("onJoin: stopSelf called");
 			// calling stopForeground before stopSelf could trigger a restart
 			stopForeground(true);
-			Lg.i(LOGTAG, "onJoin: stopForeground called");
+			Lg.i("onJoin: stopForeground called");
 		} else {
-			Lg.i(LOGTAG, "onJoin: recovering calling startLinphone");
+			Lg.i("onJoin: recovering calling startLinphone");
 			startLinphone();
 		}
 	}
@@ -1028,12 +1027,12 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	public void verifyAuthenticationTokenOfCurrentCall(final boolean verified)
 	{
 		if (mLinphoneThread == null) {
-			Lg.e(LOGTAG, "ERROR: verifyAuthenticationToken called but no linphone thread");
+			Lg.e("ERROR: verifyAuthenticationToken called but no linphone thread");
 			return;
 		}
 
 		if (Util.isNullOrEmpty(mSimlarCallState.getAuthenticationToken())) {
-			Lg.e(LOGTAG, "ERROR: verifyAuthenticationToken called but no token available");
+			Lg.e("ERROR: verifyAuthenticationToken called but no token available");
 			return;
 		}
 

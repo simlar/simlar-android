@@ -6,7 +6,6 @@ import android.content.pm.PackageManager.NameNotFoundException;
 
 final class Version
 {
-	private static final String LOGTAG = CreateAccount.class.getSimpleName();
 	private static final boolean DEVELOPER_MENU = false;
 
 	private Version()
@@ -52,7 +51,7 @@ final class Version
 		try {
 			return context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
 		} catch (final NameNotFoundException e) {
-			Lg.ex(LOGTAG, e, "NameNotFoundException in Version.getPackageInfo:");
+			Lg.ex(e, "NameNotFoundException in Version.getPackageInfo:");
 			return createEmptyPackageInfo();
 		}
 	}

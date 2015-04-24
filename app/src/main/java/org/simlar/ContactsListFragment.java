@@ -27,8 +27,6 @@ import android.widget.ListView;
 
 public final class ContactsListFragment extends android.support.v4.app.ListFragment
 {
-	private static final String LOGTAG = ContactsListFragment.class.getSimpleName();
-
 	@Override
 	public void onActivityCreated(final Bundle savedInstanceState)
 	{
@@ -42,7 +40,7 @@ public final class ContactsListFragment extends android.support.v4.app.ListFragm
 		final ListView listView = getListView();
 
 		if (listView == null) {
-			Lg.e(LOGTAG, "no list view");
+			Lg.e("no list view");
 			return;
 		}
 
@@ -54,11 +52,11 @@ public final class ContactsListFragment extends android.support.v4.app.ListFragm
 	{
 		final String simlarId = ((ContactsAdapter) getListAdapter()).getItem(position).simlarId;
 		if (Util.isNullOrEmpty(simlarId)) {
-			Lg.e(LOGTAG, "onListItemClick: no simlarId found");
+			Lg.e("onListItemClick: no simlarId found");
 			return;
 		}
 
-		Lg.i(LOGTAG, "starting CallActivity with simlarId=", new Lg.Anonymizer(simlarId));
+		Lg.i("starting CallActivity with simlarId=", new Lg.Anonymizer(simlarId));
 		startActivity(new Intent(getActivity(), CallActivity.class)
 				.putExtra(CallActivity.INTENT_EXTRA_SIMLAR_ID, simlarId)
 				.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));

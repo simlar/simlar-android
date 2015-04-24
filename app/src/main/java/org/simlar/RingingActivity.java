@@ -37,8 +37,6 @@ import java.util.List;
 
 public final class RingingActivity extends AppCompatActivity
 {
-	private static final String LOGTAG = RingingActivity.class.getSimpleName();
-
 	private final List<View> mCircles = new ArrayList<>();
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorRinging();
 
@@ -71,7 +69,7 @@ public final class RingingActivity extends AppCompatActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
-		Lg.i(LOGTAG, "onCreate");
+		Lg.i("onCreate");
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_ringing);
@@ -145,10 +143,10 @@ public final class RingingActivity extends AppCompatActivity
 	@Override
 	protected void onResume()
 	{
-		Lg.i(LOGTAG, "onResume");
+		Lg.i("onResume");
 		super.onResume();
 		if (!mCommunicator.register(this, RingingActivity.class)) {
-			Lg.w(LOGTAG, "SimlarService is not running, starting MainActivity");
+			Lg.w("SimlarService is not running, starting MainActivity");
 			startActivity(new Intent(this, MainActivity.class));
 			finish();
 		}
@@ -157,7 +155,7 @@ public final class RingingActivity extends AppCompatActivity
 	@Override
 	protected void onPause()
 	{
-		Lg.i(LOGTAG, "onPause");
+		Lg.i("onPause");
 		mCommunicator.unregister();
 		super.onPause();
 	}
@@ -165,14 +163,14 @@ public final class RingingActivity extends AppCompatActivity
 	@Override
 	public void onStop()
 	{
-		Lg.i(LOGTAG, "onStop");
+		Lg.i("onStop");
 		super.onStop();
 	}
 
 	@Override
 	public void onDestroy()
 	{
-		Lg.i(LOGTAG, "onDestroy");
+		Lg.i("onDestroy");
 		super.onDestroy();
 	}
 
@@ -185,17 +183,17 @@ public final class RingingActivity extends AppCompatActivity
 	private void onSimlarCallStateChanged()
 	{
 		if (mCommunicator.getService() == null) {
-			Lg.e(LOGTAG, "ERROR: onSimlarCallStateChanged but not bound to service");
+			Lg.e("ERROR: onSimlarCallStateChanged but not bound to service");
 			return;
 		}
 
 		final SimlarCallState simlarCallState = mCommunicator.getService().getSimlarCallState();
 		if (simlarCallState == null || simlarCallState.isEmpty()) {
-			Lg.e(LOGTAG, "ERROR: onSimlarCallStateChanged simlarCallState null or empty");
+			Lg.e("ERROR: onSimlarCallStateChanged simlarCallState null or empty");
 			return;
 		}
 
-		Lg.i(LOGTAG, "onSimlarCallStateChanged ", simlarCallState);
+		Lg.i("onSimlarCallStateChanged ", simlarCallState);
 
 		if (simlarCallState.isEndedCall()) {
 			finish();

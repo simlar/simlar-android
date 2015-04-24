@@ -24,8 +24,6 @@ import android.app.Activity;
 
 class ProximityScreenLockerHelper
 {
-	private static final String LOGTAG = ProximityScreenLockerHelper.class.getSimpleName();
-
 	private ProximityScreenLockerHelper()
 	{
 		throw new AssertionError("This class was not meant to be instantiated");
@@ -35,11 +33,11 @@ class ProximityScreenLockerHelper
 	{
 		final ProximityScreenLocker proximityScreenLockerNative = ProximityScreenLockerNative.create(activity);
 		if (proximityScreenLockerNative == null) {
-			Lg.i(LOGTAG, "native proximity screen locking is not supported => using fallback");
+			Lg.i("native proximity screen locking is not supported => using fallback");
 			return new ProximityScreenLockerFallback(activity);
 		}
 
-		Lg.i(LOGTAG, "native proximity screen locking is supported");
+		Lg.i("native proximity screen locking is supported");
 		return proximityScreenLockerNative;
 	}
 }

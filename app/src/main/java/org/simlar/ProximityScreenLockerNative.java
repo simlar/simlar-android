@@ -33,8 +33,6 @@ import android.os.PowerManager;
 
 public class ProximityScreenLockerNative implements ProximityScreenLocker
 {
-	private static final String LOGTAG = ProximityScreenLockerNative.class.getSimpleName();
-
 	private final PowerManager.WakeLock mProximityWakeLock;
 	private final Method mPowerLockReleaseMethod;
 
@@ -68,9 +66,9 @@ public class ProximityScreenLockerNative implements ProximityScreenLocker
 
 			return powerManager.newWakeLock(proximityScreenOffWakeLock, "SimlarProximityWakeLock");
 		} catch (final NoSuchFieldException ex) {
-			Lg.ex(LOGTAG, ex, "NoSuchFieldException while accessing PROXIMITY_SCREEN_OFF_WAKE_LOCK");
+			Lg.ex(ex, "NoSuchFieldException while accessing PROXIMITY_SCREEN_OFF_WAKE_LOCK");
 		} catch (final IllegalAccessException ex) {
-			Lg.ex(LOGTAG, ex, "IllegalAccessException while accessing PROXIMITY_SCREEN_OFF_WAKE_LOCK");
+			Lg.ex(ex, "IllegalAccessException while accessing PROXIMITY_SCREEN_OFF_WAKE_LOCK");
 		}
 		return null;
 	}
@@ -87,11 +85,11 @@ public class ProximityScreenLockerNative implements ProximityScreenLocker
 			final int supportedFlags = ((Integer) method.invoke(powerManager)).intValue();
 			return (supportedFlags & proximityScreenOffWakeLock) != 0x0;
 		} catch (final NoSuchMethodException ex) {
-			Lg.ex(LOGTAG, ex, "NoSuchMethodException while checking native support");
+			Lg.ex(ex, "NoSuchMethodException while checking native support");
 		} catch (final IllegalAccessException ex) {
-			Lg.ex(LOGTAG, ex, "IllegalAccessException while checking native support");
+			Lg.ex(ex, "IllegalAccessException while checking native support");
 		} catch (final InvocationTargetException ex) {
-			Lg.ex(LOGTAG, ex, "InvocationTargetException while checking native support");
+			Lg.ex(ex, "InvocationTargetException while checking native support");
 		}
 		return false;
 	}
@@ -105,7 +103,7 @@ public class ProximityScreenLockerNative implements ProximityScreenLocker
 		try {
 			return proximityWakeLock.getClass().getDeclaredMethod("release", int.class);
 		} catch (final NoSuchMethodException ex) {
-			Lg.ex(LOGTAG, ex, "NoSuchMethodException release");
+			Lg.ex(ex, "NoSuchMethodException release");
 			return null;
 		}
 	}
@@ -118,11 +116,11 @@ public class ProximityScreenLockerNative implements ProximityScreenLocker
 		}
 
 		if (mProximityWakeLock.isHeld()) {
-			Lg.i(LOGTAG, "acquire triggered but already acquired");
+			Lg.i("acquire triggered but already acquired");
 			return;
 		}
 
-		Lg.i(LOGTAG, "acquiring");
+		Lg.i("acquiring");
 		mProximityWakeLock.acquire();
 	}
 
@@ -134,15 +132,15 @@ public class ProximityScreenLockerNative implements ProximityScreenLocker
 		}
 
 		if (!mProximityWakeLock.isHeld()) {
-			Lg.i(LOGTAG, "release triggered but not held");
+			Lg.i("release triggered but not held");
 			return;
 		}
 
 		if (releaseWithNativeFunction(immediately)) {
-			Lg.i(LOGTAG, "released using native function");
+			Lg.i("released using native function");
 		} else {
 			mProximityWakeLock.release();
-			Lg.i(LOGTAG, "released using old function");
+			Lg.i("released using old function");
 		}
 	}
 
@@ -156,11 +154,11 @@ public class ProximityScreenLockerNative implements ProximityScreenLocker
 			mPowerLockReleaseMethod.invoke(mProximityWakeLock, immediately ? 0 : 1);
 			return true;
 		} catch (final IllegalAccessException ex) {
-			Lg.ex(LOGTAG, ex, "IllegalAccessException calling native release method");
+			Lg.ex(ex, "IllegalAccessException calling native release method");
 		} catch (final IllegalArgumentException ex) {
-			Lg.ex(LOGTAG, ex, "IllegalArgumentException calling native release method");
+			Lg.ex(ex, "IllegalArgumentException calling native release method");
 		} catch (final InvocationTargetException ex) {
-			Lg.ex(LOGTAG, ex, "InvocationTargetException calling native release method");
+			Lg.ex(ex, "InvocationTargetException calling native release method");
 		}
 
 		return false;

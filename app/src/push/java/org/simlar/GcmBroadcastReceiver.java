@@ -31,8 +31,6 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 public final class GcmBroadcastReceiver extends WakefulBroadcastReceiver
 {
-	private static final String LOGTAG = GcmBroadcastReceiver.class.getSimpleName();
-
 	private static final String COLLAPSE_KEY = "collapse_key";
 	private static final String COLLAPSE_KEY_CALL = "call";
 
@@ -43,13 +41,13 @@ public final class GcmBroadcastReceiver extends WakefulBroadcastReceiver
 
 		final Bundle extras = intent.getExtras();
 		if (extras.isEmpty()) {
-			Lg.e(LOGTAG, "received Google Cloud Messaging Event with empty extras");
+			Lg.e("received Google Cloud Messaging Event with empty extras");
 			return;
 		}
 
 		final GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(context);
 		if (gcm == null) {
-			Lg.e(LOGTAG, "unable to instantiate Google Cloud Messaging");
+			Lg.e("unable to instantiate Google Cloud Messaging");
 			return;
 		}
 
@@ -58,22 +56,22 @@ public final class GcmBroadcastReceiver extends WakefulBroadcastReceiver
 		switch (messageType) {
 		case GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE:
 			if (COLLAPSE_KEY_CALL.equalsIgnoreCase(extras.getString(COLLAPSE_KEY))) {
-				Lg.i(LOGTAG, "received call push notification");
+				Lg.i("received call push notification");
 			} else {
-				Lg.w(LOGTAG, "received unknown push notification: ", extras);
+				Lg.w("received unknown push notification: ", extras);
 			}
 			intent.putExtra(SimlarService.INTENT_EXTRA_GCM, SimlarService.INTENT_EXTRA_GCM);
 			startWakefulService(context, intent.setComponent(new ComponentName(context.getPackageName(), SimlarService.class.getName())));
 			setResultCode(Activity.RESULT_OK);
 			break;
 		case GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR:
-			Lg.e(LOGTAG, "send error: ", extras);
+			Lg.e("send error: ", extras);
 			break;
 		case GoogleCloudMessaging.MESSAGE_TYPE_DELETED:
-			Lg.e(LOGTAG, "deleted messages on server: ", extras);
+			Lg.e("deleted messages on server: ", extras);
 			break;
 		default:
-			Lg.e(LOGTAG, "received Google Cloud Messaging Event with unknown message type: ", messageType);
+			Lg.e("received Google Cloud Messaging Event with unknown message type: ", messageType);
 			break;
 		}
 	}

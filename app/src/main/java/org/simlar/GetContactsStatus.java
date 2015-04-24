@@ -35,8 +35,6 @@ import android.util.Xml;
 
 final class GetContactsStatus
 {
-	private static final String LOGTAG = GetContactsStatus.class.getSimpleName();
-
 	private static final String URL_PATH = "get-contacts-status.php";
 
 	private GetContactsStatus()
@@ -46,7 +44,7 @@ final class GetContactsStatus
 
 	public static Map<String, ContactStatus> httpPostGetContactsStatus(final Set<String> contacts)
 	{
-		Lg.i(LOGTAG, "httpPostGetContactsStatus requested");
+		Lg.i("httpPostGetContactsStatus requested");
 
 		try {
 			final Map<String, String> parameters = new HashMap<>();
@@ -64,21 +62,21 @@ final class GetContactsStatus
 			try {
 				parsedResult = parseXml(result);
 			} catch (final XmlPullParserException e) {
-				Lg.ex(LOGTAG, e, "parsing xml failed");
+				Lg.ex(e, "parsing xml failed");
 			} catch (final IOException e) {
-				Lg.ex(LOGTAG, e, "IOException: ");
+				Lg.ex(e, "IOException: ");
 			}
 
 			try {
 				result.close();
 			} catch (final IOException e) {
-				Lg.ex(LOGTAG, e, "IOException: ");
+				Lg.ex(e, "IOException: ");
 			}
 
 			return parsedResult;
 
 		} catch (final NotInitedException e) {
-			Lg.ex(LOGTAG, e, "PreferencesHelper.NotInitedException");
+			Lg.ex(e, "PreferencesHelper.NotInitedException");
 			return null;
 		}
 	}
@@ -95,12 +93,12 @@ final class GetContactsStatus
 				&& parser.getAttributeName(0).equalsIgnoreCase("id")
 				&& parser.getAttributeName(1).equalsIgnoreCase("message"))
 		{
-			Lg.e(LOGTAG, "server returned error: ", parser.getAttributeValue(1));
+			Lg.e("server returned error: ", parser.getAttributeValue(1));
 			return null;
 		}
 
 		if (!xmlRootElement.equalsIgnoreCase("contacts")) {
-			Lg.e(LOGTAG, "unable to parse response");
+			Lg.e("unable to parse response");
 			return null;
 		}
 

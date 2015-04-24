@@ -39,7 +39,6 @@ import android.os.Build;
 
 public final class UploadLogFile
 {
-	private static final String LOGTAG = UploadLogFile.class.getSimpleName();
 	private static final String EMAIL_ADDRESS = "support@simlar.org";
 	private static final String EMAIL_SUBJECT = "bug report to log file ";
 	private static final String EMAIL_TEXT = "\r\n\r\n"
@@ -105,15 +104,15 @@ public final class UploadLogFile
 
 			if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
 				result = new PostResult(false, connection.getResponseMessage());
-				Lg.w(LOGTAG, "posting file failed with error code ", connection.getResponseMessage(), " and message ",
+				Lg.w("posting file failed with error code ", connection.getResponseMessage(), " and message ",
 						connection.getResponseMessage());
 			} else {
 				inputStream = connection.getInputStream();
 				responseStream = new ByteArrayOutputStream();
 				Util.copyStream(inputStream, responseStream);
 				final String response = new String(responseStream.toByteArray());
-				Lg.i(LOGTAG, "used CipherSuite: ", connection.getCipherSuite());
-				Lg.i(LOGTAG, "Response ", response);
+				Lg.i("used CipherSuite: ", connection.getCipherSuite());
+				Lg.i("Response ", response);
 
 				if (response.matches("OK \\d*")) {
 					result = new PostResult(true, file.getName());
@@ -123,7 +122,7 @@ public final class UploadLogFile
 			}
 		} catch (final Exception e) {
 			result = new PostResult(false, "Posting log file failed");
-			Lg.ex(LOGTAG, e, "Exception during postFile");
+			Lg.ex(e, "Exception during postFile");
 		}
 
 		try {
@@ -131,28 +130,28 @@ public final class UploadLogFile
 				outputStream.close();
 			}
 		} catch (final IOException e) {
-			Lg.ex(LOGTAG, e, "Exception during outputStream.close()");
+			Lg.ex(e, "Exception during outputStream.close()");
 		}
 		try {
 			if (fileInputStream != null) {
 				fileInputStream.close();
 			}
 		} catch (final IOException e) {
-			Lg.ex(LOGTAG, e, "Exception during fileInputStream.close()");
+			Lg.ex(e, "Exception during fileInputStream.close()");
 		}
 		try {
 			if (inputStream != null) {
 				inputStream.close();
 			}
 		} catch (final IOException e) {
-			Lg.ex(LOGTAG, e, "Exception during inputStream.close()");
+			Lg.ex(e, "Exception during inputStream.close()");
 		}
 		try {
 			if (responseStream != null) {
 				responseStream.close();
 			}
 		} catch (final IOException e) {
-			Lg.ex(LOGTAG, e, "Exception during responseStream.close()");
+			Lg.ex(e, "Exception during responseStream.close()");
 		}
 
 		return result;
@@ -171,19 +170,19 @@ public final class UploadLogFile
 	private static void deleteFile(final File file)
 	{
 		if (!file.delete()) {
-			Lg.w(LOGTAG, "deleting file failed: ", file.getName());
+			Lg.w("deleting file failed: ", file.getName());
 		}
 	}
 
 	public void upload(final String fileName)
 	{
 		if (mContext == null) {
-			Lg.w(LOGTAG, "no context");
+			Lg.w("no context");
 			return;
 		}
 
-		Lg.i(LOGTAG, "uploading log file started: ", fileName);
-		Lg.i(LOGTAG, "simlar version=", Version.getVersionName(mContext),
+		Lg.i("uploading log file started: ", fileName);
+		Lg.i("simlar version=", Version.getVersionName(mContext),
 				" on device: ", Build.MANUFACTURER, " ", Build.MODEL, " (", Build.DEVICE, ") with android version=", Build.VERSION.RELEASE);
 
 		new AsyncTask<File, Void, PostResult>() {
@@ -198,7 +197,7 @@ public final class UploadLogFile
 					p.waitFor();
 					return postFile(logFile);
 				} catch (final Exception e) {
-					Lg.ex(LOGTAG, e, "Exception during log file creation");
+					Lg.ex(e, "Exception during log file creation");
 					return new PostResult(false, "Log file creation failed");
 				} finally {
 					deleteFile(logFile);
@@ -209,7 +208,7 @@ public final class UploadLogFile
 			protected void onPreExecute()
 			{
 				if (mProgressDialog == null) {
-					Lg.w(LOGTAG, "no progress dialog");
+					Lg.w("no progress dialog");
 					return;
 				}
 
@@ -221,7 +220,7 @@ public final class UploadLogFile
 			{
 				mProgressDialog.dismiss();
 				if (!result.success) {
-					Lg.e(LOGTAG, "aborting uploading log file: ", result.errorMessage);
+					Lg.e("aborting uploading log file: ", result.errorMessage);
 					(new AlertDialog.Builder(mContext))
 							.setTitle(R.string.main_activity_alert_uploading_log_file_failed_title)
 							.setMessage(mContext.getString(R.string.main_activity_alert_uploading_log_file_failed_text) + ": " + result.errorMessage)
@@ -229,7 +228,7 @@ public final class UploadLogFile
 					return;
 				}
 
-				Lg.i(LOGTAG, "sending email for logfile: ", result.fileName);
+				Lg.i("sending email for logfile: ", result.fileName);
 
 				final Intent sendIntent = new Intent(Intent.ACTION_SEND);
 				sendIntent.setType("message/rfc822");
@@ -239,7 +238,7 @@ public final class UploadLogFile
 				try {
 					mContext.startActivity(Intent.createChooser(sendIntent, mContext.getString(R.string.upload_log_file_send_email_to_developer)));
 				} catch (final android.content.ActivityNotFoundException e) {
-					Lg.ex(LOGTAG, e, "ActivityNotFoundException chooser_send_email");
+					Lg.ex(e, "ActivityNotFoundException chooser_send_email");
 				}
 			}
 		}.execute(new File(mContext.getCacheDir(), fileName));

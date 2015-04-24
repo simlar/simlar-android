@@ -46,7 +46,6 @@ import android.widget.TextView;
 
 public final class CreateAccountActivity extends Activity
 {
-	private static final String LOGTAG = CreateAccountActivity.class.getSimpleName();
 	public static final String INTENT_EXTRA_NUMBER = "CreateAccountActivityTelephoneNumber";
 	private static final int SECONDS_TO_WAIT_FOR_SMS = 90;
 	private static final String SIMLAR_SMS_SOURCE = "+4922199999930";
@@ -82,7 +81,7 @@ public final class CreateAccountActivity extends Activity
 		void onSimlarStatusChanged()
 		{
 			final SimlarStatus status = mService.getSimlarStatus();
-			Lg.i(LOGTAG, "onSimlarStatusChanged: ", status);
+			Lg.i("onSimlarStatusChanged: ", status);
 
 			if (status.isConnectedToSipServer() || status.isRegistrationAtSipServerFailed()) {
 				mTestRegistrationSuccess = status.isConnectedToSipServer();
@@ -98,7 +97,7 @@ public final class CreateAccountActivity extends Activity
 		@Override
 		void onServiceFinishes()
 		{
-			Lg.i(LOGTAG, "onServiceFinishes");
+			Lg.i("onServiceFinishes");
 			handleRegistrationResult();
 		}
 
@@ -173,7 +172,7 @@ public final class CreateAccountActivity extends Activity
 	@Override
 	protected void onCreate(final Bundle savedInstanceState)
 	{
-		Lg.i(LOGTAG, "onCreate");
+		Lg.i("onCreate");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_account);
 
@@ -235,7 +234,7 @@ public final class CreateAccountActivity extends Activity
 	@Override
 	protected void onResume()
 	{
-		Lg.i(LOGTAG, "onResume");
+		Lg.i("onResume");
 		super.onResume();
 
 		if (mProgressFirstLogIn.getVisibility() == View.VISIBLE) {
@@ -246,7 +245,7 @@ public final class CreateAccountActivity extends Activity
 	@Override
 	protected void onPause()
 	{
-		Lg.i(LOGTAG, "onPause");
+		Lg.i("onPause");
 
 		if (mProgressFirstLogIn.getVisibility() == View.VISIBLE) {
 			mCommunicator.unregister();
@@ -257,7 +256,7 @@ public final class CreateAccountActivity extends Activity
 	@Override
 	protected void onDestroy()
 	{
-		Lg.i(LOGTAG, "onPause");
+		Lg.i("onPause");
 		unregisterReceiver(mSmsReceiver);
 		super.onDestroy();
 	}
@@ -265,11 +264,11 @@ public final class CreateAccountActivity extends Activity
 	private void createAccountRequest()
 	{
 		if (Util.isNullOrEmpty(mTelephoneNumber)) {
-			Lg.e(LOGTAG, "createAccountRequest without telephone number");
+			Lg.e("createAccountRequest without telephone number");
 			return;
 		}
 
-		Lg.i(LOGTAG, "createAccountRequest: ", new Lg.Anonymizer(mTelephoneNumber));
+		Lg.i("createAccountRequest: ", new Lg.Anonymizer(mTelephoneNumber));
 		final String smsText = getString(R.string.create_account_activity_sms_text) + " ";
 		final String expectedSimlarId = SimlarNumber.createSimlarId(mTelephoneNumber);
 		final String telephoneNumber = mTelephoneNumber;
@@ -293,7 +292,7 @@ public final class CreateAccountActivity extends Activity
 				}
 
 				if (!result.getSimlarId().equals(expectedSimlarId)) {
-					Lg.e(LOGTAG, "received simlarId not equal to expected: telephoneNumber=", new Lg.Anonymizer(telephoneNumber),
+					Lg.e("received simlarId not equal to expected: telephoneNumber=", new Lg.Anonymizer(telephoneNumber),
 							" expected=", new Lg.Anonymizer(expectedSimlarId),
 							" actual=", new Lg.Anonymizer(result.getSimlarId()));
 				}
@@ -317,7 +316,7 @@ public final class CreateAccountActivity extends Activity
 
 	private void waitForSms()
 	{
-		Lg.i(LOGTAG, "waiting for sms");
+		Lg.i("waiting for sms");
 		mProgressWaitingForSMS.setVisibility(View.VISIBLE);
 
 		mSecondsToStillWaitForSms = SECONDS_TO_WAIT_FOR_SMS;
@@ -343,7 +342,7 @@ public final class CreateAccountActivity extends Activity
 
 	private void onWaitingForSmsTimedOut()
 	{
-		Lg.w(LOGTAG, "waiting for sms timed out");
+		Lg.w("waiting for sms timed out");
 
 		mProgressWaitingForSMS.setVisibility(View.INVISIBLE);
 		mWaitingForSmsText.setText(R.string.create_account_activity_waiting_for_sms);
@@ -358,16 +357,16 @@ public final class CreateAccountActivity extends Activity
 		}
 
 		if (!sender.equals(SIMLAR_SMS_SOURCE)) {
-			Lg.i(LOGTAG, "ignoring sms from: ", new Lg.Anonymizer(sender));
+			Lg.i("ignoring sms from: ", new Lg.Anonymizer(sender));
 			return;
 		}
 
-		Lg.i(LOGTAG, "received sms: sender=", sender, " message=", message);
+		Lg.i("received sms: sender=", sender, " message=", message);
 
 		final String regex = getString(R.string.create_account_activity_sms_text).replace("*CODE*", "(\\d{6})");
 		final Matcher matcher = Pattern.compile(regex).matcher(message);
 		if (!matcher.find()) {
-			Lg.e(LOGTAG, "unable to parse sms message: ", message);
+			Lg.e("unable to parse sms message: ", message);
 			return;
 		}
 		final String registrationCode = matcher.group(1);
@@ -381,13 +380,13 @@ public final class CreateAccountActivity extends Activity
 
 	private void confirmRegistrationCode(final String registrationCode)
 	{
-		Lg.i(LOGTAG, "confirmRegistrationCode: ", registrationCode);
+		Lg.i("confirmRegistrationCode: ", registrationCode);
 
 		mProgressConfirm.setVisibility(View.VISIBLE);
 
 		final String simlarId = PreferencesHelper.getMySimlarIdOrEmptyString();
 		if (Util.isNullOrEmpty(registrationCode) || Util.isNullOrEmpty(simlarId)) {
-			Lg.e(LOGTAG, "Error: registrationCode or simlarId empty");
+			Lg.e("Error: registrationCode or simlarId empty");
 			onError(R.string.create_account_activity_error_not_possible);
 			return;
 		}
@@ -406,13 +405,13 @@ public final class CreateAccountActivity extends Activity
 				mProgressConfirm.setVisibility(View.INVISIBLE);
 
 				if (result.isError()) {
-					Lg.e(LOGTAG, "failed to parse confirm result");
+					Lg.e("failed to parse confirm result");
 					onError(result.getErrorMessage());
 					return;
 				}
 
 				if (!result.getSimlarId().equals(simlarId)) {
-					Lg.e(LOGTAG, "confirm response received simlarId=", new Lg.Anonymizer(result.getSimlarId()),
+					Lg.e("confirm response received simlarId=", new Lg.Anonymizer(result.getSimlarId()),
 							" not equal to requested simlarId=", new Lg.Anonymizer(simlarId));
 					onError(R.string.create_account_activity_error_not_possible);
 					return;
