@@ -81,6 +81,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private TextView mTextViewCallEndReason = null;
 
 	private LinearLayout mLayoutCallControlButtons = null;
+	private ImageButton mButtonToggleVideo = null;
 	private ImageButton mButtonMicro = null;
 	private ImageButton mButtonSpeaker = null;
 
@@ -160,6 +161,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mTextViewCallEndReason = findViewById(R.id.textViewCallEndReason);
 
 		mLayoutCallControlButtons = (LinearLayout) findViewById(R.id.linearLayoutCallControlButtons);
+		mButtonToggleVideo = (ImageButton) findViewById(R.id.buttonToggleVideo);
 		mButtonMicro = findViewById(R.id.buttonMicro);
 		mButtonSpeaker = findViewById(R.id.buttonSpeaker);
 
@@ -287,6 +289,8 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		if (simlarCallState.isTalking()) {
 			setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
 		}
+
+		mButtonToggleVideo.setEnabled(simlarCallState.isVideoRequestPossible());
 
 		setButtonMicrophoneMute();
 		setButtonSpeakerMute();

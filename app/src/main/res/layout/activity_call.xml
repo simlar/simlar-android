@@ -336,7 +336,7 @@
                 style="@style/callActivityImageButton"
                 android:contentDescription="@string/call_activity_toggle_video"
                 android:onClick="toggleVideoClicked"
-                android:src="@drawable/toggle_video"/>
+                android:src="@drawable/button_toggle_video"/>
 
             <ImageButton
                 style="@style/callActivityImageButton"
