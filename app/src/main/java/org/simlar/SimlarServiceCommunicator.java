@@ -34,8 +34,6 @@ import android.support.v4.content.LocalBroadcastManager;
 
 class SimlarServiceCommunicator
 {
-	private static final String DEFAULT_LOGTAG = "SimlarServiceCommunicator";
-	private final String mLogtag;
 	SimlarService mService = null;
 	private Class<? extends Activity> mActivity = null;
 	private final ServiceConnection mConnection = new SimlarServiceConnection();
@@ -52,14 +50,14 @@ class SimlarServiceCommunicator
 		@Override
 		public void onServiceConnected(final ComponentName className, final IBinder binder)
 		{
-			Lg.i(mLogtag, "onServiceConnected");
+			Lg.i("onServiceConnected");
 			mService = ((SimlarServiceBinder) binder).getService();
 			if (mService == null) {
-				Lg.e(mLogtag, "failed to bind to service");
+				Lg.e("failed to bind to service");
 				return;
 			}
 			if (mActivity == null) {
-				Lg.e(mLogtag, "no activity set");
+				Lg.e("no activity set");
 				return;
 			}
 			mService.registerActivityToNotification(mActivity);
@@ -69,7 +67,7 @@ class SimlarServiceCommunicator
 		@Override
 		public void onServiceDisconnected(final ComponentName arg0)
 		{
-			Lg.i(mLogtag, "onServiceDisconnected");
+			Lg.i("onServiceDisconnected");
 			mService = null;
 		}
 	}
@@ -85,18 +83,18 @@ class SimlarServiceCommunicator
 		public void onReceive(final Context context, final Intent intent)
 		{
 			if (intent == null) {
-				Lg.e(mLogtag, "Error in onReceive: no intent");
+				Lg.e("Error in onReceive: no intent");
 				return;
 			}
 
 			final SimlarServiceBroadcast fsb = (SimlarServiceBroadcast) intent.getSerializableExtra(SimlarServiceBroadcast.INTENT_EXTRA);
 			if (fsb == null) {
-				Lg.e(mLogtag, "Error in onReceive: no SimlarServiceBroadcast");
+				Lg.e("Error in onReceive: no SimlarServiceBroadcast");
 				return;
 			}
 
 			if (mService == null) {
-				Lg.v(mLogtag, "skip sending SimlarServiceBroadcast with type=", fsb.getType(), " because no service bound");
+				Lg.v("skip sending SimlarServiceBroadcast with type=", fsb.getType(), " because no service bound");
 				return;
 			}
 
@@ -116,17 +114,8 @@ class SimlarServiceCommunicator
 				unregister();
 				return;
 			default:
-				Lg.e(mLogtag, "Error in onReceive: unknown type");
+				Lg.e("Error in onReceive: unknown type");
 			}
-		}
-	}
-
-	public SimlarServiceCommunicator(final String logtag)
-	{
-		if (Util.isNullOrEmpty(logtag)) {
-			mLogtag = DEFAULT_LOGTAG;
-		} else {
-			mLogtag = logtag;
 		}
 	}
 
@@ -165,7 +154,7 @@ class SimlarServiceCommunicator
 	public void unregister()
 	{
 		if (mContext == null) {
-			Lg.i(mLogtag, "unregister skipped: no context");
+			Lg.i("unregister skipped: no context");
 			return;
 		}
 

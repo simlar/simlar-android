@@ -72,11 +72,6 @@ public final class CreateAccountActivity extends Activity
 	{
 		private boolean mTestRegistrationSuccess = false;
 
-		public SimlarServiceCommunicatorCreateAccount()
-		{
-			super(LOGTAG);
-		}
-
 		@Override
 		void onSimlarStatusChanged()
 		{

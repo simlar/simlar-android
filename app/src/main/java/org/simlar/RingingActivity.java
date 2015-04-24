@@ -42,11 +42,6 @@ public final class RingingActivity extends AppCompatActivity
 
 	private final class SimlarServiceCommunicatorRinging extends SimlarServiceCommunicator
 	{
-		public SimlarServiceCommunicatorRinging()
-		{
-			super(LOGTAG);
-		}
-
 		@Override
 		void onBoundToSimlarService()
 		{

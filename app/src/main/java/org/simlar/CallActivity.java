@@ -74,11 +74,6 @@ public final class CallActivity extends AppCompatActivity
 
 	private final class SimlarServiceCommunicatorCall extends SimlarServiceCommunicator
 	{
-		public SimlarServiceCommunicatorCall()
-		{
-			super(LOGTAG);
-		}
-
 		@Override
 		void onBoundToSimlarService()
 		{

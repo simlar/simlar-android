@@ -47,11 +47,6 @@ public final class MainActivity extends AppCompatActivity
 
 	private final class SimlarServiceCommunicatorContacts extends SimlarServiceCommunicator
 	{
-		public SimlarServiceCommunicatorContacts()
-		{
-			super(LOGTAG);
-		}
-
 		@Override
 		void onServiceFinishes()
 		{

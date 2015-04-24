@@ -41,11 +41,6 @@ public final class VolumesControlActivity extends Activity
 
 	private final class SimlarServiceCommunicatorVolumes extends SimlarServiceCommunicator
 	{
-		public SimlarServiceCommunicatorVolumes()
-		{
-			super(LOGTAG);
-		}
-
 		@Override
 		void onBoundToSimlarService()
 		{

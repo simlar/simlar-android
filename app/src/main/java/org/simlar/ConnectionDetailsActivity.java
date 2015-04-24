@@ -43,11 +43,6 @@ public final class ConnectionDetailsActivity extends Activity
 
 	private final class SimlarServiceCommunicatorConnectionDetails extends SimlarServiceCommunicator
 	{
-		public SimlarServiceCommunicatorConnectionDetails()
-		{
-			super(LOGTAG);
-		}
-
 		@Override
 		void onBoundToSimlarService()
 		{
