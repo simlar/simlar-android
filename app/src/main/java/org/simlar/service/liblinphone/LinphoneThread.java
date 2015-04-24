@@ -66,6 +66,7 @@ public final class LinphoneThread
 	{
 		Handler mLinphoneThreadHandler = null;
 		final Handler mMainThreadHandler = new Handler();
+		private boolean mVideoEnabled = false;
 
 		// NOTICE: the linphone handler should only be used in the LINPHONE-THREAD
 		final LinphoneHandler mLinphoneHandler = new LinphoneHandler();
@@ -534,8 +535,13 @@ public final class LinphoneThread
 			final boolean videoEnabled = remoteVideo && localVideo && !LinphoneCall.State.CallEnd.equals(fixedState);
 			Lg.i("callState changed state=", fixedState, " number=", new CallLogger(call), " message=", message, " videoEnabled=", videoEnabled);
 
-			if (videoEnabled) {
-				Lg.i("using video codec: ", call.getCurrentParamsCopy().getUsedVideoCodec().getMime());
+			if (!videoEnabled) {
+				mVideoEnabled = false;
+			} else {
+				if (!mVideoEnabled) {
+					Lg.i("using video codec: ", call.getCurrentParamsCopy().getUsedVideoCodec().getMime());
+					mVideoEnabled = true;;
+				}
 			}
 
 			mMainThreadHandler.post(() -> mListener.onCallStateChanged(number, fixedState, message, videoEnabled));
