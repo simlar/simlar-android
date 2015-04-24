@@ -39,6 +39,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.simlar.R;
 import org.simlar.logging.Lg;
@@ -546,7 +547,14 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	@SuppressWarnings("unused")
 	public void toggleVideoClicked(final View view)
 	{
-		mCommunicator.getService().requestVideoUpdate(mVideoFragment == null);
+		final boolean enableVideo = mVideoFragment == null;
+
+		if (enableVideo && !mCommunicator.getService().getSimlarCallState().isAuthenticationTokenVerified()) {
+			Toast.makeText(this, R.string.call_activity_request_video_without_verified_token, Toast.LENGTH_SHORT).show();
+			return;
+		}
+
+		mCommunicator.getService().requestVideoUpdate(enableVideo);
 	}
 
 	@SuppressWarnings("unused")
