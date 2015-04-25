@@ -81,7 +81,7 @@ public final class LinphoneThread
 		LinphoneThreadImpl(final LinphoneThreadListener listener, final Context context)
 		{
 			mListener = listener;
-			mListener.onCallStateChanged("", LinphoneCall.State.Idle, null, false);
+			mListener.onCallStateChanged("", LinphoneCall.State.Idle, null);
 			mContext = context;
 
 			start();
@@ -537,14 +537,35 @@ public final class LinphoneThread
 
 			if (!videoEnabled) {
 				mVideoEnabled = false;
+				mMainThreadHandler.post(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						mListener.onVideoEnabled(false);
+					}
+				});
 			} else {
 				if (!mVideoEnabled) {
 					Lg.i("using video codec: ", call.getCurrentParamsCopy().getUsedVideoCodec().getMime());
-					mVideoEnabled = true;;
+					mVideoEnabled = true;
+					if (call.getVideoStats() == null) {
+						Lg.i("restarting call encryption checker because of video initialization");
+					} else {
+						Lg.i("reusing existing video stream which is already encrypted");
+						mMainThreadHandler.post(new Runnable()
+						{
+							@Override
+							public void run()
+							{
+								mListener.onVideoEnabled(true);
+							}
+						});
+					}
 				}
 			}
 
-			mMainThreadHandler.post(() -> mListener.onCallStateChanged(number, fixedState, message, videoEnabled));
+			mMainThreadHandler.post(() -> mListener.onCallStateChanged(number, fixedState, message));
 
 			if (LinphoneCall.State.CallUpdatedByRemote.equals(fixedState) && remoteVideo && !localVideo) {
 				/// NOTE: this needs to happen directly, posting to linphone thread might take to log
@@ -671,6 +692,18 @@ public final class LinphoneThread
 
 			if (!encrypted) {
 				Lg.e("unencrypted call: number=", new CallLogger(call), " with UserAgent ", call.getRemoteUserAgent());
+			}
+
+			if (encrypted && mVideoEnabled) {
+				Lg.i("video encrypted");
+				mMainThreadHandler.post(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						mListener.onVideoEnabled(true);
+					}
+				});
 			}
 
 			mMainThreadHandler.post(() -> mListener.onCallEncryptionChanged(authenticationToken, isTokenVerified));

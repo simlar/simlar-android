@@ -265,9 +265,9 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			if (!Util.isNullOrEmpty(mSimlarIdToCall)) {
 				if (!FlavourHelper.isGcmEnabled()) {
 					if (mSimlarStatus.isOffline()) {
-						mSimlarCallState.updateCallStateChanged(mSimlarIdToCall, LinphoneCallState.CALL_END, CallEndReason.SERVER_CONNECTION_TIMEOUT, false);
+						mSimlarCallState.updateCallStateChanged(mSimlarIdToCall, LinphoneCallState.CALL_END, CallEndReason.SERVER_CONNECTION_TIMEOUT);
 					} else {
-						mSimlarCallState.updateCallStateChanged(mSimlarIdToCall, LinphoneCallState.OUTGOING_INIT, CallEndReason.NONE, false);
+						mSimlarCallState.updateCallStateChanged(mSimlarIdToCall, LinphoneCallState.OUTGOING_INIT, CallEndReason.NONE);
 					}
 				}
 
@@ -695,10 +695,10 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	}
 
 	@Override
-	public void onCallStateChanged(final String number, final State callState, final String message, final boolean videoEnabled)
+	public void onCallStateChanged(final String number, final State callState, final String message)
 	{
 		final boolean oldCallStateRinging = mSimlarCallState.isRinging();
-		if (!mSimlarCallState.updateCallStateChanged(number, LinphoneCallState.fromLinphoneCallState(callState), CallEndReason.fromMessage(message), videoEnabled)) {
+		if (!mSimlarCallState.updateCallStateChanged(number, LinphoneCallState.fromLinphoneCallState(callState), CallEndReason.fromMessage(message))) {
 			Lg.v("SimlarCallState staying the same: ", mSimlarCallState);
 			return;
 		}
@@ -818,6 +818,16 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	public void onRemoteRequestedVideo()
 	{
 		SimlarServiceBroadcast.sendRemoteRequestedVideo(this);
+	}
+
+	@Override
+	public void onVideoEnabled(boolean enabled)
+	{
+		if (!mSimlarCallState.updateVideo(enabled)) {
+			return;
+		}
+
+		SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
 	}
 
 	private void call(final String simlarId)

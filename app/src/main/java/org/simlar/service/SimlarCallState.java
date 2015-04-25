@@ -74,9 +74,9 @@ public final class SimlarCallState
 		return true;
 	}
 
-	public boolean updateCallStateChanged(final String simlarId, final LinphoneCallState callState, final CallEndReason reason, final boolean videoEnabled)
+	public boolean updateCallStateChanged(final String simlarId, final LinphoneCallState callState, final CallEndReason reason)
 	{
-		if (!updateCallEndReason(reason) && Util.equalString(mSimlarId, simlarId) && mLinphoneCallState == callState && mVideoEnabled == videoEnabled) {
+		if (!updateCallEndReason(reason) && Util.equalString(mSimlarId, simlarId) && mLinphoneCallState == callState) {
 			return false;
 		}
 
@@ -90,7 +90,6 @@ public final class SimlarCallState
 
 		mSimlarId = simlarId;
 		mLinphoneCallState = callState;
-		mVideoEnabled = videoEnabled;
 
 		if (mLinphoneCallState == LinphoneCallState.STREAMS_RUNNING) {
 			mVideoRequested = false;
@@ -193,6 +192,17 @@ public final class SimlarCallState
 		mGuiCallState = GuiCallState.CONNECTING_TO_SERVER;
 		mCallStartTime = SystemClock.elapsedRealtime();
 
+		return true;
+	}
+
+	public boolean updateVideo(final boolean enabled)
+	{
+		if (mVideoEnabled == enabled) {
+			return false;
+		}
+
+		Lg.i("video enabled: ", enabled);
+		mVideoEnabled = enabled;
 		return true;
 	}
 
