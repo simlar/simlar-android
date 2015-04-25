@@ -203,7 +203,9 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		super.onResume();
 		Lg.i("onResume");
 
-		mProximityScreenLocker.acquire();
+		if (mVideoFragment == null) {
+			mProximityScreenLocker.acquire();
+		}
 	}
 
 	@Override
@@ -451,6 +453,8 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		final FragmentManager fm = getSupportFragmentManager();
 		fm.beginTransaction().add(R.id.layoutVideoFragmentContainer, mVideoFragment).commit();
 
+		mProximityScreenLocker.release(false);
+
 		mLayoutCallControlButtons.setVisibility(View.GONE);
 	}
 
@@ -466,6 +470,8 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		fm.beginTransaction().remove(mVideoFragment).commit();
 
 		mVideoFragment = null;
+
+		mProximityScreenLocker.acquire();
 
 		mLayoutCallControlButtons.setVisibility(View.VISIBLE);
 	}
