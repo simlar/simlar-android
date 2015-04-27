@@ -62,6 +62,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private Runnable mCallTimer = null;
 	private boolean mFinishDelayedCalled = false;
 	private boolean mHideAuthenticationToken = false;
+	private AlertDialog mAlertDialogRemoteRequestedVideo = null;
 
 	// gui elements
 	private ImageView mImageViewContactImage = null;
@@ -295,6 +296,9 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		handleVideoState(simlarCallState.getVideoState());
 
 		if (simlarCallState.isEndedCall()) {
+			if (mAlertDialogRemoteRequestedVideo != null) {
+				mAlertDialogRemoteRequestedVideo.hide();
+			}
 			mLayoutConnectionQuality.setVisibility(View.INVISIBLE);
 			mLayoutVerifiedAuthenticationToken.setVisibility(View.GONE);
 			mLayoutAuthenticationToken.setVisibility(View.GONE);
@@ -365,36 +369,41 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 	private void showRemoteRequestedVideoAlert()
 	{
-		Lg.i("showRemoteRequestedVideoAlert");
+		if (mAlertDialogRemoteRequestedVideo == null) {
+			mAlertDialogRemoteRequestedVideo = (new AlertDialog.Builder(this))
+					.setTitle(R.string.call_activity_alert_accept_video_request_title)
+					.setMessage(R.string.call_activity_alert_accept_video_request_text)
+					.setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener()
+					{
+						@Override
+						public void onClick(final DialogInterface dialog, final int id)
+						{
+							CallActivity.this.acceptVideoUpdate(false);
+						}
+					})
+					.setPositiveButton(R.string.button_continue, new DialogInterface.OnClickListener()
+					{
+						@Override
+						public void onClick(final DialogInterface dialog, final int id)
+						{
+							CallActivity.this.acceptVideoUpdate(true);
+						}
+					})
+					.setOnCancelListener(new DialogInterface.OnCancelListener()
+					{
+						@Override
+						public void onCancel(DialogInterface dialog)
+						{
+							CallActivity.this.acceptVideoUpdate(false);
+						}
+					})
+					.create();
+		}
 
-		(new AlertDialog.Builder(this))
-				.setTitle(R.string.call_activity_alert_accept_video_request_title)
-				.setMessage(R.string.call_activity_alert_accept_video_request_text)
-				.setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener()
-				{
-					@Override
-					public void onClick(final DialogInterface dialog, final int id)
-					{
-						CallActivity.this.acceptVideoUpdate(false);
-					}
-				})
-				.setPositiveButton(R.string.button_continue, new DialogInterface.OnClickListener()
-				{
-					@Override
-					public void onClick(final DialogInterface dialog, final int id)
-					{
-						CallActivity.this.acceptVideoUpdate(true);
-					}
-				})
-				.setOnCancelListener(new DialogInterface.OnCancelListener()
-				{
-					@Override
-					public void onCancel(DialogInterface dialog)
-					{
-						CallActivity.this.acceptVideoUpdate(false);
-					}
-				})
-				.create().show();
+		if (!mAlertDialogRemoteRequestedVideo.isShowing()) {
+			Lg.i("remote requested video => showing alert");
+			mAlertDialogRemoteRequestedVideo.show();
+		}
 	}
 
 	private void acceptVideoUpdate(final boolean accept)
