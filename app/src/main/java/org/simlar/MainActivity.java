@@ -45,6 +45,22 @@ public final class MainActivity extends ActionBarActivity
 	private ContactsAdapter mAdapter = null;
 	private ContactsListFragment mContactList = null;
 
+	private final SimlarServiceCommunicator mCommunicator = GooglePlayServicesHelper.gcmEnabled() ? null : new SimlarServiceCommunicatorContacts();
+
+	private final class SimlarServiceCommunicatorContacts extends SimlarServiceCommunicator
+	{
+		public SimlarServiceCommunicatorContacts()
+		{
+			super(LOGTAG);
+		}
+
+		@Override
+		void onServiceFinishes()
+		{
+			MainActivity.this.finish();
+		}
+	}
+
 	@Override
 	protected void onCreate(final Bundle savedInstanceState)
 	{
@@ -101,7 +117,7 @@ public final class MainActivity extends ActionBarActivity
 		Lg.i(LOGTAG, "onResume");
 		super.onResume();
 
-		if (SimlarService.isRunning()) {
+		if (GooglePlayServicesHelper.gcmEnabled() && SimlarService.isRunning()) {
 			final Class<? extends Activity> activity = SimlarService.getActivity();
 			if (activity != this.getClass()) {
 				Lg.i(LOGTAG, "as service is running => starting: ", activity.getSimpleName());
@@ -121,6 +137,10 @@ public final class MainActivity extends ActionBarActivity
 			return;
 		}
 
+		if (mCommunicator != null) {
+			mCommunicator.startServiceAndRegister(this, MainActivity.class, null);
+		}
+
 		if (mAdapter.isEmpty()) {
 			loadContacts();
 		}
@@ -130,6 +150,11 @@ public final class MainActivity extends ActionBarActivity
 	protected void onPause()
 	{
 		Lg.i(LOGTAG, "onPause");
+
+		if (mCommunicator != null) {
+			mCommunicator.unregister();
+		}
+
 		super.onPause();
 	}
 
@@ -140,6 +165,7 @@ public final class MainActivity extends ActionBarActivity
 		getMenuInflater().inflate(R.menu.main, menu);
 		updateMenu(Version.showDeveloperMenu(), R.id.action_delete_account, R.string.main_activity_menu_delete_account, Menu.NONE, menu);
 		updateMenu(Version.showDeveloperMenu(), R.id.action_fake_telephone_book, R.string.main_activity_menu_fake_telephone_book, Menu.NONE, menu);
+		updateMenu(!GooglePlayServicesHelper.gcmEnabled(), R.id.action_quit, R.string.main_activity_menu_quit, Menu.NONE, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -168,6 +194,9 @@ public final class MainActivity extends ActionBarActivity
 			return true;
 		case R.id.action_show_about:
 			showAbout();
+			return true;
+		case R.id.action_quit:
+			quit();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -261,7 +290,11 @@ public final class MainActivity extends ActionBarActivity
 	private void deleteAccountAndQuit()
 	{
 		PreferencesHelper.resetPreferencesFile(this);
-		finish();
+		if (mCommunicator == null) {
+			finish();
+		} else {
+			mCommunicator.getService().terminate();
+		}
 	}
 
 	private void tellAFriend()
@@ -276,5 +309,27 @@ public final class MainActivity extends ActionBarActivity
 	private void showAbout()
 	{
 		startActivity(new Intent(this, AboutActivity.class));
+	}
+
+	private void quit()
+	{
+		Lg.i(LOGTAG, "quit");
+		if (mCommunicator == null) {
+			finish();
+		} else {
+			(new AlertDialog.Builder(this))
+					.setTitle(R.string.main_activity_alert_quit_simlar_title)
+					.setMessage(R.string.main_activity_alert_quit_simlar_text)
+					.setNegativeButton(R.string.button_cancel, null)
+					.setPositiveButton(R.string.button_continue, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(final DialogInterface dialog, final int id)
+						{
+							Lg.i(LOGTAG, "user decided to terminate simlar");
+							mCommunicator.getService().terminate();
+						}
+					})
+					.create().show();
+		}
 	}
 }

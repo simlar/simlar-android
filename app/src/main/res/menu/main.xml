@@ -65,4 +65,10 @@
         android:title="@string/main_activity_menu_show_about"
         app:showAsAction="never"/>
 
+    <item
+        android:id="@+id/action_quit"
+        android:orderInCategory="10"
+        android:title="@string/main_activity_menu_quit"
+        app:showAsAction="never"/>
+
 </menu>

@@ -39,12 +39,15 @@
     <string name="main_activity_menu_fake_telephone_book_disable">Normales Telefonbuch</string>
     <string name="main_activity_menu_tell_a_friend">Freunde einladen</string>
     <string name="main_activity_menu_show_about">Über Simlar</string>
+    <string name="main_activity_menu_quit">Simlar beenden</string>
     <string name="main_activity_alert_upload_log_file_title">Fehlerbericht senden?</string>
     <string name="main_activity_alert_upload_log_file_text">Danke, dass du einen Fehlerbericht senden möchtest.\n\nEs wird automatisch eine Logdatei an Simlar übertragen.\n\nAnschließend hast du die Gelegenheit, den Simlar-Entwicklern eine E-Mail mit einer Fehlerbeschreibung zu senden.\n\nWillst du fortfahren?</string>
     <string name="main_activity_alert_uploading_log_file_failed_title">Fehler</string>
     <string name="main_activity_alert_uploading_log_file_failed_text">Erstellung der Logdatei fehlgeschlagen => Senden abgebrochen</string>
     <string name="main_activity_alert_enable_linphone_debug_mode_title">Debug-Modus wirklich aktivieren?</string>
     <string name="main_activity_alert_enable_linphone_debug_mode_text">Der Debug-Modus erweitert die Ausgaben innerhalb der Logdatei erheblich. Aktiviere ihn nur, wenn du von einem Simlar-Entwickler dazu aufgefordert wurdest oder wirklich weißt, was du tust.</string>
+    <string name="main_activity_alert_quit_simlar_title">Simlar wirklich beenden?</string>
+    <string name="main_activity_alert_quit_simlar_text">Wenn Simlar beendet ist, können Sie keine Simlar-Anrufe mehr annehmen.\n\n Wenn es Sie nicht stört die Google Play Services zu installieren, können Sie die \"Push\"-Version von Simlar installieren. Z.B. aus dem Google Play Store. Diese benutzt Push-Notifications und muss daher nicht dauerhaft laufen.</string>
     <string name="main_activity_tell_a_friend_chooser_title">Freunde einladen</string>
     <!-- TextSecure messages do not have a subject. WhatsApp puts the subject just in front of the message text. Emails simply use this subject as usual. -->
     <string name="main_activity_tell_a_friend_subject">Simlar</string>
