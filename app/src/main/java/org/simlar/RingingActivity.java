@@ -22,7 +22,7 @@ package org.simlar;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
@@ -35,7 +35,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class RingingActivity extends ActionBarActivity
+public final class RingingActivity extends AppCompatActivity
 {
 	private static final String LOGTAG = RingingActivity.class.getSimpleName();
 

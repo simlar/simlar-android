@@ -25,7 +25,7 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
@@ -35,7 +35,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public final class CallActivity extends ActionBarActivity
+public final class CallActivity extends AppCompatActivity
 {
 	private static final String LOGTAG = CallActivity.class.getSimpleName();
 

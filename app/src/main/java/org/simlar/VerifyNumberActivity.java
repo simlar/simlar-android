@@ -28,7 +28,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -40,7 +40,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public final class VerifyNumberActivity extends ActionBarActivity
+public final class VerifyNumberActivity extends AppCompatActivity
 {
 	private static final String LOGTAG = VerifyNumberActivity.class.getSimpleName();
 	private static final int RESULT_CREATE_ACCOUNT_ACTIVITY = 0;
