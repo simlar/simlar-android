@@ -25,16 +25,16 @@ import org.linphone.core.LinphoneCore.RegistrationState;
 
 interface LinphoneThreadListener
 {
-	public void onInitialized();
+	void onInitialized();
 
-	public void onRegistrationStateChanged(final RegistrationState state);
+	void onRegistrationStateChanged(final RegistrationState state);
 
-	public void onCallStatsChanged(final NetworkQuality quality, final int callDuration, final String codec, final String iceState,
-			final int upload, final int download, final int jitter, final int packetLoss, final long latePackets, final int roundTripDelay);
+	void onCallStatsChanged(final NetworkQuality quality, final int callDuration, final String codec, final String iceState,
+	                        final int upload, final int download, final int jitter, final int packetLoss, final long latePackets, final int roundTripDelay);
 
-	public void onCallStateChanged(final String number, final State state, final String message);
+	void onCallStateChanged(final String number, final State state, final String message);
 
-	public void onCallEncryptionChanged(final boolean encrypted, final String authenticationToken, final boolean authenticationTokenVerified);
+	void onCallEncryptionChanged(final boolean encrypted, final String authenticationToken, final boolean authenticationTokenVerified);
 
-	public void onJoin();
+	void onJoin();
 }
