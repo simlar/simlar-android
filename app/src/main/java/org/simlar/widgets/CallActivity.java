@@ -459,6 +459,8 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 		mProximityScreenLocker.release(false);
 
+		setExternalSpeaker(true);
+
 		mLayoutCallControlButtons.setVisibility(View.GONE);
 	}
 
@@ -476,6 +478,8 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mVideoFragment = null;
 
 		mProximityScreenLocker.acquire();
+
+		setExternalSpeaker(false);
 
 		mLayoutCallControlButtons.setVisibility(View.VISIBLE);
 	}
@@ -640,6 +644,15 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 			mButtonMicro.setContentDescription(getString(R.string.call_activity_microphone_on));
 			break;
 		}
+	}
+
+	private void setExternalSpeaker(final boolean enable)
+	{
+		if (mCommunicator.getService().getExternalSpeaker() == enable) {
+			return;
+		}
+
+		toggleSpeakerMuted(null);
 	}
 
 	private void setButtonSpeakerMute()
