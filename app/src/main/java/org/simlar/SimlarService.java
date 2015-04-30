@@ -168,7 +168,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		return mBinder;
 	}
 
-	void onTelephonyCallStateOffHook()
+	private void onTelephonyCallStateOffHook()
 	{
 		restoreRingerModeIfNeeded();
 		if (mSimlarStatus != SimlarStatus.ONGOING_CALL) {
@@ -184,7 +184,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mLinphoneThread.pauseAllCalls();
 	}
 
-	void onTelephonyCallStateIdle()
+	private void onTelephonyCallStateIdle()
 	{
 		restoreRingerModeIfNeeded();
 		if (mSimlarStatus != SimlarStatus.ONGOING_CALL) {
@@ -200,7 +200,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mLinphoneThread.resumeCall();
 	}
 
-	void onTelephonyCallStateRinging()
+	private void onTelephonyCallStateRinging()
 	{
 		if (mSimlarStatus != SimlarStatus.ONGOING_CALL) {
 			return;
@@ -362,7 +362,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		return ((WifiManager) this.getSystemService(Context.WIFI_SERVICE)).createWifiLock(createWifiWakeLockType(), "SimlarWifiLock");
 	}
 
-	void terminateChecker()
+	private void terminateChecker()
 	{
 		mHandler.postDelayed(new Runnable() {
 			@Override
@@ -377,7 +377,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}, TERMINATE_CHECKER_INTERVAL);
 	}
 
-	boolean terminateCheck()
+	private boolean terminateCheck()
 	{
 		if (mGoingDown) {
 			return true;
@@ -448,7 +448,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				PreferencesHelper.getNextMissedCallNotificationId(context), notificationBuilder.build());
 	}
 
-	Notification createNotification()
+	private Notification createNotification()
 	{
 		if (mNotificationActivity == null) {
 			if (mSimlarStatus == SimlarStatus.ONGOING_CALL) {
@@ -487,7 +487,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 	}
 
-	void connect()
+	private void connect()
 	{
 		if (mLinphoneThread == null) {
 			return;
@@ -574,7 +574,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 	}
 
-	void checkNetworkConnectivityAndRefreshRegisters()
+	private void checkNetworkConnectivityAndRefreshRegisters()
 	{
 		if (mLinphoneThread == null) {
 			Lg.w(LOGTAG, "checkNetworkConnectivityAndRefreshRegisters triggered but no linphone thread");
@@ -620,7 +620,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		((AlarmManager) getSystemService(Context.ALARM_SERVICE)).cancel(mKeepAwakePendingIntent);
 	}
 
-	void keepAwake()
+	private void keepAwake()
 	{
 		// idea from linphone KeepAliveHandler
 		checkNetworkConnectivityAndRefreshRegisters();
@@ -678,7 +678,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 	}
 
-	void notifySimlarStatusChanged(final SimlarStatus status)
+	private void notifySimlarStatusChanged(final SimlarStatus status)
 	{
 		Lg.i(LOGTAG, "notifySimlarStatusChanged: ", status);
 
@@ -897,7 +897,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mSoundEffectManager.stop(SoundEffectType.UNENCRYPTED_CALL_ALARM);
 	}
 
-	void call(final String simlarId)
+	private void call(final String simlarId)
 	{
 		if (mLinphoneThread == null) {
 			return;
@@ -944,7 +944,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		});
 	}
 
-	void handleTerminate()
+	private void handleTerminate()
 	{
 		Lg.i(LOGTAG, "handleTerminate");
 		if (mGoingDown) {
@@ -976,7 +976,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 	}
 
-	void terminatePrivate()
+	private void terminatePrivate()
 	{
 		// make sure this function is only called once
 		if (mTerminatePrivateAlreadyCalled) {

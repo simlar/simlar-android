@@ -91,7 +91,7 @@ public final class RingingActivity extends ActionBarActivity
 		animateCircles();
 	}
 
-	void createCircles()
+	private void createCircles()
 	{
 		final int diameter = Math.round(250.0f * getResources().getDisplayMetrics().density);
 		final RelativeLayout mainLayout = (RelativeLayout) findViewById(R.id.layoutRingingActivity);
@@ -109,7 +109,7 @@ public final class RingingActivity extends ActionBarActivity
 		}
 	}
 
-	void animateCircles()
+	private void animateCircles()
 	{
 		final long animationStartTime = AnimationUtils.currentAnimationTimeMillis() + 100;
 		int i = 0;
@@ -182,7 +182,7 @@ public final class RingingActivity extends ActionBarActivity
 		return true;
 	}
 
-	void onSimlarCallStateChanged()
+	private void onSimlarCallStateChanged()
 	{
 		if (mCommunicator.getService() == null) {
 			Lg.e(LOGTAG, "ERROR: onSimlarCallStateChanged but not bound to service");

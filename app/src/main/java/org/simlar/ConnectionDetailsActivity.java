@@ -106,7 +106,7 @@ public final class ConnectionDetailsActivity extends Activity
 		super.onPause();
 	}
 
-	void onCallConnectionDetailsChanged()
+	private void onCallConnectionDetailsChanged()
 	{
 		if (mCommunicator.getService() == null) {
 			Lg.e(LOGTAG, "ERROR: onSimlarCallStateChanged but not bound to service");

@@ -85,7 +85,7 @@ public final class MainActivity extends ActionBarActivity
 		Lg.i(LOGTAG, "onCreate ended");
 	}
 
-	void loadContacts()
+	private void loadContacts()
 	{
 		mContactList.setEmptyText(getString(R.string.main_activity_contact_list_loading_contacts));
 		ContactsProvider.getContacts(this, new FullContactsListener() {

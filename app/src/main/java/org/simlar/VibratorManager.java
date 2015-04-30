@@ -167,7 +167,7 @@ final class VibratorManager
 		Lg.i(LOGTAG, "stopped");
 	}
 
-	void onRingerModeChanged()
+	private void onRingerModeChanged()
 	{
 		Lg.i(LOGTAG, "onRingerModeChanged");
 

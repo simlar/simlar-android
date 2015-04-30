@@ -315,7 +315,7 @@ public final class CreateAccountActivity extends Activity
 		registerReceiver(mSmsReceiver, filter);
 	}
 
-	void waitForSms()
+	private void waitForSms()
 	{
 		Lg.i(LOGTAG, "waiting for sms");
 		mProgressWaitingForSMS.setVisibility(View.VISIBLE);
@@ -324,7 +324,7 @@ public final class CreateAccountActivity extends Activity
 		waitingForSmsIteration();
 	}
 
-	void waitingForSmsIteration()
+	private void waitingForSmsIteration()
 	{
 		mWaitingForSmsText.setText(getString(R.string.create_account_activity_waiting_for_sms) + " (" + mSecondsToStillWaitForSms + "s)");
 		--mSecondsToStillWaitForSms;
@@ -351,7 +351,7 @@ public final class CreateAccountActivity extends Activity
 		onError(R.string.create_account_activity_error_sms_timeout);
 	}
 
-	void onSmsReceived(final String sender, final String message)
+	private void onSmsReceived(final String sender, final String message)
 	{
 		if (Util.isNullOrEmpty(sender) || Util.isNullOrEmpty(message)) {
 			return;
@@ -379,7 +379,7 @@ public final class CreateAccountActivity extends Activity
 		confirmRegistrationCode(registrationCode);
 	}
 
-	void confirmRegistrationCode(final String registrationCode)
+	private void confirmRegistrationCode(final String registrationCode)
 	{
 		Lg.i(LOGTAG, "confirmRegistrationCode: ", registrationCode);
 
@@ -426,13 +426,13 @@ public final class CreateAccountActivity extends Activity
 
 	}
 
-	void connectToServer()
+	private void connectToServer()
 	{
 		mProgressFirstLogIn.setVisibility(View.VISIBLE);
 		mCommunicator.startServiceAndRegister(this, VerifyNumberActivity.class, null);
 	}
 
-	void onError(final int resId)
+	private void onError(final int resId)
 	{
 		mLayoutProgress.setVisibility(View.GONE);
 		if (resId == R.string.create_account_activity_error_wrong_telephone_number ||

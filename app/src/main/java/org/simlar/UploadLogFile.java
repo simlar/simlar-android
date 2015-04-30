@@ -75,7 +75,7 @@ public final class UploadLogFile
 		}
 	}
 
-	PostResult postFile(final File file)
+	private PostResult postFile(final File file)
 	{
 
 		final HttpsURLConnection connection = HttpsPost.createConnection(URL_PATH, true);
