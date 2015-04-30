@@ -31,6 +31,7 @@ import org.linphone.core.LinphoneContent;
 import org.linphone.core.LinphoneCore;
 import org.linphone.core.LinphoneCore.EcCalibratorStatus;
 import org.linphone.core.LinphoneCore.GlobalState;
+import org.linphone.core.LinphoneCore.LogCollectionUploadState;
 import org.linphone.core.LinphoneCore.MediaEncryption;
 import org.linphone.core.LinphoneCore.RegistrationState;
 import org.linphone.core.LinphoneCore.RemoteProvisioningState;
@@ -758,6 +759,18 @@ public final class LinphoneThread
 		{
 			Lg.w("fileTransferSend: message=", message, " size=", size);
 			return 0;
+		}
+
+		@Override
+		public void uploadProgressIndication(final LinphoneCore lc, final int offset, final int total)
+		{
+			Lg.w("uploadProgressIndication: offset=", offset, " total=", total);
+		}
+
+		@Override
+		public void uploadStateChanged(final LinphoneCore lc, final LogCollectionUploadState state, final String info)
+		{
+			Lg.w("uploadStateChanged: state=", state, " info=", info);
 		}
 	}
 
