@@ -56,7 +56,7 @@ public final class SimlarServiceBroadcast implements Serializable
 	}
 
 	@SuppressWarnings("unused")
-	public static interface Parameters extends Serializable
+	public interface Parameters extends Serializable
 	{
 	}
 
