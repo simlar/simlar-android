@@ -33,7 +33,7 @@
         <!-- needed to not warn in push flavour -->
         <!--suppress AndroidDomInspection -->
         <receiver
-            android:name="org.simlar.BootCompletedReceiver"
+            android:name="org.simlar.service.BootCompletedReceiver"
             android:exported="false">
 
             <intent-filter>

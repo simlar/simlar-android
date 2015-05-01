@@ -1,0 +1,1077 @@
+/**
+ * Copyright (C) 2013 The Simlar Authors.
+ *
+ * This file is part of Simlar. (https://www.simlar.org)
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
+package org.simlar.service;
+
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.media.AudioManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
+import android.net.wifi.WifiManager.WifiLock;
+import android.os.Binder;
+import android.os.Build;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
+import android.os.SystemClock;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.WakefulBroadcastReceiver;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
+import android.widget.Toast;
+
+import org.linphone.core.LinphoneCall.State;
+import org.linphone.core.LinphoneCore.RegistrationState;
+import org.simlar.R;
+import org.simlar.contactsprovider.ContactsProvider;
+import org.simlar.contactsprovider.ContactsProvider.ContactListener;
+import org.simlar.helper.CallConnectionDetails;
+import org.simlar.helper.CallEndReason;
+import org.simlar.helper.FileHelper;
+import org.simlar.helper.FlavourHelper;
+import org.simlar.helper.NetworkQuality;
+import org.simlar.helper.PreferencesHelper;
+import org.simlar.helper.PreferencesHelper.NotInitedException;
+import org.simlar.helper.Version;
+import org.simlar.helper.Volumes;
+import org.simlar.helper.Volumes.MicrophoneStatus;
+import org.simlar.logging.Lg;
+import org.simlar.service.SoundEffectManager.SoundEffectType;
+import org.simlar.service.liblinphone.LinphoneCallState;
+import org.simlar.service.liblinphone.LinphoneThread;
+import org.simlar.service.liblinphone.LinphoneThreadListener;
+import org.simlar.utils.Util;
+import org.simlar.widgets.CallActivity;
+import org.simlar.widgets.MainActivity;
+import org.simlar.widgets.RingingActivity;
+
+public final class SimlarService extends Service implements LinphoneThreadListener
+{
+	private static final int NOTIFICATION_ID = 1;
+	private static final long TERMINATE_CHECKER_INTERVAL = 20 * 1000; // milliseconds
+	public static final String INTENT_EXTRA_SIMLAR_ID = "SimlarServiceSimlarId";
+	@SuppressWarnings("WeakerAccess") // is only used in flavour push
+	public static final String INTENT_EXTRA_GCM = "SimlarServiceGCM";
+
+	private LinphoneThread mLinphoneThread = null;
+	private final Handler mHandler = new Handler();
+	private final IBinder mBinder = new SimlarServiceBinder();
+	private SimlarStatus mSimlarStatus = SimlarStatus.OFFLINE;
+	private final SimlarCallState mSimlarCallState = new SimlarCallState();
+	private CallConnectionDetails mCallConnectionDetails = new CallConnectionDetails();
+	private WakeLock mWakeLock = null;
+	private WakeLock mDisplayWakeLock = null;
+	private WifiLock mWifiLock = null;
+	private boolean mGoingDown = false;
+	private boolean mTerminatePrivateAlreadyCalled = false;
+	private static volatile Class<? extends Activity> mNotificationActivity = null;
+	private VibratorManager mVibratorManager = null;
+	private SoundEffectManager mSoundEffectManager = null;
+	private AudioFocus mAudioFocus;
+	private final NetworkChangeReceiver mNetworkChangeReceiver = new NetworkChangeReceiver();
+	private String mSimlarIdToCall = null;
+	private static volatile boolean mRunning = false;
+	private final TelephonyCallStateListener mTelephonyCallStateListener = new TelephonyCallStateListener();
+	private int mCurrentRingerMode = -1;
+	private PendingIntent mKeepAwakePendingIntent = null;
+	private final KeepAwakeReceiver mKeepAwakeReceiver = FlavourHelper.isGcmEnabled() ? null : new KeepAwakeReceiver();
+
+	public final class SimlarServiceBinder extends Binder
+	{
+		SimlarService getService()
+		{
+			return SimlarService.this;
+		}
+	}
+
+	private final class NetworkChangeReceiver extends BroadcastReceiver
+	{
+		public NetworkChangeReceiver()
+		{
+		}
+
+		@Override
+		public void onReceive(Context context, Intent intent)
+		{
+			SimlarService.this.checkNetworkConnectivityAndRefreshRegisters();
+		}
+	}
+
+	private final class KeepAwakeReceiver extends BroadcastReceiver
+	{
+		public KeepAwakeReceiver()
+		{
+		}
+
+		@Override
+		public void onReceive(Context context, Intent intent)
+		{
+			SimlarService.this.keepAwake();
+		}
+	}
+
+
+	private final class TelephonyCallStateListener extends PhoneStateListener
+	{
+		private boolean mInCall;
+
+		public TelephonyCallStateListener()
+		{
+		}
+
+		public boolean isInCall()
+		{
+			return mInCall;
+		}
+
+		@Override
+		public void onCallStateChanged(final int state, final String incomingNumber)
+		{
+			switch (state) {
+			case TelephonyManager.CALL_STATE_IDLE:
+				Lg.i("onTelephonyCallStateChanged: state=IDLE");
+				mInCall = false;
+				SimlarService.this.onTelephonyCallStateIdle();
+				break;
+			case TelephonyManager.CALL_STATE_OFFHOOK:
+				Lg.i("onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=OFFHOOK");
+				mInCall = true;
+				SimlarService.this.onTelephonyCallStateOffHook();
+				break;
+			case TelephonyManager.CALL_STATE_RINGING:
+				Lg.i("onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=RINGING");
+				mInCall = false; /// TODO Think about
+				SimlarService.this.onTelephonyCallStateRinging();
+				break;
+			default:
+				Lg.i("onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=", state);
+				break;
+			}
+		}
+	}
+
+	@Override
+	public IBinder onBind(final Intent intent)
+	{
+		Lg.i("onBind");
+		return mBinder;
+	}
+
+	private void onTelephonyCallStateOffHook()
+	{
+		restoreRingerModeIfNeeded();
+		if (mSimlarStatus != SimlarStatus.ONGOING_CALL) {
+			return;
+		}
+
+		if (mLinphoneThread == null) {
+			return;
+		}
+
+		mSoundEffectManager.stop(SoundEffectType.CALL_INTERRUPTION);
+
+		mLinphoneThread.pauseAllCalls();
+	}
+
+	private void onTelephonyCallStateIdle()
+	{
+		restoreRingerModeIfNeeded();
+		if (mSimlarStatus != SimlarStatus.ONGOING_CALL) {
+			return;
+		}
+
+		if (mLinphoneThread == null) {
+			return;
+		}
+
+		mSoundEffectManager.stop(SoundEffectType.CALL_INTERRUPTION);
+
+		mLinphoneThread.resumeCall();
+	}
+
+	private void onTelephonyCallStateRinging()
+	{
+		if (mSimlarStatus != SimlarStatus.ONGOING_CALL) {
+			return;
+		}
+
+		silenceAndStoreRingerMode();
+
+		mSoundEffectManager.start(SoundEffectType.CALL_INTERRUPTION);
+	}
+
+	private void silenceAndStoreRingerMode()
+	{
+		// steam roller tactics to silence incoming call
+		final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+		final int ringerMode = audioManager.getRingerMode();
+		if (ringerMode == AudioManager.RINGER_MODE_SILENT) {
+			return;
+		}
+
+		mCurrentRingerMode = ringerMode;
+		Lg.i("saving RingerMode: ", mCurrentRingerMode, " and switch to ringer mode silent");
+		audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+	}
+
+	private void restoreRingerModeIfNeeded()
+	{
+		if (mCurrentRingerMode == -1 || mCurrentRingerMode == AudioManager.RINGER_MODE_SILENT) {
+			return;
+		}
+
+		final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+		/// NOTE: On lollipop getRingerMode sometimes does not report silent mode correctly, so checking it here may be dangerous.
+		Lg.i("restoring RingerMode: ", audioManager.getRingerMode(), " -> ", mCurrentRingerMode);
+		audioManager.setRingerMode(mCurrentRingerMode);
+		mCurrentRingerMode = -1;
+	}
+
+	@Override
+	public int onStartCommand(final Intent intent, final int flags, final int startId)
+	{
+		Lg.i("onStartCommand intent=", intent, " startId=", startId);
+
+		if (FlavourHelper.isGcmEnabled()) {
+			Lg.i("acquiring simlar wake lock");
+			acquireWakeLock();
+			acquireWifiLock();
+		}
+
+		// releasing wakelock of gcm's WakefulBroadcastReceiver if needed
+		if (intent != null) {
+			WakefulBroadcastReceiver.completeWakefulIntent(intent);
+
+			if (!Util.isNullOrEmpty(intent.getStringExtra(INTENT_EXTRA_GCM))) {
+				intent.removeExtra(INTENT_EXTRA_GCM);
+			}
+
+			// make sure we have a contact name for the CallActivity
+			mSimlarIdToCall = intent.getStringExtra(INTENT_EXTRA_SIMLAR_ID);
+			intent.removeExtra(INTENT_EXTRA_SIMLAR_ID);
+			if (!Util.isNullOrEmpty(mSimlarIdToCall)) {
+				if (!FlavourHelper.isGcmEnabled()) {
+					if (mSimlarStatus.isOffline()) {
+						mSimlarCallState.updateCallStateChanged(mSimlarIdToCall, LinphoneCallState.CALL_END, CallEndReason.SERVER_CONNECTION_TIMEOUT);
+					} else {
+						mSimlarCallState.updateCallStateChanged(mSimlarIdToCall, LinphoneCallState.OUTGOING_INIT, CallEndReason.NONE);
+					}
+				}
+				ContactsProvider.getNameAndPhotoId(mSimlarIdToCall, this, new ContactListener() {
+					@Override
+					public void onGetNameAndPhotoId(final String name, final String photoId)
+					{
+						mSimlarCallState.updateContactNameAndImage(name, photoId);
+					}
+				});
+			}
+		} else {
+			Lg.w("onStartCommand: with no intent");
+			mSimlarIdToCall = null;
+		}
+		Lg.i("onStartCommand simlarIdToCall=", new Lg.Anonymizer(mSimlarIdToCall));
+
+		handlePendingCall();
+
+		if (mGoingDown) {
+			Lg.i("onStartCommand called while service is going down => recovering");
+			mGoingDown = false;
+			if (mLinphoneThread == null) {
+				startLinphone();
+			}
+		}
+
+		// We want this service to continue running until it is explicitly stopped, so return sticky.
+		return START_STICKY;
+	}
+
+	@Override
+	public void onCreate()
+	{
+		Lg.i("started with simlar version=", Version.getVersionName(this),
+				" on device: ", Build.MANUFACTURER, " ", Build.MODEL, " (", Build.DEVICE, ") with android version=", Build.VERSION.RELEASE);
+
+		mRunning = true;
+
+		FileHelper.init(this);
+		mVibratorManager = new VibratorManager(this.getApplicationContext());
+		mSoundEffectManager = new SoundEffectManager(this.getApplicationContext());
+		mAudioFocus = new AudioFocus(this);
+
+		mWakeLock = ((PowerManager) this.getSystemService(Context.POWER_SERVICE))
+				.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SimlarWakeLock");
+		mDisplayWakeLock = createDisplayWakeLock();
+		mWifiLock = createWifiWakeLock();
+
+		startForeground(NOTIFICATION_ID, createNotification());
+
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+		registerReceiver(mNetworkChangeReceiver, intentFilter);
+
+		((TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE)).listen(mTelephonyCallStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+
+		PreferencesHelper.readPreferencesFromFile(this);
+
+		ContactsProvider.preLoadContacts(this);
+
+		startLinphone();
+	}
+
+	private void startLinphone()
+	{
+		Lg.i("startLinphone");
+		mLinphoneThread = new LinphoneThread(this, this);
+		mTerminatePrivateAlreadyCalled = false;
+
+		if (FlavourHelper.isGcmEnabled()) {
+			terminateChecker();
+		} else {
+			startKeepAwake();
+		}
+	}
+
+	@SuppressWarnings("deprecation")
+	private WakeLock createDisplayWakeLock()
+	{
+		return ((PowerManager) getSystemService(Context.POWER_SERVICE))
+				.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "SimlarDisplayWakeLock");
+	}
+
+	@SuppressLint("InlinedApi")
+	static private int createWifiWakeLockType()
+	{
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
+			return WifiManager.WIFI_MODE_FULL_HIGH_PERF;
+		}
+
+		return WifiManager.WIFI_MODE_FULL;
+	}
+
+	private WifiLock createWifiWakeLock()
+	{
+		return ((WifiManager) this.getSystemService(Context.WIFI_SERVICE)).createWifiLock(createWifiWakeLockType(), "SimlarWifiLock");
+	}
+
+	private void terminateChecker()
+	{
+		mHandler.postDelayed(new Runnable() {
+			@Override
+			public void run()
+			{
+				if (terminateCheck()) {
+					return;
+				}
+
+				terminateChecker();
+			}
+		}, TERMINATE_CHECKER_INTERVAL);
+	}
+
+	private boolean terminateCheck()
+	{
+		if (mGoingDown) {
+			return true;
+		}
+
+		if (mSimlarStatus == SimlarStatus.ONGOING_CALL) {
+			return false;
+		}
+
+		Lg.i("terminateChecker triggered on status=", mSimlarStatus);
+
+		if (!mSimlarStatus.isConnectedToSipServer()) {
+			mSimlarCallState.connectingToSimlarServerTimedOut();
+			SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
+		}
+		handleTerminate();
+
+		return true;
+	}
+
+	public void registerActivityToNotification(final Class<? extends Activity> activity)
+	{
+		if (activity == null) {
+			Lg.e("registerActivityToNotification with empty activity");
+			return;
+		}
+
+		Lg.i("registerActivityToNotification: ", activity.getSimpleName());
+		mNotificationActivity = activity;
+
+		final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		nm.notify(NOTIFICATION_ID, createNotification());
+	}
+
+	private static void createMissedCallNotification(final Context context, final String simlarId)
+	{
+		if (Util.isNullOrEmpty(simlarId)) {
+			Lg.w("no simlarId for missed call");
+			return;
+		}
+
+		Lg.i("missed call: ", new Lg.Anonymizer(simlarId));
+		ContactsProvider.getNameAndPhotoId(simlarId, context, new ContactListener()
+		{
+			@Override
+			public void onGetNameAndPhotoId(final String name, final String photoId)
+			{
+				createMissedCallNotification(context, name, photoId);
+			}
+		});
+	}
+
+	private static void createMissedCallNotification(final Context context, final String name, final String photoId)
+	{
+		final PendingIntent activity = PendingIntent.getActivity(context, 0,
+				new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED), 0);
+
+		final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context);
+		notificationBuilder.setSmallIcon(R.drawable.ic_notification_missed_calls);
+		notificationBuilder.setLargeIcon(ContactsProvider.getContactPhotoBitmap(context, R.drawable.ic_launcher, photoId));
+		notificationBuilder.setContentTitle(context.getString(R.string.missed_call_notification));
+		notificationBuilder.setContentText(name);
+		notificationBuilder.setContentIntent(activity);
+		notificationBuilder.setAutoCancel(true);
+		notificationBuilder.setWhen(System.currentTimeMillis());
+
+		((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(
+				PreferencesHelper.getNextMissedCallNotificationId(context), notificationBuilder.build());
+	}
+
+	private Notification createNotification()
+	{
+		if (mNotificationActivity == null) {
+			if (mSimlarStatus == SimlarStatus.ONGOING_CALL) {
+				if (mSimlarCallState.isRinging()) {
+					mNotificationActivity = RingingActivity.class;
+				} else {
+					mNotificationActivity = CallActivity.class;
+				}
+			} else {
+				mNotificationActivity = MainActivity.class;
+			}
+			Lg.i("no activity registered based on mSimlarStatus=", mSimlarStatus, " we now take: ", mNotificationActivity.getSimpleName());
+		}
+
+		/// Note: we do not want the TaskStackBuilder here
+		final PendingIntent activity = PendingIntent.getActivity(this, 0,
+				new Intent(this, mNotificationActivity).addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED), 0);
+
+		final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
+		notificationBuilder.setSmallIcon(FlavourHelper.isGcmEnabled() ? R.drawable.ic_notification_ongoing_call : mSimlarStatus.getNotificationIcon());
+		notificationBuilder.setLargeIcon(mSimlarCallState.getContactPhotoBitmap(this, R.drawable.ic_launcher));
+		notificationBuilder.setContentTitle(getString(R.string.app_name));
+		notificationBuilder.setContentText(createNotificationText());
+		notificationBuilder.setOngoing(true);
+		notificationBuilder.setContentIntent(activity);
+		notificationBuilder.setWhen(System.currentTimeMillis());
+		return notificationBuilder.build();
+	}
+
+	private String createNotificationText()
+	{
+		if (FlavourHelper.isGcmEnabled() || mSimlarStatus == SimlarStatus.ONGOING_CALL) {
+			return mSimlarCallState.createNotificationText(this, mGoingDown);
+		} else {
+			return getString(mSimlarStatus.getNotificationTextId());
+		}
+	}
+
+	private void connect()
+	{
+		if (mLinphoneThread == null) {
+			return;
+		}
+
+		notifySimlarStatusChanged(SimlarStatus.CONNECTING);
+
+		try {
+			mLinphoneThread.register(PreferencesHelper.getMySimlarId(), PreferencesHelper.getPassword());
+		} catch (final NotInitedException e) {
+			Lg.ex(e, "PreferencesHelper.NotInitedException");
+		}
+	}
+
+	@Override
+	public synchronized void onDestroy()
+	{
+		Lg.i("onDestroy");
+
+		((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(NOTIFICATION_ID);
+
+		mVibratorManager.stop();
+		mSoundEffectManager.stopAll();
+
+		unregisterReceiver(mNetworkChangeReceiver);
+
+		stopKeepAwake();
+
+		((TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE)).listen(mTelephonyCallStateListener, PhoneStateListener.LISTEN_NONE);
+
+		// just in case
+		releaseWakeLock();
+		releaseDisplayWakeLock();
+		releaseWifiLock();
+
+		mRunning = false;
+
+		if (!FlavourHelper.isGcmEnabled()) {
+			Toast.makeText(this, R.string.simlar_service_on_destroy, Toast.LENGTH_SHORT).show();
+		}
+
+		Lg.i("onDestroy ended");
+	}
+
+	private void acquireWakeLock()
+	{
+		if (!mWakeLock.isHeld()) {
+			mWakeLock.acquire();
+		}
+	}
+
+	private void acquireDisplayWakeLock()
+	{
+		if (!mDisplayWakeLock.isHeld()) {
+			mDisplayWakeLock.acquire();
+		}
+	}
+
+	private void acquireWifiLock()
+	{
+		if (!mWifiLock.isHeld()) {
+			mWifiLock.acquire();
+		}
+	}
+
+	private void releaseWakeLock()
+	{
+		if (mWakeLock.isHeld()) {
+			mWakeLock.release();
+		}
+	}
+
+	private void releaseDisplayWakeLock()
+	{
+		if (mDisplayWakeLock.isHeld()) {
+			mDisplayWakeLock.release();
+		}
+	}
+
+	private void releaseWifiLock()
+	{
+		if (mWifiLock.isHeld()) {
+			mWifiLock.release();
+		}
+	}
+
+	private void checkNetworkConnectivityAndRefreshRegisters()
+	{
+		if (mLinphoneThread == null) {
+			Lg.w("checkNetworkConnectivityAndRefreshRegisters triggered but no linphone thread");
+			return;
+		}
+
+		final NetworkInfo ni = ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+		if (ni == null) {
+			Lg.e("no NetworkInfo found");
+			return;
+		}
+
+		Lg.i("NetworkInfo ", ni.getTypeName(), " ", ni.getState());
+		if (ni.isConnected()) {
+			mLinphoneThread.refreshRegisters();
+		}
+	}
+
+	private void startKeepAwake()
+	{
+		if (mKeepAwakeReceiver == null) {
+			return;
+		}
+
+		final Intent startIntent = new Intent("org.simlar.keepAwake");
+		mKeepAwakePendingIntent = PendingIntent.getBroadcast(this, 0, startIntent, 0);
+
+		((AlarmManager) getSystemService(Context.ALARM_SERVICE))
+				.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 600000, 600000, mKeepAwakePendingIntent);
+
+		final IntentFilter filter = new IntentFilter();
+		filter.addAction("org.simlar.keepAwake");
+		registerReceiver(mKeepAwakeReceiver, filter);
+	}
+
+	private void stopKeepAwake()
+	{
+		if (mKeepAwakeReceiver == null) {
+			return;
+		}
+
+		unregisterReceiver(mKeepAwakeReceiver);
+		((AlarmManager) getSystemService(Context.ALARM_SERVICE)).cancel(mKeepAwakePendingIntent);
+	}
+
+	private void keepAwake()
+	{
+		// idea from linphone KeepAliveHandler
+		checkNetworkConnectivityAndRefreshRegisters();
+
+		// make sure iterate will have enough time before device eventually goes to sleep
+		acquireWakeLock();
+		mHandler.postDelayed(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				if (getSimlarStatus() != SimlarStatus.ONGOING_CALL) {
+					releaseWakeLock();
+				}
+			}
+		}, 4000);
+	}
+
+	@Override
+	public void onInitialized()
+	{
+		notifySimlarStatusChanged(SimlarStatus.OFFLINE);
+
+		if (!PreferencesHelper.readPreferencesFromFile(this)) {
+			Lg.e("failed to initialize credentials");
+			return;
+		}
+
+		connect();
+	}
+
+	@Override
+	public void onRegistrationStateChanged(final RegistrationState state)
+	{
+		Lg.i("onRegistrationStateChanged: ", state);
+
+		final SimlarStatus status = SimlarStatus.fromRegistrationState(state);
+
+		if (mGoingDown && !status.isConnectedToSipServer()) {
+			mHandler.post(new Runnable() {
+				@Override
+				public void run()
+				{
+					terminatePrivate();
+				}
+			});
+		}
+
+		notifySimlarStatusChanged(status);
+
+		if (!FlavourHelper.isGcmEnabled()) {
+			Lg.i("updating notification based on registration state");
+			final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+			nm.notify(NOTIFICATION_ID, createNotification());
+		}
+	}
+
+	private void notifySimlarStatusChanged(final SimlarStatus status)
+	{
+		Lg.i("notifySimlarStatusChanged: ", status);
+
+		mSimlarStatus = status;
+
+		SimlarServiceBroadcast.sendSimlarStatusChanged(this);
+
+		handlePendingCall();
+
+		if (mSimlarStatus == SimlarStatus.CONNECTING && mSimlarCallState.updateConnectingToServer()) {
+			SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
+		}
+	}
+
+	private void handlePendingCall()
+	{
+		if (getSimlarStatus() != SimlarStatus.ONLINE || Util.isNullOrEmpty(mSimlarIdToCall) || mGoingDown) {
+			return;
+		}
+
+		final String simlarId = mSimlarIdToCall;
+		mSimlarIdToCall = null;
+		mHandler.post(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				call(simlarId);
+			}
+		});
+	}
+
+	@Override
+	public void onCallStatsChanged(final NetworkQuality quality, final int callDuration, final String codec, final String iceState,
+			final int upload, final int download, final int jitter, final int packetLoss, final long latePackets, final int roundTripDelay)
+	{
+		final boolean simlarCallStateChanged = mSimlarCallState.updateCallStats(quality, callDuration);
+
+		if (mSimlarCallState.isEmpty()) {
+			Lg.e("SimlarCallState is empty: ", mSimlarCallState);
+			return;
+		}
+
+		if (!simlarCallStateChanged) {
+			Lg.v("SimlarCallState staying the same: ", mSimlarCallState);
+		} else {
+			Lg.i("updated ", mSimlarCallState);
+			SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
+		}
+
+		if (!mCallConnectionDetails.updateCallStats(quality, codec, iceState, upload, download, jitter, packetLoss, latePackets, roundTripDelay)) {
+			Lg.v("CallConnectionDetails staying the same: ", mCallConnectionDetails);
+			return;
+		}
+
+		Lg.d("CallConnectionDetails updated: ", mCallConnectionDetails);
+		SimlarServiceBroadcast.sendCallConnectionDetailsChanged(this);
+	}
+
+	@Override
+	public void onCallStateChanged(final String number, final State callState, final String message)
+	{
+		final boolean oldCallStateRinging = mSimlarCallState.isRinging();
+		if (!mSimlarCallState.updateCallStateChanged(number, LinphoneCallState.fromLinphoneCallState(callState), CallEndReason.fromMessage(message))) {
+			Lg.v("SimlarCallState staying the same: ", mSimlarCallState);
+			return;
+		}
+
+		if (mSimlarCallState.isEmpty()) {
+			Lg.e("SimlarCallState is empty: ", mSimlarCallState);
+			return;
+		}
+
+		Lg.i("updated ", mSimlarCallState);
+
+		if (mSimlarCallState.isRinging() && !mGoingDown) {
+			if (mTelephonyCallStateListener.isInCall()) {
+				Lg.i("incoming call while gsm call is active");
+				mSoundEffectManager.start(SoundEffectType.CALL_INTERRUPTION);
+			} else {
+				mSoundEffectManager.start(SoundEffectType.RINGTONE);
+				mVibratorManager.start();
+			}
+		} else {
+			mVibratorManager.stop();
+			mSoundEffectManager.stop(SoundEffectType.RINGTONE);
+			mSoundEffectManager.stop(SoundEffectType.CALL_INTERRUPTION);
+		}
+
+		if (mSimlarCallState.isWaitingForContact() && !mGoingDown) {
+			mSoundEffectManager.start(SoundEffectType.WAITING_FOR_CONTACT);
+		} else {
+			mSoundEffectManager.stop(SoundEffectType.WAITING_FOR_CONTACT);
+		}
+
+		if (mSimlarCallState.isBeforeEncryption()) {
+			mLinphoneThread.setMicrophoneStatus(MicrophoneStatus.DISABLED);
+			mSoundEffectManager.setInCallMode(true);
+			mSoundEffectManager.startPrepared(SoundEffectType.ENCRYPTION_HANDSHAKE);
+		}
+
+		if (mSimlarCallState.isNewCall() && !mGoingDown) {
+			mSoundEffectManager.prepare(SoundEffectType.ENCRYPTION_HANDSHAKE);
+			notifySimlarStatusChanged(SimlarStatus.ONGOING_CALL);
+
+			mCallConnectionDetails = new CallConnectionDetails();
+
+			if (!FlavourHelper.isGcmEnabled()) {
+				Lg.i("acquiring simlar wake lock because of new call");
+				acquireWakeLock();
+				acquireWifiLock();
+			}
+
+			mAudioFocus.request();
+
+			if (mSimlarCallState.isRinging()) {
+				Lg.i("starting RingingActivity");
+				mNotificationActivity = RingingActivity.class;
+				startActivity(new Intent(SimlarService.this, RingingActivity.class).addFlags(
+						Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+			}
+		}
+
+		if (mSimlarCallState.isEndedCall()) {
+			notifySimlarStatusChanged(SimlarStatus.ONLINE);
+			mSoundEffectManager.stopAll();
+			mSoundEffectManager.setInCallMode(false);
+			mAudioFocus.release();
+
+			restoreRingerModeIfNeeded();
+
+			if (mCallConnectionDetails.updateEndedCall()) {
+				SimlarServiceBroadcast.sendCallConnectionDetailsChanged(this);
+			}
+
+			if (oldCallStateRinging) {
+				createMissedCallNotification(this, number);
+			}
+
+			if (FlavourHelper.isGcmEnabled()) {
+				acquireDisplayWakeLock();
+				terminate();
+			} else {
+				releaseWakeLock();
+				releaseWifiLock();
+			}
+		}
+
+		ContactsProvider.getNameAndPhotoId(number, this, new ContactListener()
+		{
+			@Override
+			public void onGetNameAndPhotoId(String name, String photoId)
+			{
+				mSimlarCallState.updateContactNameAndImage(name, photoId);
+
+				final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+				nm.notify(NOTIFICATION_ID, createNotification());
+
+				SimlarServiceBroadcast.sendSimlarCallStateChanged(SimlarService.this);
+			}
+		});
+	}
+
+	@Override
+	public void onCallEncryptionChanged(final String authenticationToken, final boolean authenticationTokenVerified)
+	{
+		if (!mSimlarCallState.updateCallEncryption(authenticationToken, authenticationTokenVerified)) {
+			Lg.v("callEncryptionChanged but no difference in SimlarCallState: ", mSimlarCallState);
+			return;
+		}
+
+		if (mSimlarCallState.isEmpty()) {
+			Lg.e("callEncryptionChanged but SimlarCallState isEmpty");
+			return;
+		}
+
+		Lg.i("SimlarCallState updated encryption: authenticationToken=", authenticationToken, " authenticationTokenVerified=", authenticationTokenVerified);
+
+		mLinphoneThread.setMicrophoneStatus(MicrophoneStatus.ON);
+		mSoundEffectManager.stop(SoundEffectType.ENCRYPTION_HANDSHAKE);
+
+		SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
+	}
+
+	private void call(final String simlarId)
+	{
+		if (mLinphoneThread == null) {
+			return;
+		}
+
+		mLinphoneThread.call(simlarId);
+	}
+
+	public void pickUp()
+	{
+		if (mLinphoneThread == null) {
+			return;
+		}
+
+		mLinphoneThread.pickUp();
+	}
+
+	public void terminateCall()
+	{
+		if (mLinphoneThread == null) {
+			return;
+		}
+
+		mNotificationActivity = MainActivity.class;
+		final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		nm.notify(NOTIFICATION_ID, createNotification());
+
+		if (mSimlarStatus == SimlarStatus.ONGOING_CALL) {
+			mLinphoneThread.terminateAllCalls();
+		} else if (FlavourHelper.isGcmEnabled()) {
+			terminate();
+		}
+	}
+
+	public void terminate()
+	{
+		Lg.i("terminate");
+		mHandler.post(new Runnable() {
+			@Override
+			public void run()
+			{
+				handleTerminate();
+			}
+		});
+	}
+
+	private void handleTerminate()
+	{
+		Lg.i("handleTerminate");
+		if (mGoingDown) {
+			Lg.w("handleTerminate: already going down");
+			return;
+		}
+		mGoingDown = true;
+		SimlarServiceBroadcast.sendSimlarStatusChanged(this);
+
+		if (mLinphoneThread != null && mSimlarStatus.isConnectedToSipServer()) {
+			mLinphoneThread.unregister();
+
+			// make sure terminatePrivate is called after at least 5 seconds
+			mHandler.postDelayed(new Runnable() {
+				@Override
+				public void run()
+				{
+					terminatePrivate();
+				}
+			}, 5000);
+		} else {
+			mHandler.post(new Runnable() {
+				@Override
+				public void run()
+				{
+					terminatePrivate();
+				}
+			});
+		}
+	}
+
+	private void terminatePrivate()
+	{
+		// make sure this function is only called once
+		if (mTerminatePrivateAlreadyCalled) {
+			Lg.i("terminatePrivate already called");
+			return;
+		}
+		mTerminatePrivateAlreadyCalled = true;
+
+		Lg.i("terminatePrivate");
+		if (mLinphoneThread != null) {
+			mLinphoneThread.finish();
+		} else {
+			onJoin();
+		}
+	}
+
+	@Override
+	public void onJoin()
+	{
+		if (mLinphoneThread != null) {
+			try {
+				mLinphoneThread.join(2000);
+			} catch (final InterruptedException e) {
+				Lg.ex(e, "join interrupted");
+			}
+			mLinphoneThread = null;
+		}
+
+		SimlarServiceBroadcast.sendServiceFinishes(this);
+
+		// make sure we remove the terminateChecker by removing all events
+		mHandler.removeCallbacksAndMessages(null);
+
+		if (mGoingDown) {
+			Lg.i("onJoin: canceling notification");
+			((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(NOTIFICATION_ID);
+			Lg.i("onJoin: calling stopSelf");
+			stopSelf();
+			Lg.i("onJoin: stopSelf called");
+			// calling stopForeground before stopSelf could trigger a restart
+			stopForeground(true);
+			Lg.i("onJoin: stopForeground called");
+		} else {
+			Lg.i("onJoin: recovering calling startLinphone");
+			startLinphone();
+		}
+	}
+
+	public void verifyAuthenticationTokenOfCurrentCall(final boolean verified)
+	{
+		if (mLinphoneThread == null) {
+			Lg.e("ERROR: verifyAuthenticationToken called but no linphone thread");
+			return;
+		}
+
+		if (Util.isNullOrEmpty(mSimlarCallState.getAuthenticationToken())) {
+			Lg.e("ERROR: verifyAuthenticationToken called but no token available");
+			return;
+		}
+
+		mLinphoneThread.verifyAuthenticationToken(mSimlarCallState.getAuthenticationToken(), verified);
+	}
+
+	public SimlarStatus getSimlarStatus()
+	{
+		return mSimlarStatus;
+	}
+
+	public SimlarCallState getSimlarCallState()
+	{
+		return mSimlarCallState;
+	}
+
+	public Volumes getVolumes()
+	{
+		if (mLinphoneThread == null) {
+			return new Volumes();
+		}
+
+		return mLinphoneThread.getVolumes();
+	}
+
+	public void setVolumes(final Volumes volumes)
+	{
+		if (mLinphoneThread == null) {
+			return;
+		}
+
+		mLinphoneThread.setVolumes(volumes);
+	}
+
+	public CallConnectionDetails getCallConnectionDetails()
+	{
+		return mCallConnectionDetails;
+	}
+
+	public static boolean isRunning()
+	{
+		return mRunning;
+	}
+
+	public static Class<? extends Activity> getActivity()
+	{
+		return mNotificationActivity;
+	}
+
+	public static void startService(final Context context, final Intent intent)
+	{
+		context.startService(intent);
+		mRunning = true;
+	}
+}

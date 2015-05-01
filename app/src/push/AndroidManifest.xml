@@ -46,7 +46,7 @@
         <!-- needed to not warn in alwaysOnline flavour -->
         <!--suppress AndroidDomInspection -->
         <receiver
-            android:name="org.simlar.GcmBroadcastReceiver"
+            android:name="org.simlar.service.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
