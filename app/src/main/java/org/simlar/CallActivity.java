@@ -192,7 +192,7 @@ public final class CallActivity extends ActionBarActivity
 		return true;
 	}
 
-	void setCallEncryption(final boolean encrypted, final String authenticationToken, final boolean authenticationTokenVerified)
+	private void setCallEncryption(final boolean encrypted, final String authenticationToken, final boolean authenticationTokenVerified)
 	{
 		if (!encrypted) {
 			mLayoutAuthenticationToken.setVisibility(View.GONE);
@@ -214,7 +214,7 @@ public final class CallActivity extends ActionBarActivity
 		}
 	}
 
-	void onSimlarCallStateChanged()
+	private void onSimlarCallStateChanged()
 	{
 		if (mCommunicator.getService() == null) {
 			Lg.e(LOGTAG, "ERROR: onSimlarCallStateChanged but not bound to service");
@@ -286,7 +286,7 @@ public final class CallActivity extends ActionBarActivity
 		iterateTimer();
 	}
 
-	void iterateTimer()
+	private void iterateTimer()
 	{
 		final String text = Util.formatMilliSeconds(SystemClock.elapsedRealtime() - mCallStartTime);
 		Lg.d(LOGTAG, "iterateTimer: ", text);
