@@ -86,7 +86,7 @@ public final class CreateAccountActivity extends Activity
 
 			if (status.isConnectedToSipServer() || status.isRegistrationAtSipServerFailed()) {
 				mTestRegistrationSuccess = status.isConnectedToSipServer();
-				if (GooglePlayServicesHelper.gcmEnabled()) {
+				if (FlavourHelper.isGcmEnabled()) {
 					mService.terminate();
 				} else {
 					unregister();

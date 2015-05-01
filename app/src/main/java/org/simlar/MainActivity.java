@@ -45,7 +45,7 @@ public final class MainActivity extends ActionBarActivity
 	private ContactsAdapter mAdapter = null;
 	private ContactsListFragment mContactList = null;
 
-	private final SimlarServiceCommunicator mCommunicator = GooglePlayServicesHelper.gcmEnabled() ? null : new SimlarServiceCommunicatorContacts();
+	private final SimlarServiceCommunicator mCommunicator = FlavourHelper.isGcmEnabled() ? null : new SimlarServiceCommunicatorContacts();
 
 	private final class SimlarServiceCommunicatorContacts extends SimlarServiceCommunicator
 	{
@@ -117,7 +117,7 @@ public final class MainActivity extends ActionBarActivity
 		Lg.i(LOGTAG, "onResume");
 		super.onResume();
 
-		if (GooglePlayServicesHelper.gcmEnabled() && SimlarService.isRunning()) {
+		if (FlavourHelper.isGcmEnabled() && SimlarService.isRunning()) {
 			final Class<? extends Activity> activity = SimlarService.getActivity();
 			if (activity != this.getClass()) {
 				Lg.i(LOGTAG, "as service is running => starting: ", activity.getSimpleName());
@@ -165,7 +165,7 @@ public final class MainActivity extends ActionBarActivity
 		getMenuInflater().inflate(R.menu.main, menu);
 		updateMenu(Version.showDeveloperMenu(), R.id.action_delete_account, R.string.main_activity_menu_delete_account, Menu.NONE, menu);
 		updateMenu(Version.showDeveloperMenu(), R.id.action_fake_telephone_book, R.string.main_activity_menu_fake_telephone_book, Menu.NONE, menu);
-		updateMenu(!GooglePlayServicesHelper.gcmEnabled(), R.id.action_quit, R.string.main_activity_menu_quit, Menu.NONE, menu);
+		updateMenu(!FlavourHelper.isGcmEnabled(), R.id.action_quit, R.string.main_activity_menu_quit, Menu.NONE, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 

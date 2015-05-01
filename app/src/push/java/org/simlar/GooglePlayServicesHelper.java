@@ -45,12 +45,6 @@ final class GooglePlayServicesHelper
 		throw new AssertionError("This class was not meant to be instantiated");
 	}
 
-	@SuppressWarnings("SameReturnValue")
-	public static boolean gcmEnabled()
-	{
-		return true;
-	}
-
 	public static void registerGcmIfNeeded(final Context context)
 	{
 		// Why do we check the version code here?

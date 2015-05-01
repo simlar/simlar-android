@@ -20,24 +20,10 @@
 
 package org.simlar;
 
-import android.app.Activity;
-import android.content.Context;
-
-
-final class GooglePlayServicesHelper
+class FlavourHelper
 {
-	private GooglePlayServicesHelper()
-	{
-		throw new AssertionError("This class was not meant to be instantiated");
-	}
-
-	@SuppressWarnings({"EmptyMethod", "UnusedParameters"})
-	public static void registerGcmIfNeeded(final Context context)
-	{
-	}
-
-	@SuppressWarnings({"SameReturnValue", "UnusedParameters"})
-	public static boolean checkPlayServices(final Activity activity)
+	@SuppressWarnings("SameReturnValue")
+	public static boolean isGcmEnabled()
 	{
 		return true;
 	}
