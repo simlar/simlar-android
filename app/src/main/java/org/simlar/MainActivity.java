@@ -127,6 +127,7 @@ public final class MainActivity extends ActionBarActivity
 			}
 		}
 
+		//noinspection ConstantConditions /// needed in alwaysOnline flavour
 		if (!GooglePlayServicesHelper.checkPlayServices(this)) {
 			return;
 		}
