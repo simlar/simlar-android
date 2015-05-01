@@ -26,6 +26,7 @@
     <string name="app_name">Simlar</string>
     <string name="button_continue">Continue</string>
     <string name="button_cancel">Cancel</string>
+    <string name="simlar_service_on_destroy">Simlar terminated</string>
 
     <string name="main_activity_contact_list_loading_contacts">Loading contacts</string>
     <string name="main_activity_contact_list_error_loading_contacts">Error: Failed to load contacts. Are you online?</string>
@@ -55,6 +56,12 @@
 
     <string name="upload_log_file_send_email_to_developer">Send email to developer</string>
     <string name="upload_log_file_progress">Uploading log file&#8230;</string>
+
+    <string name="notification_simlar_status_unknown">unknown status</string>
+    <string name="notification_simlar_status_offline">offline</string>
+    <string name="notification_simlar_status_connecting">connecting</string>
+    <string name="notification_simlar_status_online">online</string>
+    <string name="notification_simlar_status_error">registration failed</string>
 
     <string name="linphone_call_state_notification_initializing">initializing</string>
     <string name="linphone_call_state_notification_calling">calling %1$s</string>

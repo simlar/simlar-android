@@ -60,6 +60,21 @@ public enum SimlarStatus {
 		}
 	}
 
+	public boolean isOffline()
+	{
+		switch (this) {
+		case ONLINE:
+		case ONGOING_CALL:
+		case CONNECTING:
+			return false;
+		case OFFLINE:
+		case ERROR:
+		case UNKNOWN:
+		default:
+			return true;
+		}
+	}
+
 	public boolean isRegistrationAtSipServerFailed()
 	{
 		switch (this) {
@@ -74,4 +89,38 @@ public enum SimlarStatus {
 			return false;
 		}
 	}
+
+	public int getNotificationIcon()
+	{
+		switch (this) {
+		case ONLINE:
+		case ONGOING_CALL:
+			return R.drawable.ic_notification_ongoing_call;
+		case UNKNOWN:
+		case OFFLINE:
+		case CONNECTING:
+		case ERROR:
+		default:
+			return R.drawable.ic_notification_offline;
+		}
+	}
+
+	public int getNotificationTextId()
+	{
+		switch (this) {
+		case OFFLINE:
+			return R.string.notification_simlar_status_offline;
+		case CONNECTING:
+			return R.string.notification_simlar_status_connecting;
+		case ONLINE:
+		case ONGOING_CALL:
+			return R.string.notification_simlar_status_online;
+		case ERROR:
+			return R.string.notification_simlar_status_error;
+		case UNKNOWN:
+		default:
+			return R.string.notification_simlar_status_unknown;
+		}
+	}
+
 }

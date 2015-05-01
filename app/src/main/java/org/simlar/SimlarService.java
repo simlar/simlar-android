@@ -28,6 +28,7 @@ import org.simlar.SoundEffectManager.SoundEffectType;
 import org.simlar.Volumes.MicrophoneStatus;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -47,10 +48,12 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.widget.Toast;
 
 public final class SimlarService extends Service implements LinphoneThreadListener
 {
@@ -81,6 +84,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private static volatile boolean mRunning = false;
 	private final TelephonyCallStateListener mTelephonyCallStateListener = new TelephonyCallStateListener();
 	private int mCurrentRingerMode = -1;
+	private PendingIntent mKeepAwakePendingIntent = null;
+	private final KeepAwakeReceiver mKeepAwakeReceiver = GooglePlayServicesHelper.gcmEnabled() ? null : new KeepAwakeReceiver();
 
 	public final class SimlarServiceBinder extends Binder
 	{
@@ -102,6 +107,20 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			SimlarService.this.checkNetworkConnectivityAndRefreshRegisters();
 		}
 	}
+
+	private final class KeepAwakeReceiver extends BroadcastReceiver
+	{
+		public KeepAwakeReceiver()
+		{
+		}
+
+		@Override
+		public void onReceive(Context context, Intent intent)
+		{
+			SimlarService.this.keepAwake();
+		}
+	}
+
 
 	private final class TelephonyCallStateListener extends PhoneStateListener
 	{
@@ -224,9 +243,11 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	{
 		Lg.i(LOGTAG, "onStartCommand intent=", intent, " startId=", startId);
 
-		Lg.i(LOGTAG, "acquiring simlar wake lock");
-		acquireWakeLock();
-		acquireWifiLock();
+		if (GooglePlayServicesHelper.gcmEnabled()) {
+			Lg.i(LOGTAG, "acquiring simlar wake lock");
+			acquireWakeLock();
+			acquireWifiLock();
+		}
 
 		// releasing wakelock of gcm's WakefulBroadcastReceiver if needed
 		if (intent != null) {
@@ -240,6 +261,13 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			mSimlarIdToCall = intent.getStringExtra(INTENT_EXTRA_SIMLAR_ID);
 			intent.removeExtra(INTENT_EXTRA_SIMLAR_ID);
 			if (!Util.isNullOrEmpty(mSimlarIdToCall)) {
+				if (!GooglePlayServicesHelper.gcmEnabled()) {
+					if (mSimlarStatus.isOffline()) {
+						mSimlarCallState.updateCallStateChanged(mSimlarIdToCall, LinphoneCallState.CALL_END, CallEndReason.SERVER_CONNECTION_TIMEOUT);
+					} else {
+						mSimlarCallState.updateCallStateChanged(mSimlarIdToCall, LinphoneCallState.OUTGOING_INIT, CallEndReason.NONE);
+					}
+				}
 				ContactsProvider.getNameAndPhotoId(mSimlarIdToCall, this, new ContactListener() {
 					@Override
 					public void onGetNameAndPhotoId(final String name, final String photoId)
@@ -308,6 +336,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		if (GooglePlayServicesHelper.gcmEnabled()) {
 			terminateChecker();
+		} else {
+			startKeepAwake();
 		}
 	}
 
@@ -437,16 +467,24 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		final PendingIntent activity = PendingIntent.getActivity(this, 0,
 				new Intent(this, mNotificationActivity).addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED), 0);
 
-		final String text = mSimlarCallState.createNotificationText(this, mGoingDown);
 		final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
-		notificationBuilder.setSmallIcon(R.drawable.ic_notification_ongoing_call);
+		notificationBuilder.setSmallIcon(GooglePlayServicesHelper.gcmEnabled() ? R.drawable.ic_notification_ongoing_call : mSimlarStatus.getNotificationIcon());
 		notificationBuilder.setLargeIcon(mSimlarCallState.getContactPhotoBitmap(this, R.drawable.ic_launcher));
 		notificationBuilder.setContentTitle(getString(R.string.app_name));
-		notificationBuilder.setContentText(text);
+		notificationBuilder.setContentText(createNotificationText());
 		notificationBuilder.setOngoing(true);
 		notificationBuilder.setContentIntent(activity);
 		notificationBuilder.setWhen(System.currentTimeMillis());
 		return notificationBuilder.build();
+	}
+
+	private String createNotificationText()
+	{
+		if (GooglePlayServicesHelper.gcmEnabled() || mSimlarStatus == SimlarStatus.ONGOING_CALL) {
+			return mSimlarCallState.createNotificationText(this, mGoingDown);
+		} else {
+			return getString(mSimlarStatus.getNotificationTextId());
+		}
 	}
 
 	void connect()
@@ -476,6 +514,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		unregisterReceiver(mNetworkChangeReceiver);
 
+		stopKeepAwake();
+
 		((TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE)).listen(mTelephonyCallStateListener, PhoneStateListener.LISTEN_NONE);
 
 		// just in case
@@ -484,6 +524,10 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		releaseWifiLock();
 
 		mRunning = false;
+
+		if (!GooglePlayServicesHelper.gcmEnabled()) {
+			Toast.makeText(this, R.string.simlar_service_on_destroy, Toast.LENGTH_SHORT).show();
+		}
 
 		Lg.i(LOGTAG, "onDestroy ended");
 	}
@@ -549,6 +593,52 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 	}
 
+	private void startKeepAwake()
+	{
+		if (mKeepAwakeReceiver == null) {
+			return;
+		}
+
+		final Intent startIntent = new Intent("org.simlar.keepAwake");
+		mKeepAwakePendingIntent = PendingIntent.getBroadcast(this, 0, startIntent, 0);
+
+		((AlarmManager) getSystemService(Context.ALARM_SERVICE))
+				.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 600000, 600000, mKeepAwakePendingIntent);
+
+		final IntentFilter filter = new IntentFilter();
+		filter.addAction("org.simlar.keepAwake");
+		registerReceiver(mKeepAwakeReceiver, filter);
+	}
+
+	private void stopKeepAwake()
+	{
+		if (mKeepAwakeReceiver == null) {
+			return;
+		}
+
+		unregisterReceiver(mKeepAwakeReceiver);
+		((AlarmManager) getSystemService(Context.ALARM_SERVICE)).cancel(mKeepAwakePendingIntent);
+	}
+
+	void keepAwake()
+	{
+		// idea from linphone KeepAliveHandler
+		checkNetworkConnectivityAndRefreshRegisters();
+
+		// make sure iterate will have enough time before device eventually goes to sleep
+		acquireWakeLock();
+		mHandler.postDelayed(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				if (getSimlarStatus() != SimlarStatus.ONGOING_CALL) {
+					releaseWakeLock();
+				}
+			}
+		}, 4000);
+	}
+
 	@Override
 	public void onInitialized()
 	{
@@ -580,6 +670,12 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 
 		notifySimlarStatusChanged(status);
+
+		if (!GooglePlayServicesHelper.gcmEnabled()) {
+			Lg.i(LOGTAG, "updating notification based on registration state");
+			final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+			nm.notify(NOTIFICATION_ID, createNotification());
+		}
 	}
 
 	void notifySimlarStatusChanged(final SimlarStatus status)
@@ -690,6 +786,12 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 			mCallConnectionDetails = new CallConnectionDetails();
 
+			if (!GooglePlayServicesHelper.gcmEnabled()) {
+				Lg.i(LOGTAG, "acquiring simlar wake lock because of new call");
+				acquireWakeLock();
+				acquireWifiLock();
+			}
+
 			if (!mHasAudioFocus) {
 				// We acquire AUDIOFOCUS_GAIN_TRANSIENT instead of AUDIOFOCUS_GAIN because we want the music to resume after ringing or call
 				final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -736,6 +838,9 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 			if (GooglePlayServicesHelper.gcmEnabled()) {
 				terminate();
+			} else {
+				releaseWakeLock();
+				releaseWifiLock();
 			}
 		}
 

@@ -26,6 +26,7 @@
     <string name="app_name">Simlar</string>
     <string name="button_continue">Weiter</string>
     <string name="button_cancel">Abbrechen</string>
+    <string name="simlar_service_on_destroy">Simlar wurde beendet</string>
 
     <string name="main_activity_contact_list_loading_contacts">Kontakte werden geladen</string>
     <string name="main_activity_contact_list_error_loading_contacts">Kontakte konnten nicht geladen werden. Möglicherweise funktioniert dein Internet nicht.</string>
@@ -55,6 +56,12 @@
 
     <string name="upload_log_file_send_email_to_developer">Entwickler per E-Mail kontaktieren</string>
     <string name="upload_log_file_progress">Bitte warten. Die Logdatei wird hochgeladen&#8230;</string>
+
+    <string name="notification_simlar_status_unknown">unbekannter Status</string>
+    <string name="notification_simlar_status_offline">offline</string>
+    <string name="notification_simlar_status_connecting">verbinde mit Server</string>
+    <string name="notification_simlar_status_online">online</string>
+    <string name="notification_simlar_status_error">Registrierungsfehler</string>
 
     <string name="linphone_call_state_notification_initializing">Vorbereitung</string>
     <string name="linphone_call_state_notification_calling">rufe %1$s an</string>
