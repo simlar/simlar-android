@@ -20,11 +20,13 @@
 
 package org.simlar;
 
+import org.simlar.BuildConfig;
+
 class FlavourHelper
 {
 	@SuppressWarnings("SameReturnValue")
 	public static boolean isGcmEnabled()
 	{
-		return true;
+		return BuildConfig.IS_GCM_ENABLED;
 	}
 }
