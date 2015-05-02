@@ -3,14 +3,18 @@
 ## exit if an error occurs or on unset variables
 set -eu -o pipefail
 
-declare -r BRANCH=${1:-""}
+declare -r BRANCH=${1:-"2.3.2"} ## use master to build current git revision
 
 declare -r COMPILE_SCRIPT="$(dirname $(readlink -f $0))/compile-liblinphone.sh"
-declare -r LINPHONE_ANDROID_PATCH_DIR="$(dirname $(readlink -f $0))/liblinphone/patches/linphone-android"
-declare -r LINPHONE_PATCH_DIR="$(dirname $(readlink -f $0))/liblinphone/patches/linphone"
-declare -r MEDIASTREAMER2_PATCH_DIR="$(dirname $(readlink -f $0))/liblinphone/patches/mediastreamer2"
-declare -r BELLESIP_PATCH_DIR="$(dirname $(readlink -f $0))/liblinphone/patches/belle-sip"
-declare -r ORTP_PATCH_DIR="$(dirname $(readlink -f $0))/liblinphone/patches/ortp"
+
+declare -r PATCH_DIR="$(dirname $(readlink -f $0))/../liblinphone/patches"
+
+declare -r LINPHONE_ANDROID_PATCH_DIR="${PATCH_DIR}/linphone-android"
+declare -r LINPHONE_PATCH_DIR="${PATCH_DIR}/linphone"
+declare -r MEDIASTREAMER2_PATCH_DIR="${PATCH_DIR}/mediastreamer2"
+declare -r BELLESIP_PATCH_DIR="${PATCH_DIR}/belle-sip"
+declare -r ORTP_PATCH_DIR="${PATCH_DIR}/ortp"
+declare -r BZRTP_PATCH_DIR="${PATCH_DIR}/bzrtp"
 
 declare -r BUILD_DIR="liblinphone/builds/$(date '+%Y%m%d_%H%M%S')"
 mkdir -p "${BUILD_DIR}"
@@ -59,6 +63,12 @@ if [ -d "${ORTP_PATCH_DIR}" ] ; then
 	cd submodules/linphone/oRTP/
 	git am "${ORTP_PATCH_DIR}"/*.patch
 	cd ../../..
+fi
+
+if [ -d "${BZRTP_PATCH_DIR}" ] ; then
+	cd submodules/bzrtp/
+	git am "${BZRTP_PATCH_DIR}"/*.patch
+	cd ../..
 fi
 
 cd ../../../..
