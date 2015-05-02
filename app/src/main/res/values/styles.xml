@@ -34,13 +34,10 @@
         <item name="actionBarStyle">@style/MyActionBar</item>
     </style>
 
-    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
         <item name="android:textColor">@color/text_black</item>
         <item name="android:windowBackground">@null</item>
-
-        <item name="windowActionBar">false</item>
-        <item name="android:windowNoTitle">true</item>
     </style>
 
     <!-- ActionBar styles -->
@@ -66,6 +63,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
+        <item name="textAllCaps">false</item>
     </style>
 
     <style name="buttonWhiteBorderLess" parent="@android:style/Widget.Button.Small">
