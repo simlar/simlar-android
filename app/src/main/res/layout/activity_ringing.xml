@@ -29,8 +29,8 @@
 
     <ImageView
         android:id="@+id/contactImage"
-        android:layout_width="70dip"
-        android:layout_height="70dip"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:background="@color/calling_title_background_black"
@@ -40,7 +40,7 @@
     <TextView
         android:id="@+id/contactName"
         android:layout_width="fill_parent"
-        android:layout_height="40dip"
+        android:layout_height="40dp"
         android:layout_toRightOf="@+id/contactImage"
         android:background="@color/calling_title_background_black"
         android:contentDescription="@string/ringing_activity_phone_is_ringing"
@@ -52,7 +52,7 @@
     <TextView
         android:id="@+id/contactText"
         android:layout_width="fill_parent"
-        android:layout_height="30dip"
+        android:layout_height="30dp"
         android:layout_below="@+id/contactName"
         android:layout_toRightOf="@+id/contactImage"
         android:background="@color/calling_title_background_black"

@@ -25,7 +25,7 @@
         <shape android:shape="rectangle">
             <solid android:color="#DEDEDE"/>
             <stroke
-                android:width="1dip"
+                android:width="1dp"
                 android:color="@color/border"/>
             <corners android:radius="10dp"/>
         </shape>
@@ -35,7 +35,7 @@
         <shape android:shape="rectangle">
             <solid android:color="@color/button_white"/>
             <stroke
-                android:width="1dip"
+                android:width="1dp"
                 android:color="@color/border"/>
             <corners android:radius="10dp"/>
         </shape>
