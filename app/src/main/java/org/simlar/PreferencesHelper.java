@@ -66,7 +66,7 @@ final class PreferencesHelper
 	private static void createPasswordHash()
 	{
 		// kamailio password hash md5(username:realm:password)
-		mPasswordHash = md5(mMySimlarId + ":sip.simlar.org:" + mPassword);
+		mPasswordHash = md5(mMySimlarId + ":" + ServerSettings.DOMAIN + ":" + mPassword);
 	}
 
 	private static String md5(final String str)
