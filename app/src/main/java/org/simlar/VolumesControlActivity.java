@@ -179,7 +179,7 @@ public final class VolumesControlActivity extends Activity
 		super.onPause();
 	}
 
-	void setVolumes()
+	private void setVolumes()
 	{
 		mVolumes = mCommunicator.getService().getVolumes();
 

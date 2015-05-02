@@ -135,7 +135,7 @@ public final class VerifyNumberActivity extends ActionBarActivity
 		return adapter;
 	}
 
-	void showSoftInputForEditNumber()
+	private void showSoftInputForEditNumber()
 	{
 		Lg.e(LOGTAG, "no number");
 		mEditNumber.requestFocus();
@@ -173,7 +173,7 @@ public final class VerifyNumberActivity extends ActionBarActivity
 		super.onPause();
 	}
 
-	void updateButtonAccept()
+	private void updateButtonAccept()
 	{
 		final boolean enabled = !Util.isNullOrEmpty(mEditNumber.getText().toString());
 		Lg.i(LOGTAG, "updateButtonAccept enabled=", enabled);

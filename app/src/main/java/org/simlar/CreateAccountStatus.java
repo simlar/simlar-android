@@ -27,7 +27,7 @@ public enum CreateAccountStatus {
 
 	final int mValue;
 
-	private CreateAccountStatus(final int i)
+	CreateAccountStatus(final int i)
 	{
 		mValue = i;
 	}

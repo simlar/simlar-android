@@ -85,7 +85,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private final TelephonyCallStateListener mTelephonyCallStateListener = new TelephonyCallStateListener();
 	private int mCurrentRingerMode = -1;
 	private PendingIntent mKeepAwakePendingIntent = null;
-	private final KeepAwakeReceiver mKeepAwakeReceiver = GooglePlayServicesHelper.gcmEnabled() ? null : new KeepAwakeReceiver();
+	private final KeepAwakeReceiver mKeepAwakeReceiver = FlavourHelper.isGcmEnabled() ? null : new KeepAwakeReceiver();
 
 	public final class SimlarServiceBinder extends Binder
 	{
@@ -168,7 +168,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		return mBinder;
 	}
 
-	void onTelephonyCallStateOffHook()
+	private void onTelephonyCallStateOffHook()
 	{
 		restoreRingerModeIfNeeded();
 		if (mSimlarStatus != SimlarStatus.ONGOING_CALL) {
@@ -184,7 +184,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mLinphoneThread.pauseAllCalls();
 	}
 
-	void onTelephonyCallStateIdle()
+	private void onTelephonyCallStateIdle()
 	{
 		restoreRingerModeIfNeeded();
 		if (mSimlarStatus != SimlarStatus.ONGOING_CALL) {
@@ -200,7 +200,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mLinphoneThread.resumeCall();
 	}
 
-	void onTelephonyCallStateRinging()
+	private void onTelephonyCallStateRinging()
 	{
 		if (mSimlarStatus != SimlarStatus.ONGOING_CALL) {
 			return;
@@ -243,7 +243,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	{
 		Lg.i(LOGTAG, "onStartCommand intent=", intent, " startId=", startId);
 
-		if (GooglePlayServicesHelper.gcmEnabled()) {
+		if (FlavourHelper.isGcmEnabled()) {
 			Lg.i(LOGTAG, "acquiring simlar wake lock");
 			acquireWakeLock();
 			acquireWifiLock();
@@ -261,7 +261,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			mSimlarIdToCall = intent.getStringExtra(INTENT_EXTRA_SIMLAR_ID);
 			intent.removeExtra(INTENT_EXTRA_SIMLAR_ID);
 			if (!Util.isNullOrEmpty(mSimlarIdToCall)) {
-				if (!GooglePlayServicesHelper.gcmEnabled()) {
+				if (!FlavourHelper.isGcmEnabled()) {
 					if (mSimlarStatus.isOffline()) {
 						mSimlarCallState.updateCallStateChanged(mSimlarIdToCall, LinphoneCallState.CALL_END, CallEndReason.SERVER_CONNECTION_TIMEOUT);
 					} else {
@@ -334,7 +334,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mLinphoneThread = new LinphoneThread(this, this);
 		mTerminatePrivateAlreadyCalled = false;
 
-		if (GooglePlayServicesHelper.gcmEnabled()) {
+		if (FlavourHelper.isGcmEnabled()) {
 			terminateChecker();
 		} else {
 			startKeepAwake();
@@ -362,7 +362,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		return ((WifiManager) this.getSystemService(Context.WIFI_SERVICE)).createWifiLock(createWifiWakeLockType(), "SimlarWifiLock");
 	}
 
-	void terminateChecker()
+	private void terminateChecker()
 	{
 		mHandler.postDelayed(new Runnable() {
 			@Override
@@ -377,7 +377,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}, TERMINATE_CHECKER_INTERVAL);
 	}
 
-	boolean terminateCheck()
+	private boolean terminateCheck()
 	{
 		if (mGoingDown) {
 			return true;
@@ -448,7 +448,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				PreferencesHelper.getNextMissedCallNotificationId(context), notificationBuilder.build());
 	}
 
-	Notification createNotification()
+	private Notification createNotification()
 	{
 		if (mNotificationActivity == null) {
 			if (mSimlarStatus == SimlarStatus.ONGOING_CALL) {
@@ -468,7 +468,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				new Intent(this, mNotificationActivity).addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED), 0);
 
 		final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
-		notificationBuilder.setSmallIcon(GooglePlayServicesHelper.gcmEnabled() ? R.drawable.ic_notification_ongoing_call : mSimlarStatus.getNotificationIcon());
+		notificationBuilder.setSmallIcon(FlavourHelper.isGcmEnabled() ? R.drawable.ic_notification_ongoing_call : mSimlarStatus.getNotificationIcon());
 		notificationBuilder.setLargeIcon(mSimlarCallState.getContactPhotoBitmap(this, R.drawable.ic_launcher));
 		notificationBuilder.setContentTitle(getString(R.string.app_name));
 		notificationBuilder.setContentText(createNotificationText());
@@ -480,14 +480,14 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	private String createNotificationText()
 	{
-		if (GooglePlayServicesHelper.gcmEnabled() || mSimlarStatus == SimlarStatus.ONGOING_CALL) {
+		if (FlavourHelper.isGcmEnabled() || mSimlarStatus == SimlarStatus.ONGOING_CALL) {
 			return mSimlarCallState.createNotificationText(this, mGoingDown);
 		} else {
 			return getString(mSimlarStatus.getNotificationTextId());
 		}
 	}
 
-	void connect()
+	private void connect()
 	{
 		if (mLinphoneThread == null) {
 			return;
@@ -525,7 +525,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		mRunning = false;
 
-		if (!GooglePlayServicesHelper.gcmEnabled()) {
+		if (!FlavourHelper.isGcmEnabled()) {
 			Toast.makeText(this, R.string.simlar_service_on_destroy, Toast.LENGTH_SHORT).show();
 		}
 
@@ -574,7 +574,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 	}
 
-	void checkNetworkConnectivityAndRefreshRegisters()
+	private void checkNetworkConnectivityAndRefreshRegisters()
 	{
 		if (mLinphoneThread == null) {
 			Lg.w(LOGTAG, "checkNetworkConnectivityAndRefreshRegisters triggered but no linphone thread");
@@ -620,7 +620,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		((AlarmManager) getSystemService(Context.ALARM_SERVICE)).cancel(mKeepAwakePendingIntent);
 	}
 
-	void keepAwake()
+	private void keepAwake()
 	{
 		// idea from linphone KeepAliveHandler
 		checkNetworkConnectivityAndRefreshRegisters();
@@ -671,14 +671,14 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		notifySimlarStatusChanged(status);
 
-		if (!GooglePlayServicesHelper.gcmEnabled()) {
+		if (!FlavourHelper.isGcmEnabled()) {
 			Lg.i(LOGTAG, "updating notification based on registration state");
 			final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 			nm.notify(NOTIFICATION_ID, createNotification());
 		}
 	}
 
-	void notifySimlarStatusChanged(final SimlarStatus status)
+	private void notifySimlarStatusChanged(final SimlarStatus status)
 	{
 		Lg.i(LOGTAG, "notifySimlarStatusChanged: ", status);
 
@@ -786,7 +786,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 			mCallConnectionDetails = new CallConnectionDetails();
 
-			if (!GooglePlayServicesHelper.gcmEnabled()) {
+			if (!FlavourHelper.isGcmEnabled()) {
 				Lg.i(LOGTAG, "acquiring simlar wake lock because of new call");
 				acquireWakeLock();
 				acquireWifiLock();
@@ -836,7 +836,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				createMissedCallNotification(this, number);
 			}
 
-			if (GooglePlayServicesHelper.gcmEnabled()) {
+			if (FlavourHelper.isGcmEnabled()) {
 				terminate();
 			} else {
 				releaseWakeLock();
@@ -897,7 +897,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mSoundEffectManager.stop(SoundEffectType.UNENCRYPTED_CALL_ALARM);
 	}
 
-	void call(final String simlarId)
+	private void call(final String simlarId)
 	{
 		if (mLinphoneThread == null) {
 			return;
@@ -927,7 +927,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		if (mSimlarStatus == SimlarStatus.ONGOING_CALL) {
 			mLinphoneThread.terminateAllCalls();
-		} else if (GooglePlayServicesHelper.gcmEnabled()) {
+		} else if (FlavourHelper.isGcmEnabled()) {
 			terminate();
 		}
 	}
@@ -944,7 +944,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		});
 	}
 
-	void handleTerminate()
+	private void handleTerminate()
 	{
 		Lg.i(LOGTAG, "handleTerminate");
 		if (mGoingDown) {
@@ -976,7 +976,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 	}
 
-	void terminatePrivate()
+	private void terminatePrivate()
 	{
 		// make sure this function is only called once
 		if (mTerminatePrivateAlreadyCalled) {

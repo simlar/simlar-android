@@ -15,10 +15,12 @@ android {
     productFlavors {
         push {
             versionName = android.defaultConfig.versionName
+            buildConfigField("boolean", "IS_GCM_ENABLED", "true")
         }
 
         alwaysOnline {
             versionName = android.defaultConfig.versionName + " (alwaysOnline)"
+            buildConfigField("boolean", "IS_GCM_ENABLED", "false")
         }
     }
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013 The Simlar Authors.
+ * Copyright (C) 2015 The Simlar Authors.
  *
  * This file is part of Simlar. (https://www.simlar.org)
  *
@@ -20,21 +20,13 @@
 
 package org.simlar;
 
-import org.linphone.core.LinphoneCall.State;
-import org.linphone.core.LinphoneCore.RegistrationState;
+import org.simlar.BuildConfig;
 
-interface LinphoneThreadListener
+class FlavourHelper
 {
-	void onInitialized();
-
-	void onRegistrationStateChanged(final RegistrationState state);
-
-	void onCallStatsChanged(final NetworkQuality quality, final int callDuration, final String codec, final String iceState,
-	                        final int upload, final int download, final int jitter, final int packetLoss, final long latePackets, final int roundTripDelay);
-
-	void onCallStateChanged(final String number, final State state, final String message);
-
-	void onCallEncryptionChanged(final boolean encrypted, final String authenticationToken, final boolean authenticationTokenVerified);
-
-	void onJoin();
+	@SuppressWarnings("SameReturnValue")
+	public static boolean isGcmEnabled()
+	{
+		return BuildConfig.IS_GCM_ENABLED;
+	}
 }
