@@ -116,7 +116,6 @@ public final class SimlarCallState
 			mAuthenticationToken = null;
 			mAuthenticationTokenVerified = false;
 			mQuality = NetworkQuality.UNKNOWN;
-			mCallStartTime = -1;
 		}
 
 		return true;
@@ -168,7 +167,6 @@ public final class SimlarCallState
 
 		if (mGuiCallState == GuiCallState.ENCRYPTING) {
 			mGuiCallState = GuiCallState.TALKING;
-			mCallStartTime = SystemClock.elapsedRealtime();
 		}
 
 		mEncrypted = encrypted;
