@@ -28,8 +28,6 @@ import android.widget.TextView;
 
 public final class ConnectionDetailsActivity extends Activity
 {
-	private static final String LOGTAG = ConnectionDetailsActivity.class.getSimpleName();
-
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorConnectionDetails();
 
 	// gui elements
@@ -45,11 +43,6 @@ public final class ConnectionDetailsActivity extends Activity
 
 	private final class SimlarServiceCommunicatorConnectionDetails extends SimlarServiceCommunicator
 	{
-		public SimlarServiceCommunicatorConnectionDetails()
-		{
-			super(LOGTAG);
-		}
-
 		@Override
 		void onBoundToSimlarService()
 		{
@@ -91,7 +84,7 @@ public final class ConnectionDetailsActivity extends Activity
 	@Override
 	protected void onResume()
 	{
-		Lg.i(LOGTAG, "onResume");
+		Lg.i("onResume");
 		super.onResume();
 		if (!mCommunicator.register(this, CallActivity.class)) {
 			finish();
@@ -101,7 +94,7 @@ public final class ConnectionDetailsActivity extends Activity
 	@Override
 	protected void onPause()
 	{
-		Lg.i(LOGTAG, "onPause");
+		Lg.i("onPause");
 		mCommunicator.unregister();
 		super.onPause();
 	}
@@ -109,14 +102,14 @@ public final class ConnectionDetailsActivity extends Activity
 	private void onCallConnectionDetailsChanged()
 	{
 		if (mCommunicator.getService() == null) {
-			Lg.e(LOGTAG, "ERROR: onSimlarCallStateChanged but not bound to service");
+			Lg.e("ERROR: onSimlarCallStateChanged but not bound to service");
 			return;
 		}
 
 		final CallConnectionDetails callConnectionDetails = mCommunicator.getService().getCallConnectionDetails();
 
 		if (callConnectionDetails == null) {
-			Lg.e(LOGTAG, "ERROR: onCallConnectionDetailsChanged but callConnectionDetails null or empty");
+			Lg.e("ERROR: onCallConnectionDetailsChanged but callConnectionDetails null or empty");
 			return;
 		}
 

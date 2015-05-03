@@ -26,8 +26,6 @@ import android.os.SystemClock;
 
 public final class SimlarCallState
 {
-	private static final String LOGTAG = SimlarCallState.class.getSimpleName();
-
 	private String mSimlarId = null;
 	private String mContactName = null;
 	private String mContactPhotoId = null;
@@ -62,7 +60,7 @@ public final class SimlarCallState
 			return false;
 		}
 
-		Lg.w(LOGTAG, "new CallEndReason=", reason);
+		Lg.w("new CallEndReason=", reason);
 		mCallEndReason = reason;
 		return true;
 	}
@@ -74,11 +72,11 @@ public final class SimlarCallState
 		}
 
 		if (Util.isNullOrEmpty(simlarId) && callState != LinphoneCallState.IDLE) {
-			Lg.e(LOGTAG, "ERROR updateCallStateChanged: simlarId not set state=", callState);
+			Lg.e("ERROR updateCallStateChanged: simlarId not set state=", callState);
 		}
 
 		if (callState == LinphoneCallState.UNKNOWN) {
-			Lg.e(LOGTAG, "ERROR updateCallStateChanged: callState=", callState);
+			Lg.e("ERROR updateCallStateChanged: callState=", callState);
 		}
 
 		mSimlarId = simlarId;
@@ -107,7 +105,7 @@ public final class SimlarCallState
 		}
 
 		if (mLinphoneCallState.isNewCallJustStarted()) {
-			Lg.i(LOGTAG, "resetting call state, because of new call");
+			Lg.i("resetting call state, because of new call");
 			mSimlarId = null;
 			mContactName = null;
 			mContactPhotoId = null;
@@ -128,7 +126,7 @@ public final class SimlarCallState
 		}
 
 		if (Util.isNullOrEmpty(name)) {
-			Lg.e(LOGTAG, "ERROR updateContactNameAndImage: name not set");
+			Lg.e("ERROR updateContactNameAndImage: name not set");
 		}
 
 		mContactName = name;
@@ -241,7 +239,7 @@ public final class SimlarCallState
 			return context.getString(mCallEndReason.getDisplayMessageId());
 		case UNKNOWN:
 		default:
-			Lg.w(LOGTAG, "getCallStatusDisplayMessage mLinphoneCallState=", mLinphoneCallState);
+			Lg.w("getCallStatusDisplayMessage mLinphoneCallState=", mLinphoneCallState);
 			return "";
 		}
 	}
@@ -308,7 +306,7 @@ public final class SimlarCallState
 
 	public void connectingToSimlarServerTimedOut()
 	{
-		Lg.w(LOGTAG, "connecting to simlar server timed out");
+		Lg.w("connecting to simlar server timed out");
 		mGuiCallState = GuiCallState.ENDED;
 		mLinphoneCallState = LinphoneCallState.CALL_END;
 		mCallEndReason = CallEndReason.SERVER_CONNECTION_TIMEOUT;

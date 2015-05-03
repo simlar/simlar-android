@@ -42,7 +42,6 @@ import android.widget.TextView;
 
 public final class VerifyNumberActivity extends AppCompatActivity
 {
-	private static final String LOGTAG = VerifyNumberActivity.class.getSimpleName();
 	private static final int RESULT_CREATE_ACCOUNT_ACTIVITY = 0;
 
 	private Spinner mSpinner;
@@ -76,7 +75,7 @@ public final class VerifyNumberActivity extends AppCompatActivity
 	@Override
 	protected void onCreate(final Bundle savedInstanceState)
 	{
-		Lg.i(LOGTAG, "onCreate");
+		Lg.i("onCreate");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_verify_number);
 
@@ -87,7 +86,7 @@ public final class VerifyNumberActivity extends AppCompatActivity
 		mSpinner = (Spinner) findViewById(R.id.spinnerCountryCodes);
 		mSpinner.setAdapter(adapter);
 
-		Lg.i(LOGTAG, "proposing country code: ", regionCode);
+		Lg.i("proposing country code: ", regionCode);
 		if (regionCode > 0) {
 			mSpinner.setSelection(adapter.getPosition(regionCode));
 		}
@@ -137,14 +136,14 @@ public final class VerifyNumberActivity extends AppCompatActivity
 
 	private void showSoftInputForEditNumber()
 	{
-		Lg.e(LOGTAG, "no number");
+		Lg.e("no number");
 		mEditNumber.requestFocus();
 		if (((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
 				.showSoftInput(mEditNumber, InputMethodManager.SHOW_IMPLICIT))
 		{
-			Lg.w(LOGTAG, "showSoftInput success");
+			Lg.w("showSoftInput success");
 		} else {
-			Lg.w(LOGTAG, "showSoftInput failed");
+			Lg.w("showSoftInput failed");
 		}
 	}
 
@@ -157,11 +156,11 @@ public final class VerifyNumberActivity extends AppCompatActivity
 	@Override
 	protected void onResume()
 	{
-		Lg.i(LOGTAG, "onResume");
+		Lg.i("onResume");
 		super.onResume();
 
 		if (PreferencesHelper.getCreateAccountStatus() == CreateAccountStatus.WAITING_FOR_SMS) {
-			Lg.i(LOGTAG, "CreateAccountStatus = WAITING FOR SMS");
+			Lg.i("CreateAccountStatus = WAITING FOR SMS");
 			startActivityForResult(new Intent(this, CreateAccountActivity.class), RESULT_CREATE_ACCOUNT_ACTIVITY);
 		}
 	}
@@ -169,14 +168,14 @@ public final class VerifyNumberActivity extends AppCompatActivity
 	@Override
 	protected void onPause()
 	{
-		Lg.i(LOGTAG, "onPause");
+		Lg.i("onPause");
 		super.onPause();
 	}
 
 	private void updateButtonAccept()
 	{
 		final boolean enabled = !Util.isNullOrEmpty(mEditNumber.getText().toString());
-		Lg.i(LOGTAG, "updateButtonAccept enabled=", enabled);
+		Lg.i("updateButtonAccept enabled=", enabled);
 		mButtonAccept.setEnabled(enabled);
 	}
 
@@ -185,14 +184,14 @@ public final class VerifyNumberActivity extends AppCompatActivity
 	{
 		final Integer countryCallingCode = (Integer) mSpinner.getSelectedItem();
 		if (countryCallingCode == null) {
-			Lg.e(LOGTAG, "createAccount no country code => aborting");
+			Lg.e("createAccount no country code => aborting");
 			return;
 		}
 		SimlarNumber.setDefaultRegion(countryCallingCode.intValue());
 
 		final String number = mEditNumber.getText().toString();
 		if (Util.isNullOrEmpty(number)) {
-			Lg.e(LOGTAG, "createAccount no number => aborting");
+			Lg.e("createAccount no number => aborting");
 			return;
 		}
 
@@ -213,10 +212,10 @@ public final class VerifyNumberActivity extends AppCompatActivity
 	@Override
 	protected void onActivityResult(final int requestCode, final int resultCode, final Intent data)
 	{
-		Lg.i(LOGTAG, "onActivityResult requestCode=", requestCode, " resultCode=", resultCode);
+		Lg.i("onActivityResult requestCode=", requestCode, " resultCode=", resultCode);
 		if (requestCode == RESULT_CREATE_ACCOUNT_ACTIVITY) {
 			if (resultCode == RESULT_OK) {
-				Lg.i(LOGTAG, "finishing on CreateAccount request");
+				Lg.i("finishing on CreateAccount request");
 				finish();
 				startActivity(new Intent(this, MainActivity.class));
 			}

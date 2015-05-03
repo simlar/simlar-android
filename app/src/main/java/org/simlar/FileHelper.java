@@ -29,8 +29,6 @@ import android.content.Context;
 
 final class FileHelper
 {
-	private static final String LOGTAG = FileHelper.class.getSimpleName();
-
 	private static String mRootCaFileName = null;
 	private static String mZrtpSecretsCacheFileName = null;
 	private static String mLinphoneInitialConfigFile = null;
@@ -45,12 +43,12 @@ final class FileHelper
 	public static void init(final Context context)
 	{
 		if (isInitialized()) {
-			Lg.w(LOGTAG, "already inited => aborting");
+			Lg.w("already inited => aborting");
 			return;
 		}
 
 		final String basePath = context.getFilesDir().getAbsolutePath();
-		Lg.i(LOGTAG, "using basePath: ", basePath);
+		Lg.i("using basePath: ", basePath);
 
 		mRootCaFileName = basePath + "/rootca.pem";
 		mZrtpSecretsCacheFileName = basePath + "/zrtp_secrets";
@@ -84,9 +82,9 @@ final class FileHelper
 			outputStream.flush();
 			outputStream.close();
 			inputStream.close();
-			Lg.i(LOGTAG, "created ", target);
+			Lg.i("created ", target);
 		} catch (final IOException e) {
-			Lg.ex(LOGTAG, e, "IOException: failed to create: ", target);
+			Lg.ex(e, "IOException: failed to create: ", target);
 		}
 	}
 

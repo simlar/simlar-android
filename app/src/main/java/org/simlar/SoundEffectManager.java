@@ -37,7 +37,6 @@ import android.os.SystemClock;
 
 final class SoundEffectManager
 {
-	private static final String LOGTAG = SoundEffectManager.class.getSimpleName();
 	private static final long MIN_PLAY_TIME = VibratorManager.VIBRATE_LENGTH + VibratorManager.VIBRATE_PAUSE;
 
 	private final Context mContext;
@@ -66,7 +65,7 @@ final class SoundEffectManager
 			mPlayRequestTime = now;
 
 			if (mMediaPlayer == null) {
-				Lg.e(LOGTAG, "[", type, "] failed to create media player");
+				Lg.e("[", type, "] failed to create media player");
 				return;
 			}
 
@@ -106,11 +105,11 @@ final class SoundEffectManager
 					mediaPlayer.setLooping(true);
 					return mediaPlayer;
 				default:
-					Lg.e(LOGTAG, "[", mType, "] unknown type");
+					Lg.e("[", mType, "] unknown type");
 					return null;
 				}
 			} catch (final IOException e) {
-				Lg.ex(LOGTAG, e, "[", mType, "] Media Player IOException");
+				Lg.ex(e, "[", mType, "] Media Player IOException");
 				return null;
 			}
 		}
@@ -118,11 +117,11 @@ final class SoundEffectManager
 		public void prepare(final boolean start)
 		{
 			if (mMediaPlayer == null) {
-				Lg.e(LOGTAG, "[", mType, "] not initialized");
+				Lg.e("[", mType, "] not initialized");
 				return;
 			}
 
-			Lg.i(LOGTAG, "[", mType, "] preparing");
+			Lg.i("[", mType, "] preparing");
 			if (start) {
 				mMediaPlayer.setOnPreparedListener(this);
 			}
@@ -139,7 +138,7 @@ final class SoundEffectManager
 		public void onPrepared(final MediaPlayer mp)
 		{
 			if (mMediaPlayer == null) {
-				Lg.e(LOGTAG, "[", mType, "] not initialized");
+				Lg.e("[", mType, "] not initialized");
 				return;
 			}
 
@@ -147,7 +146,7 @@ final class SoundEffectManager
 				mPlayStart = SystemClock.elapsedRealtime();
 			}
 			final long playStartTime = SystemClock.elapsedRealtime();
-			Lg.i(LOGTAG, "[", mType, "] start playing at time: ", playStartTime);
+			Lg.i("[", mType, "] start playing at time: ", playStartTime);
 			mMediaPlayer.start();
 
 			mMediaPlayer.setOnCompletionListener(new OnCompletionListener() {
@@ -156,7 +155,7 @@ final class SoundEffectManager
 				{
 					final long now = SystemClock.elapsedRealtime();
 					final long delay = Math.max(0, playStartTime + MIN_PLAY_TIME - now);
-					Lg.i(LOGTAG, "[", mType, "] MediaPlayer onCompletion at: ", now, " restarting with delay: ", delay);
+					Lg.i("[", mType, "] MediaPlayer onCompletion at: ", now, " restarting with delay: ", delay);
 
 					if (delay > 0) {
 						mHandler.postDelayed(new Runnable() {
@@ -182,7 +181,7 @@ final class SoundEffectManager
 				mMediaPlayer.release();
 				mMediaPlayer = null;
 				final long now = SystemClock.elapsedRealtime();
-				Lg.i(LOGTAG, "[", mType, "] play time=", now - mPlayStart,
+				Lg.i("[", mType, "] play time=", now - mPlayStart,
 						"ms delay=", mPlayRequestTime - mPlayStart,
 						"ms sum=", Long.valueOf(now - mPlayRequestTime) + "ms");
 			}
@@ -191,7 +190,7 @@ final class SoundEffectManager
 		@Override
 		public boolean onError(MediaPlayer mp, int what, int extra)
 		{
-			Lg.e(LOGTAG, "[", mType, "] MediaPlayer Error what=", what, " extra=", extra);
+			Lg.e("[", mType, "] MediaPlayer Error what=", what, " extra=", extra);
 			mHandler.removeCallbacksAndMessages(null);
 			if (mMediaPlayer != null) {
 				mMediaPlayer.reset();
@@ -212,12 +211,12 @@ final class SoundEffectManager
 		final long now = SystemClock.elapsedRealtime();
 
 		if (type == null) {
-			Lg.e(LOGTAG, "start with type null");
+			Lg.e("start with type null");
 			return;
 		}
 
 		if (mPlayers.containsKey(type)) {
-			Lg.i(LOGTAG, "[", type, "] already playing");
+			Lg.i("[", type, "] already playing");
 			return;
 		}
 
@@ -229,12 +228,12 @@ final class SoundEffectManager
 	public void prepare(final SoundEffectType type)
 	{
 		if (type == null) {
-			Lg.e(LOGTAG, "start with type null");
+			Lg.e("start with type null");
 			return;
 		}
 
 		if (mPlayers.containsKey(type)) {
-			Lg.i(LOGTAG, "[", type, "] already prepared or playing");
+			Lg.i("[", type, "] already prepared or playing");
 			return;
 		}
 
@@ -247,15 +246,15 @@ final class SoundEffectManager
 	{
 		final long now = SystemClock.elapsedRealtime();
 
-		Lg.i(LOGTAG, "[", type, "] playing prepared requested");
+		Lg.i("[", type, "] playing prepared requested");
 
 		if (type == null) {
-			Lg.e(LOGTAG, "start with type null");
+			Lg.e("start with type null");
 			return;
 		}
 
 		if (!mPlayers.containsKey(type)) {
-			Lg.e(LOGTAG, "[", type, "] not prepared");
+			Lg.e("[", type, "] not prepared");
 			return;
 		}
 
@@ -265,17 +264,17 @@ final class SoundEffectManager
 	public void stop(final SoundEffectType type)
 	{
 		if (type == null) {
-			Lg.e(LOGTAG, "stop with type null");
+			Lg.e("stop with type null");
 			return;
 		}
 
 		if (!mPlayers.containsKey(type)) {
-			//Log.i(LOGTAG, "[" + type + "] not playing");
+			//Log.i("[" + type + "] not playing");
 			return;
 		}
 
 		if (mPlayers.get(type) == null) {
-			Lg.e(LOGTAG, "[", type, "] not initialized");
+			Lg.e("[", type, "] not initialized");
 			mPlayers.remove(type);
 			return;
 		}
@@ -283,7 +282,7 @@ final class SoundEffectManager
 		mPlayers.get(type).stopMediaPlayer();
 		mPlayers.remove(type);
 
-		Lg.i(LOGTAG, "[", type, "] stopped");
+		Lg.i("[", type, "] stopped");
 	}
 
 	public void stopAll()
@@ -296,7 +295,7 @@ final class SoundEffectManager
 	@SuppressLint("InlinedApi")
 	public void setInCallMode(final boolean enabled)
 	{
-		Lg.i(LOGTAG, "setInCallMode: ", enabled);
+		Lg.i("setInCallMode: ", enabled);
 
 		final AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
 		if (enabled) {

@@ -32,7 +32,6 @@ import android.os.Vibrator;
 
 final class VibratorManager
 {
-	private static final String LOGTAG = VibratorManager.class.getSimpleName();
 	public static final long VIBRATE_LENGTH = 1000; // ms
 	public static final long VIBRATE_PAUSE = 1000; // ms
 
@@ -68,7 +67,7 @@ final class VibratorManager
 
 		void startVibration()
 		{
-			Lg.i(LOGTAG, "vibrate");
+			Lg.i("vibrate");
 			mVibrator.vibrate(VIBRATE_LENGTH);
 
 			mHandler.postDelayed(new Runnable() {
@@ -116,7 +115,7 @@ final class VibratorManager
 		mContext.registerReceiver(mRingerModeReceiver, filter);
 
 		if (!shouldVibrate()) {
-			Lg.i(LOGTAG, "VibratorManager: vibration disabled at the moment");
+			Lg.i("VibratorManager: vibration disabled at the moment");
 			return;
 		}
 
@@ -126,14 +125,14 @@ final class VibratorManager
 	private void startVibrate()
 	{
 		if (mImpl != null) {
-			Lg.i(LOGTAG, "already vibrating");
+			Lg.i("already vibrating");
 			return;
 		}
 
 		mImpl = new VibratorManagerImpl();
 
 		if (!mImpl.hasVibrator()) {
-			Lg.i(LOGTAG, "VibratorManager: no vibrator");
+			Lg.i("VibratorManager: no vibrator");
 			mImpl = null;
 			return;
 		}
@@ -157,19 +156,19 @@ final class VibratorManager
 	private void stopVibrate()
 	{
 		if (mImpl == null) {
-			Lg.i(LOGTAG, "not vibrating");
+			Lg.i("not vibrating");
 			return;
 		}
 
 		mImpl.stopVibration();
 		mImpl = null;
 
-		Lg.i(LOGTAG, "stopped");
+		Lg.i("stopped");
 	}
 
 	private void onRingerModeChanged()
 	{
-		Lg.i(LOGTAG, "onRingerModeChanged");
+		Lg.i("onRingerModeChanged");
 
 		if (!mHasOnGoingAlarm) {
 			return;

@@ -34,7 +34,6 @@ import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 
 final class SimlarNumber
 {
-	private static final String LOGTAG = SimlarNumber.class.getSimpleName();
 	private static String mDefaultRegion = null;
 	private final PhoneNumber mPhoneNumber;
 	private final String mPlainSimlarId;
@@ -53,12 +52,12 @@ final class SimlarNumber
 	private static PhoneNumber createPhoneNumber(final String telephoneNumber)
 	{
 		if (Util.isNullOrEmpty(telephoneNumber)) {
-			Lg.e(LOGTAG, "createPhoneNumber: empty telephone number");
+			Lg.e("createPhoneNumber: empty telephone number");
 			return null;
 		}
 
 		if (Util.isNullOrEmpty(mDefaultRegion)) {
-			Lg.e(LOGTAG, "no default region set, please initialize");
+			Lg.e("no default region set, please initialize");
 			return null;
 		}
 
@@ -66,24 +65,24 @@ final class SimlarNumber
 			final PhoneNumber pn = PhoneNumberUtil.getInstance().parse(telephoneNumber, mDefaultRegion);
 
 			if (pn == null) {
-				Lg.w(LOGTAG, "parsing number with LibPhoneNumber failed: pn is null");
+				Lg.w("parsing number with LibPhoneNumber failed: pn is null");
 				return null;
 			}
 
 			if (!pn.hasCountryCode()) {
-				Lg.w(LOGTAG, "parsing number with LibPhoneNumber failed: no country code");
+				Lg.w("parsing number with LibPhoneNumber failed: no country code");
 				return null;
 			}
 
 			if (!pn.hasNationalNumber()) {
-				Lg.w(LOGTAG, "parsing number with LibPhoneNumber failed: no national number");
+				Lg.w("parsing number with LibPhoneNumber failed: no national number");
 				return null;
 			}
 
 			return pn;
 		} catch (final NumberParseException e) {
 			// we do not want a stacktrace in the logs for each not parsable number
-			Lg.i(LOGTAG, "NumberParseException (telephoneNumber=", telephoneNumber, " mDefaultRegion=", mDefaultRegion, "): ", e.getMessage());
+			Lg.i("NumberParseException (telephoneNumber=", telephoneNumber, " mDefaultRegion=", mDefaultRegion, "): ", e.getMessage());
 			return null;
 		}
 	}
@@ -140,7 +139,7 @@ final class SimlarNumber
 	public static void setDefaultRegion(int countryCallingCode)
 	{
 		mDefaultRegion = PhoneNumberUtil.getInstance().getRegionCodeForCountryCode(countryCallingCode);
-		Lg.i(LOGTAG, "for number parsing now using default region: ", mDefaultRegion);
+		Lg.i("for number parsing now using default region: ", mDefaultRegion);
 	}
 
 	public static int getDefaultRegion()
@@ -165,7 +164,7 @@ final class SimlarNumber
 
 		// read countryCode from configuration
 		final String regionFromConfig = c.getResources().getConfiguration().locale.getCountry().toUpperCase(Locale.US);
-		Lg.i(LOGTAG, "guessed region by android configuration: ", regionFromConfig);
+		Lg.i("guessed region by android configuration: ", regionFromConfig);
 		mDefaultRegion = regionFromConfig;
 		return regionFromConfig;
 	}
@@ -185,7 +184,7 @@ final class SimlarNumber
 		final String numberFromSim = ((TelephonyManager) c.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
 
 		if (Util.isNullOrEmpty(numberFromSim)) {
-			Lg.w(LOGTAG, "failed to read telephone number from sim card");
+			Lg.w("failed to read telephone number from sim card");
 			return "";
 		}
 

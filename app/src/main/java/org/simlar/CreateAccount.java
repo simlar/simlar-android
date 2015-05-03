@@ -32,8 +32,6 @@ import android.util.Xml;
 
 public final class CreateAccount
 {
-	private static final String LOGTAG = CreateAccount.class.getSimpleName();
-
 	private static final String URL_PATH = "create-account.php";
 
 	private CreateAccount()
@@ -122,7 +120,7 @@ public final class CreateAccount
 
 	public static RequestResult httpPostRequest(final String telephoneNumber, final String smsText)
 	{
-		Lg.i(LOGTAG, "httpPostRequest: ", new Lg.Anonymizer(telephoneNumber));
+		Lg.i("httpPostRequest: ", new Lg.Anonymizer(telephoneNumber));
 
 		final Map<String, String> parameters = new HashMap<>();
 		parameters.put("command", "request");
@@ -134,7 +132,7 @@ public final class CreateAccount
 
 	public static ConfirmResult httpPostConfirm(final String simlarId, final String registrationCode)
 	{
-		Lg.i(LOGTAG, "httpPostConfirm: simlarId=", new Lg.Anonymizer(simlarId), " registrationCode=", registrationCode);
+		Lg.i("httpPostConfirm: simlarId=", new Lg.Anonymizer(simlarId), " registrationCode=", registrationCode);
 
 		final Map<String, String> parameters = new HashMap<>();
 		parameters.put("command", "confirm");
@@ -158,15 +156,15 @@ public final class CreateAccount
 		try {
 			parsedResult = parseXml(result, responseAttribute1, responseAttribute2);
 		} catch (final XmlPullParserException e) {
-			Lg.ex(LOGTAG, e, "parsing xml failed");
+			Lg.ex(e, "parsing xml failed");
 		} catch (final IOException e) {
-			Lg.ex(LOGTAG, e, "IOException");
+			Lg.ex(e, "IOException");
 		}
 
 		try {
 			result.close();
 		} catch (final IOException e) {
-			Lg.ex(LOGTAG, e, "IOException");
+			Lg.ex(e, "IOException");
 		}
 
 		return parsedResult;
@@ -186,7 +184,7 @@ public final class CreateAccount
 				&& parser.getAttributeName(1).equalsIgnoreCase("message"))
 		{
 			final int errorId = Integer.parseInt(parser.getAttributeValue(0));
-			Lg.i(LOGTAG, "server returned error: ", parser.getAttributeValue(1), " (", errorId, ")");
+			Lg.i("server returned error: ", parser.getAttributeValue(1), " (", errorId, ")");
 			return new Result(errorId, null, null);
 		}
 
@@ -195,11 +193,11 @@ public final class CreateAccount
 				&& parser.getAttributeName(0).equals(attribute1)
 				&& parser.getAttributeName(1).equals(attribute2))
 		{
-			Lg.i(LOGTAG, "request success");
+			Lg.i("request success");
 			return new Result(Result.SUCCESS, parser.getAttributeValue(0), parser.getAttributeValue(1));
 		}
 
-		Lg.e(LOGTAG, "unable to parse response: xmlRootElement=", xmlRootElement, " AttributeCount=", parser.getAttributeCount());
+		Lg.e("unable to parse response: xmlRootElement=", xmlRootElement, " AttributeCount=", parser.getAttributeCount());
 		return null;
 	}
 }

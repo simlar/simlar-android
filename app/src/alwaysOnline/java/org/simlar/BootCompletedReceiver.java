@@ -28,13 +28,11 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 
 public class BootCompletedReceiver extends WakefulBroadcastReceiver
 {
-	private static final String LOGTAG = BootCompletedReceiver.class.getSimpleName();
-
 	@Override
 	public void onReceive(final Context context, final Intent intent)
 	{
 		Lg.init(context);
-		Lg.i(LOGTAG, "onReceive");
+		Lg.i("onReceive");
 
 		startWakefulService(context, intent.setComponent(new ComponentName(context.getPackageName(), SimlarService.class.getName())));
 	}

@@ -42,8 +42,6 @@ import android.text.TextUtils;
 
 public final class SimlarSSLSocketFactory extends SSLSocketFactory
 {
-	private static final String LOGTAG = SimlarSSLSocketFactory.class.getSimpleName();
-
 	private static final String[] PREFERRED_CIPHER_SUITES = { "TLS_DHE_RSA_WITH_AES_256_CBC_SHA", "DHE-RSA-AES256-SHA" };
 	private static final String[] PREFERRED_PROTOCOLS = { "TLSv1.2", "TLSv1.1", "TLSv1" };
 
@@ -82,7 +80,7 @@ public final class SimlarSSLSocketFactory extends SSLSocketFactory
 		final String[] cipherSuites = getPreferred(PREFERRED_CIPHER_SUITES,
 				HttpsURLConnection.getDefaultSSLSocketFactory().getSupportedCipherSuites(),
 				HttpsURLConnection.getDefaultSSLSocketFactory().getDefaultCipherSuites());
-		Lg.i(LOGTAG, "using cipher suites: ", TextUtils.join(", ", cipherSuites));
+		Lg.i("using cipher suites: ", TextUtils.join(", ", cipherSuites));
 		return cipherSuites;
 	}
 
@@ -91,10 +89,10 @@ public final class SimlarSSLSocketFactory extends SSLSocketFactory
 		try {
 			final String[] deviceSupports = ((SSLSocket) HttpsURLConnection.getDefaultSSLSocketFactory().createSocket()).getSupportedProtocols();
 			final String[] protocols = getPreferred(PREFERRED_PROTOCOLS, deviceSupports, deviceSupports);
-			Lg.i(LOGTAG, "using protocols: ", TextUtils.join(", ", protocols));
+			Lg.i("using protocols: ", TextUtils.join(", ", protocols));
 			return protocols;
 		} catch (final IOException e) {
-			Lg.ex(LOGTAG, e, "failed to create protocols");
+			Lg.ex(e, "failed to create protocols");
 			return null;
 		}
 	}
@@ -102,7 +100,7 @@ public final class SimlarSSLSocketFactory extends SSLSocketFactory
 	private static Certificate loadCertificate()
 	{
 		if (!FileHelper.isInitialized()) {
-			Lg.e(LOGTAG, "Error: FileHelper not initialized");
+			Lg.e("Error: FileHelper not initialized");
 			return null;
 		}
 
@@ -112,7 +110,7 @@ public final class SimlarSSLSocketFactory extends SSLSocketFactory
 			caInput = new BufferedInputStream(new FileInputStream(FileHelper.getRootCaFileName()));
 			return cf.generateCertificate(caInput);
 		} catch (final Exception e) {
-			Lg.ex(LOGTAG, e, "Exception during loadCertificate");
+			Lg.ex(e, "Exception during loadCertificate");
 			return null;
 		} finally {
 			try {
@@ -120,7 +118,7 @@ public final class SimlarSSLSocketFactory extends SSLSocketFactory
 					caInput.close();
 				}
 			} catch (final IOException e) {
-				Lg.ex(LOGTAG, e, "IOException during loadCertificate");
+				Lg.ex(e, "IOException during loadCertificate");
 			}
 		}
 	}
@@ -144,7 +142,7 @@ public final class SimlarSSLSocketFactory extends SSLSocketFactory
 			context.init(null, tmf.getTrustManagers(), null);
 			return context.getSocketFactory();
 		} catch (final Exception e) {
-			Lg.ex(LOGTAG, e, "Exception during createSSLSocketFactory");
+			Lg.ex(e, "Exception during createSSLSocketFactory");
 			return null;
 		}
 	}

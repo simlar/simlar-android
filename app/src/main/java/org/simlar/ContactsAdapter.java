@@ -36,8 +36,6 @@ import android.widget.TextView;
 
 final class ContactsAdapter extends ArrayAdapter<FullContactData>
 {
-	private static final String LOGTAG = ContactsAdapter.class.getSimpleName();
-
 	private final int mLayout;
 	private final LayoutInflater mInflater;
 
@@ -99,7 +97,7 @@ final class ContactsAdapter extends ArrayAdapter<FullContactData>
 		if (convertView == null) {
 			rowView = mInflater.inflate(mLayout, parent, false);
 			if (rowView == null) {
-				Lg.e(LOGTAG, "no row view found");
+				Lg.e("no row view found");
 				return null;
 			}
 			holder = new RowViewHolder(rowView);

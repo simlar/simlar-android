@@ -36,7 +36,6 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 final class GooglePlayServicesHelper
 {
-	private static final String LOGTAG = GooglePlayServicesHelper.class.getSimpleName();
 	private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 	private static final String GOOGLE_PUSH_SENDER_ID = "772399062899";
 
@@ -53,7 +52,7 @@ final class GooglePlayServicesHelper
 
 		final int versionCode = Version.getVersionCode(context);
 		if (versionCode < 1) {
-			Lg.e(LOGTAG, "unable to read simlar version code");
+			Lg.e("unable to read simlar version code");
 			return;
 		}
 
@@ -61,7 +60,7 @@ final class GooglePlayServicesHelper
 				&& PreferencesHelper.getSimlarVersionCode() == versionCode
 				&& !Util.isNullOrEmpty(PreferencesHelper.getGcmRegistrationId()))
 		{
-			Lg.i(LOGTAG, "already registered for google push notifications");
+			Lg.i("already registered for google push notifications");
 			return;
 		}
 
@@ -79,19 +78,19 @@ final class GooglePlayServicesHelper
 					final String gcmRegistrationId = gcm.register(GOOGLE_PUSH_SENDER_ID);
 
 					if (Util.isNullOrEmpty(gcmRegistrationId)) {
-						Lg.e(LOGTAG, "got empty gcm registration id from google server");
+						Lg.e("got empty gcm registration id from google server");
 						return null;
 					}
 
 					if (!StorePushId.httpPostStorePushId(gcmRegistrationId)) {
-						Lg.e(LOGTAG, "ERROR: failed to store gcm push notification registration id=", gcmRegistrationId, " on simlar server");
+						Lg.e("ERROR: failed to store gcm push notification registration id=", gcmRegistrationId, " on simlar server");
 						return null;
 					}
 
-					Lg.i(LOGTAG, "gcm push notification registration id=", gcmRegistrationId, " stored on simlar server");
+					Lg.i("gcm push notification registration id=", gcmRegistrationId, " stored on simlar server");
 					return gcmRegistrationId;
 				} catch (final IOException e) {
-					Lg.ex(LOGTAG, e, "gcm registration IOException");
+					Lg.ex(e, "gcm registration IOException");
 					return null;
 				}
 			}
@@ -101,7 +100,7 @@ final class GooglePlayServicesHelper
 			{
 				if (!Util.isNullOrEmpty(gcmRegistrationId)) {
 					PreferencesHelper.saveToFileGcmRegistrationId(context, gcmRegistrationId, simlarVersionCode);
-					Lg.i(LOGTAG, "gcm push notification registration id=", gcmRegistrationId, " cached on device");
+					Lg.i("gcm push notification registration id=", gcmRegistrationId, " cached on device");
 				}
 			}
 		}.execute();
@@ -124,17 +123,17 @@ final class GooglePlayServicesHelper
 	{
 		final int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(activity);
 		if (resultCode == ConnectionResult.SUCCESS) {
-			Lg.i(LOGTAG, "google play services check ok");
+			Lg.i("google play services check ok");
 			return true;
 		}
 
-		Lg.w(LOGTAG, "google play services not available: ", GooglePlayServicesUtil.getErrorString(resultCode));
+		Lg.w("google play services not available: ", GooglePlayServicesUtil.getErrorString(resultCode));
 
 		if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-			Lg.w(LOGTAG, "This device has no or too old google play services installed. Asking user");
+			Lg.w("This device has no or too old google play services installed. Asking user");
 			showDialogAndFinishParent(activity, GooglePlayServicesUtil.getErrorDialog(resultCode, activity, PLAY_SERVICES_RESOLUTION_REQUEST));
 		} else {
-			Lg.e(LOGTAG, "This device is not supported.");
+			Lg.e("This device is not supported.");
 			showDialogAndFinishParent(activity,
 					new AlertDialog.Builder(activity)
 							.setTitle(R.string.google_play_services_helper_alert_unavailable_title)

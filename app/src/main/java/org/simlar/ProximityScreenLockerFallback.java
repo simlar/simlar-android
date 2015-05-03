@@ -34,8 +34,6 @@ import android.view.WindowManager;
 
 public class ProximityScreenLockerFallback implements ProximityScreenLocker, SensorEventListener
 {
-	private static final String LOGTAG = ProximityScreenLockerFallback.class.getSimpleName();
-
 	private static final float PROXIMITY_DISTANCE_THRESHOLD = 4.0f;
 
 	private final Activity mActivity;
@@ -81,7 +79,7 @@ public class ProximityScreenLockerFallback implements ProximityScreenLocker, Sen
 		final float distance = event.values[0];
 
 		if (distance > event.sensor.getMaximumRange()) {
-			Lg.w(LOGTAG, "proximity sensors distance=", distance, " out of range=", event.sensor.getMaximumRange());
+			Lg.w("proximity sensors distance=", distance, " out of range=", event.sensor.getMaximumRange());
 			/// do not return, e.g. the galaxy s2 won't work otherwise
 		}
 
@@ -90,14 +88,14 @@ public class ProximityScreenLockerFallback implements ProximityScreenLocker, Sen
 
 		final WindowManager.LayoutParams params = window.getAttributes();
 		if (distance <= PROXIMITY_DISTANCE_THRESHOLD) {
-			Lg.i(LOGTAG, "proximity sensors distance=", distance, " below threshold=", PROXIMITY_DISTANCE_THRESHOLD,
+			Lg.i("proximity sensors distance=", distance, " below threshold=", PROXIMITY_DISTANCE_THRESHOLD,
 					" => dimming screen in order to disable touch events");
 			params.screenBrightness = 0.1f;
 			view.setVisibility(View.INVISIBLE);
 			showNavigationBar(false);
 			window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		} else {
-			Lg.i(LOGTAG, "proximity sensors distance=", distance, " above threshold=", PROXIMITY_DISTANCE_THRESHOLD,
+			Lg.i("proximity sensors distance=", distance, " above threshold=", PROXIMITY_DISTANCE_THRESHOLD,
 					" => enabling touch events (no screen dimming)");
 			params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
 			view.setVisibility(View.VISIBLE);

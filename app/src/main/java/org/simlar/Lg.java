@@ -25,16 +25,18 @@ import android.util.Log;
 
 final class Lg
 {
+	private static final int FILENAME_SIZE_MAX = 34;
 	private static final int LOG_LEVEL_NORMAL = Log.WARN;
 	private static final int LOG_LEVEL_DEBUG = Log.DEBUG;
 	private static volatile int mLevel = LOG_LEVEL_NORMAL;
+	private static volatile String mPackageName;
 
 	private Lg()
 	{
 		throw new AssertionError("This class was not meant to be instantiated");
 	}
 
-	private static void println(final int priority, final String tag, final Throwable exception, final Object... messageParts)
+	private static void println(final int priority, final Throwable exception, final Object... messageParts)
 	{
 		if (priority < mLevel) {
 			return;
@@ -53,7 +55,25 @@ final class Lg
 					.append(Log.getStackTraceString(exception));
 		}
 
-		Log.println(priority, tag, message.toString());
+		Log.println(priority, createTag(), message.toString());
+	}
+
+	private static String createTag()
+	{
+		final StackTraceElement stackTraceElement = Thread.currentThread().getStackTrace()[5];
+		final String fileName = stackTraceElement.getFileName() + ":" + stackTraceElement.getLineNumber();
+
+		final StringBuilder tag = new StringBuilder();
+		tag.append(mPackageName).append(".(");
+
+		final int n = FILENAME_SIZE_MAX - fileName.length();
+		if (n > 0) {
+			tag.append(fileName).append(")").append(String.format("%" + n + "s", "."));
+		} else {
+			tag.append(fileName.substring(-n)).append(")");
+		}
+
+		return tag.toString();
 	}
 
 	public static class Anonymizer
@@ -92,6 +112,7 @@ final class Lg
 	public static void init(final Context context)
 	{
 		setDebugMode(PreferencesHelper.readFromFileDebugMode(context));
+		mPackageName = context.getPackageName();
 	}
 
 	private static void setDebugMode(final boolean enabled)
@@ -110,33 +131,33 @@ final class Lg
 		return mLevel < LOG_LEVEL_NORMAL;
 	}
 
-	public static void v(final String tag, final Object... messageParts)
+	public static void v(final Object... messageParts)
 	{
-		println(Log.VERBOSE, tag, null, messageParts);
+		println(Log.VERBOSE, null, messageParts);
 	}
 
-	public static void d(final String tag, final Object... messageParts)
+	public static void d(final Object... messageParts)
 	{
-		println(Log.DEBUG, tag, null, messageParts);
+		println(Log.DEBUG, null, messageParts);
 	}
 
-	public static void i(final String tag, final Object... messageParts)
+	public static void i(final Object... messageParts)
 	{
-		println(Log.INFO, tag, null, messageParts);
+		println(Log.INFO, null, messageParts);
 	}
 
-	public static void w(final String tag, final Object... messageParts)
+	public static void w(final Object... messageParts)
 	{
-		println(Log.WARN, tag, null, messageParts);
+		println(Log.WARN, null, messageParts);
 	}
 
-	public static void e(final String tag, final Object... messageParts)
+	public static void e(final Object... messageParts)
 	{
-		println(Log.ERROR, tag, null, messageParts);
+		println(Log.ERROR, null, messageParts);
 	}
 
-	public static void ex(final String tag, final Throwable exception, final Object... messageParts)
+	public static void ex(final Throwable exception, final Object... messageParts)
 	{
-		println(Log.ERROR, tag, exception, messageParts);
+		println(Log.ERROR, exception, messageParts);
 	}
 }

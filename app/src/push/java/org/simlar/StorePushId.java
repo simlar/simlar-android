@@ -33,7 +33,6 @@ import android.util.Xml;
 
 final class StorePushId
 {
-	private static final String LOGTAG = StorePushId.class.getSimpleName();
 	private static final String URL_PATH = "store-push-id.php";
 	private static final int DEVICE_TYPE_ANDROID = 1;
 
@@ -45,7 +44,7 @@ final class StorePushId
 	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	public static boolean httpPostStorePushId(final String pushId)
 	{
-		Lg.i(LOGTAG, "httpPostStorePushId requested");
+		Lg.i("httpPostStorePushId requested");
 
 		try {
 			final Map<String, String> parameters = new HashMap<>();
@@ -64,21 +63,21 @@ final class StorePushId
 			try {
 				success = parseXml(result, pushId);
 			} catch (final XmlPullParserException e) {
-				Lg.ex(LOGTAG, e, "parsing xml failed");
+				Lg.ex(e, "parsing xml failed");
 			} catch (final IOException e) {
-				Lg.ex(LOGTAG, e, "IOException in InputStream of HttpsPost");
+				Lg.ex(e, "IOException in InputStream of HttpsPost");
 			}
 
 			try {
 				result.close();
 			} catch (final IOException e) {
-				Lg.ex(LOGTAG, e, "IOException during close");
+				Lg.ex(e, "IOException during close");
 			}
 
 			return success;
 
 		} catch (final NotInitedException e) {
-			Lg.ex(LOGTAG, e, "PreferencesHelper.NotInitedException");
+			Lg.ex(e, "PreferencesHelper.NotInitedException");
 			return false;
 		}
 	}
@@ -95,7 +94,7 @@ final class StorePushId
 				&& parser.getAttributeName(0).equalsIgnoreCase("id")
 				&& parser.getAttributeName(1).equalsIgnoreCase("message"))
 		{
-			Lg.e(LOGTAG, "server returned error: ", parser.getAttributeValue(1));
+			Lg.e("server returned error: ", parser.getAttributeValue(1));
 			return false;
 		}
 
@@ -109,7 +108,7 @@ final class StorePushId
 			return true;
 		}
 
-		Lg.e(LOGTAG, "parse error: ", parser.getPositionDescription());
+		Lg.e("parse error: ", parser.getPositionDescription());
 		return false;
 	}
 }

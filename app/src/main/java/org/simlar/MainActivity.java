@@ -40,8 +40,6 @@ import android.view.MenuItem;
 
 public final class MainActivity extends AppCompatActivity
 {
-	private static final String LOGTAG = MainActivity.class.getSimpleName();
-
 	private ContactsAdapter mAdapter = null;
 	private ContactsListFragment mContactList = null;
 
@@ -49,11 +47,6 @@ public final class MainActivity extends AppCompatActivity
 
 	private final class SimlarServiceCommunicatorContacts extends SimlarServiceCommunicator
 	{
-		public SimlarServiceCommunicatorContacts()
-		{
-			super(LOGTAG);
-		}
-
 		@Override
 		void onServiceFinishes()
 		{
@@ -66,7 +59,7 @@ public final class MainActivity extends AppCompatActivity
 	{
 		Lg.init(this);
 
-		Lg.i(LOGTAG, "onCreate ", savedInstanceState);
+		Lg.i("onCreate ", savedInstanceState);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
@@ -82,7 +75,7 @@ public final class MainActivity extends AppCompatActivity
 		}
 		mContactList.setListAdapter(mAdapter);
 
-		Lg.i(LOGTAG, "onCreate ended");
+		Lg.i("onCreate ended");
 	}
 
 	private void loadContacts()
@@ -114,13 +107,13 @@ public final class MainActivity extends AppCompatActivity
 	@Override
 	protected void onResume()
 	{
-		Lg.i(LOGTAG, "onResume");
+		Lg.i("onResume");
 		super.onResume();
 
 		if (FlavourHelper.isGcmEnabled() && SimlarService.isRunning()) {
 			final Class<? extends Activity> activity = SimlarService.getActivity();
 			if (activity != this.getClass()) {
-				Lg.i(LOGTAG, "as service is running => starting: ", activity.getSimpleName());
+				Lg.i("as service is running => starting: ", activity.getSimpleName());
 				startActivity(new Intent(this, activity));
 				finish();
 				return;
@@ -133,7 +126,7 @@ public final class MainActivity extends AppCompatActivity
 		}
 
 		if (!PreferencesHelper.readPreferencesFromFile(this)) {
-			Lg.i(LOGTAG, "as we are not registered yet => creating account");
+			Lg.i("as we are not registered yet => creating account");
 			startAccountCreation();
 			return;
 		}
@@ -150,7 +143,7 @@ public final class MainActivity extends AppCompatActivity
 	@Override
 	protected void onPause()
 	{
-		Lg.i(LOGTAG, "onPause");
+		Lg.i("onPause");
 
 		if (mCommunicator != null) {
 			mCommunicator.unregister();
@@ -236,7 +229,7 @@ public final class MainActivity extends AppCompatActivity
 
 	private void reloadContacts()
 	{
-		Lg.i(LOGTAG, "reloadContacts");
+		Lg.i("reloadContacts");
 		if (ContactsProvider.clearCache()) {
 			mAdapter.clear();
 			loadContacts();
@@ -314,7 +307,7 @@ public final class MainActivity extends AppCompatActivity
 
 	private void quit()
 	{
-		Lg.i(LOGTAG, "quit");
+		Lg.i("quit");
 		if (mCommunicator == null) {
 			finish();
 		} else {
@@ -326,7 +319,7 @@ public final class MainActivity extends AppCompatActivity
 						@Override
 						public void onClick(final DialogInterface dialog, final int id)
 						{
-							Lg.i(LOGTAG, "user decided to terminate simlar");
+							Lg.i("user decided to terminate simlar");
 							mCommunicator.getService().terminate();
 						}
 					})
