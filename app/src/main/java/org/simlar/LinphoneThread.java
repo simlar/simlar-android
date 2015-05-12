@@ -59,7 +59,7 @@ public final class LinphoneThread
 
 	private static final class LinphoneThreadImpl extends Thread implements LinphoneCoreListener
 	{
-		private static final long ZRTP_HANDSHAKE_CHECK = 15000;
+		private static final long ZRTP_CHECK_INTERVAL = 40000;
 		Handler mLinphoneThreadHandler = null;
 		final Handler mMainThreadHandler = new Handler();
 		Runnable mCallEncryptionChecker = null;
@@ -459,12 +459,12 @@ public final class LinphoneThread
 					}
 
 					if (mCallEncryptionChecker != null) {
-						mLinphoneThreadHandler.postDelayed(mCallEncryptionChecker, ZRTP_HANDSHAKE_CHECK);
+						mLinphoneThreadHandler.postDelayed(mCallEncryptionChecker, ZRTP_CHECK_INTERVAL);
 					}
 				}
 			};
 
-			mLinphoneThreadHandler.postDelayed(mCallEncryptionChecker, ZRTP_HANDSHAKE_CHECK);
+			mLinphoneThreadHandler.postDelayed(mCallEncryptionChecker, ZRTP_CHECK_INTERVAL);
 			Lg.i("started callEncryptionChecker");
 		}
 
