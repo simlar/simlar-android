@@ -130,6 +130,7 @@ final class LinphoneHandler
 			// enable zrtp
 			mLinphoneCore.setMediaEncryption(MediaEncryption.ZRTP);
 			mLinphoneCore.setZrtpSecretsCache(zrtpSecretsCacheFile);
+			mLinphoneCore.setMediaEncryptionMandatory(true);
 
 			// set sound files
 			mLinphoneCore.setRingback(ringbackSoundFile);
