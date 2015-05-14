@@ -1023,11 +1023,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	public void onJoin()
 	{
 		if (mLinphoneThread != null) {
-			try {
-				mLinphoneThread.join(2000);
-			} catch (final InterruptedException e) {
-				Lg.ex(e, "join interrupted");
-			}
 			mLinphoneThread = null;
 		}
 

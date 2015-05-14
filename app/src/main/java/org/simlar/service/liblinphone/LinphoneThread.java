@@ -75,9 +75,8 @@ import org.simlar.logging.Lg;
 import org.simlar.service.AudioOutputType;
 import org.simlar.utils.Util;
 
-public final class LinphoneThread implements Runnable, CoreListener
+public final class LinphoneThread implements CoreListener
 {
-	private final Thread mThread;
 	private Handler mLinphoneThreadHandler = null;
 	private final Handler mMainThreadHandler = new Handler(Looper.getMainLooper());
 	private VideoState mVideoState = VideoState.OFF;
@@ -97,15 +96,12 @@ public final class LinphoneThread implements Runnable, CoreListener
 		mListener.onCallStateChanged("", Call.State.Idle, null);
 		mContext = context;
 
-		mThread = new Thread(this);
-		mThread.start();
+		run();
 	}
 
-	@Override
 	public void run()
 	{
 		Lg.i("run");
-		Looper.prepare();
 
 		mLinphoneThreadHandler = new Handler();
 
@@ -113,7 +109,6 @@ public final class LinphoneThread implements Runnable, CoreListener
 
 		mMainThreadHandler.post(mListener::onInitialized);
 
-		Looper.loop();
 	}
 
 	public void finish()
@@ -126,22 +121,18 @@ public final class LinphoneThread implements Runnable, CoreListener
 		mLinphoneThreadHandler.post(() -> {
 			mLinphoneThreadHandler.removeCallbacksAndMessages(null);
 			mLinphoneThreadHandler = null;
+			/*
 			final Looper looper = Looper.myLooper();
 			if (looper != null) {
 				looper.quit();
 			}
+			*/
 			mLinphoneHandler.destroy(this);
 			mMainThreadHandler.post(() -> {
 				mMainThreadHandler.removeCallbacksAndMessages(null);
 				mListener.onJoin();
 			});
 		});
-	}
-
-	@SuppressWarnings("SameParameterValue")
-	public void join(final long millis) throws InterruptedException
-	{
-		mThread.join(millis);
 	}
 
 	public void register(final String mySimlarId, final String password)
