@@ -153,6 +153,17 @@ public final class Lg
 	public static void init(final boolean debugMode)
 	{
 		setDebugMode(debugMode);
+
+		Thread.setDefaultUncaughtExceptionHandler (new Thread.UncaughtExceptionHandler()
+		{
+			@Override
+			public void uncaughtException (Thread thread, Throwable e)
+			{
+				Lg.w("uncaughtException");
+				e.printStackTrace();
+				System.exit(1);
+			}
+		});
 	}
 
 	public static void setDebugMode(final boolean enabled)
