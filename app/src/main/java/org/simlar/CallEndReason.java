@@ -20,7 +20,8 @@
 
 package org.simlar;
 
-public enum CallEndReason {
+public enum CallEndReason
+{
 	NONE,
 	DECLINED,
 	OFFLINE,

@@ -22,7 +22,8 @@ package org.simlar;
 
 import org.linphone.core.LinphoneCore.RegistrationState;
 
-public enum SimlarStatus {
+public enum SimlarStatus
+{
 	UNKNOWN,
 	OFFLINE,
 	CONNECTING,
