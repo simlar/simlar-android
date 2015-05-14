@@ -66,8 +66,9 @@ import org.simlar.helper.Volumes.MicrophoneStatus;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
-public final class LinphoneThread extends Thread implements CoreListener
+public final class LinphoneThread implements Runnable, CoreListener
 {
+	private final Thread mThread;
 	private Handler mLinphoneThreadHandler = null;
 	private final Handler mMainThreadHandler = new Handler();
 	private VideoState mVideoState = VideoState.OFF;
@@ -88,7 +89,8 @@ public final class LinphoneThread extends Thread implements CoreListener
 		mListener.onCallStateChanged("", Call.State.Idle, null);
 		mContext = context;
 
-		start();
+		mThread = new Thread(this);
+		mThread.start();
 	}
 
 	@Override
@@ -126,6 +128,12 @@ public final class LinphoneThread extends Thread implements CoreListener
 				mListener.onJoin();
 			});
 		});
+	}
+
+	@SuppressWarnings("SameParameterValue")
+	public void join(final long millis) throws InterruptedException
+	{
+		mThread.join(millis);
 	}
 
 	public void register(final String mySimlarId, final String password)
