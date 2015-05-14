@@ -272,6 +272,13 @@
                 android:gravity="center_horizontal"
                 android:text="@string/call_activity_call_ended_normally"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <org.simlar.widgets.ConnectionDetailsView
+                android:id="@+id/connectionDetailsViewCallEndReason"
+                android:paddingTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
         </LinearLayout>
     </RelativeLayout>
 

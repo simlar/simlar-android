@@ -46,6 +46,7 @@ import androidx.fragment.app.FragmentManager;
 import java.util.Set;
 
 import org.simlar.R;
+import org.simlar.helper.CallConnectionDetails;
 import org.simlar.helper.PermissionsHelper;
 import org.simlar.helper.VideoState;
 import org.simlar.logging.Lg;
@@ -90,6 +91,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 	private LinearLayout mLayoutCallEndReason = null;
 	private TextView mTextViewCallEndReason = null;
+	private ConnectionDetailsView mConnectionDetailsView = null;
 
 	private LinearLayout mLayoutCallControlButtons = null;
 	private ProgressBar mProgressBarRequestingVideo = null;
@@ -191,6 +193,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 		mLayoutCallEndReason = findViewById(R.id.linearLayoutCallEndReason);
 		mTextViewCallEndReason = findViewById(R.id.textViewCallEndReason);
+		mConnectionDetailsView = (ConnectionDetailsView) findViewById(R.id.connectionDetailsViewCallEndReason);
 
 		mLayoutCallControlButtons = findViewById(R.id.linearLayoutCallControlButtons);
 		mProgressBarRequestingVideo = findViewById(R.id.progressBarRequestingVideo);
@@ -338,6 +341,11 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 			mLayoutAuthenticationToken.setVisibility(View.GONE);
 			mLayoutCallEndReason.setVisibility(View.VISIBLE);
 			mTextViewCallEndReason.setText(simlarCallState.getCallStatusDisplayMessage(this));
+			final CallConnectionDetails details = mCommunicator.getService().getCallConnectionDetails();
+			if (details != null && details.hasConnectionInfo()) {
+				mConnectionDetailsView.setVisibility(View.VISIBLE);
+				mConnectionDetailsView.setCallConnectionDetails(details);
+			}
 			stopCallTimer();
 			finishDelayed(20000);
 		}
