@@ -126,8 +126,7 @@ public final class ConnectionDetailsActivity extends Activity
 			mTextViewJitter.setText(callConnectionDetails.getJitter());
 			mTextViewPacketLoss.setText(callConnectionDetails.getPacketLoss() + " " + getString(R.string.connection_details_activity_percent));
 			mTextViewLatePackets.setText(callConnectionDetails.getLatePackets());
-			mTextViewRoundTripDelay
-					.setText(callConnectionDetails.getRoundTripDelay() + " " + getString(R.string.connection_details_activity_milli_seconds));
+			mTextViewRoundTripDelay.setText(callConnectionDetails.getRoundTripDelay() + " " + getString(R.string.connection_details_activity_milli_seconds));
 		}
 	}
 }
