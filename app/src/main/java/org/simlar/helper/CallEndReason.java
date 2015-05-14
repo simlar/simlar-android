@@ -31,6 +31,7 @@ public enum CallEndReason
 	OFFLINE,
 	UNSUPPORTED_MEDIA,
 	BUSY,
+	ENCRYPTION_FAILED,
 	SERVER_CONNECTION_TIMEOUT;
 
 	public static CallEndReason fromReason(final Reason reason)
@@ -56,6 +57,7 @@ public enum CallEndReason
 			case OFFLINE -> R.string.call_activity_call_ended_because_user_offline;
 			case UNSUPPORTED_MEDIA -> R.string.call_activity_call_ended_because_incompatible_media;
 			case BUSY -> R.string.call_activity_call_ended_because_user_busy;
+			case ENCRYPTION_FAILED -> R.string.call_activity_call_ended_because_encryption_failed;
 			case SERVER_CONNECTION_TIMEOUT -> R.string.call_activity_connecting_to_server_timed_out;
 			case NONE -> R.string.call_activity_call_ended_normally;
 		};
