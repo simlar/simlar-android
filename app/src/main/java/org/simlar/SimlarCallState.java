@@ -60,7 +60,7 @@ public final class SimlarCallState
 			return false;
 		}
 
-		Lg.w("new CallEndReason=", reason);
+		Lg.i("new CallEndReason=", reason);
 		mCallEndReason = reason;
 		return true;
 	}
