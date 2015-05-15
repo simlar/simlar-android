@@ -43,7 +43,7 @@ final class FileHelper
 	public static void init(final Context context)
 	{
 		if (isInitialized()) {
-			Lg.w("already inited => aborting");
+			Lg.i("already inited => aborting");
 			return;
 		}
 
