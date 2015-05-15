@@ -20,7 +20,8 @@
 
 package org.simlar;
 
-public enum ContactStatus {
+public enum ContactStatus
+{
 	NOT_REGISTERED,
 	REGISTERED,
 	UNKNOWN;

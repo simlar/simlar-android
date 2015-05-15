@@ -20,7 +20,8 @@
 
 package org.simlar;
 
-public enum CreateAccountStatus {
+public enum CreateAccountStatus
+{
 	NONE(0),
 	WAITING_FOR_SMS(1),
 	SUCCESS(2);
