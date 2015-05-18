@@ -107,7 +107,6 @@
     <string name="call_activity_alert_accept_video_request_title">Video-Anruf</string>
     <string name="call_activity_alert_accept_video_request_text">Akzeptierst Du das Update auf einen Video-Anruf?</string>
     <string name="call_activity_requesting_video">Warte auf Videobestätigung</string>
-    <string name="call_activity_encrypting_video">Verschlüssele Video</string>
     <string name="call_activity_video_denied">Video wurde abgelehnt</string>
     <string name="call_activity_request_video_without_verified_token">Vergleiche zuerst den Code</string>
 

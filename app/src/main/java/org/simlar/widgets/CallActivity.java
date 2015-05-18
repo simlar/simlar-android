@@ -328,7 +328,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	{
 		Lg.i("onVideoStateChanged: ", videoState);
 
-		if (VideoState.PLAYING.equals(videoState)) {
+		if (VideoState.PLAYING.equals(videoState) || VideoState.ENCRYPTING.equals(videoState)) {
 			startVideo();
 		} else {
 			stopVideo();
@@ -350,9 +350,6 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 			mTextViewRequestingVideo.setText(R.string.call_activity_requesting_video);
 			break;
 		case ENCRYPTING:
-			mLayoutRequestingVideo.setVisibility(View.VISIBLE);
-			mProgressBarRequestingVideo.setVisibility(View.VISIBLE);
-			mTextViewRequestingVideo.setText(R.string.call_activity_encrypting_video);
 			break;
 		case DENIED:
 			mLayoutRequestingVideo.setVisibility(View.VISIBLE);
