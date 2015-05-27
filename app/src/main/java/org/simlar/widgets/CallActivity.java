@@ -62,6 +62,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private boolean mFinishDelayedCalled = false;
 	private boolean mHideAuthenticationToken = false;
 	private AlertDialog mAlertDialogRemoteRequestedVideo = null;
+	private AlertDialog mAlertDialogRemoteDeniedVideo = null;
 
 	// gui elements
 	private ImageView mImageViewContactImage = null;
@@ -297,6 +298,9 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 			if (mAlertDialogRemoteRequestedVideo != null) {
 				mAlertDialogRemoteRequestedVideo.hide();
 			}
+			if (mAlertDialogRemoteDeniedVideo != null) {
+				mAlertDialogRemoteDeniedVideo.hide();
+			}
 			mLayoutConnectionQuality.setVisibility(View.INVISIBLE);
 			mLayoutVerifiedAuthenticationToken.setVisibility(View.GONE);
 			mLayoutAuthenticationToken.setVisibility(View.GONE);
@@ -343,6 +347,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		case ENCRYPTING:
 			break;
 		case DENIED:
+			showRemoteDeniedVideoAlert();
 			break;
 		}
 	}
@@ -383,6 +388,20 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		if (!mAlertDialogRemoteRequestedVideo.isShowing()) {
 			Lg.i("remote requested video => showing alert");
 			mAlertDialogRemoteRequestedVideo.show();
+		}
+	}
+
+	private void showRemoteDeniedVideoAlert()
+	{
+		if (mAlertDialogRemoteDeniedVideo == null) {
+			mAlertDialogRemoteDeniedVideo = (new AlertDialog.Builder(this))
+					.setMessage(R.string.call_activity_video_denied)
+					.create();
+		}
+
+		if (!mAlertDialogRemoteDeniedVideo.isShowing()) {
+			Lg.i("remote denied video => showing alert");
+			mAlertDialogRemoteDeniedVideo.show();
 		}
 	}
 
