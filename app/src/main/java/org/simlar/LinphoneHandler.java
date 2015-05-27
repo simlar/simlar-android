@@ -245,7 +245,7 @@ final class LinphoneHandler
 		Lg.i("Call to ", new Lg.Anonymizer(number), " is in progress...");
 	}
 
-	public LinphoneCall getCurrentCall()
+	private LinphoneCall getCurrentCall()
 	{
 		/// NOTE LinphoneCore.getCurrentCall() does not return paused calls
 

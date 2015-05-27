@@ -32,7 +32,6 @@ import org.linphone.core.LinphoneCore;
 import org.linphone.core.LinphoneCore.EcCalibratorStatus;
 import org.linphone.core.LinphoneCore.GlobalState;
 import org.linphone.core.LinphoneCore.LogCollectionUploadState;
-import org.linphone.core.LinphoneCore.MediaEncryption;
 import org.linphone.core.LinphoneCore.RegistrationState;
 import org.linphone.core.LinphoneCore.RemoteProvisioningState;
 import org.linphone.core.LinphoneCoreListener;
@@ -59,10 +58,8 @@ public final class LinphoneThread
 
 	private static final class LinphoneThreadImpl extends Thread implements LinphoneCoreListener
 	{
-		private static final long ZRTP_CHECK_INTERVAL = 40000;
 		Handler mLinphoneThreadHandler = null;
 		final Handler mMainThreadHandler = new Handler();
-		Runnable mCallEncryptionChecker = null;
 
 		// NOTICE: the linphone handler should only be used in the LINPHONE-THREAD
 		final LinphoneHandler mLinphoneHandler = new LinphoneHandler();
@@ -422,63 +419,6 @@ public final class LinphoneThread
 			return status.equals(PresenceBasicStatus.Open);
 		}
 
-		private void startCallEncryptionChecker()
-		{
-			if (mCallEncryptionChecker != null) {
-				return;
-			}
-
-			mCallEncryptionChecker = new Runnable() {
-				@Override
-				public void run()
-				{
-					final LinphoneCall currentCall = mLinphoneHandler.getCurrentCall();
-					if (currentCall == null) {
-						Lg.w("no current call stopping callEncryptionChecker");
-						stopCallEncryptionChecker();
-						return;
-					}
-
-					final boolean encrypted = MediaEncryption.ZRTP.equals(currentCall.getCurrentParamsCopy().getMediaEncryption());
-					final String authenticationToken = currentCall.getAuthenticationToken();
-					final boolean authenticationTokenVerified = currentCall.isAuthenticationTokenVerified();
-
-					Lg.i("callEncryptionChecker status: encrypted=", encrypted);
-					mMainThreadHandler.post(new Runnable() {
-						@Override
-						public void run()
-						{
-							mListener.onCallEncryptionChanged(encrypted, authenticationToken, authenticationTokenVerified);
-						}
-					});
-
-					if (!encrypted) {
-						Lg.w("call not encrypted stopping callEncryptionChecker");
-						stopCallEncryptionChecker();
-						return;
-					}
-
-					if (mCallEncryptionChecker != null) {
-						mLinphoneThreadHandler.postDelayed(mCallEncryptionChecker, ZRTP_CHECK_INTERVAL);
-					}
-				}
-			};
-
-			mLinphoneThreadHandler.postDelayed(mCallEncryptionChecker, ZRTP_CHECK_INTERVAL);
-			Lg.i("started callEncryptionChecker");
-		}
-
-		public void stopCallEncryptionChecker()
-		{
-			if (mCallEncryptionChecker == null) {
-				return;
-			}
-
-			mLinphoneThreadHandler.removeCallbacks(mCallEncryptionChecker);
-			mCallEncryptionChecker = null;
-			Lg.i("stopped callEncryptionChecker");
-		}
-
 		//
 		// LinphoneCoreListener overloaded member functions
 		//
@@ -550,12 +490,6 @@ public final class LinphoneThread
 					mListener.onCallStateChanged(number, fixedState, message);
 				}
 			});
-
-			if (LinphoneCall.State.Connected.equals(fixedState)) {
-				startCallEncryptionChecker();
-			} else if (LinphoneCall.State.CallEnd.equals(fixedState)) {
-				stopCallEncryptionChecker();
-			}
 		}
 
 		@Override
