@@ -306,6 +306,12 @@
                 android:onClick="toggleVideoClicked"
                 android:src="@drawable/button_toggle_video"/>
 
+            <ProgressBar
+                android:id="@+id/progressBarRequestingVideo"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:visibility="gone"/>
+
             <ImageButton
                 style="@style/callActivityImageButton"
                 android:contentDescription="@string/call_activity_sound_settings"

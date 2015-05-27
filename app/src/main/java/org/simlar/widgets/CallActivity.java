@@ -37,6 +37,7 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.simlar.R;
@@ -82,6 +83,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private TextView mTextViewCallEndReason = null;
 
 	private LinearLayout mLayoutCallControlButtons = null;
+	private ProgressBar mProgressBarRequestingVideo = null;
 	private ImageButton mButtonToggleVideo = null;
 	private ImageButton mButtonMicro = null;
 	private ImageButton mButtonSpeaker = null;
@@ -158,6 +160,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mTextViewCallEndReason = findViewById(R.id.textViewCallEndReason);
 
 		mLayoutCallControlButtons = (LinearLayout) findViewById(R.id.linearLayoutCallControlButtons);
+		mProgressBarRequestingVideo = (ProgressBar) findViewById(R.id.progressBarRequestingVideo);
 		mButtonToggleVideo = (ImageButton) findViewById(R.id.buttonToggleVideo);
 		mButtonMicro = findViewById(R.id.buttonMicro);
 		mButtonSpeaker = findViewById(R.id.buttonSpeaker);
@@ -169,6 +172,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mLayoutConnectionQuality.setVisibility(View.INVISIBLE);
 		mLayoutVerifiedAuthenticationToken.setVisibility(View.GONE);
 		mLayoutAuthenticationToken.setVisibility(View.GONE);
+		mProgressBarRequestingVideo.setVisibility(View.GONE);
 	}
 
 	@Override
@@ -322,37 +326,21 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 			stopVideo();
 		}
 
+		final boolean requestingVideo = VideoState.REQUESTING.equals(videoState);
+		mProgressBarRequestingVideo.setVisibility(requestingVideo ? View.VISIBLE : View.GONE);
+		mButtonToggleVideo.setVisibility(requestingVideo ? View.GONE : View.VISIBLE);
+
 		switch (videoState) {
-		case OFF:
-			break;
-		case PLAYING:
-			mLayoutRequestingVideo.setVisibility(View.GONE);
-			break;
+		case OFF: break;
+		case PLAYING: break;
 		case REMOTE_REQUESTED:
-			mLayoutRequestingVideo.setVisibility(View.GONE);
 			showRemoteRequestedVideoAlert();
 			break;
 		case REQUESTING:
-			mLayoutRequestingVideo.setVisibility(View.VISIBLE);
-			mProgressBarRequestingVideo.setVisibility(View.VISIBLE);
-			mTextViewRequestingVideo.setText(R.string.call_activity_requesting_video);
 			break;
 		case ENCRYPTING:
 			break;
 		case DENIED:
-			mLayoutRequestingVideo.setVisibility(View.VISIBLE);
-			mProgressBarRequestingVideo.setVisibility(View.GONE);
-			mTextViewRequestingVideo.setText(R.string.call_activity_video_denied);
-			mHandler.postDelayed(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					if (mProgressBarRequestingVideo.getVisibility() != View.VISIBLE) {
-						mLayoutRequestingVideo.setVisibility(View.GONE);
-					}
-				}
-			}, 10000);
 			break;
 		}
 	}
