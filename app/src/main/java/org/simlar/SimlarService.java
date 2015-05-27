@@ -873,27 +873,14 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		Lg.i("SimlarCallState updated encryption: encrypted=", encrypted, " authenticationToken=", authenticationToken, " authenticationTokenVerified=", authenticationTokenVerified);
 
+		if (!encrypted) {
+			Lg.w("unencrypted call");
+		}
+
 		mLinphoneThread.setMicrophoneStatus(MicrophoneStatus.ON);
 		mSoundEffectManager.stop(SoundEffectType.ENCRYPTION_HANDSHAKE);
 
-		if (encrypted) {
-			// just to be sure
-			mVibratorManager.stop();
-			mSoundEffectManager.stop(SoundEffectType.UNENCRYPTED_CALL_ALARM);
-		} else {
-			Lg.w("unencrypted call");
-			mVibratorManager.start();
-			mSoundEffectManager.start(SoundEffectType.UNENCRYPTED_CALL_ALARM);
-		}
-
 		SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
-	}
-
-	public void acceptUnencryptedCall()
-	{
-		Lg.w("user accepts unencrypted call");
-		mVibratorManager.stop();
-		mSoundEffectManager.stop(SoundEffectType.UNENCRYPTED_CALL_ALARM);
 	}
 
 	private void call(final String simlarId)

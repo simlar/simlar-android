@@ -341,7 +341,6 @@ public final class CallActivity extends AppCompatActivity
 	@SuppressWarnings("unused")
 	public void acceptUnencryptedCall(final View view)
 	{
-		mCommunicator.getService().acceptUnencryptedCall();
 		mButtonAcceptUnencryptedCall.setVisibility(View.INVISIBLE);
 	}
 
