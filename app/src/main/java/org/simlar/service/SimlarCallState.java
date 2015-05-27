@@ -107,10 +107,6 @@ public final class SimlarCallState
 
 		if (oldGuiCallState != mGuiCallState) {
 			mCallStartTime = mGuiCallState == GuiCallState.ENDED ? -1 : SystemClock.elapsedRealtime();
-
-			if (mGuiCallState == GuiCallState.ENDED && oldGuiCallState == GuiCallState.ENCRYPTING) {
-				updateCallEndReason(CallEndReason.ENCRYPTION_FAILED);
-			}
 		}
 
 		if (mLinphoneCallState.isNewCallJustStarted()) {

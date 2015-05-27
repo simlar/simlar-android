@@ -125,7 +125,6 @@
     <string name="call_activity_call_ended_because_user_offline">Kontakt ist offline</string>
     <string name="call_activity_call_ended_because_incompatible_media">Verbindung nicht möglich</string>
     <string name="call_activity_call_ended_because_user_busy">Besetzt</string>
-    <string name="call_activity_call_ended_because_encryption_failed">Verschlüsselung fehlgeschlagen</string>
     <string name="call_activity_call_ended_normally">Gespräch beendet</string>
     <string name="call_activity_alert_accept_video_request_title">Video-Anruf</string>
     <string name="call_activity_alert_accept_video_request_text">Akzeptierst du das Update auf einen Video-Anruf?</string>

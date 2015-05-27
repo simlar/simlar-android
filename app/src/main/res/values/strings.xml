@@ -128,7 +128,6 @@
     <string name="call_activity_call_ended_because_user_offline">Contact is offline</string>
     <string name="call_activity_call_ended_because_incompatible_media">Incompatible media type</string>
     <string name="call_activity_call_ended_because_user_busy">Busy</string>
-    <string name="call_activity_call_ended_because_encryption_failed">Encryption failed</string>
     <string name="call_activity_call_ended_normally">Call ended</string>
     <string name="call_activity_alert_accept_video_request_title">Video Call</string>
     <string name="call_activity_alert_accept_video_request_text">Do you accept to update to a video call?</string>
