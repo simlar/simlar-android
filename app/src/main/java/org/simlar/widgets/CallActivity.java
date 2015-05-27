@@ -37,7 +37,6 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.simlar.R;
@@ -86,10 +85,6 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private ImageButton mButtonToggleVideo = null;
 	private ImageButton mButtonMicro = null;
 	private ImageButton mButtonSpeaker = null;
-
-	private LinearLayout mLayoutRequestingVideo;
-	private TextView mTextViewRequestingVideo;
-	private ProgressBar mProgressBarRequestingVideo;
 
 	private ConnectionDetailsDialogFragment mConnectionDetailsDialogFragment = null;
 	private VideoFragment mVideoFragment = null;
@@ -167,10 +162,6 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mButtonMicro = findViewById(R.id.buttonMicro);
 		mButtonSpeaker = findViewById(R.id.buttonSpeaker);
 
-		mLayoutRequestingVideo = (LinearLayout) findViewById(R.id.linearLayoutRequestingVideo);
-		mTextViewRequestingVideo = (TextView) findViewById(R.id.textViewRequestingVideo);
-		mProgressBarRequestingVideo = (ProgressBar) findViewById(R.id.progressBarRequestingVideo);
-
 		//
 		// Presets
 		mTextViewCallTimer.setVisibility(View.INVISIBLE);
@@ -178,7 +169,6 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mLayoutConnectionQuality.setVisibility(View.INVISIBLE);
 		mLayoutVerifiedAuthenticationToken.setVisibility(View.GONE);
 		mLayoutAuthenticationToken.setVisibility(View.GONE);
-		mLayoutRequestingVideo.setVisibility(View.GONE);
 	}
 
 	@Override
@@ -306,7 +296,6 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 			mLayoutConnectionQuality.setVisibility(View.INVISIBLE);
 			mLayoutVerifiedAuthenticationToken.setVisibility(View.GONE);
 			mLayoutAuthenticationToken.setVisibility(View.GONE);
-			mLayoutRequestingVideo.setVisibility(View.GONE);
 			mLayoutCallEndReason.setVisibility(View.VISIBLE);
 			mTextViewCallEndReason.setText(simlarCallState.getCallStatusDisplayMessage(this));
 			stopCallTimer();
