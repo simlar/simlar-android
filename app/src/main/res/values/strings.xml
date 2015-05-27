@@ -86,8 +86,6 @@
     <string name="call_activity_loudspeaker_on">Loudspeaker</string>
     <string name="call_activity_loudspeaker_off">Loudspeaker off</string>
     <string name="call_activity_terminate_call">Terminate call</string>
-    <string name="call_activity_not_encrypted">WARNING: This call is NOT encrypted!</string>
-    <string name="call_activity_button_accept_unencrypted_call">Quiet alarm</string>
     <string name="call_activity_no_authentication_token">&#8230;</string>
     <string name="call_activity_verified_authentication_token">Verified Code: </string>
     <string name="call_activity_please_verify_authentication_token">Has the person you are speaking to the same code?</string>

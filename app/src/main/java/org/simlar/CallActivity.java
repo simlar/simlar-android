@@ -29,7 +29,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -62,9 +61,6 @@ public final class CallActivity extends AppCompatActivity
 
 	private LinearLayout mLayoutAuthenticationToken;
 	private TextView mTextViewAuthenticationToken;
-
-	private LinearLayout mLayoutUnencryptedCall;
-	private Button mButtonAcceptUnencryptedCall;
 
 	private LinearLayout mLayoutCallEndReason;
 	private TextView mTextViewCallEndReason;
@@ -117,9 +113,6 @@ public final class CallActivity extends AppCompatActivity
 		mLayoutAuthenticationToken = (LinearLayout) findViewById(R.id.linearLayoutAuthenticationToken);
 		mTextViewAuthenticationToken = (TextView) findViewById(R.id.textViewAuthenticationToken);
 
-		mLayoutUnencryptedCall = (LinearLayout) findViewById(R.id.linearLayoutUnencryptedCall);
-		mButtonAcceptUnencryptedCall = (Button) findViewById(R.id.buttonAcceptUnencryptedCall);
-
 		mLayoutCallEndReason = (LinearLayout) findViewById(R.id.linearLayoutCallEndReason);
 		mTextViewCallEndReason = (TextView) findViewById(R.id.textViewCallEndReason);
 
@@ -133,7 +126,6 @@ public final class CallActivity extends AppCompatActivity
 		mLayoutConnectionQuality.setVisibility(View.INVISIBLE);
 		mLayoutVerifiedAuthenticationToken.setVisibility(View.GONE);
 		mLayoutAuthenticationToken.setVisibility(View.GONE);
-		mLayoutUnencryptedCall.setVisibility(View.GONE);
 	}
 
 	@Override
@@ -185,25 +177,20 @@ public final class CallActivity extends AppCompatActivity
 		return true;
 	}
 
-	private void setCallEncryption(final boolean encrypted, final String authenticationToken, final boolean authenticationTokenVerified)
+	private void setCallEncryption(final String authenticationToken, final boolean authenticationTokenVerified)
 	{
-		if (!encrypted) {
-			mLayoutAuthenticationToken.setVisibility(View.GONE);
-			mLayoutUnencryptedCall.setVisibility(View.VISIBLE);
+		if (Util.isNullOrEmpty(authenticationToken)) {
 			return;
 		}
-		mLayoutUnencryptedCall.setVisibility(View.GONE);
 
-		if (!Util.isNullOrEmpty(authenticationToken)) {
-			if (authenticationTokenVerified) {
-				mLayoutVerifiedAuthenticationToken.setVisibility(View.VISIBLE);
-				mTextViewVerifiedAuthenticationToken.setText(authenticationToken);
-				mLayoutAuthenticationToken.setVisibility(View.GONE);
-			} else {
-				mLayoutVerifiedAuthenticationToken.setVisibility(View.GONE);
-				mLayoutAuthenticationToken.setVisibility(mHideAuthenticationToken ? View.GONE : View.VISIBLE);
-				mTextViewAuthenticationToken.setText(authenticationToken);
-			}
+		if (authenticationTokenVerified) {
+			mLayoutVerifiedAuthenticationToken.setVisibility(View.VISIBLE);
+			mTextViewVerifiedAuthenticationToken.setText(authenticationToken);
+			mLayoutAuthenticationToken.setVisibility(View.GONE);
+		} else {
+			mLayoutVerifiedAuthenticationToken.setVisibility(View.GONE);
+			mLayoutAuthenticationToken.setVisibility(mHideAuthenticationToken ? View.GONE : View.VISIBLE);
+			mTextViewAuthenticationToken.setText(authenticationToken);
 		}
 	}
 
@@ -239,7 +226,7 @@ public final class CallActivity extends AppCompatActivity
 			getString(simlarCallState.getQualityDescription());
 		}
 
-		setCallEncryption(simlarCallState.isEncrypted(), simlarCallState.getAuthenticationToken(), simlarCallState.isAuthenticationTokenVerified());
+		setCallEncryption(simlarCallState.getAuthenticationToken(), simlarCallState.isAuthenticationTokenVerified());
 
 		if (simlarCallState.isTalking()) {
 			setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
@@ -252,7 +239,6 @@ public final class CallActivity extends AppCompatActivity
 			mLayoutConnectionQuality.setVisibility(View.INVISIBLE);
 			mLayoutVerifiedAuthenticationToken.setVisibility(View.GONE);
 			mLayoutAuthenticationToken.setVisibility(View.GONE);
-			mLayoutUnencryptedCall.setVisibility(View.GONE);
 			mLayoutCallEndReason.setVisibility(View.VISIBLE);
 			mTextViewCallEndReason.setText(simlarCallState.getCallStatusDisplayMessage(this));
 			stopCallTimer();
@@ -308,7 +294,8 @@ public final class CallActivity extends AppCompatActivity
 
 		Lg.i("finishing activity in ", milliSeconds, " ms");
 
-		new Handler().postDelayed(new Runnable() {
+		new Handler().postDelayed(new Runnable()
+		{
 			@Override
 			public void run()
 			{
@@ -336,12 +323,6 @@ public final class CallActivity extends AppCompatActivity
 	public void showConnectionDetails(final View view)
 	{
 		startActivity(new Intent(this, ConnectionDetailsActivity.class));
-	}
-
-	@SuppressWarnings("unused")
-	public void acceptUnencryptedCall(final View view)
-	{
-		mButtonAcceptUnencryptedCall.setVisibility(View.INVISIBLE);
 	}
 
 	@SuppressWarnings("unused")
