@@ -859,9 +859,9 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	}
 
 	@Override
-	public void onCallEncryptionChanged(final boolean encrypted, final String authenticationToken, final boolean authenticationTokenVerified)
+	public void onCallEncryptionChanged(final String authenticationToken, final boolean authenticationTokenVerified)
 	{
-		if (!mSimlarCallState.updateCallEncryption(encrypted, authenticationToken, authenticationTokenVerified)) {
+		if (!mSimlarCallState.updateCallEncryption(authenticationToken, authenticationTokenVerified)) {
 			Lg.v("callEncryptionChanged but no difference in SimlarCallState: ", mSimlarCallState);
 			return;
 		}
@@ -871,11 +871,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			return;
 		}
 
-		Lg.i("SimlarCallState updated encryption: encrypted=", encrypted, " authenticationToken=", authenticationToken, " authenticationTokenVerified=", authenticationTokenVerified);
-
-		if (!encrypted) {
-			Lg.w("unencrypted call");
-		}
+		Lg.i("SimlarCallState updated encryption: authenticationToken=", authenticationToken, " authenticationTokenVerified=", authenticationTokenVerified);
 
 		mLinphoneThread.setMicrophoneStatus(MicrophoneStatus.ON);
 		mSoundEffectManager.stop(SoundEffectType.ENCRYPTION_HANDSHAKE);

@@ -34,7 +34,7 @@ interface LinphoneThreadListener
 
 	void onCallStateChanged(final String number, final State state, final String message);
 
-	void onCallEncryptionChanged(final boolean encrypted, final String authenticationToken, final boolean authenticationTokenVerified);
+	void onCallEncryptionChanged(final String authenticationToken, final boolean authenticationTokenVerified);
 
 	void onJoin();
 }

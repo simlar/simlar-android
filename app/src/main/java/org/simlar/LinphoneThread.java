@@ -612,7 +612,7 @@ public final class LinphoneThread
 				@Override
 				public void run()
 				{
-					mListener.onCallEncryptionChanged(encrypted, authenticationToken, isTokenVerified);
+					mListener.onCallEncryptionChanged(authenticationToken, isTokenVerified);
 				}
 			});
 		}

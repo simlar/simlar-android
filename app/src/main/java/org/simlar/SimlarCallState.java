@@ -32,7 +32,6 @@ public final class SimlarCallState
 	private String mContactName = null;
 	private String mContactPhotoId = null;
 	private CallEndReason mCallEndReason = CallEndReason.NONE;
-	private boolean mEncrypted = true;
 	private String mAuthenticationToken = null;
 	private boolean mAuthenticationTokenVerified = false;
 	private NetworkQuality mQuality = NetworkQuality.UNKNOWN;
@@ -110,7 +109,6 @@ public final class SimlarCallState
 			mContactName = null;
 			mContactPhotoId = null;
 			mCallEndReason = CallEndReason.NONE;
-			mEncrypted = true;
 			mAuthenticationToken = null;
 			mAuthenticationTokenVerified = false;
 			mQuality = NetworkQuality.UNKNOWN;
@@ -156,9 +154,9 @@ public final class SimlarCallState
 		return true;
 	}
 
-	public boolean updateCallEncryption(final boolean encrypted, final String authenticationToken, final boolean authenticationTokenVerified)
+	public boolean updateCallEncryption(final String authenticationToken, final boolean authenticationTokenVerified)
 	{
-		if (encrypted == mEncrypted && authenticationTokenVerified == mAuthenticationTokenVerified
+		if (authenticationTokenVerified == mAuthenticationTokenVerified
 				&& Util.equalString(authenticationToken, mAuthenticationToken)) {
 			return false;
 		}
@@ -167,7 +165,6 @@ public final class SimlarCallState
 			mGuiCallState = GuiCallState.TALKING;
 		}
 
-		mEncrypted = encrypted;
 		mAuthenticationToken = authenticationToken;
 		mAuthenticationTokenVerified = authenticationTokenVerified;
 
@@ -201,7 +198,6 @@ public final class SimlarCallState
 				", mContactName='" + mContactName + '\'' +
 				", mContactPhotoId='" + mContactPhotoId + '\'' +
 				", mCallEndReason=" + mCallEndReason +
-				", mEncrypted=" + mEncrypted +
 				", mAuthenticationToken='" + mAuthenticationToken + '\'' +
 				", mAuthenticationTokenVerified=" + mAuthenticationTokenVerified +
 				", mQuality=" + mQuality +
@@ -247,11 +243,6 @@ public final class SimlarCallState
 			Lg.w("getCallStatusDisplayMessage mLinphoneCallState=", mLinphoneCallState);
 			return "";
 		}
-	}
-
-	public boolean isEncrypted()
-	{
-		return mEncrypted;
 	}
 
 	public String getAuthenticationToken()
