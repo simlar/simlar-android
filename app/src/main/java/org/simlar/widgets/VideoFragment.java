@@ -42,7 +42,6 @@ public class VideoFragment extends Fragment
 	// gui elements
 	private TextureView mVideoView = null;
 	private TextureView mCaptureView = null;
-	private View mInitializingView = null;
 
 	public interface Listener
 	{
@@ -89,7 +88,6 @@ public class VideoFragment extends Fragment
 
 		mVideoView = view.findViewById(R.id.videoSurface);
 		mCaptureView = view.findViewById(R.id.videoCaptureSurface);
-		mInitializingView = view.findViewById(R.id.layoutInitializingVideo);
 
 		if (mListener == null) {
 			Lg.e("onCreateView, no listener registered => not initializing video");
@@ -160,10 +158,9 @@ public class VideoFragment extends Fragment
 
 	public final void setNowPlaying()
 	{
-		if (mInitializingView == null) {
-			Lg.e("called setNowPlaying too early");
-			return;
-		}
-		mInitializingView.setVisibility(View.GONE);
+		final ViewGroup.LayoutParams params = mCaptureView.getLayoutParams();
+		params.width = (int)(120 * getResources().getDisplayMetrics().density);
+		params.height = (int)(145 * getResources().getDisplayMetrics().density);
+		mCaptureView.setLayoutParams(params);
 	}
 }
