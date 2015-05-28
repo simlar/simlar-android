@@ -100,6 +100,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private int mCurrentRingerMode = -1;
 	private PendingIntent mKeepAwakePendingIntent = null;
 	private final KeepAwakeReceiver mKeepAwakeReceiver = FlavourHelper.isGcmEnabled() ? null : new KeepAwakeReceiver();
+	private VideoState mVideoState = VideoState.OFF;
 
 	public final class SimlarServiceBinder extends Binder
 	{
@@ -818,12 +819,13 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	@Override
 	public void onVideoStateChanged(final VideoState videoState)
 	{
-		if (!mSimlarCallState.updateVideoState(videoState)) {
+		if (mVideoState == videoState) {
 			return;
 		}
 
+		mVideoState = videoState;
 		Lg.i("updated video state: ", videoState);
-		SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
+		SimlarServiceBroadcast.sendVideoStateChanged(this, videoState);
 	}
 
 	private void call(final String simlarId)

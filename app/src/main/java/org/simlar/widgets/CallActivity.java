@@ -108,10 +108,17 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		{
 			CallActivity.this.onSimlarCallStateChanged();
 		}
+
 		@Override
 		public void onCallConnectionDetailsChanged()
 		{
 			CallActivity.this.onCallConnectionDetailsChanged();
+		}
+
+		@Override
+		public void onVideoStateChanged(final VideoState videoState)
+		{
+			CallActivity.this.onVideoStateChanged(videoState);
 		}
 	}
 
@@ -293,8 +300,6 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		setButtonMicrophoneMute();
 		setButtonSpeakerMute();
 
-		handleVideoState(simlarCallState.getVideoState());
-
 		if (simlarCallState.isEndedCall()) {
 			if (mAlertDialogRemoteRequestedVideo != null) {
 				mAlertDialogRemoteRequestedVideo.hide();
@@ -319,9 +324,9 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mConnectionDetailsDialogFragment.setCallConnectionDetails(mCommunicator.getService().getCallConnectionDetails());
 	}
 
-	private void handleVideoState(final VideoState videoState)
+	private void onVideoStateChanged(VideoState videoState)
 	{
-		Lg.i("handleVideoState: ", videoState);
+		Lg.i("onVideoStateChanged: ", videoState);
 
 		if (VideoState.PLAYING.equals(videoState)) {
 			startVideo();
