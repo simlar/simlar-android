@@ -545,11 +545,15 @@ public final class LinphoneThread
 			return callState;
 		}
 
-		private VideoState createVideoState(final LinphoneCall.State state, final boolean localVideo, final boolean remoteVideo, final boolean newVideoStream)
+		private VideoState createVideoState(final LinphoneCall.State state, final boolean localVideo, final boolean remoteVideo, final LinphoneCallStats videoStats)
 		{
 			if (!LinphoneCall.State.CallEnd.equals(state) && localVideo && remoteVideo) {
-				if (newVideoStream || mVideoState == VideoState.ENCRYPTING) {
+				if (videoStats == null || mVideoState == VideoState.ENCRYPTING) {
 					return VideoState.ENCRYPTING;
+				}
+
+				if (!isConnectionEstablished(videoStats.getIceState())) {
+					return VideoState.WAITING_FOR_ICE;
 				}
 
 				return VideoState.PLAYING;
@@ -570,17 +574,11 @@ public final class LinphoneThread
 			return VideoState.OFF;
 		}
 
-		private static boolean isNewVideoStream(final LinphoneCall call)
+		private static boolean isConnectionEstablished(final LinphoneCallStats.IceState iceState)
 		{
-			final LinphoneCallStats stats = call.getVideoStats();
-			if (stats == null) {
-				return true;
-			}
-
-			Lg.i("bandwidth: down=", stats.getDownloadBandwidth(), " up=", stats.getUploadBandwidth());
-			Lg.i("loss rate: local=", stats.getLocalLossRate(), " Receiver=", stats.getReceiverLossRate(), " Sender=", stats.getSenderLossRate());
-
-			return false;
+			return LinphoneCallStats.IceState.HostConnection.equals(iceState) ||
+					LinphoneCallStats.IceState.ReflexiveConnection.equals(iceState) ||
+					LinphoneCallStats.IceState.RelayConnection.equals(iceState);
 		}
 
 		@Override
@@ -591,7 +589,7 @@ public final class LinphoneThread
 
 			final String number = getNumber(call);
 			final LinphoneCall.State fixedState = fixLinphoneCallState(state);
-			final VideoState videoState = createVideoState(fixedState, call.getCurrentParamsCopy().getVideoEnabled(), call.getRemoteParams().getVideoEnabled(), isNewVideoStream(call));
+			final VideoState videoState = createVideoState(fixedState, call.getCurrentParamsCopy().getVideoEnabled(), call.getRemoteParams().getVideoEnabled(), call.getVideoStats());
 
 			updateVideoState(videoState);
 
@@ -670,6 +668,14 @@ public final class LinphoneThread
 		{
 			// LinphoneCall is mutable => use it only in the calling thread
 			// LinphoneCallStats maybe mutable => use it only in the calling thread
+
+			/// crashing since liblinphone 3.2.5
+			if (LinphoneCallStats.MediaType.Video.equals(statsDoNotUse.getMediaType())) {
+				if (mVideoState == VideoState.WAITING_FOR_ICE && isConnectionEstablished(statsDoNotUse.getIceState())) {
+					updateVideoState(VideoState.PLAYING);
+				}
+				return;
+			}
 
 			final LinphoneCallStats stats = call.getAudioStats();
 			final int duration = call.getDuration();

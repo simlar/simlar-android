@@ -330,7 +330,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 			stopVideo();
 		}
 
-		final boolean requestingVideo = VideoState.REQUESTING.equals(videoState) || VideoState.ENCRYPTING.equals(videoState);
+		final boolean requestingVideo = VideoState.REQUESTING.equals(videoState) || VideoState.ENCRYPTING.equals(videoState) || VideoState.WAITING_FOR_ICE.equals(videoState);
 		mProgressBarRequestingVideo.setVisibility(requestingVideo ? View.VISIBLE : View.GONE);
 		mButtonToggleVideo.setVisibility(requestingVideo ? View.GONE : View.VISIBLE);
 
@@ -343,6 +343,8 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 			showRemoteRequestedVideoAlert();
 			break;
 		case REQUESTING:
+			break;
+		case WAITING_FOR_ICE:
 			break;
 		case ENCRYPTING:
 			break;
