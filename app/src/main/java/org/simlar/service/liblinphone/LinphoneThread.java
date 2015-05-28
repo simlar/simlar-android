@@ -67,8 +67,7 @@ public final class LinphoneThread
 	{
 		Handler mLinphoneThreadHandler = null;
 		final Handler mMainThreadHandler = new Handler();
-		private boolean mVideoRequesting = false;
-		private boolean mVideoEnabled = false;
+		private VideoState mVideoState = VideoState.OFF;
 
 		// NOTICE: the linphone handler should only be used in the LINPHONE-THREAD
 		final LinphoneHandler mLinphoneHandler = new LinphoneHandler();
@@ -280,17 +279,34 @@ public final class LinphoneThread
 				return;
 			}
 
-			if (enable) {
-				mVideoRequesting = true;
-				mListener.onVideoStateChanged(VideoState.REQUESTING);
-			}
-
 			mLinphoneThreadHandler.post(new Runnable()
 			{
 				@Override
 				public void run()
 				{
+					if (enable) {
+						updateVideoState(VideoState.REQUESTING);
+					}
 					mLinphoneHandler.requestVideoUpdate(enable);
+				}
+			});
+		}
+
+		private void updateVideoState(final VideoState videoState)
+		{
+			if (mVideoState == videoState) {
+				return;
+			}
+
+			Lg.i("updating video state: ", mVideoState, " => ", videoState);
+			mVideoState = videoState;
+
+			mMainThreadHandler.post(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					mListener.onVideoStateChanged(videoState);
 				}
 			});
 		}
@@ -532,33 +548,39 @@ public final class LinphoneThread
 		private VideoState createVideoState(final LinphoneCall.State state, final boolean localVideo, final boolean remoteVideo, final boolean newVideoStream)
 		{
 			if (!LinphoneCall.State.CallEnd.equals(state) && localVideo && remoteVideo) {
-				mVideoRequesting = false;
-
-				if (!mVideoEnabled) {
-					mVideoEnabled = true;
-					if (newVideoStream) {
-						return VideoState.ENCRYPTING;
-					}
+				if (newVideoStream || mVideoState == VideoState.ENCRYPTING) {
+					return VideoState.ENCRYPTING;
 				}
 
 				return VideoState.PLAYING;
 			}
 
-			mVideoEnabled = false;
 			if (LinphoneCall.State.CallUpdatedByRemote.equals(state) && !localVideo && remoteVideo) {
 				return VideoState.REMOTE_REQUESTED;
 			}
 
-			if (LinphoneCall.State.StreamsRunning.equals(state) && mVideoRequesting) {
-				mVideoRequesting = false;
+			if (LinphoneCall.State.StreamsRunning.equals(state) && mVideoState == VideoState.REQUESTING) {
 				return VideoState.DENIED;
 			}
 
-			if (mVideoRequesting) {
+			if (mVideoState == VideoState.REQUESTING) {
 				return VideoState.REQUESTING;
 			}
 
 			return VideoState.OFF;
+		}
+
+		private static boolean isNewVideoStream(final LinphoneCall call)
+		{
+			final LinphoneCallStats stats = call.getVideoStats();
+			if (stats == null) {
+				return true;
+			}
+
+			Lg.i("bandwidth: down=", stats.getDownloadBandwidth(), " up=", stats.getUploadBandwidth());
+			Lg.i("loss rate: local=", stats.getLocalLossRate(), " Receiver=", stats.getReceiverLossRate(), " Sender=", stats.getSenderLossRate());
+
+			return false;
 		}
 
 		@Override
@@ -569,7 +591,9 @@ public final class LinphoneThread
 
 			final String number = getNumber(call);
 			final LinphoneCall.State fixedState = fixLinphoneCallState(state);
-			final VideoState videoState = createVideoState(fixedState, call.getCurrentParamsCopy().getVideoEnabled(), call.getRemoteParams().getVideoEnabled(), call.getVideoStats() == null);
+			final VideoState videoState = createVideoState(fixedState, call.getCurrentParamsCopy().getVideoEnabled(), call.getRemoteParams().getVideoEnabled(), isNewVideoStream(call));
+
+			updateVideoState(videoState);
 
 			Lg.i("callState changed state=", fixedState, " number=", new CallLogger(call), " message=", message, " videoState=", videoState);
 
@@ -579,10 +603,7 @@ public final class LinphoneThread
 				mLinphoneHandler.preventAutoAnswer();
 			}
 
-			mMainThreadHandler.post(() -> {
-				mListener.onCallStateChanged(number, fixedState, message);
-				mListener.onVideoStateChanged(videoState);
-			});
+			mMainThreadHandler.post(() -> mListener.onCallStateChanged(number, fixedState, message));
 		}
 
 		@Override
@@ -696,16 +717,9 @@ public final class LinphoneThread
 				Lg.e("unencrypted call: number=", new CallLogger(call), " with UserAgent ", call.getRemoteUserAgent());
 			}
 
-			if (encrypted && mVideoEnabled) {
+			if (encrypted && mVideoState == VideoState.ENCRYPTING) {
 				Lg.i("video encrypted");
-				mMainThreadHandler.post(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						mListener.onVideoStateChanged(VideoState.PLAYING);
-					}
-				});
+				updateVideoState(VideoState.PLAYING);
 			}
 
 			mMainThreadHandler.post(() -> mListener.onCallEncryptionChanged(authenticationToken, isTokenVerified));
