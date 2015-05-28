@@ -37,4 +37,10 @@
         android:layout_width="120dp"
         android:layout_height="145dp"/>
 
+    <ProgressBar
+        android:id="@+id/progressBarInitializingVideo"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"/>
+
 </FrameLayout>
