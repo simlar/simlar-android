@@ -102,6 +102,8 @@ public class VideoFragment extends Fragment
 		});
 
 		mCaptureView.setOnClickListener(view1 -> {
+			//view.animate().setDuration(2000).rotationYBy(180);
+			//mCaptureView.animate().setDuration(2000).scaleX(2).scaleY(2);
 			if (mListener != null) {
 				mListener.onCaptureViewClick();
 			}
@@ -158,9 +160,10 @@ public class VideoFragment extends Fragment
 
 	public final void setNowPlaying()
 	{
-		final ViewGroup.LayoutParams params = mCaptureView.getLayoutParams();
-		params.width = (int)(120 * getResources().getDisplayMetrics().density);
-		params.height = (int)(145 * getResources().getDisplayMetrics().density);
-		mCaptureView.setLayoutParams(params);
+//		final ViewGroup.LayoutParams params = mCaptureView.getLayoutParams();
+//		params.width = (int)(120 * getResources().getDisplayMetrics().density);
+//		params.height = (int)(145 * getResources().getDisplayMetrics().density);
+//		mCaptureView.setLayoutParams(params);
+		mCaptureView.animate().setDuration(2000).scaleXBy(2).scaleYBy(2);
 	}
 }
