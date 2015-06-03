@@ -545,14 +545,17 @@ public final class LinphoneThread
 			return callState;
 		}
 
-		private VideoState createVideoState(final LinphoneCall.State state, final boolean localVideo, final boolean remoteVideo, final LinphoneCallStats videoStats)
+		private VideoState createVideoState(final LinphoneCall.State state, final LinphoneCall call)
 		{
+			final boolean localVideo = call.getCurrentParamsCopy().getVideoEnabled();
+			final boolean remoteVideo = call.getRemoteParams().getVideoEnabled();
+
 			if (!LinphoneCall.State.CallEnd.equals(state) && localVideo && remoteVideo) {
-				if (videoStats == null || mVideoState == VideoState.ENCRYPTING) {
+				if (call.getVideoStats() == null || mVideoState == VideoState.ENCRYPTING) {
 					return VideoState.ENCRYPTING;
 				}
 
-				if (!isConnectionEstablished(videoStats.getIceState())) {
+				if (call.mediaInProgress()) {
 					return VideoState.WAITING_FOR_ICE;
 				}
 
@@ -574,13 +577,6 @@ public final class LinphoneThread
 			return VideoState.OFF;
 		}
 
-		private static boolean isConnectionEstablished(final LinphoneCallStats.IceState iceState)
-		{
-			return LinphoneCallStats.IceState.HostConnection.equals(iceState) ||
-					LinphoneCallStats.IceState.ReflexiveConnection.equals(iceState) ||
-					LinphoneCallStats.IceState.RelayConnection.equals(iceState);
-		}
-
 		@Override
 		public void callState(final LinphoneCore lc, final LinphoneCall call, final LinphoneCall.State state, final String message)
 		{
@@ -589,7 +585,7 @@ public final class LinphoneThread
 
 			final String number = getNumber(call);
 			final LinphoneCall.State fixedState = fixLinphoneCallState(state);
-			final VideoState videoState = createVideoState(fixedState, call.getCurrentParamsCopy().getVideoEnabled(), call.getRemoteParams().getVideoEnabled(), call.getVideoStats());
+			final VideoState videoState = createVideoState(fixedState, call);
 
 			updateVideoState(videoState);
 
@@ -669,9 +665,8 @@ public final class LinphoneThread
 			// LinphoneCall is mutable => use it only in the calling thread
 			// LinphoneCallStats maybe mutable => use it only in the calling thread
 
-			/// crashing since liblinphone 3.2.5
 			if (LinphoneCallStats.MediaType.Video.equals(statsDoNotUse.getMediaType())) {
-				if (mVideoState == VideoState.WAITING_FOR_ICE && isConnectionEstablished(statsDoNotUse.getIceState())) {
+				if (mVideoState == VideoState.WAITING_FOR_ICE && !call.mediaInProgress()) {
 					updateVideoState(VideoState.PLAYING);
 				}
 				return;
