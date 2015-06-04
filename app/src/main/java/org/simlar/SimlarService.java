@@ -724,7 +724,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		if (!simlarCallStateChanged) {
 			Lg.v("SimlarCallState staying the same: ", mSimlarCallState);
 		} else {
-			Lg.i("SimlarCallState updated: ", mSimlarCallState);
+			Lg.i("updated ", mSimlarCallState);
 			SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
 		}
 
@@ -751,7 +751,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			return;
 		}
 
-		Lg.i("SimlarCallState updated: ", mSimlarCallState);
+		Lg.i("updated ", mSimlarCallState);
 
 		if (mSimlarCallState.isRinging() && !mGoingDown) {
 			if (mTelephonyCallStateListener.isInCall()) {
@@ -871,7 +871,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			return;
 		}
 
-		Lg.i("SimlarCallState updated encryption: ", mSimlarCallState);
+		Lg.i("SimlarCallState updated encryption: encrypted=", encrypted, " authenticationToken=", authenticationToken, " authenticationTokenVerified=", authenticationTokenVerified);
 
 		mLinphoneThread.setMicrophoneStatus(MicrophoneStatus.ON);
 		mSoundEffectManager.stop(SoundEffectType.ENCRYPTION_HANDSHAKE);
