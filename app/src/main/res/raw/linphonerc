@@ -9,23 +9,4 @@ video_rtp_port=9078
 audio_jitt_comp=60
 video_jitt_comp=60
 nortp_timeout=30
-
-[sound]
-playback_dev_id=
-ringer_dev_id=
-capture_dev_id=
-remote_ring=/data/data/org.simlar/files/ringback.wav
-local_ring=/data/data/org.simlar/files/oldphone_mono.wav
-dtmf_player_amp=0.1
-## Echo Limiter
-el_type=mic
-#speaker energy threshold (linear scale) above which echo limiter decreases mic gain.
-el_thres=0.03
-#attenuation applied to mic gain (linear scale)
-el_force=100000
-#minimum time in milliseconds during which attenuation is applied
-el_sustain=600
-#double talk detection: threshold of ratio mic-energy/speaker-energy above which mic input is sent anyway.
-el_transmit_thres=1.7
-#noise gate floorgain (gain applied when no voice is detected).
-ng_floorgain=0.01
+disable_upnp=1
