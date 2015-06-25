@@ -66,7 +66,7 @@ final class LinphoneHandler
 	}
 
 	public void initialize(final LinphoneCoreListener listener, final Context context, final String linphoneInitialConfigFile,
-	                       final String rootCaFile, final String zrtpSecretsCacheFile, final String pauseSoundFile)
+	                       final String rootCaFile, final String zrtpSecretsCacheFile, final String ringbackSoundFile, final String pauseSoundFile)
 	{
 		if (listener == null) {
 			Lg.e("Error: initialize without listener");
@@ -130,8 +130,10 @@ final class LinphoneHandler
 			// enable zrtp
 			mLinphoneCore.setMediaEncryption(MediaEncryption.ZRTP);
 			mLinphoneCore.setZrtpSecretsCache(zrtpSecretsCacheFile);
+			mLinphoneCore.setMediaEncryptionMandatory(true);
 
-			// pause sound file
+			// set sound files
+			mLinphoneCore.setRingback(ringbackSoundFile);
 			mLinphoneCore.setPlayFile(pauseSoundFile);
 
 			// enable echo cancellation
@@ -243,7 +245,7 @@ final class LinphoneHandler
 		Lg.i("Call to ", new Lg.Anonymizer(number), " is in progress...");
 	}
 
-	public LinphoneCall getCurrentCall()
+	private LinphoneCall getCurrentCall()
 	{
 		/// NOTE LinphoneCore.getCurrentCall() does not return paused calls
 

@@ -46,7 +46,6 @@ final class SoundEffectManager
 		RINGTONE,
 		WAITING_FOR_CONTACT,
 		ENCRYPTION_HANDSHAKE,
-		UNENCRYPTED_CALL_ALARM,
 		CALL_INTERRUPTION
 	}
 
@@ -92,11 +91,6 @@ final class SoundEffectManager
 					mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
 					mediaPlayer.setDataSource(mContext,
 							Uri.parse("android.resource://" + mContext.getPackageName() + "/" + R.raw.encryption_handshake));
-					mediaPlayer.setLooping(true);
-					return mediaPlayer;
-				case UNENCRYPTED_CALL_ALARM:
-					mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-					mediaPlayer.setDataSource(mContext, Uri.parse("android.resource://" + mContext.getPackageName() + "/" + R.raw.unencrypted_call));
 					mediaPlayer.setLooping(true);
 					return mediaPlayer;
 				case CALL_INTERRUPTION:

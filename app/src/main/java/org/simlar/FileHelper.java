@@ -33,6 +33,7 @@ final class FileHelper
 	private static String mZrtpSecretsCacheFileName = null;
 	private static String mLinphoneInitialConfigFile = null;
 	private static String mFakePhoneBookPicture = null;
+	private static String mRingbackSoundFile = null;
 	private static String mPauseSoundFile = null;
 
 	private FileHelper()
@@ -54,13 +55,14 @@ final class FileHelper
 		mZrtpSecretsCacheFileName = basePath + "/zrtp_secrets";
 		mLinphoneInitialConfigFile = basePath + "/linphonerc";
 		mFakePhoneBookPicture = basePath + "/fake_phone_book_picture.png";
+		mRingbackSoundFile = basePath + "/ringback.wav";
 		mPauseSoundFile = basePath + "/pause.wav";
 
 		// Always overwrite to make updates of this file work
 		copyFileFromPackage(context, R.raw.rootca, new File(mRootCaFileName).getName());
-		copyFileFromPackage(context, R.raw.ringback, new File(basePath + "/ringback.wav").getName());
 		copyFileFromPackage(context, R.raw.linphonerc, new File(mLinphoneInitialConfigFile).getName());
 		copyFileFromPackage(context, R.raw.fake_phone_book_picture, new File(mFakePhoneBookPicture).getName());
+		copyFileFromPackage(context, R.raw.ringback, new File(basePath + "/ringback.wav").getName());
 		copyFileFromPackage(context, R.raw.pause, new File(mPauseSoundFile).getName());
 	}
 
@@ -70,6 +72,7 @@ final class FileHelper
 				!Util.isNullOrEmpty(mZrtpSecretsCacheFileName) &&
 				!Util.isNullOrEmpty(mLinphoneInitialConfigFile) &&
 				!Util.isNullOrEmpty(mFakePhoneBookPicture) &&
+				!Util.isNullOrEmpty(mRingbackSoundFile) &&
 				!Util.isNullOrEmpty(mPauseSoundFile);
 	}
 
@@ -122,6 +125,14 @@ final class FileHelper
 			throw new NotInitedException();
 		}
 		return mFakePhoneBookPicture;
+	}
+
+	public static String getRingbackSoundFile() throws NotInitedException
+	{
+		if (Util.isNullOrEmpty(mPauseSoundFile)) {
+			throw new NotInitedException();
+		}
+		return mRingbackSoundFile;
 	}
 
 	public static String getPauseSoundFile() throws NotInitedException
