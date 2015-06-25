@@ -830,12 +830,12 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				SimlarServiceBroadcast.sendCallConnectionDetailsChanged(this);
 			}
 
-			acquireDisplayWakeLock();
 			if (oldCallStateRinging) {
 				createMissedCallNotification(this, number);
 			}
 
 			if (FlavourHelper.isGcmEnabled()) {
+				acquireDisplayWakeLock();
 				terminate();
 			} else {
 				releaseWakeLock();

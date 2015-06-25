@@ -256,7 +256,7 @@ public final class CallActivity extends AppCompatActivity
 			mLayoutCallEndReason.setVisibility(View.VISIBLE);
 			mTextViewCallEndReason.setText(simlarCallState.getCallStatusDisplayMessage(this));
 			stopCallTimer();
-			finishDelayed(5000);
+			finishDelayed(20000);
 		}
 	}
 
