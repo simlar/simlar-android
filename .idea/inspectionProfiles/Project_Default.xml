@@ -1,6 +1,8 @@
 <component name="InspectionProjectProfileManager">
-  <profile version="1.0" is_locked="false">
+  <profile version="1.0">
     <option name="myName" value="Project Default" />
-    <option name="myLocal" value="false" />
+    <inspection_tool class="UnnecessaryUnboxing" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="onlyReportSuperfluouslyUnboxed" value="true" />
+    </inspection_tool>
   </profile>
 </component>
