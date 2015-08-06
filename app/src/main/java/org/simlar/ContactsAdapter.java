@@ -28,6 +28,7 @@ import org.simlar.ContactsProvider.FullContactData;
 
 import android.content.Context;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -135,7 +136,7 @@ final class ContactsAdapter extends ArrayAdapter<FullContactData>
 	}
 
 	@Override
-	public void addAll(final Collection<? extends FullContactData> contacts)
+	public void addAll(@NonNull final Collection<? extends FullContactData> contacts)
 	{
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			super.addAll(contacts);
