@@ -1,0 +1,4 @@
+language: android
+jdk: oraclejdk7
+script:
+- ./gradlew assembleRelease
