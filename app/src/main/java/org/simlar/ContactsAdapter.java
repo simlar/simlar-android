@@ -21,14 +21,13 @@
 package org.simlar;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
+import java.util.Set;
 
 import org.simlar.ContactsProvider.FullContactData;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -135,21 +134,7 @@ final class ContactsAdapter extends ArrayAdapter<FullContactData>
 		return rowView;
 	}
 
-	@Override
-	public void addAll(@NonNull final Collection<? extends FullContactData> contacts)
-	{
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			super.addAll(contacts);
-		} else {
-			for (final FullContactData contact : contacts) {
-				super.add(contact);
-			}
-		}
-		sort(new SortByName());
-	}
-
-	@Override
-	public void addAll(final FullContactData... contacts)
+	public void addAllContacts(Set<FullContactData> contacts)
 	{
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			super.addAll(contacts);
