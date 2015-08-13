@@ -27,6 +27,7 @@ import org.simlar.PreferencesHelper.NotInitedException;
 import org.simlar.SoundEffectManager.SoundEffectType;
 import org.simlar.Volumes.MicrophoneStatus;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -347,6 +348,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "SimlarDisplayWakeLock");
 	}
 
+	@SuppressLint("InlinedApi")
 	static private int createWifiWakeLockType()
 	{
 		if  (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
