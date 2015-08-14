@@ -23,5 +23,6 @@ idea {
         excludeDirs += file('app/src/main/res/raw/')
         excludeDirs += file('liblinphone')
         excludeDirs += file('scripts')
+        excludeDirs += file('.travis.yml')
     }
 }
