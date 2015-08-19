@@ -31,7 +31,9 @@
 
     <uses-permission android:name="org.simlar.permission.C2D_MESSAGE"/>
 
-    <application>
+    <application
+        android:allowBackup="false">
+
         <!-- needed to not warn in alwaysOnline flavour -->
         <!--suppress AndroidDomInspection -->
         <meta-data
