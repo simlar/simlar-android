@@ -89,7 +89,7 @@ public final class MainActivity extends AppCompatActivity
 				if (contacts == null) {
 					mContactList.setEmptyText(getString(R.string.main_activity_contact_list_error_loading_contacts));
 				} else {
-					mAdapter.addAll(contacts);
+					mAdapter.addAllContacts(contacts);
 					mContactList.setEmptyText(getString(R.string.main_activity_contact_list_no_contacts_found));
 				}
 

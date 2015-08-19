@@ -20,6 +20,7 @@
 
 package org.simlar;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
@@ -58,6 +59,7 @@ public class ProximityScreenLockerFallback implements ProximityScreenLocker, Sen
 		/// TODO: handle immediately
 	}
 
+	@SuppressLint("InlinedApi")
 	private void showNavigationBar(final boolean visible)
 	{
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
