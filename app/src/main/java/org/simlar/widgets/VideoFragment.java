@@ -21,7 +21,7 @@
 package org.simlar.widgets;
 
 
-import android.app.Activity;
+import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -52,7 +52,7 @@ public class VideoFragment extends android.support.v4.app.Fragment
 	}
 
 	@Override
-	public void onAttach(final Activity activity)
+	public void onAttach(final Context activity)
 	{
 		Lg.i("onAttach");
 		super.onAttach(activity);
