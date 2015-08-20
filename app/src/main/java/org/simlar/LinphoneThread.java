@@ -549,12 +549,6 @@ public final class LinphoneThread
 		}
 
 		@Override
-		public void textReceived(final LinphoneCore lc, final LinphoneChatRoom cr, final LinphoneAddress from, final String message)
-		{
-			Lg.i("textReceived chatRoom=", cr, " from=", new Lg.Anonymizer(from), " message=", message);
-		}
-
-		@Override
 		public void callStatsUpdated(final LinphoneCore lc, final LinphoneCall call, final LinphoneCallStats stats)
 		{
 			// LinphoneCall is mutable => use it only in the calling thread
