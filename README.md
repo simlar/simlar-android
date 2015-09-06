@@ -1,4 +1,4 @@
-simlar-android:debug
+simlar-android
 ==============
 
 [![Build Status](https://github.com/simlar/simlar-android/actions/workflows/simlar-android-ci.yml/badge.svg?branch=master)](https://github.com/simlar/simlar-android/actions)
