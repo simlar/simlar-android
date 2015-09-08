@@ -51,6 +51,7 @@ import org.linphone.mediastream.video.AndroidVideoWindowImpl;
 import org.simlar.helper.FileHelper;
 import org.simlar.helper.FileHelper.NotInitedException;
 import org.simlar.helper.NetworkQuality;
+import org.simlar.helper.VideoState;
 import org.simlar.helper.Volumes;
 import org.simlar.helper.Volumes.MicrophoneStatus;
 import org.simlar.logging.Lg;
@@ -66,6 +67,7 @@ public final class LinphoneThread
 	{
 		Handler mLinphoneThreadHandler = null;
 		final Handler mMainThreadHandler = new Handler();
+		private boolean mVideoRequesting = false;
 		private boolean mVideoEnabled = false;
 
 		// NOTICE: the linphone handler should only be used in the LINPHONE-THREAD
@@ -276,6 +278,11 @@ public final class LinphoneThread
 			if (mLinphoneThreadHandler == null) {
 				Lg.e("handler is null, probably thread not started");
 				return;
+			}
+
+			if (enable) {
+				mVideoRequesting = true;
+				mListener.onVideoStateChanged(VideoState.REQUESTING);
 			}
 
 			mLinphoneThreadHandler.post(new Runnable()
@@ -522,6 +529,38 @@ public final class LinphoneThread
 			return callState;
 		}
 
+		private VideoState createVideoState(final LinphoneCall.State state, final boolean localVideo, final boolean remoteVideo, final boolean newVideoStream)
+		{
+			if (!LinphoneCall.State.CallEnd.equals(state) && localVideo && remoteVideo) {
+				mVideoRequesting = false;
+
+				if (!mVideoEnabled) {
+					mVideoEnabled = true;
+					if (newVideoStream) {
+						return VideoState.ENCRYPTING;
+					}
+				}
+
+				return VideoState.PLAYING;
+			}
+
+			mVideoEnabled = false;
+			if (LinphoneCall.State.CallUpdatedByRemote.equals(state) && !localVideo && remoteVideo) {
+				return VideoState.REMOTE_REQUESTED;
+			}
+
+			if (LinphoneCall.State.StreamsRunning.equals(state) && mVideoRequesting) {
+				mVideoRequesting = false;
+				return VideoState.DENIED;
+			}
+
+			if (mVideoRequesting) {
+				return VideoState.REQUESTING;
+			}
+
+			return VideoState.OFF;
+		}
+
 		@Override
 		public void callState(final LinphoneCore lc, final LinphoneCall call, final LinphoneCall.State state, final String message)
 		{
@@ -530,57 +569,20 @@ public final class LinphoneThread
 
 			final String number = getNumber(call);
 			final LinphoneCall.State fixedState = fixLinphoneCallState(state);
-			final boolean remoteVideo = call.getRemoteParams().getVideoEnabled();
-			final boolean localVideo = call.getCurrentParamsCopy().getVideoEnabled();
-			final boolean videoEnabled = remoteVideo && localVideo && !LinphoneCall.State.CallEnd.equals(fixedState);
-			Lg.i("callState changed state=", fixedState, " number=", new CallLogger(call), " message=", message, " videoEnabled=", videoEnabled);
+			final VideoState videoState = createVideoState(fixedState, call.getCurrentParamsCopy().getVideoEnabled(), call.getRemoteParams().getVideoEnabled(), call.getVideoStats() == null);
 
-			if (!videoEnabled) {
-				mVideoEnabled = false;
-				mMainThreadHandler.post(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						mListener.onVideoEnabled(false);
-					}
-				});
-			} else {
-				if (!mVideoEnabled) {
-					Lg.i("using video codec: ", call.getCurrentParamsCopy().getUsedVideoCodec().getMime());
-					mVideoEnabled = true;
-					if (call.getVideoStats() == null) {
-						Lg.i("restarting call encryption checker because of video initialization");
-					} else {
-						Lg.i("reusing existing video stream which is already encrypted");
-						mMainThreadHandler.post(new Runnable()
-						{
-							@Override
-							public void run()
-							{
-								mListener.onVideoEnabled(true);
-							}
-						});
-					}
-				}
-			}
+			Lg.i("callState changed state=", fixedState, " number=", new CallLogger(call), " message=", message, " videoState=", videoState);
 
-			mMainThreadHandler.post(() -> mListener.onCallStateChanged(number, fixedState, message));
-
-			if (LinphoneCall.State.CallUpdatedByRemote.equals(fixedState) && remoteVideo && !localVideo) {
+			if (videoState == VideoState.REMOTE_REQUESTED) {
+				Lg.i("remote requested video");
 				/// NOTE: this needs to happen directly, posting to linphone thread might take to log
 				mLinphoneHandler.preventAutoAnswer();
-
-				Lg.i("remote requested video");
-				mMainThreadHandler.post(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						mListener.onRemoteRequestedVideo();
-					}
-				});
 			}
+
+			mMainThreadHandler.post(() -> {
+				mListener.onCallStateChanged(number, fixedState, message);
+				mListener.onVideoStateChanged(videoState);
+			});
 		}
 
 		@Override
@@ -701,7 +703,7 @@ public final class LinphoneThread
 					@Override
 					public void run()
 					{
-						mListener.onVideoEnabled(true);
+						mListener.onVideoStateChanged(VideoState.PLAYING);
 					}
 				});
 			}

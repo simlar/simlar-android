@@ -59,6 +59,7 @@ import org.simlar.helper.NetworkQuality;
 import org.simlar.helper.PermissionsHelper;
 import org.simlar.helper.PreferencesHelper;
 import org.simlar.helper.PreferencesHelper.NotInitedException;
+import org.simlar.helper.VideoState;
 import org.simlar.helper.Volumes;
 import org.simlar.helper.Volumes.MicrophoneStatus;
 import org.simlar.logging.Lg;
@@ -815,18 +816,13 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	}
 
 	@Override
-	public void onRemoteRequestedVideo()
+	public void onVideoStateChanged(final VideoState videoState)
 	{
-		SimlarServiceBroadcast.sendRemoteRequestedVideo(this);
-	}
-
-	@Override
-	public void onVideoEnabled(boolean enabled)
-	{
-		if (!mSimlarCallState.updateVideo(enabled)) {
+		if (!mSimlarCallState.updateVideoState(videoState)) {
 			return;
 		}
 
+		Lg.i("updated video state: ", videoState);
 		SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
 	}
 
@@ -1041,11 +1037,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	{
 		if (mLinphoneThread == null) {
 			return;
-		}
-
-		if (enable) {
-			mSimlarCallState.setVideoRequested();
-			SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
 		}
 
 		mLinphoneThread.requestVideoUpdate(enable);

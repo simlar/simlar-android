@@ -97,9 +97,6 @@ public class SimlarServiceCommunicator
 			case CALL_CONNECTION_DETAILS:
 				onCallConnectionDetailsChanged();
 				return;
-			case REMOTE_REQUESTED_VIDEO:
-				onRemoteRequestedVideo();
-				return;
 			case SERVICE_FINISHES:
 				onServiceFinishes();
 				unregister();
@@ -170,10 +167,6 @@ public class SimlarServiceCommunicator
 	}
 
 	protected void onCallConnectionDetailsChanged()
-	{
-	}
-
-	protected void onRemoteRequestedVideo()
 	{
 	}
 
