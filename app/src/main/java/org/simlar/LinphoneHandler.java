@@ -105,7 +105,7 @@ final class LinphoneHandler
 
 			// First instantiate the core Linphone object given only a listener.
 			// The listener will react to events in Linphone core.
-			mLinphoneCore = LinphoneCoreFactory.instance().createLinphoneCore(listener, "", linphoneInitialConfigFile, null, context);
+			mLinphoneCore = LinphoneCoreFactory.instance().createLinphoneCore(listener, null, linphoneInitialConfigFile, null, context);
 			mLinphoneCore.setContext(context);
 			mLinphoneCore.setUserAgent("Simlar", Version.getVersionName(context));
 

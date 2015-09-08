@@ -3,7 +3,7 @@
 ## exit if an error occurs or on unset variables
 set -eu -o pipefail
 
-declare -r BRANCH=${1:-"2.4.1"} ## use master to build current git revision
+declare -r BRANCH=${1:-"2.5.1"} ## use master to build current git revision
 
 declare -r COMPILE_SCRIPT="$(dirname $(readlink -f $0))/compile-liblinphone.sh"
 
