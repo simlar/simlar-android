@@ -45,6 +45,7 @@ import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.view.SurfaceView;
 import android.widget.Toast;
 
 import org.linphone.core.LinphoneCall.State;
@@ -1042,6 +1043,33 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 
 		mLinphoneThread.acceptVideoUpdate(accept);
+	}
+
+	public void setVideoWindows(final SurfaceView videoView, final SurfaceView captureView)
+	{
+		if (mLinphoneThread == null) {
+			return;
+		}
+
+		mLinphoneThread.setVideoWindows(videoView, captureView);
+	}
+
+	public void enableVideoWindow(final boolean enable)
+	{
+		if (mLinphoneThread == null) {
+			return;
+		}
+
+		mLinphoneThread.enableVideoWindow(enable);
+	}
+
+	public void destroyVideoWindows()
+	{
+		if (mLinphoneThread == null) {
+			return;
+		}
+
+		mLinphoneThread.destroyVideoWindows();
 	}
 
 	public CallConnectionDetails getCallConnectionDetails()

@@ -23,6 +23,7 @@ package org.simlar.service.liblinphone;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.SurfaceView;
 
 import org.linphone.core.LinphoneAddress;
 import org.linphone.core.LinphoneAuthInfo;
@@ -46,6 +47,7 @@ import org.linphone.core.LinphoneProxyConfig;
 import org.linphone.core.PayloadType;
 import org.linphone.core.PublishState;
 import org.linphone.core.SubscriptionState;
+import org.linphone.mediastream.video.AndroidVideoWindowImpl;
 import org.simlar.helper.FileHelper;
 import org.simlar.helper.FileHelper.NotInitedException;
 import org.simlar.helper.NetworkQuality;
@@ -73,6 +75,7 @@ public final class LinphoneThread
 		RegistrationState mRegistrationState = RegistrationState.RegistrationNone;
 		Volumes mVolumes = new Volumes();
 		final Context mContext;
+		private AndroidVideoWindowImpl mMediaStreamerVideoWindow = null;
 
 		LinphoneThreadImpl(final LinphoneThreadListener listener, final Context context)
 		{
@@ -297,6 +300,109 @@ public final class LinphoneThread
 				public void run()
 				{
 					mLinphoneHandler.acceptVideoUpdate(accept);
+				}
+			});
+		}
+
+		public void setVideoWindows(final SurfaceView videoView, final SurfaceView captureView)
+		{
+			if (videoView == null) {
+				Lg.e("setVideoWindows: videoView is null => aborting");
+				return;
+			}
+
+			if (captureView == null) {
+				Lg.e("setVideoWindows: captureView is null => aborting");
+				return;
+			}
+
+			if (mMediaStreamerVideoWindow != null) {
+				Lg.e("setVideoWindows: video windows already enabled => aborting");
+				return;
+			}
+
+			/// Note: AndroidVideoWindowImpl needs to initiated in the gui thread
+			mMediaStreamerVideoWindow = new AndroidVideoWindowImpl(videoView, captureView, new AndroidVideoWindowImpl.VideoWindowListener()
+			{
+				public void onVideoRenderingSurfaceReady(final AndroidVideoWindowImpl videoWindow, final SurfaceView surface)
+				{
+					Lg.i("onVideoRenderingSurfaceReady");
+					enableVideoWindow(true);
+				}
+
+				public void onVideoRenderingSurfaceDestroyed(final AndroidVideoWindowImpl videoWindow)
+				{
+					Lg.i("onVideoRenderingSurfaceDestroyed");
+					enableVideoWindow(false);
+				}
+
+				public void onVideoPreviewSurfaceReady(final AndroidVideoWindowImpl videoWindowPreview, final SurfaceView surface)
+				{
+					Lg.i("onVideoPreviewSurfaceReady");
+					setVideoPreviewWindow(surface);
+				}
+
+				public void onVideoPreviewSurfaceDestroyed(final AndroidVideoWindowImpl videoWindowPreview)
+				{
+					Lg.i("onVideoPreviewSurfaceDestroyed");
+					setVideoPreviewWindow(null);
+				}
+			});
+		}
+
+		public void destroyVideoWindows()
+		{
+			if (mMediaStreamerVideoWindow == null) {
+				Lg.i("destroyVideoWindows: video windows already destroyed");
+				return;
+			}
+
+			Lg.i("destroyVideoWindows: disabling video windows");
+			setVideoWindow(null);
+			setVideoPreviewWindow(null);
+			mMediaStreamerVideoWindow.release();
+			mMediaStreamerVideoWindow = null;
+		}
+
+		public void enableVideoWindow(final boolean enable)
+		{
+			if (enable && mMediaStreamerVideoWindow == null) {
+				Lg.e("enableVideoWindow with no mMediaStreamerVideoWindow => disabling");
+			}
+
+			setVideoWindow(enable ? mMediaStreamerVideoWindow : null);
+		}
+
+		private void setVideoWindow(final Object videoWindow)
+		{
+			if (mLinphoneThreadHandler == null) {
+				Lg.e("handler is null, probably thread not started");
+				return;
+			}
+
+			mLinphoneThreadHandler.post(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					mLinphoneHandler.setVideoWindow(videoWindow);
+				}
+			});
+		}
+
+		private void setVideoPreviewWindow(final Object videoPreviewWindow)
+		{
+			if (mLinphoneThreadHandler == null) {
+				Lg.e("handler is null, probably thread not started");
+				return;
+			}
+
+			mLinphoneThreadHandler.post(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					mLinphoneHandler.setVideoPreviewWindow(videoPreviewWindow);
 				}
 			});
 		}
@@ -751,5 +857,20 @@ public final class LinphoneThread
 	public void acceptVideoUpdate(final boolean accept)
 	{
 		mImpl.acceptVideoUpdate(accept);
+	}
+
+	public void setVideoWindows(final SurfaceView videoView, final SurfaceView captureView)
+	{
+		mImpl.setVideoWindows(videoView, captureView);
+	}
+
+	public void enableVideoWindow(final boolean enable)
+	{
+		mImpl.enableVideoWindow(enable);
+	}
+
+	public void destroyVideoWindows()
+	{
+		mImpl.destroyVideoWindows();
 	}
 }

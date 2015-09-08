@@ -441,4 +441,28 @@ final class LinphoneHandler
 			Lg.ex(e, "LinphoneCoreException during acceptCallUpdate");
 		}
 	}
+
+	public void setVideoWindow(final Object videoWindow)
+	{
+		Lg.i("setVideoWindow");
+
+		if (mLinphoneCore == null) {
+			Lg.e("setVideoWindow: mLinphoneCore is null => aborting");
+			return;
+		}
+
+		mLinphoneCore.setVideoWindow(videoWindow);
+	}
+
+	public void setVideoPreviewWindow(final Object videoPreviewWindow)
+	{
+		Lg.i("setVideoPreviewWindow");
+
+		if (mLinphoneCore == null) {
+			Lg.e("setVideoPreviewWindow: mLinphoneCore is null => aborting");
+			return;
+		}
+
+		mLinphoneCore.setPreviewWindow(videoPreviewWindow);
+	}
 }
