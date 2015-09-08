@@ -24,5 +24,6 @@ idea {
         excludeDirs += file('liblinphone')
         excludeDirs += file('scripts')
         excludeDirs += file('.travis.yml')
+        excludeDirs += file('app/build/intermediates/manifest/androidTest/')
     }
 }

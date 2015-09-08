@@ -48,7 +48,7 @@
     <string name="main_activity_alert_enable_linphone_debug_mode_title">Really enable debug mode?</string>
     <string name="main_activity_alert_enable_linphone_debug_mode_text">This will increase log file entries a lot. Only do so if you have been asked for it by a Simlar developer. Or you really know what you are doing.</string>
     <string name="main_activity_alert_quit_simlar_title">Really quit Simlar?</string>
-    <string name="main_activity_alert_quit_simlar_text">Once you quit Simlar it is not possible to receive calls anymore.\n\nIf you do not mind installing Google Play Services, you may consider installing the \"Push\" version of Simlar e.g. from the Google Play Store. It uses Push-Notifications and therefore does not require to run all the time.</string>
+    <string name="main_activity_alert_quit_simlar_text">Once you quit Simlar it is not possible to receive calls anymore.\n\nIf you do not mind installing Google Play Services, you may consider installing the Push-Version of Simlar e.g. from the Google Play Store. It uses Push-Notifications and therefore does not require to run all the time.</string>
     <string name="main_activity_tell_a_friend_chooser_title">Invite friends</string>
     <!-- TextSecure messages do not have a subject. WhatsApp puts the subject just in front of the message text. Emails simply use this subject as usual. -->
     <string name="main_activity_tell_a_friend_subject">Simlar</string>

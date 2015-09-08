@@ -26,7 +26,8 @@
               android:layout_height="wrap_content"
               android:background="@drawable/background"
               android:orientation="vertical"
-              tools:context="org.simlar.ContactsListFragment">
+              tools:context="org.simlar.ContactsListFragment"
+              tools:ignore="SelectableText">
 
     <TextView
         android:id="@+id/letter"

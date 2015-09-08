@@ -38,6 +38,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+
+    lintOptions {
+        checkAllWarnings true
+        disable 'UnusedIds', 'IconExpectedSize'
+        warningsAsErrors true
+    }
 }
 
 dependencies {

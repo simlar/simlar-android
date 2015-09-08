@@ -20,6 +20,7 @@
 
 package org.simlar;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 
@@ -36,6 +37,7 @@ final class Lg
 		throw new AssertionError("This class was not meant to be instantiated");
 	}
 
+	@SuppressLint("LogConditional")
 	private static void println(final int priority, final Throwable exception, final Object... messageParts)
 	{
 		if (priority < mLevel) {
