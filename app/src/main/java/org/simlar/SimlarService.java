@@ -352,7 +352,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	@SuppressLint("InlinedApi")
 	static private int createWifiWakeLockType()
 	{
-		if  (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
 			return WifiManager.WIFI_MODE_FULL_HIGH_PERF;
 		}
 
