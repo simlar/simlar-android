@@ -30,6 +30,8 @@ import android.os.AsyncTask;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 
+import org.simlar.helper.ContactData;
+import org.simlar.helper.ContactDataComplete;
 import org.simlar.helper.ContactStatus;
 import org.simlar.helper.FileHelper;
 import org.simlar.helper.FileHelper.NotInitedException;
@@ -64,54 +66,6 @@ public final class ContactsProvider
 	public interface ContactListener
 	{
 		void onGetNameAndPhotoId(final String name, final String photoId);
-	}
-
-	public static class ContactData
-	{
-		public final String name;
-		public final String guiTelephoneNumber;
-
-		public ContactStatus status;
-		public final String photoId;
-
-		public ContactData(final String name, final String guiTelephoneNumber, final ContactStatus status, final String photoId)
-		{
-			this.name = name;
-			this.guiTelephoneNumber = guiTelephoneNumber;
-			this.status = status;
-			this.photoId = photoId;
-		}
-
-		public boolean isRegistered()
-		{
-			return status.isRegistered();
-		}
-
-		@Override
-		public String toString()
-		{
-			return "ContactData [name=" + name + ", guiTelephoneNumber=" + guiTelephoneNumber + ", status=" + status + ", photoId=" + photoId + "]";
-		}
-	}
-
-	public static final class ContactDataComplete extends ContactData
-	{
-		public final String simlarId;
-
-		public ContactDataComplete(final String simlarId, final ContactData cd)
-		{
-			super(cd.name, cd.guiTelephoneNumber, cd.status, cd.photoId);
-			this.simlarId = simlarId;
-		}
-
-		public String getNameOrNumber()
-		{
-			if (Util.isNullOrEmpty(name)) {
-				return simlarId;
-			}
-
-			return name;
-		}
 	}
 
 	private static final class ContactsProviderImpl

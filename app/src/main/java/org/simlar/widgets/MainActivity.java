@@ -32,8 +32,8 @@ import android.view.MenuItem;
 
 import org.simlar.R;
 import org.simlar.contactsprovider.ContactsProvider;
-import org.simlar.contactsprovider.ContactsProvider.ContactDataComplete;
 import org.simlar.contactsprovider.ContactsProvider.FullContactsListener;
+import org.simlar.helper.ContactDataComplete;
 import org.simlar.helper.ContactsAdapter;
 import org.simlar.helper.FileHelper;
 import org.simlar.helper.FlavourHelper;

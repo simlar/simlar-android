@@ -29,7 +29,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import org.simlar.R;
-import org.simlar.contactsprovider.ContactsProvider.ContactDataComplete;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
