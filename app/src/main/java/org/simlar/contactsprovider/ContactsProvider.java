@@ -58,7 +58,7 @@ public final class ContactsProvider
 
 	public interface FullContactsListener
 	{
-		void onGetContacts(final Set<FullContactData> contacts);
+		void onGetContacts(final Set<ContactDataComplete> contacts);
 	}
 
 	public interface ContactListener
@@ -94,11 +94,11 @@ public final class ContactsProvider
 		}
 	}
 
-	public static final class FullContactData extends ContactData
+	public static final class ContactDataComplete extends ContactData
 	{
 		public final String simlarId;
 
-		public FullContactData(final String simlarId, final ContactData cd)
+		public ContactDataComplete(final String simlarId, final ContactData cd)
 		{
 			super(cd.name, cd.guiTelephoneNumber, cd.status, cd.photoId);
 			this.simlarId = simlarId;
@@ -177,7 +177,7 @@ public final class ContactsProvider
 			mContactListener.clear();
 		}
 
-		private void notifyFullContactsListeners(final Set<FullContactData> contacts)
+		private void notifyFullContactsListeners(final Set<ContactDataComplete> contacts)
 		{
 			for (final FullContactsListener listener : mFullContactsListeners) {
 				listener.onGetContacts(contacts);
@@ -237,7 +237,7 @@ public final class ContactsProvider
 
 		void onContactsStatusRequestedFromServer(final Map<String, ContactStatus> contactsStatus)
 		{
-			Set<FullContactData> contacts = null;
+			Set<ContactDataComplete> contacts = null;
 			if (updateContactStatus(contactsStatus)) {
 				contacts = createFullContactDataSet();
 				mState = State.INITIALIZED;
@@ -249,12 +249,12 @@ public final class ContactsProvider
 			notifyFullContactsListeners(contacts);
 		}
 
-		private Set<FullContactData> createFullContactDataSet()
+		private Set<ContactDataComplete> createFullContactDataSet()
 		{
-			final Set<FullContactData> registeredContacts = new HashSet<>();
+			final Set<ContactDataComplete> registeredContacts = new HashSet<>();
 			for (final Map.Entry<String, ContactData> c : mContacts.entrySet()) {
 				if (c.getValue().isRegistered()) {
-					registeredContacts.add(new FullContactData(c.getKey(), c.getValue()));
+					registeredContacts.add(new ContactDataComplete(c.getKey(), c.getValue()));
 				}
 			}
 

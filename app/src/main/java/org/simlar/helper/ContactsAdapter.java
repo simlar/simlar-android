@@ -29,7 +29,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import org.simlar.R;
-import org.simlar.contactsprovider.ContactsProvider.FullContactData;
+import org.simlar.contactsprovider.ContactsProvider.ContactDataComplete;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
@@ -37,15 +37,15 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Set;
 
-public final class ContactsAdapter extends ArrayAdapter<FullContactData>
+public final class ContactsAdapter extends ArrayAdapter<ContactDataComplete>
 {
 	private final int mLayout;
 	private final LayoutInflater mInflater;
 
-	private final class SortByName implements Comparator<FullContactData>
+	private final class SortByName implements Comparator<ContactDataComplete>
 	{
 		@Override
-		public int compare(final FullContactData lhs, final FullContactData rhs)
+		public int compare(final ContactDataComplete lhs, final ContactDataComplete rhs)
 		{
 			if (lhs == null && rhs == null) {
 				return 0;
@@ -87,7 +87,7 @@ public final class ContactsAdapter extends ArrayAdapter<FullContactData>
 
 	public ContactsAdapter(final Context context)
 	{
-		super(context, R.layout.fragment_contacts_list_element, new ArrayList<FullContactData>());
+		super(context, R.layout.fragment_contacts_list_element, new ArrayList<ContactDataComplete>());
 		mLayout = R.layout.fragment_contacts_list_element;
 		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
@@ -110,13 +110,13 @@ public final class ContactsAdapter extends ArrayAdapter<FullContactData>
 			holder = (RowViewHolder) rowView.getTag();
 		}
 
-		final FullContactData contact = getItem(position);
+		final ContactDataComplete contact = getItem(position);
 		if (contact == null) {
 			return rowView;
 		}
 
 		if (position > 0) {
-			final FullContactData prevContact = getItem(position - 1);
+			final ContactDataComplete prevContact = getItem(position - 1);
 			if (contact.getNameOrNumber().charAt(0) != prevContact.getNameOrNumber().charAt(0)) {
 				holder.letterView.setVisibility(View.VISIBLE);
 				holder.letterView.setText(Character.toString(contact.getNameOrNumber().charAt(0)));
@@ -137,12 +137,12 @@ public final class ContactsAdapter extends ArrayAdapter<FullContactData>
 		return rowView;
 	}
 
-	public void addAllContacts(Set<FullContactData> contacts)
+	public void addAllContacts(Set<ContactDataComplete> contacts)
 	{
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			super.addAll(contacts);
 		} else {
-			for (final FullContactData contact : contacts) {
+			for (final ContactDataComplete contact : contacts) {
 				super.add(contact);
 			}
 		}
@@ -150,7 +150,7 @@ public final class ContactsAdapter extends ArrayAdapter<FullContactData>
 	}
 
 	@Override
-	public void add(final FullContactData contact)
+	public void add(final ContactDataComplete contact)
 	{
 		super.add(contact);
 		sort(new SortByName());

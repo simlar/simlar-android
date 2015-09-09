@@ -32,7 +32,7 @@ import android.view.MenuItem;
 
 import org.simlar.R;
 import org.simlar.contactsprovider.ContactsProvider;
-import org.simlar.contactsprovider.ContactsProvider.FullContactData;
+import org.simlar.contactsprovider.ContactsProvider.ContactDataComplete;
 import org.simlar.contactsprovider.ContactsProvider.FullContactsListener;
 import org.simlar.helper.ContactsAdapter;
 import org.simlar.helper.FileHelper;
@@ -95,7 +95,7 @@ public final class MainActivity extends AppCompatActivity
 		mContactList.setEmptyText(getString(R.string.main_activity_contact_list_loading_contacts));
 		ContactsProvider.getContacts(this, new FullContactsListener() {
 			@Override
-			public void onGetContacts(Set<FullContactData> contacts)
+			public void onGetContacts(Set<ContactDataComplete> contacts)
 			{
 				mAdapter.clear();
 				if (contacts == null) {
