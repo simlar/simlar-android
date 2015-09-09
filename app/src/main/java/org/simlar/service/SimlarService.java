@@ -271,7 +271,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				intent.removeExtra(INTENT_EXTRA_GCM);
 			}
 
-			// make sure we have a contact name for the CallActivity
 			mSimlarIdToCall = intent.getStringExtra(INTENT_EXTRA_SIMLAR_ID);
 			intent.removeExtra(INTENT_EXTRA_SIMLAR_ID);
 			if (!Util.isNullOrEmpty(mSimlarIdToCall)) {
@@ -282,6 +281,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 						mSimlarCallState.updateCallStateChanged(mSimlarIdToCall, LinphoneCallState.OUTGOING_INIT, CallEndReason.NONE);
 					}
 				}
+
+				// make sure we have a contact name for the CallActivity
 				ContactsProvider.getNameAndPhotoId(mSimlarIdToCall, this, new ContactListener()
 				{
 					@Override
