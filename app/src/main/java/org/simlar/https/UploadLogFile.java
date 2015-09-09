@@ -191,7 +191,8 @@ public final class UploadLogFile
 		Lg.i("simlar version=", Version.getVersionName(mContext),
 				" on device: ", Build.MANUFACTURER, " ", Build.MODEL, " (", Build.DEVICE, ") with android version=", Build.VERSION.RELEASE);
 
-		new AsyncTask<File, Void, PostResult>() {
+		new AsyncTask<File, Void, PostResult>()
+		{
 			@Override
 			protected PostResult doInBackground(File... logFiles)
 			{

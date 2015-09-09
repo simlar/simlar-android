@@ -137,7 +137,7 @@ public class SimlarServiceCommunicator
 	}
 
 	private void startServiceAndRegister(final Context context, final Class<? extends Activity> activity, final boolean onlyRegister,
-			final String simlarId)
+	                                     final String simlarId)
 	{
 		mContext = context;
 		mActivity = activity;

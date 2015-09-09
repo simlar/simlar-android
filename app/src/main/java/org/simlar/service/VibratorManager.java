@@ -72,7 +72,8 @@ final class VibratorManager
 			Lg.i("vibrate");
 			mVibrator.vibrate(VIBRATE_LENGTH);
 
-			mHandler.postDelayed(new Runnable() {
+			mHandler.postDelayed(new Runnable()
+			{
 				@Override
 				public void run()
 				{

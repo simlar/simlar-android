@@ -88,7 +88,8 @@ public final class MainActivity extends AppCompatActivity
 	private void loadContacts()
 	{
 		mContactList.setEmptyText(getString(R.string.main_activity_contact_list_loading_contacts));
-		ContactsProvider.getContacts(this, new FullContactsListener() {
+		ContactsProvider.getContacts(this, new FullContactsListener()
+		{
 			@Override
 			public void onGetContacts(Set<ContactDataComplete> contacts)
 			{
@@ -257,7 +258,8 @@ public final class MainActivity extends AppCompatActivity
 				.setTitle(R.string.main_activity_alert_upload_log_file_title)
 				.setMessage(R.string.main_activity_alert_upload_log_file_text)
 				.setNegativeButton(R.string.button_cancel, null)
-				.setPositiveButton(R.string.button_continue, new DialogInterface.OnClickListener() {
+				.setPositiveButton(R.string.button_continue, new DialogInterface.OnClickListener()
+				{
 					@Override
 					public void onClick(final DialogInterface dialog, final int id)
 					{
@@ -279,7 +281,8 @@ public final class MainActivity extends AppCompatActivity
 				.setTitle(R.string.main_activity_alert_enable_linphone_debug_mode_title)
 				.setMessage(R.string.main_activity_alert_enable_linphone_debug_mode_text)
 				.setNegativeButton(R.string.button_cancel, null)
-				.setPositiveButton(R.string.button_continue, new DialogInterface.OnClickListener() {
+				.setPositiveButton(R.string.button_continue, new DialogInterface.OnClickListener()
+				{
 					@Override
 					public void onClick(final DialogInterface dialog, final int id)
 					{
@@ -324,7 +327,8 @@ public final class MainActivity extends AppCompatActivity
 					.setTitle(R.string.main_activity_alert_quit_simlar_title)
 					.setMessage(R.string.main_activity_alert_quit_simlar_text)
 					.setNegativeButton(R.string.button_cancel, null)
-					.setPositiveButton(R.string.button_continue, new DialogInterface.OnClickListener() {
+					.setPositiveButton(R.string.button_continue, new DialogInterface.OnClickListener()
+					{
 						@Override
 						public void onClick(final DialogInterface dialog, final int id)
 						{

@@ -106,7 +106,8 @@ public final class VerifyNumberActivity extends AppCompatActivity
 			final TextView text = (TextView) findViewById(R.id.textViewCheckOrVerifyYourNumber);
 			text.setText(getString(R.string.verify_number_activity_verify_your_number));
 		} else {
-			new Handler().postDelayed(new Runnable() {
+			new Handler().postDelayed(new Runnable()
+			{
 				@Override
 				public void run()
 				{
@@ -130,7 +131,8 @@ public final class VerifyNumberActivity extends AppCompatActivity
 				adapter.add(countryCode);
 			}
 		}
-		adapter.sort(new Comparator<Integer>() {
+		adapter.sort(new Comparator<Integer>()
+		{
 			@Override
 			public int compare(final Integer lhs, final Integer rhs)
 			{

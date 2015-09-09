@@ -31,7 +31,8 @@ public final class SimlarServiceBroadcast implements Serializable
 	public static final String BROADCAST_NAME = "SimlarServiceBroadcast";
 	public static final String INTENT_EXTRA = "SimlarServiceBroadcast";
 
-	public enum Type {
+	public enum Type
+	{
 		SIMLAR_STATUS,
 		SIMLAR_CALL_STATE,
 		CALL_CONNECTION_DETAILS,

@@ -45,7 +45,8 @@ final class SoundEffectManager
 	private final Context mContext;
 	private final Map<SoundEffectType, SoundEffectPlayer> mPlayers = new HashMap<>();
 
-	public enum SoundEffectType {
+	public enum SoundEffectType
+	{
 		RINGTONE,
 		WAITING_FOR_CONTACT,
 		ENCRYPTION_HANDSHAKE,
@@ -146,7 +147,8 @@ final class SoundEffectManager
 			Lg.i("[", mType, "] start playing at time: ", playStartTime);
 			mMediaPlayer.start();
 
-			mMediaPlayer.setOnCompletionListener(new OnCompletionListener() {
+			mMediaPlayer.setOnCompletionListener(new OnCompletionListener()
+			{
 				@Override
 				public void onCompletion(final MediaPlayer mp2)
 				{
@@ -155,7 +157,8 @@ final class SoundEffectManager
 					Lg.i("[", mType, "] MediaPlayer onCompletion at: ", now, " restarting with delay: ", delay);
 
 					if (delay > 0) {
-						mHandler.postDelayed(new Runnable() {
+						mHandler.postDelayed(new Runnable()
+						{
 							@Override
 							public void run()
 							{
