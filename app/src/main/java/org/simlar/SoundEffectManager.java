@@ -301,7 +301,5 @@ final class SoundEffectManager
 		} else {
 			audioManager.setMode(AudioManager.MODE_NORMAL);
 		}
-
-		audioManager.setStreamSolo(AudioManager.STREAM_VOICE_CALL, enabled);
 	}
 }

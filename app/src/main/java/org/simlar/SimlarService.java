@@ -78,7 +78,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private static volatile Class<? extends Activity> mNotificationActivity = null;
 	private VibratorManager mVibratorManager = null;
 	private SoundEffectManager mSoundEffectManager = null;
-	private boolean mHasAudioFocus = false;
+	private AudioFocus mAudioFocus;
 	private final NetworkChangeReceiver mNetworkChangeReceiver = new NetworkChangeReceiver();
 	private String mSimlarIdToCall = null;
 	private static volatile boolean mRunning = false;
@@ -307,6 +307,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		FileHelper.init(this);
 		mVibratorManager = new VibratorManager(this.getApplicationContext());
 		mSoundEffectManager = new SoundEffectManager(this.getApplicationContext());
+		mAudioFocus = new AudioFocus(this);
 
 		mWakeLock = ((PowerManager) this.getSystemService(Context.POWER_SERVICE))
 				.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SimlarWakeLock");
@@ -351,7 +352,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	@SuppressLint("InlinedApi")
 	static private int createWifiWakeLockType()
 	{
-		if  (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
 			return WifiManager.WIFI_MODE_FULL_HIGH_PERF;
 		}
 
@@ -793,16 +794,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				acquireWifiLock();
 			}
 
-			if (!mHasAudioFocus) {
-				// We acquire AUDIOFOCUS_GAIN_TRANSIENT instead of AUDIOFOCUS_GAIN because we want the music to resume after ringing or call
-				final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-				if (audioManager.requestAudioFocus(null, AudioManager.STREAM_VOICE_CALL, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT) == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-					mHasAudioFocus = true;
-					Lg.i("audio focus granted");
-				} else {
-					Lg.e("audio focus not granted");
-				}
-			}
+			mAudioFocus.request();
 
 			if (mSimlarCallState.isRinging()) {
 				Lg.i("starting RingingActivity");
@@ -816,15 +808,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			notifySimlarStatusChanged(SimlarStatus.ONLINE);
 			mSoundEffectManager.stopAll();
 			mSoundEffectManager.setInCallMode(false);
-			if (mHasAudioFocus) {
-				final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-				if (audioManager.abandonAudioFocus(null) == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-					Lg.i("audio focus released");
-				} else {
-					Lg.e("releasing audio focus not granted");
-				}
-				mHasAudioFocus = false;
-			}
+			mAudioFocus.release();
 
 			restoreRingerModeIfNeeded();
 
