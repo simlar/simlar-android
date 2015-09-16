@@ -40,6 +40,7 @@ import android.widget.TextView;
 
 import org.simlar.R;
 import org.simlar.helper.CreateAccountStatus;
+import org.simlar.helper.SimCardReader;
 import org.simlar.helper.PreferencesHelper;
 import org.simlar.helper.SimlarNumber;
 import org.simlar.logging.Lg;
@@ -86,8 +87,9 @@ public final class VerifyNumberActivity extends AppCompatActivity
 		Lg.i("onCreate");
 		setContentView(R.layout.activity_verify_number);
 
-		final int regionCode = SimlarNumber.readRegionCodeFromSimCardOrConfiguration(this);
-		final String number = SimlarNumber.readLocalPhoneNumberFromSimCard(this);
+		final int regionCode = SimlarNumber.region2RegionCode(SimCardReader.readRegionCode(this));
+		SimlarNumber.setDefaultRegion(regionCode);
+		final String number = new SimlarNumber(SimCardReader.readPhoneNumber(this)).getNationalOnly();
 
 		final ArrayAdapter<Integer> adapter = createCountryCodeSelector();
 		mSpinner = (Spinner) findViewById(R.id.spinnerCountryCodes);

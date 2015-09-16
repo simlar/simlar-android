@@ -20,9 +20,6 @@
 
 package org.simlar.helper;
 
-import android.content.Context;
-import android.telephony.TelephonyManager;
-
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat;
@@ -32,7 +29,6 @@ import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
 
 public final class SimlarNumber
@@ -130,13 +126,19 @@ public final class SimlarNumber
 		return PhoneNumberUtil.getInstance().format(mPhoneNumber, PhoneNumberFormat.INTERNATIONAL);
 	}
 
-	private String getNationalOnly()
+	public String getNationalOnly()
 	{
 		if (mPhoneNumber == null) {
 			return "";
 		}
 
 		return Long.toString(mPhoneNumber.getNationalNumber());
+	}
+
+	public static int region2RegionCode(final String region)
+	{
+		// returns 0 if not found
+		return PhoneNumberUtil.getInstance().getCountryCodeForRegion(region);
 	}
 
 	public static void setDefaultRegion(final int countryCallingCode)
@@ -153,45 +155,6 @@ public final class SimlarNumber
 	public static String createSimlarId(final String telephoneNumber)
 	{
 		return new SimlarNumber(telephoneNumber).getSimlarId();
-	}
-
-	private static String readRegionFromSimCardOrConfiguration(final Context context)
-	{
-		// try to read country code from sim
-		final TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-		final String regionFromSim = tm.getSimCountryIso().toUpperCase(Locale.US);
-		if (!Util.isNullOrEmpty(regionFromSim)) {
-			mDefaultRegion = regionFromSim;
-			return regionFromSim;
-		}
-
-		// read countryCode from configuration
-		final String regionFromConfig = context.getResources().getConfiguration().locale.getCountry().toUpperCase(Locale.US);
-		Lg.i("guessed region by android configuration: ", regionFromConfig);
-		mDefaultRegion = regionFromConfig;
-		return regionFromConfig;
-	}
-
-	public static int readRegionCodeFromSimCardOrConfiguration(final Context context)
-	{
-		// returns 0 if not found
-		return PhoneNumberUtil.getInstance().getCountryCodeForRegion(readRegionFromSimCardOrConfiguration(context));
-	}
-
-	public static String readLocalPhoneNumberFromSimCard(final Context context)
-	{
-		if (Util.isNullOrEmpty(mDefaultRegion)) {
-			readRegionFromSimCardOrConfiguration(context);
-		}
-
-		final String numberFromSim = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
-
-		if (Util.isNullOrEmpty(numberFromSim)) {
-			Lg.w("failed to read telephone number from sim card");
-			return "";
-		}
-
-		return new SimlarNumber(numberFromSim).getNationalOnly();
 	}
 
 	public static Set<Integer> getSupportedCountryCodes()
