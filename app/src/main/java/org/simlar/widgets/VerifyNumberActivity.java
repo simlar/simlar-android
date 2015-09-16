@@ -93,7 +93,7 @@ public final class VerifyNumberActivity extends AppCompatActivity
 		mSpinner = (Spinner) findViewById(R.id.spinnerCountryCodes);
 		mSpinner.setAdapter(adapter);
 
-		Lg.i("proposing country code: ", regionCode);
+		Lg.i("proposing region code: ", regionCode);
 		if (regionCode > 0) {
 			mSpinner.setSelection(adapter.getPosition(regionCode));
 		}
