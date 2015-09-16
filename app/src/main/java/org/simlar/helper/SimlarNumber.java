@@ -155,10 +155,10 @@ public final class SimlarNumber
 		return new SimlarNumber(telephoneNumber).getSimlarId();
 	}
 
-	private static String readRegionFromSimCardOrConfiguration(final Context c)
+	private static String readRegionFromSimCardOrConfiguration(final Context context)
 	{
 		// try to read country code from sim
-		final TelephonyManager tm = (TelephonyManager) c.getSystemService(Context.TELEPHONY_SERVICE);
+		final TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 		final String regionFromSim = tm.getSimCountryIso().toUpperCase(Locale.US);
 		if (!Util.isNullOrEmpty(regionFromSim)) {
 			mDefaultRegion = regionFromSim;
@@ -166,25 +166,25 @@ public final class SimlarNumber
 		}
 
 		// read countryCode from configuration
-		final String regionFromConfig = c.getResources().getConfiguration().locale.getCountry().toUpperCase(Locale.US);
+		final String regionFromConfig = context.getResources().getConfiguration().locale.getCountry().toUpperCase(Locale.US);
 		Lg.i("guessed region by android configuration: ", regionFromConfig);
 		mDefaultRegion = regionFromConfig;
 		return regionFromConfig;
 	}
 
-	public static int readRegionCodeFromSimCardOrConfiguration(final Context c)
+	public static int readRegionCodeFromSimCardOrConfiguration(final Context context)
 	{
 		// returns 0 if not found
-		return PhoneNumberUtil.getInstance().getCountryCodeForRegion(readRegionFromSimCardOrConfiguration(c));
+		return PhoneNumberUtil.getInstance().getCountryCodeForRegion(readRegionFromSimCardOrConfiguration(context));
 	}
 
-	public static String readLocalPhoneNumberFromSimCard(final Context c)
+	public static String readLocalPhoneNumberFromSimCard(final Context context)
 	{
 		if (Util.isNullOrEmpty(mDefaultRegion)) {
-			readRegionFromSimCardOrConfiguration(c);
+			readRegionFromSimCardOrConfiguration(context);
 		}
 
-		final String numberFromSim = ((TelephonyManager) c.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
+		final String numberFromSim = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
 
 		if (Util.isNullOrEmpty(numberFromSim)) {
 			Lg.w("failed to read telephone number from sim card");
