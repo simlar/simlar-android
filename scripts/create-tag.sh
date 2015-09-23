@@ -3,11 +3,12 @@
 ## exit if an error occurs or on unset variables
 set -eu -o pipefail
 
-declare -r USAGE="Usage example: $0 1 0 0"
+declare -r USAGE="Usage example: $0 1 0 0 [master]"
 
 declare -ri VERSION_MAJOR=${1?${USAGE}}
 declare -ri VERSION_MINOR=${2?${USAGE}}
 declare -ri VERSION_BUGFIX=${3?${USAGE}}
+declare -r  BRANCH=${4:-"master"}
 
 declare -r BUILD_SCRIPT="$(dirname $(readlink -f $0))/build-for-upload.sh"
 declare -r UPDATE_MANIFEST_SCRIPT="$(dirname $(readlink -f $0))/update-android-manifest.sh"
@@ -22,7 +23,7 @@ if ! git diff --quiet ; then
 	exit 1
 fi
 
-git checkout master
+git checkout "${BRANCH}"
 git fetch
 git fetch --tags
 git pull --rebase
