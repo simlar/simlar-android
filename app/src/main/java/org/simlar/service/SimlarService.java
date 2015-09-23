@@ -69,14 +69,12 @@ import org.simlar.service.liblinphone.LinphoneCallState;
 import org.simlar.service.liblinphone.LinphoneThread;
 import org.simlar.service.liblinphone.LinphoneThreadListener;
 import org.simlar.utils.Util;
-import org.simlar.widgets.CallActivity;
-import org.simlar.widgets.MainActivity;
-import org.simlar.widgets.RingingActivity;
 
 public final class SimlarService extends Service implements LinphoneThreadListener
 {
 	private static final int NOTIFICATION_ID = 1;
 	private static final long TERMINATE_CHECKER_INTERVAL = 20 * 1000; // milliseconds
+	private static ServiceActivities ACTIVITIES = null;
 	public static final String INTENT_EXTRA_SIMLAR_ID = "SimlarServiceSimlarId";
 	@SuppressWarnings("WeakerAccess") // is only used in flavour push
 	public static final String INTENT_EXTRA_GCM = "SimlarServiceGCM";
@@ -451,7 +449,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private static void createMissedCallNotification(final Context context, final String name, final String photoId)
 	{
 		final PendingIntent activity = PendingIntent.getActivity(context, 0,
-				new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED), 0);
+				new Intent(context, ACTIVITIES.getMainActivity()).addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED), 0);
 
 		final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context);
 		notificationBuilder.setSmallIcon(R.drawable.ic_notification_missed_calls);
@@ -471,12 +469,12 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		if (mNotificationActivity == null) {
 			if (mSimlarStatus == SimlarStatus.ONGOING_CALL) {
 				if (mSimlarCallState.isRinging()) {
-					mNotificationActivity = RingingActivity.class;
+					mNotificationActivity = ACTIVITIES.getRingingActivity();
 				} else {
-					mNotificationActivity = CallActivity.class;
+					mNotificationActivity = ACTIVITIES.getCallActivity();
 				}
 			} else {
-				mNotificationActivity = MainActivity.class;
+				mNotificationActivity = ACTIVITIES.getMainActivity();
 			}
 			Lg.i("no activity registered based on mSimlarStatus=", mSimlarStatus, " we now take: ", mNotificationActivity.getSimpleName());
 		}
@@ -814,8 +812,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 			if (mSimlarCallState.isRinging()) {
 				Lg.i("starting RingingActivity");
-				mNotificationActivity = RingingActivity.class;
-				startActivity(new Intent(SimlarService.this, RingingActivity.class).addFlags(
+				mNotificationActivity = ACTIVITIES.getRingingActivity();
+				startActivity(new Intent(SimlarService.this, ACTIVITIES.getRingingActivity()).addFlags(
 						Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
 			}
 		}
@@ -905,7 +903,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			return;
 		}
 
-		mNotificationActivity = MainActivity.class;
+		mNotificationActivity = ACTIVITIES.getMainActivity();
 		final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		nm.notify(NOTIFICATION_ID, createNotification());
 
@@ -1071,5 +1069,12 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	{
 		context.startService(intent);
 		mRunning = true;
+	}
+
+	public static void initActivities(final ServiceActivities activities)
+	{
+		if (ACTIVITIES == null) {
+			ACTIVITIES = activities;
+		}
 	}
 }
