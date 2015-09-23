@@ -29,7 +29,6 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import org.simlar.helper.PreferencesHelper;
 import org.simlar.logging.Lg;
 
 public final class GcmBroadcastReceiver extends WakefulBroadcastReceiver
@@ -40,8 +39,6 @@ public final class GcmBroadcastReceiver extends WakefulBroadcastReceiver
 	@Override
 	public void onReceive(final Context context, final Intent intent)
 	{
-		Lg.init(context, PreferencesHelper.readFromFileDebugMode(context));
-
 		final Bundle extras = intent.getExtras();
 		if (extras.isEmpty()) {
 			Lg.e("received Google Cloud Messaging Event with empty extras");

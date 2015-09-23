@@ -26,7 +26,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
 
-import org.simlar.helper.PreferencesHelper;
 import org.simlar.logging.Lg;
 
 public class BootCompletedReceiver extends WakefulBroadcastReceiver
@@ -34,7 +33,6 @@ public class BootCompletedReceiver extends WakefulBroadcastReceiver
 	@Override
 	public void onReceive(final Context context, final Intent intent)
 	{
-		Lg.init(context, PreferencesHelper.readFromFileDebugMode(context));
 		Lg.i("onReceive");
 
 		startWakefulService(context, intent.setComponent(new ComponentName(context.getPackageName(), SimlarService.class.getName())));

@@ -69,10 +69,9 @@ public final class MainActivity extends AppCompatActivity
 	@Override
 	protected void onCreate(final Bundle savedInstanceState)
 	{
-		Lg.init(this, PreferencesHelper.readFromFileDebugMode(this));
-
 		Lg.i("onCreate ", savedInstanceState);
 		super.onCreate(savedInstanceState);
+
 		setContentView(R.layout.activity_main);
 
 		FileHelper.init(this);

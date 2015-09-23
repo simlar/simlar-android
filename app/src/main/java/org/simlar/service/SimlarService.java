@@ -61,7 +61,6 @@ import org.simlar.helper.FlavourHelper;
 import org.simlar.helper.NetworkQuality;
 import org.simlar.helper.PreferencesHelper;
 import org.simlar.helper.PreferencesHelper.NotInitedException;
-import org.simlar.helper.Version;
 import org.simlar.helper.Volumes;
 import org.simlar.helper.Volumes.MicrophoneStatus;
 import org.simlar.logging.Lg;
@@ -317,8 +316,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	@Override
 	public void onCreate()
 	{
-		Lg.i("started with simlar version=", Version.getVersionName(this),
-				" on device: ", Build.MANUFACTURER, " ", Build.MODEL, " (", Build.DEVICE, ") with android version=", Build.VERSION.RELEASE);
+		Lg.i("onCreate");
 
 		mRunning = true;
 
