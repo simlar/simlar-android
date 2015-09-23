@@ -331,8 +331,10 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mButtonToggleVideo.setVisibility(requestingVideo ? View.GONE : View.VISIBLE);
 
 		switch (videoState) {
-		case OFF: break;
-		case PLAYING: break;
+		case OFF:
+			break;
+		case PLAYING:
+			break;
 		case REMOTE_REQUESTED:
 			showRemoteRequestedVideoAlert();
 			break;
