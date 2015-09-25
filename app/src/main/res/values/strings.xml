@@ -123,6 +123,12 @@
     <string name="verify_number_activity_sms_announcement">In order to register, Simlar will send an SMS to this number during the next step.</string>
     <string name="verify_number_activity_alert_wrong_number_text">The number you have entered doesn\'t seem to be a telephone number. Check it again.</string>
 
+    <string name="permission_explain_text_sms">Simlar reads your telephone number once and incoming SMS temporarily so that you don\'t have to enter your number and registration code manually.</string>
+    <string name="permission_explain_text_record_audio">Simlar accesses your microphone while making Simlar calls so that the person you are talking to can here you.</string>
+    <string name="permission_explain_text_phone_state">Simlar reads your phone state while making Simlar calls to deal with incoming regular phone calls.</string>
+    <string name="permission_explain_text_contacts">Simlar reads your contacts data to show you contacts you can talk to privately.</string>
+    <string name="permission_explain_text_storage">Simlar reads your ringtone from external storage if it\'s located there.</string>
+
     <string name="volumes_control_fragment_software_echo_limiter">Software Echo Limiter</string>
 
     <string name="about_activity_title">About Simlar</string>

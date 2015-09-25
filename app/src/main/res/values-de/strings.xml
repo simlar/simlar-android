@@ -124,6 +124,12 @@
     <string name="verify_number_activity_sms_announcement">Um die Anmeldung abzuschließen, schickt Simlar im nächsten Schritt eine SMS an diese Nummer.</string>
     <string name="verify_number_activity_alert_wrong_number_text">Deine eingegebene Rufnummer wurde nicht erkannt. Kontrolliere deine Eingabe.</string>
 
+    <string name="permission_explain_text_sms">Zum Automatischen auslesen der Telefonnummer und des Registrierungscodes wird eine Berechtigung benötigt.</string>
+    <string name="permission_explain_text_record_audio">Telefonieren erfordert die Berechtigung auf das Mikrofon zu zugreifen.</string>
+    <string name="permission_explain_text_phone_state">Die Telefon Berechtigung ermöglicht die Anklopf-Funktion.</string>
+    <string name="permission_explain_text_contacts">Simlar benötigt die Berechtigung Ihr Telefonbuch zu lesen, um andere Simlar-Nutzer zu finden.</string>
+    <string name="permission_explain_text_storage">Die Speicher-Berechtigung wird nur benötigt, wenn Ihr Klingelton dort gespeichert ist.</string>
+
     <string name="volumes_control_fragment_software_echo_limiter">Echo verringern</string>
 
     <string name="about_activity_title">Über Simlar</string>
