@@ -35,6 +35,7 @@ import org.simlar.helper.ContactDataComplete;
 import org.simlar.helper.ContactStatus;
 import org.simlar.helper.FileHelper;
 import org.simlar.helper.FileHelper.NotInitedException;
+import org.simlar.helper.PermissionsHelper;
 import org.simlar.helper.PreferencesHelper;
 import org.simlar.helper.SimlarNumber;
 import org.simlar.https.GetContactsStatus;
@@ -96,6 +97,12 @@ public final class ContactsProvider
 
 			if (Util.isNullOrEmpty(mySimlarId)) {
 				Lg.e("loadContacts: no simlarId for myself, probably PreferencesHelper not inited => aborting");
+				onError();
+				return;
+			}
+
+			if (!PermissionsHelper.hasPermission(context, PermissionsHelper.Type.CONTACTS)) {
+				Lg.e("loadContacts: we do not have the permission to read contacts => aborting");
 				onError();
 				return;
 			}
