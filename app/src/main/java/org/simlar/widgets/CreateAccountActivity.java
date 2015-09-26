@@ -46,6 +46,7 @@ import android.widget.TextView;
 import org.simlar.R;
 import org.simlar.helper.CreateAccountStatus;
 import org.simlar.helper.FlavourHelper;
+import org.simlar.helper.PermissionsHelper;
 import org.simlar.helper.PreferencesHelper;
 import org.simlar.helper.SimlarNumber;
 import org.simlar.https.CreateAccount;
@@ -77,7 +78,7 @@ public final class CreateAccountActivity extends Activity
 	private int mSecondsToStillWaitForSms = 0;
 	private final Handler mHandler = new Handler();
 
-	private final BroadcastReceiver mSmsReceiver = new SmsReceiver();
+	private BroadcastReceiver mSmsReceiver = null;
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCreateAccount();
 	private String mTelephoneNumber = "";
 
@@ -299,7 +300,9 @@ public final class CreateAccountActivity extends Activity
 	protected void onDestroy()
 	{
 		Lg.i("onPause");
-		unregisterReceiver(mSmsReceiver);
+		if (mSmsReceiver != null) {
+			unregisterReceiver(mSmsReceiver);
+		}
 		super.onDestroy();
 	}
 
@@ -343,7 +346,11 @@ public final class CreateAccountActivity extends Activity
 				PreferencesHelper.init(result.getSimlarId(), result.getPassword());
 				PreferencesHelper.saveToFilePreferences(CreateAccountActivity.this);
 				PreferencesHelper.saveToFileCreateAccountStatus(CreateAccountActivity.this, CreateAccountStatus.WAITING_FOR_SMS, telephoneNumber);
-				waitForSms();
+				if (mSmsReceiver != null) {
+					waitForSms();
+				} else {
+					smsNotGranted();
+				}
 			}
 
 		}.execute(mTelephoneNumber, smsText);
@@ -351,9 +358,21 @@ public final class CreateAccountActivity extends Activity
 
 	private void registerSmsReceiver()
 	{
+		if (mSmsReceiver != null) {
+			Lg.i("SmsReceiver already registered");
+			return;
+		}
+
+		// Do not annoy user here again, as we have just asked in VerifyNumberActivity
+		if (!PermissionsHelper.hasPermission(this, PermissionsHelper.Type.SMS)) {
+			Lg.i("permission to read sms not granted");
+			return;
+		}
+
 		final IntentFilter filter = new IntentFilter();
 		filter.addAction("android.provider.Telephony.SMS_RECEIVED");
 		filter.setPriority(1002); // TextSecure uses 1001
+		mSmsReceiver = new SmsReceiver();
 		registerReceiver(mSmsReceiver, filter);
 	}
 
@@ -393,6 +412,16 @@ public final class CreateAccountActivity extends Activity
 		mWaitingForSmsText.setText(R.string.create_account_activity_waiting_for_sms);
 
 		onError(R.string.create_account_activity_error_sms_timeout);
+	}
+
+	private void smsNotGranted()
+	{
+		Lg.i("smsNotGranted");
+
+		mProgressWaitingForSMS.setVisibility(View.INVISIBLE);
+		mWaitingForSmsText.setText(R.string.create_account_activity_waiting_for_sms);
+
+		onError(R.string.create_account_activity_error_sms_not_granted);
 	}
 
 	private void onSmsReceived(final String sender, final String message)
@@ -491,6 +520,7 @@ public final class CreateAccountActivity extends Activity
 			break;
 		case R.string.create_account_activity_error_sms:
 		case R.string.create_account_activity_error_sms_timeout:
+		case R.string.create_account_activity_error_sms_not_granted:
 			mDetails.setText(String.format(getString(resId), mTelephoneNumber));
 			mButtonConfirm.setVisibility(View.VISIBLE);
 			mButtonConfirm.setEnabled(false);

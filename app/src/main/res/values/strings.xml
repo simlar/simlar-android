@@ -146,6 +146,7 @@
     <string name="create_account_activity_error_wrong_telephone_number">It\'s not possible to create a Simlar account with the number you provided:\n%1$s\n\nTry another number and contact the mailing list.</string>
     <string name="create_account_activity_error_sms">We are currently not able to send an SMS to the number you provided:\n%1$s\n\nCheck your number or try again later.</string>
     <string name="create_account_activity_error_sms_timeout">Waiting for SMS timed out.\n\nIs this really your number?\n%1$s\n\nIf you received the registration SMS, enter the code manually:</string>
+    <string name="create_account_activity_error_sms_not_granted">Simlar has sent an SMS to the number you provided:\n%1$s\n\nOnce you receive this SMS, enter the code manually:</string>
     <string name="create_account_activity_error_not_possible">Account creation is not possible at the moment.\n\nTry again later.</string>
     <string name="create_account_activity_error_registration_code">The registration code is invalid.\n\nTry again.</string>
     <string name="create_account_activity_error_too_many_confirms">Account confirmation is not possible anymore.\n\nStart again.</string>
