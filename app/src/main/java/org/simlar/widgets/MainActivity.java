@@ -25,6 +25,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -36,6 +37,7 @@ import org.simlar.contactsprovider.ContactsProvider.FullContactsListener;
 import org.simlar.helper.ContactDataComplete;
 import org.simlar.helper.FlavourHelper;
 import org.simlar.helper.GooglePlayServicesHelper;
+import org.simlar.helper.PermissionsHelper;
 import org.simlar.helper.PreferencesHelper;
 import org.simlar.helper.Version;
 import org.simlar.https.UploadLogFile;
@@ -83,6 +85,21 @@ public final class MainActivity extends AppCompatActivity
 		mContactList.setListAdapter(mAdapter);
 
 		Lg.i("onCreate ended");
+	}
+
+	private void requestContacts()
+	{
+		if (PermissionsHelper.checkAndRequestPermissions(this, PermissionsHelper.Type.CONTACTS)) {
+			loadContacts();
+		}
+	}
+
+	@Override
+	public void onRequestPermissionsResult(final int requestCode, @NonNull final String permissions[], @NonNull final int grantResults[])
+	{
+		if (PermissionsHelper.isGranted(PermissionsHelper.Type.CONTACTS, requestCode, permissions, grantResults)) {
+			loadContacts();
+		}
 	}
 
 	private void loadContacts()
@@ -144,7 +161,7 @@ public final class MainActivity extends AppCompatActivity
 		}
 
 		if (mAdapter.isEmpty()) {
-			loadContacts();
+			requestContacts();
 		}
 	}
 
@@ -254,7 +271,7 @@ public final class MainActivity extends AppCompatActivity
 		Lg.i("reloadContacts");
 		if (ContactsProvider.clearCache()) {
 			mAdapter.clear();
-			loadContacts();
+			requestContacts();
 		}
 	}
 
