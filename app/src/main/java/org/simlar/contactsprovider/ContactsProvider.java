@@ -96,10 +96,7 @@ public final class ContactsProvider
 
 			if (Util.isNullOrEmpty(mySimlarId)) {
 				Lg.e("loadContacts: no simlarId for myself, probably PreferencesHelper not inited => aborting");
-				mState = State.ERROR;
-				mContacts.clear();
-				notifyContactListeners();
-				notifyFullContactsListeners(null);
+				onError();
 				return;
 			}
 
@@ -123,6 +120,14 @@ public final class ContactsProvider
 			}.execute();
 		}
 
+		private void onError()
+		{
+			mState = State.ERROR;
+			mContacts.clear();
+			notifyContactListeners();
+			notifyFullContactsListeners(null);
+		}
+
 		private void notifyContactListeners()
 		{
 			for (final Map.Entry<ContactListener, String> entry : mContactListener.entrySet()) {
@@ -144,10 +149,7 @@ public final class ContactsProvider
 		{
 			if (contacts == null) {
 				Lg.e("onContactsLoadedFromTelephoneBook called with empty contacts");
-				mState = State.ERROR;
-				mContacts.clear();
-				notifyContactListeners();
-				notifyFullContactsListeners(null);
+				onError();
 				return;
 			}
 
@@ -193,16 +195,13 @@ public final class ContactsProvider
 
 		void onContactsStatusRequestedFromServer(final Map<String, ContactStatus> contactsStatus)
 		{
-			Set<ContactDataComplete> contacts = null;
 			if (updateContactStatus(contactsStatus)) {
-				contacts = createFullContactDataSet();
+				final Set<ContactDataComplete> contacts = createFullContactDataSet();
 				mState = State.INITIALIZED;
+				notifyFullContactsListeners(contacts);
 			} else {
-				mContacts.clear();
-				mState = State.ERROR;
+				onError();
 			}
-
-			notifyFullContactsListeners(contacts);
 		}
 
 		private Set<ContactDataComplete> createFullContactDataSet()
