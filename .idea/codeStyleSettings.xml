@@ -77,6 +77,15 @@
         <XML>
           <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
         </XML>
+        <codeStyleSettings language="JAVA">
+          <option name="CLASS_BRACE_STYLE" value="2" />
+          <option name="METHOD_BRACE_STYLE" value="2" />
+          <option name="INDENT_CASE_FROM_SWITCH" value="false" />
+          <indentOptions>
+            <option name="USE_TAB_CHARACTER" value="true" />
+            <option name="SMART_TABS" value="true" />
+          </indentOptions>
+        </codeStyleSettings>
         <codeStyleSettings language="XML">
           <option name="FORCE_REARRANGE_MODE" value="1" />
           <indentOptions>
@@ -236,6 +245,7 @@
         </codeStyleSettings>
       </value>
     </option>
+    <option name="USE_PER_PROJECT_SETTINGS" value="true" />
     <option name="PREFERRED_PROJECT_CODE_STYLE" value="simlar-android" />
   </component>
 </project>
