@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -40,6 +41,7 @@ import android.widget.TextView;
 
 import org.simlar.R;
 import org.simlar.helper.CreateAccountStatus;
+import org.simlar.helper.PermissionsHelper;
 import org.simlar.helper.SimCardReader;
 import org.simlar.helper.PreferencesHelper;
 import org.simlar.helper.SimlarNumber;
@@ -87,9 +89,9 @@ public final class VerifyNumberActivity extends AppCompatActivity
 		Lg.i("onCreate");
 		setContentView(R.layout.activity_verify_number);
 
+		// region code spinner
 		final int regionCode = SimlarNumber.region2RegionCode(SimCardReader.readRegionCode(this));
 		SimlarNumber.setDefaultRegion(regionCode);
-		final String number = new SimlarNumber(SimCardReader.readPhoneNumber(this)).getNationalOnly();
 
 		final ArrayAdapter<Integer> adapter = createCountryCodeSelector();
 		mSpinner = (Spinner) findViewById(R.id.spinnerCountryCodes);
@@ -100,11 +102,34 @@ public final class VerifyNumberActivity extends AppCompatActivity
 			mSpinner.setSelection(adapter.getPosition(regionCode));
 		}
 
+		mButtonAccept = (Button) findViewById(R.id.buttonRegister);
+
 		// telephone number
 		mEditNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
-		if (!Util.isNullOrEmpty(number)) {
-			mEditNumber.setText(number);
+		mEditNumber.addTextChangedListener(new EditNumberTextWatcher());
+		requestPhoneNumber();
+	}
 
+	private void requestPhoneNumber()
+	{
+		if (PermissionsHelper.checkAndRequestPermissions(this, PermissionsHelper.Type.SMS)) {
+			readPhoneNumber();
+		}
+	}
+
+	@Override
+	public void onRequestPermissionsResult(final int requestCode, @NonNull final String permissions[], @NonNull final int grantResults[])
+	{
+		if (PermissionsHelper.isGranted(PermissionsHelper.Type.SMS, permissions, grantResults)) {
+			readPhoneNumber();
+		}
+	}
+
+	private void readPhoneNumber()
+	{
+		final String phoneNumber = SimCardReader.readPhoneNumber(this);
+		if (!Util.isNullOrEmpty(phoneNumber)) {
+			mEditNumber.setText(new SimlarNumber(phoneNumber).getNationalOnly());
 			final TextView text = (TextView) findViewById(R.id.textViewCheckOrVerifyYourNumber);
 			text.setText(getString(R.string.verify_number_activity_verify_your_number));
 		} else {
@@ -117,9 +142,7 @@ public final class VerifyNumberActivity extends AppCompatActivity
 				}
 			}, 100);
 		}
-		mEditNumber.addTextChangedListener(new EditNumberTextWatcher());
 
-		mButtonAccept = (Button) findViewById(R.id.buttonRegister);
 		updateButtonAccept();
 	}
 
