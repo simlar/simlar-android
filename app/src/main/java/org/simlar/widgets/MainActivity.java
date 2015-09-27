@@ -34,7 +34,6 @@ import org.simlar.R;
 import org.simlar.contactsprovider.ContactsProvider;
 import org.simlar.contactsprovider.ContactsProvider.FullContactsListener;
 import org.simlar.helper.ContactDataComplete;
-import org.simlar.helper.FileHelper;
 import org.simlar.helper.FlavourHelper;
 import org.simlar.helper.GooglePlayServicesHelper;
 import org.simlar.helper.PreferencesHelper;
@@ -72,8 +71,6 @@ public final class MainActivity extends AppCompatActivity
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main);
-
-		FileHelper.init(this);
 
 		mAdapter = new ContactsAdapter(this);
 

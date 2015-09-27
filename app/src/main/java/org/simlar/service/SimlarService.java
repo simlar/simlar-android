@@ -56,7 +56,6 @@ import org.simlar.contactsprovider.ContactsProvider;
 import org.simlar.contactsprovider.ContactsProvider.ContactListener;
 import org.simlar.helper.CallConnectionDetails;
 import org.simlar.helper.CallEndReason;
-import org.simlar.helper.FileHelper;
 import org.simlar.helper.FlavourHelper;
 import org.simlar.helper.NetworkQuality;
 import org.simlar.helper.PreferencesHelper;
@@ -318,7 +317,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		mRunning = true;
 
-		FileHelper.init(this);
 		mVibratorManager = new VibratorManager(this.getApplicationContext());
 		mSoundEffectManager = new SoundEffectManager(this.getApplicationContext());
 		mAudioFocus = new AudioFocus(this);

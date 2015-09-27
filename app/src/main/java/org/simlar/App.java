@@ -25,6 +25,7 @@ import android.app.Application;
 import android.content.res.Configuration;
 import android.os.Build;
 
+import org.simlar.helper.FileHelper;
 import org.simlar.helper.PreferencesHelper;
 import org.simlar.helper.Version;
 import org.simlar.logging.Lg;
@@ -42,6 +43,7 @@ public final class App extends Application
 		super.onCreate();
 
 		Lg.init(this, PreferencesHelper.readFromFileDebugMode(this));
+		FileHelper.init(this);
 		SimlarService.initActivities(new ServiceActivities(MainActivity.class, RingingActivity.class, CallActivity.class));
 
 		Lg.i("simlar started with version=", Version.getVersionName(this),
