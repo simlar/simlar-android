@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-package org.simlar.helper;
+package org.simlar.widgets;
 
 import android.content.Context;
 import android.os.Build;
@@ -29,6 +29,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import org.simlar.R;
+import org.simlar.helper.ContactDataComplete;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
@@ -36,7 +37,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Set;
 
-public final class ContactsAdapter extends ArrayAdapter<ContactDataComplete>
+final class ContactsAdapter extends ArrayAdapter<ContactDataComplete>
 {
 	private final int mLayout;
 	private final LayoutInflater mInflater;

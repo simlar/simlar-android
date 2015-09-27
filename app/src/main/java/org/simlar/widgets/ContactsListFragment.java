@@ -26,7 +26,6 @@ import android.view.View;
 import android.widget.ListView;
 
 import org.simlar.R;
-import org.simlar.helper.ContactsAdapter;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
