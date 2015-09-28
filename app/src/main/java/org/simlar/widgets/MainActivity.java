@@ -97,7 +97,7 @@ public final class MainActivity extends AppCompatActivity
 	@Override
 	public void onRequestPermissionsResult(final int requestCode, @NonNull final String permissions[], @NonNull final int grantResults[])
 	{
-		if (PermissionsHelper.isGranted(PermissionsHelper.Type.CONTACTS, requestCode, permissions, grantResults)) {
+		if (mAdapter.isEmpty()) {
 			loadContacts();
 		}
 	}
@@ -160,8 +160,10 @@ public final class MainActivity extends AppCompatActivity
 			mCommunicator.startServiceAndRegister(this, MainActivity.class, null);
 		}
 
+		PermissionsHelper.requestMajorPermissions(this);
+
 		if (mAdapter.isEmpty()) {
-			requestContacts();
+			loadContacts();
 		}
 	}
 
