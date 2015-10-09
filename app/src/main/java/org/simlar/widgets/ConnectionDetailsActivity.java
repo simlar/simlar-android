@@ -124,14 +124,14 @@ public final class ConnectionDetailsActivity extends Activity
 
 		if (callConnectionDetails.hasConnectionInfo()) {
 			mTextViewQuality.setText(getString(callConnectionDetails.getQualityDescription()));
-			mTextViewUpload.setText(callConnectionDetails.getUpload() + " " + getString(R.string.connection_details_activity_kilobytes_per_second));
-			mTextViewDownload.setText(callConnectionDetails.getDownload() + " " + getString(R.string.connection_details_activity_kilobytes_per_second));
+			mTextViewUpload.setText(getString(R.string.connection_details_activity_kilobytes_per_second, callConnectionDetails.getUpload()));
+			mTextViewDownload.setText(getString(R.string.connection_details_activity_kilobytes_per_second, callConnectionDetails.getDownload()));
 			mTextViewIceState.setText(callConnectionDetails.getIceState());
 			mTextViewCodec.setText(callConnectionDetails.getCodec());
 			mTextViewJitter.setText(callConnectionDetails.getJitter());
-			mTextViewPacketLoss.setText(callConnectionDetails.getPacketLoss() + " " + getString(R.string.connection_details_activity_percent));
+			mTextViewPacketLoss.setText(getString(R.string.connection_details_activity_percent, callConnectionDetails.getPacketLoss()));
 			mTextViewLatePackets.setText(callConnectionDetails.getLatePackets());
-			mTextViewRoundTripDelay.setText(callConnectionDetails.getRoundTripDelay() + " " + getString(R.string.connection_details_activity_milli_seconds));
+			mTextViewRoundTripDelay.setText(getString(R.string.connection_details_activity_milli_seconds, callConnectionDetails.getRoundTripDelay()));
 		}
 	}
 }
