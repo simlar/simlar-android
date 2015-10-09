@@ -20,6 +20,7 @@
 
 package org.simlar.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -349,6 +350,7 @@ public final class CreateAccountActivity extends Activity
 		waitingForSmsIteration();
 	}
 
+	@SuppressLint("SetTextI18n")
 	private void waitingForSmsIteration()
 	{
 		mWaitingForSmsText.setText(getString(R.string.create_account_activity_waiting_for_sms) + " (" + mSecondsToStillWaitForSms + "s)");
