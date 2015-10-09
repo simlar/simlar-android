@@ -260,6 +260,12 @@ public final class ContactsProvider
 
 			final Cursor contacts = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projection, null, null,
 					null);
+
+			if (contacts == null) {
+				Lg.e("contacts cursor null");
+				return result;
+			}
+
 			while (contacts.moveToNext()) {
 				final long contactId = contacts.getLong(0);
 				final String number = contacts.getString(1);
