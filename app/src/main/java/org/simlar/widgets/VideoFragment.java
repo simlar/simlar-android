@@ -52,14 +52,14 @@ public class VideoFragment extends android.support.v4.app.Fragment
 	}
 
 	@Override
-	public void onAttach(final Context activity)
+	public void onAttach(final Context context)
 	{
 		Lg.i("onAttach");
-		super.onAttach(activity);
+		super.onAttach(context);
 		try {
-			mListener = (Listener) activity;
+			mListener = (Listener) context;
 		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString() + " must implement VideoFragment.Listener");
+			throw new ClassCastException(context.toString() + " must implement VideoFragment.Listener");
 		}
 	}
 
