@@ -70,8 +70,8 @@ public final class RingingActivity extends AppCompatActivity
 	@Override
 	protected void onCreate(final Bundle savedInstanceState)
 	{
-		Lg.i("onCreate");
 		super.onCreate(savedInstanceState);
+		Lg.i("onCreate");
 
 		setContentView(R.layout.activity_ringing);
 
@@ -142,10 +142,11 @@ public final class RingingActivity extends AppCompatActivity
 	}
 
 	@Override
-	protected void onResume()
+	public void onStart()
 	{
-		Lg.i("onResume");
-		super.onResume();
+		super.onStart();
+		Lg.i("onStart");
+
 		if (!mCommunicator.register(this, RingingActivity.class)) {
 			Lg.w("SimlarService is not running, starting MainActivity");
 			startActivity(new Intent(this, MainActivity.class));
@@ -154,10 +155,16 @@ public final class RingingActivity extends AppCompatActivity
 	}
 
 	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		Lg.i("onResume");
+	}
+
+	@Override
 	protected void onPause()
 	{
 		Lg.i("onPause");
-		mCommunicator.unregister();
 		super.onPause();
 	}
 
@@ -165,6 +172,7 @@ public final class RingingActivity extends AppCompatActivity
 	public void onStop()
 	{
 		Lg.i("onStop");
+		mCommunicator.unregister();
 		super.onStop();
 	}
 
