@@ -56,11 +56,13 @@ public class VideoFragment extends android.support.v4.app.Fragment
 	{
 		Lg.i("onAttach");
 		super.onAttach(context);
-		try {
-			mListener = (Listener) context;
-		} catch (ClassCastException e) {
-			throw new ClassCastException(context.toString() + " must implement VideoFragment.Listener");
+
+		if ( ! (context instanceof Listener )) {
+			Lg.e("not attached to listener object");
+			return;
 		}
+
+		mListener = (Listener) context;
 	}
 
 	@Override
