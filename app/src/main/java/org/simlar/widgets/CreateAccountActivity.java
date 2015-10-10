@@ -173,14 +173,8 @@ public final class CreateAccountActivity extends Activity
 				return;
 			}
 
-			final String smsFormat = extras.getString("format");
-			if (smsFormat == null) {
-				Lg.e("received sms with no format");
-				return;
-			}
-
 			for (final Object pdu : pdus) {
-				final SmsMessage sms = SmsMessage.createFromPdu((byte[]) pdu, smsFormat);
+				final SmsMessage sms = SmsMessage.createFromPdu((byte[]) pdu);
 				onSmsReceived(sms.getOriginatingAddress(), sms.getMessageBody());
 			}
 		}
