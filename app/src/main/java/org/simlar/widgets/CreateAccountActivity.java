@@ -27,7 +27,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -174,23 +173,15 @@ public final class CreateAccountActivity extends Activity
 				return;
 			}
 
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-				final String smsFormat = extras.getString("format");
-				if (smsFormat == null) {
-					Lg.e("received sms with no format");
-					return;
-				}
+			final String smsFormat = extras.getString("format");
+			if (smsFormat == null) {
+				Lg.e("received sms with no format");
+				return;
+			}
 
-				for (final Object pdu : pdus) {
-					final SmsMessage sms = SmsMessage.createFromPdu((byte[]) pdu, smsFormat);
-					onSmsReceived(sms.getOriginatingAddress(), sms.getMessageBody());
-				}
-			} else {
-				for (final Object pdu : pdus) {
-					//noinspection deprecation
-					final SmsMessage sms = SmsMessage.createFromPdu((byte[]) pdu);
-					onSmsReceived(sms.getOriginatingAddress(), sms.getMessageBody());
-				}
+			for (final Object pdu : pdus) {
+				final SmsMessage sms = SmsMessage.createFromPdu((byte[]) pdu, smsFormat);
+				onSmsReceived(sms.getOriginatingAddress(), sms.getMessageBody());
 			}
 		}
 	}
