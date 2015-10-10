@@ -16,6 +16,7 @@ android {
     defaultConfig {
         applicationId "org.simlar"
         minSdkVersion 9
+        //noinspection OldTargetApi
         targetSdkVersion 22
         versionName getGitVersion()
     }
@@ -49,7 +50,9 @@ android {
 dependencies {
     pushCompile 'com.google.android.gms:play-services-gcm:8.1.0'
     compile files('libs/liblinphone.jar')
+    //noinspection GradleDependency
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.googlecode.libphonenumber:libphonenumber:7.1.0'
+    //noinspection GradleDependency
     compile 'com.android.support:support-v4:22.2.1'
 }
