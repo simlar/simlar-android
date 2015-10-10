@@ -95,8 +95,8 @@ public final class CallActivity extends AppCompatActivity
 	@Override
 	protected void onCreate(final Bundle savedInstanceState)
 	{
-		Lg.i("onCreate");
 		super.onCreate(savedInstanceState);
+		Lg.i("onCreate");
 
 		setContentView(R.layout.activity_call);
 
@@ -138,10 +138,10 @@ public final class CallActivity extends AppCompatActivity
 	}
 
 	@Override
-	protected void onResume()
+	public void onStart()
 	{
-		Lg.i("onResume");
-		super.onResume();
+		super.onStart();
+		Lg.i("onStart");
 
 		final String simlarIdToCall = getIntent().getStringExtra(INTENT_EXTRA_SIMLAR_ID);
 		getIntent().removeExtra(INTENT_EXTRA_SIMLAR_ID);
@@ -152,6 +152,13 @@ public final class CallActivity extends AppCompatActivity
 			startActivity(new Intent(this, MainActivity.class));
 			finish();
 		}
+	}
+
+	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		Lg.i("onResume");
 
 		mProximityScreenLocker.acquire();
 	}
@@ -160,7 +167,6 @@ public final class CallActivity extends AppCompatActivity
 	protected void onPause()
 	{
 		Lg.i("onPause");
-		mCommunicator.unregister();
 		mProximityScreenLocker.release(false);
 		super.onPause();
 	}
@@ -170,6 +176,7 @@ public final class CallActivity extends AppCompatActivity
 	{
 		Lg.i("onStop");
 		stopCallTimer();
+		mCommunicator.unregister();
 		super.onStop();
 	}
 
