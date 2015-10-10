@@ -82,8 +82,8 @@ public final class VerifyNumberActivity extends AppCompatActivity
 	@Override
 	protected void onCreate(final Bundle savedInstanceState)
 	{
-		Lg.i("onCreate");
 		super.onCreate(savedInstanceState);
+		Lg.i("onCreate");
 		setContentView(R.layout.activity_verify_number);
 
 		final int regionCode = SimlarNumber.readRegionCodeFromSimCardOrConfiguration(this);
@@ -163,15 +163,22 @@ public final class VerifyNumberActivity extends AppCompatActivity
 	}
 
 	@Override
-	protected void onResume()
+	public void onStart()
 	{
-		Lg.i("onResume");
-		super.onResume();
+		super.onStart();
+		Lg.i("onStart");
 
 		if (PreferencesHelper.getCreateAccountStatus() == CreateAccountStatus.WAITING_FOR_SMS) {
 			Lg.i("CreateAccountStatus = WAITING FOR SMS");
 			startActivityForResult(new Intent(this, CreateAccountActivity.class), RESULT_CREATE_ACCOUNT_ACTIVITY);
 		}
+	}
+
+	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		Lg.i("onResume");
 	}
 
 	@Override
