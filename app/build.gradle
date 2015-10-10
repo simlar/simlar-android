@@ -42,7 +42,7 @@ android {
 
     lintOptions {
         checkAllWarnings true
-        disable 'UnusedIds', 'IconExpectedSize'
+        disable 'UnusedIds', 'IconExpectedSize', 'AllowBackup'
         warningsAsErrors true
     }
 }
