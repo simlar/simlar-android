@@ -40,7 +40,7 @@ public final class CallConnectionDetails
 	private boolean mEndedCall = false;
 
 	public boolean updateCallStats(final NetworkQuality quality, final String codec, final String iceState, final int upload, final int download,
-			final int jitter, final int packetLoss, final long latePackets, final int roundTripDelay)
+	                               final int jitter, final int packetLoss, final long latePackets, final int roundTripDelay)
 	{
 		if (quality == mQuality && Util.equalString(codec, mCodec) && Util.equalString(iceState, mIceState)
 				&& upload == mUpload && download == mDownload && jitter == mJitter && packetLoss == mPacketLoss

@@ -31,7 +31,8 @@ public final class Volumes
 	private final MicrophoneStatus mMicrophoneStatus;
 	private final boolean mEchoLimiter;
 
-	public enum MicrophoneStatus {
+	public enum MicrophoneStatus
+	{
 		DISABLED,
 		MUTED,
 		ON

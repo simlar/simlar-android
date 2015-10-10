@@ -20,6 +20,7 @@
 
 package org.simlar.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -298,7 +299,8 @@ public final class CreateAccountActivity extends Activity
 		final String expectedSimlarId = SimlarNumber.createSimlarId(mTelephoneNumber);
 		final String telephoneNumber = mTelephoneNumber;
 
-		new AsyncTask<String, Void, CreateAccount.RequestResult>() {
+		new AsyncTask<String, Void, CreateAccount.RequestResult>()
+		{
 
 			@Override
 			protected CreateAccount.RequestResult doInBackground(final String... params)
@@ -348,12 +350,14 @@ public final class CreateAccountActivity extends Activity
 		waitingForSmsIteration();
 	}
 
+	@SuppressLint("SetTextI18n")
 	private void waitingForSmsIteration()
 	{
 		mWaitingForSmsText.setText(getString(R.string.create_account_activity_waiting_for_sms) + " (" + mSecondsToStillWaitForSms + "s)");
 		--mSecondsToStillWaitForSms;
 		if (mSecondsToStillWaitForSms >= 0) {
-			mHandler.postDelayed(new Runnable() {
+			mHandler.postDelayed(new Runnable()
+			{
 				@Override
 				public void run()
 				{
@@ -416,7 +420,8 @@ public final class CreateAccountActivity extends Activity
 			return;
 		}
 
-		new AsyncTask<String, Void, CreateAccount.ConfirmResult>() {
+		new AsyncTask<String, Void, CreateAccount.ConfirmResult>()
+		{
 
 			@Override
 			protected CreateAccount.ConfirmResult doInBackground(final String... params)

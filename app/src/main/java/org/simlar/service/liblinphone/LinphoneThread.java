@@ -94,7 +94,8 @@ public final class LinphoneThread
 
 			Lg.i("handler initialized");
 
-			mMainThreadHandler.post(new Runnable() {
+			mMainThreadHandler.post(new Runnable()
+			{
 				@Override
 				public void run()
 				{
@@ -112,7 +113,8 @@ public final class LinphoneThread
 				return;
 			}
 
-			mLinphoneThreadHandler.post(new Runnable() {
+			mLinphoneThreadHandler.post(new Runnable()
+			{
 				@Override
 				public void run()
 				{
@@ -123,7 +125,8 @@ public final class LinphoneThread
 						looper.quit();
 					}
 					mLinphoneHandler.destroy();
-					mMainThreadHandler.post(new Runnable() {
+					mMainThreadHandler.post(new Runnable()
+					{
 						@Override
 						public void run()
 						{
@@ -151,7 +154,8 @@ public final class LinphoneThread
 				final Volumes volumes = mVolumes;
 				final Context context = mContext;
 
-				mLinphoneThreadHandler.post(new Runnable() {
+				mLinphoneThreadHandler.post(new Runnable()
+				{
 					@Override
 					public void run()
 					{
@@ -177,7 +181,8 @@ public final class LinphoneThread
 		{
 			mLinphoneHandler.linphoneCoreIterate();
 
-			mLinphoneThreadHandler.postDelayed(new Runnable() {
+			mLinphoneThreadHandler.postDelayed(new Runnable()
+			{
 				@Override
 				public void run()
 				{
@@ -193,7 +198,8 @@ public final class LinphoneThread
 				return;
 			}
 
-			mLinphoneThreadHandler.post(new Runnable() {
+			mLinphoneThreadHandler.post(new Runnable()
+			{
 				@Override
 				public void run()
 				{
@@ -209,7 +215,8 @@ public final class LinphoneThread
 				return;
 			}
 
-			mLinphoneThreadHandler.post(new Runnable() {
+			mLinphoneThreadHandler.post(new Runnable()
+			{
 				@Override
 				public void run()
 				{
@@ -235,7 +242,8 @@ public final class LinphoneThread
 				return;
 			}
 
-			mLinphoneThreadHandler.post(new Runnable() {
+			mLinphoneThreadHandler.post(new Runnable()
+			{
 				@Override
 				public void run()
 				{
@@ -251,7 +259,8 @@ public final class LinphoneThread
 				return;
 			}
 
-			mLinphoneThreadHandler.post(new Runnable() {
+			mLinphoneThreadHandler.post(new Runnable()
+			{
 				@Override
 				public void run()
 				{
@@ -267,7 +276,8 @@ public final class LinphoneThread
 				return;
 			}
 
-			mLinphoneThreadHandler.post(new Runnable() {
+			mLinphoneThreadHandler.post(new Runnable()
+			{
 				@Override
 				public void run()
 				{
@@ -283,7 +293,8 @@ public final class LinphoneThread
 				return;
 			}
 
-			mLinphoneThreadHandler.post(new Runnable() {
+			mLinphoneThreadHandler.post(new Runnable()
+			{
 				@Override
 				public void run()
 				{
@@ -299,7 +310,8 @@ public final class LinphoneThread
 				return;
 			}
 
-			mLinphoneThreadHandler.post(new Runnable() {
+			mLinphoneThreadHandler.post(new Runnable()
+			{
 				@Override
 				public void run()
 				{
@@ -315,7 +327,8 @@ public final class LinphoneThread
 				return;
 			}
 
-			mLinphoneThreadHandler.post(new Runnable() {
+			mLinphoneThreadHandler.post(new Runnable()
+			{
 				@Override
 				public void run()
 				{
@@ -338,7 +351,8 @@ public final class LinphoneThread
 
 			mVolumes = volumes;
 
-			mLinphoneThreadHandler.post(new Runnable() {
+			mLinphoneThreadHandler.post(new Runnable()
+			{
 				@Override
 				public void run()
 				{
@@ -438,7 +452,8 @@ public final class LinphoneThread
 
 			final String identity = cfg.getIdentity();
 
-			mMainThreadHandler.post(new Runnable() {
+			mMainThreadHandler.post(new Runnable()
+			{
 				@Override
 				public void run()
 				{
@@ -491,7 +506,8 @@ public final class LinphoneThread
 			final LinphoneCall.State fixedState = fixLinphoneCallState(state);
 			Lg.i("callState changed state=", fixedState, " number=", new CallLogger(call), " message=", message);
 
-			mMainThreadHandler.post(new Runnable() {
+			mMainThreadHandler.post(new Runnable()
+			{
 				@Override
 				public void run()
 				{
@@ -580,7 +596,8 @@ public final class LinphoneThread
 					" jitter=", jitter, " loss=", packetLoss,
 					" latePackets=", latePackets, " roundTripDelay=", roundTripDelay);
 
-			mMainThreadHandler.post(new Runnable() {
+			mMainThreadHandler.post(new Runnable()
+			{
 				@Override
 				public void run()
 				{
@@ -610,7 +627,8 @@ public final class LinphoneThread
 				Lg.e("unencrypted call: number=", new CallLogger(call), " with UserAgent ", call.getRemoteUserAgent());
 			}
 
-			mMainThreadHandler.post(new Runnable() {
+			mMainThreadHandler.post(new Runnable()
+			{
 				@Override
 				public void run()
 				{
@@ -678,21 +696,21 @@ public final class LinphoneThread
 
 		@Override
 		public void fileTransferProgressIndication(final LinphoneCore lc, final LinphoneChatMessage message, final LinphoneContent content,
-				final int progress)
+		                                           final int progress)
 		{
 			Lg.w("fileTransferProgressIndication: message=", message, " progress=", progress);
 		}
 
 		@Override
 		public void fileTransferRecv(final LinphoneCore lc, final LinphoneChatMessage message, final LinphoneContent content, final byte[] buffer,
-				final int size)
+		                             final int size)
 		{
 			Lg.w("fileTransferRecv: message=", message, " size=", size);
 		}
 
 		@Override
 		public int fileTransferSend(final LinphoneCore lc, final LinphoneChatMessage message, final LinphoneContent content, final ByteBuffer buffer,
-				final int size)
+		                            final int size)
 		{
 			Lg.w("fileTransferSend: message=", message, " size=", size);
 			return 0;

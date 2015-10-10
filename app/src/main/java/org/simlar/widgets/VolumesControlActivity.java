@@ -85,7 +85,8 @@ public final class VolumesControlActivity extends Activity
 		mSeekBarMicrophone = (SeekBar) findViewById(R.id.seekBarMicrophone);
 		mCheckBoxEchoLimiter = (CheckBox) findViewById(R.id.checkBoxEchoLimiter);
 
-		mSeekBarSpeaker.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+		mSeekBarSpeaker.setOnSeekBarChangeListener(new OnSeekBarChangeListener()
+		{
 
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar)
@@ -110,7 +111,8 @@ public final class VolumesControlActivity extends Activity
 			}
 		});
 
-		mSeekBarMicrophone.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+		mSeekBarMicrophone.setOnSeekBarChangeListener(new OnSeekBarChangeListener()
+		{
 
 			@Override
 			public void onStopTrackingTouch(final SeekBar seekBar)
@@ -135,7 +137,8 @@ public final class VolumesControlActivity extends Activity
 			}
 		});
 
-		mCheckBoxEchoLimiter.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+		mCheckBoxEchoLimiter.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		{
 			@Override
 			public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked)
 			{

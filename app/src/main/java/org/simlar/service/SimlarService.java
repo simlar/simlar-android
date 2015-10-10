@@ -271,7 +271,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				intent.removeExtra(INTENT_EXTRA_GCM);
 			}
 
-			// make sure we have a contact name for the CallActivity
 			mSimlarIdToCall = intent.getStringExtra(INTENT_EXTRA_SIMLAR_ID);
 			intent.removeExtra(INTENT_EXTRA_SIMLAR_ID);
 			if (!Util.isNullOrEmpty(mSimlarIdToCall)) {
@@ -282,7 +281,10 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 						mSimlarCallState.updateCallStateChanged(mSimlarIdToCall, LinphoneCallState.OUTGOING_INIT, CallEndReason.NONE);
 					}
 				}
-				ContactsProvider.getNameAndPhotoId(mSimlarIdToCall, this, new ContactListener() {
+
+				// make sure we have a contact name for the CallActivity
+				ContactsProvider.getNameAndPhotoId(mSimlarIdToCall, this, new ContactListener()
+				{
 					@Override
 					public void onGetNameAndPhotoId(final String name, final String photoId)
 					{
@@ -378,7 +380,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	private void terminateChecker()
 	{
-		mHandler.postDelayed(new Runnable() {
+		mHandler.postDelayed(new Runnable()
+		{
 			@Override
 			public void run()
 			{
@@ -674,7 +677,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		final SimlarStatus status = SimlarStatus.fromRegistrationState(state);
 
 		if (mGoingDown && !status.isConnectedToSipServer()) {
-			mHandler.post(new Runnable() {
+			mHandler.post(new Runnable()
+			{
 				@Override
 				public void run()
 				{
@@ -727,7 +731,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	@Override
 	public void onCallStatsChanged(final NetworkQuality quality, final int callDuration, final String codec, final String iceState,
-			final int upload, final int download, final int jitter, final int packetLoss, final long latePackets, final int roundTripDelay)
+	                               final int upload, final int download, final int jitter, final int packetLoss, final long latePackets, final int roundTripDelay)
 	{
 		final boolean simlarCallStateChanged = mSimlarCallState.updateCallStats(quality, callDuration);
 
@@ -915,7 +919,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	public void terminate()
 	{
 		Lg.i("terminate");
-		mHandler.post(new Runnable() {
+		mHandler.post(new Runnable()
+		{
 			@Override
 			public void run()
 			{
@@ -938,7 +943,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			mLinphoneThread.unregister();
 
 			// make sure terminatePrivate is called after at least 5 seconds
-			mHandler.postDelayed(new Runnable() {
+			mHandler.postDelayed(new Runnable()
+			{
 				@Override
 				public void run()
 				{
@@ -946,7 +952,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				}
 			}, 5000);
 		} else {
-			mHandler.post(new Runnable() {
+			mHandler.post(new Runnable()
+			{
 				@Override
 				public void run()
 				{

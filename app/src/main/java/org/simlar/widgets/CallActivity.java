@@ -261,7 +261,8 @@ public final class CallActivity extends AppCompatActivity
 			return;
 		}
 
-		mCallTimer = new Runnable() {
+		mCallTimer = new Runnable()
+		{
 			@Override
 			public void run()
 			{

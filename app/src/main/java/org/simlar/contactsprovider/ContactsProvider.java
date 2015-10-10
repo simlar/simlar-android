@@ -76,7 +76,8 @@ public final class ContactsProvider
 		private final Set<FullContactsListener> mFullContactsListeners = new HashSet<>();
 		private final Map<ContactListener, String> mContactListener = new HashMap<>();
 
-		private enum State {
+		private enum State
+		{
 			UNINITIALIZED,
 			PARSING_PHONES_ADDRESS_BOOK,
 			REQUESTING_CONTACTS_STATUS_FROM_SERVER,
@@ -103,7 +104,8 @@ public final class ContactsProvider
 			}
 
 			mState = State.PARSING_PHONES_ADDRESS_BOOK;
-			new AsyncTask<Void, Void, Map<String, ContactData>>() {
+			new AsyncTask<Void, Void, Map<String, ContactData>>()
+			{
 				@Override
 				protected Map<String, ContactData> doInBackground(final Void... params)
 				{
@@ -123,8 +125,7 @@ public final class ContactsProvider
 
 		private void notifyContactListeners()
 		{
-			for (final Map.Entry<ContactListener, String> entry : mContactListener.entrySet())
-			{
+			for (final Map.Entry<ContactListener, String> entry : mContactListener.entrySet()) {
 				final ContactData cd = createContactData(entry.getValue());
 				entry.getKey().onGetNameAndPhotoId(cd.name, cd.photoId);
 			}
@@ -155,7 +156,8 @@ public final class ContactsProvider
 
 			notifyContactListeners();
 
-			new AsyncTask<String, Void, Map<String, ContactStatus>>() {
+			new AsyncTask<String, Void, Map<String, ContactStatus>>()
+			{
 				@Override
 				protected Map<String, ContactStatus> doInBackground(final String... params)
 				{
@@ -258,8 +260,13 @@ public final class ContactsProvider
 
 			final Cursor contacts = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projection, null, null,
 					null);
-			while (contacts.moveToNext())
-			{
+
+			if (contacts == null) {
+				Lg.e("contacts cursor null");
+				return result;
+			}
+
+			while (contacts.moveToNext()) {
 				final long contactId = contacts.getLong(0);
 				final String number = contacts.getString(1);
 				final String name = contacts.getString(2);
