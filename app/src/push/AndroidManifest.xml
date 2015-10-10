@@ -34,7 +34,6 @@
 
     <application
         android:allowBackup="false"
-        android:fullBackupContent="false"
         tools:ignore="UnusedAttribute">
 
         <!-- needed to not warn in alwaysOnline flavour -->

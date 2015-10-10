@@ -10,13 +10,14 @@ def getGitVersion = { ->
 }
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 22
     buildToolsVersion "23.0.1"
 
     defaultConfig {
         applicationId "org.simlar"
         minSdkVersion 9
-        targetSdkVersion 23
+        //noinspection OldTargetApi
+        targetSdkVersion 22
         versionName getGitVersion()
     }
 
@@ -41,7 +42,7 @@ android {
 
     lintOptions {
         checkAllWarnings true
-        disable 'UnusedIds', 'IconExpectedSize'
+        disable 'UnusedIds', 'IconExpectedSize', 'AllowBackup'
         warningsAsErrors true
     }
 }
@@ -49,7 +50,9 @@ android {
 dependencies {
     pushCompile 'com.google.android.gms:play-services-gcm:8.1.0'
     compile files('libs/liblinphone.jar')
-    compile 'com.android.support:appcompat-v7:23.0.1'
+    //noinspection GradleDependency
+    compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.googlecode.libphonenumber:libphonenumber:7.1.0'
-    compile 'com.android.support:support-v4:23.0.1'
+    //noinspection GradleDependency
+    compile 'com.android.support:support-v4:22.2.1'
 }
