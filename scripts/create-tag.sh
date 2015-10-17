@@ -26,13 +26,13 @@ fi
 git checkout "${BRANCH}"
 git fetch
 git fetch --tags
-git pull --rebase
+git pull --rebase origin "${BRANCH}"
 
 "${UPDATE_MANIFEST_SCRIPT}" "${ANDROID_MANIFEST}"
 
 git add "${ANDROID_MANIFEST}"
 git commit -m "[Release] Version: ${SIMLAR_VERSION}"
-git push
+git push origin "${BRANCH}":"${BRANCH}"
 
 git tag -a "${SIMLAR_VERSION}" -m "Version: ${SIMLAR_VERSION}"
 git push origin "${SIMLAR_VERSION}"
