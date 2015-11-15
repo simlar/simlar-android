@@ -41,7 +41,7 @@ android {
 
     lintOptions {
         checkAllWarnings true
-        disable 'UnusedIds', 'IconExpectedSize'
+        disable 'UnusedIds', 'IconExpectedSize', 'GoogleAppIndexingWarning'
         warningsAsErrors true
     }
 }
