@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
 
 import org.simlar.logging.Lg;
+import org.simlar.utils.Util;
 
 public class BootCompletedReceiver extends WakefulBroadcastReceiver
 {
@@ -34,6 +35,21 @@ public class BootCompletedReceiver extends WakefulBroadcastReceiver
 	public void onReceive(final Context context, final Intent intent)
 	{
 		Lg.i("onReceive");
+
+		if (context == null) {
+			Lg.e("context is null");
+			return;
+		}
+
+		if (intent == null) {
+			Lg.e("intent is null");
+			return;
+		}
+
+		if (!Util.equalString(intent.getAction(), Intent.ACTION_BOOT_COMPLETED)) {
+			Lg.e("unexpected intent action: ", intent.getAction());
+			return;
+		}
 
 		startWakefulService(context, intent.setComponent(new ComponentName(context.getPackageName(), SimlarService.class.getName())));
 	}
