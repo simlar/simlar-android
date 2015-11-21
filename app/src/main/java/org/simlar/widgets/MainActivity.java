@@ -108,14 +108,24 @@ public final class MainActivity extends AppCompatActivity
 		ContactsProvider.getContacts(this, new FullContactsListener()
 		{
 			@Override
-			public void onGetContacts(final Set<ContactDataComplete> contacts)
+			public void onGetContacts(final Set<ContactDataComplete> contacts, final ContactsProvider.Error error)
 			{
+				Lg.i("onGetContacts: error=", error);
 				mAdapter.clear();
-				if (contacts == null) {
-					mContactList.setEmptyText(getString(R.string.main_activity_contact_list_error_loading_contacts));
-				} else {
+				switch (error) {
+				case NONE:
 					mAdapter.addAllContacts(contacts);
 					mContactList.setEmptyText(getString(R.string.main_activity_contact_list_no_contacts_found));
+					break;
+				case BUG:
+					mContactList.setEmptyText(getString(R.string.main_activity_contact_list_error_loading_contacts));
+					break;
+				case NO_INTERNET_CONNECTION:
+					mContactList.setEmptyText(getString(R.string.main_activity_contact_list_error_loading_contacts_no_internet));
+					break;
+				case PERMISSION_DENIED:
+					mContactList.setEmptyText(getString(R.string.main_activity_contact_list_error_loading_contacts_permission_denied));
+					break;
 				}
 
 				GooglePlayServicesHelper.registerGcmIfNeeded(MainActivity.this);

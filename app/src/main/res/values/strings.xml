@@ -29,8 +29,10 @@
     <string name="simlar_service_on_destroy">Simlar terminated</string>
 
     <string name="main_activity_contact_list_loading_contacts">Loading contacts&#8230;</string>
-    <string name="main_activity_contact_list_error_loading_contacts">Error: Failed to load contacts. Are you online?</string>
-    <string name="main_activity_contact_list_no_contacts_found">No contacts found.</string>
+    <string name="main_activity_contact_list_no_contacts_found">No contacts found. Ask your friends to install Simlar too.</string>
+    <string name="main_activity_contact_list_error_loading_contacts">Error: Failed to load contacts.</string>
+    <string name="main_activity_contact_list_error_loading_contacts_no_internet">Failed to connect to the server. Check your internet connection.</string>
+    <string name="main_activity_contact_list_error_loading_contacts_permission_denied">Permission to read contacts denied. Grant this permission.</string>
     <string name="main_activity_menu_reload_contacts">Reload contacts</string>
     <string name="main_activity_menu_upload_logfile">Report bug</string>
     <string name="main_activity_menu_enable_debug_mode">Enable debug mode</string>
