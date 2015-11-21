@@ -28,7 +28,7 @@
     <string name="button_cancel">Cancel</string>
     <string name="simlar_service_on_destroy">Simlar terminated</string>
 
-    <string name="main_activity_contact_list_loading_contacts">Loading contacts</string>
+    <string name="main_activity_contact_list_loading_contacts">Loading contacts&#8230;</string>
     <string name="main_activity_contact_list_error_loading_contacts">Error: Failed to load contacts. Are you online?</string>
     <string name="main_activity_contact_list_no_contacts_found">No contacts found.</string>
     <string name="main_activity_menu_reload_contacts">Reload contacts</string>
