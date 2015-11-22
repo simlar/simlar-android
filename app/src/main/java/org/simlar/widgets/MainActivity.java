@@ -39,6 +39,7 @@ import org.simlar.helper.FlavourHelper;
 import org.simlar.helper.GooglePlayServicesHelper;
 import org.simlar.helper.PermissionsHelper;
 import org.simlar.helper.PreferencesHelper;
+import org.simlar.helper.RingtoneHelper;
 import org.simlar.helper.Version;
 import org.simlar.https.UploadLogFile;
 import org.simlar.logging.Lg;
@@ -170,7 +171,7 @@ public final class MainActivity extends AppCompatActivity
 			mCommunicator.startServiceAndRegister(this, MainActivity.class, null);
 		}
 
-		PermissionsHelper.requestMajorPermissions(this);
+		PermissionsHelper.requestMajorPermissions(this, PermissionsHelper.needsExternalStoragePermission(this, RingtoneHelper.getDefaultRingtone()));
 
 		if (mAdapter.isEmpty()) {
 			loadContacts();
