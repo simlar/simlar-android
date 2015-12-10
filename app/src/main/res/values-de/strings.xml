@@ -124,8 +124,7 @@
     <string name="verify_number_activity_sms_announcement">Um die Anmeldung abzuschließen, schickt Simlar im nächsten Schritt eine SMS an diese Nummer.</string>
     <string name="verify_number_activity_alert_wrong_number_text">Deine eingegebene Rufnummer wurde nicht erkannt. Kontrolliere deine Eingabe.</string>
 
-    <string name="volumes_control_activity_title">Lautstärkeregelung</string>
-    <string name="volumes_control_activity_software_echo_limiter">Echo verringern</string>
+    <string name="volumes_control_fragment_software_echo_limiter">Echo verringern</string>
 
     <string name="about_activity_title">Über Simlar</string>
     <string name="about_activity_copyright">&#169; 2013&#8211;2014 Die Simlar-Autoren\nAlle Rechte vorbehalten.</string>

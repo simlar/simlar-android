@@ -43,7 +43,7 @@ import org.simlar.service.SimlarService;
 import org.simlar.service.SimlarServiceCommunicator;
 import org.simlar.utils.Util;
 
-public final class CallActivity extends AppCompatActivity
+public final class CallActivity extends AppCompatActivity implements VolumesControlDialogFragment.Listener
 {
 	public static final String INTENT_EXTRA_SIMLAR_ID = "simlarId";
 
@@ -345,7 +345,7 @@ public final class CallActivity extends AppCompatActivity
 	@SuppressWarnings("unused")
 	public void showSoundSettingsDialog(final View view)
 	{
-		startActivity(new Intent(this, VolumesControlActivity.class));
+		(new VolumesControlDialogFragment()).show(getSupportFragmentManager(), VolumesControlDialogFragment.class.getCanonicalName());
 	}
 
 	@SuppressWarnings("unused")
@@ -408,5 +408,41 @@ public final class CallActivity extends AppCompatActivity
 	{
 		// prevent switch to MainActivity
 		moveTaskToBack(true);
+	}
+
+	@Override
+	public int getMicrophoneVolume()
+	{
+		return mCommunicator.getService().getVolumes().getProgressMicrophone();
+	}
+
+	@Override
+	public int getSpeakerVolume()
+	{
+		return mCommunicator.getService().getVolumes().getProgressSpeaker();
+	}
+
+	@Override
+	public boolean getEchoLimiter()
+	{
+		return mCommunicator.getService().getVolumes().getEchoLimiter();
+	}
+
+	@Override
+	public void onMicrophoneVolumeChanged(final int progress)
+	{
+		mCommunicator.getService().setVolumes(mCommunicator.getService().getVolumes().setProgressMicrophone(progress));
+	}
+
+	@Override
+	public void onSpeakerVolumeChanged(final int progress)
+	{
+		mCommunicator.getService().setVolumes(mCommunicator.getService().getVolumes().setProgressSpeaker(progress));
+	}
+
+	@Override
+	public void onEchoLimiterChanged(final boolean enabled)
+	{
+		mCommunicator.getService().setVolumes(mCommunicator.getService().getVolumes().toggleEchoLimiter());
 	}
 }

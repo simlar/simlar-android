@@ -92,11 +92,6 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".widgets.VolumesControlActivity"
-            android:label="@string/volumes_control_activity_title"
-            android:theme="@style/dialogTheme">
-        </activity>
-        <activity
             android:name=".widgets.ConnectionDetailsActivity"
             android:theme="@style/dialogTheme">
         </activity>
