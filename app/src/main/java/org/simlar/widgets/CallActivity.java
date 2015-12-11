@@ -351,20 +351,20 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	@SuppressWarnings("unused")
 	public void toggleMicrophoneMuted(final View view)
 	{
-		mCommunicator.getService().setVolumes(mCommunicator.getService().getVolumes().toggleMicrophoneMuted());
+		mCommunicator.getService().toggleMicrophoneMuted();
 		setButtonMicrophoneMute();
 	}
 
 	@SuppressWarnings("unused")
 	public void toggleSpeakerMuted(final View view)
 	{
-		mCommunicator.getService().setVolumes(mCommunicator.getService().getVolumes().toggleExternalSpeaker());
+		mCommunicator.getService().toggleExternalSpeaker();
 		setButtonSpeakerMute();
 	}
 
 	private void setButtonMicrophoneMute()
 	{
-		switch (mCommunicator.getService().getVolumes().getMicrophoneStatus()) {
+		switch (mCommunicator.getService().getMicrophoneStatus()) {
 		case DISABLED:
 			mButtonMicro.setImageResource(R.drawable.micro_off_disabled);
 			mButtonMicro.setContentDescription(getString(R.string.call_activity_microphone_disabled));
@@ -383,7 +383,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 	private void setButtonSpeakerMute()
 	{
-		if (mCommunicator.getService().getVolumes().getExternalSpeaker()) {
+		if (mCommunicator.getService().getExternalSpeaker()) {
 			mButtonSpeaker.setImageResource(R.drawable.speaker_on);
 			mButtonSpeaker.setContentDescription(getString(R.string.call_activity_loudspeaker_on));
 		} else {
@@ -413,36 +413,36 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	@Override
 	public int getMicrophoneVolume()
 	{
-		return mCommunicator.getService().getVolumes().getProgressMicrophone();
+		return mCommunicator.getService().getMicrophoneVolume();
 	}
 
 	@Override
 	public int getSpeakerVolume()
 	{
-		return mCommunicator.getService().getVolumes().getProgressSpeaker();
+		return mCommunicator.getService().getSpeakerVolume();
 	}
 
 	@Override
 	public boolean getEchoLimiter()
 	{
-		return mCommunicator.getService().getVolumes().getEchoLimiter();
+		return mCommunicator.getService().getEchoLimiter();
 	}
 
 	@Override
 	public void onMicrophoneVolumeChanged(final int progress)
 	{
-		mCommunicator.getService().setVolumes(mCommunicator.getService().getVolumes().setProgressMicrophone(progress));
+		mCommunicator.getService().setMicrophoneVolume(progress);
 	}
 
 	@Override
 	public void onSpeakerVolumeChanged(final int progress)
 	{
-		mCommunicator.getService().setVolumes(mCommunicator.getService().getVolumes().setProgressSpeaker(progress));
+		mCommunicator.getService().setSpeakerVolume(progress);
 	}
 
 	@Override
 	public void onEchoLimiterChanged(final boolean enabled)
 	{
-		mCommunicator.getService().setVolumes(mCommunicator.getService().getVolumes().toggleEchoLimiter());
+		mCommunicator.getService().setEchoLimiter(enabled);
 	}
 }
