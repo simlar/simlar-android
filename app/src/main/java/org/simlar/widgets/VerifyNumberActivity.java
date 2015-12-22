@@ -63,18 +63,18 @@ public final class VerifyNumberActivity extends AppCompatActivity
 		}
 
 		@Override
-		public void onTextChanged(CharSequence s, int start, int before, int count)
+		public void onTextChanged(final CharSequence sequence, final int start, final int before, final int count)
 		{
 			VerifyNumberActivity.this.updateButtonAccept();
 		}
 
 		@Override
-		public void beforeTextChanged(CharSequence s, int start, int count, int after)
+		public void beforeTextChanged(final CharSequence sequence, final int start, final int count, final int after)
 		{
 		}
 
 		@Override
-		public void afterTextChanged(Editable s)
+		public void afterTextChanged(final Editable editable)
 		{
 		}
 	}
