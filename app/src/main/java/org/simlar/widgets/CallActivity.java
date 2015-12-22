@@ -320,7 +320,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mConnectionDetailsDialogFragment.setCallConnectionDetails(mCommunicator.getService().getCallConnectionDetails());
 	}
 
-	private void onVideoStateChanged(VideoState videoState)
+	private void onVideoStateChanged(final VideoState videoState)
 	{
 		Lg.i("onVideoStateChanged: ", videoState);
 
@@ -380,7 +380,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 					.setOnCancelListener(new DialogInterface.OnCancelListener()
 					{
 						@Override
-						public void onCancel(DialogInterface dialog)
+						public void onCancel(final DialogInterface dialog)
 						{
 							CallActivity.this.acceptVideoUpdate(false);
 						}
