@@ -119,7 +119,7 @@ final class LinphoneHandler
 			mLinphoneCore.setFirewallPolicy(FirewallPolicy.UseIce);
 
 			// Use TLS for registration with random port
-			Transports transports = new Transports();
+			final Transports transports = new Transports();
 			transports.udp = 0;
 			transports.tcp = 0;
 			transports.tls = (int) (Math.random() * (0xFFFF - 1024)) + 1024;
@@ -206,7 +206,7 @@ final class LinphoneHandler
 
 			// create linphone proxy config
 			mLinphoneCore.clearProxyConfigs();
-			LinphoneProxyConfig proxyCfg = mLinphoneCore.createProxyConfig(
+			final LinphoneProxyConfig proxyCfg = mLinphoneCore.createProxyConfig(
 					"sip:" + mySimlarId + "@" + ServerSettings.DOMAIN, "sip:" + ServerSettings.DOMAIN, null, true);
 			proxyCfg.setExpires(60); // connection times out after 1 minute. This overrides kamailio setting which is 3600 (1 hour).
 			proxyCfg.enablePublish(false);
