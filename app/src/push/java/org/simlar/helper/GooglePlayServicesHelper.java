@@ -78,7 +78,7 @@ public final class GooglePlayServicesHelper
 	{
 		new AsyncTask<Void, Void, String>() {
 			@Override
-			protected String doInBackground(Void... params)
+			protected String doInBackground(final Void... params)
 			{
 				try {
 					final GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(context);
