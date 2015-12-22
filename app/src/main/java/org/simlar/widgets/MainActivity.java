@@ -91,7 +91,7 @@ public final class MainActivity extends AppCompatActivity
 		ContactsProvider.getContacts(this, new FullContactsListener()
 		{
 			@Override
-			public void onGetContacts(Set<ContactDataComplete> contacts)
+			public void onGetContacts(final Set<ContactDataComplete> contacts)
 			{
 				mAdapter.clear();
 				if (contacts == null) {
