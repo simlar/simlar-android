@@ -50,7 +50,7 @@ final class VibratorManager
 		}
 
 		@Override
-		public void onReceive(Context context, Intent intent)
+		public void onReceive(final Context context, final Intent intent)
 		{
 			VibratorManager.this.onRingerModeChanged();
 		}
@@ -113,7 +113,7 @@ final class VibratorManager
 
 		mHasOnGoingAlarm = true;
 
-		IntentFilter filter = new IntentFilter();
+		final IntentFilter filter = new IntentFilter();
 		filter.addAction(AudioManager.RINGER_MODE_CHANGED_ACTION);
 		mContext.registerReceiver(mRingerModeReceiver, filter);
 
