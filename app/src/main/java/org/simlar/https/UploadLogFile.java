@@ -194,7 +194,7 @@ public final class UploadLogFile
 		new AsyncTask<File, Void, PostResult>()
 		{
 			@Override
-			protected PostResult doInBackground(File... logFiles)
+			protected PostResult doInBackground(final File... logFiles)
 			{
 				final File logFile = logFiles[0];
 				deleteFile(logFile);
@@ -223,7 +223,7 @@ public final class UploadLogFile
 			}
 
 			@Override
-			protected void onPostExecute(PostResult result)
+			protected void onPostExecute(final PostResult result)
 			{
 				mProgressDialog.dismiss();
 				if (!result.success) {
