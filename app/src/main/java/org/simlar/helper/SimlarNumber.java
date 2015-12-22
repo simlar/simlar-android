@@ -139,7 +139,7 @@ public final class SimlarNumber
 		return Long.toString(mPhoneNumber.getNationalNumber());
 	}
 
-	public static void setDefaultRegion(int countryCallingCode)
+	public static void setDefaultRegion(final int countryCallingCode)
 	{
 		mDefaultRegion = PhoneNumberUtil.getInstance().getRegionCodeForCountryCode(countryCallingCode);
 		Lg.i("for number parsing now using default region: ", mDefaultRegion);
