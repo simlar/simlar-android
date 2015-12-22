@@ -116,7 +116,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 
 		@Override
-		public void onReceive(Context context, Intent intent)
+		public void onReceive(final Context context, final Intent intent)
 		{
 			SimlarService.this.checkNetworkConnectivityAndRefreshRegisters();
 		}
@@ -129,7 +129,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 
 		@Override
-		public void onReceive(Context context, Intent intent)
+		public void onReceive(final Context context, final Intent intent)
 		{
 			SimlarService.this.keepAwake();
 		}
@@ -330,7 +330,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		startForeground(NOTIFICATION_ID, createNotification());
 
-		IntentFilter intentFilter = new IntentFilter();
+		final IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 		registerReceiver(mNetworkChangeReceiver, intentFilter);
 
@@ -848,7 +848,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		ContactsProvider.getNameAndPhotoId(number, this, new ContactListener()
 		{
 			@Override
-			public void onGetNameAndPhotoId(String name, String photoId)
+			public void onGetNameAndPhotoId(final String name, final String photoId)
 			{
 				mSimlarCallState.updateContactNameAndImage(name, photoId);
 
