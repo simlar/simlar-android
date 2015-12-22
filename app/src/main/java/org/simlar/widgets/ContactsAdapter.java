@@ -137,7 +137,7 @@ final class ContactsAdapter extends ArrayAdapter<ContactDataComplete>
 		return rowView;
 	}
 
-	public void addAllContacts(Set<ContactDataComplete> contacts)
+	public void addAllContacts(final Set<ContactDataComplete> contacts)
 	{
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			super.addAll(contacts);
