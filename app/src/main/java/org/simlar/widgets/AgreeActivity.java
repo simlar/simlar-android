@@ -34,7 +34,7 @@ public class AgreeActivity extends AppCompatActivity
 {
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
+	protected void onCreate(final Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_agree);
@@ -45,7 +45,7 @@ public class AgreeActivity extends AppCompatActivity
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
+	public boolean onCreateOptionsMenu(final Menu menu)
 	{
 		return true;
 	}
