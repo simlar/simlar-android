@@ -68,7 +68,7 @@ public final class RingingActivity extends AppCompatActivity
 	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
+	protected void onCreate(final Bundle savedInstanceState)
 	{
 		Lg.i("onCreate");
 		super.onCreate(savedInstanceState);
@@ -122,18 +122,18 @@ public final class RingingActivity extends AppCompatActivity
 				circleAnimation.setAnimationListener(new Animation.AnimationListener()
 				{
 					@Override
-					public void onAnimationStart(Animation animation)
+					public void onAnimationStart(final Animation animation)
 					{
 					}
 
 					@Override
-					public void onAnimationEnd(Animation animation)
+					public void onAnimationEnd(final Animation animation)
 					{
 						RingingActivity.this.animateCircles();
 					}
 
 					@Override
-					public void onAnimationRepeat(Animation animation)
+					public void onAnimationRepeat(final Animation animation)
 					{
 					}
 				});
