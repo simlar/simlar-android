@@ -20,7 +20,7 @@
 
 package org.simlar.helper;
 
-public class ServerSettings
+public final class ServerSettings
 {
 	public static final String DOMAIN = "sip.simlar.org";
 

@@ -22,7 +22,7 @@ package org.simlar.helper;
 
 import org.simlar.BuildConfig;
 
-public class FlavourHelper
+public final class FlavourHelper
 {
 	@SuppressWarnings("SameReturnValue")
 	public static boolean isGcmEnabled()
