@@ -348,6 +348,42 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		(new VolumesControlDialogFragment()).show(getSupportFragmentManager(), VolumesControlDialogFragment.class.getCanonicalName());
 	}
 
+	@Override
+	public int getMicrophoneVolume()
+	{
+		return mCommunicator.getService().getMicrophoneVolume();
+	}
+
+	@Override
+	public int getSpeakerVolume()
+	{
+		return mCommunicator.getService().getSpeakerVolume();
+	}
+
+	@Override
+	public boolean getEchoLimiter()
+	{
+		return mCommunicator.getService().getEchoLimiter();
+	}
+
+	@Override
+	public void onMicrophoneVolumeChanged(final int progress)
+	{
+		mCommunicator.getService().setMicrophoneVolume(progress);
+	}
+
+	@Override
+	public void onSpeakerVolumeChanged(final int progress)
+	{
+		mCommunicator.getService().setSpeakerVolume(progress);
+	}
+
+	@Override
+	public void onEchoLimiterChanged(final boolean enabled)
+	{
+		mCommunicator.getService().setEchoLimiter(enabled);
+	}
+
 	@SuppressWarnings("unused")
 	public void toggleMicrophoneMuted(final View view)
 	{
@@ -408,41 +444,5 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	{
 		// prevent switch to MainActivity
 		moveTaskToBack(true);
-	}
-
-	@Override
-	public int getMicrophoneVolume()
-	{
-		return mCommunicator.getService().getMicrophoneVolume();
-	}
-
-	@Override
-	public int getSpeakerVolume()
-	{
-		return mCommunicator.getService().getSpeakerVolume();
-	}
-
-	@Override
-	public boolean getEchoLimiter()
-	{
-		return mCommunicator.getService().getEchoLimiter();
-	}
-
-	@Override
-	public void onMicrophoneVolumeChanged(final int progress)
-	{
-		mCommunicator.getService().setMicrophoneVolume(progress);
-	}
-
-	@Override
-	public void onSpeakerVolumeChanged(final int progress)
-	{
-		mCommunicator.getService().setSpeakerVolume(progress);
-	}
-
-	@Override
-	public void onEchoLimiterChanged(final boolean enabled)
-	{
-		mCommunicator.getService().setEchoLimiter(enabled);
 	}
 }
