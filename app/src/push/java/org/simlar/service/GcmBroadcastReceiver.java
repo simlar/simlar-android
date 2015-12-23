@@ -31,6 +31,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.simlar.logging.Lg;
 
+@SuppressWarnings("deprecation")
 public final class GcmBroadcastReceiver extends WakefulBroadcastReceiver
 {
 	private static final String COLLAPSE_KEY = "collapse_key";
