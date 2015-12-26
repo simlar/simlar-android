@@ -37,7 +37,7 @@
         <TextView
             android:id="@+id/textViewLabelQuality"
             style="@style/connectionDetailsActivityTableLabel"
-            android:text="@string/connection_details_activity_label_quality"/>
+            android:text="@string/connection_details_dialog_fragment_label_quality"/>
 
         <TextView
             android:id="@+id/textViewQuality"
@@ -46,7 +46,7 @@
         <TextView
             android:id="@+id/textViewLabelCodec"
             style="@style/connectionDetailsActivityTableLabel"
-            android:text="@string/connection_details_activity_label_codec"/>
+            android:text="@string/connection_details_dialog_fragment_label_codec"/>
 
         <TextView
             android:id="@+id/textViewCodec"
@@ -61,7 +61,7 @@
         <TextView
             android:id="@+id/textViewLabelDownload"
             style="@style/connectionDetailsActivityTableLabel"
-            android:text="@string/connection_details_activity_label_download"/>
+            android:text="@string/connection_details_dialog_fragment_label_download"/>
 
         <TextView
             android:id="@+id/textViewDownload"
@@ -70,7 +70,7 @@
         <TextView
             android:id="@+id/textViewLabelPacketLoss"
             style="@style/connectionDetailsActivityTableLabel"
-            android:text="@string/connection_details_activity_label_packet_loss"/>
+            android:text="@string/connection_details_dialog_fragment_label_packet_loss"/>
 
         <TextView
             android:id="@+id/textViewPacketLoss"
@@ -85,7 +85,7 @@
         <TextView
             android:id="@+id/textViewLabelUpload"
             style="@style/connectionDetailsActivityTableLabel"
-            android:text="@string/connection_details_activity_label_upload"/>
+            android:text="@string/connection_details_dialog_fragment_label_upload"/>
 
         <TextView
             android:id="@+id/textViewUpload"
@@ -94,7 +94,7 @@
         <TextView
             android:id="@+id/textViewLabelLatePackets"
             style="@style/connectionDetailsActivityTableLabel"
-            android:text="@string/connection_details_activity_label_late_packets"/>
+            android:text="@string/connection_details_dialog_fragment_label_late_packets"/>
 
         <TextView
             android:id="@+id/textViewLatePackets"
@@ -110,7 +110,7 @@
         <TextView
             android:id="@+id/textViewLabelRoundTripDelay"
             style="@style/connectionDetailsActivityTableLabel"
-            android:text="@string/connection_details_activity_label_round_trip_delay"/>
+            android:text="@string/connection_details_dialog_fragment_label_round_trip_delay"/>
 
         <TextView
             android:id="@+id/textViewRoundTripDelay"
@@ -119,7 +119,7 @@
         <TextView
             android:id="@+id/textViewLabelJitter"
             style="@style/connectionDetailsActivityTableLabel"
-            android:text="@string/connection_details_activity_label_jitter"/>
+            android:text="@string/connection_details_dialog_fragment_label_jitter"/>
 
         <TextView
             android:id="@+id/textViewJitter"
@@ -136,7 +136,7 @@
         <TextView
             android:id="@+id/textViewLabelIceState"
             style="@style/connectionDetailsActivityTable"
-            android:text="@string/connection_details_activity_label_ice_state"/>
+            android:text="@string/connection_details_dialog_fragment_label_ice_state"/>
 
         <TextView
             android:id="@+id/textViewIceState"
