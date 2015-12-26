@@ -168,9 +168,4 @@ public final class CallConnectionDetails
 	{
 		return String.valueOf(mRoundTripDelay);
 	}
-
-	public boolean isEndedCall()
-	{
-		return mEndedCall;
-	}
 }

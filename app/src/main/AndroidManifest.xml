@@ -92,10 +92,6 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".widgets.ConnectionDetailsActivity"
-            android:theme="@style/dialogTheme">
-        </activity>
-        <activity
             android:name=".widgets.AboutActivity"
             android:label="@string/about_activity_title"
             android:theme="@style/dialogTheme">
