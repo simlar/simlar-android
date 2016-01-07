@@ -79,17 +79,17 @@
         <item name="android:textSize">18sp</item>
     </style>
 
-    <!-- ConnectionDetailsActivity  -->
-    <style name="connectionDetailsActivityTable" parent="@android:style/TextAppearance.Small">
+    <!-- ConnectionDetailsDialogFragment  -->
+    <style name="connectionDetailsDialogFragmentTable" parent="@android:style/TextAppearance.Small">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
 
-    <style name="connectionDetailsActivityTableLabel" parent="connectionDetailsActivityTable">
+    <style name="connectionDetailsDialogFragmentTableLabel" parent="connectionDetailsDialogFragmentTable">
         <item name="android:gravity">right</item>
     </style>
 
-    <style name="connectionDetailsActivityTableValue" parent="connectionDetailsActivityTable">
+    <style name="connectionDetailsDialogFragmentTableValue" parent="connectionDetailsDialogFragmentTable">
         <item name="android:layout_marginLeft">8dp</item>
         <item name="android:textStyle">bold</item>
     </style>
