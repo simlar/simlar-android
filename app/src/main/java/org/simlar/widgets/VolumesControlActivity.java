@@ -89,17 +89,17 @@ public final class VolumesControlActivity extends Activity
 		{
 
 			@Override
-			public void onStopTrackingTouch(SeekBar seekBar)
+			public void onStopTrackingTouch(final SeekBar seekBar)
 			{
 			}
 
 			@Override
-			public void onStartTrackingTouch(SeekBar seekBar)
+			public void onStartTrackingTouch(final SeekBar seekBar)
 			{
 			}
 
 			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+			public void onProgressChanged(final SeekBar seekBar, final int progress, final boolean fromUser)
 			{
 				Lg.i("seekBarSpeaker changed: ", progress);
 				if (mVolumes == null) {

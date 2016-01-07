@@ -78,7 +78,7 @@ final class SoundEffectManager
 		private MediaPlayer initializeMediaPlayer()
 		{
 			try {
-				MediaPlayer mediaPlayer = new MediaPlayer();
+				final MediaPlayer mediaPlayer = new MediaPlayer();
 				switch (mType) {
 				case RINGTONE:
 					mediaPlayer.setAudioStreamType(AudioManager.STREAM_RING);
@@ -188,7 +188,7 @@ final class SoundEffectManager
 		}
 
 		@Override
-		public boolean onError(MediaPlayer mp, int what, int extra)
+		public boolean onError(final MediaPlayer mp, final int what, final int extra)
 		{
 			Lg.e("[", mType, "] MediaPlayer Error what=", what, " extra=", extra);
 			mHandler.removeCallbacksAndMessages(null);

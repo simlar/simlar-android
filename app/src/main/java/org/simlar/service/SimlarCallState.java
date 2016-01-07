@@ -316,7 +316,7 @@ public final class SimlarCallState
 		mCallEndReason = CallEndReason.SERVER_CONNECTION_TIMEOUT;
 	}
 
-	public String createNotificationText(final Context context, boolean goingDown)
+	public String createNotificationText(final Context context, final boolean goingDown)
 	{
 		return mLinphoneCallState.createNotificationText(context, getContactName(), goingDown);
 	}

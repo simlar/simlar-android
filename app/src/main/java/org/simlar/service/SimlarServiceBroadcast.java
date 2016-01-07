@@ -51,7 +51,7 @@ public final class SimlarServiceBroadcast implements Serializable
 
 	private void send(final Context context)
 	{
-		Intent intent = new Intent(BROADCAST_NAME);
+		final Intent intent = new Intent(BROADCAST_NAME);
 		intent.putExtra(INTENT_EXTRA, this);
 		LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 	}

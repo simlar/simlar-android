@@ -110,7 +110,7 @@ public enum LinphoneCallState
 		return this == LinphoneCallState.CONNECTED;
 	}
 
-	public String createNotificationText(final Context context, final String simlarId, boolean goingDown)
+	public String createNotificationText(final Context context, final String simlarId, final boolean goingDown)
 	{
 		if (Util.isNullOrEmpty(simlarId)) {
 			return context.getString(R.string.linphone_call_state_notification_initializing);

@@ -490,7 +490,7 @@ public final class ContactsProvider
 			return MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(contactPhotoId));
 		} catch (final FileNotFoundException e) {
 			Lg.ex(e, "getContactPhotoBitmap FileNotFoundException");
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			Lg.ex(e, "getContactPhotoBitmap IOException");
 		}
 

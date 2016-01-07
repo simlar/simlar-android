@@ -41,6 +41,7 @@ import org.simlar.https.StorePushId;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
+@SuppressWarnings("deprecation")
 public final class GooglePlayServicesHelper
 {
 	private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -78,7 +79,7 @@ public final class GooglePlayServicesHelper
 	{
 		new AsyncTask<Void, Void, String>() {
 			@Override
-			protected String doInBackground(Void... params)
+			protected String doInBackground(final Void... params)
 			{
 				try {
 					final GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(context);

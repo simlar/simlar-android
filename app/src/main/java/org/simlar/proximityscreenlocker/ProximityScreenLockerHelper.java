@@ -24,7 +24,7 @@ import android.app.Activity;
 
 import org.simlar.logging.Lg;
 
-public class ProximityScreenLockerHelper
+public final class ProximityScreenLockerHelper
 {
 	private ProximityScreenLockerHelper()
 	{
