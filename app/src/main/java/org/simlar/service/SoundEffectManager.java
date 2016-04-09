@@ -88,7 +88,13 @@ final class SoundEffectManager
 				switch (mType) {
 				case RINGTONE:
 					mediaPlayer.setAudioStreamType(AudioManager.STREAM_RING);
-					mediaPlayer.setDataSource(mContext, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE));
+					// in case we do have permissions to read the ringtone
+					try {
+						mediaPlayer.setDataSource(mContext, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE));
+					} catch (final IOException e) {
+						Lg.w("[", mType, "] falling back to provided ringtone");
+						mediaPlayer.setDataSource(mContext, createSoundUri(R.raw.ringtone));
+					}
 					mediaPlayer.setLooping(false);
 					return mediaPlayer;
 				case WAITING_FOR_CONTACT:
