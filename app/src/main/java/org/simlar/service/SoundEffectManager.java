@@ -25,7 +25,6 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -33,6 +32,7 @@ import android.os.SystemClock;
 import android.support.annotation.RawRes;
 
 import org.simlar.R;
+import org.simlar.helper.RingtoneHelper;
 import org.simlar.logging.Lg;
 
 import java.io.IOException;
@@ -90,7 +90,7 @@ final class SoundEffectManager
 					mediaPlayer.setAudioStreamType(AudioManager.STREAM_RING);
 					// in case we do have permissions to read the ringtone
 					try {
-						mediaPlayer.setDataSource(mContext, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE));
+						mediaPlayer.setDataSource(mContext, RingtoneHelper.getDefaultRingtone());
 					} catch (final IOException e) {
 						Lg.w("[", mType, "] falling back to provided ringtone");
 						mediaPlayer.setDataSource(mContext, createSoundUri(R.raw.ringtone));
