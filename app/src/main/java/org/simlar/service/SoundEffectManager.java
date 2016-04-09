@@ -30,6 +30,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.annotation.RawRes;
 
 import org.simlar.R;
 import org.simlar.logging.Lg;
@@ -75,6 +76,11 @@ final class SoundEffectManager
 			mMediaPlayer.setOnErrorListener(this);
 		}
 
+		private Uri createSoundUri(@RawRes final int sound)
+		{
+			return Uri.parse("android.resource://" + mContext.getPackageName() + "/" + sound);
+		}
+
 		private MediaPlayer initializeMediaPlayer()
 		{
 			try {
@@ -87,19 +93,17 @@ final class SoundEffectManager
 					return mediaPlayer;
 				case WAITING_FOR_CONTACT:
 					mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-					mediaPlayer.setDataSource(mContext,
-							Uri.parse("android.resource://" + mContext.getPackageName() + "/" + R.raw.waiting_for_contact));
+					mediaPlayer.setDataSource(mContext, createSoundUri(R.raw.waiting_for_contact));
 					mediaPlayer.setLooping(true);
 					return mediaPlayer;
 				case ENCRYPTION_HANDSHAKE:
 					mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-					mediaPlayer.setDataSource(mContext,
-							Uri.parse("android.resource://" + mContext.getPackageName() + "/" + R.raw.encryption_handshake));
+					mediaPlayer.setDataSource(mContext, createSoundUri(R.raw.encryption_handshake));
 					mediaPlayer.setLooping(true);
 					return mediaPlayer;
 				case CALL_INTERRUPTION:
 					mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-					mediaPlayer.setDataSource(mContext, Uri.parse("android.resource://" + mContext.getPackageName() + "/" + R.raw.call_interruption));
+					mediaPlayer.setDataSource(mContext, createSoundUri(R.raw.call_interruption));
 					mediaPlayer.setLooping(true);
 					return mediaPlayer;
 				default:
