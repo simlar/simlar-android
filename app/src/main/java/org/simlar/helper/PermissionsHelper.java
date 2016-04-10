@@ -28,6 +28,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -53,7 +54,7 @@ public final class PermissionsHelper
 		MICROPHONE(Manifest.permission.RECORD_AUDIO, true, R.string.permission_explain_text_record_audio),
 		PHONE(Manifest.permission.READ_PHONE_STATE, true, R.string.permission_explain_text_phone_state),
 		SMS(Manifest.permission.READ_SMS, false, R.string.permission_explain_text_sms),
-		STORAGE(Manifest.permission.READ_EXTERNAL_STORAGE, false, R.string.permission_explain_text_storage);
+		STORAGE(storagePermission(), false, R.string.permission_explain_text_storage);
 
 		private final String mPermission;
 		private final boolean mMajor;
@@ -64,6 +65,12 @@ public final class PermissionsHelper
 			mPermission = permission;
 			mMajor = major;
 			mRationalMessageId = rationalMessageId;
+		}
+
+		@SuppressLint("InlinedApi")
+		private static String storagePermission()
+		{
+			return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN ? Manifest.permission.READ_EXTERNAL_STORAGE : "";
 		}
 
 		String getPermission()
