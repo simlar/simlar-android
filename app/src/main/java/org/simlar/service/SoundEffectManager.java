@@ -183,7 +183,7 @@ final class SoundEffectManager
 				final long now = SystemClock.elapsedRealtime();
 				Lg.i("[", mType, "] play time=", now - mPlayStart,
 						"ms delay=", mPlayRequestTime - mPlayStart,
-						"ms sum=", Long.valueOf(now - mPlayRequestTime) + "ms");
+						"ms sum=", now - mPlayRequestTime + "ms");
 			}
 		}
 
