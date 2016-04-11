@@ -39,6 +39,7 @@ import org.linphone.core.LinphoneCore.RemoteProvisioningState;
 import org.linphone.core.LinphoneCoreListener;
 import org.linphone.core.LinphoneEvent;
 import org.linphone.core.LinphoneFriend;
+import org.linphone.core.LinphoneFriendList;
 import org.linphone.core.LinphoneInfoMessage;
 import org.linphone.core.LinphoneProxyConfig;
 import org.linphone.core.PayloadType;
@@ -726,6 +727,18 @@ public final class LinphoneThread
 		public void uploadStateChanged(final LinphoneCore lc, final LogCollectionUploadState state, final String info)
 		{
 			Lg.w("uploadStateChanged: state=", state, " info=", info);
+		}
+
+		@Override
+		public void friendListCreated(final LinphoneCore lc, final LinphoneFriendList linphoneFriendList)
+		{
+			Lg.w("friendListCreated: linphoneFriendList=", linphoneFriendList);
+		}
+
+		@Override
+		public void friendListRemoved(final LinphoneCore lc, final LinphoneFriendList linphoneFriendList)
+		{
+			Lg.w("friendListRemoved: linphoneFriendList=", linphoneFriendList);
 		}
 	}
 

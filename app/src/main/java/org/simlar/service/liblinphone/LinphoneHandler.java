@@ -269,7 +269,7 @@ final class LinphoneHandler
 		}
 
 		Lg.i("Picking up call: ", new Lg.Anonymizer(currentCall.getRemoteAddress().asStringUriOnly()));
-		final LinphoneCallParams params = mLinphoneCore.createDefaultCallParameters();
+		final LinphoneCallParams params = mLinphoneCore.createCallParams(null);
 		try {
 			mLinphoneCore.acceptCallWithParams(currentCall, params);
 		} catch (final LinphoneCoreException e) {
