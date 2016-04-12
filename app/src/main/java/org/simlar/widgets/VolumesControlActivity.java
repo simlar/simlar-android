@@ -164,21 +164,38 @@ public final class VolumesControlActivity extends Activity
 	}
 
 	@Override
-	protected void onResume()
+	public void onStart()
 	{
-		Lg.i("onResume");
-		super.onResume();
+		super.onStart();
+		Lg.i("onStart");
+
 		if (!mCommunicator.register(this, CallActivity.class)) {
 			finish();
 		}
 	}
 
 	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		Lg.i("onResume");
+	}
+
+	@Override
 	protected void onPause()
 	{
 		Lg.i("onPause");
-		mCommunicator.unregister();
 		super.onPause();
+	}
+
+	@Override
+	protected void onStop()
+	{
+		Lg.i("onStop");
+
+		mCommunicator.unregister();
+
+		super.onStop();
 	}
 
 	private void setVolumes()

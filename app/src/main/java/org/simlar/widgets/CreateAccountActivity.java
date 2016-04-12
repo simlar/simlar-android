@@ -198,8 +198,9 @@ public final class CreateAccountActivity extends Activity
 	@Override
 	protected void onCreate(final Bundle savedInstanceState)
 	{
-		Lg.i("onCreate");
 		super.onCreate(savedInstanceState);
+		Lg.i("onCreate");
+
 		setContentView(R.layout.activity_create_account);
 
 		Util.setFinishOnTouchOutsideCompatible(this, false);
@@ -258,10 +259,10 @@ public final class CreateAccountActivity extends Activity
 	}
 
 	@Override
-	protected void onResume()
+	public void onStart()
 	{
-		Lg.i("onResume");
-		super.onResume();
+		super.onStart();
+		Lg.i("onStart");
 
 		if (mProgressFirstLogIn.getVisibility() == View.VISIBLE) {
 			mCommunicator.register(this, VerifyNumberActivity.class);
@@ -269,14 +270,29 @@ public final class CreateAccountActivity extends Activity
 	}
 
 	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		Lg.i("onResume");
+	}
+
+	@Override
 	protected void onPause()
 	{
 		Lg.i("onPause");
+		super.onPause();
+	}
+
+	@Override
+	protected void onStop()
+	{
+		Lg.i("onStop");
 
 		if (mProgressFirstLogIn.getVisibility() == View.VISIBLE) {
 			mCommunicator.unregister();
 		}
-		super.onPause();
+
+		super.onStop();
 	}
 
 	@Override

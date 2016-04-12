@@ -67,8 +67,8 @@ public final class MainActivity extends AppCompatActivity
 	@Override
 	protected void onCreate(final Bundle savedInstanceState)
 	{
-		Lg.i("onCreate ", savedInstanceState);
 		super.onCreate(savedInstanceState);
+		Lg.i("onCreate ", savedInstanceState);
 
 		setContentView(R.layout.activity_main);
 
@@ -113,10 +113,10 @@ public final class MainActivity extends AppCompatActivity
 	}
 
 	@Override
-	protected void onResume()
+	public void onStart()
 	{
-		Lg.i("onResume");
-		super.onResume();
+		super.onStart();
+		Lg.i("onStart");
 
 		if (FlavourHelper.isGcmEnabled() && SimlarService.isRunning()) {
 			final Class<? extends Activity> activity = SimlarService.getActivity();
@@ -149,15 +149,29 @@ public final class MainActivity extends AppCompatActivity
 	}
 
 	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		Lg.i("onResume");
+	}
+
+	@Override
 	protected void onPause()
 	{
 		Lg.i("onPause");
+		super.onPause();
+	}
+
+	@Override
+	protected void onStop()
+	{
+		Lg.i("onStop");
 
 		if (mCommunicator != null) {
 			mCommunicator.unregister();
 		}
 
-		super.onPause();
+		super.onStop();
 	}
 
 	@Override
