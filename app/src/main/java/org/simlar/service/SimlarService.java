@@ -1037,7 +1037,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		return mSimlarCallState;
 	}
 
-	public Volumes getVolumes()
+	private Volumes getVolumes()
 	{
 		if (mLinphoneThread == null) {
 			return new Volumes();
@@ -1046,13 +1046,67 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		return mLinphoneThread.getVolumes();
 	}
 
-	public void setVolumes(final Volumes volumes)
+	public int getMicrophoneVolume()
+	{
+		return getVolumes().getProgressMicrophone();
+	}
+
+	public int getSpeakerVolume()
+	{
+		return getVolumes().getProgressSpeaker();
+	}
+
+	public boolean getEchoLimiter()
+	{
+		return getVolumes().getEchoLimiter();
+	}
+
+	public boolean getExternalSpeaker()
+	{
+		return getVolumes().getExternalSpeaker();
+	}
+
+	public MicrophoneStatus getMicrophoneStatus()
+	{
+		return getVolumes().getMicrophoneStatus();
+	}
+
+	private void setVolumes(final Volumes volumes)
 	{
 		if (mLinphoneThread == null) {
 			return;
 		}
 
 		mLinphoneThread.setVolumes(volumes);
+	}
+
+	public void setMicrophoneVolume(final int progress)
+	{
+		setVolumes(getVolumes().setProgressMicrophone(progress));
+	}
+
+	public void setSpeakerVolume(final int progress)
+	{
+		setVolumes(getVolumes().setProgressSpeaker(progress));
+	}
+
+	public void setEchoLimiter(final boolean enabled)
+	{
+		final Volumes volumes = getVolumes();
+
+		if (volumes.getEchoLimiter() != enabled) {
+			setVolumes(volumes.toggleEchoLimiter());
+		}
+	}
+
+	public void toggleMicrophoneMuted()
+	{
+		setVolumes(getVolumes().toggleMicrophoneMuted());
+	}
+
+	public void toggleExternalSpeaker()
+	{
+		setVolumes(getVolumes().toggleExternalSpeaker());
 	}
 
 	public CallConnectionDetails getCallConnectionDetails()

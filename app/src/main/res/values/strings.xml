@@ -123,8 +123,7 @@
     <string name="verify_number_activity_sms_announcement">In order to register, Simlar will send an SMS to this number during the next step.</string>
     <string name="verify_number_activity_alert_wrong_number_text">The number you have entered doesn\'t seem to be a telephone number. Check it again.</string>
 
-    <string name="volumes_control_activity_title">Volumes Control Activity</string>
-    <string name="volumes_control_activity_software_echo_limiter">Software Echo Limiter</string>
+    <string name="volumes_control_fragment_software_echo_limiter">Software Echo Limiter</string>
 
     <string name="about_activity_title">About Simlar</string>
     <string name="about_activity_copyright">&#169; 2013&#8211;2014 The Simlar authors\nAll rights reserved.</string>
