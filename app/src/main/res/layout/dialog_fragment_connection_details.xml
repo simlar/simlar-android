@@ -26,7 +26,7 @@
              android:paddingTop="@dimen/activity_vertical_margin"
              android:shrinkColumns="*"
              android:stretchColumns="*"
-             tools:context="org.simlar.widgets.ConnectionDetailsActivity"
+             tools:context="org.simlar.widgets.ConnectionDetailsDialogFragment"
              tools:ignore="SelectableText">
 
     <TableRow
@@ -36,21 +36,21 @@
 
         <TextView
             android:id="@+id/textViewLabelQuality"
-            style="@style/connectionDetailsActivityTableLabel"
-            android:text="@string/connection_details_activity_label_quality"/>
+            style="@style/connectionDetailsDialogFragmentTableLabel"
+            android:text="@string/connection_details_dialog_fragment_label_quality"/>
 
         <TextView
             android:id="@+id/textViewQuality"
-            style="@style/connectionDetailsActivityTableValue"/>
+            style="@style/connectionDetailsDialogFragmentTableValue"/>
 
         <TextView
             android:id="@+id/textViewLabelCodec"
-            style="@style/connectionDetailsActivityTableLabel"
-            android:text="@string/connection_details_activity_label_codec"/>
+            style="@style/connectionDetailsDialogFragmentTableLabel"
+            android:text="@string/connection_details_dialog_fragment_label_codec"/>
 
         <TextView
             android:id="@+id/textViewCodec"
-            style="@style/connectionDetailsActivityTableValue"/>
+            style="@style/connectionDetailsDialogFragmentTableValue"/>
     </TableRow>
 
     <TableRow
@@ -60,21 +60,21 @@
 
         <TextView
             android:id="@+id/textViewLabelDownload"
-            style="@style/connectionDetailsActivityTableLabel"
-            android:text="@string/connection_details_activity_label_download"/>
+            style="@style/connectionDetailsDialogFragmentTableLabel"
+            android:text="@string/connection_details_dialog_fragment_label_download"/>
 
         <TextView
             android:id="@+id/textViewDownload"
-            style="@style/connectionDetailsActivityTableValue"/>
+            style="@style/connectionDetailsDialogFragmentTableValue"/>
 
         <TextView
             android:id="@+id/textViewLabelPacketLoss"
-            style="@style/connectionDetailsActivityTableLabel"
-            android:text="@string/connection_details_activity_label_packet_loss"/>
+            style="@style/connectionDetailsDialogFragmentTableLabel"
+            android:text="@string/connection_details_dialog_fragment_label_packet_loss"/>
 
         <TextView
             android:id="@+id/textViewPacketLoss"
-            style="@style/connectionDetailsActivityTableValue"/>
+            style="@style/connectionDetailsDialogFragmentTableValue"/>
     </TableRow>
 
     <TableRow
@@ -84,21 +84,21 @@
 
         <TextView
             android:id="@+id/textViewLabelUpload"
-            style="@style/connectionDetailsActivityTableLabel"
-            android:text="@string/connection_details_activity_label_upload"/>
+            style="@style/connectionDetailsDialogFragmentTableLabel"
+            android:text="@string/connection_details_dialog_fragment_label_upload"/>
 
         <TextView
             android:id="@+id/textViewUpload"
-            style="@style/connectionDetailsActivityTableValue"/>
+            style="@style/connectionDetailsDialogFragmentTableValue"/>
 
         <TextView
             android:id="@+id/textViewLabelLatePackets"
-            style="@style/connectionDetailsActivityTableLabel"
-            android:text="@string/connection_details_activity_label_late_packets"/>
+            style="@style/connectionDetailsDialogFragmentTableLabel"
+            android:text="@string/connection_details_dialog_fragment_label_late_packets"/>
 
         <TextView
             android:id="@+id/textViewLatePackets"
-            style="@style/connectionDetailsActivityTableValue"/>
+            style="@style/connectionDetailsDialogFragmentTableValue"/>
     </TableRow>
 
     <TableRow
@@ -109,21 +109,21 @@
 
         <TextView
             android:id="@+id/textViewLabelRoundTripDelay"
-            style="@style/connectionDetailsActivityTableLabel"
-            android:text="@string/connection_details_activity_label_round_trip_delay"/>
+            style="@style/connectionDetailsDialogFragmentTableLabel"
+            android:text="@string/connection_details_dialog_fragment_label_round_trip_delay"/>
 
         <TextView
             android:id="@+id/textViewRoundTripDelay"
-            style="@style/connectionDetailsActivityTableValue"/>
+            style="@style/connectionDetailsDialogFragmentTableValue"/>
 
         <TextView
             android:id="@+id/textViewLabelJitter"
-            style="@style/connectionDetailsActivityTableLabel"
-            android:text="@string/connection_details_activity_label_jitter"/>
+            style="@style/connectionDetailsDialogFragmentTableLabel"
+            android:text="@string/connection_details_dialog_fragment_label_jitter"/>
 
         <TextView
             android:id="@+id/textViewJitter"
-            style="@style/connectionDetailsActivityTableValue"/>
+            style="@style/connectionDetailsDialogFragmentTableValue"/>
     </TableRow>
 
     <TableRow
@@ -135,12 +135,12 @@
 
         <TextView
             android:id="@+id/textViewLabelIceState"
-            style="@style/connectionDetailsActivityTable"
-            android:text="@string/connection_details_activity_label_ice_state"/>
+            style="@style/connectionDetailsDialogFragmentTable"
+            android:text="@string/connection_details_dialog_fragment_label_ice_state"/>
 
         <TextView
             android:id="@+id/textViewIceState"
-            style="@style/connectionDetailsActivityTable"/>
+            style="@style/connectionDetailsDialogFragmentTable"/>
     </TableRow>
 
 </TableLayout>

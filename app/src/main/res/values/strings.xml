@@ -103,18 +103,18 @@
     <string name="call_activity_call_ended_because_user_busy">Busy</string>
     <string name="call_activity_call_ended_normally">Call ended</string>
 
-    <string name="connection_details_activity_label_quality">Quality: </string>
-    <string name="connection_details_activity_label_codec">Codec: </string>
-    <string name="connection_details_activity_label_ice_state">ICE State: </string>
-    <string name="connection_details_activity_label_upload">Up: </string>
-    <string name="connection_details_activity_label_download">Down: </string>
-    <string name="connection_details_activity_label_packet_loss">Loss: </string>
-    <string name="connection_details_activity_label_late_packets">Late: </string>
-    <string name="connection_details_activity_label_round_trip_delay">Delay: </string>
-    <string name="connection_details_activity_label_jitter">Jitter: </string>
-    <string name="connection_details_activity_kilobytes_per_second">%1$s kb/s</string>
-    <string name="connection_details_activity_milli_seconds">%1$s ms</string>
-    <string name="connection_details_activity_percent">%1$s &#65285;</string>
+    <string name="connection_details_dialog_fragment_label_quality">Quality: </string>
+    <string name="connection_details_dialog_fragment_label_codec">Codec: </string>
+    <string name="connection_details_dialog_fragment_label_ice_state">ICE State: </string>
+    <string name="connection_details_dialog_fragment_label_upload">Up: </string>
+    <string name="connection_details_dialog_fragment_label_download">Down: </string>
+    <string name="connection_details_dialog_fragment_label_packet_loss">Loss: </string>
+    <string name="connection_details_dialog_fragment_label_late_packets">Late: </string>
+    <string name="connection_details_dialog_fragment_label_round_trip_delay">Delay: </string>
+    <string name="connection_details_dialog_fragment_label_jitter">Jitter: </string>
+    <string name="connection_details_dialog_fragment_kilobytes_per_second">%1$s kb/s</string>
+    <string name="connection_details_dialog_fragment_milli_seconds">%1$s ms</string>
+    <string name="connection_details_dialog_fragment_percent">%1$s &#65285;</string>
 
     <string name="verify_number_activity_title">Creating account</string>
     <string name="verify_number_activity_verify_your_number">Verify your telephone number:</string>

@@ -77,6 +77,8 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private ImageButton mButtonMicro;
 	private ImageButton mButtonSpeaker;
 
+	private ConnectionDetailsDialogFragment mConnectionDetailsDialogFragment = null;
+
 	private final class SimlarServiceCommunicatorCall extends SimlarServiceCommunicator
 	{
 		@Override
@@ -89,6 +91,12 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		public void onSimlarCallStateChanged()
 		{
 			CallActivity.this.onSimlarCallStateChanged();
+		}
+
+		@Override
+		public void onCallConnectionDetailsChanged()
+		{
+			CallActivity.this.onCallConnectionDetailsChanged();
 		}
 	}
 
@@ -262,6 +270,15 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		}
 	}
 
+	private void onCallConnectionDetailsChanged()
+	{
+		if (mConnectionDetailsDialogFragment == null) {
+			return;
+		}
+
+		mConnectionDetailsDialogFragment.setCallConnectionDetails(mCommunicator.getService().getCallConnectionDetails());
+	}
+
 	private void startCallTimer()
 	{
 		if (mCallTimer != null) {
@@ -339,7 +356,13 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	@SuppressWarnings("unused")
 	public void showConnectionDetails(final View view)
 	{
-		startActivity(new Intent(this, ConnectionDetailsActivity.class));
+		if (mConnectionDetailsDialogFragment == null) {
+			mConnectionDetailsDialogFragment = new ConnectionDetailsDialogFragment();
+		}
+
+		if (!mConnectionDetailsDialogFragment.isResumed()) {
+			mConnectionDetailsDialogFragment.show(getSupportFragmentManager(), ConnectionDetailsDialogFragment.class.getCanonicalName());
+		}
 	}
 
 	@SuppressWarnings("unused")
