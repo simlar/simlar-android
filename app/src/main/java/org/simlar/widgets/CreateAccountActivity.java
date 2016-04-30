@@ -480,19 +480,18 @@ public final class CreateAccountActivity extends Activity
 	private void onError(final int resId)
 	{
 		mLayoutProgress.setVisibility(View.GONE);
-		if (resId == R.string.create_account_activity_error_wrong_telephone_number ||
-				resId == R.string.create_account_activity_error_sms ||
-				resId == R.string.create_account_activity_error_sms_timeout) {
-			mDetails.setText(String.format(getString(resId), mTelephoneNumber));
-		} else {
-			mDetails.setText(resId);
-		}
+
 		mDetails.setVisibility(View.VISIBLE);
 		mButtonCancel.setVisibility(View.VISIBLE);
 
-		if (resId == R.string.create_account_activity_error_sms_timeout
-				|| resId == R.string.create_account_activity_error_registration_code)
-		{
+		switch (resId) {
+		case R.string.create_account_activity_error_wrong_telephone_number:
+			mDetails.setText(String.format(getString(resId), mTelephoneNumber));
+			mButtonConfirm.setVisibility(View.GONE);
+			break;
+		case R.string.create_account_activity_error_sms:
+		case R.string.create_account_activity_error_sms_timeout:
+			mDetails.setText(String.format(getString(resId), mTelephoneNumber));
 			mButtonConfirm.setVisibility(View.VISIBLE);
 			mButtonConfirm.setEnabled(false);
 
@@ -500,7 +499,9 @@ public final class CreateAccountActivity extends Activity
 			mEditRegistrationCode.requestFocus();
 			((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mEditRegistrationCode,
 					InputMethodManager.SHOW_IMPLICIT);
-		} else {
+			break;
+		default:
+			mDetails.setText(resId);
 			mButtonConfirm.setVisibility(View.GONE);
 		}
 	}
