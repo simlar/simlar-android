@@ -211,9 +211,8 @@ public final class ContactsProvider
 		void onContactsStatusRequestedFromServer(final Map<String, ContactStatus> contactsStatus)
 		{
 			if (updateContactStatus(contactsStatus)) {
-				final Set<ContactDataComplete> contacts = createFullContactDataSet();
 				mState = State.INITIALIZED;
-				notifyFullContactsListeners(contacts, Error.NONE);
+				notifyFullContactsListeners(createFullContactDataSet(), Error.NONE);
 			} else {
 				onError(Error.NO_INTERNET_CONNECTION);
 			}
