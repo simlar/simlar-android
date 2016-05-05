@@ -59,6 +59,7 @@ public final class PermissionsHelper
 	}
 
 	public enum Type{
+		CAMERA(Manifest.permission.CAMERA, false, R.string.permission_explain_text_camera),
 		CONTACTS(Manifest.permission.READ_CONTACTS, false, R.string.permission_explain_text_contacts),
 		MICROPHONE(Manifest.permission.RECORD_AUDIO, true, R.string.permission_explain_text_record_audio),
 		PHONE(Manifest.permission.READ_PHONE_STATE, true, R.string.permission_explain_text_phone_state),
