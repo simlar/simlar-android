@@ -49,7 +49,7 @@ android {
 dependencies {
     pushCompile 'com.google.android.gms:play-services-gcm:9.0.2'
     compile files('libs/liblinphone.jar')
-    compile 'com.android.support:appcompat-v7:23.3.0'
+    compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.googlecode.libphonenumber:libphonenumber:7.4.2'
-    compile 'com.android.support:support-v4:23.3.0'
+    compile 'com.android.support:support-v4:23.4.0'
 }
