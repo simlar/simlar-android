@@ -10,13 +10,13 @@ def getGitVersion = { ->
 }
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.0"
 
     defaultConfig {
         applicationId "org.simlar"
         minSdkVersion 9
-        targetSdkVersion 23
+        targetSdkVersion 24
         versionName getGitVersion()
     }
 
