@@ -10,13 +10,13 @@ def getGitVersion = { ->
 }
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.0"
 
     defaultConfig {
         applicationId "org.simlar"
         minSdkVersion 9
-        targetSdkVersion 23
+        targetSdkVersion 24
         versionName getGitVersion()
     }
 
@@ -47,9 +47,9 @@ android {
 }
 
 dependencies {
-    pushCompile 'com.google.android.gms:play-services-gcm:8.4.0'
+    pushCompile 'com.google.android.gms:play-services-gcm:9.0.2'
     compile files('libs/liblinphone.jar')
-    compile 'com.android.support:appcompat-v7:23.3.0'
-    compile 'com.googlecode.libphonenumber:libphonenumber:7.3.2'
-    compile 'com.android.support:support-v4:23.3.0'
+    compile 'com.android.support:appcompat-v7:24.0.0'
+    compile 'com.googlecode.libphonenumber:libphonenumber:7.4.3'
+    compile 'com.android.support:support-v4:24.0.0'
 }
