@@ -23,6 +23,7 @@ cd "${BUILD_DIR}/linphone-android"
 
 rm -f liblinphone-android-sdk-*.zip
 
+./prepare.py -C
 ./prepare.py \
 	-DENABLE_OPENH264=OFF \
 	-DENABLE_AMRNB=OFF \
