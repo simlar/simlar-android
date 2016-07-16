@@ -23,7 +23,8 @@ cd "${BUILD_DIR}/linphone-android"
 
 rm -f liblinphone-android-sdk-*.zip
 
-make BUILD_OPENH264=0 BUILD_AMRNB=0 BUILD_AMRWB=0 BUILD_SILK=0 BUILD_G729=0
+./prepare.py -DENABLE_AMRNB=NO -DENABLE_AMRWB=NO -DENABLE_SILK=NO -DENABLE_G729=NO -DENABLE_OPENH264=N
+make
 make liblinphone-android-sdk
 cd ../../../..
 
