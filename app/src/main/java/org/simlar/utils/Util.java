@@ -131,11 +131,4 @@ public final class Util
 		}
 		return service;
 	}
-
-	@SuppressWarnings({ "unused" })
-	public static void simulateCrash()
-	{
-		@SuppressWarnings({"NumericOverflow", "UnusedAssignment"})
-		final int i = 5 / 0;
-	}
 }
