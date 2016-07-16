@@ -44,6 +44,8 @@ import java.util.Set;
 
 public final class PermissionsHelper
 {
+	private static final int REQUEST_CODE = 23;
+
 	private PermissionsHelper()
 	{
 		throw new AssertionError("This class was not meant to be instantiated");
@@ -167,7 +169,7 @@ public final class PermissionsHelper
 		}
 		Lg.i("requesting permissions: ", TextUtils.join(", ", permissions));
 
-		ActivityCompat.requestPermissions(activity, permissions.toArray(new String[permissions.size()]), 7); // TODO requestCode
+		ActivityCompat.requestPermissions(activity, permissions.toArray(new String[permissions.size()]), REQUEST_CODE);
 	}
 
 	@SuppressWarnings("SameParameterValue")
