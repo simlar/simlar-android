@@ -36,7 +36,6 @@
     <string name="main_activity_contact_list_error_loading_contacts_wrong_credentials">Failed to authorize. Recreate account.</string>
     <string name="main_activity_contact_list_error_loading_contacts_wrong_credentials_dialog_title">Failed to authorize.</string>
     <string name="main_activity_contact_list_error_loading_contacts_wrong_credentials_dialog_message">Register again.</string>
-    <string name="main_activity_actionbar_search">Search Contacts</string>
     <string name="main_activity_menu_reload_contacts">Reload contacts</string>
     <string name="main_activity_menu_upload_logfile">Report bug</string>
     <string name="main_activity_menu_enable_debug_mode">Enable debug mode</string>
