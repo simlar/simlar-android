@@ -25,6 +25,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -36,6 +37,7 @@ import org.simlar.contactsprovider.ContactsProvider.FullContactsListener;
 import org.simlar.helper.ContactDataComplete;
 import org.simlar.helper.FlavourHelper;
 import org.simlar.helper.GooglePlayServicesHelper;
+import org.simlar.helper.PermissionsHelper;
 import org.simlar.helper.PreferencesHelper;
 import org.simlar.helper.Version;
 import org.simlar.https.UploadLogFile;
@@ -85,20 +87,45 @@ public final class MainActivity extends AppCompatActivity
 		Lg.i("onCreate ended");
 	}
 
+	private void requestContacts()
+	{
+		if (PermissionsHelper.checkAndRequestPermissions(this, PermissionsHelper.Type.CONTACTS)) {
+			loadContacts();
+		}
+	}
+
+	@Override
+	public void onRequestPermissionsResult(final int requestCode, @NonNull final String permissions[], @NonNull final int grantResults[])
+	{
+		if (mAdapter.isEmpty()) {
+			loadContacts();
+		}
+	}
+
 	private void loadContacts()
 	{
 		mContactList.setEmptyText(getString(R.string.main_activity_contact_list_loading_contacts));
 		ContactsProvider.getContacts(this, new FullContactsListener()
 		{
 			@Override
-			public void onGetContacts(final Set<ContactDataComplete> contacts)
+			public void onGetContacts(final Set<ContactDataComplete> contacts, final ContactsProvider.Error error)
 			{
+				Lg.i("onGetContacts: error=", error);
 				mAdapter.clear();
-				if (contacts == null) {
-					mContactList.setEmptyText(getString(R.string.main_activity_contact_list_error_loading_contacts));
-				} else {
+				switch (error) {
+				case NONE:
 					mAdapter.addAllContacts(contacts);
 					mContactList.setEmptyText(getString(R.string.main_activity_contact_list_no_contacts_found));
+					break;
+				case BUG:
+					mContactList.setEmptyText(getString(R.string.main_activity_contact_list_error_loading_contacts));
+					break;
+				case NO_INTERNET_CONNECTION:
+					mContactList.setEmptyText(getString(R.string.main_activity_contact_list_error_loading_contacts_no_internet));
+					break;
+				case PERMISSION_DENIED:
+					mContactList.setEmptyText(getString(R.string.main_activity_contact_list_error_loading_contacts_permission_denied));
+					break;
 				}
 
 				GooglePlayServicesHelper.registerGcmIfNeeded(MainActivity.this);
@@ -142,6 +169,8 @@ public final class MainActivity extends AppCompatActivity
 		if (mCommunicator != null) {
 			mCommunicator.startServiceAndRegister(this, MainActivity.class, null);
 		}
+
+		PermissionsHelper.requestMajorPermissions(this);
 
 		if (mAdapter.isEmpty()) {
 			loadContacts();
@@ -254,7 +283,7 @@ public final class MainActivity extends AppCompatActivity
 		Lg.i("reloadContacts");
 		if (ContactsProvider.clearCache()) {
 			mAdapter.clear();
-			loadContacts();
+			requestContacts();
 		}
 	}
 

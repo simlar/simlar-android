@@ -35,6 +35,7 @@ import org.simlar.helper.ContactDataComplete;
 import org.simlar.helper.ContactStatus;
 import org.simlar.helper.FileHelper;
 import org.simlar.helper.FileHelper.NotInitedException;
+import org.simlar.helper.PermissionsHelper;
 import org.simlar.helper.PreferencesHelper;
 import org.simlar.helper.SimlarNumber;
 import org.simlar.https.GetContactsStatus;
@@ -60,12 +61,20 @@ public final class ContactsProvider
 
 	public interface FullContactsListener
 	{
-		void onGetContacts(final Set<ContactDataComplete> contacts);
+		void onGetContacts(final Set<ContactDataComplete> contacts, final Error error);
 	}
 
 	public interface ContactListener
 	{
 		void onGetNameAndPhotoId(final String name, final String photoId);
+	}
+
+	public enum Error
+	{
+		NONE,
+		BUG,
+		NO_INTERNET_CONNECTION,
+		PERMISSION_DENIED
 	}
 
 	private static final class ContactsProviderImpl
@@ -96,10 +105,13 @@ public final class ContactsProvider
 
 			if (Util.isNullOrEmpty(mySimlarId)) {
 				Lg.e("loadContacts: no simlarId for myself, probably PreferencesHelper not inited => aborting");
-				mState = State.ERROR;
-				mContacts.clear();
-				notifyContactListeners();
-				notifyFullContactsListeners(null);
+				onError(Error.BUG);
+				return;
+			}
+
+			if (!PermissionsHelper.hasPermission(context, PermissionsHelper.Type.CONTACTS)) {
+				Lg.e("loadContacts: we do not have the permission to read contacts => aborting");
+				onError(Error.PERMISSION_DENIED);
 				return;
 			}
 
@@ -123,6 +135,14 @@ public final class ContactsProvider
 			}.execute();
 		}
 
+		private void onError(final Error error)
+		{
+			mState = State.ERROR;
+			mContacts.clear();
+			notifyContactListeners();
+			notifyFullContactsListeners(null, error);
+		}
+
 		private void notifyContactListeners()
 		{
 			for (final Map.Entry<ContactListener, String> entry : mContactListener.entrySet()) {
@@ -132,10 +152,10 @@ public final class ContactsProvider
 			mContactListener.clear();
 		}
 
-		private void notifyFullContactsListeners(final Set<ContactDataComplete> contacts)
+		private void notifyFullContactsListeners(final Set<ContactDataComplete> contacts, final Error error)
 		{
 			for (final FullContactsListener listener : mFullContactsListeners) {
-				listener.onGetContacts(contacts);
+				listener.onGetContacts(contacts, error);
 			}
 			mFullContactsListeners.clear();
 		}
@@ -144,10 +164,7 @@ public final class ContactsProvider
 		{
 			if (contacts == null) {
 				Lg.e("onContactsLoadedFromTelephoneBook called with empty contacts");
-				mState = State.ERROR;
-				mContacts.clear();
-				notifyContactListeners();
-				notifyFullContactsListeners(null);
+				onError(Error.BUG);
 				return;
 			}
 
@@ -193,16 +210,12 @@ public final class ContactsProvider
 
 		void onContactsStatusRequestedFromServer(final Map<String, ContactStatus> contactsStatus)
 		{
-			Set<ContactDataComplete> contacts = null;
 			if (updateContactStatus(contactsStatus)) {
-				contacts = createFullContactDataSet();
 				mState = State.INITIALIZED;
+				notifyFullContactsListeners(createFullContactDataSet(), Error.NONE);
 			} else {
-				mContacts.clear();
-				mState = State.ERROR;
+				onError(Error.NO_INTERNET_CONNECTION);
 			}
-
-			notifyFullContactsListeners(contacts);
 		}
 
 		private Set<ContactDataComplete> createFullContactDataSet()
@@ -369,7 +382,7 @@ public final class ContactsProvider
 			switch (mState) {
 			case INITIALIZED:
 				Lg.i("using cached data for all contacts");
-				listener.onGetContacts(createFullContactDataSet());
+				listener.onGetContacts(createFullContactDataSet(), Error.NONE);
 				break;
 			case PARSING_PHONES_ADDRESS_BOOK:
 			case REQUESTING_CONTACTS_STATUS_FROM_SERVER:

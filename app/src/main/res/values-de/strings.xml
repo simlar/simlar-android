@@ -29,8 +29,10 @@
     <string name="simlar_service_on_destroy">Simlar wurde beendet</string>
 
     <string name="main_activity_contact_list_loading_contacts">Kontakte werden geladen &#8230;</string>
-    <string name="main_activity_contact_list_error_loading_contacts">Kontakte konnten nicht geladen werden. Möglicherweise funktioniert dein Internet nicht.</string>
     <string name="main_activity_contact_list_no_contacts_found">Keiner deiner Kontakte hat Simlar installiert. Empfiehl Simlar deinen Freunden!</string>
+    <string name="main_activity_contact_list_error_loading_contacts">Fehler beim Laden der Kontakte.</string>
+    <string name="main_activity_contact_list_error_loading_contacts_no_internet">Die Verindung zum Server ist fehlgeschlagen. Überprüfe Deine Internetverbindung.</string>
+    <string name="main_activity_contact_list_error_loading_contacts_permission_denied">Keine Berechtigung zum Lesen der Kontakte. Aktiviere diese Berechtigung.</string>
     <string name="main_activity_menu_reload_contacts">Kontakte neu laden</string>
     <string name="main_activity_menu_upload_logfile">Fehler melden</string>
     <string name="main_activity_menu_enable_debug_mode">Debug-Modus einschalten</string>
@@ -124,6 +126,17 @@
     <string name="verify_number_activity_sms_announcement">Um die Anmeldung abzuschließen, schickt Simlar im nächsten Schritt eine SMS an diese Nummer.</string>
     <string name="verify_number_activity_alert_wrong_number_text">Deine eingegebene Rufnummer wurde nicht erkannt. Kontrolliere deine Eingabe.</string>
 
+    <!-- Simlar ermöglichen, SMS zu senden und abzurufen? -->
+    <string name="permission_explain_text_sms">Simlar liest einmalig Ihre Telefonnummer und eingehende SMS, damit Sie Ihre Nummer und den Registrierungscode nicht eingeben müssen.</string>
+    <!-- Simlar ermöglichen, Audio aufzunehmen? -->
+    <string name="permission_explain_text_record_audio">Simlar greift auf Ihr Mikrophone zu, damit Ihr Gesprächspartner Sie hören kann.</string>
+    <!-- Simlar ermöglichen, Telefonanrufe zu tätigen und zu verwalten? -->
+    <string name="permission_explain_text_phone_state">Simlar greift auf die Telefonverwaltung zu, um bei Telefonaten die Anklopf-Funktion zu ermöglichen.</string>
+    <!-- Simlar ermöglichen, auf Kontakte zuzugreifen? -->
+    <string name="permission_explain_text_contacts">Simlar liest die Nummern in ihrem Telefonbuch, um andere Simlar-Nutzer zu finden.</string>
+    <!-- Simlar ermöglichen, auf Fotos, Medien und Dateien zuzugreifen? -->
+    <string name="permission_explain_text_storage">Simlar benutzt den Klingelton Ihres Gerätes und dieser liegt in den Medien und Dateien.</string>
+
     <string name="volumes_control_fragment_software_echo_limiter">Echo verringern</string>
 
     <string name="about_activity_title">Über Simlar</string>
@@ -141,6 +154,7 @@
     <string name="create_account_activity_error_wrong_telephone_number">Mit der angegebenen Rufnummer ist eine Registrierung nicht möglich:\n%1$s\n\nProbiere eine andere Rufnummer oder schreibe an support@simlar.org</string>
     <string name="create_account_activity_error_sms">Simlar kann keine SMS an deine angegebene Telefonnummer schicken:\n%1$s\n\n Überprüfe deine Eingabe oder versuche es später nochmal</string>
     <string name="create_account_activity_error_sms_timeout">Das automatische Auslesen der SMS wurde abgebrochen.\n\nÜberprüfe deine Nummer:\n\n%1$s\n\nOder warte auf die SMS und gib den Bestätigungscode manuell ein.</string>
+    <string name="create_account_activity_error_sms_not_granted">Simlar hat eine SMS an deine Telefonnummer geschickt:\n%1$s\n\nSobald du die SMS empfangen hast, gib den Bestätigungscode hier manuell ein:</string>
     <string name="create_account_activity_error_not_possible">Anmeldung momentan nicht möglich.\n\nÜberprüfe deine Intertverbindung und versuch es erneut.</string>
     <string name="create_account_activity_error_registration_code">Falscher Bestätigungscode.\n\nVersuch es erneut.</string>
     <string name="create_account_activity_error_too_many_confirms">Die Registrierung ist fehlgeschlagen.\n\nVersuch es erneut.</string>
