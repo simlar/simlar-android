@@ -46,7 +46,7 @@ public final class SimCardReader
 		}
 
 		// read countryCode from configuration
-		final String regionFromConfig = context.getResources().getConfiguration().locale.getCountry().toUpperCase(Locale.US);
+		final String regionFromConfig = Locale.getDefault().getCountry().toUpperCase(Locale.US);
 		Lg.i("guessed region by android configuration: ", regionFromConfig);
 		return regionFromConfig;
 	}
