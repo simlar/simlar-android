@@ -22,8 +22,8 @@
 package org.simlar.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -56,14 +56,14 @@ public final class VolumesControlDialogFragment extends DialogFragment
 	}
 
 	@Override
-	public void onAttach(final Activity activity)
+	public void onAttach(final Context context)
 	{
-		super.onAttach(activity);
+		super.onAttach(context);
 
-		if (activity instanceof Listener) {
-			mListener = (Listener) activity;
+		if (context instanceof Listener) {
+			mListener = (Listener) context;
 		} else {
-			Lg.e(activity.getClass().getName(), " should implement ", Listener.class.getName());
+			Lg.e(context.getClass().getName(), " should implement ", Listener.class.getName());
 		}
 	}
 
