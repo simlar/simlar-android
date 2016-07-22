@@ -28,10 +28,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -41,6 +39,8 @@ import org.simlar.R;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
@@ -202,31 +202,22 @@ public final class PermissionsHelper
 		}
 	}
 
-	private static Uri resolveUri(final Context context, final Uri uri)
-	{
-		if (uri == null) {
-			return Uri.EMPTY;
-		}
-
-		if(!Util.equalString(uri.getAuthority(), Settings.AUTHORITY)) {
-			return uri;
-		}
-
-		final Cursor cursor = context.getContentResolver().query(uri, new String[]{Settings.NameValueTable.VALUE}, null, null, null);
-		if (cursor == null) {
-			return uri;
-		}
-
-		cursor.moveToFirst();
-
-		final String ringtoneString = cursor.getString(0);
-		cursor.close();
-
-		return Uri.parse(ringtoneString);
-	}
-
 	public static boolean needsExternalStoragePermission(final Context context, final Uri uri)
 	{
-		return !resolveUri(context, uri).getEncodedPath().startsWith("/internal");
+		if (context == null) {
+			return false;
+		}
+
+		if (uri == null) {
+			return false;
+		}
+
+		try {
+			final FileInputStream stream = new FileInputStream(uri.getPath());
+			stream.close();
+			return false;
+		} catch (final IOException e) {
+			return true;
+		}
 	}
 }
