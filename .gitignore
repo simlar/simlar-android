@@ -1,4 +1,5 @@
 ## Android Studio
+*.iml
 .gradle
 /local.properties
 /.idea/workspace.xml
@@ -6,8 +7,6 @@
 .DS_Store
 /build
 app/build/
-app/app.iml
-simlar-android.iml
 
 ## bootstrap liblinphone
 build.log

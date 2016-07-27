@@ -17,6 +17,10 @@ allprojects {
     }
 }
 
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
 idea {
     module {
         excludeDirs += file('build/intermediates/dex-cache')
