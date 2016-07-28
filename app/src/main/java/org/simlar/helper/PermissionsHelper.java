@@ -28,6 +28,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -38,6 +39,8 @@ import org.simlar.R;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
@@ -90,7 +93,7 @@ public final class PermissionsHelper
 			return mMajor;
 		}
 
-		static Set<Type> getMajorPermissions()
+		static Set<Type> getMajorPermissions(final boolean needsExternalStorage)
 		{
 			final Set<Type> majorTypes = EnumSet.noneOf(Type.class);
 			for (final Type type : Type.values()) {
@@ -98,6 +101,11 @@ public final class PermissionsHelper
 					majorTypes.add(type);
 				}
 			}
+
+			if (needsExternalStorage) {
+				majorTypes.add(STORAGE);
+			}
+
 			return majorTypes;
 		}
 	}
@@ -113,9 +121,9 @@ public final class PermissionsHelper
 		return checkAndRequestPermissions(activity, EnumSet.of(type));
 	}
 
-	public static void requestMajorPermissions(final Activity activity)
+	public static void requestMajorPermissions(final Activity activity, final boolean needsExternalStorage)
 	{
-		checkAndRequestPermissions(activity, Type.getMajorPermissions());
+		checkAndRequestPermissions(activity, Type.getMajorPermissions(needsExternalStorage));
 	}
 
 	private static boolean checkAndRequestPermissions(final Activity activity, final Set<Type> types)
@@ -191,6 +199,25 @@ public final class PermissionsHelper
 		} else {
 			Lg.i("permission denied: ", permission);
 			return false;
+		}
+	}
+
+	public static boolean needsExternalStoragePermission(final Context context, final Uri uri)
+	{
+		if (context == null) {
+			return false;
+		}
+
+		if (uri == null) {
+			return false;
+		}
+
+		try {
+			final FileInputStream stream = new FileInputStream(uri.getPath());
+			stream.close();
+			return false;
+		} catch (final IOException e) {
+			return true;
 		}
 	}
 }
