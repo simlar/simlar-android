@@ -1,0 +1,25 @@
+From 6dbf9bb05ecbe90e532eee0cd30d8e66005ea0d7 Mon Sep 17 00:00:00 2001
+From: Ben Sartor <ben@simlar.org>
+Date: Sat, 16 Jul 2016 22:36:59 +0200
+Subject: [PATCH 3/3] set project version to 2.13.0
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index dba31a1..4742755 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -21,7 +21,7 @@
+ ############################################################################
+ 
+ cmake_minimum_required(VERSION 3.0)
+-project(mediastreamer2 VERSION 2.12.1 LANGUAGES C CXX)
++project(mediastreamer2 VERSION 2.13.0 LANGUAGES C CXX)
+ 
+ 
+ set(MEDIASTREAMER_MAJOR_VERSION ${PROJECT_VERSION_MAJOR})
+-- 
+2.1.4
+
