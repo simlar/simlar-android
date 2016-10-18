@@ -114,9 +114,9 @@ final class ContactsAdapter extends ArrayAdapter<ContactDataComplete>
 
 		if (position > 0) {
 			final ContactDataComplete prevContact = getItem(position - 1);
-			if (contact.getNameOrNumber().charAt(0) != prevContact.getNameOrNumber().charAt(0)) {
+			if (contact.getFirstChar() != prevContact.getFirstChar()) {
 				holder.letterView.setVisibility(View.VISIBLE);
-				holder.letterView.setText(Character.toString(contact.getNameOrNumber().charAt(0)));
+				holder.letterView.setText(Character.toString(contact.getFirstChar()));
 				holder.dividerLineView.setVisibility(View.GONE);
 			} else {
 				holder.letterView.setVisibility(View.GONE);
@@ -124,7 +124,7 @@ final class ContactsAdapter extends ArrayAdapter<ContactDataComplete>
 			}
 		} else {
 			holder.letterView.setVisibility(View.VISIBLE);
-			holder.letterView.setText(Character.toString(contact.getNameOrNumber().charAt(0)));
+			holder.letterView.setText(Character.toString(contact.getFirstChar()));
 			holder.dividerLineView.setVisibility(View.GONE);
 		}
 

@@ -41,4 +41,10 @@ public final class ContactDataComplete extends ContactData
 
 		return name;
 	}
+
+	public char getFirstChar()
+	{
+		final String nameOrNumber = getNameOrNumber();
+		return Util.isNullOrEmpty(nameOrNumber) ? ' ' : nameOrNumber.charAt(0);
+	}
 }
