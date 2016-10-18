@@ -22,6 +22,8 @@ package org.simlar.widgets;
 
 import android.content.Context;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +32,6 @@ import android.widget.TextView;
 
 import org.simlar.R;
 import org.simlar.helper.ContactDataComplete;
-import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
 import java.util.ArrayList;
@@ -93,16 +94,12 @@ final class ContactsAdapter extends ArrayAdapter<ContactDataComplete>
 	}
 
 	@Override
-	public View getView(final int position, final View convertView, final ViewGroup parent)
+	public @NonNull View getView(final int position, @Nullable final View convertView, @NonNull final ViewGroup parent)
 	{
 		final View rowView;
 		final RowViewHolder holder;
 		if (convertView == null) {
 			rowView = mInflater.inflate(mLayout, parent, false);
-			if (rowView == null) {
-				Lg.e("no row view found");
-				return null;
-			}
 			holder = new RowViewHolder(rowView);
 			rowView.setTag(holder);
 		} else {
