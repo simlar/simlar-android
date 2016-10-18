@@ -92,6 +92,7 @@ android {
                 dimension "default"
                 versionName = android.defaultConfig.versionName
                 buildConfigField("boolean", "IS_FCM_ENABLED", "true")
+                return void
             }
         }
 
@@ -99,6 +100,7 @@ android {
             dimension "default"
             versionName = android.defaultConfig.versionName + " (alwaysOnline)"
             buildConfigField("boolean", "IS_FCM_ENABLED", "false")
+            return void
         }
     }
 
