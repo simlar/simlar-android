@@ -23,6 +23,11 @@ export ANDROID_HOME=<YOUR ANDROID SDK DIRECTORY>
 ./gradlew assembleDebug
 ```
 
+Compile and run static code analysis.
+```
+./gradlew build connectedCheck
+```
+
 ### Android Studio ###
 Initially importing simlar-android in Android Studio, removes the inspection settings. That's why we recommend to run the following command once after importing:
 ```
