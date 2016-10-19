@@ -26,6 +26,7 @@ import android.view.View;
 import android.widget.ListView;
 
 import org.simlar.R;
+import org.simlar.helper.ContactDataComplete;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
@@ -51,10 +52,21 @@ public final class ContactsListFragment extends android.support.v4.app.ListFragm
 		listView.setDivider(null);
 	}
 
+	private String getSimlarId(final int position)
+	{
+		final ContactsAdapter contactsAdapter = (ContactsAdapter) getListAdapter();
+		if (contactsAdapter == null) {
+			return null;
+		}
+
+		final ContactDataComplete contact = contactsAdapter.getItem(position);
+		return contact == null ? null : contact.simlarId;
+	}
+
 	@Override
 	public void onListItemClick(final ListView l, final View v, final int position, final long id)
 	{
-		final String simlarId = ((ContactsAdapter) getListAdapter()).getItem(position).simlarId;
+		final String simlarId = getSimlarId(position);
 		if (Util.isNullOrEmpty(simlarId)) {
 			Lg.e("onListItemClick: no simlarId found");
 			return;
