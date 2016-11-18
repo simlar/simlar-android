@@ -310,7 +310,7 @@ public final class ContactsProvider
 							photoUri));
 
 					/// ATTENTION this logs the users telephone book
-					// Log.d("adding contact " + name + " " + number + " => " + simlarId);
+					// Lg.d("adding contact " + name + " " + number + " => " + simlarId);
 				}
 			}
 			contacts.close();
