@@ -55,6 +55,9 @@ import org.simlar.service.SimlarServiceCommunicator;
 import org.simlar.service.SimlarStatus;
 import org.simlar.utils.Util;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,7 +65,7 @@ public final class CreateAccountActivity extends Activity
 {
 	public static final String INTENT_EXTRA_NUMBER = "CreateAccountActivityTelephoneNumber";
 	private static final int SECONDS_TO_WAIT_FOR_SMS = 90;
-	private static final String SIMLAR_SMS_SOURCE = "+4922199999930";
+	private static final Collection<String> SIMLAR_SMS_SOURCES = Collections.unmodifiableCollection(Arrays.asList( "+4922199999930", "+32460202070"));
 
 	private View mLayoutProgress = null;
 	private ProgressBar mProgressRequest = null;
@@ -430,7 +433,7 @@ public final class CreateAccountActivity extends Activity
 			return;
 		}
 
-		if (!sender.equals(SIMLAR_SMS_SOURCE)) {
+		if (!SIMLAR_SMS_SOURCES.contains(sender)) {
 			Lg.i("ignoring sms from: ", new Lg.Anonymizer(sender));
 			return;
 		}
