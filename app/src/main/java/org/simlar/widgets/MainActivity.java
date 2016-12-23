@@ -35,6 +35,7 @@ import org.simlar.R;
 import org.simlar.contactsprovider.ContactsProvider;
 import org.simlar.contactsprovider.ContactsProvider.FullContactsListener;
 import org.simlar.helper.ContactDataComplete;
+import org.simlar.helper.CreateAccountStatus;
 import org.simlar.helper.FlavourHelper;
 import org.simlar.helper.GooglePlayServicesHelper;
 import org.simlar.helper.PermissionsHelper;
@@ -136,7 +137,11 @@ public final class MainActivity extends AppCompatActivity
 
 	private void startAccountCreation()
 	{
-		startActivity(new Intent(this, AgreeActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+		if (PreferencesHelper.getCreateAccountStatus() == CreateAccountStatus.WAITING_FOR_SMS) {
+			startActivity(new Intent(this, VerifyNumberActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+		} else {
+			startActivity(new Intent(this, AgreeActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+		}
 		finish();
 	}
 
