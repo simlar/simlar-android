@@ -137,11 +137,12 @@ public final class MainActivity extends AppCompatActivity
 
 	private void startAccountCreation()
 	{
-		if (PreferencesHelper.getCreateAccountStatus() == CreateAccountStatus.WAITING_FOR_SMS) {
-			startActivity(new Intent(this, VerifyNumberActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-		} else {
-			startActivity(new Intent(this, AgreeActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-		}
+		final Class<?> activity =
+				PreferencesHelper.getCreateAccountStatus() == CreateAccountStatus.WAITING_FOR_SMS
+						? VerifyNumberActivity.class
+						: AgreeActivity.class;
+
+		startActivity(new Intent(this, activity).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
 		finish();
 	}
 
