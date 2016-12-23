@@ -186,14 +186,12 @@ public final class CreateAccountActivity extends Activity
 				}
 
 				for (final Object pdu : pdus) {
-					final SmsMessage sms = SmsMessage.createFromPdu((byte[]) pdu, smsFormat);
-					onSmsReceived(sms.getOriginatingAddress(), sms.getMessageBody());
+					onSmsReceived(SmsMessage.createFromPdu((byte[]) pdu, smsFormat));
 				}
 			} else {
 				for (final Object pdu : pdus) {
 					//noinspection deprecation
-					final SmsMessage sms = SmsMessage.createFromPdu((byte[]) pdu);
-					onSmsReceived(sms.getOriginatingAddress(), sms.getMessageBody());
+					onSmsReceived(SmsMessage.createFromPdu((byte[]) pdu));
 				}
 			}
 		}
@@ -425,6 +423,18 @@ public final class CreateAccountActivity extends Activity
 		mWaitingForSmsText.setText(R.string.create_account_activity_waiting_for_sms);
 
 		onError(R.string.create_account_activity_error_sms_not_granted);
+	}
+
+	private static String normalizeTelephoneNumber(final String telephoneNumber)
+	{
+		return Util.isNullOrEmpty(telephoneNumber) || telephoneNumber.startsWith("+")
+				? telephoneNumber
+				: "+" + telephoneNumber;
+	}
+
+	private void onSmsReceived(final SmsMessage sms)
+	{
+		onSmsReceived(normalizeTelephoneNumber(sms.getOriginatingAddress()), sms.getMessageBody());
 	}
 
 	private void onSmsReceived(final String sender, final String message)
