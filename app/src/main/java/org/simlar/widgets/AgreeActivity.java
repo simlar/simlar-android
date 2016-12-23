@@ -32,7 +32,6 @@ import org.simlar.R;
 
 public class AgreeActivity extends AppCompatActivity
 {
-
 	@Override
 	protected void onCreate(final Bundle savedInstanceState)
 	{

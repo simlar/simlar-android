@@ -55,6 +55,9 @@ import org.simlar.service.SimlarServiceCommunicator;
 import org.simlar.service.SimlarStatus;
 import org.simlar.utils.Util;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,7 +65,7 @@ public final class CreateAccountActivity extends Activity
 {
 	public static final String INTENT_EXTRA_NUMBER = "CreateAccountActivityTelephoneNumber";
 	private static final int SECONDS_TO_WAIT_FOR_SMS = 90;
-	private static final String SIMLAR_SMS_SOURCE = "+4922199999930";
+	private static final Collection<String> SIMLAR_SMS_SOURCES = Collections.unmodifiableCollection(Arrays.asList( "+4922199999930", "+32460202070"));
 
 	private View mLayoutProgress = null;
 	private ProgressBar mProgressRequest = null;
@@ -183,14 +186,12 @@ public final class CreateAccountActivity extends Activity
 				}
 
 				for (final Object pdu : pdus) {
-					final SmsMessage sms = SmsMessage.createFromPdu((byte[]) pdu, smsFormat);
-					onSmsReceived(sms.getOriginatingAddress(), sms.getMessageBody());
+					onSmsReceived(SmsMessage.createFromPdu((byte[]) pdu, smsFormat));
 				}
 			} else {
 				for (final Object pdu : pdus) {
 					//noinspection deprecation
-					final SmsMessage sms = SmsMessage.createFromPdu((byte[]) pdu);
-					onSmsReceived(sms.getOriginatingAddress(), sms.getMessageBody());
+					onSmsReceived(SmsMessage.createFromPdu((byte[]) pdu));
 				}
 			}
 		}
@@ -212,7 +213,7 @@ public final class CreateAccountActivity extends Activity
 		mProgressConfirm = (ProgressBar) findViewById(R.id.progressBarConfirm);
 		mProgressFirstLogIn = (ProgressBar) findViewById(R.id.progressBarFirstLogIn);
 
-		mProgressRequest.setVisibility(View.VISIBLE);
+		mProgressRequest.setVisibility(View.INVISIBLE);
 		mProgressWaitingForSMS.setVisibility(View.INVISIBLE);
 		mProgressConfirm.setVisibility(View.INVISIBLE);
 		mProgressFirstLogIn.setVisibility(View.INVISIBLE);
@@ -313,6 +314,7 @@ public final class CreateAccountActivity extends Activity
 			return;
 		}
 
+		mProgressRequest.setVisibility(View.VISIBLE);
 		Lg.i("createAccountRequest: ", new Lg.Anonymizer(mTelephoneNumber));
 		final String smsText = getString(R.string.create_account_activity_sms_text) + " ";
 		final String expectedSimlarId = SimlarNumber.createSimlarId(mTelephoneNumber);
@@ -424,13 +426,25 @@ public final class CreateAccountActivity extends Activity
 		onError(R.string.create_account_activity_error_sms_not_granted);
 	}
 
+	private static String normalizeTelephoneNumber(final String telephoneNumber)
+	{
+		return Util.isNullOrEmpty(telephoneNumber) || telephoneNumber.startsWith("+")
+				? telephoneNumber
+				: "+" + telephoneNumber;
+	}
+
+	private void onSmsReceived(final SmsMessage sms)
+	{
+		onSmsReceived(normalizeTelephoneNumber(sms.getOriginatingAddress()), sms.getMessageBody());
+	}
+
 	private void onSmsReceived(final String sender, final String message)
 	{
 		if (Util.isNullOrEmpty(sender) || Util.isNullOrEmpty(message)) {
 			return;
 		}
 
-		if (!sender.equals(SIMLAR_SMS_SOURCE)) {
+		if (!SIMLAR_SMS_SOURCES.contains(sender)) {
 			Lg.i("ignoring sms from: ", new Lg.Anonymizer(sender));
 			return;
 		}
@@ -539,6 +553,7 @@ public final class CreateAccountActivity extends Activity
 	@SuppressWarnings("unused")
 	public void onCancelClicked(final View view)
 	{
+		Lg.i("onCancelClicked");
 		PreferencesHelper.saveToFileCreateAccountStatus(CreateAccountActivity.this, CreateAccountStatus.NONE);
 		finish();
 	}
@@ -546,6 +561,7 @@ public final class CreateAccountActivity extends Activity
 	@SuppressWarnings("unused")
 	public void onConfirmClicked(final View view)
 	{
+		Lg.i("onConfirmClicked");
 		((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);
 		mWaitingForSmsText.setText(R.string.create_account_activity_waiting_for_sms_manual);
 		mDetails.setVisibility(View.GONE);
