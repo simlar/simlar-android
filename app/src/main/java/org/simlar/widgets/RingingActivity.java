@@ -47,9 +47,6 @@ public final class RingingActivity extends AppCompatActivity
 	private final List<View> mCircles = new ArrayList<>();
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorRinging();
 
-	private ImageView mContactImage;
-	private TextView mContactName;
-
 	private final class SimlarServiceCommunicatorRinging extends SimlarServiceCommunicator
 	{
 		@Override
@@ -85,11 +82,6 @@ public final class RingingActivity extends AppCompatActivity
 				WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
 				WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
 				WindowManager.LayoutParams.FLAG_IGNORE_CHEEK_PRESSES);
-
-
-
-		mContactImage = findViewById(R.id.contactImage);
-		mContactName = findViewById(R.id.contactName);
 
 		final Animation logoAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate_logo);
 		final ImageView logo = findViewById(R.id.logo);
@@ -217,8 +209,11 @@ public final class RingingActivity extends AppCompatActivity
 			finish();
 		}
 
-		mContactImage.setImageBitmap(simlarCallState.getContactPhotoBitmap(this, R.drawable.contact_picture));
-		mContactName.setText(simlarCallState.getContactName());
+		final ImageView contactImage = findViewById(R.id.contactImage);
+		final TextView contactName = findViewById(R.id.contactName);
+
+		contactImage.setImageBitmap(simlarCallState.getContactPhotoBitmap(this, R.drawable.contact_picture));
+		contactName.setText(simlarCallState.getContactName());
 	}
 
 	@SuppressWarnings({ "unused", "RedundantSuppression" })
