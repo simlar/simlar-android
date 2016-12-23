@@ -108,6 +108,11 @@ public final class VerifyNumberActivity extends AppCompatActivity
 		mEditNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
 		mEditNumber.addTextChangedListener(new EditNumberTextWatcher());
 		requestPhoneNumber();
+
+		if (PreferencesHelper.getCreateAccountStatus() == CreateAccountStatus.WAITING_FOR_SMS) {
+			Lg.i("CreateAccountStatus = WAITING FOR SMS");
+			startActivityForResult(new Intent(this, CreateAccountActivity.class), RESULT_CREATE_ACCOUNT_ACTIVITY);
+		}
 	}
 
 	private void requestPhoneNumber()
@@ -192,11 +197,6 @@ public final class VerifyNumberActivity extends AppCompatActivity
 	{
 		super.onStart();
 		Lg.i("onStart");
-
-		if (PreferencesHelper.getCreateAccountStatus() == CreateAccountStatus.WAITING_FOR_SMS) {
-			Lg.i("CreateAccountStatus = WAITING FOR SMS");
-			startActivityForResult(new Intent(this, CreateAccountActivity.class), RESULT_CREATE_ACCOUNT_ACTIVITY);
-		}
 	}
 
 	@Override
