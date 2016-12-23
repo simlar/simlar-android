@@ -25,6 +25,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import org.linphone.core.LinphoneAddress;
+import org.linphone.core.LinphoneAuthInfo;
 import org.linphone.core.LinphoneCall;
 import org.linphone.core.LinphoneCallStats;
 import org.linphone.core.LinphoneChatMessage;
@@ -739,6 +740,12 @@ public final class LinphoneThread
 		public void friendListRemoved(final LinphoneCore lc, final LinphoneFriendList linphoneFriendList)
 		{
 			Lg.w("friendListRemoved: linphoneFriendList=", linphoneFriendList);
+		}
+
+		@Override
+		public void authenticationRequested(final LinphoneCore lc, final LinphoneAuthInfo linphoneAuthInfo, final LinphoneCore.AuthMethod authMethod)
+		{
+			Lg.w("authenticationRequested: linphoneAuthInfo=", linphoneAuthInfo, " authMethod=", authMethod);
 		}
 	}
 
