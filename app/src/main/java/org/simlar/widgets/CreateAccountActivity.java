@@ -539,6 +539,7 @@ public final class CreateAccountActivity extends Activity
 	@SuppressWarnings("unused")
 	public void onCancelClicked(final View view)
 	{
+		Lg.i("onCancelClicked");
 		PreferencesHelper.saveToFileCreateAccountStatus(CreateAccountActivity.this, CreateAccountStatus.NONE);
 		finish();
 	}
@@ -546,6 +547,7 @@ public final class CreateAccountActivity extends Activity
 	@SuppressWarnings("unused")
 	public void onConfirmClicked(final View view)
 	{
+		Lg.i("onConfirmClicked");
 		((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);
 		mWaitingForSmsText.setText(R.string.create_account_activity_waiting_for_sms_manual);
 		mDetails.setVisibility(View.GONE);
