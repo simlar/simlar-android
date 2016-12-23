@@ -213,7 +213,7 @@ public final class CreateAccountActivity extends Activity
 		mProgressConfirm = (ProgressBar) findViewById(R.id.progressBarConfirm);
 		mProgressFirstLogIn = (ProgressBar) findViewById(R.id.progressBarFirstLogIn);
 
-		mProgressRequest.setVisibility(View.VISIBLE);
+		mProgressRequest.setVisibility(View.INVISIBLE);
 		mProgressWaitingForSMS.setVisibility(View.INVISIBLE);
 		mProgressConfirm.setVisibility(View.INVISIBLE);
 		mProgressFirstLogIn.setVisibility(View.INVISIBLE);
@@ -314,6 +314,7 @@ public final class CreateAccountActivity extends Activity
 			return;
 		}
 
+		mProgressRequest.setVisibility(View.VISIBLE);
 		Lg.i("createAccountRequest: ", new Lg.Anonymizer(mTelephoneNumber));
 		final String smsText = getString(R.string.create_account_activity_sms_text) + " ";
 		final String expectedSimlarId = SimlarNumber.createSimlarId(mTelephoneNumber);
