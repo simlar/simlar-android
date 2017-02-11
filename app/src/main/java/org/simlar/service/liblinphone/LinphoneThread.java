@@ -44,9 +44,6 @@ import org.linphone.core.LinphoneFriendList;
 import org.linphone.core.LinphoneInfoMessage;
 import org.linphone.core.LinphoneProxyConfig;
 import org.linphone.core.PayloadType;
-import org.linphone.core.PresenceBasicStatus;
-import org.linphone.core.PresenceModel;
-import org.linphone.core.PresenceService;
 import org.linphone.core.PublishState;
 import org.linphone.core.SubscriptionState;
 import org.simlar.helper.FileHelper;
@@ -410,39 +407,6 @@ public final class LinphoneThread
 			return call.getRemoteAddress().asStringUriOnly().split("@")[0].replaceFirst("sip:", "");
 		}
 
-		private static boolean isOnline(final PresenceModel presenceModel)
-		{
-			if (presenceModel == null) {
-				Lg.w("isOnline: no PresenceModel");
-				return false;
-			}
-
-			final PresenceService service = presenceModel.getNthService(0);
-			if (service == null) {
-				Lg.w("isOnline: no PresenceService");
-				return false;
-			}
-
-			PresenceBasicStatus status = service.getBasicStatus();
-			if (status == null) {
-				return false;
-			}
-
-			//Log.i("NbServices" + presenceModel.getNbServices());
-
-			for (long i = presenceModel.getNbServices() - 1; i >= 0; --i) {
-				Lg.w("Service ", presenceModel.getNthService(i).getBasicStatus());
-				if (presenceModel.getNthService(i).getContact() == null) {
-					status = presenceModel.getNthService(i).getBasicStatus();
-					Lg.w("using service no ", i);
-				}
-			}
-
-			Lg.i("PresenceBasicStatus: ", status);
-
-			return status.equals(PresenceBasicStatus.Open);
-		}
-
 		//
 		// LinphoneCoreListener overloaded member functions
 		//
@@ -568,7 +532,7 @@ public final class LinphoneThread
 			// LinphoneFriend is mutable => use it only in the calling thread
 			// OnlineStatus is immutable
 
-			Lg.w("presence received: username=", new FriendLogger(lf), " online=", isOnline(lf.getPresenceModel()));
+			Lg.w("presence received: username=", new FriendLogger(lf));
 		}
 
 		@Override

@@ -25,7 +25,6 @@ import android.content.Context;
 import org.linphone.core.LinphoneCall;
 import org.linphone.core.LinphoneCallParams;
 import org.linphone.core.LinphoneCore;
-import org.linphone.core.LinphoneCore.FirewallPolicy;
 import org.linphone.core.LinphoneCore.MediaEncryption;
 import org.linphone.core.LinphoneCore.Transports;
 import org.linphone.core.LinphoneCoreException;
@@ -115,8 +114,9 @@ final class LinphoneHandler
 			mLinphoneCore.setUserAgent("Simlar", Version.getVersionName(context));
 
 			// enable STUN with ICE
-			mLinphoneCore.setStunServer(STUN_SERVER);
-			mLinphoneCore.setFirewallPolicy(FirewallPolicy.UseIce);
+			mLinphoneCore.getNatPolicy().setStunServer(STUN_SERVER);
+			mLinphoneCore.getNatPolicy().enableStun(true);
+			mLinphoneCore.getNatPolicy().enableIce(true);
 
 			// Use TLS for registration with random port
 			final Transports transports = new Transports();
