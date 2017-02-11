@@ -65,7 +65,7 @@ public final class CreateAccountActivity extends Activity
 {
 	public static final String INTENT_EXTRA_NUMBER = "CreateAccountActivityTelephoneNumber";
 	private static final int SECONDS_TO_WAIT_FOR_SMS = 90;
-	private static final Collection<String> SIMLAR_SMS_SOURCES = Collections.unmodifiableCollection(Arrays.asList("+4922199999930", "+32460202070", "+14102042044"));
+	private static final Collection<String> SIMLAR_SMS_SOURCES = Collections.unmodifiableCollection(Arrays.asList("+4922199999930", "+14102042044"));
 
 	private View mLayoutProgress = null;
 	private ProgressBar mProgressRequest = null;
