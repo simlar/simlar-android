@@ -94,8 +94,7 @@ final class SimlarSSLSocketFactory extends SSLSocketFactory
 			context.init(null, tmf.getTrustManagers(), null);
 			return context.getSocketFactory();
 		} catch (final CertificateException | NoSuchAlgorithmException | IOException | KeyStoreException | KeyManagementException e) {
-			Lg.ex(e, "Exception during createSSLSocketFactory");
-			return null;
+			throw new RuntimeException("unable to create SSL socket", e);
 		}
 	}
 
