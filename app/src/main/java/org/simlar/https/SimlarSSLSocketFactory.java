@@ -31,8 +31,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.security.KeyManagementException;
 import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.util.Arrays;
 import java.util.List;
@@ -144,7 +148,7 @@ final class SimlarSSLSocketFactory extends SSLSocketFactory
 			final SSLContext context = SSLContext.getInstance("TLS");
 			context.init(null, tmf.getTrustManagers(), null);
 			return context.getSocketFactory();
-		} catch (final Exception e) {
+		} catch (final CertificateException | NoSuchAlgorithmException | IOException | KeyStoreException | KeyManagementException e) {
 			Lg.ex(e, "Exception during createSSLSocketFactory");
 			return null;
 		}
