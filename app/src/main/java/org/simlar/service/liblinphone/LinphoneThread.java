@@ -485,7 +485,7 @@ public final class LinphoneThread
 		@Override
 		public void messageReceived(final LinphoneCore lc, final LinphoneChatRoom cr, final LinphoneChatMessage message)
 		{
-			Lg.i("messageReceived ", message);
+			Lg.i("messageReceived message=", message);
 		}
 
 		@Override
