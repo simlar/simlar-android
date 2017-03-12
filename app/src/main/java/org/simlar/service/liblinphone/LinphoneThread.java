@@ -489,6 +489,12 @@ public final class LinphoneThread
 		}
 
 		@Override
+		public void messageReceivedUnableToDecrypted(final LinphoneCore lc, final LinphoneChatRoom cr, final LinphoneChatMessage message)
+		{
+			Lg.w("messageReceivedUnableToDecrypted message=", message);
+		}
+
+		@Override
 		public void show(final LinphoneCore lc)
 		{
 			Lg.i("show called");
@@ -704,6 +710,12 @@ public final class LinphoneThread
 		public void friendListRemoved(final LinphoneCore lc, final LinphoneFriendList linphoneFriendList)
 		{
 			Lg.w("friendListRemoved: linphoneFriendList=", linphoneFriendList);
+		}
+
+		@Override
+		public void networkReachableChanged(final LinphoneCore linphoneCore, final boolean b)
+		{
+			Lg.i("networkReachableChanged reachable=", Boolean.toString(b));
 		}
 
 		@Override
