@@ -31,8 +31,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.security.KeyManagementException;
 import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.util.Arrays;
 import java.util.List;
@@ -51,7 +55,7 @@ final class SimlarSSLSocketFactory extends SSLSocketFactory
 	private static final String[] CIPHER_SUITES = createCipherSuites();
 	private static final String[] PROTOCOLS = createProtocols();
 
-	private final SSLSocketFactory mSSLSocketFactory = createSSLSocketFactory();
+	private final SSLSocketFactory mSSLSocketFactory;
 
 	// thread-safe and lazy evaluation singleton as proposed by Bill Pugh
 	private static final class InstanceHolder
@@ -63,6 +67,36 @@ final class SimlarSSLSocketFactory extends SSLSocketFactory
 	public static SimlarSSLSocketFactory getInstance()
 	{
 		return InstanceHolder.INSTANCE;
+	}
+
+	private SimlarSSLSocketFactory()
+	{
+		super();
+		mSSLSocketFactory = createSSLSocketFactory();
+	}
+
+	private static SSLSocketFactory createSSLSocketFactory()
+	{
+		final Certificate ca = loadCertificate();
+
+		try {
+			final KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+			keyStore.load(null, null);
+			keyStore.setCertificateEntry("SimlarCA", ca);
+
+			// Create a TrustManager that trusts the CAs in our KeyStore
+			final String tmAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
+			final TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmAlgorithm);
+			tmf.init(keyStore);
+
+			// Create an SSLContext that uses our TrustManager
+			final SSLContext context = SSLContext.getInstance("TLS");
+			context.init(null, tmf.getTrustManagers(), null);
+			return context.getSocketFactory();
+		} catch (final CertificateException | NoSuchAlgorithmException | IOException | KeyStoreException | KeyManagementException e) {
+			// We expect Simlar to crash here as SSL connections are essential.
+			throw new RuntimeException("unable to create SSL socket", e);
+		}
 	}
 
 	private static String[] getPreferred(final String[] preferred, final String[] supported, final String[] defaults)
@@ -96,7 +130,7 @@ final class SimlarSSLSocketFactory extends SSLSocketFactory
 			return protocols;
 		} catch (final IOException e) {
 			Lg.ex(e, "failed to create protocols");
-			return null;
+			return PREFERRED_PROTOCOLS;
 		}
 	}
 
@@ -124,35 +158,6 @@ final class SimlarSSLSocketFactory extends SSLSocketFactory
 				Lg.ex(e, "IOException during loadCertificate");
 			}
 		}
-	}
-
-	private static SSLSocketFactory createSSLSocketFactory()
-	{
-		final Certificate ca = loadCertificate();
-
-		try {
-			final KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-			keyStore.load(null, null);
-			keyStore.setCertificateEntry("SimlarCA", ca);
-
-			// Create a TrustManager that trusts the CAs in our KeyStore
-			final String tmAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
-			final TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmAlgorithm);
-			tmf.init(keyStore);
-
-			// Create an SSLContext that uses our TrustManager
-			final SSLContext context = SSLContext.getInstance("TLS");
-			context.init(null, tmf.getTrustManagers(), null);
-			return context.getSocketFactory();
-		} catch (final Exception e) {
-			Lg.ex(e, "Exception during createSSLSocketFactory");
-			return null;
-		}
-	}
-
-	private SimlarSSLSocketFactory()
-	{
-		super();
 	}
 
 	@Override
@@ -211,5 +216,4 @@ final class SimlarSSLSocketFactory extends SSLSocketFactory
 		socket.setEnabledProtocols(PROTOCOLS);
 		return socket;
 	}
-
 }
