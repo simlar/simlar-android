@@ -129,7 +129,7 @@ final class SimlarSSLSocketFactory extends SSLSocketFactory
 			return protocols;
 		} catch (final IOException e) {
 			Lg.ex(e, "failed to create protocols");
-			return null;
+			return PREFERRED_PROTOCOLS;
 		}
 	}
 
