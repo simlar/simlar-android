@@ -51,6 +51,6 @@ dependencies {
     pushCompile 'com.google.android.gms:play-services-gcm:10.0.1'
     compile files('libs/liblinphone.jar')
     compile 'com.android.support:appcompat-v7:25.2.0'
-    compile 'com.googlecode.libphonenumber:libphonenumber:8.3.2'
+    compile 'com.googlecode.libphonenumber:libphonenumber:8.3.3'
     compile 'com.android.support:support-v4:25.2.0'
 }
