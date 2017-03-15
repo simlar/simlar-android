@@ -47,8 +47,7 @@ android {
 }
 
 dependencies {
-    //noinspection GradleDependency /// TODO: version >= 10.2.0 need minSdkVersion 14
-    pushCompile 'com.google.android.gms:play-services-gcm:10.0.1'
+    pushCompile 'com.google.android.gms:play-services-gcm:10.2.0'
     compile files('libs/liblinphone.jar')
     compile 'com.android.support:appcompat-v7:25.3.0'
     compile 'com.googlecode.libphonenumber:libphonenumber:8.3.3'
