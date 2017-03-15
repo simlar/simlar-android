@@ -20,13 +20,11 @@
 
 package org.simlar.service;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.RawRes;
@@ -302,18 +300,13 @@ final class SoundEffectManager
 		}
 	}
 
-	@SuppressLint("InlinedApi")
 	public void setInCallMode(final boolean enabled)
 	{
 		Lg.i("setInCallMode: ", enabled);
 
 		final AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
 		if (enabled) {
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-				audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
-			} else {
-				audioManager.setMode(AudioManager.MODE_IN_CALL);
-			}
+			audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
 		} else {
 			audioManager.setMode(AudioManager.MODE_NORMAL);
 		}
