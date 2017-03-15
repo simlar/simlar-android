@@ -20,7 +20,6 @@
 
 package org.simlar.service;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -37,7 +36,6 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
 import android.os.Binder;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -363,19 +361,9 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "SimlarDisplayWakeLock");
 	}
 
-	@SuppressLint("InlinedApi")
-	static private int createWifiWakeLockType()
-	{
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
-			return WifiManager.WIFI_MODE_FULL_HIGH_PERF;
-		}
-
-		return WifiManager.WIFI_MODE_FULL;
-	}
-
 	private WifiLock createWifiWakeLock()
 	{
-		return ((WifiManager) this.getSystemService(Context.WIFI_SERVICE)).createWifiLock(createWifiWakeLockType(), "SimlarWifiLock");
+		return ((WifiManager) this.getSystemService(Context.WIFI_SERVICE)).createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "SimlarWifiLock");
 	}
 
 	private void terminateChecker()
