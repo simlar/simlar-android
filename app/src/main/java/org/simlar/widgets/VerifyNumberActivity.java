@@ -23,7 +23,6 @@ package org.simlar.widgets;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -154,13 +153,7 @@ public final class VerifyNumberActivity extends AppCompatActivity
 	private ArrayAdapter<Integer> createCountryCodeSelector()
 	{
 		final ArrayAdapter<Integer> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			adapter.addAll(SimlarNumber.getSupportedCountryCodes());
-		} else {
-			for (final Integer countryCode : SimlarNumber.getSupportedCountryCodes()) {
-				adapter.add(countryCode);
-			}
-		}
+		adapter.addAll(SimlarNumber.getSupportedCountryCodes());
 		adapter.sort(new Comparator<Integer>()
 		{
 			@Override
@@ -169,7 +162,6 @@ public final class VerifyNumberActivity extends AppCompatActivity
 				return lhs.compareTo(rhs);
 			}
 		});
-
 		return adapter;
 	}
 
