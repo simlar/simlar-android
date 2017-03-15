@@ -267,7 +267,7 @@ public final class ContactsProvider
 			final String[] projection = new String[] {
 					ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
 					ContactsContract.CommonDataKinds.Phone.NUMBER,
-					ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+					ContactsContract.CommonDataKinds.Phone.SORT_KEY_PRIMARY,
 					ContactsContract.CommonDataKinds.Phone.PHOTO_ID
 			};
 
