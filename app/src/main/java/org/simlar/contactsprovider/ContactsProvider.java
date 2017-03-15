@@ -305,9 +305,9 @@ public final class ContactsProvider
 							ContactsContract.Contacts.CONTENT_URI, contactId), ContactsContract.Contacts.Photo.CONTENT_DIRECTORY).toString();
 				}
 
-				if (!result.containsKey(simlarId)) {
-					result.put(simlarId, new ContactData(name, simlarNumber.getGuiTelephoneNumber(), ContactStatus.UNKNOWN,
-							photoUri));
+				if (!result.containsKey(simlarId) || Util.isNullOrEmpty(result.get(simlarId).name)) {
+					result.put(simlarId, new ContactData(Util.equalString(name, number) ? "" : name,
+							simlarNumber.getGuiTelephoneNumber(), ContactStatus.UNKNOWN, photoUri));
 
 					/// ATTENTION this logs the users telephone book
 					// Lg.d("adding contact " + name + " " + number + " => " + simlarId);
