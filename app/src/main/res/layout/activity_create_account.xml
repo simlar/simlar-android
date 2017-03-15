@@ -146,7 +146,8 @@
             android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:onClick="onCancelClicked"
-            android:text="@string/create_account_activity_button_cancel"/>
+            android:text="@string/create_account_activity_button_cancel"
+            style="?android:attr/buttonBarStyle"/>
 
         <Button
             android:id="@+id/buttonConfirm"
@@ -156,7 +157,8 @@
             android:layout_marginRight="15dp"
             android:layout_weight="1"
             android:onClick="onConfirmClicked"
-            android:text="@string/create_account_activity_button_confirm"/>
+            android:text="@string/create_account_activity_button_confirm"
+            style="?android:attr/buttonBarStyle"/>
     </LinearLayout>
 
 </RelativeLayout>
