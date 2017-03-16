@@ -10,4 +10,4 @@ android:
     - extra
 
 after_failure:
-    - cat app/build/outputs/lint-results*.xml
+    - cat app/build/reports/lint-results*.xml
