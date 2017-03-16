@@ -41,7 +41,7 @@ android {
 
     lintOptions {
         checkAllWarnings true
-        disable 'UnusedIds', 'GoogleAppIndexingWarning'
+        disable 'GoogleAppIndexingWarning'
         warningsAsErrors true
     }
 }
