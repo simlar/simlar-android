@@ -37,7 +37,6 @@
         android:layout_marginTop="20dp">
 
         <ImageView
-            android:id="@+id/imageButtonSpeaker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/speaker_on"
@@ -64,7 +63,6 @@
         android:layout_marginTop="20dp">
 
         <ImageView
-            android:id="@+id/imageButtonMicrophone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/micro_on"

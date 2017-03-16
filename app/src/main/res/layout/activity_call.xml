@@ -47,7 +47,6 @@
         android:textIsSelectable="true"/>
 
     <LinearLayout
-        android:id="@+id/linearLayoutCallStatus"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_below="@+id/contactName"
@@ -112,7 +111,6 @@
                 android:background="#EFEFEF">
 
                 <TextView
-                    android:id="@+id/textViewLabelQuality"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="5dp"
@@ -131,7 +129,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linearLayoutConnectionDetailsButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
@@ -161,7 +158,6 @@
             android:visibility="gone">
 
             <TextView
-                android:id="@+id/textViewLabelVerifiedAuthenticationToken"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="5dp"
@@ -195,7 +191,6 @@
             android:paddingRight="20dp">
 
             <TextView
-                android:id="@+id/textViewLabelAuthenticationToken"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -225,7 +220,6 @@
                 android:paddingRight="10dp">
 
                 <Button
-                    android:id="@+id/buttonAuthenticationTokenVerify"
                     style="@style/buttonWhiteWithIcon"
                     android:layout_width="match_parent"
                     android:drawableLeft="@drawable/button_ok"
@@ -233,7 +227,6 @@
                     android:text="@string/call_activity_button_authentication_token_verify"/>
 
                 <Button
-                    android:id="@+id/buttonAuthenticationTokenWrong"
                     style="@style/buttonWhiteWithIcon"
                     android:layout_width="match_parent"
                     android:layout_marginBottom="5dp"
@@ -284,7 +277,6 @@
             android:gravity="center_vertical|center_horizontal">
 
             <ImageButton
-                android:id="@+id/buttonSoundSettings"
                 style="@style/callActivityImageButton"
                 android:layout_marginRight="25dp"
                 android:contentDescription="@string/call_activity_sound_settings"
