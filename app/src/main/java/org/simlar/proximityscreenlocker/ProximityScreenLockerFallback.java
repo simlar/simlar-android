@@ -20,14 +20,12 @@
 
 package org.simlar.proximityscreenlocker;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -61,12 +59,9 @@ public class ProximityScreenLockerFallback implements ProximityScreenLocker, Sen
 		/// TODO: handle immediately
 	}
 
-	@SuppressLint("InlinedApi")
 	private void showNavigationBar(final boolean visible)
 	{
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-			mActivity.getWindow().getDecorView().setSystemUiVisibility(visible ? View.SYSTEM_UI_FLAG_VISIBLE : View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-		}
+		mActivity.getWindow().getDecorView().setSystemUiVisibility(visible ? View.SYSTEM_UI_FLAG_VISIBLE : View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 	}
 
 	//

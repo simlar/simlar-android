@@ -20,13 +20,11 @@
 
 package org.simlar.service;
 
-import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Vibrator;
 
@@ -88,10 +86,9 @@ final class VibratorManager
 			mVibrator.cancel();
 		}
 
-		@SuppressLint("NewApi")
 		public boolean hasVibrator()
 		{
-			return mVibrator != null && (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB || mVibrator.hasVibrator());
+			return mVibrator != null;
 		}
 	}
 

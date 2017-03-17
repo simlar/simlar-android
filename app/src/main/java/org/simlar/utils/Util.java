@@ -20,7 +20,6 @@
 
 package org.simlar.utils;
 
-import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -45,11 +44,7 @@ public final class Util
 
 	public static boolean isNullOrEmpty(final String string)
 	{
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-			return string == null || string.isEmpty();
-		}
-
-		return string == null || string.length() == 0;
+		return string == null || string.isEmpty();
 	}
 
 	public static int compareString(final String lhs, final String rhs)
@@ -132,14 +127,5 @@ public final class Util
 		}
 
 		return new SimpleDateFormat("mm:ss", Locale.US);
-	}
-
-	@SuppressWarnings("SameParameterValue")
-	public static void setFinishOnTouchOutsideCompatible(final Activity activity, final boolean finish)
-	{
-		// versions before HONEYCOMB do not support FinishOnTouchOutsides
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			activity.setFinishOnTouchOutside(finish);
-		}
 	}
 }

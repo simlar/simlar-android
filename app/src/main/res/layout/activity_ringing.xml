@@ -51,7 +51,6 @@
         android:textIsSelectable="true"/>
 
     <TextView
-        android:id="@+id/contactText"
         android:layout_width="fill_parent"
         android:layout_height="30dp"
         android:layout_below="@+id/contactName"
@@ -73,7 +72,6 @@
         android:contentDescription="@string/ringing_activity_phone_is_ringing"/>
 
     <ImageButton
-        android:id="@+id/ButtonTerminateCall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -85,7 +83,6 @@
         android:src="@drawable/button_ringing_hang_up"/>
 
     <ImageButton
-        android:id="@+id/buttonPickUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

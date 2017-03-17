@@ -205,7 +205,7 @@ public final class CreateAccountActivity extends Activity
 
 		setContentView(R.layout.activity_create_account);
 
-		Util.setFinishOnTouchOutsideCompatible(this, false);
+		setFinishOnTouchOutside(false);
 
 		mLayoutProgress = findViewById(R.id.linearLayoutProgress);
 		mProgressRequest = (ProgressBar) findViewById(R.id.progressBarRequest);
