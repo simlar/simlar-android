@@ -665,13 +665,6 @@ public final class LinphoneThread
 			// LinphoneCall is mutable => use it only in the calling thread
 			// LinphoneCallStats maybe mutable => use it only in the calling thread
 
-			if (LinphoneCallStats.MediaType.Video.equals(statsDoNotUse.getMediaType())) {
-				if (mVideoState == VideoState.WAITING_FOR_ICE && !call.mediaInProgress()) {
-					updateVideoState(VideoState.PLAYING);
-				}
-				return;
-			}
-
 			final LinphoneCallStats stats = call.getAudioStats();
 			final int duration = call.getDuration();
 			final PayloadType payloadType = call.getCurrentParams().getUsedAudioCodec();
