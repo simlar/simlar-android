@@ -542,11 +542,12 @@ public final class LinphoneThread
 		}
 
 		@Override
-		public void callStatsUpdated(final LinphoneCore lc, final LinphoneCall call, final LinphoneCallStats stats)
+		public void callStatsUpdated(final LinphoneCore lc, final LinphoneCall call, final LinphoneCallStats statsDoNotUse)
 		{
 			// LinphoneCall is mutable => use it only in the calling thread
 			// LinphoneCallStats maybe mutable => use it only in the calling thread
 
+			final LinphoneCallStats stats = call.getAudioStats();
 			final int duration = call.getDuration();
 			final PayloadType payloadType = call.getCurrentParamsCopy().getUsedAudioCodec();
 			final String codec = payloadType.getMime() + " " + payloadType.getRate() / 1000;
