@@ -171,4 +171,10 @@
     <string name="agree_activity_privacy_statement_and_terms_of_use">Do you agree to the\n<a href="https://www.simlar.org/datenschutzerklaerung/">privacy statement</a>\n and\n<a href="https://www.simlar.org/nutzungsbedingungen/">terms of use</a>?</string>
 
     <string name="missed_call_notification">Missed call</string>
+
+    <string name="no_contact_permission_fragment_title">Simlar can\'t access your contacts</string>
+    <string name="no_contact_permission_fragment_open_settings_text">By accessing your contacts Simlar automatically detects other Simlar users you can talk to in privacy. Please tap Settings and enable Contacts.</string>
+    <string name="no_contact_permission_fragment_open_settings_button">Settings</string>
+    <string name="no_contact_permission_fragment_call_contact_text">Otherwise, you\'ll have to find other Simlar contacts by trying to call each contact individually.</string>
+    <string name="no_contact_permission_fragment_call_contact_button">Call Contact</string>
 </resources>
