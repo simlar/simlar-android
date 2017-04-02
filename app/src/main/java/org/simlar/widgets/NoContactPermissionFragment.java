@@ -21,18 +21,27 @@
 
 package org.simlar.widgets;
 
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.simlar.R;
+import org.simlar.helper.SimlarNumber;
 import org.simlar.logging.Lg;
+
+import static android.app.Activity.RESULT_OK;
 
 
 public final class NoContactPermissionFragment extends Fragment
 {
+	private static final int PICK_CONTACT = 4711;
+
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
 	{
@@ -66,5 +75,28 @@ public final class NoContactPermissionFragment extends Fragment
 	private void callContactClicked()
 	{
 		Lg.i("callContactClicked");
+
+		final Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+		startActivityForResult(intent, PICK_CONTACT);
+	}
+
+	@Override
+	public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+		Lg.i("onActivityResult");
+
+		if (requestCode == PICK_CONTACT && resultCode == RESULT_OK) {
+			final Uri contactUri = data.getData();
+			final Cursor cursor = getActivity().getContentResolver().query(contactUri, null, null, null, null);
+			if (cursor != null) {
+				cursor.moveToFirst();
+				final String name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.SORT_KEY_PRIMARY));
+				final String telephoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+				cursor.close();
+				final String simlarId = SimlarNumber.createSimlarId(telephoneNumber);
+				Lg.i("contact: ", name, " ", telephoneNumber, " -> ", simlarId);
+
+				CallActivity.createCallView(getActivity(), simlarId);
+			}
+		}
 	}
 }
