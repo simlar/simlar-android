@@ -147,14 +147,14 @@ public final class PermissionsHelper
 		if (rationalMessages.isEmpty()) {
 			requestPermissions(activity, requestTypes);
 		} else {
-			showPermissionRationaleAlert(activity, TextUtils.join("\n\n", rationalMessages), requestTypes);
+			showPermissionsRationaleAlert(activity, TextUtils.join("\n\n", rationalMessages), requestTypes);
 		}
 
 		return false;
 	}
 
 	@SuppressLint("NewApi")
-	private static void showPermissionRationaleAlert(final Activity activity, final String message, final Set<Type> types)
+	private static void showPermissionsRationaleAlert(final Activity activity, final String message, final Set<Type> types)
 	{
 		(new AlertDialog.Builder(activity))
 				.setMessage(message)
