@@ -105,7 +105,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	{
 		Lg.i("starting CallActivity with simlarId=", new Lg.Anonymizer(simlarId));
 		currentActivity.startActivity(new Intent(currentActivity, CallActivity.class)
-				.putExtra(CallActivity.INTENT_EXTRA_SIMLAR_ID, simlarId)
+				.putExtra(INTENT_EXTRA_SIMLAR_ID, simlarId)
 				.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
 	}
 
