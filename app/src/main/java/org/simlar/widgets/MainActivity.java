@@ -26,10 +26,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import org.simlar.R;
 import org.simlar.contactsprovider.ContactsProvider;
@@ -56,6 +58,7 @@ public final class MainActivity extends AppCompatActivity
 {
 	private ContactsAdapter mAdapter = null;
 	private ContactsListFragment mContactList = null;
+	private NoContactPermissionFragment mNoContactPermissionFragment = null;
 
 	private final SimlarServiceCommunicator mCommunicator = FlavourHelper.isGcmEnabled() ? null : new SimlarServiceCommunicatorContacts();
 
@@ -79,14 +82,43 @@ public final class MainActivity extends AppCompatActivity
 		mAdapter = new ContactsAdapter(this);
 
 		final FragmentManager fm = getSupportFragmentManager();
-		mContactList = (ContactsListFragment) fm.findFragmentById(android.R.id.content);
+		mContactList = (ContactsListFragment) fm.findFragmentById(R.id.contactsListFragment);
 		if (mContactList == null) {
 			mContactList = new ContactsListFragment();
-			fm.beginTransaction().add(android.R.id.content, mContactList).commit();
+			fm.beginTransaction().add(R.id.contactsListFragment, mContactList).commit();
 		}
 		mContactList.setListAdapter(mAdapter);
 
+		mNoContactPermissionFragment = (NoContactPermissionFragment) fm.findFragmentById(R.id.noContactPermissionFragment);
+		if (mNoContactPermissionFragment == null) {
+			mNoContactPermissionFragment = new NoContactPermissionFragment();
+			fm.beginTransaction().add(R.id.noContactPermissionFragment, mNoContactPermissionFragment).commit();
+		}
+
+		showNoContactPermissionFragment(false);
+
 		Lg.i("onCreate ended");
+	}
+
+	private void showNoContactPermissionFragment(final boolean visible)
+	{
+		Lg.i("showNoContactPermissionFragment visible=" + Boolean.toString(visible));
+		setFragmentVisible(mNoContactPermissionFragment, visible);
+		setFragmentVisible(mContactList, !visible);
+	}
+
+	private static void setFragmentVisible(final Fragment fragment, final boolean visible)
+	{
+		if (fragment == null) {
+			return;
+		}
+
+		final View view = fragment.getView();
+		if (view == null) {
+			return;
+		}
+
+		view.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
 	}
 
 	private void requestContacts()
@@ -106,6 +138,7 @@ public final class MainActivity extends AppCompatActivity
 
 	private void loadContacts()
 	{
+		showNoContactPermissionFragment(false);
 		mContactList.setEmptyText(getString(R.string.main_activity_contact_list_loading_contacts));
 		ContactsProvider.getContacts(this, new FullContactsListener()
 		{
@@ -126,7 +159,7 @@ public final class MainActivity extends AppCompatActivity
 					mContactList.setEmptyText(getString(R.string.main_activity_contact_list_error_loading_contacts_no_internet));
 					break;
 				case PERMISSION_DENIED:
-					mContactList.setEmptyText(getString(R.string.main_activity_contact_list_error_loading_contacts_permission_denied));
+					showNoContactPermissionFragment(true);
 					break;
 				}
 

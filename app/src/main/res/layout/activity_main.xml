@@ -28,4 +28,19 @@
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
                 tools:context="org.simlar.widgets.MainActivity">
+
+    <fragment
+        android:name="org.simlar.widgets.ContactsListFragment"
+        android:id="@+id/contactsListFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"/>
+
+    <fragment
+        android:name="org.simlar.widgets.NoContactPermissionFragment"
+        android:id="@+id/noContactPermissionFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"/>
+
 </RelativeLayout>
