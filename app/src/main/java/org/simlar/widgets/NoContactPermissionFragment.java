@@ -118,6 +118,15 @@ public final class NoContactPermissionFragment extends Fragment
 		ContactsProvider.getContactStatus(simlarId, new ContactsProvider.ContactStatusListener()
 		{
 			@Override
+			public void onOffline()
+			{
+				(new AlertDialog.Builder(getActivity()))
+						.setTitle(R.string.no_contact_permission_fragment_alert_offline_title)
+						.setMessage(getString(R.string.no_contact_permission_fragment_alert_offline_message))
+						.create().show();
+			}
+
+			@Override
 			public void onGetStatus(final boolean registered)
 			{
 				if (!registered) {

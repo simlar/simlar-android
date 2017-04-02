@@ -72,6 +72,7 @@ public final class ContactsProvider
 	public interface ContactStatusListener
 	{
 		void onGetStatus(final boolean registered);
+		void onOffline();
 	}
 
 	public enum Error
@@ -557,7 +558,11 @@ public final class ContactsProvider
 			@Override
 			protected void onPostExecute(final Map<String, ContactStatus> contactsStatus)
 			{
-				listener.onGetStatus(contactsStatus.get(simlarId) == ContactStatus.REGISTERED);
+				if (contactsStatus == null) {
+					listener.onOffline();
+				} else {
+					listener.onGetStatus(contactsStatus.get(simlarId) == ContactStatus.REGISTERED);
+				}
 			}
 		}.execute(simlarId);
 	}
