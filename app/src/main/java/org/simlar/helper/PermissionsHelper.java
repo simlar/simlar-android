@@ -41,6 +41,7 @@ import org.simlar.utils.Util;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
@@ -167,6 +168,11 @@ public final class PermissionsHelper
 					}
 				})
 				.create().show();
+	}
+
+	public static void requestContactPermission(final Activity activity)
+	{
+		requestPermissions(activity, new HashSet<>(Arrays.asList(new Type[]{ Type.CONTACTS })));
 	}
 
 	private static void requestPermissions(final Activity activity, final Set<Type> types)

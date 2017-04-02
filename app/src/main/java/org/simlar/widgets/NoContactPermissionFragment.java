@@ -32,6 +32,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.simlar.R;
+import org.simlar.helper.PermissionsHelper;
 import org.simlar.helper.SimlarNumber;
 import org.simlar.logging.Lg;
 
@@ -70,6 +71,7 @@ public final class NoContactPermissionFragment extends Fragment
 	private void requestContactPermissionsClicked()
 	{
 		Lg.i("requestContactPermissionsClicked");
+		PermissionsHelper.requestContactPermission(getActivity());
 	}
 
 	private void callContactClicked()
