@@ -138,7 +138,10 @@ public final class ContactsProvider
 		private void onError(final Error error)
 		{
 			mState = State.ERROR;
-			mContacts.clear();
+			if (error != Error.PERMISSION_DENIED) {
+				mContacts.clear();
+			}
+
 			notifyContactListeners();
 			notifyFullContactsListeners(null, error);
 		}
@@ -367,6 +370,17 @@ public final class ContactsProvider
 			}
 		}
 
+		void addContact(final String simlarId, final String name, final String telephoneNumber)
+		{
+			if (Util.isNullOrEmpty(simlarId)) {
+				Lg.e("no simlarId");
+				return;
+			}
+
+			Lg.i("manually add contact with simlarId=", new Lg.Anonymizer(simlarId));
+			mContacts.put(simlarId, new ContactData(name, telephoneNumber, ContactStatus.REGISTERED, null));
+		}
+
 		void getContacts(final Context context, final FullContactsListener listener)
 		{
 			if (context == null) {
@@ -466,6 +480,11 @@ public final class ContactsProvider
 	public static void preLoadContacts(final Context context)
 	{
 		mImpl.preLoadContacts(context);
+	}
+
+	public static void addContact(final String simlarId, final String name, final String telephoneNumber)
+	{
+		mImpl.addContact(simlarId, name, telephoneNumber);
 	}
 
 	public static void getContacts(final Context context, final FullContactsListener listener)
