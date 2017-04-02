@@ -115,8 +115,23 @@ public final class NoContactPermissionFragment extends Fragment
 			return;
 		}
 
-		ContactsProvider.addContact(simlarId, name, telephoneNumber);
+		ContactsProvider.getContactStatus(simlarId, new ContactsProvider.ContactStatusListener()
+		{
+			@Override
+			public void onGetStatus(final boolean registered)
+			{
+				if (!registered) {
+					(new AlertDialog.Builder(getActivity()))
+							.setTitle(String.format(getString(R.string.no_contact_permission_fragment_alert_contact_not_registered_title), telephoneNumber))
+							.setMessage(Util.fromHtml(String.format(getString(R.string.no_contact_permission_fragment_alert_contact_not_registered_message), name)))
+							.create().show();
+					return;
+				}
 
-		CallActivity.createCallView(getActivity(), simlarId);
+				ContactsProvider.addContact(simlarId, name, telephoneNumber);
+
+				CallActivity.createCallView(getActivity(), simlarId);
+			}
+		});
 	}
 }

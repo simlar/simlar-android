@@ -69,6 +69,11 @@ public final class ContactsProvider
 		void onGetNameAndPhotoId(final String name, final String photoId);
 	}
 
+	public interface ContactStatusListener
+	{
+		void onGetStatus(final boolean registered);
+	}
+
 	public enum Error
 	{
 		NONE,
@@ -527,5 +532,33 @@ public final class ContactsProvider
 		}
 
 		return BitmapFactory.decodeResource(context.getResources(), defaultResourceId);
+	}
+
+	public static void getContactStatus(final String simlarId, final ContactStatusListener listener)
+	{
+		if (Util.isNullOrEmpty(simlarId)) {
+			Lg.e("no simlarId");
+			return;
+		}
+
+		if (listener == null) {
+			Lg.e("no listener");
+			return;
+		}
+
+		new AsyncTask<String, Void, Map<String, ContactStatus>>()
+		{
+			@Override
+			protected Map<String, ContactStatus> doInBackground(final String... params)
+			{
+				return GetContactsStatus.httpPostGetContactsStatus(new HashSet<>(Arrays.asList(params)));
+			}
+
+			@Override
+			protected void onPostExecute(final Map<String, ContactStatus> contactsStatus)
+			{
+				listener.onGetStatus(contactsStatus.get(simlarId) == ContactStatus.REGISTERED);
+			}
+		}.execute(simlarId);
 	}
 }

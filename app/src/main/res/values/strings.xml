@@ -178,4 +178,6 @@
     <string name="no_contact_permission_fragment_call_contact_button">Call Contact</string>
     <string name="no_contact_permission_fragment_alert_no_simlarId_title">Invalid telephone number</string>
     <string name="no_contact_permission_fragment_alert_no_simlarId_message">The number &lt;b>%1$s&lt;/b> is not usable with Simlar. Choose another contact.</string>
+    <string name="no_contact_permission_fragment_alert_contact_not_registered_title">%1$s not registered</string>
+    <string name="no_contact_permission_fragment_alert_contact_not_registered_message">Ask your &lt;b>%1$s&lt;/b> to install Simlar, too</string>
 </resources>
