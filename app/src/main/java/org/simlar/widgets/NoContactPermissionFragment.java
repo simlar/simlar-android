@@ -115,11 +115,19 @@ public final class NoContactPermissionFragment extends Fragment
 			return;
 		}
 
+		final AlertDialog dialog = (new AlertDialog.Builder(getActivity()))
+				.setTitle(R.string.no_contact_permission_fragment_alert_checking_status_title)
+				.setMessage(name + " " + telephoneNumber)
+				.setCancelable(false)
+				.create();
+		dialog.show();
+
 		ContactsProvider.getContactStatus(simlarId, new ContactsProvider.ContactStatusListener()
 		{
 			@Override
 			public void onOffline()
 			{
+				dialog.dismiss();
 				(new AlertDialog.Builder(getActivity()))
 						.setTitle(R.string.no_contact_permission_fragment_alert_offline_title)
 						.setMessage(getString(R.string.no_contact_permission_fragment_alert_offline_message))
@@ -129,6 +137,7 @@ public final class NoContactPermissionFragment extends Fragment
 			@Override
 			public void onGetStatus(final boolean registered)
 			{
+				dialog.dismiss();
 				if (!registered) {
 					(new AlertDialog.Builder(getActivity()))
 							.setTitle(String.format(getString(R.string.no_contact_permission_fragment_alert_contact_not_registered_title), telephoneNumber))
