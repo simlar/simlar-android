@@ -20,7 +20,6 @@
 
 package org.simlar.widgets;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
@@ -72,9 +71,6 @@ public final class ContactsListFragment extends android.support.v4.app.ListFragm
 			return;
 		}
 
-		Lg.i("starting CallActivity with simlarId=", new Lg.Anonymizer(simlarId));
-		startActivity(new Intent(getActivity(), CallActivity.class)
-				.putExtra(CallActivity.INTENT_EXTRA_SIMLAR_ID, simlarId)
-				.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+		CallActivity.createCallView(getActivity(), simlarId);
 	}
 }
