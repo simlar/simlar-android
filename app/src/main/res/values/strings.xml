@@ -176,4 +176,6 @@
     <string name="no_contact_permission_fragment_open_settings_button">Settings</string>
     <string name="no_contact_permission_fragment_call_contact_text">Otherwise, you\'ll have to find other Simlar contacts by trying to call each contact individually.</string>
     <string name="no_contact_permission_fragment_call_contact_button">Call Contact</string>
+    <string name="no_contact_permission_fragment_alert_no_simlarId_title">Invalid telephone number</string>
+    <string name="no_contact_permission_fragment_alert_no_simlarId_message">The number &lt;b>%1$s&lt;/b> is not usable with Simlar. Choose another contact.</string>
 </resources>

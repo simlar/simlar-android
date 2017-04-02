@@ -27,6 +27,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ import org.simlar.R;
 import org.simlar.helper.PermissionsHelper;
 import org.simlar.helper.SimlarNumber;
 import org.simlar.logging.Lg;
+import org.simlar.utils.Util;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -94,11 +96,24 @@ public final class NoContactPermissionFragment extends Fragment
 				final String name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.SORT_KEY_PRIMARY));
 				final String telephoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 				cursor.close();
-				final String simlarId = SimlarNumber.createSimlarId(telephoneNumber);
-				Lg.i("contact: ", name, " ", telephoneNumber, " -> ", simlarId);
 
-				CallActivity.createCallView(getActivity(), simlarId);
+				callContact(name, telephoneNumber);
 			}
 		}
+	}
+
+	private void callContact(final String name, final String telephoneNumber)
+	{
+		final String simlarId = SimlarNumber.createSimlarId(telephoneNumber);
+
+		if (Util.isNullOrEmpty(simlarId)) {
+			(new AlertDialog.Builder(getActivity()))
+					.setTitle(R.string.no_contact_permission_fragment_alert_no_simlarId_title)
+					.setMessage(Util.fromHtml(String.format(getString(R.string.no_contact_permission_fragment_alert_no_simlarId_message), telephoneNumber)))
+					.create().show();
+			return;
+		}
+
+		CallActivity.createCallView(getActivity(), simlarId);
 	}
 }

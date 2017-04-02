@@ -23,6 +23,8 @@ package org.simlar.utils;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.View;
 
 import java.io.IOException;
@@ -101,6 +103,15 @@ public final class Util
 		} else {
 			//noinspection deprecation
 			return resources.getDrawable(id);
+		}
+	}
+
+	public static Spanned fromHtml(final String string) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+			return Html.fromHtml(string, Html.FROM_HTML_MODE_LEGACY);
+		} else {
+			//noinspection deprecation
+			return Html.fromHtml(string);
 		}
 	}
 
