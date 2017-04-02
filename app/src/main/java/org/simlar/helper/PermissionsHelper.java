@@ -145,7 +145,7 @@ public final class PermissionsHelper
 		}
 
 		if (rationalMessages.isEmpty()) {
-			requestPermission(activity, requestTypes);
+			requestPermissions(activity, requestTypes);
 		} else {
 			showPermissionRationaleAlert(activity, TextUtils.join("\n\n", rationalMessages), requestTypes);
 		}
@@ -163,13 +163,13 @@ public final class PermissionsHelper
 					@Override
 					public void onDismiss(final DialogInterface dialog)
 					{
-						requestPermission(activity, types);
+						requestPermissions(activity, types);
 					}
 				})
 				.create().show();
 	}
 
-	private static void requestPermission(final Activity activity, final Set<Type> types)
+	private static void requestPermissions(final Activity activity, final Set<Type> types)
 	{
 		final Set<String> permissions = new HashSet<>();
 		for (final Type type : types) {
