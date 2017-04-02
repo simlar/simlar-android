@@ -112,7 +112,7 @@ public final class MainActivity extends AppCompatActivity
 			@Override
 			public void onGetContacts(final Set<ContactDataComplete> contacts, final ContactsProvider.Error error)
 			{
-				Lg.i("onGetContacts: error=", error);
+				Lg.i("onGetContacts error=", error);
 				mAdapter.clear();
 				switch (error) {
 				case NONE:
