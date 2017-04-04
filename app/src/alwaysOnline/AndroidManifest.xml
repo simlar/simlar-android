@@ -28,7 +28,7 @@
     <application
         android:allowBackup="false"
         android:fullBackupContent="false"
-        android:extractNativeLibs="false"
+        android:extractNativeLibs="true"
         tools:ignore="UnusedAttribute">
 
         <!-- needed to not warn in push flavour -->
