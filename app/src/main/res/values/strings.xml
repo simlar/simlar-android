@@ -182,5 +182,5 @@
     <string name="no_contact_permission_fragment_alert_offline_title">You are offline</string>
     <string name="no_contact_permission_fragment_alert_offline_message">Please check your internet connection and try again.</string>
     <string name="no_contact_permission_fragment_alert_contact_not_registered_title">%1$s not registered</string>
-    <string name="no_contact_permission_fragment_alert_contact_not_registered_message">Ask your &lt;b>%1$s&lt;/b> to install Simlar, too</string>
+    <string name="no_contact_permission_fragment_alert_contact_not_registered_message">Ask &lt;b>%1$s&lt;/b> to install Simlar, too</string>
 </resources>
