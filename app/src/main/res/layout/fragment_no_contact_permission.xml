@@ -68,7 +68,7 @@
             style="@style/buttonWhiteWithIcon"
             android:layout_width="match_parent"
             android:layout_marginTop="15dp"
-            android:drawableLeft="@drawable/button_ok"
+            android:drawableLeft="@drawable/button_request_contacts_permission"
             android:text="@string/no_contact_permission_fragment_open_settings_button"/>
 
         <TextView
@@ -85,7 +85,7 @@
             android:layout_width="match_parent"
             android:layout_marginBottom="20dp"
             android:layout_marginTop="15dp"
-            android:drawableLeft="@drawable/button_cancel"
+            android:drawableLeft="@drawable/button_call_contact"
             android:text="@string/no_contact_permission_fragment_call_contact_button"/>
     </LinearLayout>
 
