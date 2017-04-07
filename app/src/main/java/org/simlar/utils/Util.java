@@ -106,7 +106,8 @@ public final class Util
 		}
 	}
 
-	public static Spanned fromHtml(final String string) {
+	public static Spanned fromHtml(final String string)
+	{
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 			return Html.fromHtml(string, Html.FROM_HTML_MODE_LEGACY);
 		} else {
