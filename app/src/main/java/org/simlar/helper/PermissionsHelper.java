@@ -41,6 +41,7 @@ import org.simlar.utils.Util;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
@@ -55,7 +56,7 @@ public final class PermissionsHelper
 	}
 
 	public enum Type{
-		CONTACTS(Manifest.permission.READ_CONTACTS, true, R.string.permission_explain_text_contacts),
+		CONTACTS(Manifest.permission.READ_CONTACTS, false, R.string.permission_explain_text_contacts),
 		MICROPHONE(Manifest.permission.RECORD_AUDIO, true, R.string.permission_explain_text_record_audio),
 		PHONE(Manifest.permission.READ_PHONE_STATE, true, R.string.permission_explain_text_phone_state),
 		SMS(Manifest.permission.READ_SMS, false, R.string.permission_explain_text_sms),
@@ -145,16 +146,16 @@ public final class PermissionsHelper
 		}
 
 		if (rationalMessages.isEmpty()) {
-			requestPermission(activity, requestTypes);
+			requestPermissions(activity, requestTypes);
 		} else {
-			showPermissionRationaleAlert(activity, TextUtils.join("\n\n", rationalMessages), requestTypes);
+			showPermissionsRationaleAlert(activity, TextUtils.join("\n\n", rationalMessages), requestTypes);
 		}
 
 		return false;
 	}
 
 	@SuppressLint("NewApi")
-	private static void showPermissionRationaleAlert(final Activity activity, final String message, final Set<Type> types)
+	private static void showPermissionsRationaleAlert(final Activity activity, final String message, final Set<Type> types)
 	{
 		(new AlertDialog.Builder(activity))
 				.setMessage(message)
@@ -163,13 +164,18 @@ public final class PermissionsHelper
 					@Override
 					public void onDismiss(final DialogInterface dialog)
 					{
-						requestPermission(activity, types);
+						requestPermissions(activity, types);
 					}
 				})
 				.create().show();
 	}
 
-	private static void requestPermission(final Activity activity, final Set<Type> types)
+	public static void requestContactPermission(final Activity activity)
+	{
+		requestPermissions(activity, Collections.singleton(Type.CONTACTS));
+	}
+
+	private static void requestPermissions(final Activity activity, final Set<Type> types)
 	{
 		final Set<String> permissions = new HashSet<>();
 		for (final Type type : types) {

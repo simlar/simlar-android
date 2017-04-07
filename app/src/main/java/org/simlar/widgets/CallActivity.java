@@ -20,6 +20,7 @@
 
 package org.simlar.widgets;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -45,7 +46,7 @@ import org.simlar.utils.Util;
 
 public final class CallActivity extends AppCompatActivity implements VolumesControlDialogFragment.Listener
 {
-	public static final String INTENT_EXTRA_SIMLAR_ID = "simlarId";
+	private static final String INTENT_EXTRA_SIMLAR_ID = "simlarId";
 
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCall();
 	private ProximityScreenLocker mProximityScreenLocker;
@@ -98,6 +99,14 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		{
 			CallActivity.this.onCallConnectionDetailsChanged();
 		}
+	}
+
+	public static void createCallView(final Activity currentActivity, final String simlarId)
+	{
+		Lg.i("starting CallActivity with simlarId=", new Lg.Anonymizer(simlarId));
+		currentActivity.startActivity(new Intent(currentActivity, CallActivity.class)
+				.putExtra(INTENT_EXTRA_SIMLAR_ID, simlarId)
+				.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
 	}
 
 	@Override

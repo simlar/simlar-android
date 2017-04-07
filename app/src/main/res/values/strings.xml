@@ -32,7 +32,6 @@
     <string name="main_activity_contact_list_no_contacts_found">No contacts found. Ask your friends to install Simlar too.</string>
     <string name="main_activity_contact_list_error_loading_contacts">Error: Failed to load contacts.</string>
     <string name="main_activity_contact_list_error_loading_contacts_no_internet">Failed to connect to the server. Check your internet connection.</string>
-    <string name="main_activity_contact_list_error_loading_contacts_permission_denied">Permission to read contacts denied. Grant this permission.</string>
     <string name="main_activity_menu_reload_contacts">Reload contacts</string>
     <string name="main_activity_menu_upload_logfile">Report bug</string>
     <string name="main_activity_menu_enable_debug_mode">Enable debug mode</string>
@@ -171,4 +170,17 @@
     <string name="agree_activity_privacy_statement_and_terms_of_use">Do you agree to the\n<a href="https://www.simlar.org/datenschutzerklaerung/">privacy statement</a>\n and\n<a href="https://www.simlar.org/nutzungsbedingungen/">terms of use</a>?</string>
 
     <string name="missed_call_notification">Missed call</string>
+
+    <string name="no_contact_permission_fragment_title">Simlar can\'t access your contacts</string>
+    <string name="no_contact_permission_fragment_open_settings_text">By accessing your contacts Simlar automatically detects other Simlar users you can talk to in privacy. Please tap Settings and enable Contacts.</string>
+    <string name="no_contact_permission_fragment_open_settings_button">Settings</string>
+    <string name="no_contact_permission_fragment_call_contact_text">Otherwise, you\'ll have to find other Simlar contacts by trying to call each contact individually.</string>
+    <string name="no_contact_permission_fragment_call_contact_button">Call Contact</string>
+    <string name="no_contact_permission_fragment_alert_no_simlarId_title">Invalid telephone number</string>
+    <string name="no_contact_permission_fragment_alert_no_simlarId_message">The number &lt;b>%1$s&lt;/b> is not usable with Simlar. Choose another contact.</string>
+    <string name="no_contact_permission_fragment_alert_checking_status_title">Checking contact status</string>
+    <string name="no_contact_permission_fragment_alert_offline_title">You are offline</string>
+    <string name="no_contact_permission_fragment_alert_offline_message">Please check your internet connection and try again.</string>
+    <string name="no_contact_permission_fragment_alert_contact_not_registered_title">%1$s not registered</string>
+    <string name="no_contact_permission_fragment_alert_contact_not_registered_message">Ask &lt;b>%1$s&lt;/b> to install Simlar, too</string>
 </resources>

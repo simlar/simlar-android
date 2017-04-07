@@ -69,6 +69,12 @@ public final class ContactsProvider
 		void onGetNameAndPhotoId(final String name, final String photoId);
 	}
 
+	public interface ContactStatusListener
+	{
+		void onGetStatus(final boolean registered);
+		void onOffline();
+	}
+
 	public enum Error
 	{
 		NONE,
@@ -138,7 +144,10 @@ public final class ContactsProvider
 		private void onError(final Error error)
 		{
 			mState = State.ERROR;
-			mContacts.clear();
+			if (error != Error.PERMISSION_DENIED) {
+				mContacts.clear();
+			}
+
 			notifyContactListeners();
 			notifyFullContactsListeners(null, error);
 		}
@@ -367,6 +376,17 @@ public final class ContactsProvider
 			}
 		}
 
+		void addContact(final String simlarId, final String name, final String telephoneNumber)
+		{
+			if (Util.isNullOrEmpty(simlarId)) {
+				Lg.e("no simlarId");
+				return;
+			}
+
+			Lg.i("manually add contact with simlarId=", new Lg.Anonymizer(simlarId));
+			mContacts.put(simlarId, new ContactData(name, telephoneNumber, ContactStatus.REGISTERED, null));
+		}
+
 		void getContacts(final Context context, final FullContactsListener listener)
 		{
 			if (context == null) {
@@ -468,6 +488,11 @@ public final class ContactsProvider
 		mImpl.preLoadContacts(context);
 	}
 
+	public static void addContact(final String simlarId, final String name, final String telephoneNumber)
+	{
+		mImpl.addContact(simlarId, name, telephoneNumber);
+	}
+
 	public static void getContacts(final Context context, final FullContactsListener listener)
 	{
 		mImpl.getContacts(context, listener);
@@ -508,5 +533,37 @@ public final class ContactsProvider
 		}
 
 		return BitmapFactory.decodeResource(context.getResources(), defaultResourceId);
+	}
+
+	public static void getContactStatus(final String simlarId, final ContactStatusListener listener)
+	{
+		if (Util.isNullOrEmpty(simlarId)) {
+			Lg.e("no simlarId");
+			return;
+		}
+
+		if (listener == null) {
+			Lg.e("no listener");
+			return;
+		}
+
+		new AsyncTask<String, Void, Map<String, ContactStatus>>()
+		{
+			@Override
+			protected Map<String, ContactStatus> doInBackground(final String... params)
+			{
+				return GetContactsStatus.httpPostGetContactsStatus(new HashSet<>(Arrays.asList(params)));
+			}
+
+			@Override
+			protected void onPostExecute(final Map<String, ContactStatus> contactsStatus)
+			{
+				if (contactsStatus == null) {
+					listener.onOffline();
+				} else {
+					listener.onGetStatus(contactsStatus.get(simlarId) == ContactStatus.REGISTERED);
+				}
+			}
+		}.execute(simlarId);
 	}
 }
