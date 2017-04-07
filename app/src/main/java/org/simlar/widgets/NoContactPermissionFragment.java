@@ -88,20 +88,40 @@ public final class NoContactPermissionFragment extends Fragment
 	@Override
 	public void onActivityResult(final int requestCode, final int resultCode, final Intent data)
 	{
-		Lg.i("onActivityResult");
-
-		if (requestCode == PICK_CONTACT && resultCode == RESULT_OK) {
-			final Uri contactUri = data.getData();
-			final Cursor cursor = getActivity().getContentResolver().query(contactUri, null, null, null, null);
-			if (cursor != null) {
-				cursor.moveToFirst();
-				final String name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.SORT_KEY_PRIMARY));
-				final String telephoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-				cursor.close();
-
-				callContact(name, telephoneNumber);
-			}
+		if (requestCode != PICK_CONTACT) {
+			Lg.e("onActivityResult with unknown requestCode=", requestCode);
+			return;
 		}
+
+		if (resultCode != RESULT_OK) {
+			Lg.i("onActivityResult with resultCode=", resultCode);
+			return;
+		}
+
+		if (data == null) {
+			Lg.e("onActivityResult without intent data");
+			return;
+		}
+
+		final Uri contactUri = data.getData();
+		if (contactUri == null) {
+			Lg.e("onActivityResult without contactUri data=", data);
+			return;
+		}
+
+
+		final Cursor cursor = getActivity().getContentResolver().query(contactUri, null, null, null, null);
+		if (cursor == null) {
+			Lg.e("onActivityResult failed to create cursor for contactUri=", contactUri);
+			return;
+		}
+
+		cursor.moveToFirst();
+		final String name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.SORT_KEY_PRIMARY));
+		final String telephoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+		cursor.close();
+
+		callContact(name, telephoneNumber);
 	}
 
 	private void callContact(final String name, final String telephoneNumber)
@@ -109,6 +129,7 @@ public final class NoContactPermissionFragment extends Fragment
 		final String simlarId = SimlarNumber.createSimlarId(telephoneNumber);
 
 		if (Util.isNullOrEmpty(simlarId)) {
+			Lg.i("not calling contact because of invalid telephoneNumber=", new Lg.Anonymizer(telephoneNumber));
 			(new AlertDialog.Builder(getActivity()))
 					.setTitle(R.string.no_contact_permission_fragment_alert_no_simlarId_title)
 					.setMessage(Util.fromHtml(String.format(getString(R.string.no_contact_permission_fragment_alert_no_simlarId_message), telephoneNumber)))
@@ -116,6 +137,7 @@ public final class NoContactPermissionFragment extends Fragment
 			return;
 		}
 
+		Lg.i("checking status of simlarId=", new Lg.Anonymizer(simlarId));
 		final AlertDialog dialog = (new AlertDialog.Builder(getActivity()))
 				.setTitle(R.string.no_contact_permission_fragment_alert_checking_status_title)
 				.setMessage(name + " " + telephoneNumber)
@@ -129,6 +151,7 @@ public final class NoContactPermissionFragment extends Fragment
 			public void onOffline()
 			{
 				dialog.dismiss();
+				Lg.i("no connection to the server");
 				(new AlertDialog.Builder(getActivity()))
 						.setTitle(R.string.no_contact_permission_fragment_alert_offline_title)
 						.setMessage(getString(R.string.no_contact_permission_fragment_alert_offline_message))
@@ -140,6 +163,7 @@ public final class NoContactPermissionFragment extends Fragment
 			{
 				dialog.dismiss();
 				if (!registered) {
+					Lg.i("simlarId=", new Lg.Anonymizer(simlarId), " not registered");
 					(new AlertDialog.Builder(getActivity()))
 							.setTitle(String.format(getString(R.string.no_contact_permission_fragment_alert_contact_not_registered_title), telephoneNumber))
 							.setMessage(Util.fromHtml(String.format(getString(R.string.no_contact_permission_fragment_alert_contact_not_registered_message), name)))
