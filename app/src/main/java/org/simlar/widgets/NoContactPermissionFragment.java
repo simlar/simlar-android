@@ -51,7 +51,7 @@ public final class NoContactPermissionFragment extends Fragment
 	{
 		final View view = inflater.inflate(R.layout.fragment_no_contact_permission, container, false);
 
-		view.findViewById(R.id.buttonSettings).setOnClickListener(new View.OnClickListener()
+		view.findViewById(R.id.buttonRequestContactsPermissions).setOnClickListener(new View.OnClickListener()
 		{
 			@Override
 			public void onClick(final View v)

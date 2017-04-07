@@ -60,16 +60,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="22dp"
             android:gravity="center_horizontal"
-            android:text="@string/no_contact_permission_fragment_open_settings_text"
+            android:text="@string/no_contact_permission_fragment_request_contacts_permissions_text"
             android:textSize="18sp"/>
 
         <Button
-            android:id="@+id/buttonSettings"
+            android:id="@+id/buttonRequestContactsPermissions"
             style="@style/buttonWhiteWithIcon"
             android:layout_width="match_parent"
             android:layout_marginTop="15dp"
             android:drawableLeft="@drawable/button_request_contacts_permission"
-            android:text="@string/no_contact_permission_fragment_open_settings_button"/>
+            android:text="@string/no_contact_permission_fragment_request_contacts_permissions_button"/>
 
         <TextView
             android:layout_width="match_parent"
