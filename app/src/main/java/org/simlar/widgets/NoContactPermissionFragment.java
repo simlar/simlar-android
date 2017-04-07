@@ -86,7 +86,8 @@ public final class NoContactPermissionFragment extends Fragment
 	}
 
 	@Override
-	public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+	public void onActivityResult(final int requestCode, final int resultCode, final Intent data)
+	{
 		Lg.i("onActivityResult");
 
 		if (requestCode == PICK_CONTACT && resultCode == RESULT_OK) {
