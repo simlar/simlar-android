@@ -36,11 +36,11 @@
         android:name="org.simlar.widgets.NoContactPermissionFragment"
         android:id="@+id/noContactPermissionFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginLeft="@dimen/fragment_no_contact_permission_horizontal_margin"
         android:layout_marginRight="@dimen/fragment_no_contact_permission_horizontal_margin"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        tools:layout="@layout/fragment_no_contact_permission"/>
 
 </RelativeLayout>
