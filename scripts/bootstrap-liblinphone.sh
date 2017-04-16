@@ -48,9 +48,9 @@ if [ -d "${LINPHONE_PATCH_DIR}" ] ; then
 fi
 
 if [ -d "${MEDIASTREAMER2_PATCH_DIR}" ] ; then
-	cd submodules/linphone/mediastreamer2
+	cd submodules/mediastreamer2
 	git am "${MEDIASTREAMER2_PATCH_DIR}"/*.patch
-	cd ../../..
+	cd ../..
 fi
 
 if [ -d "${BELLESIP_PATCH_DIR}" ] ; then
