@@ -21,6 +21,7 @@
 
 package org.simlar.widgets;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -51,7 +52,7 @@ public final class NoContactPermissionFragment extends Fragment
 	{
 		final View view = inflater.inflate(R.layout.fragment_no_contact_permission, container, false);
 
-		view.findViewById(R.id.buttonSettings).setOnClickListener(new View.OnClickListener()
+		view.findViewById(R.id.buttonRequestContactsPermissions).setOnClickListener(new View.OnClickListener()
 		{
 			@Override
 			public void onClick(final View v)
@@ -138,11 +139,9 @@ public final class NoContactPermissionFragment extends Fragment
 		}
 
 		Lg.i("checking status of simlarId=", new Lg.Anonymizer(simlarId));
-		final AlertDialog dialog = (new AlertDialog.Builder(getActivity()))
-				.setTitle(R.string.no_contact_permission_fragment_alert_checking_status_title)
-				.setMessage(name + " " + telephoneNumber)
-				.setCancelable(false)
-				.create();
+		final ProgressDialog dialog = new ProgressDialog(getActivity());
+		dialog.setTitle(R.string.no_contact_permission_fragment_alert_checking_status_title);
+		dialog.setMessage(name + '\n' + telephoneNumber);
 		dialog.show();
 
 		ContactsProvider.getContactStatus(simlarId, new ContactsProvider.ContactStatusListener()

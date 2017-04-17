@@ -24,9 +24,6 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_alignParentLeft="true"
-              android:layout_alignParentRight="true"
-              android:layout_marginBottom="@dimen/activity_vertical_margin"
               android:layout_marginLeft="@dimen/fragment_no_contact_permission_horizontal_margin"
               android:layout_marginRight="@dimen/fragment_no_contact_permission_horizontal_margin"
               android:layout_marginTop="@dimen/activity_vertical_margin"
@@ -43,8 +40,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:gravity="center_horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:text="@string/no_contact_permission_fragment_title"
-        android:textSize="25sp"/>
+        android:textSize="23sp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -58,35 +57,37 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
+            android:layout_marginTop="14dp"
             android:gravity="center_horizontal"
-            android:text="@string/no_contact_permission_fragment_open_settings_text"
-            android:textSize="18sp"/>
+            android:text="@string/no_contact_permission_fragment_request_contacts_permissions_text"
+            android:textSize="16sp"/>
 
         <Button
-            android:id="@+id/buttonSettings"
+            android:id="@+id/buttonRequestContactsPermissions"
             style="@style/buttonWhiteWithIcon"
             android:layout_width="match_parent"
-            android:layout_marginTop="15dp"
-            android:drawableLeft="@drawable/button_ok"
-            android:text="@string/no_contact_permission_fragment_open_settings_button"/>
+            android:layout_marginTop="12dp"
+            android:drawableLeft="@drawable/button_request_contacts_permission"
+            android:text="@string/no_contact_permission_fragment_request_contacts_permissions_button"
+            android:textSize="16sp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="26dp"
             android:gravity="center_horizontal"
             android:text="@string/no_contact_permission_fragment_call_contact_text"
-            android:textSize="18sp"/>
+            android:textSize="16sp"/>
 
         <Button
             android:id="@+id/buttonCallContact"
             style="@style/buttonWhiteWithIcon"
             android:layout_width="match_parent"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="15dp"
-            android:drawableLeft="@drawable/button_cancel"
-            android:text="@string/no_contact_permission_fragment_call_contact_button"/>
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="14dp"
+            android:drawableLeft="@drawable/button_call_contact"
+            android:text="@string/no_contact_permission_fragment_call_contact_button"
+            android:textSize="16sp"/>
     </LinearLayout>
 
 </LinearLayout>
