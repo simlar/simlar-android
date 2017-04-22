@@ -70,7 +70,6 @@ final class SimlarSSLSocketFactory extends SSLSocketFactory
 
 	private SimlarSSLSocketFactory()
 	{
-		super();
 		mSSLSocketFactory = createSSLSocketFactory();
 	}
 
