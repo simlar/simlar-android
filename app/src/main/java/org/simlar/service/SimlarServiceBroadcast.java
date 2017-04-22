@@ -44,8 +44,8 @@ public final class SimlarServiceBroadcast implements Serializable
 
 	private SimlarServiceBroadcast(final Type type, final Parameters parameters)
 	{
-		this.mType = type;
-		this.mParameters = parameters;
+		mType = type;
+		mParameters = parameters;
 	}
 
 	private void send(final Context context)

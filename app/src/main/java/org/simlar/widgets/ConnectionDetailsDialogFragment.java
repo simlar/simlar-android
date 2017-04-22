@@ -81,7 +81,7 @@ public final class ConnectionDetailsDialogFragment extends DialogFragment
 			return;
 		}
 
-		if (this.isDetached() || !this.isResumed()) {
+		if (isDetached() || !isResumed()) {
 			return;
 		}
 

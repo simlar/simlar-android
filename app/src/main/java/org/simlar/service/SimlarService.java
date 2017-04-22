@@ -305,11 +305,11 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		mRunning = true;
 
-		mVibratorManager = new VibratorManager(this.getApplicationContext());
-		mSoundEffectManager = new SoundEffectManager(this.getApplicationContext());
+		mVibratorManager = new VibratorManager(getApplicationContext());
+		mSoundEffectManager = new SoundEffectManager(getApplicationContext());
 		mAudioFocus = new AudioFocus(this);
 
-		mWakeLock = ((PowerManager) this.getSystemService(Context.POWER_SERVICE))
+		mWakeLock = ((PowerManager) getSystemService(Context.POWER_SERVICE))
 				.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SimlarWakeLock");
 		mDisplayWakeLock = createDisplayWakeLock();
 		mWifiLock = createWifiWakeLock();
@@ -351,7 +351,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	private WifiLock createWifiWakeLock()
 	{
-		return ((WifiManager) this.getSystemService(Context.WIFI_SERVICE)).createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "SimlarWifiLock");
+		return ((WifiManager) getSystemService(Context.WIFI_SERVICE)).createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "SimlarWifiLock");
 	}
 
 	private void terminateChecker()

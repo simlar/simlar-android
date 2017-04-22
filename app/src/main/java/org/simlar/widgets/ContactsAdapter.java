@@ -73,10 +73,10 @@ final class ContactsAdapter extends ArrayAdapter<ContactDataComplete>
 	{
 		public RowViewHolder(final View rowView)
 		{
-			this.letterView = (TextView) rowView.findViewById(R.id.letter);
-			this.dividerLineView = rowView.findViewById(R.id.dividerLine);
-			this.nameView = (TextView) rowView.findViewById(R.id.name);
-			this.numberView = (TextView) rowView.findViewById(R.id.number);
+			letterView = (TextView) rowView.findViewById(R.id.letter);
+			dividerLineView = rowView.findViewById(R.id.dividerLine);
+			nameView = (TextView) rowView.findViewById(R.id.name);
+			numberView = (TextView) rowView.findViewById(R.id.number);
 		}
 
 		public final TextView letterView;
