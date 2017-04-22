@@ -324,13 +324,13 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	{
 		Lg.i("onVideoStateChanged: ", videoState);
 
-		if (VideoState.PLAYING.equals(videoState) || VideoState.ENCRYPTING.equals(videoState) || VideoState.WAITING_FOR_ICE.equals(videoState)) {
+		if (VideoState.PLAYING == videoState || VideoState.ENCRYPTING == videoState || VideoState.WAITING_FOR_ICE == videoState) {
 			startVideo();
 		} else {
 			stopVideo();
 		}
 
-		final boolean requestingVideo = VideoState.REQUESTING.equals(videoState);
+		final boolean requestingVideo = VideoState.REQUESTING == videoState;
 		mProgressBarRequestingVideo.setVisibility(requestingVideo ? View.VISIBLE : View.GONE);
 		mButtonToggleVideo.setVisibility(requestingVideo ? View.GONE : View.VISIBLE);
 
