@@ -791,7 +791,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			if (mSimlarCallState.isRinging()) {
 				Lg.i("starting RingingActivity");
 				mNotificationActivity = ACTIVITIES.getRingingActivity();
-				startActivity(new Intent(SimlarService.this, ACTIVITIES.getRingingActivity()).addFlags(
+				startActivity(new Intent(this, ACTIVITIES.getRingingActivity()).addFlags(
 						Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
 			}
 		}
