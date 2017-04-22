@@ -29,6 +29,7 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Map;
@@ -98,6 +99,8 @@ final class HttpsPost
 			return connection;
 		} catch (final MalformedURLException e) {
 			Lg.ex(e, "MalformedURLException");
+		} catch (final ProtocolException e) {
+			Lg.ex(e, "ProtocolException");
 		} catch (final IOException e) {
 			Lg.ex(e, "IOException while creating connection");
 		}
