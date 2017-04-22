@@ -37,15 +37,15 @@ import org.simlar.logging.Lg;
 public final class ConnectionDetailsDialogFragment extends DialogFragment
 {
 	// gui elements
-	private TextView mTextViewQuality;
-	private TextView mTextViewUpload;
-	private TextView mTextViewDownload;
-	private TextView mTextViewIceState;
-	private TextView mTextViewCodec;
-	private TextView mTextViewJitter;
-	private TextView mTextViewPacketLoss;
-	private TextView mTextViewLatePackets;
-	private TextView mTextViewRoundTripDelay;
+	private TextView mTextViewQuality = null;
+	private TextView mTextViewUpload = null;
+	private TextView mTextViewDownload = null;
+	private TextView mTextViewIceState = null;
+	private TextView mTextViewCodec = null;
+	private TextView mTextViewJitter = null;
+	private TextView mTextViewPacketLoss = null;
+	private TextView mTextViewLatePackets = null;
+	private TextView mTextViewRoundTripDelay = null;
 
 	@NonNull
 	@Override

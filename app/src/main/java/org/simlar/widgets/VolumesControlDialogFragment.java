@@ -38,7 +38,7 @@ import org.simlar.logging.Lg;
 
 public final class VolumesControlDialogFragment extends DialogFragment
 {
-	private Listener mListener;
+	private Listener mListener = null;
 
 	public interface Listener
 	{
