@@ -100,10 +100,6 @@ public final class ContactsProvider
 			INITIALIZED
 		}
 
-		public ContactsProviderImpl()
-		{
-		}
-
 		private void loadContacts(final Context context)
 		{
 			Lg.i("start creating contacts cache");
