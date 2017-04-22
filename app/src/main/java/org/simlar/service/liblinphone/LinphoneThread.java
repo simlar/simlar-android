@@ -348,24 +348,28 @@ public final class LinphoneThread
 			/// Note: AndroidVideoWindowImpl needs to initiated in the gui thread
 			mMediaStreamerVideoWindow = new AndroidVideoWindowImpl(videoView, captureView, new AndroidVideoWindowImpl.VideoWindowListener()
 			{
+				@Override
 				public void onVideoRenderingSurfaceReady(final AndroidVideoWindowImpl videoWindow, final SurfaceView surface)
 				{
 					Lg.i("onVideoRenderingSurfaceReady");
 					enableVideoWindow(true);
 				}
 
+				@Override
 				public void onVideoRenderingSurfaceDestroyed(final AndroidVideoWindowImpl videoWindow)
 				{
 					Lg.i("onVideoRenderingSurfaceDestroyed");
 					enableVideoWindow(false);
 				}
 
+				@Override
 				public void onVideoPreviewSurfaceReady(final AndroidVideoWindowImpl videoWindowPreview, final SurfaceView surface)
 				{
 					Lg.i("onVideoPreviewSurfaceReady");
 					setVideoPreviewWindow(surface);
 				}
 
+				@Override
 				public void onVideoPreviewSurfaceDestroyed(final AndroidVideoWindowImpl videoWindowPreview)
 				{
 					Lg.i("onVideoPreviewSurfaceDestroyed");
