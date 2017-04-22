@@ -351,7 +351,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	private WifiLock createWifiWakeLock()
 	{
-		return ((WifiManager) getSystemService(Context.WIFI_SERVICE)).createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "SimlarWifiLock");
+		return ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "SimlarWifiLock");
 	}
 
 	private void terminateChecker()
