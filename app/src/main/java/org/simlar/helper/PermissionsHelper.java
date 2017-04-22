@@ -41,6 +41,7 @@ import org.simlar.utils.Util;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -130,7 +131,7 @@ public final class PermissionsHelper
 	private static boolean checkAndRequestPermissions(final Activity activity, final Set<Type> types)
 	{
 		final Set<Type> requestTypes = EnumSet.noneOf(Type.class);
-		final Set<String> rationalMessages = new HashSet<>();
+		final Collection<String> rationalMessages = new HashSet<>();
 		for (final Type type : types) {
 			if (!hasPermission(activity, type)) {
 				requestTypes.add(type);
@@ -155,7 +156,7 @@ public final class PermissionsHelper
 	}
 
 	@SuppressLint("NewApi")
-	private static void showPermissionsRationaleAlert(final Activity activity, final String message, final Set<Type> types)
+	private static void showPermissionsRationaleAlert(final Activity activity, final CharSequence message, final Set<Type> types)
 	{
 		(new AlertDialog.Builder(activity))
 				.setMessage(message)
