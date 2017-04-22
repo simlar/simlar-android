@@ -135,7 +135,7 @@ final class ContactsAdapter extends ArrayAdapter<ContactDataComplete>
 
 	public void addAllContacts(final Set<ContactDataComplete> contacts)
 	{
-		super.addAll(contacts);
+		addAll(contacts);
 		sort(new SortByName());
 	}
 
