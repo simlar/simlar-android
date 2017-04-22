@@ -22,6 +22,7 @@ package org.simlar.https;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -244,7 +245,7 @@ public final class UploadLogFile
 				sendIntent.putExtra(Intent.EXTRA_TEXT, EMAIL_TEXT + UPLOAD_SFTP_LINK + result.fileName);
 				try {
 					mContext.startActivity(Intent.createChooser(sendIntent, mContext.getString(R.string.upload_log_file_send_email_to_developer)));
-				} catch (final android.content.ActivityNotFoundException e) {
+				} catch (final ActivityNotFoundException e) {
 					Lg.ex(e, "ActivityNotFoundException chooser_send_email");
 				}
 			}
