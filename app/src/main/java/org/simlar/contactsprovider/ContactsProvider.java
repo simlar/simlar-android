@@ -273,7 +273,7 @@ public final class ContactsProvider
 			Lg.i("loading contacts from telephone book");
 			final Map<String, ContactData> result = new HashMap<>();
 
-			final String[] projection = new String[] {
+			final String[] projection = {
 					ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
 					ContactsContract.CommonDataKinds.Phone.NUMBER,
 					ContactsContract.CommonDataKinds.Phone.SORT_KEY_PRIMARY,
