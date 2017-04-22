@@ -121,11 +121,7 @@ public final class UploadLogFile
 				Lg.i("used CipherSuite: ", connection.getCipherSuite());
 				Lg.i("Response ", response);
 
-				if (response.matches("OK \\d*")) {
-					result = new PostResult(true, file.getName());
-				} else {
-					result = new PostResult(false, response);
-				}
+				result = response.matches("OK \\d*") ? new PostResult(true, file.getName()) : new PostResult(false, response);
 			}
 		} catch (final Exception e) {
 			result = new PostResult(false, "Posting log file failed");
