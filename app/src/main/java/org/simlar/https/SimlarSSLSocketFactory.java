@@ -27,6 +27,7 @@ import org.simlar.logging.Lg;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
@@ -144,8 +145,11 @@ final class SimlarSSLSocketFactory extends SSLSocketFactory
 			final CertificateFactory cf = CertificateFactory.getInstance("X.509");
 			caInput = new BufferedInputStream(new FileInputStream(FileHelper.getRootCaFileName()));
 			return cf.generateCertificate(caInput);
-		} catch (final Exception e) {
-			Lg.ex(e, "Exception during loadCertificate");
+		} catch (final CertificateException e) {
+			Lg.ex(e, "CertificateException during loadCertificate");
+			return null;
+		} catch (final FileNotFoundException e) {
+			Lg.ex(e, "FileNotFoundException during loadCertificate with file=", FileHelper.getRootCaFileName());
 			return null;
 		} finally {
 			try {
