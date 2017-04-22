@@ -160,7 +160,7 @@ public final class SimlarNumber
 
 	public static Collection<Integer> getSupportedCountryCodes()
 	{
-		final Set<Integer> supportedCountryCodes = new HashSet<>();
+		final Collection<Integer> supportedCountryCodes = new HashSet<>();
 
 		final PhoneNumberUtil pnUtil = PhoneNumberUtil.getInstance();
 		for (final String region : pnUtil.getSupportedRegions()) {
