@@ -128,7 +128,7 @@ final class HttpsPost
 
 	private static InputStream postPrivate(final String urlPath, final Map<String, String> parameters)
 	{
-		final HttpsURLConnection connection = HttpsPost.createConnection(urlPath, false);
+		final HttpsURLConnection connection = createConnection(urlPath, false);
 
 		if (connection == null) {
 			return null;
@@ -136,7 +136,7 @@ final class HttpsPost
 
 		try {
 			final PrintWriter out = new PrintWriter(connection.getOutputStream());
-			out.print(HttpsPost.createQueryStringForParameters(parameters));
+			out.print(createQueryStringForParameters(parameters));
 			out.close();
 
 			if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {

@@ -107,7 +107,7 @@ public enum LinphoneCallState
 
 	public boolean isBeforeEncryption()
 	{
-		return this == LinphoneCallState.CONNECTED;
+		return this == CONNECTED;
 	}
 
 	public String createNotificationText(final Context context, final String simlarId, final boolean goingDown)
