@@ -127,11 +127,7 @@ public final class VerifyNumberActivity extends AppCompatActivity
 	private void readPhoneNumber()
 	{
 		final String phoneNumber = SimCardReader.readPhoneNumber(this);
-		if (!Util.isNullOrEmpty(phoneNumber)) {
-			mEditNumber.setText(new SimlarNumber(phoneNumber).getNationalOnly());
-			final TextView text = (TextView) findViewById(R.id.textViewCheckOrVerifyYourNumber);
-			text.setText(getString(R.string.verify_number_activity_verify_your_number));
-		} else {
+		if (Util.isNullOrEmpty(phoneNumber)) {
 			new Handler().postDelayed(new Runnable()
 			{
 				@Override
@@ -140,6 +136,10 @@ public final class VerifyNumberActivity extends AppCompatActivity
 					showSoftInputForEditNumber();
 				}
 			}, 100);
+		} else {
+			mEditNumber.setText(new SimlarNumber(phoneNumber).getNationalOnly());
+			final TextView text = (TextView) findViewById(R.id.textViewCheckOrVerifyYourNumber);
+			text.setText(getString(R.string.verify_number_activity_verify_your_number));
 		}
 
 		updateButtonAccept();

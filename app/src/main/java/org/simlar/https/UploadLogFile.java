@@ -109,11 +109,7 @@ public final class UploadLogFile
 			outputStream.writeBytes(TWO_HYPHENS + HttpsPost.DATA_BOUNDARY + TWO_HYPHENS + LINE_END);
 			outputStream.flush();
 
-			if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-				result = new PostResult(false, connection.getResponseMessage());
-				Lg.w("posting file failed with error code ", connection.getResponseMessage(), " and message ",
-						connection.getResponseMessage());
-			} else {
+			if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 				inputStream = connection.getInputStream();
 				responseStream = new ByteArrayOutputStream();
 				Util.copyStream(inputStream, responseStream);
@@ -122,6 +118,10 @@ public final class UploadLogFile
 				Lg.i("Response ", response);
 
 				result = response.matches("OK \\d*") ? new PostResult(true, file.getName()) : new PostResult(false, response);
+			} else {
+				result = new PostResult(false, connection.getResponseMessage());
+				Lg.w("posting file failed with error code ", connection.getResponseMessage(), " and message ",
+						connection.getResponseMessage());
 			}
 		} catch (final Exception e) {
 			result = new PostResult(false, "Posting log file failed");

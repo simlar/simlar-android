@@ -710,11 +710,11 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			return;
 		}
 
-		if (!simlarCallStateChanged) {
-			Lg.v("SimlarCallState staying the same: ", mSimlarCallState);
-		} else {
+		if (simlarCallStateChanged) {
 			Lg.i("updated ", mSimlarCallState);
 			SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
+		} else {
+			Lg.v("SimlarCallState staying the same: ", mSimlarCallState);
 		}
 
 		if (!mCallConnectionDetails.updateCallStats(quality, codec, iceState, upload, download, jitter, packetLoss, latePackets, roundTripDelay)) {
