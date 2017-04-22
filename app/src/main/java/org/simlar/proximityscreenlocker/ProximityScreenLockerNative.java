@@ -38,7 +38,7 @@ public final class ProximityScreenLockerNative implements ProximityScreenLocker
 	private final PowerManager.WakeLock mProximityWakeLock;
 	private final Method mPowerLockReleaseMethod;
 
-	public static ProximityScreenLockerNative create(final Context context)
+	public static ProximityScreenLocker create(final Context context)
 	{
 		final PowerManager.WakeLock proximityWakeLock = initProximitySensor(context);
 
