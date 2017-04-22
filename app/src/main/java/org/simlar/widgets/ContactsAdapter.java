@@ -93,7 +93,8 @@ final class ContactsAdapter extends ArrayAdapter<ContactDataComplete>
 	}
 
 	@Override
-	public @NonNull View getView(final int position, @Nullable final View convertView, @NonNull final ViewGroup parent)
+	@NonNull
+	public View getView(final int position, @Nullable final View convertView, @NonNull final ViewGroup parent)
 	{
 		final View rowView;
 		final RowViewHolder holder;
