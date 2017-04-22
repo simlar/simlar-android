@@ -109,10 +109,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	private final class NetworkChangeReceiver extends BroadcastReceiver
 	{
-		public NetworkChangeReceiver()
-		{
-		}
-
 		@Override
 		public void onReceive(final Context context, final Intent intent)
 		{
@@ -122,10 +118,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	private final class KeepAwakeReceiver extends BroadcastReceiver
 	{
-		public KeepAwakeReceiver()
-		{
-		}
-
 		@Override
 		public void onReceive(final Context context, final Intent intent)
 		{
@@ -137,10 +129,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private final class TelephonyCallStateListener extends PhoneStateListener
 	{
 		private boolean mInCall;
-
-		public TelephonyCallStateListener()
-		{
-		}
 
 		public boolean isInCall()
 		{
