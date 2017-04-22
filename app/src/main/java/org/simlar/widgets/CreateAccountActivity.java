@@ -544,7 +544,7 @@ public final class CreateAccountActivity extends Activity
 	public void onCancelClicked(final View view)
 	{
 		Lg.i("onCancelClicked");
-		PreferencesHelper.saveToFileCreateAccountStatus(CreateAccountActivity.this, CreateAccountStatus.NONE);
+		PreferencesHelper.saveToFileCreateAccountStatus(this, CreateAccountStatus.NONE);
 		finish();
 	}
 
