@@ -28,6 +28,7 @@ import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -126,7 +127,7 @@ public final class SimlarNumber
 		return PhoneNumberUtil.getInstance().format(mPhoneNumber, PhoneNumberFormat.INTERNATIONAL);
 	}
 
-	public String getNationalOnly()
+	public CharSequence getNationalOnly()
 	{
 		if (mPhoneNumber == null) {
 			return "";
@@ -157,7 +158,7 @@ public final class SimlarNumber
 		return new SimlarNumber(telephoneNumber).getSimlarId();
 	}
 
-	public static Set<Integer> getSupportedCountryCodes()
+	public static Collection<Integer> getSupportedCountryCodes()
 	{
 		final Set<Integer> supportedCountryCodes = new HashSet<>();
 
