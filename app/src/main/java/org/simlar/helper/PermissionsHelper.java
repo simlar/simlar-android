@@ -157,7 +157,7 @@ public final class PermissionsHelper
 	@SuppressLint("NewApi")
 	private static void showPermissionsRationaleAlert(final Activity activity, final String message, final Set<Type> types)
 	{
-		(new AlertDialog.Builder(activity))
+		new AlertDialog.Builder(activity)
 				.setMessage(message)
 				.setOnDismissListener(new DialogInterface.OnDismissListener()
 				{

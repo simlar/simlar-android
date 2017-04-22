@@ -88,7 +88,7 @@ public final class SimlarNumber
 
 	public boolean isValid()
 	{
-		return (!Util.isNullOrEmpty(mPlainSimlarId) || mPhoneNumber != null);
+		return !Util.isNullOrEmpty(mPlainSimlarId) || mPhoneNumber != null;
 	}
 
 	public String getSimlarId()

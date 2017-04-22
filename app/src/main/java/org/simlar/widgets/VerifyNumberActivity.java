@@ -226,7 +226,7 @@ public final class VerifyNumberActivity extends AppCompatActivity
 		// check telephoneNumbers plausibility
 		final SimlarNumber simlarNumber = new SimlarNumber(number);
 		if (!simlarNumber.isValid()) {
-			(new AlertDialog.Builder(this))
+			new AlertDialog.Builder(this)
 					.setMessage(R.string.verify_number_activity_alert_wrong_number_text)
 					.create().show();
 			return;

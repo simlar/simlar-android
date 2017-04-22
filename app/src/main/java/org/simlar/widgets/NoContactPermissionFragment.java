@@ -131,7 +131,7 @@ public final class NoContactPermissionFragment extends Fragment
 
 		if (Util.isNullOrEmpty(simlarId)) {
 			Lg.i("not calling contact because of invalid telephoneNumber=", new Lg.Anonymizer(telephoneNumber));
-			(new AlertDialog.Builder(getActivity()))
+			new AlertDialog.Builder(getActivity())
 					.setTitle(R.string.no_contact_permission_fragment_alert_no_simlarId_title)
 					.setMessage(Util.fromHtml(String.format(getString(R.string.no_contact_permission_fragment_alert_no_simlarId_message), telephoneNumber)))
 					.create().show();
@@ -151,7 +151,7 @@ public final class NoContactPermissionFragment extends Fragment
 			{
 				dialog.dismiss();
 				Lg.i("no connection to the server");
-				(new AlertDialog.Builder(getActivity()))
+				new AlertDialog.Builder(getActivity())
 						.setTitle(R.string.no_contact_permission_fragment_alert_offline_title)
 						.setMessage(getString(R.string.no_contact_permission_fragment_alert_offline_message))
 						.create().show();
@@ -163,7 +163,7 @@ public final class NoContactPermissionFragment extends Fragment
 				dialog.dismiss();
 				if (!registered) {
 					Lg.i("simlarId=", new Lg.Anonymizer(simlarId), " not registered");
-					(new AlertDialog.Builder(getActivity()))
+					new AlertDialog.Builder(getActivity())
 							.setTitle(String.format(getString(R.string.no_contact_permission_fragment_alert_contact_not_registered_title), telephoneNumber))
 							.setMessage(Util.fromHtml(String.format(getString(R.string.no_contact_permission_fragment_alert_contact_not_registered_message), name)))
 							.create().show();

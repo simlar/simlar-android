@@ -229,7 +229,7 @@ public final class UploadLogFile
 				mProgressDialog.dismiss();
 				if (!result.success) {
 					Lg.e("aborting uploading log file: ", result.errorMessage);
-					(new AlertDialog.Builder(mContext))
+					new AlertDialog.Builder(mContext)
 							.setTitle(R.string.main_activity_alert_uploading_log_file_failed_title)
 							.setMessage(mContext.getString(R.string.main_activity_alert_uploading_log_file_failed_text) + ": " + result.errorMessage)
 							.create().show();
