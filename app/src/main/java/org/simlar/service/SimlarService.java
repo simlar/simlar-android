@@ -435,7 +435,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		});
 	}
 
-	private static void createMissedCallNotification(final Context context, final String name, final String photoId)
+	private static void createMissedCallNotification(final Context context, final CharSequence name, final String photoId)
 	{
 		final PendingIntent activity = PendingIntent.getActivity(context, 0,
 				new Intent(context, ACTIVITIES.getMainActivity()).addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED), 0);
@@ -483,7 +483,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		return notificationBuilder.build();
 	}
 
-	private String createNotificationText()
+	private CharSequence createNotificationText()
 	{
 		if (FlavourHelper.isGcmEnabled() || mSimlarStatus == SimlarStatus.ONGOING_CALL) {
 			return mSimlarCallState.createNotificationText(this, mGoingDown);
