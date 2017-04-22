@@ -59,11 +59,6 @@ public final class VerifyNumberActivity extends AppCompatActivity
 
 	private final class EditNumberTextWatcher implements TextWatcher
 	{
-		public EditNumberTextWatcher()
-		{
-			super();
-		}
-
 		@Override
 		public void onTextChanged(final CharSequence sequence, final int start, final int before, final int count)
 		{
