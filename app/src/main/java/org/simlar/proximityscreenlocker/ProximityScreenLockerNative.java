@@ -33,7 +33,7 @@ import org.simlar.logging.Lg;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class ProximityScreenLockerNative implements ProximityScreenLocker
+public final class ProximityScreenLockerNative implements ProximityScreenLocker
 {
 	private final PowerManager.WakeLock mProximityWakeLock;
 	private final Method mPowerLockReleaseMethod;
