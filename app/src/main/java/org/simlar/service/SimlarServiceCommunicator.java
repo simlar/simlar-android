@@ -44,11 +44,6 @@ public class SimlarServiceCommunicator
 
 	private final class SimlarServiceConnection implements ServiceConnection
 	{
-		public SimlarServiceConnection()
-		{
-			super();
-		}
-
 		@Override
 		public void onServiceConnected(final ComponentName className, final IBinder binder)
 		{
@@ -76,11 +71,6 @@ public class SimlarServiceCommunicator
 
 	private final class SimlarServiceReceiver extends BroadcastReceiver
 	{
-		public SimlarServiceReceiver()
-		{
-			super();
-		}
-
 		@Override
 		public void onReceive(final Context context, final Intent intent)
 		{
