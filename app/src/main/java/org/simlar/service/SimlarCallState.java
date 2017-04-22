@@ -104,11 +104,7 @@ public final class SimlarCallState
 		// NOTE: talking is set after encryption
 
 		if (oldGuiCallState != mGuiCallState) {
-			if (mGuiCallState == GuiCallState.ENDED) {
-				mCallStartTime = -1;
-			} else {
-				mCallStartTime = SystemClock.elapsedRealtime();
-			}
+			mCallStartTime = mGuiCallState == GuiCallState.ENDED ? -1 : SystemClock.elapsedRealtime();
 		}
 
 		if (mLinphoneCallState.isNewCallJustStarted()) {
