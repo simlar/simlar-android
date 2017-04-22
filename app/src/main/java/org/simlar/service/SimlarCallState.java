@@ -227,7 +227,7 @@ public final class SimlarCallState
 		return ContactsProvider.getContactPhotoBitmap(context, defaultResourceId, mContactPhotoId);
 	}
 
-	public String getCallStatusDisplayMessage(final Context context)
+	public CharSequence getCallStatusDisplayMessage(final Context context)
 	{
 		if (isEmpty()) {
 			return null;
