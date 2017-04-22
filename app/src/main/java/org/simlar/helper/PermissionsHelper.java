@@ -128,6 +128,7 @@ public final class PermissionsHelper
 		checkAndRequestPermissions(activity, Type.getMajorPermissions(needsExternalStorage));
 	}
 
+	@SuppressWarnings("TypeMayBeWeakened")
 	private static boolean checkAndRequestPermissions(final Activity activity, final Set<Type> types)
 	{
 		final Set<Type> requestTypes = EnumSet.noneOf(Type.class);
@@ -176,6 +177,7 @@ public final class PermissionsHelper
 		requestPermissions(activity, Collections.singleton(Type.CONTACTS));
 	}
 
+	@SuppressWarnings("TypeMayBeWeakened")
 	private static void requestPermissions(final Activity activity, final Set<Type> types)
 	{
 		final Set<String> permissions = new HashSet<>();
