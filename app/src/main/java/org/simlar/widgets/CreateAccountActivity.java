@@ -128,11 +128,6 @@ public final class CreateAccountActivity extends Activity
 
 	private final class EditRegistrationCodeListener implements TextWatcher
 	{
-		public EditRegistrationCodeListener()
-		{
-			super();
-		}
-
 		@Override
 		public void onTextChanged(final CharSequence s, final int start, final int before, final int count)
 		{
@@ -156,11 +151,6 @@ public final class CreateAccountActivity extends Activity
 
 	private final class SmsReceiver extends BroadcastReceiver
 	{
-		public SmsReceiver()
-		{
-			super();
-		}
-
 		@Override
 		public void onReceive(final Context context, final Intent intent)
 		{
