@@ -54,7 +54,7 @@ final class VibratorManager
 		private final Handler mHandler;
 		private final Vibrator mVibrator;
 
-		public VibratorManagerImpl()
+		VibratorManagerImpl()
 		{
 			mHandler = new Handler();
 			mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
@@ -87,7 +87,7 @@ final class VibratorManager
 		}
 	}
 
-	public VibratorManager(final Context context)
+	VibratorManager(final Context context)
 	{
 		mContext = context;
 	}

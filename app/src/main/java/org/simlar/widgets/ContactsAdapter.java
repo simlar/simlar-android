@@ -71,7 +71,7 @@ final class ContactsAdapter extends ArrayAdapter<ContactDataComplete>
 
 	private static class RowViewHolder
 	{
-		public RowViewHolder(final View rowView)
+		RowViewHolder(final View rowView)
 		{
 			letterView = (TextView) rowView.findViewById(R.id.letter);
 			dividerLineView = rowView.findViewById(R.id.dividerLine);
@@ -85,7 +85,7 @@ final class ContactsAdapter extends ArrayAdapter<ContactDataComplete>
 		public final TextView numberView;
 	}
 
-	public ContactsAdapter(final Context context)
+	ContactsAdapter(final Context context)
 	{
 		super(context, R.layout.fragment_contacts_list_element, new ArrayList<ContactDataComplete>());
 		mLayout = R.layout.fragment_contacts_list_element;

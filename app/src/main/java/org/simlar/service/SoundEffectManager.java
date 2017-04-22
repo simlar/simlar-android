@@ -60,7 +60,7 @@ final class SoundEffectManager
 		private long mPlayRequestTime;
 		private long mPlayStart = -1;
 
-		public SoundEffectPlayer(final SoundEffectType type, final long now)
+		SoundEffectPlayer(final SoundEffectType type, final long now)
 		{
 			mType = type;
 			mMediaPlayer = initializeMediaPlayer();
@@ -209,7 +209,7 @@ final class SoundEffectManager
 		}
 	}
 
-	public SoundEffectManager(final Context context)
+	SoundEffectManager(final Context context)
 	{
 		mContext = context;
 	}

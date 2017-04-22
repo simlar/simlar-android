@@ -74,7 +74,7 @@ public final class LinphoneThread
 		Volumes mVolumes = new Volumes();
 		Context mContext = null;
 
-		public LinphoneThreadImpl(final LinphoneThreadListener listener, final Context context)
+		LinphoneThreadImpl(final LinphoneThreadListener listener, final Context context)
 		{
 			mListener = listener;
 			mListener.onCallStateChanged("", LinphoneCall.State.Idle, null);
@@ -364,7 +364,7 @@ public final class LinphoneThread
 		{
 			private final LinphoneCall mCall;
 
-			public CallLogger(final LinphoneCall call)
+			CallLogger(final LinphoneCall call)
 			{
 				super(call);
 				mCall = call;
@@ -381,7 +381,7 @@ public final class LinphoneThread
 		{
 			private final LinphoneFriend mFriend;
 
-			public FriendLogger(final LinphoneFriend friend)
+			FriendLogger(final LinphoneFriend friend)
 			{
 				super(friend);
 				mFriend = friend;
