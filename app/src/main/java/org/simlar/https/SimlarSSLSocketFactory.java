@@ -60,7 +60,6 @@ final class SimlarSSLSocketFactory extends SSLSocketFactory
 	// thread-safe and lazy evaluation singleton as proposed by Bill Pugh
 	private static final class InstanceHolder
 	{
-		@SuppressWarnings("synthetic-access")
 		static final SimlarSSLSocketFactory INSTANCE = new SimlarSSLSocketFactory();
 	}
 
