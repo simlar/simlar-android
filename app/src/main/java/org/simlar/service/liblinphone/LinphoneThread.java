@@ -429,7 +429,7 @@ public final class LinphoneThread
 					}
 
 					if (RegistrationState.RegistrationOk.equals(mRegistrationState) && RegistrationState.RegistrationProgress.equals(state)
-							&& message.equals("Refresh registration")) {
+							&& "Refresh registration".equals(message)) {
 						Lg.i("registration state for ", new Lg.Anonymizer(identity), " ignored: ", state,
 								" as it is caused by refreshRegisters");
 						return;

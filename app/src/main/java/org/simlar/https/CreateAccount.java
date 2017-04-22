@@ -181,17 +181,17 @@ public final class CreateAccount
 		parser.nextTag();
 
 		final String xmlRootElement = parser.getName();
-		if (xmlRootElement.equalsIgnoreCase("error")
+		if ("error".equalsIgnoreCase(xmlRootElement)
 				&& parser.getAttributeCount() >= 2
-				&& parser.getAttributeName(0).equalsIgnoreCase("id")
-				&& parser.getAttributeName(1).equalsIgnoreCase("message"))
+				&& "id".equalsIgnoreCase(parser.getAttributeName(0))
+				&& "message".equalsIgnoreCase(parser.getAttributeName(1)))
 		{
 			final int errorId = Integer.parseInt(parser.getAttributeValue(0));
 			Lg.i("server returned error: ", parser.getAttributeValue(1), " (", errorId, ")");
 			return new Result(errorId, null, null);
 		}
 
-		if (xmlRootElement.equalsIgnoreCase("success")
+		if ("success".equalsIgnoreCase(xmlRootElement)
 				&& parser.getAttributeCount() >= 2
 				&& parser.getAttributeName(0).equals(attribute1)
 				&& parser.getAttributeName(1).equals(attribute2))

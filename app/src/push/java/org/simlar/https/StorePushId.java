@@ -91,20 +91,20 @@ public final class StorePushId
 		parser.nextTag();
 
 		final String xmlRootElement = parser.getName();
-		if (xmlRootElement.equalsIgnoreCase("error")
+		if ("error".equalsIgnoreCase(xmlRootElement)
 				&& parser.getAttributeCount() >= 2
-				&& parser.getAttributeName(0).equalsIgnoreCase("id")
-				&& parser.getAttributeName(1).equalsIgnoreCase("message"))
+				&& "id".equalsIgnoreCase(parser.getAttributeName(0))
+				&& "message".equalsIgnoreCase(parser.getAttributeName(1)))
 		{
 			Lg.e("server returned error: ", parser.getAttributeValue(1));
 			return false;
 		}
 
-		if (xmlRootElement.equalsIgnoreCase("success")
+		if ("success".equalsIgnoreCase(xmlRootElement)
 				&& parser.getAttributeCount() >= 2
-				&& parser.getAttributeName(0).equalsIgnoreCase("deviceType")
+				&& "deviceType".equalsIgnoreCase(parser.getAttributeName(0))
 				&& parser.getAttributeValue(0).equals(Integer.toString(DEVICE_TYPE_ANDROID))
-				&& parser.getAttributeName(1).equalsIgnoreCase("pushId")
+				&& "pushId".equalsIgnoreCase(parser.getAttributeName(1))
 				&& parser.getAttributeValue(1).equals(pushId))
 		{
 			return true;

@@ -91,16 +91,16 @@ public final class GetContactsStatus
 		parser.nextTag();
 
 		final String xmlRootElement = parser.getName();
-		if (xmlRootElement.equalsIgnoreCase("error")
+		if ("error".equalsIgnoreCase(xmlRootElement)
 				&& parser.getAttributeCount() >= 2
-				&& parser.getAttributeName(0).equalsIgnoreCase("id")
-				&& parser.getAttributeName(1).equalsIgnoreCase("message"))
+				&& "id".equalsIgnoreCase(parser.getAttributeName(0))
+				&& "message".equalsIgnoreCase(parser.getAttributeName(1)))
 		{
 			Lg.e("server returned error: ", parser.getAttributeValue(1));
 			return null;
 		}
 
-		if (!xmlRootElement.equalsIgnoreCase("contacts")) {
+		if (!"contacts".equalsIgnoreCase(xmlRootElement)) {
 			Lg.e("unable to parse response");
 			return null;
 		}
@@ -111,10 +111,10 @@ public final class GetContactsStatus
 				continue;
 			}
 
-			if (!parser.getName().equalsIgnoreCase("contact")
+			if (!"contact".equalsIgnoreCase(parser.getName())
 					|| parser.getAttributeCount() < 2
-					|| !parser.getAttributeName(0).equalsIgnoreCase("id")
-					|| !parser.getAttributeName(1).equalsIgnoreCase("status"))
+					|| !"id".equalsIgnoreCase(parser.getAttributeName(0))
+					|| !"status".equalsIgnoreCase(parser.getAttributeName(1)))
 			{
 				continue;
 			}
