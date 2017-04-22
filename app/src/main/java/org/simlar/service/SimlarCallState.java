@@ -83,7 +83,7 @@ public final class SimlarCallState
 		}
 
 		if (callState == LinphoneCallState.UNKNOWN) {
-			Lg.e("ERROR updateCallStateChanged: callState=", callState);
+			Lg.e("ERROR updateCallStateChanged: callState=", LinphoneCallState.UNKNOWN);
 		}
 
 		mSimlarId = simlarId;
