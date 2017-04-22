@@ -103,7 +103,7 @@ public final class CallConnectionDetails
 			return "";
 		}
 
-		return " " + name + "=" + String.valueOf(value);
+		return " " + name + "=" + value;
 	}
 
 	@SuppressWarnings("SameParameterValue")
@@ -113,7 +113,7 @@ public final class CallConnectionDetails
 			return "";
 		}
 
-		return " " + name + "=" + String.valueOf(value);
+		return " " + name + "=" + value;
 	}
 
 	@Override
