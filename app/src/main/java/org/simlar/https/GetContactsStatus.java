@@ -45,6 +45,7 @@ public final class GetContactsStatus
 		throw new AssertionError("This class was not meant to be instantiated");
 	}
 
+	@SuppressWarnings("TypeMayBeWeakened")
 	public static Map<String, ContactStatus> httpPostGetContactsStatus(final Set<String> contacts)
 	{
 		Lg.i("httpPostGetContactsStatus requested");
