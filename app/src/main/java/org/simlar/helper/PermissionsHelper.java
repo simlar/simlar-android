@@ -187,7 +187,7 @@ public final class PermissionsHelper
 	}
 
 	@SuppressWarnings("SameParameterValue")
-	public static boolean isGranted(final Type type, @NonNull final String permissions[], @NonNull final int grantResults[])
+	public static boolean isGranted(final Type type, @NonNull final String[] permissions, @NonNull final int[] grantResults)
 	{
 		if (permissions.length != 1) {
 			Lg.w("expected exactly one permission but got: ", TextUtils.join(", ", permissions));
