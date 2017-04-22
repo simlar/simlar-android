@@ -40,6 +40,7 @@ import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -222,6 +223,8 @@ public final class PermissionsHelper
 			final FileInputStream stream = new FileInputStream(uri.getPath());
 			stream.close();
 			return false;
+		} catch (final FileNotFoundException e) {
+			return true;
 		} catch (final IOException e) {
 			return true;
 		}
