@@ -91,6 +91,8 @@ public final class SimlarServiceBroadcast implements Serializable
 
 	public static class VideoStateChanged implements Parameters
 	{
+		private static final long serialVersionUID = 1;
+
 		public final VideoState videoState;
 
 		public VideoStateChanged(final VideoState videoState)
