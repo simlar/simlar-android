@@ -203,7 +203,7 @@ final class LinphoneHandler
 			// create linphone proxy config
 			mLinphoneCore.clearProxyConfigs();
 			final LinphoneProxyConfig proxyCfg = mLinphoneCore.createProxyConfig(
-					"sip:" + mySimlarId + "@" + ServerSettings.DOMAIN, "sip:" + ServerSettings.DOMAIN, null, true);
+					"sip:" + mySimlarId + '@' + ServerSettings.DOMAIN, "sip:" + ServerSettings.DOMAIN, null, true);
 			proxyCfg.setExpires(60); // connection times out after 1 minute. This overrides kamailio setting which is 3600 (1 hour).
 			proxyCfg.enablePublish(false);
 			mLinphoneCore.addProxyConfig(proxyCfg);
@@ -232,7 +232,7 @@ final class LinphoneHandler
 
 		Lg.i("calling ", new Lg.Anonymizer(number));
 		try {
-			final LinphoneCall call = mLinphoneCore.invite("sip:" + number + "@" + ServerSettings.DOMAIN);
+			final LinphoneCall call = mLinphoneCore.invite("sip:" + number + '@' + ServerSettings.DOMAIN);
 			if (call == null) {
 				Lg.i("Could not place call to: ", new Lg.Anonymizer(number));
 				Lg.i("Aborting");

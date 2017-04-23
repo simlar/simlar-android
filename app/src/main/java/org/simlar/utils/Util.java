@@ -115,7 +115,7 @@ public final class Util
 			return formatPositiveMilliSeconds(milliSeconds);
 		}
 
-		return "-" + formatPositiveMilliSeconds(-1 * milliSeconds);
+		return '-' + formatPositiveMilliSeconds(-1 * milliSeconds);
 	}
 
 	private static String formatPositiveMilliSeconds(final long milliSeconds)

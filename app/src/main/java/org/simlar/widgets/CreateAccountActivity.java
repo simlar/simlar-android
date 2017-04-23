@@ -420,7 +420,7 @@ public final class CreateAccountActivity extends Activity
 	{
 		return Util.isNullOrEmpty(telephoneNumber) || telephoneNumber.startsWith("+")
 				? telephoneNumber
-				: "+" + telephoneNumber;
+				: '+' + telephoneNumber;
 	}
 
 	private void onSmsReceived(final SmsMessage sms)

@@ -65,7 +65,7 @@ public final class Lg
 	private static String createTag()
 	{
 		final StackTraceElement stackTraceElement = Thread.currentThread().getStackTrace()[5];
-		final String fileName = stackTraceElement.getFileName() + ":" + stackTraceElement.getLineNumber();
+		final String fileName = stackTraceElement.getFileName() + ':' + stackTraceElement.getLineNumber();
 
 		final StringBuilder tag = new StringBuilder();
 		tag.append(mPackageName).append(".(");
@@ -73,9 +73,9 @@ public final class Lg
 		final int n = FILENAME_SIZE_MAX - fileName.length();
 		if (n > 0) {
 			//noinspection StringConcatenationInFormatCall
-			tag.append(fileName).append(")").append(String.format("%" + n + "s", "."));
+			tag.append(fileName).append(')').append(String.format("%" + n + 's', "."));
 		} else {
-			tag.append(fileName.substring(-n)).append(")");
+			tag.append(fileName.substring(-n)).append(')');
 		}
 
 		return tag.toString();

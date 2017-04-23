@@ -101,7 +101,7 @@ public final class SimlarNumber
 			return "";
 		}
 
-		return "*" + Long.toString(mPhoneNumber.getCountryCode()) + Long.toString(mPhoneNumber.getNationalNumber()) + "*";
+		return '*' + Long.toString(mPhoneNumber.getCountryCode()) + Long.toString(mPhoneNumber.getNationalNumber()) + '*';
 	}
 
 	public String getTelephoneNumber()
