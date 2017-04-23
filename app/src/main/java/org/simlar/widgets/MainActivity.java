@@ -187,7 +187,7 @@ public final class MainActivity extends AppCompatActivity
 
 		if (FlavourHelper.isGcmEnabled() && SimlarService.isRunning()) {
 			final Class<? extends Activity> activity = SimlarService.getActivity();
-			if (activity != getClass()) {
+			if (getClass().equals(activity)) {
 				Lg.i("as service is running => starting: ", activity.getSimpleName());
 				startActivity(new Intent(this, activity));
 				finish();
