@@ -123,7 +123,7 @@ public final class SimlarCallState
 
 	public void updateContactNameAndImage(final String name, final String photoId)
 	{
-		if (Util.equalString(mContactName, name) && Util.equals(name, photoId)) {
+		if (Util.equalString(mContactName, name) && Util.equalString(mContactPhotoId, photoId)) {
 			return;
 		}
 
