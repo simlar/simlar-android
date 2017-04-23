@@ -236,7 +236,7 @@ public final class LinphoneThread
 				return;
 			}
 
-			if (mRegistrationState != RegistrationState.RegistrationOk) {
+			if (!RegistrationState.RegistrationOk.equals(mRegistrationState)) {
 				Lg.i("call: not registered");
 				return;
 			}
