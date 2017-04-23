@@ -56,15 +56,15 @@ final class HttpsPost
 		if (parameters != null) {
 			boolean firstParameter = true;
 
-			for (final String parameterName : parameters.keySet()) {
+			for (final Map.Entry<String, String> parameter : parameters.entrySet()) {
 				if (!firstParameter) {
 					parametersAsQueryString.append(PARAMETER_DELIMITER);
 				}
 
 				try {
-					parametersAsQueryString.append(parameterName)
+					parametersAsQueryString.append(parameter.getKey())
 							.append(PARAMETER_EQUALS_CHAR)
-							.append(URLEncoder.encode(parameters.get(parameterName), "UTF-8"));
+							.append(URLEncoder.encode(parameter.getValue(), "UTF-8"));
 				} catch (final UnsupportedEncodingException e) {
 					Lg.ex(e, "UnsupportedEncodingException");
 				}
