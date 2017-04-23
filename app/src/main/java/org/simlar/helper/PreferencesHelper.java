@@ -89,6 +89,7 @@ public final class PreferencesHelper
 
 	public static final class NotInitedException extends IllegalStateException
 	{
+		private static final long serialVersionUID = 1;
 	}
 
 	public static String getMySimlarId() throws NotInitedException
