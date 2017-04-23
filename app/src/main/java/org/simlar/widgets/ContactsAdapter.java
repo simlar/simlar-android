@@ -42,6 +42,7 @@ final class ContactsAdapter extends ArrayAdapter<ContactDataComplete>
 	private final int mLayout;
 	private final LayoutInflater mInflater;
 
+	@SuppressWarnings("ComparatorNotSerializable")
 	private static final class SortByName implements Comparator<ContactDataComplete>
 	{
 		@Override
