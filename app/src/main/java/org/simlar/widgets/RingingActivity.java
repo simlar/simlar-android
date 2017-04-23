@@ -114,7 +114,7 @@ public final class RingingActivity extends AppCompatActivity
 		int i = 0;
 		for (final View circle : mCircles) {
 			final Animation circleAnimation = AnimationUtils.loadAnimation(this, R.anim.ringing_circle);
-			circleAnimation.setStartTime(animationStartTime + i++ * 250);
+			circleAnimation.setStartTime(animationStartTime + i++ * 250L);
 			circleAnimation.setFillAfter(true);
 			circle.setAnimation(circleAnimation);
 
