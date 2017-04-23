@@ -47,13 +47,13 @@ public class ProximityScreenLockerFallback implements ProximityScreenLocker, Sen
 	}
 
 	@Override
-	public void acquire()
+	public final void acquire()
 	{
 		mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY), SensorManager.SENSOR_DELAY_NORMAL);
 	}
 
 	@Override
-	public void release(final boolean immediately)
+	public final void release(final boolean immediately)
 	{
 		mSensorManager.unregisterListener(this);
 		/// TODO: handle immediately
@@ -73,7 +73,7 @@ public class ProximityScreenLockerFallback implements ProximityScreenLocker, Sen
 	}
 
 	@Override
-	public void onSensorChanged(final SensorEvent event)
+	public final void onSensorChanged(final SensorEvent event)
 	{
 		final float distance = event.values[0];
 

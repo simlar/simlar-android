@@ -111,7 +111,7 @@ public class SimlarServiceCommunicator
 		}
 	}
 
-	public boolean register(final Context context, final Class<? extends Activity> activity)
+	public final boolean register(final Context context, final Class<? extends Activity> activity)
 	{
 		if (!SimlarService.isRunning()) {
 			return false;
@@ -121,7 +121,7 @@ public class SimlarServiceCommunicator
 		return true;
 	}
 
-	public void startServiceAndRegister(final Context context, final Class<? extends Activity> activity, final String simlarId)
+	public final void startServiceAndRegister(final Context context, final Class<? extends Activity> activity, final String simlarId)
 	{
 		startServiceAndRegister(context, activity, false, simlarId);
 	}
@@ -143,7 +143,7 @@ public class SimlarServiceCommunicator
 		LocalBroadcastManager.getInstance(context).registerReceiver(mReceiver, new IntentFilter(SimlarServiceBroadcast.BROADCAST_NAME));
 	}
 
-	public void unregister()
+	public final void unregister()
 	{
 		if (mContext == null) {
 			Lg.i("unregister skipped: no context");
@@ -178,7 +178,7 @@ public class SimlarServiceCommunicator
 	{
 	}
 
-	public SimlarService getService()
+	public final SimlarService getService()
 	{
 		return mService;
 	}

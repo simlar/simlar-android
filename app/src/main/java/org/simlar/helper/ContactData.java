@@ -37,13 +37,13 @@ public class ContactData
 		this.photoId = photoId;
 	}
 
-	public boolean isRegistered()
+	public final boolean isRegistered()
 	{
 		return status.isRegistered();
 	}
 
 	@Override
-	public String toString()
+	public final String toString()
 	{
 		return "ContactData [name=" + name + ", guiTelephoneNumber=" + guiTelephoneNumber + ", status=" + status + ", photoId=" + photoId + "]";
 	}
