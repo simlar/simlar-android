@@ -63,7 +63,7 @@ public final class UploadLogFile
 	private Context mContext = null;
 	private ProgressDialog mProgressDialog = null;
 
-	private final class PostResult
+	private static final class PostResult
 	{
 		final boolean success;
 		final String fileName;
