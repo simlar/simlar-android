@@ -28,6 +28,8 @@ import java.io.Serializable;
 
 public final class SimlarServiceBroadcast implements Serializable
 {
+	private static final long serialVersionUID = 1;
+
 	public static final String BROADCAST_NAME = "SimlarServiceBroadcast";
 	public static final String INTENT_EXTRA = "SimlarServiceBroadcast";
 
