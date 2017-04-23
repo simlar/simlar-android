@@ -53,7 +53,7 @@ public class VideoFragment extends Fragment
 	}
 
 	@Override
-	public void onAttach(final Context context)
+	public final void onAttach(final Context context)
 	{
 		super.onAttach(context);
 		Lg.i("onAttach");
@@ -67,7 +67,7 @@ public class VideoFragment extends Fragment
 	}
 
 	@Override
-	public void onDetach()
+	public final void onDetach()
 	{
 		Lg.i("onDetach");
 
@@ -82,7 +82,7 @@ public class VideoFragment extends Fragment
 	}
 
 	@Override
-	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
+	public final View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
 	{
 		Lg.i("onCreateView");
 		final View view = inflater.inflate(R.layout.fragment_video, container, false);
@@ -132,7 +132,7 @@ public class VideoFragment extends Fragment
 	}
 
 	@Override
-	public void onDestroy()
+	public final void onDestroy()
 	{
 		Lg.i("onDestroy");
 
@@ -150,7 +150,7 @@ public class VideoFragment extends Fragment
 	}
 
 	@Override
-	public void onStart()
+	public final void onStart()
 	{
 		super.onStart();
 		Lg.i("onStart");
@@ -163,21 +163,21 @@ public class VideoFragment extends Fragment
 	}
 
 	@Override
-	public void onResume()
+	public final void onResume()
 	{
 		super.onResume();
 		Lg.i("onResume");
 	}
 
 	@Override
-	public void onPause()
+	public final void onPause()
 	{
 		Lg.i("onPause");
 		super.onPause();
 	}
 
 	@Override
-	public void onStop()
+	public final void onStop()
 	{
 		Lg.i("onStop");
 
@@ -201,7 +201,7 @@ public class VideoFragment extends Fragment
 		mListener.enableVideoWindow(enable);
 	}
 
-	public void setNowPlaying()
+	public final void setNowPlaying()
 	{
 		mProgressBarInitializing.setVisibility(View.GONE);
 	}
