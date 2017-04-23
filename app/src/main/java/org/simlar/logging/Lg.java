@@ -72,6 +72,7 @@ public final class Lg
 
 		final int n = FILENAME_SIZE_MAX - fileName.length();
 		if (n > 0) {
+			//noinspection StringConcatenationInFormatCall
 			tag.append(fileName).append(")").append(String.format("%" + n + "s", "."));
 		} else {
 			tag.append(fileName.substring(-n)).append(")");
