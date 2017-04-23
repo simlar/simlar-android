@@ -86,19 +86,19 @@ public final class GooglePlayServicesHelper
 
 					if (Util.isNullOrEmpty(gcmRegistrationId)) {
 						Lg.e("got empty gcm registration id from google server");
-						return null;
+						return "";
 					}
 
 					if (!StorePushId.httpPostStorePushId(gcmRegistrationId)) {
 						Lg.e("ERROR: failed to store gcm push notification registration id=", gcmRegistrationId, " on simlar server");
-						return null;
+						return "";
 					}
 
 					Lg.i("gcm push notification registration id=", gcmRegistrationId, " stored on simlar server");
 					return gcmRegistrationId;
 				} catch (final IOException e) {
 					Lg.ex(e, "gcm registration IOException");
-					return null;
+					return "";
 				}
 			}
 
