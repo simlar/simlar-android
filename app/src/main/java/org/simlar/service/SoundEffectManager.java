@@ -34,7 +34,7 @@ import org.simlar.helper.RingtoneHelper;
 import org.simlar.logging.Lg;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 final class SoundEffectManager
@@ -42,7 +42,7 @@ final class SoundEffectManager
 	private static final long MIN_PLAY_TIME = VibratorManager.VIBRATE_LENGTH + VibratorManager.VIBRATE_PAUSE;
 
 	private final Context mContext;
-	private final Map<SoundEffectType, SoundEffectPlayer> mPlayers = new HashMap<>();
+	private final Map<SoundEffectType, SoundEffectPlayer> mPlayers = new EnumMap<>(SoundEffectType.class);
 
 	public enum SoundEffectType
 	{
