@@ -366,7 +366,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 						@Override
 						public void onClick(final DialogInterface dialog, final int id)
 						{
-							CallActivity.this.acceptVideoUpdate(false);
+							acceptVideoUpdate(false);
 						}
 					})
 					.setPositiveButton(R.string.button_continue, new DialogInterface.OnClickListener()
@@ -374,7 +374,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 						@Override
 						public void onClick(final DialogInterface dialog, final int id)
 						{
-							CallActivity.this.acceptVideoUpdate(true);
+							acceptVideoUpdate(true);
 						}
 					})
 					.setOnCancelListener(new DialogInterface.OnCancelListener()
@@ -382,7 +382,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 						@Override
 						public void onCancel(final DialogInterface dialog)
 						{
-							CallActivity.this.acceptVideoUpdate(false);
+							acceptVideoUpdate(false);
 						}
 					})
 					.create();
