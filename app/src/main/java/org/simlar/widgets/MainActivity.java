@@ -67,7 +67,7 @@ public final class MainActivity extends AppCompatActivity
 		@Override
 		public void onServiceFinishes()
 		{
-			MainActivity.this.finish();
+			finish();
 		}
 	}
 

@@ -63,7 +63,7 @@ public final class RingingActivity extends AppCompatActivity
 		@Override
 		public void onServiceFinishes()
 		{
-			RingingActivity.this.finish();
+			finish();
 		}
 	}
 
@@ -129,7 +129,7 @@ public final class RingingActivity extends AppCompatActivity
 					@Override
 					public void onAnimationEnd(final Animation animation)
 					{
-						RingingActivity.this.animateCircles();
+						animateCircles();
 					}
 
 					@Override

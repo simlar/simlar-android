@@ -45,7 +45,7 @@ final class VibratorManager
 		@Override
 		public void onReceive(final Context context, final Intent intent)
 		{
-			VibratorManager.this.onRingerModeChanged();
+			onRingerModeChanged();
 		}
 	}
 

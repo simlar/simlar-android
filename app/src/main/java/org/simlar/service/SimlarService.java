@@ -112,7 +112,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		@Override
 		public void onReceive(final Context context, final Intent intent)
 		{
-			SimlarService.this.checkNetworkConnectivityAndRefreshRegisters();
+			checkNetworkConnectivityAndRefreshRegisters();
 		}
 	}
 
@@ -121,7 +121,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		@Override
 		public void onReceive(final Context context, final Intent intent)
 		{
-			SimlarService.this.keepAwake();
+			keepAwake();
 		}
 	}
 
@@ -142,17 +142,17 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			case TelephonyManager.CALL_STATE_IDLE:
 				Lg.i("onTelephonyCallStateChanged: state=IDLE");
 				mInCall = false;
-				SimlarService.this.onTelephonyCallStateIdle();
+				onTelephonyCallStateIdle();
 				break;
 			case TelephonyManager.CALL_STATE_OFFHOOK:
 				Lg.i("onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=OFFHOOK");
 				mInCall = true;
-				SimlarService.this.onTelephonyCallStateOffHook();
+				onTelephonyCallStateOffHook();
 				break;
 			case TelephonyManager.CALL_STATE_RINGING:
 				Lg.i("onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=RINGING");
 				mInCall = false; /// TODO Think about
-				SimlarService.this.onTelephonyCallStateRinging();
+				onTelephonyCallStateRinging();
 				break;
 			default:
 				Lg.i("onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=", state);
