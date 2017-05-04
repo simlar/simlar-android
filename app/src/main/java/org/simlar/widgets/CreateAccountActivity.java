@@ -306,7 +306,7 @@ public final class CreateAccountActivity extends Activity
 
 		mProgressRequest.setVisibility(View.VISIBLE);
 		Lg.i("createAccountRequest: ", new Lg.Anonymizer(mTelephoneNumber));
-		final String smsText = getString(R.string.create_account_activity_sms_text) + " ";
+		final String smsText = getString(R.string.create_account_activity_sms_text);
 		final String expectedSimlarId = SimlarNumber.createSimlarId(mTelephoneNumber);
 		final String telephoneNumber = mTelephoneNumber;
 
