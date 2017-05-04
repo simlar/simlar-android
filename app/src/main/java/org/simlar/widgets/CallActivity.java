@@ -358,7 +358,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private void showRemoteRequestedVideoAlert()
 	{
 		if (mAlertDialogRemoteRequestedVideo == null) {
-			mAlertDialogRemoteRequestedVideo = (new AlertDialog.Builder(this))
+			mAlertDialogRemoteRequestedVideo = new AlertDialog.Builder(this)
 					.setTitle(R.string.call_activity_alert_accept_video_request_title)
 					.setMessage(R.string.call_activity_alert_accept_video_request_text)
 					.setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener()
@@ -397,7 +397,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private void showRemoteDeniedVideoAlert()
 	{
 		if (mAlertDialogRemoteDeniedVideo == null) {
-			mAlertDialogRemoteDeniedVideo = (new AlertDialog.Builder(this))
+			mAlertDialogRemoteDeniedVideo = new AlertDialog.Builder(this)
 					.setMessage(R.string.call_activity_video_denied)
 					.create();
 		}
