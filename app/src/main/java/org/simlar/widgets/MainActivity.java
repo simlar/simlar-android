@@ -129,7 +129,7 @@ public final class MainActivity extends AppCompatActivity
 	}
 
 	@Override
-	public void onRequestPermissionsResult(final int requestCode, @NonNull final String permissions[], @NonNull final int grantResults[])
+	public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults)
 	{
 		if (mAdapter.isEmpty()) {
 			loadContacts();

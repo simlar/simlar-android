@@ -43,10 +43,6 @@ final class LinphoneHandler
 
 	private LinphoneCore mLinphoneCore = null;
 
-	public LinphoneHandler()
-	{
-	}
-
 	public void destroy()
 	{
 		Lg.i("destroy called => forcing unregister");

@@ -42,11 +42,6 @@ final class VibratorManager
 
 	private final class RingerModeReceiver extends BroadcastReceiver
 	{
-		public RingerModeReceiver()
-		{
-			super();
-		}
-
 		@Override
 		public void onReceive(final Context context, final Intent intent)
 		{

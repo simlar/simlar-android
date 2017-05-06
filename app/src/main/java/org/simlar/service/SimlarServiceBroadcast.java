@@ -42,7 +42,6 @@ public final class SimlarServiceBroadcast implements Serializable
 	private final Type mType;
 	private final Parameters mParameters;
 
-	@SuppressWarnings("SameParameterValue")
 	private SimlarServiceBroadcast(final Type type, final Parameters parameters)
 	{
 		this.mType = type;

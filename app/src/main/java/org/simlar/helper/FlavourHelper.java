@@ -24,6 +24,11 @@ import org.simlar.BuildConfig;
 
 public final class FlavourHelper
 {
+	private FlavourHelper()
+	{
+		throw new AssertionError("This class was not meant to be instantiated");
+	}
+
 	@SuppressWarnings("SameReturnValue")
 	public static boolean isGcmEnabled()
 	{
