@@ -51,15 +51,15 @@ public final class Util
 
 	public static int compareString(final String lhs, final String rhs)
 	{
-		if (Util.isNullOrEmpty(lhs) && Util.isNullOrEmpty(rhs)) {
+		if (isNullOrEmpty(lhs) && isNullOrEmpty(rhs)) {
 			return 0;
 		}
 
-		if (Util.isNullOrEmpty(lhs)) {
+		if (isNullOrEmpty(lhs)) {
 			return -1;
 		}
 
-		if (Util.isNullOrEmpty(rhs)) {
+		if (isNullOrEmpty(rhs)) {
 			return 1;
 		}
 

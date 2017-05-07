@@ -112,7 +112,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		@Override
 		public void onReceive(final Context context, final Intent intent)
 		{
-			SimlarService.this.checkNetworkConnectivityAndRefreshRegisters();
+			checkNetworkConnectivityAndRefreshRegisters();
 		}
 	}
 
@@ -121,7 +121,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		@Override
 		public void onReceive(final Context context, final Intent intent)
 		{
-			SimlarService.this.keepAwake();
+			keepAwake();
 		}
 	}
 
@@ -142,17 +142,17 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			case TelephonyManager.CALL_STATE_IDLE:
 				Lg.i("onTelephonyCallStateChanged: state=IDLE");
 				mInCall = false;
-				SimlarService.this.onTelephonyCallStateIdle();
+				onTelephonyCallStateIdle();
 				break;
 			case TelephonyManager.CALL_STATE_OFFHOOK:
 				Lg.i("onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=OFFHOOK");
 				mInCall = true;
-				SimlarService.this.onTelephonyCallStateOffHook();
+				onTelephonyCallStateOffHook();
 				break;
 			case TelephonyManager.CALL_STATE_RINGING:
 				Lg.i("onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=RINGING");
 				mInCall = false; /// TODO Think about
-				SimlarService.this.onTelephonyCallStateRinging();
+				onTelephonyCallStateRinging();
 				break;
 			default:
 				Lg.i("onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=", state);
@@ -305,11 +305,11 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		mRunning = true;
 
-		mVibratorManager = new VibratorManager(this.getApplicationContext());
-		mSoundEffectManager = new SoundEffectManager(this.getApplicationContext());
+		mVibratorManager = new VibratorManager(getApplicationContext());
+		mSoundEffectManager = new SoundEffectManager(getApplicationContext());
 		mAudioFocus = new AudioFocus(this);
 
-		mWakeLock = ((PowerManager) this.getSystemService(Context.POWER_SERVICE))
+		mWakeLock = ((PowerManager) getSystemService(Context.POWER_SERVICE))
 				.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SimlarWakeLock");
 		mDisplayWakeLock = createDisplayWakeLock();
 		mWifiLock = createWifiWakeLock();
@@ -351,7 +351,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	private WifiLock createWifiWakeLock()
 	{
-		return ((WifiManager) this.getSystemService(Context.WIFI_SERVICE)).createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "SimlarWifiLock");
+		return ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "SimlarWifiLock");
 	}
 
 	private void terminateChecker()
@@ -791,7 +791,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			if (mSimlarCallState.isRinging()) {
 				Lg.i("starting RingingActivity");
 				mNotificationActivity = ACTIVITIES.getRingingActivity();
-				startActivity(new Intent(SimlarService.this, ACTIVITIES.getRingingActivity()).addFlags(
+				startActivity(new Intent(this, ACTIVITIES.getRingingActivity()).addFlags(
 						Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
 			}
 		}

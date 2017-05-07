@@ -71,12 +71,12 @@ final class ContactsAdapter extends ArrayAdapter<ContactDataComplete>
 
 	private static class RowViewHolder
 	{
-		public RowViewHolder(final View rowView)
+		RowViewHolder(final View rowView)
 		{
-			this.letterView = (TextView) rowView.findViewById(R.id.letter);
-			this.dividerLineView = rowView.findViewById(R.id.dividerLine);
-			this.nameView = (TextView) rowView.findViewById(R.id.name);
-			this.numberView = (TextView) rowView.findViewById(R.id.number);
+			letterView = (TextView) rowView.findViewById(R.id.letter);
+			dividerLineView = rowView.findViewById(R.id.dividerLine);
+			nameView = (TextView) rowView.findViewById(R.id.name);
+			numberView = (TextView) rowView.findViewById(R.id.number);
 		}
 
 		public final TextView letterView;
@@ -85,7 +85,7 @@ final class ContactsAdapter extends ArrayAdapter<ContactDataComplete>
 		public final TextView numberView;
 	}
 
-	public ContactsAdapter(final Context context)
+	ContactsAdapter(final Context context)
 	{
 		super(context, R.layout.fragment_contacts_list_element, new ArrayList<ContactDataComplete>());
 		mLayout = R.layout.fragment_contacts_list_element;
@@ -135,7 +135,7 @@ final class ContactsAdapter extends ArrayAdapter<ContactDataComplete>
 
 	public void addAllContacts(final Set<ContactDataComplete> contacts)
 	{
-		super.addAll(contacts);
+		addAll(contacts);
 		sort(new SortByName());
 	}
 

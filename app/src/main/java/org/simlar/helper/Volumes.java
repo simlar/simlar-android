@@ -108,6 +108,7 @@ public final class Volumes
 	{
 		switch (mMicrophoneStatus) {
 		case DISABLED:
+			//noinspection ReturnOfThis
 			return this;
 		case MUTED:
 			return new Volumes(mPlayGain, mMicGain, mExternalSpeaker, MicrophoneStatus.ON, mEchoLimiter);

@@ -21,6 +21,7 @@
 package org.simlar.widgets;
 
 import android.os.Bundle;
+import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ListView;
 
@@ -29,7 +30,7 @@ import org.simlar.helper.ContactDataComplete;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
-public final class ContactsListFragment extends android.support.v4.app.ListFragment
+public final class ContactsListFragment extends ListFragment
 {
 	@Override
 	public void onActivityCreated(final Bundle savedInstanceState)

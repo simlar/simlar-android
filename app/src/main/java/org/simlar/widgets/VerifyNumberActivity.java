@@ -62,7 +62,7 @@ public final class VerifyNumberActivity extends AppCompatActivity
 		@Override
 		public void onTextChanged(final CharSequence sequence, final int start, final int before, final int count)
 		{
-			VerifyNumberActivity.this.updateButtonAccept();
+			updateButtonAccept();
 		}
 
 		@Override

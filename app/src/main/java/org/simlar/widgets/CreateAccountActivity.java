@@ -119,7 +119,7 @@ public final class CreateAccountActivity extends Activity
 
 			if (mTestRegistrationSuccess) {
 				setResult(RESULT_OK);
-				CreateAccountActivity.this.finish();
+				finish();
 			} else {
 				onError(R.string.create_account_activity_error_sip_not_possible);
 			}
@@ -544,7 +544,7 @@ public final class CreateAccountActivity extends Activity
 	public void onCancelClicked(final View view)
 	{
 		Lg.i("onCancelClicked");
-		PreferencesHelper.saveToFileCreateAccountStatus(CreateAccountActivity.this, CreateAccountStatus.NONE);
+		PreferencesHelper.saveToFileCreateAccountStatus(this, CreateAccountStatus.NONE);
 		finish();
 	}
 
