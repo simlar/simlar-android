@@ -199,6 +199,4 @@ dependencies {
         debugImplementation("org.linphone:linphone-sdk-android-debug:${liblinphoneVersion}")
         releaseImplementation("org.linphone:linphone-sdk-android:${liblinphoneVersion}")
     }
-
-    testImplementation 'junit:junit:4.12'
 }
