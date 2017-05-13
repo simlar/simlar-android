@@ -54,6 +54,7 @@ public final class ContactsListFragment extends ListFragment
 
 	private String getSimlarId(final int position)
 	{
+		@SuppressWarnings("TypeMayBeWeakened")
 		final ContactsAdapter contactsAdapter = (ContactsAdapter) getListAdapter();
 		if (contactsAdapter == null) {
 			return null;

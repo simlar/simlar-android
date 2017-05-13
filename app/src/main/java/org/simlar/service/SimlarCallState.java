@@ -227,7 +227,7 @@ public final class SimlarCallState
 		return ContactsProvider.getContactPhotoBitmap(context, defaultResourceId, mContactPhotoId);
 	}
 
-	public String getCallStatusDisplayMessage(final Context context)
+	public CharSequence getCallStatusDisplayMessage(final Context context)
 	{
 		if (isEmpty()) {
 			return null;
@@ -316,7 +316,7 @@ public final class SimlarCallState
 		mCallEndReason = CallEndReason.SERVER_CONNECTION_TIMEOUT;
 	}
 
-	public String createNotificationText(final Context context, final boolean goingDown)
+	public CharSequence createNotificationText(final Context context, final boolean goingDown)
 	{
 		return mLinphoneCallState.createNotificationText(context, getContactName(), goingDown);
 	}

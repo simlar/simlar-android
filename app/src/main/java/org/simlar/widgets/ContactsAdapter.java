@@ -34,6 +34,7 @@ import org.simlar.helper.ContactDataComplete;
 import org.simlar.utils.Util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Set;
 
@@ -133,7 +134,7 @@ final class ContactsAdapter extends ArrayAdapter<ContactDataComplete>
 		return rowView;
 	}
 
-	public void addAllContacts(final Set<ContactDataComplete> contacts)
+	public void addAllContacts(final Collection<ContactDataComplete> contacts)
 	{
 		addAll(contacts);
 		sort(new SortByName());

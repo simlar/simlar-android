@@ -129,12 +129,12 @@ public final class CallConnectionDetails
 		return mQuality.getDescription();
 	}
 
-	public String getCodec()
+	public CharSequence getCodec()
 	{
 		return mCodec;
 	}
 
-	public String getIceState()
+	public CharSequence getIceState()
 	{
 		return mIceState;
 	}
@@ -149,7 +149,7 @@ public final class CallConnectionDetails
 		return GUI_VALUE.format(mDownload / 10.0f);
 	}
 
-	public String getJitter()
+	public CharSequence getJitter()
 	{
 		return String.valueOf(mJitter);
 	}
@@ -159,7 +159,7 @@ public final class CallConnectionDetails
 		return GUI_VALUE.format(mPacketLoss / 10.0f);
 	}
 
-	public String getLatePackets()
+	public CharSequence getLatePackets()
 	{
 		return String.valueOf(mLatePackets);
 	}

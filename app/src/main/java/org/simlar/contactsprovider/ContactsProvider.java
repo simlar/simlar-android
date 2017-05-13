@@ -45,6 +45,7 @@ import org.simlar.utils.Util;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -88,7 +89,7 @@ public final class ContactsProvider
 		private Map<String, ContactData> mContacts = new HashMap<>();
 		private State mState = State.UNINITIALIZED;
 		boolean mFakeData = false;
-		private final Set<FullContactsListener> mFullContactsListeners = new HashSet<>();
+		private final Collection<FullContactsListener> mFullContactsListeners = new HashSet<>();
 		private final Map<ContactListener, String> mContactListener = new HashMap<>();
 
 		private enum State

@@ -39,11 +39,12 @@ import org.simlar.service.SimlarServiceCommunicator;
 import org.simlar.utils.Util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public final class RingingActivity extends AppCompatActivity
 {
-	private final List<View> mCircles = new ArrayList<>();
+	private final Collection<View> mCircles = new ArrayList<>();
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorRinging();
 
 	private final class SimlarServiceCommunicatorRinging extends SimlarServiceCommunicator
