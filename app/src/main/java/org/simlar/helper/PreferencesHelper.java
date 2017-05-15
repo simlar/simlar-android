@@ -86,8 +86,7 @@ public final class PreferencesHelper
 		}
 	}
 
-	@SuppressWarnings("SuperClassHasFrequentlyUsedInheritors")
-	public static final class NotInitedException extends RuntimeException
+	public static final class NotInitedException extends IllegalStateException
 	{
 	}
 
