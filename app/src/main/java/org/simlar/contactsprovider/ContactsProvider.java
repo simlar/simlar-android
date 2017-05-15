@@ -304,11 +304,9 @@ public final class ContactsProvider
 					continue;
 				}
 
-				String photoUri = null;
-				if (hasPhotoId) {
-					photoUri = Uri.withAppendedPath(ContentUris.withAppendedId(
-							ContactsContract.Contacts.CONTENT_URI, contactId), ContactsContract.Contacts.Photo.CONTENT_DIRECTORY).toString();
-				}
+				final String photoUri = hasPhotoId
+						? Uri.withAppendedPath(ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, contactId), ContactsContract.Contacts.Photo.CONTENT_DIRECTORY).toString()
+						: null;
 
 				if (!result.containsKey(simlarId) || Util.isNullOrEmpty(result.get(simlarId).name)) {
 					result.put(simlarId, new ContactData(Util.equalString(name, number) ? "" : name,
