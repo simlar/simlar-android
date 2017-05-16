@@ -98,22 +98,14 @@ public final class Util
 	@SuppressWarnings("SameParameterValue")
 	public static Drawable getDrawableCompatible(final Resources resources, final int id)
 	{
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			return resources.getDrawable(id, null);
-		} else {
-			//noinspection deprecation
-			return resources.getDrawable(id);
-		}
+		//noinspection deprecation
+		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? resources.getDrawable(id, null) : resources.getDrawable(id);
 	}
 
 	public static Spanned fromHtml(final String string)
 	{
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-			return Html.fromHtml(string, Html.FROM_HTML_MODE_LEGACY);
-		} else {
-			//noinspection deprecation
-			return Html.fromHtml(string);
-		}
+		//noinspection deprecation
+		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ? Html.fromHtml(string, Html.FROM_HTML_MODE_LEGACY) : Html.fromHtml(string);
 	}
 
 	public static String formatMilliSeconds(final long milliSeconds)

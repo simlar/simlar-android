@@ -109,11 +109,7 @@ public final class UploadLogFile
 			outputStream.writeBytes(TWO_HYPHENS + HttpsPost.DATA_BOUNDARY + TWO_HYPHENS + LINE_END);
 			outputStream.flush();
 
-			if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-				result = new PostResult(false, connection.getResponseMessage());
-				Lg.w("posting file failed with error code ", connection.getResponseMessage(), " and message ",
-						connection.getResponseMessage());
-			} else {
+			if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 				inputStream = connection.getInputStream();
 				responseStream = new ByteArrayOutputStream();
 				Util.copyStream(inputStream, responseStream);
@@ -121,11 +117,11 @@ public final class UploadLogFile
 				Lg.i("used CipherSuite: ", connection.getCipherSuite());
 				Lg.i("Response ", response);
 
-				if (response.matches("OK \\d*")) {
-					result = new PostResult(true, file.getName());
-				} else {
-					result = new PostResult(false, response);
-				}
+				result = response.matches("OK \\d*") ? new PostResult(true, file.getName()) : new PostResult(false, response);
+			} else {
+				result = new PostResult(false, connection.getResponseMessage());
+				Lg.w("posting file failed with error code ", connection.getResponseMessage(), " and message ",
+						connection.getResponseMessage());
 			}
 		} catch (final Exception e) {
 			result = new PostResult(false, "Posting log file failed");
@@ -229,7 +225,7 @@ public final class UploadLogFile
 				mProgressDialog.dismiss();
 				if (!result.success) {
 					Lg.e("aborting uploading log file: ", result.errorMessage);
-					(new AlertDialog.Builder(mContext))
+					new AlertDialog.Builder(mContext)
 							.setTitle(R.string.main_activity_alert_uploading_log_file_failed_title)
 							.setMessage(mContext.getString(R.string.main_activity_alert_uploading_log_file_failed_text) + ": " + result.errorMessage)
 							.create().show();

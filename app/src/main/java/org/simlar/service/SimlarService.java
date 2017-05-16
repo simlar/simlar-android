@@ -445,11 +445,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	{
 		if (mNotificationActivity == null) {
 			if (mSimlarStatus == SimlarStatus.ONGOING_CALL) {
-				if (mSimlarCallState.isRinging()) {
-					mNotificationActivity = ACTIVITIES.getRingingActivity();
-				} else {
-					mNotificationActivity = ACTIVITIES.getCallActivity();
-				}
+				mNotificationActivity = mSimlarCallState.isRinging() ? ACTIVITIES.getRingingActivity() : ACTIVITIES.getCallActivity();
 			} else {
 				mNotificationActivity = ACTIVITIES.getMainActivity();
 			}
@@ -473,11 +469,9 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	private String createNotificationText()
 	{
-		if (FlavourHelper.isGcmEnabled() || mSimlarStatus == SimlarStatus.ONGOING_CALL) {
-			return mSimlarCallState.createNotificationText(this, mGoingDown);
-		} else {
-			return getString(mSimlarStatus.getNotificationTextId());
-		}
+		return FlavourHelper.isGcmEnabled() || mSimlarStatus == SimlarStatus.ONGOING_CALL
+				? mSimlarCallState.createNotificationText(this, mGoingDown)
+				: getString(mSimlarStatus.getNotificationTextId());
 	}
 
 	private void connect()
@@ -716,11 +710,11 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			return;
 		}
 
-		if (!simlarCallStateChanged) {
-			Lg.v("SimlarCallState staying the same: ", mSimlarCallState);
-		} else {
+		if (simlarCallStateChanged) {
 			Lg.i("updated ", mSimlarCallState);
 			SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
+		} else {
+			Lg.v("SimlarCallState staying the same: ", mSimlarCallState);
 		}
 
 		if (!mCallConnectionDetails.updateCallStats(quality, codec, iceState, upload, download, jitter, packetLoss, latePackets, roundTripDelay)) {

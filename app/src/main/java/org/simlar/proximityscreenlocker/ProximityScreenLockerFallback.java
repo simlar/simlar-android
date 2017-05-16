@@ -83,6 +83,7 @@ public class ProximityScreenLockerFallback implements ProximityScreenLocker, Sen
 		}
 
 		final Window window = mActivity.getWindow();
+		@SuppressWarnings("UnnecessaryFullyQualifiedName") /// this would require to 'import android.R'
 		final View view = ((ViewGroup) mActivity.findViewById(android.R.id.content)).getChildAt(0);
 
 		final WindowManager.LayoutParams params = window.getAttributes();

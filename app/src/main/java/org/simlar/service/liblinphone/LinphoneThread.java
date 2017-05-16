@@ -158,16 +158,16 @@ public final class LinphoneThread
 					@Override
 					public void run()
 					{
-						if (!mLinphoneHandler.isInitialized()) {
+						if (mLinphoneHandler.isInitialized()) {
+							mLinphoneHandler.unregister();
+							mLinphoneHandler.setCredentials(mySimlarId, password);
+						} else {
 							// LinphoneCore uses context only for getting audio manager. I think this is still thread safe.
 							mLinphoneHandler.initialize(LinphoneThreadImpl.this, context, linphoneInitialConfigFile, rootCaFile,
 									zrtpSecretsCacheFile, ringbackSoundFile, pauseSoundFile);
 							mLinphoneHandler.setVolumes(volumes);
 							mLinphoneHandler.setCredentials(mySimlarId, password);
 							linphoneIterator();
-						} else {
-							mLinphoneHandler.unregister();
-							mLinphoneHandler.setCredentials(mySimlarId, password);
 						}
 					}
 				});
@@ -560,7 +560,7 @@ public final class LinphoneThread
 			final int roundTripDelay = Math.round(stats.getRoundTripDelay() * 1000f);
 
 			// set quality to unusable if up or download bandwidth is zero
-			final float quality = (upload > 0 && download > 0) ? call.getCurrentQuality() : 0;
+			final float quality = upload > 0 && download > 0 ? call.getCurrentQuality() : 0;
 
 			Lg.d("callStatsUpdated: number=", new CallLogger(call), " quality=", quality,
 					" duration=", duration,

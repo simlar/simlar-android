@@ -377,7 +377,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	@SuppressWarnings("unused")
 	public void showSoundSettingsDialog(final View view)
 	{
-		(new VolumesControlDialogFragment()).show(getSupportFragmentManager(), VolumesControlDialogFragment.class.getCanonicalName());
+		new VolumesControlDialogFragment().show(getSupportFragmentManager(), VolumesControlDialogFragment.class.getCanonicalName());
 	}
 
 	@Override

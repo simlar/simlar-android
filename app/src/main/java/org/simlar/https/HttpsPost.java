@@ -87,11 +87,11 @@ final class HttpsPost
 			connection.setDoOutput(true);
 			connection.setUseCaches(false);
 			connection.setRequestMethod("POST");
-			if (!multiPart) {
-				connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-			} else {
+			if (multiPart) {
 				connection.setRequestProperty("Connection", "Keep-Alive");
 				connection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + DATA_BOUNDARY);
+			} else {
+				connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 			}
 
 			Lg.v("created connection for: ", urlPath);

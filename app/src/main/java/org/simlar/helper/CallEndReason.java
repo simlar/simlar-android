@@ -48,9 +48,9 @@ public enum CallEndReason
 			return UNSUPPORTED_MEDIA;
 		case "Busy here":
 			return BUSY;
+		default:
+			return NONE;
 		}
-
-		return NONE;
 	}
 
 	public int getDisplayMessageId()

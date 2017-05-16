@@ -336,8 +336,8 @@ public final class MainActivity extends AppCompatActivity
 	private void uploadLogFile()
 	{
 		final String logFileName = "simlar_" + PreferencesHelper.getMySimlarIdOrEmptyString() + "_"
-				+ (new SimpleDateFormat("yyyy-MM-dd_HHmmss", Locale.US)).format(new Date()) + ".log";
-		(new AlertDialog.Builder(this))
+				+ new SimpleDateFormat("yyyy-MM-dd_HHmmss", Locale.US).format(new Date()) + ".log";
+		new AlertDialog.Builder(this)
 				.setTitle(R.string.main_activity_alert_upload_log_file_title)
 				.setMessage(R.string.main_activity_alert_upload_log_file_text)
 				.setNegativeButton(R.string.button_cancel, null)
@@ -346,7 +346,7 @@ public final class MainActivity extends AppCompatActivity
 					@Override
 					public void onClick(final DialogInterface dialog, final int id)
 					{
-						(new UploadLogFile(MainActivity.this)).upload(logFileName);
+						new UploadLogFile(MainActivity.this).upload(logFileName);
 					}
 				})
 				.create().show();
@@ -360,7 +360,7 @@ public final class MainActivity extends AppCompatActivity
 			return;
 		}
 
-		(new AlertDialog.Builder(this))
+		new AlertDialog.Builder(this)
 				.setTitle(R.string.main_activity_alert_enable_linphone_debug_mode_title)
 				.setMessage(R.string.main_activity_alert_enable_linphone_debug_mode_text)
 				.setNegativeButton(R.string.button_cancel, null)
@@ -406,7 +406,7 @@ public final class MainActivity extends AppCompatActivity
 		if (mCommunicator == null) {
 			finish();
 		} else {
-			(new AlertDialog.Builder(this))
+			new AlertDialog.Builder(this)
 					.setTitle(R.string.main_activity_alert_quit_simlar_title)
 					.setMessage(R.string.main_activity_alert_quit_simlar_text)
 					.setNegativeButton(R.string.button_cancel, null)

@@ -107,7 +107,7 @@ public final class Lg
 
 			final StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < string.length(); ++i) {
-				sb.append((i % 2 == 0) ? string.charAt(i) : '*');
+				sb.append(i % 2 == 0 ? string.charAt(i) : '*');
 			}
 			return sb.toString();
 		}
