@@ -86,7 +86,7 @@ public final class PreferencesHelper
 		}
 	}
 
-	public static final class NotInitedException extends Exception
+	public static final class NotInitedException extends IllegalStateException
 	{
 	}
 
