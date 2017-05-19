@@ -32,7 +32,7 @@ public final class Lg
 	private static final int LOG_LEVEL_NORMAL = Log.WARN;
 	private static final int LOG_LEVEL_DEBUG = Log.DEBUG;
 	private static volatile int mLevel = LOG_LEVEL_NORMAL;
-	private static volatile String mPackageName;
+	private static volatile String mPackageName = "";
 
 	private Lg()
 	{
