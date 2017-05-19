@@ -27,7 +27,6 @@ import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -91,8 +90,6 @@ public final class FileHelper
 			outputStream.close();
 			inputStream.close();
 			Lg.i("created ", target);
-		} catch (final FileNotFoundException e) {
-			Lg.ex(e, "FileNotFoundException: failed to create: ", target);
 		} catch (final IOException e) {
 			Lg.ex(e, "IOException: failed to create: ", target);
 		}
