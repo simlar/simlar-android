@@ -82,6 +82,7 @@ public final class FileHelper
 
 	private static void copyFileFromPackage(final Context context, final int resourceId, final String target)
 	{
+		//noinspection OverlyBroadCatchBlock
 		try {
 			final FileOutputStream outputStream = context.openFileOutput(target, 0);
 			final InputStream inputStream = context.getResources().openRawResource(resourceId);
