@@ -489,7 +489,7 @@ public final class CreateAccountActivity extends Activity
 					return;
 				}
 
-				if (!result.getSimlarId().equals(simlarId)) {
+				if (!Util.equalString(result.getSimlarId(), simlarId)) {
 					Lg.e("confirm response received simlarId=", new Lg.Anonymizer(result.getSimlarId()),
 							" not equal to requested simlarId=", new Lg.Anonymizer(simlarId));
 					onError(R.string.create_account_activity_error_not_possible);
