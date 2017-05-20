@@ -26,6 +26,7 @@ import android.content.SharedPreferences;
 import org.simlar.utils.Util;
 
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public final class PreferencesHelper
 {
@@ -81,7 +82,7 @@ public final class PreferencesHelper
 				sb.append(String.format("%02x", b));
 			}
 			return sb.toString();
-		} catch (final Exception e) {
+		} catch (final NoSuchAlgorithmException e) {
 			return "";
 		}
 	}

@@ -35,8 +35,6 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.simlar.R;
-import org.simlar.helper.PreferencesHelper;
-import org.simlar.helper.Version;
 import org.simlar.https.StorePushId;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;

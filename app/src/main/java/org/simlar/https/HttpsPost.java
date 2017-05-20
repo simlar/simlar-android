@@ -28,7 +28,6 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Map;
@@ -78,6 +77,7 @@ final class HttpsPost
 
 	public static HttpsURLConnection createConnection(final String urlPath, final boolean multiPart)
 	{
+		//noinspection OverlyBroadCatchBlock
 		try {
 			final URL url = new URL(SERVER_URL + "/" + urlPath);
 
@@ -96,10 +96,8 @@ final class HttpsPost
 
 			Lg.v("created connection for: ", urlPath);
 			return connection;
-		} catch (final MalformedURLException e) {
-			Lg.ex(e, "MalformedURLException");
 		} catch (final IOException e) {
-			Lg.ex(e, "IOException while creating connection");
+			Lg.ex(e);
 		}
 
 		Lg.e("failed to create connection for: ", urlPath);

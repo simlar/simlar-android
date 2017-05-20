@@ -27,10 +27,12 @@ import org.simlar.logging.Lg;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -144,8 +146,11 @@ final class SimlarSSLSocketFactory extends SSLSocketFactory
 			final CertificateFactory cf = CertificateFactory.getInstance("X.509");
 			caInput = new BufferedInputStream(new FileInputStream(FileHelper.getRootCaFileName()));
 			return cf.generateCertificate(caInput);
-		} catch (final Exception e) {
-			Lg.ex(e, "Exception during loadCertificate");
+		} catch (final CertificateException e) {
+			Lg.ex(e, "CertificateException during loadCertificate");
+			return null;
+		} catch (final FileNotFoundException e) {
+			Lg.ex(e, "FileNotFoundException during loadCertificate with file=", FileHelper.getRootCaFileName());
 			return null;
 		} finally {
 			try {
@@ -180,7 +185,7 @@ final class SimlarSSLSocketFactory extends SSLSocketFactory
 	}
 
 	@Override
-	public Socket createSocket(final String host, final int port) throws IOException
+	public Socket createSocket(final String host, final int port) throws IOException, UnknownHostException
 	{
 		final SSLSocket socket = (SSLSocket) mSSLSocketFactory.createSocket(host, port);
 		socket.setEnabledCipherSuites(CIPHER_SUITES);
@@ -189,7 +194,7 @@ final class SimlarSSLSocketFactory extends SSLSocketFactory
 	}
 
 	@Override
-	public Socket createSocket(final String host, final int port, final InetAddress localHost, final int localPort) throws IOException
+	public Socket createSocket(final String host, final int port, final InetAddress localHost, final int localPort) throws IOException, UnknownHostException
 	{
 		final SSLSocket socket = (SSLSocket) mSSLSocketFactory.createSocket(host, port, localHost, localPort);
 		socket.setEnabledCipherSuites(CIPHER_SUITES);

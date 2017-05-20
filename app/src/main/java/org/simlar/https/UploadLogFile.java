@@ -38,6 +38,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -123,9 +124,12 @@ public final class UploadLogFile
 				Lg.w("posting file failed with error code ", connection.getResponseMessage(), " and message ",
 						connection.getResponseMessage());
 			}
-		} catch (final Exception e) {
+		} catch (final FileNotFoundException e) {
+			result = new PostResult(false, "Creating log file failed");
+			Lg.ex(e, "FileNotFoundException during postFile");
+		} catch (final IOException e) {
 			result = new PostResult(false, "Posting log file failed");
-			Lg.ex(e, "Exception during postFile");
+			Lg.ex(e, "IOException during postFile");
 		}
 
 		try {
@@ -200,7 +204,7 @@ public final class UploadLogFile
 					final Process p = Runtime.getRuntime().exec("logcat -d -v threadtime -f " + logFile.getAbsolutePath());
 					p.waitFor();
 					return postFile(logFile);
-				} catch (final Exception e) {
+				} catch (final IOException | InterruptedException e) {
 					Lg.ex(e, "Exception during log file creation");
 					return new PostResult(false, "Log file creation failed");
 				} finally {
