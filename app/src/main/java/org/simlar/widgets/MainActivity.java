@@ -312,7 +312,7 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 		}
 
 		if (itemId == R.id.action_tell_a_friend) {
-			tellAFriend();
+			TellFriend.sendMessage(this);
 			return true;
 		}
 
@@ -439,15 +439,6 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 					});
 				}))
 				.create().show();
-	}
-
-	private void tellAFriend()
-	{
-		final Intent sendIntent = new Intent(Intent.ACTION_SEND);
-		sendIntent.setType("text/plain");
-		sendIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.main_activity_tell_a_friend_subject));
-		sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.main_activity_tell_a_friend_text));
-		startActivity(Intent.createChooser(sendIntent, getString(R.string.main_activity_tell_a_friend_chooser_title)));
 	}
 
 	private void showAbout()
