@@ -36,12 +36,12 @@ import org.simlar.logging.Lg;
 
 public class VideoFragment extends Fragment
 {
-	private Listener mListener;
+	private Listener mListener = null;
 
 	// gui elements
-	private GLSurfaceView mVideoView;
-	private SurfaceView mCaptureView;
-	private ProgressBar mProgressBarInitializing;
+	private GLSurfaceView mVideoView = null;
+	private SurfaceView mCaptureView = null;
+	private ProgressBar mProgressBarInitializing = null;
 
 	public interface Listener
 	{
