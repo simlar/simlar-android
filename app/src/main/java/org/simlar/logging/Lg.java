@@ -24,8 +24,10 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.util.Arrays;
 
 import org.simlar.utils.Util;
@@ -42,6 +44,7 @@ public final class Lg
 		throw new AssertionError("This class was not meant to be instantiated");
 	}
 
+	@Target({ElementType.PARAMETER, ElementType.FIELD, ElementType.LOCAL_VARIABLE, ElementType.TYPE})
 	@Retention(RetentionPolicy.RUNTIME)
 	public @interface Anonymize {}
 
