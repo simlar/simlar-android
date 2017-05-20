@@ -118,9 +118,9 @@ public final class CreateAccount
 		}
 	}
 
-	public static RequestResult httpPostRequest(final String telephoneNumber, final String smsText)
+	public static RequestResult httpPostRequest(@Lg.Anonymize final String telephoneNumber, final String smsText)
 	{
-		Lg.i("httpPostRequest: ", new Lg.Anonymizer(telephoneNumber));
+		Lg.i("httpPostRequest: ", telephoneNumber);
 
 		final Map<String, String> parameters = new HashMap<>();
 		parameters.put("command", "request");
@@ -130,9 +130,9 @@ public final class CreateAccount
 		return new RequestResult(httpPost(parameters, "simlarId", "password"));
 	}
 
-	public static RequestResult httpPostCall(final String telephoneNumber, final String password)
+	public static RequestResult httpPostCall(@Lg.Anonymize final String telephoneNumber, final String password)
 	{
-		Lg.i("httpPostCall: ", new Lg.Anonymizer(telephoneNumber));
+		Lg.i("httpPostCall: ", telephoneNumber);
 
 		final Map<String, String> parameters = new HashMap<>();
 		parameters.put("telephoneNumber", telephoneNumber);
@@ -141,9 +141,9 @@ public final class CreateAccount
 		return new RequestResult(httpPost(URL_PATH_CALL, parameters, "simlarId", "password"));
 	}
 
-	public static ConfirmResult httpPostConfirm(final String simlarId, final String registrationCode)
+	public static ConfirmResult httpPostConfirm(@Lg.Anonymize final String simlarId, final String registrationCode)
 	{
-		Lg.i("httpPostConfirm: simlarId=", new Lg.Anonymizer(simlarId), " registrationCode=", registrationCode);
+		Lg.i("httpPostConfirm: simlarId=", simlarId, " registrationCode=", registrationCode);
 
 		final Map<String, String> parameters = new HashMap<>();
 		parameters.put("command", "confirm");

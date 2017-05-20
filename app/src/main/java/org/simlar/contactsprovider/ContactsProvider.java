@@ -370,14 +370,14 @@ public final class ContactsProvider
 			}
 		}
 
-		void addContact(final String simlarId, final String name, final String telephoneNumber)
+		void addContact(@Lg.Anonymize final String simlarId, final String name, final String telephoneNumber)
 		{
 			if (Util.isNullOrEmpty(simlarId)) {
 				Lg.e("no simlarId");
 				return;
 			}
 
-			Lg.i("manually add contact with simlarId=", new Lg.Anonymizer(simlarId));
+			Lg.i("manually add contact with simlarId=", simlarId);
 			mContacts.put(simlarId, new ContactData(name, telephoneNumber, ContactStatus.REGISTERED, null));
 		}
 

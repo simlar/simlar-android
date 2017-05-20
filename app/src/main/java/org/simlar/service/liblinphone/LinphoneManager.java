@@ -280,14 +280,15 @@ public final class LinphoneManager extends CoreListenerStub
 	public void onAccountRegistrationStateChanged(@NonNull final Core core, @NonNull final Account account, final RegistrationState state, @NonNull final String message)
 	{
 		final Address address = account.getParams().getIdentityAddress();
+		@Lg.Anonymize
 		final String identity = address == null ? "" : address.asString();
 
 		if (Util.equals(mRegistrationState, state)) {
-			Lg.v("registration state for ", new Lg.Anonymizer(identity), " not changed: state=", state, " message=", message);
+			Lg.v("registration state for ", identity, " not changed: state=", state, " message=", message);
 			return;
 		}
 
-		Lg.i("registration state for ", new Lg.Anonymizer(identity), " changed: ", state, " ", message);
+		Lg.i("registration state for ", identity, " changed: ", state, " ", message);
 		mRegistrationState = state;
 
 		mListener.onRegistrationStateChanged(state);

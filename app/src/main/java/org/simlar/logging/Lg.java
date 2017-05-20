@@ -73,7 +73,11 @@ public final class Lg
 		if (messageParts != null) {
 			for (final Object part : messageParts) {
 				if (part != null && part.getClass().isAnnotationPresent(Anonymize.class)) {
-					message.append(anonymize(part.toString()));
+					if (part instanceof String) {
+						message.append(anonymize((String)part));
+					} else {
+						message.append(anonymize(part.toString()));
+					}
 				} else {
 					message.append(part);
 				}
@@ -126,28 +130,6 @@ public final class Lg
 			sb.append(i % 2 == 0 ? string.charAt(i) : '*');
 		}
 		return sb.toString();
-	}
-
-	@Anonymize
-	public static class Anonymizer
-	{
-		private final String mMessagePart;
-
-		public Anonymizer(final String messagePart)
-		{
-			mMessagePart = messagePart;
-		}
-
-		@NonNull
-		@Override
-		public final String toString()
-		{
-			if (mMessagePart == null) {
-				return "";
-			}
-
-			return mMessagePart;
-		}
 	}
 
 	public static void init(final boolean debugMode)

@@ -181,12 +181,13 @@ public final class NoContactPermissionFragment extends Fragment
 		callContact(contact.name(), contact.telephoneNumber());
 	}
 
-	private void callContact(final String name, final String telephoneNumber)
+	private void callContact(final String name, @Lg.Anonymize final String telephoneNumber)
 	{
+		@Lg.Anonymize
 		final String simlarId = SimlarNumber.createSimlarId(telephoneNumber);
 
 		if (Util.isNullOrEmpty(simlarId)) {
-			Lg.i("not calling contact because of invalid telephoneNumber=", new Lg.Anonymizer(telephoneNumber));
+			Lg.i("not calling contact because of invalid telephoneNumber=", telephoneNumber);
 			new AlertDialog.Builder(requireContext())
 					.setTitle(R.string.no_contact_permission_fragment_alert_no_simlarId_title)
 					.setMessage(Util.fromHtml(String.format(getString(R.string.no_contact_permission_fragment_alert_no_simlarId_message), telephoneNumber)))
@@ -194,7 +195,7 @@ public final class NoContactPermissionFragment extends Fragment
 			return;
 		}
 
-		Lg.i("checking status of simlarId=", new Lg.Anonymizer(simlarId));
+		Lg.i("checking status of simlarId=", simlarId);
 		final ProgressDialog dialog = new ProgressDialog(getActivity());
 		dialog.setTitle(R.string.no_contact_permission_fragment_alert_checking_status_title);
 		dialog.setMessage(name + '\n' + telephoneNumber);
@@ -225,7 +226,7 @@ public final class NoContactPermissionFragment extends Fragment
 			{
 				dialog.dismiss();
 				if (!registered) {
-					Lg.i("simlarId=", new Lg.Anonymizer(simlarId), " not registered");
+					Lg.i("simlarId=", simlarId, " not registered");
 					new AlertDialog.Builder(requireContext())
 							.setTitle(String.format(getString(R.string.no_contact_permission_fragment_alert_contact_not_registered_title), telephoneNumber))
 							.setMessage(Util.fromHtml(String.format(getString(R.string.no_contact_permission_fragment_alert_contact_not_registered_message), name)))

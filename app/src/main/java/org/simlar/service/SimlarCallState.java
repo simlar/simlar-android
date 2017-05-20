@@ -38,6 +38,7 @@ public final class SimlarCallState
 {
 	private LinphoneCallState mLinphoneCallState = LinphoneCallState.UNKNOWN;
 	private GuiCallState mGuiCallState = GuiCallState.UNKNOWN;
+	@Lg.Anonymize
 	private String mSimlarId = null;
 	private String mContactName = null;
 	private String mContactPhotoId = null;
@@ -201,7 +202,7 @@ public final class SimlarCallState
 		return "SimlarCallState{" +
 				"mLinphoneCallState=" + mLinphoneCallState +
 				", mGuiCallState=" + mGuiCallState +
-				", mSimlarId='" + new Lg.Anonymizer(mSimlarId) + '\'' +
+				", mSimlarId='" + mSimlarId + '\'' +
 				", mContactName='" + mContactName + '\'' +
 				", mContactPhotoId='" + mContactPhotoId + '\'' +
 				", mCallEndReason=" + mCallEndReason +

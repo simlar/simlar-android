@@ -73,6 +73,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 	private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCreateAccount();
+	@Lg.Anonymize
 	private String mTelephoneNumber = "";
 
 	private final class SimlarServiceCommunicatorCreateAccount extends SimlarServiceCommunicator
@@ -236,9 +237,11 @@ public final class CreateAccountActivity extends AppCompatActivity
 		}
 
 		mProgressRequest.setVisibility(View.VISIBLE);
-		Lg.i("createAccountRequest: ", new Lg.Anonymizer(mTelephoneNumber));
+		Lg.i("createAccountRequest: ", mTelephoneNumber);
 		final String smsText = getString(R.string.create_account_activity_sms_text);
+		@Lg.Anonymize
 		final String expectedSimlarId = SimlarNumber.createSimlarId(mTelephoneNumber);
+		@Lg.Anonymize
 		final String telephoneNumber = mTelephoneNumber;
 
 		executorService.execute(() -> {
@@ -253,9 +256,11 @@ public final class CreateAccountActivity extends AppCompatActivity
 				}
 
 				if (!result.getSimlarId().equals(expectedSimlarId)) {
-					Lg.e("received simlarId not equal to expected: telephoneNumber=", new Lg.Anonymizer(telephoneNumber),
-							" expected=", new Lg.Anonymizer(expectedSimlarId),
-							" actual=", new Lg.Anonymizer(result.getSimlarId()));
+					@Lg.Anonymize
+					final String actual = result.getSimlarId();
+					Lg.e("received simlarId not equal to expected: telephoneNumber=", telephoneNumber,
+							" expected=", expectedSimlarId,
+							" actual=", actual);
 				}
 
 				PreferencesHelper.init(result.getSimlarId(), result.getPassword(), Calendar.getInstance().getTime().getTime());
@@ -273,6 +278,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 
 		mProgressConfirm.setVisibility(View.VISIBLE);
 
+		@Lg.Anonymize
 		final String simlarId = PreferencesHelper.getMySimlarIdOrEmptyString();
 		if (Util.isNullOrEmpty(registrationCode) || Util.isNullOrEmpty(simlarId)) {
 			Lg.e("Error: registrationCode or simlarId empty");
@@ -292,9 +298,11 @@ public final class CreateAccountActivity extends AppCompatActivity
 					return;
 				}
 
-				if (!Util.equalString(result.getSimlarId(), simlarId)) {
-					Lg.e("confirm response received simlarId=", new Lg.Anonymizer(result.getSimlarId()),
-							" not equal to requested simlarId=", new Lg.Anonymizer(simlarId));
+				@Lg.Anonymize
+				final String resultSimlarId = result.getSimlarId();
+				if (!Util.equalString(resultSimlarId, simlarId)) {
+					Lg.e("confirm response received simlarId=", resultSimlarId,
+							" not equal to requested simlarId=", simlarId);
 					showMessage(CreateAccountMessage.NOT_POSSIBLE);
 					return;
 				}
