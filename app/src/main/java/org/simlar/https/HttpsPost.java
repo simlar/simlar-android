@@ -151,7 +151,7 @@ final class HttpsPost
 		final PrintWriter out = new PrintWriter(stream);
 		try {
 			out.print(createQueryStringForParameters(parameters));
-			out.close();
+			out.flush();
 
 			if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
 				Lg.e("server response error(", connection.getResponseCode(), "): ", connection.getResponseMessage());
@@ -162,8 +162,9 @@ final class HttpsPost
 			return connection.getInputStream();
 		} catch (final IOException e) {
 			Lg.ex(e, "IOException while posting");
-			out.close();
 			return null;
+		} finally {
+			out.close();
 		}
 	}
 }
