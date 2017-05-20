@@ -107,9 +107,9 @@ public final class Lg
 	@Anonymize
 	public static class Anonymizer
 	{
-		private final Object mMessagePart;
+		private final String mMessagePart;
 
-		public Anonymizer(final Object messagePart)
+		public Anonymizer(final String messagePart)
 		{
 			mMessagePart = messagePart;
 		}
@@ -121,7 +121,7 @@ public final class Lg
 				return "";
 			}
 
-			return mMessagePart.toString();
+			return mMessagePart;
 		}
 	}
 
