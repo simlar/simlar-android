@@ -306,7 +306,7 @@ public final class CreateAccountActivity extends Activity
 
 		mProgressRequest.setVisibility(View.VISIBLE);
 		Lg.i("createAccountRequest: ", new Lg.Anonymizer(mTelephoneNumber));
-		final String smsText = getString(R.string.create_account_activity_sms_text) + " ";
+		final String smsText = getString(R.string.create_account_activity_sms_text);
 		final String expectedSimlarId = SimlarNumber.createSimlarId(mTelephoneNumber);
 		final String telephoneNumber = mTelephoneNumber;
 
@@ -489,7 +489,7 @@ public final class CreateAccountActivity extends Activity
 					return;
 				}
 
-				if (!result.getSimlarId().equals(simlarId)) {
+				if (!Util.equalString(result.getSimlarId(), simlarId)) {
 					Lg.e("confirm response received simlarId=", new Lg.Anonymizer(result.getSimlarId()),
 							" not equal to requested simlarId=", new Lg.Anonymizer(simlarId));
 					onError(R.string.create_account_activity_error_not_possible);

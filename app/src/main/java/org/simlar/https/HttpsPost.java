@@ -25,6 +25,7 @@ import org.simlar.logging.Lg;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -56,15 +57,15 @@ final class HttpsPost
 		if (parameters != null) {
 			boolean firstParameter = true;
 
-			for (final String parameterName : parameters.keySet()) {
+			for (final Map.Entry<String, String> parameter : parameters.entrySet()) {
 				if (!firstParameter) {
 					parametersAsQueryString.append(PARAMETER_DELIMITER);
 				}
 
 				try {
-					parametersAsQueryString.append(parameterName)
+					parametersAsQueryString.append(parameter.getKey())
 							.append(PARAMETER_EQUALS_CHAR)
-							.append(URLEncoder.encode(parameters.get(parameterName), "UTF-8"));
+							.append(URLEncoder.encode(parameter.getValue(), "UTF-8"));
 				} catch (final UnsupportedEncodingException e) {
 					Lg.ex(e, "UnsupportedEncodingException");
 				}
@@ -124,18 +125,33 @@ final class HttpsPost
 		return null;
 	}
 
-	private static InputStream postPrivate(final String urlPath, final Map<String, String> parameters)
+	private static OutputStream getOutputStream(final HttpsURLConnection connection)
 	{
-		final HttpsURLConnection connection = createConnection(urlPath, false);
-
 		if (connection == null) {
 			return null;
 		}
 
 		try {
-			final PrintWriter out = new PrintWriter(connection.getOutputStream());
+			return connection.getOutputStream();
+		} catch (final IOException e) {
+			Lg.ex(e, "IOException while getting OutputStream");
+			return null;
+		}
+	}
+
+	private static InputStream postPrivate(final String urlPath, final Map<String, String> parameters)
+	{
+		final HttpsURLConnection connection = createConnection(urlPath, false);
+
+		final OutputStream stream = getOutputStream(connection);
+		if (stream == null) {
+			return null;
+		}
+
+		final PrintWriter out = new PrintWriter(stream);
+		try {
 			out.print(createQueryStringForParameters(parameters));
-			out.close();
+			out.flush();
 
 			if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
 				Lg.e("server response error(", connection.getResponseCode(), "): ", connection.getResponseMessage());
@@ -144,10 +160,11 @@ final class HttpsPost
 
 			Lg.i("used CipherSuite: ", connection.getCipherSuite());
 			return connection.getInputStream();
-
 		} catch (final IOException e) {
 			Lg.ex(e, "IOException while posting");
 			return null;
+		} finally {
+			out.close();
 		}
 	}
 }

@@ -166,13 +166,13 @@ final class SimlarSSLSocketFactory extends SSLSocketFactory
 	@Override
 	public String[] getDefaultCipherSuites()
 	{
-		return CIPHER_SUITES;
+		return Arrays.copyOf(CIPHER_SUITES, CIPHER_SUITES.length);
 	}
 
 	@Override
 	public String[] getSupportedCipherSuites()
 	{
-		return CIPHER_SUITES;
+		return Arrays.copyOf(CIPHER_SUITES, CIPHER_SUITES.length);
 	}
 
 	@Override
