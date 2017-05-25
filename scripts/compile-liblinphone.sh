@@ -7,17 +7,17 @@ declare -r  BUILD_DIR=${1:?"Please give liblinphone dir as first parameter"}
 declare -r  GIT_HASH=${2:-"unknown"}
 
 declare -rx ANDROID_NDK=${ANDROID_NDK:-""}
-declare -rx ANDROID_SDK=${ANDROID_SDK:-""}
+declare -rx ANDROID_HOME=${ANDROID_HOME:-""}
 
-if [[ -z "${ANDROID_NDK}" || -z "${ANDROID_SDK}" ]] ; then
-	echo "ERROR: Please declare ANDROID_NDK and ANDROID_SDK, e.g. by:"
+if [[ -z "${ANDROID_NDK}" || -z "${ANDROID_HOME}" ]] ; then
+	echo "ERROR: Please declare ANDROID_NDK and ANDROID_HOME, e.g. by:"
 	echo "  export ANDROID_NDK=~/dev/android/android-ndk/android-ndk-r8e/"
-	echo "  export ANDROID_SDK=~/dev/android/android-sdk/adt-bundle-linux-x86_64-20130514/sdk/"
+	echo "  export ANDROID_HOME=~/dev/android/android-sdk/adt-bundle-linux-x86_64-20130514/sdk/"
 	echo "aborting"
 	exit 1
 fi
 
-declare -rx PATH=${PATH}:${ANDROID_SDK}/tools:${ANDROID_SDK}/platform-tools:${ANDROID_NDK}
+declare -rx PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_NDK}
 
 cd "${BUILD_DIR}/linphone-android"
 
