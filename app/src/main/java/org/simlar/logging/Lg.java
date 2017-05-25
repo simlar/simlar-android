@@ -81,13 +81,12 @@ public final class Lg
 		final StringBuilder tag = new StringBuilder();
 		tag.append(mPackageName).append(".(");
 
-		final int n = FILENAME_SIZE_MAX - fileName.length();
-		if (n > 0) {
-			final char[] padding = new char[n];
+		if (fileName.length() >= FILENAME_SIZE_MAX) {
+			tag.append(fileName.substring(fileName.length() - FILENAME_SIZE_MAX)).append(')');
+		} else {
+			final char[] padding = new char[FILENAME_SIZE_MAX - fileName.length()];
 			Arrays.fill(padding, '.');
 			tag.append(fileName).append(')').append(padding);
-		} else {
-			tag.append(fileName.substring(-n)).append(')');
 		}
 
 		return tag.toString();
