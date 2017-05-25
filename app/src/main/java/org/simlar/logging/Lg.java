@@ -21,7 +21,6 @@
 package org.simlar.logging;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.util.Log;
 
 import org.simlar.utils.Util;
@@ -32,11 +31,10 @@ import java.util.Arrays;
 
 public final class Lg
 {
-	private static final int FILENAME_SIZE_MAX = 34;
+	private static final int FILENAME_SIZE_MAX = 42;
 	private static final int LOG_LEVEL_NORMAL = Log.WARN;
 	private static final int LOG_LEVEL_DEBUG = Log.DEBUG;
 	private static volatile int mLevel = LOG_LEVEL_NORMAL;
-	private static volatile String mPackageName = "";
 
 	private Lg()
 	{
@@ -79,7 +77,7 @@ public final class Lg
 		final String fileName = stackTraceElement.getFileName() + ':' + stackTraceElement.getLineNumber();
 
 		final StringBuilder tag = new StringBuilder();
-		tag.append(mPackageName).append(".(");
+		tag.append('(');
 
 		if (fileName.length() >= FILENAME_SIZE_MAX) {
 			tag.append(fileName.substring(fileName.length() - FILENAME_SIZE_MAX)).append(')');
@@ -126,10 +124,9 @@ public final class Lg
 		}
 	}
 
-	public static void init(final Context context, final boolean debugMode)
+	public static void init(final boolean debugMode)
 	{
 		setDebugMode(debugMode);
-		mPackageName = context.getPackageName();
 	}
 
 	public static void setDebugMode(final boolean enabled)

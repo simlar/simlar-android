@@ -42,7 +42,7 @@ public final class App extends Application
 	{
 		super.onCreate();
 
-		Lg.init(this, PreferencesHelper.readFromFileDebugMode(this));
+		Lg.init(PreferencesHelper.readFromFileDebugMode(this));
 		FileHelper.init(this);
 		SimlarService.initActivities(new ServiceActivities(MainActivity.class, RingingActivity.class, CallActivity.class));
 
