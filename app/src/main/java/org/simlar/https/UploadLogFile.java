@@ -201,7 +201,6 @@ public final class UploadLogFile
 				deleteFile(logFile);
 
 				try {
-					//noinspection CallToRuntimeExecWithNonConstantString
 					final Process p = Runtime.getRuntime().exec("logcat -d -v threadtime -f " + logFile.getAbsolutePath());
 					p.waitFor();
 					return postFile(logFile);
