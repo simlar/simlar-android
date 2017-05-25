@@ -74,17 +74,16 @@ public final class Lg
 	private static String createTag()
 	{
 		final StackTraceElement stackTraceElement = Thread.currentThread().getStackTrace()[5];
-		final String fileName = stackTraceElement.getFileName() + ':' + stackTraceElement.getLineNumber();
+		final String fileName = stackTraceElement.getFileName() + ':' + stackTraceElement.getLineNumber() + ')';
 
-		final StringBuilder tag = new StringBuilder();
-		tag.append('(');
+		final StringBuilder tag = new StringBuilder("(");
 
 		if (fileName.length() >= FILENAME_SIZE_MAX) {
-			tag.append(fileName.substring(fileName.length() - FILENAME_SIZE_MAX)).append(')');
+			tag.append(fileName.substring(fileName.length() - FILENAME_SIZE_MAX));
 		} else {
 			final char[] padding = new char[FILENAME_SIZE_MAX - fileName.length()];
 			Arrays.fill(padding, '.');
-			tag.append(fileName).append(')').append(padding);
+			tag.append(fileName).append(padding);
 		}
 
 		return tag.toString();
