@@ -554,10 +554,10 @@ public final class LinphoneThread
 			final String iceState = stats.getIceState().toString();
 			final int upload = Math.round(stats.getUploadBandwidth() / 8.0f * 10.0f); // upload bandwidth in 100 Bytes / second
 			final int download = Math.round(stats.getDownloadBandwidth() / 8.0f * 10.0f); // download bandwidth in 100 Bytes / second
-			final int jitter = Math.round((stats.getReceiverInterarrivalJitter() + stats.getSenderInterarrivalJitter()) * 1000f);
+			final int jitter = Math.round((stats.getReceiverInterarrivalJitter() + stats.getSenderInterarrivalJitter()) * 1000.0f);
 			final int packetLoss = Math.round((stats.getReceiverLossRate() + stats.getSenderLossRate()) / 2.0f * 10.0f); // sum of up and down stream loss in per mille
 			final long latePackets = stats.getLatePacketsCumulativeNumber();
-			final int roundTripDelay = Math.round(stats.getRoundTripDelay() * 1000f);
+			final int roundTripDelay = Math.round(stats.getRoundTripDelay() * 1000.0f);
 
 			// set quality to unusable if up or download bandwidth is zero
 			final float quality = upload > 0 && download > 0 ? call.getCurrentQuality() : 0;
