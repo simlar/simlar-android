@@ -12,7 +12,7 @@ declare -rx ANDROID_HOME=${ANDROID_HOME:-""}
 if [[ -z "${ANDROID_NDK}" || -z "${ANDROID_HOME}" ]] ; then
 	echo "ERROR: Please declare ANDROID_NDK and ANDROID_HOME, e.g. by:"
 	echo "  export ANDROID_NDK=~/dev/android/android-ndk/android-ndk-r8e/"
-	echo "  export ANDROID_HOME=~/dev/android/android-sdk/adt-bundle-linux-x86_64-20130514/sdk/"
+	echo "  export ANDROID_HOME=~/Android/Sdk/"
 	echo "aborting"
 	exit 1
 fi
