@@ -33,6 +33,7 @@ import org.simlar.R;
 import org.simlar.helper.ContactDataComplete;
 import org.simlar.utils.Util;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Set;
@@ -42,8 +43,10 @@ final class ContactsAdapter extends ArrayAdapter<ContactDataComplete>
 	private final int mLayout;
 	private final LayoutInflater mInflater;
 
-	private static final class SortByName implements Comparator<ContactDataComplete>
+	private static final class SortByName implements Comparator<ContactDataComplete>, Serializable
 	{
+		private static final long serialVersionUID = 1;
+
 		@Override
 		public int compare(final ContactDataComplete lhs, final ContactDataComplete rhs)
 		{
