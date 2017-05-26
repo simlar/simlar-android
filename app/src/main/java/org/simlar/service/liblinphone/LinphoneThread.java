@@ -551,7 +551,7 @@ public final class LinphoneThread
 
 		private VideoState createVideoState(final LinphoneCall.State state, final LinphoneCall call)
 		{
-			final boolean localVideo = call.getCurrentParamsCopy() != null && call.getCurrentParamsCopy().getVideoEnabled();
+			final boolean localVideo = call.getCurrentParams() != null && call.getCurrentParams().getVideoEnabled();
 			final boolean remoteVideo = call.getRemoteParams() != null && call.getRemoteParams().getVideoEnabled();
 
 			if (!LinphoneCall.State.CallEnd.equals(state) && localVideo && remoteVideo) {
