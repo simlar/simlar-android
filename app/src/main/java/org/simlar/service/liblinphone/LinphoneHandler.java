@@ -394,7 +394,7 @@ final class LinphoneHandler
 			return;
 		}
 
-		final LinphoneCallParams params = currentCall.getCurrentParamsCopy();
+		final LinphoneCallParams params = currentCall.getCurrentParams();
 		if (params.getVideoEnabled() == enable) {
 			Lg.i("requestVideoUpdate already: ", enable, " => aborting");
 			return;
@@ -431,7 +431,7 @@ final class LinphoneHandler
 			return;
 		}
 
-		final LinphoneCallParams params = currentCall.getCurrentParamsCopy();
+		final LinphoneCallParams params = currentCall.getCurrentParams();
 		if (accept) {
 			params.setVideoEnabled(true);
 		}
