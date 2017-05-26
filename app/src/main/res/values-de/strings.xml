@@ -180,16 +180,16 @@
 
     <string name="missed_call_notification">Verpasster Anruf</string>
 
-    <string name="no_contact_permission_fragment_title">Simlar can\'t access your contacts</string>
-    <string name="no_contact_permission_fragment_request_contacts_permissions_text">By accessing your contacts Simlar automatically detects other Simlar users you can talk to in privacy.</string>
-    <string name="no_contact_permission_fragment_request_contacts_permissions_button">Request Permission</string>
-    <string name="no_contact_permission_fragment_call_contact_text">Otherwise, you\'ll have to find other Simlar contacts by trying to call each contact individually.</string>
-    <string name="no_contact_permission_fragment_call_contact_button">Call Contact</string>
-    <string name="no_contact_permission_fragment_alert_no_simlarId_title">Invalid telephone number</string>
-    <string name="no_contact_permission_fragment_alert_no_simlarId_message">The number &lt;b>%1$s&lt;/b> is not usable with Simlar. Choose another contact.</string>
-    <string name="no_contact_permission_fragment_alert_checking_status_title">Checking contact status</string>
-    <string name="no_contact_permission_fragment_alert_offline_title">You are offline</string>
-    <string name="no_contact_permission_fragment_alert_offline_message">Please check your internet connection and try again.</string>
-    <string name="no_contact_permission_fragment_alert_contact_not_registered_title">%1$s not registered</string>
-    <string name="no_contact_permission_fragment_alert_contact_not_registered_message">Ask &lt;b>%1$s&lt;/b> to install Simlar, too</string>
+    <string name="no_contact_permission_fragment_title">Simlar darf nicht auf Ihre Kontakte zugreifen</string>
+    <string name="no_contact_permission_fragment_request_contacts_permissions_text">Simlar liest die Nummern in ihrem Telefonbuch, um andere Simlar-Nutzer zu finden.</string>
+    <string name="no_contact_permission_fragment_request_contacts_permissions_button">Berechtigung anfordern</string>
+    <string name="no_contact_permission_fragment_call_contact_text">Alternativ kannst Du probieren, einen Kontakt direkt anzurufen.</string>
+    <string name="no_contact_permission_fragment_call_contact_button">Kontakt anrufen</string>
+    <string name="no_contact_permission_fragment_alert_no_simlarId_title">Ungültige Telefonnummer</string>
+    <string name="no_contact_permission_fragment_alert_no_simlarId_message">Die Nummer &lt;b>%1$s&lt;/b> kann mit Simlar nicht benutzt werden. Wählen Sie eine andere.</string>
+    <string name="no_contact_permission_fragment_alert_checking_status_title">Üperprüfe den Status des Kontaktes</string>
+    <string name="no_contact_permission_fragment_alert_offline_title">Keine Verbindung</string>
+    <string name="no_contact_permission_fragment_alert_offline_message">Überprüfe deine Internetverbindung und versuch es erneut.</string>
+    <string name="no_contact_permission_fragment_alert_contact_not_registered_title">%1$s ist nicht registriert</string>
+    <string name="no_contact_permission_fragment_alert_contact_not_registered_message">Frag &lt;b>%1$s&lt;/b> danach Simlar zu installieren.</string>
 </resources>
