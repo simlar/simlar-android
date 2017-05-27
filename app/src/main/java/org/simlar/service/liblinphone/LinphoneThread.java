@@ -371,7 +371,7 @@ public final class LinphoneThread
 			}
 
 			@Override
-			public String toString()
+			public final String toString()
 			{
 				return anonymize(getNumber(mCall));
 			}
@@ -388,7 +388,7 @@ public final class LinphoneThread
 			}
 
 			@Override
-			public String toString()
+			public final String toString()
 			{
 				if (mFriend == null || mFriend.getAddress() == null) {
 					return "";

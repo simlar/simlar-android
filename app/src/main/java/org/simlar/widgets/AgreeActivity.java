@@ -33,7 +33,7 @@ import org.simlar.R;
 public class AgreeActivity extends AppCompatActivity
 {
 	@Override
-	protected void onCreate(final Bundle savedInstanceState)
+	protected final void onCreate(final Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_agree);
@@ -44,20 +44,20 @@ public class AgreeActivity extends AppCompatActivity
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(final Menu menu)
+	public final boolean onCreateOptionsMenu(final Menu menu)
 	{
 		return true;
 	}
 
 	@SuppressWarnings("unused")
-	public void createAccount(final View view)
+	public final void createAccount(final View view)
 	{
 		startActivity(new Intent(this, VerifyNumberActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
 		finish();
 	}
 
 	@SuppressWarnings("unused")
-	public void cancelAccountCreation(final View view)
+	public final void cancelAccountCreation(final View view)
 	{
 		finish();
 	}

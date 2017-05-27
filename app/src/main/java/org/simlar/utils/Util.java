@@ -73,7 +73,7 @@ public final class Util
 
 	public static boolean equals(final Object lhs, final Object rhs)
 	{
-		//noinspection EqualsReplaceableByObjectsCall /// Objects.equals is available in android sdk >= 19
+		//noinspection EqualsReplaceableByObjectsCall,ObjectEquality /// Objects.equals is available in android sdk >= 19
 		return lhs == rhs || lhs != null && lhs.equals(rhs);
 	}
 

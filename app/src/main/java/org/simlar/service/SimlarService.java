@@ -683,7 +683,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	private void handlePendingCall()
 	{
-		if (getSimlarStatus() != SimlarStatus.ONLINE || Util.isNullOrEmpty(mSimlarIdToCall) || mGoingDown) {
+		if (mSimlarStatus != SimlarStatus.ONLINE || Util.isNullOrEmpty(mSimlarIdToCall) || mGoingDown) {
 			return;
 		}
 

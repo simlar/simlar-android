@@ -82,7 +82,7 @@ public final class UploadLogFile
 		}
 	}
 
-	private PostResult postFile(final File file)
+	private static PostResult postFile(final File file)
 	{
 
 		final HttpsURLConnection connection = HttpsPost.createConnection(URL_PATH, true);
@@ -201,7 +201,8 @@ public final class UploadLogFile
 				deleteFile(logFile);
 
 				try {
-					final Process p = Runtime.getRuntime().exec("logcat -d -v threadtime -f " + logFile.getAbsolutePath());
+					//noinspection UseOfProcessBuilder
+					final Process p = new ProcessBuilder("logcat", "-d", "-v", "threadtime", "-f", logFile.getAbsolutePath()).start();
 					p.waitFor();
 					return postFile(logFile);
 				} catch (final IOException | InterruptedException e) {

@@ -90,16 +90,11 @@ public final class PermissionsHelper
 			return mRationalMessageId;
 		}
 
-		private boolean isMajor()
-		{
-			return mMajor;
-		}
-
 		static Set<Type> getMajorPermissions(final boolean needsExternalStorage)
 		{
 			final Set<Type> majorTypes = EnumSet.noneOf(Type.class);
 			for (final Type type : Type.values()) {
-				if (type.isMajor()) {
+				if (type.mMajor) {
 					majorTypes.add(type);
 				}
 			}

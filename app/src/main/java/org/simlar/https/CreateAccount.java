@@ -71,12 +71,12 @@ public final class CreateAccount
 			mResult2 = result.mResult2;
 		}
 
-		public boolean isError()
+		public final boolean isError()
 		{
 			return mErrorId != SUCCESS || Util.isNullOrEmpty(mResult1) || Util.isNullOrEmpty(mResult2);
 		}
 
-		public int getErrorMessage()
+		public final int getErrorMessage()
 		{
 			switch (mErrorId) {
 			case 22:
@@ -94,7 +94,7 @@ public final class CreateAccount
 			}
 		}
 
-		public String getSimlarId()
+		public final String getSimlarId()
 		{
 			return mResult1;
 		}
