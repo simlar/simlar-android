@@ -168,6 +168,6 @@ public final class Volumes
 			return GAIN_MAX;
 		}
 
-		return (GAIN_MIN - GAIN_MAX) / 2 + (GAIN_MAX - GAIN_MIN) * (progress / 100.0f);
+		return (GAIN_MAX - GAIN_MIN) * (progress / 100.0f - 0.5f);
 	}
 }
