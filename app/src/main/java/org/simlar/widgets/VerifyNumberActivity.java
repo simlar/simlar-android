@@ -53,9 +53,9 @@ public final class VerifyNumberActivity extends AppCompatActivity
 {
 	private static final int RESULT_CREATE_ACCOUNT_ACTIVITY = 0;
 
-	private Spinner mSpinner;
-	private EditText mEditNumber;
-	private Button mButtonAccept;
+	private Spinner mSpinner = null;
+	private EditText mEditNumber = null;
+	private Button mButtonAccept = null;
 
 	private final class EditNumberTextWatcher implements TextWatcher
 	{

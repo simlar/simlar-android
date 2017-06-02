@@ -45,6 +45,6 @@ public class ContactData
 	@Override
 	public final String toString()
 	{
-		return "ContactData [name=" + name + ", guiTelephoneNumber=" + guiTelephoneNumber + ", status=" + status + ", photoId=" + photoId + "]";
+		return "ContactData [name=" + name + ", guiTelephoneNumber=" + guiTelephoneNumber + ", status=" + status + ", photoId=" + photoId + ']';
 	}
 }

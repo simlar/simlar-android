@@ -99,7 +99,7 @@ public final class UploadLogFile
 			outputStream = new DataOutputStream(connection.getOutputStream());
 			outputStream.writeBytes(TWO_HYPHENS + HttpsPost.DATA_BOUNDARY + LINE_END);
 			outputStream.writeBytes("Content-Disposition: form-data; name=\"file\";filename=\""
-					+ file.getAbsolutePath() + "\"" + LINE_END);
+					+ file.getAbsolutePath() + '"' + LINE_END);
 			outputStream.writeBytes(LINE_END);
 
 			// copy log file

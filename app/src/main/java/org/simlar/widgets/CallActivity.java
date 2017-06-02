@@ -49,7 +49,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private static final String INTENT_EXTRA_SIMLAR_ID = "simlarId";
 
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCall();
-	private ProximityScreenLocker mProximityScreenLocker;
+	private ProximityScreenLocker mProximityScreenLocker = null;
 	private long mCallStartTime = -1;
 	private final Handler mHandler = new Handler();
 	private Runnable mCallTimer = null;
@@ -57,26 +57,26 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private boolean mHideAuthenticationToken = false;
 
 	// gui elements
-	private ImageView mImageViewContactImage;
-	private TextView mTextViewContactName;
-	private TextView mTextViewCallStatus;
-	private TextView mTextViewCallTimer;
+	private ImageView mImageViewContactImage = null;
+	private TextView mTextViewContactName = null;
+	private TextView mTextViewCallStatus = null;
+	private TextView mTextViewCallTimer = null;
 
-	private LinearLayout mLayoutConnectionQuality;
-	private TextView mTextViewQuality;
-	private ImageButton mButtonConnectionDetails;
+	private LinearLayout mLayoutConnectionQuality = null;
+	private TextView mTextViewQuality = null;
+	private ImageButton mButtonConnectionDetails = null;
 
-	private LinearLayout mLayoutVerifiedAuthenticationToken;
-	private TextView mTextViewVerifiedAuthenticationToken;
+	private LinearLayout mLayoutVerifiedAuthenticationToken = null;
+	private TextView mTextViewVerifiedAuthenticationToken = null;
 
-	private LinearLayout mLayoutAuthenticationToken;
-	private TextView mTextViewAuthenticationToken;
+	private LinearLayout mLayoutAuthenticationToken = null;
+	private TextView mTextViewAuthenticationToken = null;
 
-	private LinearLayout mLayoutCallEndReason;
-	private TextView mTextViewCallEndReason;
+	private LinearLayout mLayoutCallEndReason = null;
+	private TextView mTextViewCallEndReason = null;
 
-	private ImageButton mButtonMicro;
-	private ImageButton mButtonSpeaker;
+	private ImageButton mButtonMicro = null;
+	private ImageButton mButtonSpeaker = null;
 
 	private ConnectionDetailsDialogFragment mConnectionDetailsDialogFragment = null;
 

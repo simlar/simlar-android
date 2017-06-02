@@ -80,7 +80,7 @@ final class HttpsPost
 	{
 		//noinspection OverlyBroadCatchBlock
 		try {
-			final URL url = new URL(SERVER_URL + "/" + urlPath);
+			final URL url = new URL(SERVER_URL + '/' + urlPath);
 
 			final HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
 			connection.setSSLSocketFactory(SimlarSSLSocketFactory.getInstance());

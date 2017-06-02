@@ -76,7 +76,7 @@ final class SoundEffectManager
 
 		private Uri createSoundUri(@RawRes final int sound)
 		{
-			return Uri.parse("android.resource://" + mContext.getPackageName() + "/" + sound);
+			return Uri.parse("android.resource://" + mContext.getPackageName() + '/' + sound);
 		}
 
 		private MediaPlayer initializeMediaPlayer()

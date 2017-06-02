@@ -90,7 +90,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private static volatile Class<? extends Activity> mNotificationActivity = null;
 	private VibratorManager mVibratorManager = null;
 	private SoundEffectManager mSoundEffectManager = null;
-	private AudioFocus mAudioFocus;
+	private AudioFocus mAudioFocus = null;
 	private final NetworkChangeReceiver mNetworkChangeReceiver = new NetworkChangeReceiver();
 	private String mSimlarIdToCall = null;
 	private static volatile boolean mRunning = false;
@@ -128,7 +128,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	private final class TelephonyCallStateListener extends PhoneStateListener
 	{
-		private boolean mInCall;
+		private boolean mInCall = false;
 
 		public boolean isInCall()
 		{
