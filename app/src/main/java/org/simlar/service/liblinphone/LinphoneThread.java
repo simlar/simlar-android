@@ -360,30 +360,30 @@ public final class LinphoneThread
 			});
 		}
 
-		private static class CallLogger extends Lg.Anonymizer
+		@Lg.Anonymize
+		private static class CallLogger
 		{
 			private final LinphoneCall mCall;
 
 			CallLogger(final LinphoneCall call)
 			{
-				super(call);
 				mCall = call;
 			}
 
 			@Override
 			public final String toString()
 			{
-				return anonymize(getNumber(mCall));
+				return getNumber(mCall);
 			}
 		}
 
-		private static class FriendLogger extends Lg.Anonymizer
+		@Lg.Anonymize
+		private static class FriendLogger
 		{
 			private final LinphoneFriend mFriend;
 
 			FriendLogger(final LinphoneFriend friend)
 			{
-				super(friend);
 				mFriend = friend;
 			}
 
@@ -394,7 +394,7 @@ public final class LinphoneThread
 					return "";
 				}
 
-				return anonymize(mFriend.getAddress().getUserName());
+				return mFriend.getAddress().getUserName();
 			}
 		}
 

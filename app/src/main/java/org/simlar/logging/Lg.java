@@ -26,6 +26,9 @@ import android.util.Log;
 
 import org.simlar.utils.Util;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 public final class Lg
 {
 	private static final int FILENAME_SIZE_MAX = 34;
@@ -39,6 +42,9 @@ public final class Lg
 		throw new AssertionError("This class was not meant to be instantiated");
 	}
 
+	@Retention(RetentionPolicy.RUNTIME)
+	public @interface Anonymize {}
+
 	@SuppressLint("LogConditional")
 	private static void println(final int priority, final Throwable exception, final Object... messageParts)
 	{
@@ -49,7 +55,11 @@ public final class Lg
 		final StringBuilder message = new StringBuilder();
 		if (messageParts != null) {
 			for (final Object part : messageParts) {
-				message.append(part);
+				if (part != null && part.getClass().isAnnotationPresent(Anonymize.class)) {
+					message.append(anonymize(part.toString()));
+				} else {
+					message.append(part);
+				}
 			}
 		}
 
@@ -81,36 +91,37 @@ public final class Lg
 		return tag.toString();
 	}
 
+	private static String anonymize(final String string)
+	{
+		if (Util.isNullOrEmpty(string)) {
+			return "";
+		}
+
+		final StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < string.length(); ++i) {
+			sb.append(i % 2 == 0 ? string.charAt(i) : '*');
+		}
+		return sb.toString();
+	}
+
+	@Anonymize
 	public static class Anonymizer
 	{
-		private final Object mMessagePart;
+		private final String mMessagePart;
 
-		public Anonymizer(final Object messagePart)
+		public Anonymizer(final String messagePart)
 		{
 			mMessagePart = messagePart;
 		}
 
 		@Override
-		public String toString()
+		public final String toString()
 		{
 			if (mMessagePart == null) {
 				return "";
 			}
 
-			return anonymize(mMessagePart.toString());
-		}
-
-		public static String anonymize(final String string)
-		{
-			if (Util.isNullOrEmpty(string)) {
-				return "";
-			}
-
-			final StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < string.length(); ++i) {
-				sb.append(i % 2 == 0 ? string.charAt(i) : '*');
-			}
-			return sb.toString();
+			return mMessagePart;
 		}
 	}
 
