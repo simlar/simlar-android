@@ -169,8 +169,12 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 
 			switch (error) {
 				case NONE -> {
-					mAdapter.setContacts(contacts);
-					mContactList.setEmptyText(getString(R.string.main_activity_contact_list_no_contacts_found));
+					if (contacts == null || contacts.isEmpty()) {
+						mContactList.setEmptyText(getString(R.string.main_activity_contact_list_no_contacts_found));
+					} else {
+						mAdapter.setContacts(contacts);
+					}
+
 				}
 				case BUG -> {
 					mAdapter.clear();
