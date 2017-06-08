@@ -50,6 +50,6 @@ dependencies {
     pushCompile 'com.google.android.gms:play-services-gcm:10.2.6'
     compile (name:'liblinphone-android-sdk', ext:'aar')
     compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.googlecode.libphonenumber:libphonenumber:8.5.0'
+    compile 'com.googlecode.libphonenumber:libphonenumber:8.5.1'
     compile 'com.android.support:support-v4:25.3.1'
 }
