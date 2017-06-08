@@ -21,12 +21,14 @@
 package org.simlar.widgets;
 
 import android.content.Context;
+import android.database.DataSetObserver;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import org.simlar.R;
@@ -38,8 +40,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Set;
 
-final class ContactsAdapter extends ArrayAdapter<ContactDataComplete>
+final class ContactsAdapter implements ListAdapter
 {
+	private final ArrayAdapter<ContactDataComplete> mContacts;
 	private final int mLayout;
 	private final LayoutInflater mInflater;
 
@@ -90,7 +93,7 @@ final class ContactsAdapter extends ArrayAdapter<ContactDataComplete>
 
 	ContactsAdapter(final Context context)
 	{
-		super(context, R.layout.fragment_contacts_list_element, new ArrayList<ContactDataComplete>());
+		mContacts = new ArrayAdapter<>(context, R.layout.fragment_contacts_list_element, new ArrayList<ContactDataComplete>());
 		mLayout = R.layout.fragment_contacts_list_element;
 		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
@@ -110,13 +113,13 @@ final class ContactsAdapter extends ArrayAdapter<ContactDataComplete>
 			holder = (RowViewHolder) rowView.getTag();
 		}
 
-		final ContactDataComplete contact = getItem(position);
+		final ContactDataComplete contact = mContacts.getItem(position);
 		if (contact == null) {
 			return rowView;
 		}
 
 		if (position > 0) {
-			final ContactDataComplete prevContact = getItem(position - 1);
+			final ContactDataComplete prevContact = mContacts.getItem(position - 1);
 			if (prevContact == null || contact.getFirstChar() != prevContact.getFirstChar()) {
 				holder.letterView.setVisibility(View.VISIBLE);
 				holder.letterView.setText(Character.toString(contact.getFirstChar()));
@@ -139,10 +142,81 @@ final class ContactsAdapter extends ArrayAdapter<ContactDataComplete>
 
 	public void setContacts(final Set<ContactDataComplete> contacts)
 	{
-		setNotifyOnChange(false);
-		clear();
-		addAll(contacts);
-		sort(new SortByName());
-		notifyDataSetChanged();
+		mContacts.setNotifyOnChange(false);
+		mContacts.clear();
+		mContacts.addAll(contacts);
+		mContacts.sort(new SortByName());
+		mContacts.notifyDataSetChanged();
+	}
+
+	public void clear()
+	{
+		mContacts.clear();
+	}
+
+	@Override
+	public boolean areAllItemsEnabled()
+	{
+		return mContacts.areAllItemsEnabled();
+	}
+
+	@Override
+	public boolean isEnabled(final int position)
+	{
+		return mContacts.isEnabled(position);
+	}
+
+	@Override
+	public void registerDataSetObserver(final DataSetObserver observer)
+	{
+		mContacts.registerDataSetObserver(observer);
+	}
+
+	@Override
+	public void unregisterDataSetObserver(final DataSetObserver observer)
+	{
+		mContacts.unregisterDataSetObserver(observer);
+	}
+
+	@Override
+	public int getCount()
+	{
+		return mContacts.getCount();
+	}
+
+	@Override
+	public ContactDataComplete getItem(final int position)
+	{
+		return mContacts.getItem(position);
+	}
+
+	@Override
+	public long getItemId(final int position)
+	{
+		return mContacts.getItemId(position);
+	}
+
+	@Override
+	public boolean hasStableIds()
+	{
+		return mContacts.hasStableIds();
+	}
+
+	@Override
+	public int getItemViewType(final int position)
+	{
+		return mContacts.getItemViewType(position);
+	}
+
+	@Override
+	public int getViewTypeCount()
+	{
+		return mContacts.getViewTypeCount();
+	}
+
+	@Override
+	public boolean isEmpty()
+	{
+		return mContacts.isEmpty();
 	}
 }
