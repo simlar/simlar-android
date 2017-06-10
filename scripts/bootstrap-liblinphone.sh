@@ -3,7 +3,7 @@
 ## exit if an error occurs or on unset variables
 set -eu -o pipefail
 
-declare -r BRANCH=${1:-"3.2.5"} ## use master to build current git revision
+declare -r BRANCH=${1:-"3.2.7"} ## use master to build current git revision
 
 declare -r COMPILE_SCRIPT="$(dirname $(readlink -f $0))/compile-liblinphone.sh"
 
@@ -48,9 +48,9 @@ if [ -d "${LINPHONE_PATCH_DIR}" ] ; then
 fi
 
 if [ -d "${MEDIASTREAMER2_PATCH_DIR}" ] ; then
-	cd submodules/linphone/mediastreamer2
+	cd submodules/mediastreamer2
 	git am "${MEDIASTREAMER2_PATCH_DIR}"/*.patch
-	cd ../../..
+	cd ../..
 fi
 
 if [ -d "${BELLESIP_PATCH_DIR}" ] ; then
