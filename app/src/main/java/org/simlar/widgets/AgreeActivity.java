@@ -39,7 +39,7 @@ public class AgreeActivity extends AppCompatActivity
 		setContentView(R.layout.activity_agree);
 
 		// make hrefs work in terms and conditions
-		final TextView termsAndConditions = (TextView) findViewById(R.id.textViewTermsAndConditions);
+		final TextView termsAndConditions = findViewById(R.id.textViewTermsAndConditions);
 		termsAndConditions.setMovementMethod(LinkMovementMethod.getInstance());
 	}
 

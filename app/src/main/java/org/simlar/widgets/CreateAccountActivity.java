@@ -198,25 +198,25 @@ public final class CreateAccountActivity extends Activity
 		setFinishOnTouchOutside(false);
 
 		mLayoutProgress = findViewById(R.id.linearLayoutProgress);
-		mProgressRequest = (ProgressBar) findViewById(R.id.progressBarRequest);
-		mProgressWaitingForSMS = (ProgressBar) findViewById(R.id.progressBarWaitingForSMS);
-		mProgressConfirm = (ProgressBar) findViewById(R.id.progressBarConfirm);
-		mProgressFirstLogIn = (ProgressBar) findViewById(R.id.progressBarFirstLogIn);
+		mProgressRequest = findViewById(R.id.progressBarRequest);
+		mProgressWaitingForSMS = findViewById(R.id.progressBarWaitingForSMS);
+		mProgressConfirm = findViewById(R.id.progressBarConfirm);
+		mProgressFirstLogIn = findViewById(R.id.progressBarFirstLogIn);
 
 		mProgressRequest.setVisibility(View.INVISIBLE);
 		mProgressWaitingForSMS.setVisibility(View.INVISIBLE);
 		mProgressConfirm.setVisibility(View.INVISIBLE);
 		mProgressFirstLogIn.setVisibility(View.INVISIBLE);
 
-		mWaitingForSmsText = (TextView) findViewById(R.id.textViewWaitingForSMS);
-		mEditRegistrationCode = (EditText) findViewById(R.id.editTextRegistrationCode);
+		mWaitingForSmsText = findViewById(R.id.textViewWaitingForSMS);
+		mEditRegistrationCode = findViewById(R.id.editTextRegistrationCode);
 		mEditRegistrationCode.setVisibility(View.GONE);
-		mDetails = (TextView) findViewById(R.id.textViewDetails);
+		mDetails = findViewById(R.id.textViewDetails);
 		mDetails.setVisibility(View.GONE);
 
-		mButtonConfirm = (Button) findViewById(R.id.buttonConfirm);
+		mButtonConfirm = findViewById(R.id.buttonConfirm);
 		mButtonConfirm.setVisibility(View.GONE);
-		mButtonCancel = (Button) findViewById(R.id.buttonCancel);
+		mButtonCancel = findViewById(R.id.buttonCancel);
 		mButtonCancel.setVisibility(View.GONE);
 
 		mEditRegistrationCode.addTextChangedListener(new EditRegistrationCodeListener());

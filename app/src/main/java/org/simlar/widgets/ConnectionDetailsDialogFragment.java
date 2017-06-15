@@ -62,15 +62,15 @@ public final class ConnectionDetailsDialogFragment extends DialogFragment
 		@SuppressLint("InflateParams")
 		final View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_fragment_connection_details, null);
 
-		mTextViewQuality = (TextView) view.findViewById(R.id.textViewQuality);
-		mTextViewUpload = (TextView) view.findViewById(R.id.textViewUpload);
-		mTextViewDownload = (TextView) view.findViewById(R.id.textViewDownload);
-		mTextViewIceState = (TextView) view.findViewById(R.id.textViewIceState);
-		mTextViewCodec = (TextView) view.findViewById(R.id.textViewCodec);
-		mTextViewJitter = (TextView) view.findViewById(R.id.textViewJitter);
-		mTextViewPacketLoss = (TextView) view.findViewById(R.id.textViewPacketLoss);
-		mTextViewLatePackets = (TextView) view.findViewById(R.id.textViewLatePackets);
-		mTextViewRoundTripDelay = (TextView) view.findViewById(R.id.textViewRoundTripDelay);
+		mTextViewQuality = view.findViewById(R.id.textViewQuality);
+		mTextViewUpload = view.findViewById(R.id.textViewUpload);
+		mTextViewDownload = view.findViewById(R.id.textViewDownload);
+		mTextViewIceState = view.findViewById(R.id.textViewIceState);
+		mTextViewCodec = view.findViewById(R.id.textViewCodec);
+		mTextViewJitter = view.findViewById(R.id.textViewJitter);
+		mTextViewPacketLoss = view.findViewById(R.id.textViewPacketLoss);
+		mTextViewLatePackets = view.findViewById(R.id.textViewLatePackets);
+		mTextViewRoundTripDelay = view.findViewById(R.id.textViewRoundTripDelay);
 
 		return view;
 	}

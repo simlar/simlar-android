@@ -88,7 +88,7 @@ public final class VerifyNumberActivity extends AppCompatActivity
 		SimlarNumber.setDefaultRegion(regionCode);
 
 		final ArrayAdapter<Integer> adapter = createCountryCodeSelector();
-		mSpinner = (Spinner) findViewById(R.id.spinnerCountryCodes);
+		mSpinner = findViewById(R.id.spinnerCountryCodes);
 		mSpinner.setAdapter(adapter);
 
 		Lg.i("proposing region code: ", regionCode);
@@ -96,10 +96,10 @@ public final class VerifyNumberActivity extends AppCompatActivity
 			mSpinner.setSelection(adapter.getPosition(regionCode));
 		}
 
-		mButtonAccept = (Button) findViewById(R.id.buttonRegister);
+		mButtonAccept = findViewById(R.id.buttonRegister);
 
 		// telephone number
-		mEditNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
+		mEditNumber = findViewById(R.id.editTextPhoneNumber);
 		mEditNumber.addTextChangedListener(new EditNumberTextWatcher());
 		requestPhoneNumber();
 
@@ -138,7 +138,7 @@ public final class VerifyNumberActivity extends AppCompatActivity
 			}, 100);
 		} else {
 			mEditNumber.setText(new SimlarNumber(phoneNumber).getNationalOnly());
-			final TextView text = (TextView) findViewById(R.id.textViewCheckOrVerifyYourNumber);
+			final TextView text = findViewById(R.id.textViewCheckOrVerifyYourNumber);
 			text.setText(getString(R.string.verify_number_activity_verify_your_number));
 		}
 

@@ -37,11 +37,11 @@ public final class AboutActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_about);
 
-		final TextView version = (TextView) findViewById(R.id.textViewVersion);
+		final TextView version = findViewById(R.id.textViewVersion);
 		version.setText(Version.getVersionName(this));
 
 		// make hrefs work in privacy statement and terms of use
-		final TextView privacyStatementAndTermsOfUse = (TextView) findViewById(R.id.textViewPrivacyStatementAndTermsOfUse);
+		final TextView privacyStatementAndTermsOfUse = findViewById(R.id.textViewPrivacyStatementAndTermsOfUse);
 		privacyStatementAndTermsOfUse.setMovementMethod(LinkMovementMethod.getInstance());
 	}
 

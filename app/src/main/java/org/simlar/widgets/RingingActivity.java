@@ -83,7 +83,7 @@ public final class RingingActivity extends AppCompatActivity
 				WindowManager.LayoutParams.FLAG_IGNORE_CHEEK_PRESSES);
 
 		final Animation logoAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate_logo);
-		final ImageView logo = (ImageView) findViewById(R.id.logo);
+		final ImageView logo = findViewById(R.id.logo);
 		logo.startAnimation(logoAnimation);
 
 		createCircles();
@@ -93,7 +93,7 @@ public final class RingingActivity extends AppCompatActivity
 	private void createCircles()
 	{
 		final int diameter = Math.round(250.0f * getResources().getDisplayMetrics().density);
-		final RelativeLayout mainLayout = (RelativeLayout) findViewById(R.id.layoutRingingActivity);
+		final RelativeLayout mainLayout = findViewById(R.id.layoutRingingActivity);
 
 		for (int i = 0; i < 3; i++) {
 			final View circle = new View(this);
@@ -208,8 +208,8 @@ public final class RingingActivity extends AppCompatActivity
 			finish();
 		}
 
-		final ImageView contactImage = (ImageView) findViewById(R.id.contactImage);
-		final TextView contactName = (TextView) findViewById(R.id.contactName);
+		final ImageView contactImage = findViewById(R.id.contactImage);
+		final TextView contactName = findViewById(R.id.contactName);
 
 		contactImage.setImageBitmap(simlarCallState.getContactPhotoBitmap(this, R.drawable.contact_picture));
 		contactName.setText(simlarCallState.getContactName());
