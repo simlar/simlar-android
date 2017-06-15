@@ -87,9 +87,9 @@ public class VideoFragment extends Fragment
 		Lg.i("onCreateView");
 		final View view = inflater.inflate(R.layout.fragment_video, container, false);
 
-		mVideoView = (GLSurfaceView) view.findViewById(R.id.videoSurface);
-		mCaptureView = (SurfaceView) view.findViewById(R.id.videoCaptureSurface);
-		mProgressBarInitializing = (ProgressBar) view.findViewById(R.id.progressBarInitializingVideo);
+		mVideoView = view.findViewById(R.id.videoSurface);
+		mCaptureView = view.findViewById(R.id.videoCaptureSurface);
+		mProgressBarInitializing = view.findViewById(R.id.progressBarInitializingVideo);
 
 		fixZOrder();
 
