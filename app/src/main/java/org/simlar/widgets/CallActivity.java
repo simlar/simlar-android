@@ -160,9 +160,9 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mLayoutCallEndReason = findViewById(R.id.linearLayoutCallEndReason);
 		mTextViewCallEndReason = findViewById(R.id.textViewCallEndReason);
 
-		mLayoutCallControlButtons = (LinearLayout) findViewById(R.id.linearLayoutCallControlButtons);
-		mProgressBarRequestingVideo = (ProgressBar) findViewById(R.id.progressBarRequestingVideo);
-		mButtonToggleVideo = (ImageButton) findViewById(R.id.buttonToggleVideo);
+		mLayoutCallControlButtons = findViewById(R.id.linearLayoutCallControlButtons);
+		mProgressBarRequestingVideo = findViewById(R.id.progressBarRequestingVideo);
+		mButtonToggleVideo = findViewById(R.id.buttonToggleVideo);
 		mButtonMicro = findViewById(R.id.buttonMicro);
 		mButtonSpeaker = findViewById(R.id.buttonSpeaker);
 
