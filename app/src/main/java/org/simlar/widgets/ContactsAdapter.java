@@ -137,16 +137,12 @@ final class ContactsAdapter extends ArrayAdapter<ContactDataComplete>
 		return rowView;
 	}
 
-	public void addAllContacts(final Set<ContactDataComplete> contacts)
+	public void setContacts(final Set<ContactDataComplete> contacts)
 	{
+		setNotifyOnChange(false);
+		clear();
 		addAll(contacts);
 		sort(new SortByName());
-	}
-
-	@Override
-	public void add(final ContactDataComplete contact)
-	{
-		super.add(contact);
-		sort(new SortByName());
+		notifyDataSetChanged();
 	}
 }

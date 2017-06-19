@@ -146,16 +146,17 @@ public final class MainActivity extends AppCompatActivity
 			public void onGetContacts(final Set<ContactDataComplete> contacts, final ContactsProvider.Error error)
 			{
 				Lg.i("onGetContacts error=", error);
-				mAdapter.clear();
 				switch (error) {
 				case NONE:
-					mAdapter.addAllContacts(contacts);
+					mAdapter.setContacts(contacts);
 					mContactList.setEmptyText(getString(R.string.main_activity_contact_list_no_contacts_found));
 					break;
 				case BUG:
+					mAdapter.clear();
 					mContactList.setEmptyText(getString(R.string.main_activity_contact_list_error_loading_contacts));
 					break;
 				case NO_INTERNET_CONNECTION:
+					mAdapter.clear();
 					mContactList.setEmptyText(getString(R.string.main_activity_contact_list_error_loading_contacts_no_internet));
 					break;
 				case PERMISSION_DENIED:
