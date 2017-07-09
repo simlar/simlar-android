@@ -124,26 +124,26 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 		mProximityScreenLocker = ProximityScreenLockerHelper.createProximityScreenLocker(this);
 
-		mImageViewContactImage = (ImageView) findViewById(R.id.contactImage);
-		mTextViewContactName = (TextView) findViewById(R.id.contactName);
-		mTextViewCallStatus = (TextView) findViewById(R.id.textViewCallStatus);
-		mTextViewCallTimer = (TextView) findViewById(R.id.textViewCallTimer);
+		mImageViewContactImage = findViewById(R.id.contactImage);
+		mTextViewContactName = findViewById(R.id.contactName);
+		mTextViewCallStatus = findViewById(R.id.textViewCallStatus);
+		mTextViewCallTimer = findViewById(R.id.textViewCallTimer);
 
-		mLayoutConnectionQuality = (LinearLayout) findViewById(R.id.linearLayoutConnectionQuality);
-		mTextViewQuality = (TextView) findViewById(R.id.textViewQuality);
-		mButtonConnectionDetails = (ImageButton) findViewById(R.id.buttonConnectionDetails);
+		mLayoutConnectionQuality = findViewById(R.id.linearLayoutConnectionQuality);
+		mTextViewQuality = findViewById(R.id.textViewQuality);
+		mButtonConnectionDetails = findViewById(R.id.buttonConnectionDetails);
 
-		mLayoutVerifiedAuthenticationToken = (LinearLayout) findViewById(R.id.linearLayoutVerifiedAuthenticationToken);
-		mTextViewVerifiedAuthenticationToken = (TextView) findViewById(R.id.textViewVerifiedAuthenticationToken);
+		mLayoutVerifiedAuthenticationToken = findViewById(R.id.linearLayoutVerifiedAuthenticationToken);
+		mTextViewVerifiedAuthenticationToken = findViewById(R.id.textViewVerifiedAuthenticationToken);
 
-		mLayoutAuthenticationToken = (LinearLayout) findViewById(R.id.linearLayoutAuthenticationToken);
-		mTextViewAuthenticationToken = (TextView) findViewById(R.id.textViewAuthenticationToken);
+		mLayoutAuthenticationToken = findViewById(R.id.linearLayoutAuthenticationToken);
+		mTextViewAuthenticationToken = findViewById(R.id.textViewAuthenticationToken);
 
-		mLayoutCallEndReason = (LinearLayout) findViewById(R.id.linearLayoutCallEndReason);
-		mTextViewCallEndReason = (TextView) findViewById(R.id.textViewCallEndReason);
+		mLayoutCallEndReason = findViewById(R.id.linearLayoutCallEndReason);
+		mTextViewCallEndReason = findViewById(R.id.textViewCallEndReason);
 
-		mButtonMicro = (ImageButton) findViewById(R.id.buttonMicro);
-		mButtonSpeaker = (ImageButton) findViewById(R.id.buttonSpeaker);
+		mButtonMicro = findViewById(R.id.buttonMicro);
+		mButtonSpeaker = findViewById(R.id.buttonSpeaker);
 
 		//
 		// Presets

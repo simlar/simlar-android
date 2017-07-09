@@ -82,9 +82,9 @@ public final class VolumesControlDialogFragment extends DialogFragment
 		@SuppressLint("InflateParams")
 		final View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_fragment_volumes_control, null);
 
-		final SeekBar seekBarSpeaker = (SeekBar) view.findViewById(R.id.seekBarSpeaker);
-		final SeekBar seekBarMicrophone = (SeekBar) view.findViewById(R.id.seekBarMicrophone);
-		final CheckBox checkBoxEchoLimiter = (CheckBox) view.findViewById(R.id.checkBoxEchoLimiter);
+		final SeekBar seekBarSpeaker = view.findViewById(R.id.seekBarSpeaker);
+		final SeekBar seekBarMicrophone = view.findViewById(R.id.seekBarMicrophone);
+		final CheckBox checkBoxEchoLimiter = view.findViewById(R.id.checkBoxEchoLimiter);
 
 		if (mListener != null) {
 			seekBarSpeaker.setProgress(mListener.getSpeakerVolume());

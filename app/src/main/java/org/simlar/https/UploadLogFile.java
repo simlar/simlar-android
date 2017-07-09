@@ -61,6 +61,7 @@ public final class UploadLogFile
 	private static final String TWO_HYPHENS = "--";
 
 	private Context mContext = null;
+	//noinspection deprecation
 	private ProgressDialog mProgressDialog = null;
 
 	private static final class PostResult
@@ -168,6 +169,7 @@ public final class UploadLogFile
 	{
 		mContext = context;
 
+		//noinspection deprecation
 		mProgressDialog = new ProgressDialog(mContext);
 		mProgressDialog.setMessage(mContext.getString(R.string.upload_log_file_progress));
 		mProgressDialog.setIndeterminate(true);
