@@ -42,7 +42,7 @@ android {
     lintOptions {
         checkAllWarnings true
         disable 'GoogleAppIndexingWarning'
-        warningsAsErrors true
+        warningsAsErrors false
     }
 }
 
