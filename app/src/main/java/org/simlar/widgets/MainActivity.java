@@ -146,6 +146,12 @@ public final class MainActivity extends AppCompatActivity
 			public void onGetContacts(final Set<ContactDataComplete> contacts, final ContactsProvider.Error error)
 			{
 				Lg.i("onGetContacts error=", error);
+
+				if (!mContactList.isVisible() || isFinishing()) {
+					Lg.i("onGetContacts the fragment went away");
+					return;
+				}
+
 				switch (error) {
 				case NONE:
 					mAdapter.setContacts(contacts);
