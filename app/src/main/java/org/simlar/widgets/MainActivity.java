@@ -22,12 +22,12 @@ package org.simlar.widgets;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -54,7 +54,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
 
-public final class MainActivity extends AppCompatActivity
+public final class MainActivity extends AppCompatActivity implements NoContactPermissionFragment.Listener
 {
 	private ContactsAdapter mAdapter = null;
 	private ContactsListFragment mContactList = null;
@@ -81,7 +81,7 @@ public final class MainActivity extends AppCompatActivity
 
 		mAdapter = new ContactsAdapter(this);
 
-		final FragmentManager fm = getSupportFragmentManager();
+		final FragmentManager fm = getFragmentManager();
 		mContactList = (ContactsListFragment) fm.findFragmentById(R.id.contactsListFragment);
 		if (mContactList == null) {
 			mContactList = new ContactsListFragment();

@@ -25,12 +25,14 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v13.app.FragmentCompat;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
@@ -42,7 +44,6 @@ import org.simlar.utils.Util;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
@@ -166,9 +167,10 @@ public final class PermissionsHelper
 				.create().show();
 	}
 
-	public static void requestContactPermission(final Activity activity)
+	public static void requestContactPermission(final Fragment fragment)
 	{
-		requestPermissions(activity, Collections.singleton(Type.CONTACTS));
+		Lg.i("requesting contact permission");
+		FragmentCompat.requestPermissions(fragment, new String[] { Type.CONTACTS.getPermission() }, REQUEST_CODE);
 	}
 
 	private static void requestPermissions(final Activity activity, final Set<Type> types)
