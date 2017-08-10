@@ -124,6 +124,11 @@ public final class PermissionsHelper
 		checkAndRequestPermissions(activity, Type.getMajorPermissions(needsExternalStorage));
 	}
 
+	public static boolean shouldShowRationale(final Activity activity, final Type type)
+	{
+		return ActivityCompat.shouldShowRequestPermissionRationale(activity, type.getPermission());
+	}
+
 	private static boolean checkAndRequestPermissions(final Activity activity, final Set<Type> types)
 	{
 		final Set<Type> requestTypes = EnumSet.noneOf(Type.class);
@@ -131,7 +136,7 @@ public final class PermissionsHelper
 		for (final Type type : types) {
 			if (!hasPermission(activity, type)) {
 				requestTypes.add(type);
-				if (ActivityCompat.shouldShowRequestPermissionRationale(activity, type.getPermission())) {
+				if (shouldShowRationale(activity, type)) {
 					rationalMessages.add(activity.getString(type.getRationalMessageId()));
 				}
 			}
