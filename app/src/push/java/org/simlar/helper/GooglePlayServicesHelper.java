@@ -20,8 +20,6 @@
 
 package org.simlar.helper;
 
-import java.io.IOException;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -38,6 +36,8 @@ import org.simlar.R;
 import org.simlar.https.StorePushId;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
+
+import java.io.IOException;
 
 @SuppressWarnings("deprecation")
 public final class GooglePlayServicesHelper
