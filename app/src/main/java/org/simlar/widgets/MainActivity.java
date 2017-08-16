@@ -157,7 +157,6 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 
 	private void loadContacts()
 	{
-		Lg.i("loadContacts ContactList visible: ", mContactList.isVisible());
 		showNoContactPermissionFragment(false);
 		mContactList.setEmptyText(getString(R.string.main_activity_contact_list_loading_contacts));
 		ContactsProvider.getContacts(this, (contacts, error) -> {
@@ -165,11 +164,6 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 
 			if (isFinishing()) {
 				Lg.i("onGetContacts MainActivity is finishing");
-				return;
-			}
-
-			if (mContactList.isRemoving()) {
-				Lg.i("onGetContacts ContactList is removing");
 				return;
 			}
 
