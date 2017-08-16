@@ -114,8 +114,8 @@ public final class MainActivity extends AppCompatActivity
 			{
 				Lg.i("onGetContacts: error=", error);
 
-				if (!mContactList.isVisible() || isFinishing()) {
-					Lg.i("onGetContacts the fragment went away");
+				if (isFinishing()) {
+					Lg.i("onGetContacts MainActivity is finishing");
 					return;
 				}
 
