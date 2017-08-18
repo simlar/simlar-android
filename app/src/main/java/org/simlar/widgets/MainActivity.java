@@ -97,6 +97,8 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 
 		showNoContactPermissionFragment(false);
 
+		PermissionsHelper.checkAndRequestNotificationPolicyAccess(this);
+
 		Lg.i("onCreate ended");
 	}
 

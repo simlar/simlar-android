@@ -135,6 +135,12 @@
     <!-- Allow Simlar to access photos, media and files on your device? -->
     <string name="permission_explain_text_storage">Simlar reads the ringtone of your device if you chose a custom one to play it on incoming Simlar calls.</string>
 
+    <!-- Do Not Disturb -->
+    <!-- Allow access to Do Not Disturb for Simlar? -->
+    <!-- The app will be able to turn on/off Do Not Disturb and make changes to related settings. -->
+    <string name="permission_explain_text_notification_policy_access">Simlar wants to enter Do Not Disturb mode during calls in order to prevent e.g. other calls from vibrating and ringing load.</string>
+    <string name="permission_explain_text_notification_policy_access_button">Open Settings</string>
+
     <string name="volumes_control_fragment_software_echo_limiter">Software Echo Limiter</string>
 
     <string name="about_activity_title">About Simlar</string>
