@@ -26,6 +26,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -230,5 +231,11 @@ public final class PermissionsHelper
 		} catch (final IOException e) {
 			return true;
 		}
+	}
+
+	public static boolean isNotificationPolicyAccessGranted(final Context context)
+	{
+		return Build.VERSION.SDK_INT < Build.VERSION_CODES.N ||
+				((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).isNotificationPolicyAccessGranted();
 	}
 }
