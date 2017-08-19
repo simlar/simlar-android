@@ -39,6 +39,7 @@
     <string name="main_activity_menu_delete_account">Einstellungen löschen</string>
     <string name="main_activity_menu_fake_telephone_book">Screenshot Telefonbuch</string>
     <string name="main_activity_menu_fake_telephone_book_disable">Normales Telefonbuch</string>
+    <string name="main_activity_menu_notification_settings">Nicht stören Einstellungen</string>
     <string name="main_activity_menu_tell_a_friend">Freunde einladen</string>
     <string name="main_activity_menu_show_about">Über Simlar</string>
     <string name="main_activity_menu_quit">Simlar beenden</string>

@@ -26,6 +26,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -259,6 +260,7 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 		getMenuInflater().inflate(R.menu.main, menu);
 		updateMenu(Version.showDeveloperMenu(), R.id.action_delete_account, R.string.main_activity_menu_delete_account, Menu.NONE, menu);
 		updateMenu(Version.showDeveloperMenu(), R.id.action_fake_telephone_book, R.string.main_activity_menu_fake_telephone_book, Menu.NONE, menu);
+		updateMenu(Version.showDeveloperMenu() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N, R.id.action_notification_settings, R.string.main_activity_menu_notification_settings, Menu.NONE, menu);
 		updateMenu(!FlavourHelper.isGcmEnabled(), R.id.action_quit, R.string.main_activity_menu_quit, Menu.NONE, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -282,6 +284,9 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 			return true;
 		case R.id.action_fake_telephone_book:
 			fakeTelephoneBook();
+			return true;
+		case R.id.action_notification_settings:
+			PermissionsHelper.openNotificationPolicyAccessSettings(this);
 			return true;
 		case R.id.action_tell_a_friend:
 			tellAFriend();

@@ -54,6 +54,12 @@
         app:showAsAction="never"/>
 
     <item
+        android:id="@+id/action_notification_settings"
+        android:orderInCategory="6"
+        android:title="@string/main_activity_menu_notification_settings"
+        app:showAsAction="never"/>
+
+    <item
         android:id="@+id/action_tell_a_friend"
         android:orderInCategory="8"
         android:title="@string/main_activity_menu_tell_a_friend"
