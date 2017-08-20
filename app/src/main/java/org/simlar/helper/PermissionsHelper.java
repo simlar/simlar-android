@@ -268,4 +268,11 @@ public final class PermissionsHelper
 							.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 		}
 	}
+
+	public static void openAppSettings(final Activity activity)
+	{
+		activity.startActivity(
+				new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", activity.getPackageName(), null))
+						.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+	}
 }
