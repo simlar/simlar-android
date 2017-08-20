@@ -260,19 +260,19 @@ public final class PermissionsHelper
 				.create().show();
 	}
 
-	public static void openNotificationPolicyAccessSettings(final Activity activity)
+	public static void openNotificationPolicyAccessSettings(final Context context)
 	{
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			activity.startActivity(
+			context.startActivity(
 					new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
 							.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 		}
 	}
 
-	public static void openAppSettings(final Activity activity)
+	public static void openAppSettings(final Context context)
 	{
-		activity.startActivity(
-				new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", activity.getPackageName(), null))
+		context.startActivity(
+				new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", context.getPackageName(), null))
 						.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 	}
 }
