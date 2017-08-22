@@ -21,21 +21,20 @@
 package org.simlar.logging;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.util.Log;
 
 import org.simlar.utils.Util;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.Arrays;
 
 public final class Lg
 {
-	private static final int FILENAME_SIZE_MAX = 34;
+	private static final int FILENAME_SIZE_MAX = 42;
 	private static final int LOG_LEVEL_NORMAL = Log.WARN;
 	private static final int LOG_LEVEL_DEBUG = Log.DEBUG;
 	private static volatile int mLevel = LOG_LEVEL_NORMAL;
-	private static volatile String mPackageName = "";
 
 	private Lg()
 	{
@@ -75,17 +74,16 @@ public final class Lg
 	private static String createTag()
 	{
 		final StackTraceElement stackTraceElement = Thread.currentThread().getStackTrace()[5];
-		final String fileName = stackTraceElement.getFileName() + ':' + stackTraceElement.getLineNumber();
+		final String fileName = stackTraceElement.getFileName() + ':' + stackTraceElement.getLineNumber() + ')';
 
-		final StringBuilder tag = new StringBuilder();
-		tag.append(mPackageName).append(".(");
+		final StringBuilder tag = new StringBuilder("(");
 
-		final int n = FILENAME_SIZE_MAX - fileName.length();
-		if (n > 0) {
-			//noinspection StringConcatenationInFormatCall
-			tag.append(fileName).append(')').append(String.format("%" + n + 's', "."));
+		if (fileName.length() >= FILENAME_SIZE_MAX) {
+			tag.append(fileName.substring(fileName.length() - FILENAME_SIZE_MAX));
 		} else {
-			tag.append(fileName.substring(-n)).append(')');
+			final char[] padding = new char[FILENAME_SIZE_MAX - fileName.length()];
+			Arrays.fill(padding, '.');
+			tag.append(fileName).append(padding);
 		}
 
 		return tag.toString();
@@ -125,10 +123,9 @@ public final class Lg
 		}
 	}
 
-	public static void init(final Context context, final boolean debugMode)
+	public static void init(final boolean debugMode)
 	{
 		setDebugMode(debugMode);
-		mPackageName = context.getPackageName();
 	}
 
 	public static void setDebugMode(final boolean enabled)
