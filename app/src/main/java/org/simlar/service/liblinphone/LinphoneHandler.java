@@ -37,6 +37,8 @@ import org.simlar.helper.Volumes;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
+import java.util.Random;
+
 final class LinphoneHandler
 {
 	private static final String STUN_SERVER = "stun.simlar.org";
@@ -118,7 +120,7 @@ final class LinphoneHandler
 			final Transports transports = new Transports();
 			transports.udp = 0;
 			transports.tcp = 0;
-			transports.tls = (int) (Math.random() * (0xFFFF - 1024)) + 1024;
+			transports.tls = new Random().nextInt(Short.MAX_VALUE - 1023) + 1024;
 			mLinphoneCore.setSignalingTransportPorts(transports);
 			Lg.i("using random port: ", transports.tls);
 
