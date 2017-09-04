@@ -65,7 +65,7 @@ public final class NoContactPermissionFragment extends Fragment
 		super.onAttach(context);
 		Lg.i("onAttach");
 
-		if ( ! (context instanceof Listener)) {
+		if (!(context instanceof Listener)) {
 			Lg.e("not attached to listener object");
 			return;
 		}
