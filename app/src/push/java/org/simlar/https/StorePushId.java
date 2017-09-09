@@ -20,18 +20,18 @@
 
 package org.simlar.https;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
+import android.util.Xml;
 
-import org.simlar.helper.PreferencesHelper.NotInitedException;
 import org.simlar.helper.PreferencesHelper;
+import org.simlar.helper.PreferencesHelper.NotInitedException;
 import org.simlar.logging.Lg;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-import android.util.Xml;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class StorePushId
 {

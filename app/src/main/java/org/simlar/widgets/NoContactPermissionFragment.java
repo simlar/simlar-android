@@ -21,13 +21,16 @@
 
 package org.simlar.widgets;
 
+import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.v4.app.Fragment;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +49,29 @@ import static android.app.Activity.RESULT_OK;
 public final class NoContactPermissionFragment extends Fragment
 {
 	private static final int PICK_CONTACT = 4711;
+
+	private Listener mListener = null;
+	private boolean mShouldShowRationalBeforeRequest = false;
+
+	public interface Listener
+	{
+		@SuppressWarnings("UnusedParameters")
+		void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults);
+	}
+
+	@Override
+	public void onAttach(final Context context)
+	{
+		super.onAttach(context);
+		Lg.i("onAttach");
+
+		if (!(context instanceof Listener)) {
+			Lg.e("not attached to listener object");
+			return;
+		}
+
+		mListener = (Listener) context;
+	}
 
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
@@ -75,7 +101,26 @@ public final class NoContactPermissionFragment extends Fragment
 	private void requestContactPermissionsClicked()
 	{
 		Lg.i("requestContactPermissionsClicked");
-		PermissionsHelper.requestContactPermission(getActivity());
+		mShouldShowRationalBeforeRequest = PermissionsHelper.shouldShowRationale(getActivity(), PermissionsHelper.Type.CONTACTS);
+		PermissionsHelper.requestContactPermission(this);
+	}
+
+	@Override
+	public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults)
+	{
+		// if shouldShowRationale returns false before and after requesting contacts permission,
+		// we assume the user has checked "Never Ask again" before and no dialog has been shown.
+		// In this case Simlar opens the settings app.
+		if (!PermissionsHelper.isGranted(PermissionsHelper.Type.CONTACTS, permissions, grantResults)
+				&& !mShouldShowRationalBeforeRequest && !PermissionsHelper.shouldShowRationale(getActivity(), PermissionsHelper.Type.CONTACTS)) {
+			startActivity(
+					new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", getActivity().getPackageName(), null))
+							.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+		}
+
+		if (mListener != null) {
+			mListener.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		}
 	}
 
 	private void callContactClicked()

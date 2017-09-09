@@ -45,6 +45,6 @@ public final class ContactDataComplete extends ContactData
 	public char getFirstChar()
 	{
 		final String nameOrNumber = getNameOrNumber();
-		return Util.isNullOrEmpty(nameOrNumber) ? ' ' : nameOrNumber.charAt(0);
+		return Util.isNullOrEmpty(nameOrNumber) ? ' ' : Character.toTitleCase(nameOrNumber.charAt(0));
 	}
 }
