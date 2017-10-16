@@ -39,7 +39,7 @@
     <string name="main_activity_menu_delete_account">Einstellungen löschen</string>
     <string name="main_activity_menu_fake_telephone_book">Screenshot Telefonbuch</string>
     <string name="main_activity_menu_fake_telephone_book_disable">Normales Telefonbuch</string>
-    <string name="main_activity_menu_notification_settings">Nicht stören Einstellungen</string>
+    <string name="main_activity_menu_notification_settings">\"Nicht stören\"-Einstellungen</string>
     <string name="main_activity_menu_app_settings">App Einstellungen</string>
     <string name="main_activity_menu_tell_a_friend">Freunde einladen</string>
     <string name="main_activity_menu_show_about">Über Simlar</string>
@@ -141,7 +141,7 @@
     <!-- Zugriff während "Nicht stören" -->
     <!-- Zugriff auf "Nicht stören" für Simlar zu lassen?-->
     <!-- Die App kann "Nicht stören" aktivieren/deaktivieren und Änderungen an verwandten Einstellungen vornehmen?-->
-    <string name="permission_explain_text_notification_policy_access">Simlar möchte wöhrend Telefonaten den Nicht stören Modus aktivieren, damit z.B: weitere Anrufe nicht vibrieren oder laut klingeln.</string>
+    <string name="permission_explain_text_notification_policy_access">Simlar möchte wöhrend Telefonaten den \"Nicht stören\"-Modus aktivieren, damit z.B: weitere Anrufe nicht vibrieren oder laut klingeln.</string>
     <string name="permission_explain_text_notification_policy_access_button">Einstellungen öffnen</string>
 
     <string name="volumes_control_fragment_software_echo_limiter">Echo verringern</string>
