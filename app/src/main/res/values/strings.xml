@@ -39,7 +39,7 @@
     <string name="main_activity_menu_delete_account">Delete my credentials and quit</string>
     <string name="main_activity_menu_fake_telephone_book">Screenshot telephone book</string>
     <string name="main_activity_menu_fake_telephone_book_disable">Regular telephone book</string>
-    <string name="main_activity_menu_notification_settings">Do Not Disturb Settings</string>
+    <string name="main_activity_menu_notification_settings">Do Not Disturb settings</string>
     <string name="main_activity_menu_app_settings">App Settings</string>
     <string name="main_activity_menu_tell_a_friend">Invite friends</string>
     <string name="main_activity_menu_show_about">About</string>
