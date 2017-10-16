@@ -262,7 +262,7 @@ public final class PermissionsHelper
 
 	public static void openNotificationPolicyAccessSettings(final Context context)
 	{
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 			context.startActivity(
 					new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
 							.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
