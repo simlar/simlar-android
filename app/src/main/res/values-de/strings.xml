@@ -39,6 +39,8 @@
     <string name="main_activity_menu_delete_account">Einstellungen löschen</string>
     <string name="main_activity_menu_fake_telephone_book">Screenshot Telefonbuch</string>
     <string name="main_activity_menu_fake_telephone_book_disable">Normales Telefonbuch</string>
+    <string name="main_activity_menu_notification_settings">&#8220;Nicht stören&#8221;-Einstellungen</string>
+    <string name="main_activity_menu_app_settings">App-Einstellungen</string>
     <string name="main_activity_menu_tell_a_friend">Freunde einladen</string>
     <string name="main_activity_menu_show_about">Über Simlar</string>
     <string name="main_activity_menu_quit">Simlar beenden</string>
@@ -135,6 +137,12 @@
     <string name="permission_explain_text_contacts">Simlar liest die Nummern in ihrem Telefonbuch, um andere Simlar-Nutzer zu finden.</string>
     <!-- Simlar ermöglichen, auf Fotos, Medien und Dateien zuzugreifen? -->
     <string name="permission_explain_text_storage">Simlar benutzt den Klingelton Ihres Gerätes und dieser liegt in den Medien und Dateien.</string>
+
+    <!-- Zugriff während "Nicht stören" -->
+    <!-- Zugriff auf "Nicht stören" für Simlar zu lassen?-->
+    <!-- Die App kann "Nicht stören" aktivieren/deaktivieren und Änderungen an verwandten Einstellungen vornehmen?-->
+    <string name="permission_explain_text_notification_policy_access">Simlar möchte während Telefonaten den &#8220;Nicht stören&#8221;-Modus aktivieren, damit z.B. weitere Anrufe nicht vibrieren oder laut klingeln.</string>
+    <string name="permission_explain_text_notification_policy_access_button">Einstellungen öffnen</string>
 
     <string name="volumes_control_fragment_software_echo_limiter">Echo verringern</string>
 

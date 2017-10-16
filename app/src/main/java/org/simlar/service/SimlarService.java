@@ -56,6 +56,7 @@ import org.simlar.helper.CallConnectionDetails;
 import org.simlar.helper.CallEndReason;
 import org.simlar.helper.FlavourHelper;
 import org.simlar.helper.NetworkQuality;
+import org.simlar.helper.PermissionsHelper;
 import org.simlar.helper.PreferencesHelper;
 import org.simlar.helper.PreferencesHelper.NotInitedException;
 import org.simlar.helper.Volumes;
@@ -217,6 +218,11 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		final int ringerMode = audioManager.getRingerMode();
 		if (ringerMode == AudioManager.RINGER_MODE_SILENT) {
+			return;
+		}
+
+		if (!PermissionsHelper.isNotificationPolicyAccessGranted(this)) {
+			Lg.i("permission not granted to Do Not Disturb state");
 			return;
 		}
 

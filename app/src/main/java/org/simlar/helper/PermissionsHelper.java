@@ -26,11 +26,14 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v13.app.FragmentCompat;
 import android.support.v4.app.ActivityCompat;
@@ -230,5 +233,46 @@ public final class PermissionsHelper
 		} catch (final IOException e) {
 			return true;
 		}
+	}
+
+	public static boolean isNotificationPolicyAccessGranted(final Context context)
+	{
+		return Build.VERSION.SDK_INT < Build.VERSION_CODES.N ||
+				((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).isNotificationPolicyAccessGranted();
+	}
+
+	public static void checkAndRequestNotificationPolicyAccess(final Activity activity)
+	{
+		if (isNotificationPolicyAccessGranted(activity)) {
+			return;
+		}
+
+		new AlertDialog.Builder(activity)
+				.setMessage(activity.getString(R.string.permission_explain_text_notification_policy_access))
+				.setPositiveButton(R.string.permission_explain_text_notification_policy_access_button, new DialogInterface.OnClickListener()
+				{
+					@Override
+					public void onClick(final DialogInterface dialogInterface, final int i)
+					{
+						openNotificationPolicyAccessSettings(activity);
+					}
+				})
+				.create().show();
+	}
+
+	public static void openNotificationPolicyAccessSettings(final Context context)
+	{
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+			context.startActivity(
+					new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
+							.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+		}
+	}
+
+	public static void openAppSettings(final Context context)
+	{
+		context.startActivity(
+				new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", context.getPackageName(), null))
+						.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 	}
 }

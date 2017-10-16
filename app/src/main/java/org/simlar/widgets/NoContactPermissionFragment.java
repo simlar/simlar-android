@@ -29,7 +29,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -113,9 +112,7 @@ public final class NoContactPermissionFragment extends Fragment
 		// In this case Simlar opens the settings app.
 		if (!PermissionsHelper.isGranted(PermissionsHelper.Type.CONTACTS, permissions, grantResults)
 				&& !mShouldShowRationalBeforeRequest && !PermissionsHelper.shouldShowRationale(getActivity(), PermissionsHelper.Type.CONTACTS)) {
-			startActivity(
-					new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", getActivity().getPackageName(), null))
-							.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+			PermissionsHelper.openAppSettings(getActivity());
 		}
 
 		if (mListener != null) {
