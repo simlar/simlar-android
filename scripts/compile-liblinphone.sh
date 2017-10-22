@@ -80,6 +80,7 @@ unzip -o $(find "${BUILD_DIR}/linphone-android/bin/distributions/" -maxdepth 1 -
 
 ## Android Studio
 rm -rf app/src/main/jniLibs/
+rm -f app/libs/*
 mv linphone-android-release.aar linphone-android-javadoc.jar linphone-android-sources.jar app/libs/
 
 echo "liblinphone build successfull with git hash: ${GIT_HASH}"
