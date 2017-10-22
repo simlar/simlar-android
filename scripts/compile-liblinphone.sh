@@ -76,11 +76,10 @@ make
 make liblinphone-android-sdk
 cd ../../../..
 
-unzip -o $(find "${BUILD_DIR}/linphone-android/bin/distributions/" -maxdepth 1 -name liblinphone-android-sdk\*.zip)
-
-## Android Studio
 rm -rf app/src/main/jniLibs/
-rm -f app/libs/*
-mv linphone-android-release.aar linphone-android-javadoc.jar linphone-android-sources.jar app/libs/
+rm -rf app/libs/
+
+mkdir app/libs/
+unzip -o $(find "${BUILD_DIR}/linphone-android/bin/distributions/" -maxdepth 1 -name liblinphone-android-sdk\*.zip) -d app/libs/
 
 echo "liblinphone build successfull with git hash: ${GIT_HASH}"
