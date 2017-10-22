@@ -15,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId "org.simlar"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 26
         versionName getGitVersion()
     }
@@ -56,5 +56,5 @@ dependencies {
     implementation 'com.android.support:support-v4:26.1.0'
     implementation 'com.android.support:support-v13:26.1.0'
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.8.6'
-    implementation fileTree(dir: 'libs', include: ['liblinphone-android-sdk.aar'])
+    implementation fileTree(dir: 'libs', include: ['linphone-android-release.aar'])
 }
