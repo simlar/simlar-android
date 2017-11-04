@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -207,8 +206,8 @@ public final class CreateAccount
 
 		if ("success".equalsIgnoreCase(xmlRootElement)
 				&& parser.getAttributeCount() >= 2
-				&& Objects.equals(parser.getAttributeName(0), attribute1)
-				&& Objects.equals(parser.getAttributeName(1), attribute2)) {
+				&& parser.getAttributeName(0).equals(attribute1)
+				&& parser.getAttributeName(1).equals(attribute2)) {
 			Lg.i("request success");
 			return new Result(Result.SUCCESS, parser.getAttributeValue(0), parser.getAttributeValue(1));
 		}

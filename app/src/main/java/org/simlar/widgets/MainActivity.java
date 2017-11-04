@@ -40,7 +40,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.Executors;
-import java.util.Objects;
 
 import org.simlar.R;
 import org.simlar.contactsprovider.ContactsProvider;
@@ -212,9 +211,8 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 		Lg.i("onStart");
 
 		if (FlavourHelper.isGcmEnabled() && SimlarService.isRunning()) {
-
 			final Class<? extends AppCompatActivity> activity = SimlarService.getActivity();
-			if (!Objects.equals(getClass(), activity)) {
+			if (!getClass().equals(activity)) {
 				Lg.i("as service is running => starting: ", activity.getSimpleName());
 				startActivity(new Intent(this, activity));
 				finish();
