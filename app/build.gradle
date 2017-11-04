@@ -5,7 +5,7 @@ def getGitVersion = { ->
         return "git -C ${rootDir} describe --tags --always --dirty".execute().text.trim()
     }
     catch (ignored) {
-        return "git-not-found";
+        return "git-not-found"
     }
 }
 
