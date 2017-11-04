@@ -41,6 +41,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.Objects;
 
 import org.simlar.R;
 import org.simlar.helper.CreateAccountMessage;
@@ -252,7 +253,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 					return;
 				}
 
-				if (!result.getSimlarId().equals(expectedSimlarId)) {
+				if (!Objects.equals(result.getSimlarId(), expectedSimlarId)) {
 					Lg.e("received simlarId not equal to expected: telephoneNumber=", new Lg.Anonymizer(telephoneNumber),
 							" expected=", new Lg.Anonymizer(expectedSimlarId),
 							" actual=", new Lg.Anonymizer(result.getSimlarId()));
