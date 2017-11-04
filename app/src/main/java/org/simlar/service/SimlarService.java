@@ -20,6 +20,7 @@
 
 package org.simlar.service;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -525,6 +526,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		Lg.i("onDestroy ended");
 	}
 
+	@SuppressLint("WakelockTimeout") // expected to be acquired for a complete call
 	private void acquireWakeLock()
 	{
 		if (!mWakeLock.isHeld()) {
@@ -532,6 +534,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 	}
 
+	@SuppressLint("WakelockTimeout") // expected to be acquired for a complete call
 	private void acquireDisplayWakeLock()
 	{
 		if (!mDisplayWakeLock.isHeld()) {
