@@ -25,6 +25,7 @@ import android.util.Log;
 
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 
@@ -351,7 +352,7 @@ final class LinphoneHandler
 			return;
 		}
 
-		if (!token.equals(call.getAuthenticationToken())) {
+		if (!Objects.equals(token, call.getAuthenticationToken())) {
 			Lg.e("ERROR in verifyAuthenticationToken: token(", token,
 					") does not match token of current call(", call.getAuthenticationToken(), ")");
 			return;
