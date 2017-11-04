@@ -49,6 +49,7 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 
+@SuppressWarnings("Singleton")
 final class SimlarSSLSocketFactory extends SSLSocketFactory
 {
 	private static final String[] PREFERRED_CIPHER_SUITES = { "TLS_DHE_RSA_WITH_AES_256_CBC_SHA", "DHE-RSA-AES256-SHA" };
