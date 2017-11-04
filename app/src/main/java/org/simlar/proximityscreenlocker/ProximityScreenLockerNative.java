@@ -112,6 +112,7 @@ public final class ProximityScreenLockerNative implements ProximityScreenLocker
 		}
 	}
 
+	@SuppressLint("WakelockTimeout") // expected to be acquired for a complete call
 	@Override
 	public void acquire()
 	{
