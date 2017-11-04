@@ -24,6 +24,7 @@ import android.app.Activity;
 import android.content.Context;
 
 
+@SuppressWarnings("ClassOnlyUsedInOnePackage")
 public final class GooglePlayServicesHelper
 {
 	private GooglePlayServicesHelper()
