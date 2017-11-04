@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="IconDipSize">
+        <ignore path="src/main/res/drawable-hdpi/background_tile.png" />
+        <ignore path="src/main/res/drawable-ldpi/background_tile.png" />
+        <ignore path="src/main/res/drawable-mdpi/background_tile.png" />
+        <ignore path="src/main/res/drawable-xhdpi/background_tile.png" />
+        <ignore path="src/main/res/drawable-xxhdpi/background_tile.png" />
+        <ignore path="src/main/res/drawable-xxxhdpi/background_tile.png" />
+    </issue>
+</lint>
