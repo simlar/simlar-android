@@ -24,6 +24,7 @@
 
 package org.simlar.proximityscreenlocker;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.os.PowerManager;
@@ -83,6 +84,7 @@ public final class ProximityScreenLockerNative implements ProximityScreenLocker
 				return ((Boolean) method.invoke(powerManager, proximityScreenOffWakeLock)).booleanValue();
 			}
 
+			@SuppressLint("PrivateApi") // the use of a private API is intended here
 			final Method method = powerManager.getClass().getDeclaredMethod("getSupportedWakeLockFlags");
 			final int supportedFlags = ((Integer) method.invoke(powerManager)).intValue();
 			return (supportedFlags & proximityScreenOffWakeLock) != 0x0;
