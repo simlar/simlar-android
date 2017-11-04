@@ -20,6 +20,7 @@
 
 package org.simlar.contactsprovider;
 
+import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
@@ -100,6 +101,7 @@ public final class ContactsProvider
 			INITIALIZED
 		}
 
+		@SuppressLint("StaticFieldLeak")
 		private void loadContacts(final Context context)
 		{
 			Lg.i("start creating contacts cache");
@@ -165,6 +167,7 @@ public final class ContactsProvider
 			mFullContactsListeners.clear();
 		}
 
+		@SuppressLint("StaticFieldLeak")
 		void onContactsLoadedFromTelephoneBook(final Map<String, ContactData> contacts)
 		{
 			if (contacts == null) {
@@ -529,6 +532,7 @@ public final class ContactsProvider
 		return BitmapFactory.decodeResource(context.getResources(), defaultResourceId);
 	}
 
+	@SuppressLint("StaticFieldLeak")
 	public static void getContactStatus(final String simlarId, final ContactStatusListener listener)
 	{
 		if (Util.isNullOrEmpty(simlarId)) {

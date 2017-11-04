@@ -20,6 +20,7 @@
 
 package org.simlar.https;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -183,6 +184,7 @@ public final class UploadLogFile
 		}
 	}
 
+	@SuppressLint("StaticFieldLeak")
 	public void upload(final String fileName)
 	{
 		if (mContext == null) {
