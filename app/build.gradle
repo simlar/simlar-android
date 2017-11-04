@@ -20,13 +20,17 @@ android {
         versionName getGitVersion()
     }
 
+    flavorDimensions "default"
+
     productFlavors {
         push {
+            dimension "default"
             versionName = android.defaultConfig.versionName
             buildConfigField("boolean", "IS_GCM_ENABLED", "true")
         }
 
         alwaysOnline {
+            dimension "default"
             versionName = android.defaultConfig.versionName + " (alwaysOnline)"
             buildConfigField("boolean", "IS_GCM_ENABLED", "false")
         }
