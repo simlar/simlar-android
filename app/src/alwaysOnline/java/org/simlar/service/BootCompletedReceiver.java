@@ -32,7 +32,7 @@ import org.simlar.utils.Util;
 public class BootCompletedReceiver extends WakefulBroadcastReceiver
 {
 	@Override
-	public void onReceive(final Context context, final Intent intent)
+	public final void onReceive(final Context context, final Intent intent)
 	{
 		Lg.i("onReceive");
 
