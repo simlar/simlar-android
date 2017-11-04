@@ -56,5 +56,5 @@ dependencies {
     implementation 'com.android.support:support-v4:26.1.0'
     implementation 'com.android.support:support-v13:26.1.0'
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.8.5'
-    implementation (name:'liblinphone-android-sdk', ext:'aar')
+    implementation fileTree(dir: 'libs', include: ['liblinphone-android-sdk.aar'])
 }
