@@ -216,7 +216,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private void silenceAndStoreRingerMode()
 	{
 		// steam roller tactics to silence incoming call
-		final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+		final AudioManager audioManager = Util.getSystemService(this, Context.AUDIO_SERVICE);
 		final int ringerMode = audioManager.getRingerMode();
 		if (ringerMode == AudioManager.RINGER_MODE_SILENT) {
 			return;
@@ -238,7 +238,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			return;
 		}
 
-		final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+		final AudioManager audioManager = Util.getSystemService(this, Context.AUDIO_SERVICE);
 		/// NOTE: On lollipop getRingerMode sometimes does not report silent mode correctly, so checking it here may be dangerous.
 		Lg.i("restoring RingerMode: ", audioManager.getRingerMode(), " -> ", mCurrentRingerMode);
 		audioManager.setRingerMode(mCurrentRingerMode);
@@ -316,7 +316,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mSoundEffectManager = new SoundEffectManager(getApplicationContext());
 		mAudioFocus = new AudioFocus(this);
 
-		mWakeLock = ((PowerManager) getSystemService(Context.POWER_SERVICE))
+		mWakeLock = ((PowerManager) Util.getSystemService(this, Context.POWER_SERVICE))
 				.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SimlarWakeLock");
 		mDisplayWakeLock = createDisplayWakeLock();
 		mWifiLock = createWifiWakeLock();
@@ -327,7 +327,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 		registerReceiver(mNetworkChangeReceiver, intentFilter);
 
-		((TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE)).listen(mTelephonyCallStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+		((TelephonyManager) Util.getSystemService(this, Context.TELEPHONY_SERVICE))
+				.listen(mTelephonyCallStateListener, PhoneStateListener.LISTEN_CALL_STATE);
 
 		PreferencesHelper.readPreferencesFromFile(this);
 
@@ -352,13 +353,14 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	@SuppressWarnings("deprecation")
 	private WakeLock createDisplayWakeLock()
 	{
-		return ((PowerManager) getSystemService(Context.POWER_SERVICE))
+		return ((PowerManager) Util.getSystemService(this, Context.POWER_SERVICE))
 				.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "SimlarDisplayWakeLock");
 	}
 
 	private WifiLock createWifiWakeLock()
 	{
-		return ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "SimlarWifiLock");
+		return ((WifiManager) Util.getSystemService(this, Context.WIFI_SERVICE))
+				.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "SimlarWifiLock");
 	}
 
 	private void terminateChecker()
@@ -408,7 +410,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		Lg.i("registerActivityToNotification: ", activity.getSimpleName());
 		mNotificationActivity = activity;
 
-		final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		final NotificationManager nm = Util.getSystemService(this, Context.NOTIFICATION_SERVICE);
 		nm.notify(NOTIFICATION_ID, createNotification());
 	}
 
@@ -444,8 +446,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		notificationBuilder.setAutoCancel(true);
 		notificationBuilder.setWhen(System.currentTimeMillis());
 
-		((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(
-				PreferencesHelper.getNextMissedCallNotificationId(context), notificationBuilder.build());
+		((NotificationManager) Util.getSystemService(context, Context.NOTIFICATION_SERVICE))
+				.notify(PreferencesHelper.getNextMissedCallNotificationId(context), notificationBuilder.build());
 	}
 
 	private Notification createNotification()
@@ -501,7 +503,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	{
 		Lg.i("onDestroy");
 
-		((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(NOTIFICATION_ID);
+		((NotificationManager) Util.getSystemService(this, Context.NOTIFICATION_SERVICE)).cancel(NOTIFICATION_ID);
 
 		mVibratorManager.stop();
 		mSoundEffectManager.stopAll();
@@ -510,7 +512,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		stopKeepAwake();
 
-		((TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE)).listen(mTelephonyCallStateListener, PhoneStateListener.LISTEN_NONE);
+		((TelephonyManager) Util.getSystemService(this, Context.TELEPHONY_SERVICE))
+				.listen(mTelephonyCallStateListener, PhoneStateListener.LISTEN_NONE);
 
 		// just in case
 		releaseWakeLock();
@@ -577,7 +580,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			return;
 		}
 
-		final NetworkInfo ni = ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+		final NetworkInfo ni = ((ConnectivityManager) Util.getSystemService(this, Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
 		if (ni == null) {
 			Lg.e("no NetworkInfo found");
 			return;
@@ -598,7 +601,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		final Intent startIntent = new Intent("org.simlar.keepAwake");
 		mKeepAwakePendingIntent = PendingIntent.getBroadcast(this, 0, startIntent, 0);
 
-		((AlarmManager) getSystemService(Context.ALARM_SERVICE))
+		((AlarmManager) Util.getSystemService(this, Context.ALARM_SERVICE))
 				.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 600000, 600000, mKeepAwakePendingIntent);
 
 		final IntentFilter filter = new IntentFilter();
@@ -613,7 +616,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 
 		unregisterReceiver(mKeepAwakeReceiver);
-		((AlarmManager) getSystemService(Context.ALARM_SERVICE)).cancel(mKeepAwakePendingIntent);
+		((AlarmManager) Util.getSystemService(this, Context.ALARM_SERVICE)).cancel(mKeepAwakePendingIntent);
 	}
 
 	private void keepAwake()
@@ -670,7 +673,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		if (!FlavourHelper.isGcmEnabled()) {
 			Lg.i("updating notification based on registration state");
-			final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+			final NotificationManager nm = Util.getSystemService(this, Context.NOTIFICATION_SERVICE);
 			nm.notify(NOTIFICATION_ID, createNotification());
 		}
 	}
@@ -831,7 +834,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			{
 				mSimlarCallState.updateContactNameAndImage(name, photoId);
 
-				final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+				final NotificationManager nm = Util.getSystemService(SimlarService.this, Context.NOTIFICATION_SERVICE);
 				nm.notify(NOTIFICATION_ID, createNotification());
 
 				SimlarServiceBroadcast.sendSimlarCallStateChanged(SimlarService.this);
@@ -885,7 +888,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 
 		mNotificationActivity = ACTIVITIES.getMainActivity();
-		final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		final NotificationManager nm = Util.getSystemService(this, Context.NOTIFICATION_SERVICE);
 		nm.notify(NOTIFICATION_ID, createNotification());
 
 		if (mSimlarStatus == SimlarStatus.ONGOING_CALL) {
@@ -978,7 +981,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		if (mGoingDown) {
 			Lg.i("onJoin: canceling notification");
-			((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(NOTIFICATION_ID);
+			((NotificationManager) Util.getSystemService(this, Context.NOTIFICATION_SERVICE)).cancel(NOTIFICATION_ID);
 			Lg.i("onJoin: calling stopSelf");
 			stopSelf();
 			Lg.i("onJoin: stopSelf called");
