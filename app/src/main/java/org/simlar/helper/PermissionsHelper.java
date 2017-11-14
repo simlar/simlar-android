@@ -238,7 +238,7 @@ public final class PermissionsHelper
 	public static boolean isNotificationPolicyAccessGranted(final Context context)
 	{
 		return Build.VERSION.SDK_INT < Build.VERSION_CODES.N ||
-				((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).isNotificationPolicyAccessGranted();
+				((NotificationManager) Util.getSystemService(context, Context.NOTIFICATION_SERVICE)).isNotificationPolicyAccessGranted();
 	}
 
 	public static void checkAndRequestNotificationPolicyAccess(final Activity activity)
