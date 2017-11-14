@@ -238,7 +238,7 @@ public final class CreateAccountActivity extends Activity
 	public boolean onKeyUp(final int keyCode, @NonNull final KeyEvent event)
 	{
 		if (keyCode == KeyEvent.KEYCODE_ENTER) {
-			((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);
+			((InputMethodManager) Util.getSystemService(this, Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);
 			return true;
 		}
 		return false;
@@ -533,7 +533,7 @@ public final class CreateAccountActivity extends Activity
 
 			mEditRegistrationCode.setVisibility(View.VISIBLE);
 			mEditRegistrationCode.requestFocus();
-			((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(mEditRegistrationCode,
+			((InputMethodManager) Util.getSystemService(this, Context.INPUT_METHOD_SERVICE)).showSoftInput(mEditRegistrationCode,
 					InputMethodManager.SHOW_IMPLICIT);
 			break;
 		default:
@@ -554,7 +554,7 @@ public final class CreateAccountActivity extends Activity
 	public void onConfirmClicked(final View view)
 	{
 		Lg.i("onConfirmClicked");
-		((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);
+		((InputMethodManager) Util.getSystemService(this, Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);
 		mWaitingForSmsText.setText(R.string.create_account_activity_waiting_for_sms_manual);
 		mDetails.setVisibility(View.GONE);
 		mEditRegistrationCode.setVisibility(View.GONE);
