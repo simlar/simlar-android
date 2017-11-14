@@ -40,8 +40,8 @@ public final class SimCardReader
 	public static String readRegionCode(final Context context)
 	{
 		// try to read country code from sim
-		final TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-		final String regionFromSim = tm.getSimCountryIso().toUpperCase(Locale.US);
+		final String regionFromSim = ((TelephonyManager) Util.getSystemService(context, Context.TELEPHONY_SERVICE))
+				.getSimCountryIso().toUpperCase(Locale.US);
 		if (!Util.isNullOrEmpty(regionFromSim)) {
 			return regionFromSim;
 		}
@@ -62,7 +62,7 @@ public final class SimCardReader
 				"HardwareIds", // false positive
 				"MissingPermission" // Yes, sometimes "getLine1Number" even returns the wrong number but it helps most of the users.
 		})
-		final String numberFromSim = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
+		final String numberFromSim = ((TelephonyManager) Util.getSystemService(context, Context.TELEPHONY_SERVICE)).getLine1Number();
 		if (Util.isNullOrEmpty(numberFromSim)) {
 			Lg.w("failed to read telephone number from sim card");
 		}
