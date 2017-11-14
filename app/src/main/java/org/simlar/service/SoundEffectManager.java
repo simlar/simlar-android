@@ -32,6 +32,7 @@ import android.support.annotation.RawRes;
 import org.simlar.R;
 import org.simlar.helper.RingtoneHelper;
 import org.simlar.logging.Lg;
+import org.simlar.utils.Util;
 
 import java.io.IOException;
 import java.util.EnumMap;
@@ -304,7 +305,7 @@ final class SoundEffectManager
 	{
 		Lg.i("setInCallMode: ", enabled);
 
-		final AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+		final AudioManager audioManager = Util.getSystemService(mContext, Context.AUDIO_SERVICE);
 		if (enabled) {
 			audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
 		} else {
