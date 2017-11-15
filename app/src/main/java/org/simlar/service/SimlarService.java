@@ -607,7 +607,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		// make sure iterate will have enough time before device eventually goes to sleep
 		acquireWakeLock();
 		mHandler.postDelayed(() -> {
-			if (getSimlarStatus() != SimlarStatus.ONGOING_CALL) {
+			if (mSimlarStatus != SimlarStatus.ONGOING_CALL) {
 				releaseWakeLock();
 			}
 		}, 4000);
