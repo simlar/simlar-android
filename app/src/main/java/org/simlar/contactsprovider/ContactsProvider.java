@@ -60,11 +60,13 @@ public final class ContactsProvider
 		throw new AssertionError("This class was not meant to be instantiated");
 	}
 
+	@FunctionalInterface
 	public interface FullContactsListener
 	{
 		void onGetContacts(final Set<ContactDataComplete> contacts, final Error error);
 	}
 
+	@FunctionalInterface
 	public interface ContactListener
 	{
 		void onGetNameAndPhotoId(final String name, final String photoId);

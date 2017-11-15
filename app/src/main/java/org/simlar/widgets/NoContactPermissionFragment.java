@@ -52,6 +52,7 @@ public final class NoContactPermissionFragment extends Fragment
 	private Listener mListener = null;
 	private boolean mShouldShowRationalBeforeRequest = false;
 
+	@FunctionalInterface
 	public interface Listener
 	{
 		@SuppressWarnings("UnusedParameters")
