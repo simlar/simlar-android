@@ -52,7 +52,6 @@ import org.linphone.core.LinphoneCall.State;
 import org.linphone.core.LinphoneCore.RegistrationState;
 import org.simlar.R;
 import org.simlar.contactsprovider.ContactsProvider;
-import org.simlar.contactsprovider.ContactsProvider.ContactListener;
 import org.simlar.helper.CallConnectionDetails;
 import org.simlar.helper.CallEndReason;
 import org.simlar.helper.FlavourHelper;
@@ -358,17 +357,12 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	private void terminateChecker()
 	{
-		mHandler.postDelayed(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				if (terminateCheck()) {
-					return;
-				}
-
-				terminateChecker();
+		mHandler.postDelayed(() -> {
+			if (terminateCheck()) {
+				return;
 			}
+
+			terminateChecker();
 		}, TERMINATE_CHECKER_INTERVAL);
 	}
 
@@ -415,14 +409,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 
 		Lg.i("missed call: ", new Lg.Anonymizer(simlarId));
-		ContactsProvider.getNameAndPhotoId(simlarId, context, new ContactListener()
-		{
-			@Override
-			public void onGetNameAndPhotoId(final String name, final String photoId)
-			{
-				createMissedCallNotification(context, name, photoId);
-			}
-		});
+		ContactsProvider.getNameAndPhotoId(simlarId, context, (name, photoId) -> createMissedCallNotification(context, name, photoId));
 	}
 
 	private static void createMissedCallNotification(final Context context, final String name, final String photoId)
@@ -619,14 +606,9 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		// make sure iterate will have enough time before device eventually goes to sleep
 		acquireWakeLock();
-		mHandler.postDelayed(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				if (getSimlarStatus() != SimlarStatus.ONGOING_CALL) {
-					releaseWakeLock();
-				}
+		mHandler.postDelayed(() -> {
+			if (getSimlarStatus() != SimlarStatus.ONGOING_CALL) {
+				releaseWakeLock();
 			}
 		}, 4000);
 	}
@@ -687,14 +669,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		final String simlarId = mSimlarIdToCall;
 		mSimlarIdToCall = null;
-		mHandler.post(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				call(simlarId);
-			}
-		});
+		mHandler.post(() -> call(simlarId));
 	}
 
 	@Override
@@ -813,18 +788,13 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			}
 		}
 
-		ContactsProvider.getNameAndPhotoId(number, this, new ContactListener()
-		{
-			@Override
-			public void onGetNameAndPhotoId(final String name, final String photoId)
-			{
-				mSimlarCallState.updateContactNameAndImage(name, photoId);
+		ContactsProvider.getNameAndPhotoId(number, this, (name, photoId) -> {
+			mSimlarCallState.updateContactNameAndImage(name, photoId);
 
-				final NotificationManager nm = Util.getSystemService(SimlarService.this, Context.NOTIFICATION_SERVICE);
-				nm.notify(NOTIFICATION_ID, createNotification());
+			final NotificationManager nm = Util.getSystemService(this, Context.NOTIFICATION_SERVICE);
+			nm.notify(NOTIFICATION_ID, createNotification());
 
-				SimlarServiceBroadcast.sendSimlarCallStateChanged(SimlarService.this);
-			}
+			SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
 		});
 	}
 

@@ -28,7 +28,6 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -158,14 +157,7 @@ public final class PermissionsHelper
 	{
 		new AlertDialog.Builder(activity)
 				.setMessage(message)
-				.setOnDismissListener(new DialogInterface.OnDismissListener()
-				{
-					@Override
-					public void onDismiss(final DialogInterface dialog)
-					{
-						requestPermissions(activity, types);
-					}
-				})
+				.setOnDismissListener(dialog -> requestPermissions(activity, types))
 				.create().show();
 	}
 
@@ -243,14 +235,7 @@ public final class PermissionsHelper
 
 		new AlertDialog.Builder(activity)
 				.setMessage(activity.getString(R.string.permission_explain_text_notification_policy_access))
-				.setPositiveButton(R.string.permission_explain_text_notification_policy_access_button, new DialogInterface.OnClickListener()
-				{
-					@Override
-					public void onClick(final DialogInterface dialogInterface, final int i)
-					{
-						openNotificationPolicyAccessSettings(activity);
-					}
-				})
+				.setPositiveButton(R.string.permission_explain_text_notification_policy_access_button, (dialogInterface, i) -> openNotificationPolicyAccessSettings(activity))
 				.create().show();
 	}
 

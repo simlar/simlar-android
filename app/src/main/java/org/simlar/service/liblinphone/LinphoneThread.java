@@ -105,28 +105,18 @@ public final class LinphoneThread
 				return;
 			}
 
-			mLinphoneThreadHandler.post(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					mLinphoneThreadHandler.removeCallbacksAndMessages(null);
-					mLinphoneThreadHandler = null;
-					final Looper looper = Looper.myLooper();
-					if (looper != null) {
-						looper.quit();
-					}
-					mLinphoneHandler.destroy();
-					mMainThreadHandler.post(new Runnable()
-					{
-						@Override
-						public void run()
-						{
-							mMainThreadHandler.removeCallbacksAndMessages(null);
-							mListener.onJoin();
-						}
-					});
+			mLinphoneThreadHandler.post(() -> {
+				mLinphoneThreadHandler.removeCallbacksAndMessages(null);
+				mLinphoneThreadHandler = null;
+				final Looper looper = Looper.myLooper();
+				if (looper != null) {
+					looper.quit();
 				}
+				mLinphoneHandler.destroy();
+				mMainThreadHandler.post(() -> {
+					mMainThreadHandler.removeCallbacksAndMessages(null);
+					mListener.onJoin();
+				});
 			});
 		}
 
@@ -146,22 +136,17 @@ public final class LinphoneThread
 				final Volumes volumes = mVolumes;
 				final Context context = mContext;
 
-				mLinphoneThreadHandler.post(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						if (mLinphoneHandler.isInitialized()) {
-							mLinphoneHandler.unregister();
-							mLinphoneHandler.setCredentials(mySimlarId, password);
-						} else {
-							// LinphoneCore uses context only for getting audio manager. I think this is still thread safe.
-							mLinphoneHandler.initialize(LinphoneThreadImpl.this, context, linphoneInitialConfigFile, rootCaFile,
-									zrtpSecretsCacheFile, ringbackSoundFile, pauseSoundFile);
-							mLinphoneHandler.setVolumes(volumes);
-							mLinphoneHandler.setCredentials(mySimlarId, password);
-							linphoneIterator();
-						}
+				mLinphoneThreadHandler.post(() -> {
+					if (mLinphoneHandler.isInitialized()) {
+						mLinphoneHandler.unregister();
+						mLinphoneHandler.setCredentials(mySimlarId, password);
+					} else {
+						// LinphoneCore uses context only for getting audio manager. I think this is still thread safe.
+						mLinphoneHandler.initialize(this, context, linphoneInitialConfigFile, rootCaFile,
+								zrtpSecretsCacheFile, ringbackSoundFile, pauseSoundFile);
+						mLinphoneHandler.setVolumes(volumes);
+						mLinphoneHandler.setCredentials(mySimlarId, password);
+						linphoneIterator();
 					}
 				});
 			} catch (final NotInitedException e) {
@@ -213,14 +198,7 @@ public final class LinphoneThread
 				return;
 			}
 
-			mLinphoneThreadHandler.post(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					mLinphoneHandler.call(number);
-				}
-			});
+			mLinphoneThreadHandler.post(() -> mLinphoneHandler.call(number));
 		}
 
 		public void pickUp()
@@ -250,14 +228,7 @@ public final class LinphoneThread
 				return;
 			}
 
-			mLinphoneThreadHandler.post(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					mLinphoneHandler.verifyAuthenticationToken(token, verified);
-				}
-			});
+			mLinphoneThreadHandler.post(() -> mLinphoneHandler.verifyAuthenticationToken(token, verified));
 		}
 
 		public void pauseAllCalls()
@@ -294,14 +265,7 @@ public final class LinphoneThread
 
 			mVolumes = volumes;
 
-			mLinphoneThreadHandler.post(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					mLinphoneHandler.setVolumes(volumes);
-				}
-			});
+			mLinphoneThreadHandler.post(() -> mLinphoneHandler.setVolumes(volumes));
 		}
 
 		@Lg.Anonymize
@@ -362,28 +326,23 @@ public final class LinphoneThread
 
 			final String identity = cfg.getIdentity();
 
-			mMainThreadHandler.post(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					if (Util.equals(mRegistrationState, state)) {
-						Lg.v("registration state for ", new Lg.Anonymizer(identity), " not changed: state=", state, " message=", message);
-						return;
-					}
-
-					if (RegistrationState.RegistrationOk.equals(mRegistrationState) && RegistrationState.RegistrationProgress.equals(state)
-							&& "Refresh registration".equals(message)) {
-						Lg.i("registration state for ", new Lg.Anonymizer(identity), " ignored: ", state,
-								" as it is caused by refreshRegisters");
-						return;
-					}
-
-					Lg.i("registration state for ", new Lg.Anonymizer(identity), " changed: ", state, " ", message);
-					mRegistrationState = state;
-
-					mListener.onRegistrationStateChanged(state);
+			mMainThreadHandler.post(() -> {
+				if (Util.equals(mRegistrationState, state)) {
+					Lg.v("registration state for ", new Lg.Anonymizer(identity), " not changed: state=", state, " message=", message);
+					return;
 				}
+
+				if (RegistrationState.RegistrationOk.equals(mRegistrationState) && RegistrationState.RegistrationProgress.equals(state)
+						&& "Refresh registration".equals(message)) {
+					Lg.i("registration state for ", new Lg.Anonymizer(identity), " ignored: ", state,
+							" as it is caused by refreshRegisters");
+					return;
+				}
+
+				Lg.i("registration state for ", new Lg.Anonymizer(identity), " changed: ", state, " ", message);
+				mRegistrationState = state;
+
+				mListener.onRegistrationStateChanged(state);
 			});
 
 		}
@@ -416,14 +375,7 @@ public final class LinphoneThread
 			final LinphoneCall.State fixedState = fixLinphoneCallState(state);
 			Lg.i("callState changed state=", fixedState, " number=", new CallLogger(call), " message=", message);
 
-			mMainThreadHandler.post(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					mListener.onCallStateChanged(number, fixedState, message);
-				}
-			});
+			mMainThreadHandler.post(() -> mListener.onCallStateChanged(number, fixedState, message));
 		}
 
 		@Override
@@ -513,15 +465,8 @@ public final class LinphoneThread
 					" jitter=", jitter, " loss=", packetLoss,
 					" latePackets=", latePackets, " roundTripDelay=", roundTripDelay);
 
-			mMainThreadHandler.post(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					mListener.onCallStatsChanged(NetworkQuality.fromFloat(quality), duration, codec, iceState, upload, download,
-							jitter, packetLoss, latePackets, roundTripDelay);
-				}
-			});
+			mMainThreadHandler.post(() -> mListener.onCallStatsChanged(NetworkQuality.fromFloat(quality), duration, codec, iceState, upload, download,
+					jitter, packetLoss, latePackets, roundTripDelay));
 		}
 
 		@Override
@@ -544,14 +489,7 @@ public final class LinphoneThread
 				Lg.e("unencrypted call: number=", new CallLogger(call), " with UserAgent ", call.getRemoteUserAgent());
 			}
 
-			mMainThreadHandler.post(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					mListener.onCallEncryptionChanged(authenticationToken, isTokenVerified);
-				}
-			});
+			mMainThreadHandler.post(() -> mListener.onCallEncryptionChanged(authenticationToken, isTokenVerified));
 		}
 
 		@Override

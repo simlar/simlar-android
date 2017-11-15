@@ -24,7 +24,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,8 +35,6 @@ import android.view.View;
 
 import org.simlar.R;
 import org.simlar.contactsprovider.ContactsProvider;
-import org.simlar.contactsprovider.ContactsProvider.FullContactsListener;
-import org.simlar.helper.ContactDataComplete;
 import org.simlar.helper.CreateAccountStatus;
 import org.simlar.helper.FlavourHelper;
 import org.simlar.helper.GooglePlayServicesHelper;
@@ -53,7 +50,6 @@ import org.simlar.service.SimlarServiceCommunicator;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Set;
 
 public final class MainActivity extends AppCompatActivity implements NoContactPermissionFragment.Listener
 {
@@ -143,38 +139,33 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 	{
 		showNoContactPermissionFragment(false);
 		mContactList.setEmptyText(getString(R.string.main_activity_contact_list_loading_contacts));
-		ContactsProvider.getContacts(this, new FullContactsListener()
-		{
-			@Override
-			public void onGetContacts(final Set<ContactDataComplete> contacts, final ContactsProvider.Error error)
-			{
-				Lg.i("onGetContacts error=", error);
+		ContactsProvider.getContacts(this, (contacts, error) -> {
+			Lg.i("onGetContacts error=", error);
 
-				if (isFinishing()) {
-					Lg.i("onGetContacts MainActivity is finishing");
-					return;
-				}
-
-				switch (error) {
-				case NONE:
-					mAdapter.setContacts(contacts);
-					mContactList.setEmptyText(getString(R.string.main_activity_contact_list_no_contacts_found));
-					break;
-				case BUG:
-					mAdapter.clear();
-					mContactList.setEmptyText(getString(R.string.main_activity_contact_list_error_loading_contacts));
-					break;
-				case NO_INTERNET_CONNECTION:
-					mAdapter.clear();
-					mContactList.setEmptyText(getString(R.string.main_activity_contact_list_error_loading_contacts_no_internet));
-					break;
-				case PERMISSION_DENIED:
-					showNoContactPermissionFragment(true);
-					break;
-				}
-
-				GooglePlayServicesHelper.registerGcmIfNeeded(MainActivity.this);
+			if (isFinishing()) {
+				Lg.i("onGetContacts MainActivity is finishing");
+				return;
 			}
+
+			switch (error) {
+			case NONE:
+				mAdapter.setContacts(contacts);
+				mContactList.setEmptyText(getString(R.string.main_activity_contact_list_no_contacts_found));
+				break;
+			case BUG:
+				mAdapter.clear();
+				mContactList.setEmptyText(getString(R.string.main_activity_contact_list_error_loading_contacts));
+				break;
+			case NO_INTERNET_CONNECTION:
+				mAdapter.clear();
+				mContactList.setEmptyText(getString(R.string.main_activity_contact_list_error_loading_contacts_no_internet));
+				break;
+			case PERMISSION_DENIED:
+				showNoContactPermissionFragment(true);
+				break;
+			}
+
+			GooglePlayServicesHelper.registerGcmIfNeeded(this);
 		});
 	}
 
@@ -359,14 +350,7 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 				.setTitle(R.string.main_activity_alert_upload_log_file_title)
 				.setMessage(R.string.main_activity_alert_upload_log_file_text)
 				.setNegativeButton(R.string.button_cancel, null)
-				.setPositiveButton(R.string.button_continue, new DialogInterface.OnClickListener()
-				{
-					@Override
-					public void onClick(final DialogInterface dialog, final int id)
-					{
-						new UploadLogFile(MainActivity.this).upload(logFileName);
-					}
-				})
+				.setPositiveButton(R.string.button_continue, (dialog, id) -> new UploadLogFile(this).upload(logFileName))
 				.create().show();
 	}
 
@@ -382,14 +366,9 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 				.setTitle(R.string.main_activity_alert_enable_linphone_debug_mode_title)
 				.setMessage(R.string.main_activity_alert_enable_linphone_debug_mode_text)
 				.setNegativeButton(R.string.button_cancel, null)
-				.setPositiveButton(R.string.button_continue, new DialogInterface.OnClickListener()
-				{
-					@Override
-					public void onClick(final DialogInterface dialog, final int id)
-					{
-						Lg.setDebugMode(true);
-						PreferencesHelper.saveToFileDebugMode(MainActivity.this, true);
-					}
+				.setPositiveButton(R.string.button_continue, (dialog, id) -> {
+					Lg.setDebugMode(true);
+					PreferencesHelper.saveToFileDebugMode(this, true);
 				})
 				.create().show();
 	}
@@ -428,14 +407,9 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 					.setTitle(R.string.main_activity_alert_quit_simlar_title)
 					.setMessage(R.string.main_activity_alert_quit_simlar_text)
 					.setNegativeButton(R.string.button_cancel, null)
-					.setPositiveButton(R.string.button_continue, new DialogInterface.OnClickListener()
-					{
-						@Override
-						public void onClick(final DialogInterface dialog, final int id)
-						{
-							Lg.i("user decided to terminate simlar");
-							mCommunicator.getService().terminate();
-						}
+					.setPositiveButton(R.string.button_continue, (dialog, id) -> {
+						Lg.i("user decided to terminate simlar");
+						mCommunicator.getService().terminate();
 					})
 					.create().show();
 		}
