@@ -276,14 +276,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				}
 
 				// make sure we have a contact name for the CallActivity
-				ContactsProvider.getNameAndPhotoId(mSimlarIdToCall, this, new ContactListener()
-				{
-					@Override
-					public void onGetNameAndPhotoId(final String name, final String photoId)
-					{
-						mSimlarCallState.updateContactNameAndImage(name, photoId);
-					}
-				});
+				ContactsProvider.getNameAndPhotoId(mSimlarIdToCall, this, mSimlarCallState::updateContactNameAndImage);
 			}
 		} else {
 			Lg.w("onStartCommand: with no intent");
@@ -659,14 +652,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		final SimlarStatus status = SimlarStatus.fromRegistrationState(state);
 
 		if (mGoingDown && !status.isConnectedToSipServer()) {
-			mHandler.post(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					terminatePrivate();
-				}
-			});
+			mHandler.post(this::terminatePrivate);
 		}
 
 		notifySimlarStatusChanged(status);
@@ -901,14 +887,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	public void terminate()
 	{
 		Lg.i("terminate");
-		mHandler.post(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				handleTerminate();
-			}
-		});
+		mHandler.post(this::handleTerminate);
 	}
 
 	private void handleTerminate()
@@ -925,23 +904,9 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			mLinphoneThread.unregister();
 
 			// make sure terminatePrivate is called after at least 5 seconds
-			mHandler.postDelayed(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					terminatePrivate();
-				}
-			}, 5000);
+			mHandler.postDelayed(this::terminatePrivate, 5000);
 		} else {
-			mHandler.post(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					terminatePrivate();
-				}
-			});
+			mHandler.post(this::terminatePrivate);
 		}
 	}
 

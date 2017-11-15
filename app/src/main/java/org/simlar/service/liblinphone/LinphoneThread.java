@@ -93,14 +93,7 @@ public final class LinphoneThread
 
 			Lg.i("handler initialized");
 
-			mMainThreadHandler.post(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					mListener.onInitialized();
-				}
-			});
+			mMainThreadHandler.post(mListener::onInitialized);
 
 			Looper.loop();
 		}
@@ -180,14 +173,7 @@ public final class LinphoneThread
 		{
 			mLinphoneHandler.linphoneCoreIterate();
 
-			mLinphoneThreadHandler.postDelayed(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					linphoneIterator();
-				}
-			}, 20);
+			mLinphoneThreadHandler.postDelayed(this::linphoneIterator, 20);
 		}
 
 		public void unregister()
@@ -197,14 +183,7 @@ public final class LinphoneThread
 				return;
 			}
 
-			mLinphoneThreadHandler.post(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					mLinphoneHandler.unregister();
-				}
-			});
+			mLinphoneThreadHandler.post(mLinphoneHandler::unregister);
 		}
 
 		public void refreshRegisters()
@@ -214,14 +193,7 @@ public final class LinphoneThread
 				return;
 			}
 
-			mLinphoneThreadHandler.post(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					mLinphoneHandler.refreshRegisters();
-				}
-			});
+			mLinphoneThreadHandler.post(mLinphoneHandler::refreshRegisters);
 		}
 
 		public void call(final String number)
@@ -258,14 +230,7 @@ public final class LinphoneThread
 				return;
 			}
 
-			mLinphoneThreadHandler.post(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					mLinphoneHandler.pickUp();
-				}
-			});
+			mLinphoneThreadHandler.post(mLinphoneHandler::pickUp);
 		}
 
 		public void terminateAllCalls()
@@ -275,14 +240,7 @@ public final class LinphoneThread
 				return;
 			}
 
-			mLinphoneThreadHandler.post(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					mLinphoneHandler.terminateAllCalls();
-				}
-			});
+			mLinphoneThreadHandler.post(mLinphoneHandler::terminateAllCalls);
 		}
 
 		public void verifyAuthenticationToken(final String token, final boolean verified)
@@ -309,14 +267,7 @@ public final class LinphoneThread
 				return;
 			}
 
-			mLinphoneThreadHandler.post(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					mLinphoneHandler.pauseAllCalls();
-				}
-			});
+			mLinphoneThreadHandler.post(mLinphoneHandler::pauseAllCalls);
 		}
 
 		public void resumeCall()
@@ -326,14 +277,7 @@ public final class LinphoneThread
 				return;
 			}
 
-			mLinphoneThreadHandler.post(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					mLinphoneHandler.resumeCall();
-				}
-			});
+			mLinphoneThreadHandler.post(mLinphoneHandler::resumeCall);
 		}
 
 		public void setVolumes(final Volumes volumes)

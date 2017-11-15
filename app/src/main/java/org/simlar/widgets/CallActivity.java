@@ -294,14 +294,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 			return;
 		}
 
-		mCallTimer = new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				iterateTimer();
-			}
-		};
+		mCallTimer = this::iterateTimer;
 
 		mTextViewCallTimer.setVisibility(View.VISIBLE);
 
