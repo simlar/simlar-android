@@ -139,7 +139,15 @@ public final class Util
 	@NonNull
 	public static <T> T getSystemService(final Context context, final String name)
 	{
+		if (context == null) {
+			throw new IllegalArgumentException("no context");
+		}
+
 		//noinspection ConstantConditions,unchecked
-		return (T) context.getSystemService(name);
+		final T service = (T) context.getSystemService(name);
+		if (service == null) {
+			throw new IllegalArgumentException("no system service matching name: " + name);
+		}
+		return service;
 	}
 }
