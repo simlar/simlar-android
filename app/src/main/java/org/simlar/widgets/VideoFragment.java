@@ -99,25 +99,15 @@ public class VideoFragment extends Fragment
 			mListener.setVideoWindows(mVideoView, mCaptureView);
 		}
 
-		mVideoView.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(final View view)
-			{
-				if (mListener != null) {
-					mListener.onVideoViewClick();
-				}
+		mVideoView.setOnClickListener(view12 -> {
+			if (mListener != null) {
+				mListener.onVideoViewClick();
 			}
 		});
 
-		mCaptureView.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(final View view)
-			{
-				if (mListener != null) {
-					mListener.onCaptureViewClick();
-				}
+		mCaptureView.setOnClickListener(view1 -> {
+			if (mListener != null) {
+				mListener.onCaptureViewClick();
 			}
 		});
 
