@@ -442,14 +442,7 @@ public final class LinphoneThread
 				return;
 			}
 
-			mLinphoneThreadHandler.post(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					mLinphoneHandler.toggleCamera();
-				}
-			});
+			mLinphoneThreadHandler.post(mLinphoneHandler::toggleCamera);
 		}
 
 		@Lg.Anonymize
