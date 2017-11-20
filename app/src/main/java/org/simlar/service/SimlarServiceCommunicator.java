@@ -49,10 +49,6 @@ public class SimlarServiceCommunicator
 		{
 			Lg.i("onServiceConnected");
 			mService = ((SimlarServiceBinder) binder).getService();
-			if (mService == null) {
-				Lg.e("failed to bind to service");
-				return;
-			}
 			if (mActivity == null) {
 				Lg.e("no activity set");
 				return;

@@ -54,7 +54,14 @@ public final class SimCardReader
 
 	public static String readPhoneNumber(final Context context)
 	{
-		@SuppressLint("HardwareIds") // Yes, sometimes "getLine1Number" even returns the wrong number but it helps most of the users.
+		if (!PermissionsHelper.hasPermission(context, PermissionsHelper.Type.SMS)) {
+			return "";
+		}
+
+		@SuppressLint({
+				"HardwareIds", // false positive
+				"MissingPermission" // Yes, sometimes "getLine1Number" even returns the wrong number but it helps most of the users.
+		})
 		final String numberFromSim = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
 		if (Util.isNullOrEmpty(numberFromSim)) {
 			Lg.w("failed to read telephone number from sim card");

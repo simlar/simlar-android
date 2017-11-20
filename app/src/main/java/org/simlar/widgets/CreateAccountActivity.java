@@ -297,6 +297,7 @@ public final class CreateAccountActivity extends Activity
 		super.onDestroy();
 	}
 
+	@SuppressLint("StaticFieldLeak")
 	private void createAccountRequest()
 	{
 		if (Util.isNullOrEmpty(mTelephoneNumber)) {
@@ -456,6 +457,7 @@ public final class CreateAccountActivity extends Activity
 		confirmRegistrationCode(registrationCode);
 	}
 
+	@SuppressLint("StaticFieldLeak")
 	private void confirmRegistrationCode(final String registrationCode)
 	{
 		Lg.i("confirmRegistrationCode: ", registrationCode);

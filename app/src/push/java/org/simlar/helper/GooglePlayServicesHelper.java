@@ -20,6 +20,7 @@
 
 package org.simlar.helper;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -73,6 +74,7 @@ public final class GooglePlayServicesHelper
 		registerGcm(context, versionCode);
 	}
 
+	@SuppressLint("StaticFieldLeak")
 	private static void registerGcm(final Context context, final int simlarVersionCode)
 	{
 		new AsyncTask<Void, Void, String>() {

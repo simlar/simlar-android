@@ -5,13 +5,13 @@ def getGitVersion = { ->
         return "git -C ${rootDir} describe --tags --always --dirty".execute().text.trim()
     }
     catch (ignored) {
-        return "git-not-found";
+        return "git-not-found"
     }
 }
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.0"
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         applicationId "org.simlar"
@@ -20,13 +20,17 @@ android {
         versionName getGitVersion()
     }
 
+    flavorDimensions "default"
+
     productFlavors {
         push {
+            dimension "default"
             versionName = android.defaultConfig.versionName
             buildConfigField("boolean", "IS_GCM_ENABLED", "true")
         }
 
         alwaysOnline {
+            dimension "default"
             versionName = android.defaultConfig.versionName + " (alwaysOnline)"
             buildConfigField("boolean", "IS_GCM_ENABLED", "false")
         }
@@ -47,10 +51,10 @@ android {
 }
 
 dependencies {
-    pushCompile 'com.google.android.gms:play-services-gcm:11.0.4'
-    compile 'com.android.support:appcompat-v7:26.0.0-beta2'
-    compile 'com.android.support:support-v4:26.0.0-beta2'
-    compile 'com.android.support:support-v13:26.0.0-beta2'
-    compile 'com.googlecode.libphonenumber:libphonenumber:8.8.3'
-    compile (name:'liblinphone-android-sdk', ext:'aar')
+    pushImplementation 'com.google.android.gms:play-services-gcm:11.6.0'
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:support-v4:26.1.0'
+    implementation 'com.android.support:support-v13:26.1.0'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.8.6'
+    implementation fileTree(dir: 'libs', include: ['liblinphone-android-sdk.aar'])
 }
