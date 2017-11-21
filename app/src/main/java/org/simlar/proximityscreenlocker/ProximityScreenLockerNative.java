@@ -30,6 +30,7 @@ import android.os.Build;
 import android.os.PowerManager;
 
 import org.simlar.logging.Lg;
+import org.simlar.utils.Util;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -58,7 +59,7 @@ public final class ProximityScreenLockerNative implements ProximityScreenLocker
 
 	private static PowerManager.WakeLock initProximitySensor(final Context context)
 	{
-		final PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+		final PowerManager powerManager = Util.getSystemService(context, Context.POWER_SERVICE);
 		try {
 			final int proximityScreenOffWakeLock = ((Integer) PowerManager.class.getDeclaredField("PROXIMITY_SCREEN_OFF_WAKE_LOCK").get(null))
 					.intValue();

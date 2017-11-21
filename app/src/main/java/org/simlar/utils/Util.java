@@ -20,9 +20,11 @@
 
 package org.simlar.utils;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.text.Html;
 import android.text.Spanned;
 import android.view.View;
@@ -132,5 +134,20 @@ public final class Util
 		}
 
 		return new SimpleDateFormat("mm:ss", Locale.US);
+	}
+
+	@NonNull
+	public static <T> T getSystemService(final Context context, final String name)
+	{
+		if (context == null) {
+			throw new IllegalArgumentException("no context");
+		}
+
+		//noinspection ConstantConditions,unchecked
+		final T service = (T) context.getSystemService(name);
+		if (service == null) {
+			throw new IllegalArgumentException("no system service matching name: " + name);
+		}
+		return service;
 	}
 }

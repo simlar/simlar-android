@@ -29,6 +29,7 @@ import android.os.Handler;
 import android.os.Vibrator;
 
 import org.simlar.logging.Lg;
+import org.simlar.utils.Util;
 
 final class VibratorManager
 {
@@ -94,7 +95,7 @@ final class VibratorManager
 
 	private boolean shouldVibrate()
 	{
-		return ((AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE)).getRingerMode() != AudioManager.RINGER_MODE_SILENT;
+		return ((AudioManager) Util.getSystemService(mContext, Context.AUDIO_SERVICE)).getRingerMode() != AudioManager.RINGER_MODE_SILENT;
 	}
 
 	public void start()
