@@ -42,7 +42,7 @@ public final class CreateAccount
 		throw new AssertionError("This class was not meant to be instantiated");
 	}
 
-	public static class Result
+	private static class Result
 	{
 		public static final int SUCCESS = 0;
 
@@ -50,14 +50,14 @@ public final class CreateAccount
 		private final String mResult1;
 		final String mResult2;
 
-		public Result(final int errorId, final String result1, final String result2)
+		Result(final int errorId, final String result1, final String result2)
 		{
 			mErrorId = errorId;
 			mResult1 = result1;
 			mResult2 = result2;
 		}
 
-		public Result(final Result result)
+		Result(final Result result)
 		{
 			if (result == null) {
 				mErrorId = -1;
@@ -102,7 +102,7 @@ public final class CreateAccount
 
 	public static final class RequestResult extends Result
 	{
-		public RequestResult(final Result result)
+		private RequestResult(final Result result)
 		{
 			super(result);
 		}
@@ -115,7 +115,7 @@ public final class CreateAccount
 
 	public static final class ConfirmResult extends Result
 	{
-		public ConfirmResult(final Result result)
+		private ConfirmResult(final Result result)
 		{
 			super(result);
 		}
