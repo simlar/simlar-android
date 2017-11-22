@@ -27,7 +27,6 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.text.Html;
 import android.text.Spanned;
-import android.view.View;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -85,16 +84,6 @@ public final class Util
 		int length;
 		while ((length = is.read(buffer)) != -1) {
 			os.write(buffer, 0, length);
-		}
-	}
-
-	public static void setBackgroundCompatible(final View view, final Drawable drawable)
-	{
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-			view.setBackground(drawable);
-		} else {
-			//noinspection deprecation
-			view.setBackgroundDrawable(drawable);
 		}
 	}
 
