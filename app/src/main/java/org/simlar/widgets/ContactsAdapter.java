@@ -90,7 +90,7 @@ final class ContactsAdapter extends ArrayAdapter<ContactDataComplete>
 
 	ContactsAdapter(final Context context)
 	{
-		super(context, R.layout.fragment_contacts_list_element, new ArrayList<ContactDataComplete>());
+		super(context, R.layout.fragment_contacts_list_element, new ArrayList<>());
 		mLayout = R.layout.fragment_contacts_list_element;
 		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}

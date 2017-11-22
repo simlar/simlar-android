@@ -384,14 +384,7 @@ public final class CreateAccountActivity extends Activity
 		mWaitingForSmsText.setText(getString(R.string.create_account_activity_waiting_for_sms) + " (" + mSecondsToStillWaitForSms + "s)");
 		--mSecondsToStillWaitForSms;
 		if (mSecondsToStillWaitForSms >= 0) {
-			mHandler.postDelayed(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					waitingForSmsIteration();
-				}
-			}, 1000);
+			mHandler.postDelayed(this::waitingForSmsIteration, 1000);
 		} else {
 			onWaitingForSmsTimedOut();
 		}

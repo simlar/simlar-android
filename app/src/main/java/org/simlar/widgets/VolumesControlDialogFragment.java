@@ -30,7 +30,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.SeekBar;
 
 import org.simlar.R;
@@ -138,17 +137,12 @@ public final class VolumesControlDialogFragment extends DialogFragment
 			}
 		});
 
-		checkBoxEchoLimiter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
-		{
-			@Override
-			public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked)
-			{
-				Lg.i("CheckBoxEchoLimiter.onCheckedChanged: ", isChecked);
-				if (mListener == null) {
-					return;
-				}
-				mListener.onEchoLimiterChanged(isChecked);
+		checkBoxEchoLimiter.setOnCheckedChangeListener((buttonView, isChecked) -> {
+			Lg.i("CheckBoxEchoLimiter.onCheckedChanged: ", isChecked);
+			if (mListener == null) {
+				return;
 			}
+			mListener.onEchoLimiterChanged(isChecked);
 		});
 
 		return view;

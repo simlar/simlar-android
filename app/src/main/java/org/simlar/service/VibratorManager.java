@@ -66,14 +66,7 @@ final class VibratorManager
 			Lg.i("vibrate");
 			mVibrator.vibrate(VIBRATE_LENGTH);
 
-			mHandler.postDelayed(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					startVibration();
-				}
-			}, VIBRATE_LENGTH + VIBRATE_PAUSE);
+			mHandler.postDelayed(this::startVibration, VIBRATE_LENGTH + VIBRATE_PAUSE);
 		}
 
 		public void stopVibration()

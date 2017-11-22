@@ -294,14 +294,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 			return;
 		}
 
-		mCallTimer = new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				iterateTimer();
-			}
-		};
+		mCallTimer = this::iterateTimer;
 
 		mTextViewCallTimer.setVisibility(View.VISIBLE);
 
@@ -337,14 +330,9 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 		Lg.i("finishing activity in ", milliSeconds, " ms");
 
-		new Handler().postDelayed(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				finish();
-				overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-			}
+		new Handler().postDelayed(() -> {
+			finish();
+			overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 		}, milliSeconds);
 	}
 

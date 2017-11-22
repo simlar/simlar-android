@@ -47,8 +47,6 @@ import org.simlar.helper.SimlarNumber;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
-import java.util.Comparator;
-
 public final class VerifyNumberActivity extends AppCompatActivity
 {
 	private static final int RESULT_CREATE_ACCOUNT_ACTIVITY = 0;
@@ -128,14 +126,7 @@ public final class VerifyNumberActivity extends AppCompatActivity
 	{
 		final String phoneNumber = SimCardReader.readPhoneNumber(this);
 		if (Util.isNullOrEmpty(phoneNumber)) {
-			new Handler().postDelayed(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					showSoftInputForEditNumber();
-				}
-			}, 100);
+			new Handler().postDelayed(this::showSoftInputForEditNumber, 100);
 		} else {
 			mEditNumber.setText(new SimlarNumber(phoneNumber).getNationalOnly());
 			final TextView text = findViewById(R.id.textViewCheckOrVerifyYourNumber);
@@ -149,14 +140,7 @@ public final class VerifyNumberActivity extends AppCompatActivity
 	{
 		final ArrayAdapter<Integer> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
 		adapter.addAll(SimlarNumber.getSupportedCountryCodes());
-		adapter.sort(new Comparator<Integer>()
-		{
-			@Override
-			public int compare(final Integer lhs, final Integer rhs)
-			{
-				return lhs.compareTo(rhs);
-			}
-		});
+		adapter.sort(Integer::compareTo);
 		return adapter;
 	}
 

@@ -23,7 +23,6 @@ package org.simlar.service;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -156,27 +155,15 @@ final class SoundEffectManager
 			Lg.i("[", mType, "] start playing at time: ", playStartTime);
 			mMediaPlayer.start();
 
-			mMediaPlayer.setOnCompletionListener(new OnCompletionListener()
-			{
-				@Override
-				public void onCompletion(final MediaPlayer mp2)
-				{
-					final long now = SystemClock.elapsedRealtime();
-					final long delay = Math.max(0, playStartTime + MIN_PLAY_TIME - now);
-					Lg.i("[", mType, "] MediaPlayer onCompletion at: ", now, " restarting with delay: ", delay);
+			mMediaPlayer.setOnCompletionListener(mp2 -> {
+				final long now = SystemClock.elapsedRealtime();
+				final long delay = Math.max(0, playStartTime + MIN_PLAY_TIME - now);
+				Lg.i("[", mType, "] MediaPlayer onCompletion at: ", now, " restarting with delay: ", delay);
 
-					if (delay > 0) {
-						mHandler.postDelayed(new Runnable()
-						{
-							@Override
-							public void run()
-							{
-								onPrepared(mp2);
-							}
-						}, delay);
-					} else {
-						onPrepared(mp2);
-					}
+				if (delay > 0) {
+					mHandler.postDelayed(() -> onPrepared(mp2), delay);
+				} else {
+					onPrepared(mp2);
 				}
 			});
 		}
