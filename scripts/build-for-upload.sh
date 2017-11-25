@@ -26,11 +26,11 @@ rm -f Simlar-alwaysOnline.apk
 "${GRADLEW}" clean
 "${GRADLEW}" assembleRelease
 
-jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore "${KEYSTORE}" app/build/outputs/apk/app-push-release-unsigned.apk simlar
-zipalign -v 4 app/build/outputs/apk/app-push-release-unsigned.apk Simlar.apk
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore "${KEYSTORE}" app/build/outputs/apk/push/release/app-push-release-unsigned.apk simlar
+zipalign -v 4 app/build/outputs/apk/push/release/app-push-release-unsigned.apk Simlar.apk
 
-jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore "${KEYSTORE}" app/build/outputs/apk/app-alwaysOnline-release-unsigned.apk simlar
-zipalign -v 4 app/build/outputs/apk/app-alwaysOnline-release-unsigned.apk Simlar-alwaysOnline.apk
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore "${KEYSTORE}" app/build/outputs/apk/alwaysOnline/release/app-alwaysOnline-release-unsigned.apk simlar
+zipalign -v 4 app/build/outputs/apk/alwaysOnline/release/app-alwaysOnline-release-unsigned.apk Simlar-alwaysOnline.apk
 
 "${GRADLEW}" clean
 
