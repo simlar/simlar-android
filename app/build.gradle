@@ -61,7 +61,7 @@ repositories {
 
 android {
     defaultConfig {
-        applicationId "org.simlar"
+        applicationId "org.simlar.sip3"
         minSdkVersion 23
         compileSdk 34
         //noinspection OldTargetApi
