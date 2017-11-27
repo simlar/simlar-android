@@ -24,7 +24,9 @@ import android.util.Xml;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -212,7 +214,13 @@ public final class CreateAccount
 			return new Result(Result.SUCCESS, parser.getAttributeValue(0), parser.getAttributeValue(1));
 		}
 
-		Lg.e("unable to parse response: xmlRootElement=", xmlRootElement, " AttributeCount=", parser.getAttributeCount());
+		final List<String> attributes = new ArrayList<>();
+		for(int i = 0; i < parser.getAttributeCount(); ++i) {
+			attributes.add(parser.getAttributeName(i) + "=" + parser.getAttributeValue(i));
+			Lg.e("unable to parse response: xmlRootElement=", xmlRootElement, " Attributes: ", parser.getAttributeName(i) + "=" + parser.getAttributeValue(i));
+		}
+
+		//Lg.e("unable to parse response: xmlRootElement=", xmlRootElement, " Attributes: ", String.join(" ", attributes));
 		return null;
 	}
 }
