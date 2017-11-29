@@ -31,7 +31,7 @@
     <string name="main_activity_contact_list_loading_contacts">Kontakte werden geladen &#8230;</string>
     <string name="main_activity_contact_list_no_contacts_found">Keiner deiner Kontakte hat Simlar installiert. Empfiehl Simlar deinen Freunden!</string>
     <string name="main_activity_contact_list_error_loading_contacts">Fehler beim Laden der Kontakte.</string>
-    <string name="main_activity_contact_list_error_loading_contacts_no_internet">Die Verindung zum Server ist fehlgeschlagen. Überprüfe Deine Internetverbindung.</string>
+    <string name="main_activity_contact_list_error_loading_contacts_no_internet">Die Verindung zum Server ist fehlgeschlagen. Überprüfe deine Internetverbindung.</string>
     <string name="main_activity_menu_reload_contacts">Kontakte neu laden</string>
     <string name="main_activity_menu_upload_logfile">Fehler melden</string>
     <string name="main_activity_menu_enable_debug_mode">Debug-Modus einschalten</string>
@@ -51,7 +51,7 @@
     <string name="main_activity_alert_enable_linphone_debug_mode_title">Debug-Modus wirklich aktivieren?</string>
     <string name="main_activity_alert_enable_linphone_debug_mode_text">Der Debug-Modus erweitert die Ausgaben innerhalb der Logdatei erheblich. Aktiviere ihn nur, wenn du von einem Simlar-Entwickler dazu aufgefordert wurdest oder wirklich weißt, was du tust.</string>
     <string name="main_activity_alert_quit_simlar_title">Simlar wirklich beenden?</string>
-    <string name="main_activity_alert_quit_simlar_text">Wenn Simlar beendet ist, können Sie keine Simlar-Anrufe mehr annehmen.\n\n Wenn es Sie nicht stört die Google Play Services zu installieren, können Sie die Push-Version von Simlar installieren. Z.B. aus dem Google Play Store. Diese benutzt Push-Notifications und muss daher nicht dauerhaft laufen.</string>
+    <string name="main_activity_alert_quit_simlar_text">Wenn Simlar beendet ist, kannst du keine Simlar-Anrufe mehr annehmen.\n\n Wenn es dich nicht stört die Google Play Services zu installieren, kannst du die Push-Version von Simlar installieren. Z.B. aus dem Google Play Store. Diese benutzt Push-Notifications und muss daher nicht dauerhaft laufen.</string>
     <string name="main_activity_tell_a_friend_chooser_title">Freunde einladen</string>
     <!-- TextSecure messages do not have a subject. WhatsApp puts the subject just in front of the message text. Emails simply use this subject as usual. -->
     <string name="main_activity_tell_a_friend_subject">Simlar</string>
@@ -128,15 +128,15 @@
     <string name="verify_number_activity_alert_wrong_number_text">Deine eingegebene Rufnummer wurde nicht erkannt. Kontrolliere deine Eingabe.</string>
 
     <!-- Simlar ermöglichen, SMS zu senden und abzurufen? -->
-    <string name="permission_explain_text_sms">Simlar liest einmalig Ihre Telefonnummer und eingehende SMS, damit Sie Ihre Nummer und den Registrierungscode nicht eingeben müssen.</string>
+    <string name="permission_explain_text_sms">Simlar liest einmalig deine Telefonnummer und eingehende SMS, damit du deine Nummer und den Registrierungscode nicht eingeben musst.</string>
     <!-- Simlar ermöglichen, Audio aufzunehmen? -->
-    <string name="permission_explain_text_record_audio">Simlar greift auf Ihr Mikrophone zu, damit Ihr Gesprächspartner Sie hören kann.</string>
+    <string name="permission_explain_text_record_audio">Simlar greift auf dein Mikrophone zu, damit deom Gesprächspartner dich hören kann.</string>
     <!-- Simlar ermöglichen, Telefonanrufe zu tätigen und zu verwalten? -->
     <string name="permission_explain_text_phone_state">Simlar greift auf die Telefonverwaltung zu, um bei Telefonaten die Anklopf-Funktion zu ermöglichen.</string>
     <!-- Simlar ermöglichen, auf Kontakte zuzugreifen? -->
-    <string name="permission_explain_text_contacts">Simlar liest die Nummern in ihrem Telefonbuch, um andere Simlar-Nutzer zu finden.</string>
+    <string name="permission_explain_text_contacts">Simlar liest die Nummern in deinem Telefonbuch, um andere Simlar-Nutzer zu finden.</string>
     <!-- Simlar ermöglichen, auf Fotos, Medien und Dateien zuzugreifen? -->
-    <string name="permission_explain_text_storage">Simlar benutzt den Klingelton Ihres Gerätes und dieser liegt in den Medien und Dateien.</string>
+    <string name="permission_explain_text_storage">Simlar benutzt den Klingelton Deines Telefons und dieser liegt in den Medien und Dateien.</string>
 
     <!-- Zugriff während "Nicht stören" -->
     <!-- Zugriff auf "Nicht stören" für Simlar zu lassen?-->
@@ -180,16 +180,16 @@
 
     <string name="missed_call_notification">Verpasster Anruf</string>
 
-    <string name="no_contact_permission_fragment_title">Simlar can\'t access your contacts</string>
-    <string name="no_contact_permission_fragment_request_contacts_permissions_text">By accessing your contacts Simlar automatically detects other Simlar users you can talk to in privacy.</string>
-    <string name="no_contact_permission_fragment_request_contacts_permissions_button">Request Permission</string>
-    <string name="no_contact_permission_fragment_call_contact_text">Otherwise, you\'ll have to find other Simlar contacts by trying to call each contact individually.</string>
-    <string name="no_contact_permission_fragment_call_contact_button">Call Contact</string>
-    <string name="no_contact_permission_fragment_alert_no_simlarId_title">Invalid telephone number</string>
-    <string name="no_contact_permission_fragment_alert_no_simlarId_message">The number &lt;b>%1$s&lt;/b> is not usable with Simlar. Choose another contact.</string>
-    <string name="no_contact_permission_fragment_alert_checking_status_title">Checking contact status</string>
-    <string name="no_contact_permission_fragment_alert_offline_title">You are offline</string>
-    <string name="no_contact_permission_fragment_alert_offline_message">Please check your internet connection and try again.</string>
-    <string name="no_contact_permission_fragment_alert_contact_not_registered_title">%1$s not registered</string>
-    <string name="no_contact_permission_fragment_alert_contact_not_registered_message">Ask &lt;b>%1$s&lt;/b> to install Simlar, too</string>
+    <string name="no_contact_permission_fragment_title">Simlar darf nicht auf deine Kontakte zugreifen</string>
+    <string name="no_contact_permission_fragment_request_contacts_permissions_text">Simlar liest die Nummern in deinem Telefonbuch, um andere Simlar-Nutzer zu finden.</string>
+    <string name="no_contact_permission_fragment_request_contacts_permissions_button">Berechtigung anfordern</string>
+    <string name="no_contact_permission_fragment_call_contact_text">Stattdessen kannst du probieren, einen Kontakt direkt anzurufen.</string>
+    <string name="no_contact_permission_fragment_call_contact_button">Kontakt anrufen</string>
+    <string name="no_contact_permission_fragment_alert_no_simlarId_title">Ungültige Telefonnummer</string>
+    <string name="no_contact_permission_fragment_alert_no_simlarId_message">Die Nummer &lt;b>%1$s&lt;/b> kann mit Simlar nicht benutzt werden. Wähle eine andere.</string>
+    <string name="no_contact_permission_fragment_alert_checking_status_title">Üperprüfe den Status des Kontaktes</string>
+    <string name="no_contact_permission_fragment_alert_offline_title">Keine Verbindung</string>
+    <string name="no_contact_permission_fragment_alert_offline_message">Überprüfe deine Internetverbindung und versuche es erneut.</string>
+    <string name="no_contact_permission_fragment_alert_contact_not_registered_title">%1$s ist nicht registriert</string>
+    <string name="no_contact_permission_fragment_alert_contact_not_registered_message">Bitte &lt;b>%1$s&lt;/b> darum, auch Simlar zu installieren.</string>
 </resources>
