@@ -81,7 +81,6 @@ public final class GooglePlayServicesHelper
 			{
 				try {
 					final GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(context);
-					@SuppressWarnings("ResourceType") /// included in AndroidManifest for push
 					final String gcmRegistrationId = gcm.register(GOOGLE_PUSH_SENDER_ID);
 
 					if (Util.isNullOrEmpty(gcmRegistrationId)) {
