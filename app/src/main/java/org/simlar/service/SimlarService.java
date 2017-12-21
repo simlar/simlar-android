@@ -56,6 +56,7 @@ import org.simlar.helper.CallConnectionDetails;
 import org.simlar.helper.CallEndReason;
 import org.simlar.helper.FlavourHelper;
 import org.simlar.helper.NetworkQuality;
+import org.simlar.helper.NotificationChannelId;
 import org.simlar.helper.PermissionsHelper;
 import org.simlar.helper.PreferencesHelper;
 import org.simlar.helper.PreferencesHelper.NotInitedException;
@@ -417,7 +418,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		final PendingIntent activity = PendingIntent.getActivity(context, 0,
 				new Intent(context, ACTIVITIES.getMainActivity()).addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED), 0);
 
-		final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context);
+		final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, NotificationChannelId.MISSED_CALL.name());
 		notificationBuilder.setSmallIcon(R.drawable.ic_notification_missed_calls);
 		notificationBuilder.setLargeIcon(ContactsProvider.getContactPhotoBitmap(context, R.drawable.ic_launcher, photoId));
 		notificationBuilder.setContentTitle(context.getString(R.string.missed_call_notification));
@@ -445,7 +446,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		final PendingIntent activity = PendingIntent.getActivity(this, 0,
 				new Intent(this, mNotificationActivity).addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED), 0);
 
-		final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
+		final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NotificationChannelId.INCOMING_CALL.name());
 		notificationBuilder.setSmallIcon(FlavourHelper.isGcmEnabled() ? R.drawable.ic_notification_ongoing_call : mSimlarStatus.getNotificationIcon());
 		notificationBuilder.setLargeIcon(mSimlarCallState.getContactPhotoBitmap(this, R.drawable.ic_launcher));
 		notificationBuilder.setContentTitle(getString(R.string.app_name));
