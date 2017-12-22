@@ -37,9 +37,8 @@ public final class GooglePlayServicesHelper
 	{
 	}
 
-	@SuppressWarnings({"SameReturnValue", "UnusedParameters"})
-	public static boolean checkPlayServices(final Activity activity)
+	@SuppressWarnings({"EmptyMethod", "UnusedParameters"})
+	public static void checkPlayServices(final Activity activity)
 	{
-		return true;
 	}
 }

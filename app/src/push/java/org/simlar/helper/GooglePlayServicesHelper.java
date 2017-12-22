@@ -112,39 +112,34 @@ public final class GooglePlayServicesHelper
 		}.execute();
 	}
 
-	private static void showDialogAndFinishParent(final Activity activity, final Dialog dialog)
-	{
-		dialog.setOnDismissListener(dialogInterface -> {
-			dialog.dismiss();
-			activity.finish();
-		});
-		dialog.show();
-	}
-
-	public static boolean checkPlayServices(final Activity activity)
+	public static void checkPlayServices(final Activity activity)
 	{
 		final GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
 		final int resultCode = googleApiAvailability.isGooglePlayServicesAvailable(activity);
 		if (resultCode == ConnectionResult.SUCCESS) {
 			Lg.i("google play services check ok");
-			return true;
+			return;
 		}
 
 		Lg.w("google play services not available: ", googleApiAvailability.getErrorString(resultCode));
 
 		if (googleApiAvailability.isUserResolvableError(resultCode)) {
 			Lg.w("This device has no or too old google play services installed. Asking user");
-			showDialogAndFinishParent(activity, googleApiAvailability.getErrorDialog(activity, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST));
+			googleApiAvailability.getErrorDialog(activity, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST).show();
 		} else {
 			Lg.e("This device is not supported.");
-			showDialogAndFinishParent(activity,
-					new AlertDialog.Builder(activity)
-							.setTitle(R.string.google_play_services_helper_alert_unavailable_title)
-							.setMessage(R.string.google_play_services_helper_alert_unavailable_text)
-							.setNeutralButton(R.string.google_play_services_helper_alert_unavailable_button_close_simlar, null)
-							.create());
-		}
 
-		return false;
+			final Dialog dialog = new AlertDialog.Builder(activity)
+				.setTitle(R.string.google_play_services_helper_alert_unavailable_title)
+				.setMessage(R.string.google_play_services_helper_alert_unavailable_text)
+				.setNeutralButton(R.string.google_play_services_helper_alert_unavailable_button_close_simlar, null)
+				.create();
+
+			dialog.setOnDismissListener(dialogInterface -> {
+				dialog.dismiss();
+				activity.finish();
+			});
+			dialog.show();
+		}
 	}
 }

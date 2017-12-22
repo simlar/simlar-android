@@ -202,10 +202,7 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 			}
 		}
 
-		//noinspection ConstantConditions /// needed in alwaysOnline flavour
-		if (!GooglePlayServicesHelper.checkPlayServices(this)) {
-			return;
-		}
+		GooglePlayServicesHelper.checkPlayServices(this);
 
 		if (mCommunicator != null) {
 			mCommunicator.startServiceAndRegister(this, MainActivity.class, null);
