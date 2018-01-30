@@ -24,6 +24,7 @@ package org.simlar.widgets;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
@@ -82,7 +83,7 @@ public class VideoFragment extends Fragment
 	}
 
 	@Override
-	public final View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
+	public final View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
 	{
 		Lg.i("onCreateView");
 		final View view = inflater.inflate(R.layout.fragment_video, container, false);
