@@ -1,0 +1,24 @@
+From 846b0a1e50ef41cd8fad3917c572442e6158c0ee Mon Sep 17 00:00:00 2001
+From: Ben Sartor <ben@simlar.org>
+Date: Tue, 30 Jan 2018 16:57:40 +0100
+Subject: [PATCH] set encoding for javaDoc to UTF-8
+
+---
+ libLinphoneAndroidSdk.gradle | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/libLinphoneAndroidSdk.gradle b/libLinphoneAndroidSdk.gradle
+index 28b28f2f..21393b4e 100644
+--- a/libLinphoneAndroidSdk.gradle
++++ b/libLinphoneAndroidSdk.gradle
+@@ -91,6 +91,7 @@ task(releaseJavadoc, type: Javadoc, dependsOn: "assembleRelease") {
+     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+     classpath += files(android.libraryVariants.release.javaCompile.classpath.files)
+     classpath += configurations.javadocDeps
++    options.encoding = 'UTF-8'
+ }
+ 
+ task sourcesJar(type: Jar) {
+-- 
+2.11.0
+
