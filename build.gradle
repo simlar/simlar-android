@@ -1,6 +1,6 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
-apply plugin: 'idea'
+apply plugin: "idea"
 
 buildscript {
     repositories {
@@ -8,7 +8,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath "com.android.tools.build:gradle:3.0.1"
     }
 }
 
@@ -25,11 +25,11 @@ task clean(type: Delete) {
 
 idea {
     module {
-        excludeDirs += file('build/intermediates/dex-cache')
-        excludeDirs += file('app/src/main/res/raw/')
-        excludeDirs += file('liblinphone')
-        excludeDirs += file('scripts')
-        excludeDirs += file('.travis.yml')
-        excludeDirs += file('app/build/intermediates/manifest/androidTest/')
+        excludeDirs += file("build/intermediates/dex-cache")
+        excludeDirs += file("app/src/main/res/raw/")
+        excludeDirs += file("liblinphone")
+        excludeDirs += file("scripts")
+        excludeDirs += file(".travis.yml")
+        excludeDirs += file("app/build/intermediates/manifest/androidTest/")
     }
 }
