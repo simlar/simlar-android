@@ -156,6 +156,7 @@
     <string name="create_account_activity_sms_text">Welcome to Simlar! If the app asks for a registration code, use: *CODE*. Otherwise you do not need this SMS.</string>
     <string name="create_account_activity_waiting_for_sms">Waiting for SMS</string>
     <string name="create_account_activity_waiting_for_sms_manual">Manual input of registration code</string>
+    <string name="create_account_activity_registration_code_hint">registration code</string>
     <string name="create_account_activity_confirm">Confirm account creation</string>
     <string name="create_account_activity_first_login">First login</string>
     <string name="create_account_activity_error_wrong_telephone_number">It\'s not possible to create a Simlar account with the number you provided:\n%1$s\n\nTry another number and contact the mailing list.</string>
