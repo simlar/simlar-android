@@ -36,7 +36,7 @@ final class VibratorManager
 	public static final long VIBRATE_LENGTH = 1000; // ms
 	public static final long VIBRATE_PAUSE = 1000; // ms
 
-	private Context mContext = null;
+	private final Context mContext;
 	private boolean mHasOnGoingAlarm = false;
 	private VibratorManagerImpl mImpl = null;
 	private final RingerModeReceiver mRingerModeReceiver = new RingerModeReceiver();
