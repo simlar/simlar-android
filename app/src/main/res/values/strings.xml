@@ -122,6 +122,7 @@
     <string name="verify_number_activity_title">Creating account</string>
     <string name="verify_number_activity_verify_your_number">Verify your telephone number:</string>
     <string name="verify_number_activity_put_in_your_number">Enter your telephone number:</string>
+    <string name="verify_number_activity_phone_number_hint">telephone number</string>
     <string name="verify_number_activity_button_register">Continue</string>
     <string name="verify_number_activity_sms_announcement">In order to register, Simlar will send an SMS to this number during the next step.</string>
     <string name="verify_number_activity_alert_wrong_number_text">The number you have entered doesn\'t seem to be a telephone number. Check it again.</string>

@@ -123,6 +123,7 @@
     <string name="verify_number_activity_title">Anmeldung</string>
     <string name="verify_number_activity_verify_your_number">Überprüfe deine Telefonnummer:</string>
     <string name="verify_number_activity_put_in_your_number">Gib deine Telefonnummer ein:</string>
+    <string name="verify_number_activity_phone_number_hint">Telefonnummer</string>
     <string name="verify_number_activity_button_register">Weiter</string>
     <string name="verify_number_activity_sms_announcement">Um die Anmeldung abzuschließen, schickt Simlar im nächsten Schritt eine SMS an diese Nummer.</string>
     <string name="verify_number_activity_alert_wrong_number_text">Deine eingegebene Rufnummer wurde nicht erkannt. Kontrolliere deine Eingabe.</string>
