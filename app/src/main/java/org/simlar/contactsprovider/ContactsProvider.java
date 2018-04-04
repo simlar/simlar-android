@@ -458,7 +458,7 @@ public final class ContactsProvider
 			}
 		}
 
-		public boolean clearCache()
+		boolean clearCache()
 		{
 			switch (mState) {
 			case UNINITIALIZED:

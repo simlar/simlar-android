@@ -69,13 +69,13 @@ final class VibratorManager
 			mHandler.postDelayed(this::startVibration, VIBRATE_LENGTH + VIBRATE_PAUSE);
 		}
 
-		public void stopVibration()
+		void stopVibration()
 		{
 			mHandler.removeCallbacksAndMessages(null);
 			mVibrator.cancel();
 		}
 
-		public boolean hasVibrator()
+		boolean hasVibrator()
 		{
 			return mVibrator != null;
 		}

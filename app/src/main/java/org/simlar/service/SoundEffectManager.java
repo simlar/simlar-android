@@ -120,7 +120,7 @@ final class SoundEffectManager
 			}
 		}
 
-		public void prepare(final boolean start)
+		void prepare(final boolean start)
 		{
 			if (mMediaPlayer == null) {
 				Lg.e("[", mType, "] not initialized");
@@ -134,7 +134,7 @@ final class SoundEffectManager
 			mMediaPlayer.prepareAsync();
 		}
 
-		public void startPrepared(final long now)
+		void startPrepared(final long now)
 		{
 			mPlayRequestTime = now;
 			onPrepared(mMediaPlayer);
@@ -168,7 +168,7 @@ final class SoundEffectManager
 			});
 		}
 
-		public void stopMediaPlayer()
+		void stopMediaPlayer()
 		{
 			mHandler.removeCallbacksAndMessages(null);
 			if (mMediaPlayer != null) {
