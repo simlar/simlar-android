@@ -62,7 +62,6 @@ public final class UploadLogFile
 	private static final String TWO_HYPHENS = "--";
 
 	private final Context mContext;
-	//noinspection deprecation
 	private final ProgressDialog mProgressDialog;
 
 	private static final class PostResult
