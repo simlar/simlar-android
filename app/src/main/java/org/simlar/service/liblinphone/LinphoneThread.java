@@ -134,7 +134,6 @@ public final class LinphoneThread
 				final String ringbackSoundFile = FileHelper.getRingbackSoundFile();
 				final String pauseSoundFile = FileHelper.getPauseSoundFile();
 				final Volumes volumes = mVolumes;
-				final Context context = mContext;
 
 				mLinphoneThreadHandler.post(() -> {
 					if (mLinphoneHandler.isInitialized()) {
@@ -142,7 +141,7 @@ public final class LinphoneThread
 						mLinphoneHandler.setCredentials(mySimlarId, password);
 					} else {
 						// LinphoneCore uses context only for getting audio manager. I think this is still thread safe.
-						mLinphoneHandler.initialize(this, context, linphoneInitialConfigFile, rootCaFile,
+						mLinphoneHandler.initialize(this, mContext, linphoneInitialConfigFile, rootCaFile,
 								zrtpSecretsCacheFile, ringbackSoundFile, pauseSoundFile);
 						mLinphoneHandler.setVolumes(volumes);
 						mLinphoneHandler.setCredentials(mySimlarId, password);
