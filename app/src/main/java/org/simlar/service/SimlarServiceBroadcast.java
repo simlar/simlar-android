@@ -95,7 +95,7 @@ public final class SimlarServiceBroadcast implements Serializable
 
 		public final VideoState videoState;
 
-		public VideoStateChanged(final VideoState videoState)
+		VideoStateChanged(final VideoState videoState)
 		{
 			this.videoState = videoState;
 		}
