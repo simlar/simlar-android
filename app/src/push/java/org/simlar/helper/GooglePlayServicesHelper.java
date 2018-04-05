@@ -28,7 +28,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.simlar.R;
@@ -38,7 +38,6 @@ import org.simlar.utils.Util;
 
 import java.io.IOException;
 
-@SuppressWarnings("deprecation")
 public final class GooglePlayServicesHelper
 {
 	private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -81,7 +80,7 @@ public final class GooglePlayServicesHelper
 			{
 				try {
 					final GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(context);
-					@SuppressWarnings("ResourceType") /// included in AndroidManifest for push
+					@SuppressWarnings("deprecation")
 					final String gcmRegistrationId = gcm.register(GOOGLE_PUSH_SENDER_ID);
 
 					if (Util.isNullOrEmpty(gcmRegistrationId)) {
@@ -124,17 +123,18 @@ public final class GooglePlayServicesHelper
 
 	public static boolean checkPlayServices(final Activity activity)
 	{
-		final int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(activity);
+		final GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+		final int resultCode = googleApiAvailability.isGooglePlayServicesAvailable(activity);
 		if (resultCode == ConnectionResult.SUCCESS) {
 			Lg.i("google play services check ok");
 			return true;
 		}
 
-		Lg.w("google play services not available: ", GooglePlayServicesUtil.getErrorString(resultCode));
+		Lg.w("google play services not available: ", googleApiAvailability.getErrorString(resultCode));
 
-		if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+		if (googleApiAvailability.isUserResolvableError(resultCode)) {
 			Lg.w("This device has no or too old google play services installed. Asking user");
-			showDialogAndFinishParent(activity, GooglePlayServicesUtil.getErrorDialog(resultCode, activity, PLAY_SERVICES_RESOLUTION_REQUEST));
+			showDialogAndFinishParent(activity, googleApiAvailability.getErrorDialog(activity, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST));
 		} else {
 			Lg.e("This device is not supported.");
 			showDialogAndFinishParent(activity,

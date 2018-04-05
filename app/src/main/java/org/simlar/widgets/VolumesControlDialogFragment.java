@@ -22,6 +22,7 @@
 package org.simlar.widgets;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -71,15 +72,21 @@ public final class VolumesControlDialogFragment extends DialogFragment
 	public Dialog onCreateDialog(final Bundle savedInstanceState)
 	{
 		Lg.i("onCreateDialog");
-		final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setView(createView());
-		return builder.create();
+		final Activity activity = getActivity();
+		if (activity == null) {
+			Lg.e("no activity cannot create dialog");
+			return super.onCreateDialog(savedInstanceState);
+		}
+
+		return new AlertDialog.Builder(activity)
+				.setView(createView(activity))
+				.create();
 	}
 
-	private View createView()
+	private View createView(final Activity activity)
 	{
 		@SuppressLint("InflateParams")
-		final View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_fragment_volumes_control, null);
+		final View view = activity.getLayoutInflater().inflate(R.layout.dialog_fragment_volumes_control, null);
 
 		final SeekBar seekBarSpeaker = view.findViewById(R.id.seekBarSpeaker);
 		final SeekBar seekBarMicrophone = view.findViewById(R.id.seekBarMicrophone);

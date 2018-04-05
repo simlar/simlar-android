@@ -22,6 +22,7 @@
 package org.simlar.widgets;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -52,15 +53,21 @@ public final class ConnectionDetailsDialogFragment extends DialogFragment
 	public Dialog onCreateDialog(final Bundle savedInstanceState)
 	{
 		Lg.i("onCreateDialog");
-		final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setView(createView());
-		return builder.create();
+		final Activity activity = getActivity();
+		if (activity == null) {
+			Lg.e("no activity cannot create dialog");
+			return super.onCreateDialog(savedInstanceState);
+		}
+
+		return new AlertDialog.Builder(activity)
+				.setView(createView(activity))
+				.create();
 	}
 
-	private View createView()
+	private View createView(final Activity activity)
 	{
 		@SuppressLint("InflateParams")
-		final View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_fragment_connection_details, null);
+		final View view = activity.getLayoutInflater().inflate(R.layout.dialog_fragment_connection_details, null);
 
 		mTextViewQuality = view.findViewById(R.id.textViewQuality);
 		mTextViewUpload = view.findViewById(R.id.textViewUpload);
