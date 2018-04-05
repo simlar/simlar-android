@@ -180,7 +180,6 @@ public final class CreateAccountActivity extends Activity
 				}
 			} else {
 				for (final Object pdu : pdus) {
-					//noinspection deprecation
 					onSmsReceived(SmsMessage.createFromPdu((byte[]) pdu));
 				}
 			}

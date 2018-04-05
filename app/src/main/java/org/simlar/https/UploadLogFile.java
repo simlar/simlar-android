@@ -169,7 +169,6 @@ public final class UploadLogFile
 	{
 		mContext = context;
 
-		//noinspection deprecation
 		mProgressDialog = new ProgressDialog(mContext);
 		mProgressDialog.setMessage(mContext.getString(R.string.upload_log_file_progress));
 		mProgressDialog.setIndeterminate(true);
