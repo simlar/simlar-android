@@ -120,6 +120,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
         android:ems="6"
+        android:hint="@string/create_account_activity_registration_code_hint"
         android:inputType="number">
 
         <requestFocus/>

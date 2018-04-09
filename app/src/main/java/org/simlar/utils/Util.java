@@ -132,7 +132,7 @@ public final class Util
 			throw new IllegalArgumentException("no context");
 		}
 
-		//noinspection ConstantConditions,unchecked
+		@SuppressWarnings("unchecked")
 		final T service = (T) context.getSystemService(name);
 		if (service == null) {
 			throw new IllegalArgumentException("no system service matching name: " + name);

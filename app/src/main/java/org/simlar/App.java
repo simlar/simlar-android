@@ -35,6 +35,7 @@ import org.simlar.widgets.CallActivity;
 import org.simlar.widgets.MainActivity;
 import org.simlar.widgets.RingingActivity;
 
+@SuppressWarnings("WeakerAccess") // class needs to be public
 public final class App extends Application
 {
 	@Override

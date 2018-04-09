@@ -69,10 +69,10 @@ public final class LinphoneThread
 		final LinphoneHandler mLinphoneHandler = new LinphoneHandler();
 
 		// NOTICE: the following members should only be used in the MAIN-THREAD
-		LinphoneThreadListener mListener = null;
+		final LinphoneThreadListener mListener;
 		RegistrationState mRegistrationState = RegistrationState.RegistrationNone;
 		Volumes mVolumes = new Volumes();
-		Context mContext = null;
+		final Context mContext;
 
 		LinphoneThreadImpl(final LinphoneThreadListener listener, final Context context)
 		{
@@ -98,7 +98,7 @@ public final class LinphoneThread
 			Looper.loop();
 		}
 
-		public void finish()
+		void finish()
 		{
 			if (mLinphoneThreadHandler == null) {
 				Lg.e("handler is null, probably thread not started");
@@ -120,7 +120,7 @@ public final class LinphoneThread
 			});
 		}
 
-		public void register(final String mySimlarId, final String password)
+		void register(final String mySimlarId, final String password)
 		{
 			if (mLinphoneThreadHandler == null) {
 				Lg.e("handler is null, probably thread not started");
@@ -134,7 +134,6 @@ public final class LinphoneThread
 				final String ringbackSoundFile = FileHelper.getRingbackSoundFile();
 				final String pauseSoundFile = FileHelper.getPauseSoundFile();
 				final Volumes volumes = mVolumes;
-				final Context context = mContext;
 
 				mLinphoneThreadHandler.post(() -> {
 					if (mLinphoneHandler.isInitialized()) {
@@ -142,7 +141,7 @@ public final class LinphoneThread
 						mLinphoneHandler.setCredentials(mySimlarId, password);
 					} else {
 						// LinphoneCore uses context only for getting audio manager. I think this is still thread safe.
-						mLinphoneHandler.initialize(this, context, linphoneInitialConfigFile, rootCaFile,
+						mLinphoneHandler.initialize(this, mContext, linphoneInitialConfigFile, rootCaFile,
 								zrtpSecretsCacheFile, ringbackSoundFile, pauseSoundFile);
 						mLinphoneHandler.setVolumes(volumes);
 						mLinphoneHandler.setCredentials(mySimlarId, password);
@@ -161,7 +160,7 @@ public final class LinphoneThread
 			mLinphoneThreadHandler.postDelayed(this::linphoneIterator, 20);
 		}
 
-		public void unregister()
+		void unregister()
 		{
 			if (mLinphoneThreadHandler == null) {
 				Lg.e("handler is null, probably thread not started");
@@ -171,7 +170,7 @@ public final class LinphoneThread
 			mLinphoneThreadHandler.post(mLinphoneHandler::unregister);
 		}
 
-		public void refreshRegisters()
+		void refreshRegisters()
 		{
 			if (mLinphoneThreadHandler == null) {
 				Lg.e("handler is null, probably thread not started");
@@ -181,7 +180,7 @@ public final class LinphoneThread
 			mLinphoneThreadHandler.post(mLinphoneHandler::refreshRegisters);
 		}
 
-		public void call(final String number)
+		void call(final String number)
 		{
 			if (mLinphoneThreadHandler == null) {
 				Lg.e("handler is null, probably thread not started");
@@ -201,7 +200,7 @@ public final class LinphoneThread
 			mLinphoneThreadHandler.post(() -> mLinphoneHandler.call(number));
 		}
 
-		public void pickUp()
+		void pickUp()
 		{
 			if (mLinphoneThreadHandler == null) {
 				Lg.e("handler is null, probably thread not started");
@@ -211,7 +210,7 @@ public final class LinphoneThread
 			mLinphoneThreadHandler.post(mLinphoneHandler::pickUp);
 		}
 
-		public void terminateAllCalls()
+		void terminateAllCalls()
 		{
 			if (mLinphoneThreadHandler == null) {
 				Lg.e("handler is null, probably thread not started");
@@ -221,7 +220,7 @@ public final class LinphoneThread
 			mLinphoneThreadHandler.post(mLinphoneHandler::terminateAllCalls);
 		}
 
-		public void verifyAuthenticationToken(final String token, final boolean verified)
+		void verifyAuthenticationToken(final String token, final boolean verified)
 		{
 			if (mLinphoneThreadHandler == null) {
 				Lg.e("handler is null, probably thread not started");
@@ -231,7 +230,7 @@ public final class LinphoneThread
 			mLinphoneThreadHandler.post(() -> mLinphoneHandler.verifyAuthenticationToken(token, verified));
 		}
 
-		public void pauseAllCalls()
+		void pauseAllCalls()
 		{
 			if (mLinphoneThreadHandler == null) {
 				Lg.e("handler is null, probably thread not started");
@@ -241,7 +240,7 @@ public final class LinphoneThread
 			mLinphoneThreadHandler.post(mLinphoneHandler::pauseAllCalls);
 		}
 
-		public void resumeCall()
+		void resumeCall()
 		{
 			if (mLinphoneThreadHandler == null) {
 				Lg.e("handler is null, probably thread not started");
@@ -251,7 +250,7 @@ public final class LinphoneThread
 			mLinphoneThreadHandler.post(mLinphoneHandler::resumeCall);
 		}
 
-		public void setVolumes(final Volumes volumes)
+		void setVolumes(final Volumes volumes)
 		{
 			if (mLinphoneThreadHandler == null) {
 				Lg.e("handler is null, probably thread not started");

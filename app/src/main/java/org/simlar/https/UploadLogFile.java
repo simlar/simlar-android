@@ -61,9 +61,9 @@ public final class UploadLogFile
 	private static final String LINE_END = "\r\n";
 	private static final String TWO_HYPHENS = "--";
 
-	private Context mContext = null;
+	private final Context mContext;
 	//noinspection deprecation
-	private ProgressDialog mProgressDialog = null;
+	private final ProgressDialog mProgressDialog;
 
 	private static final class PostResult
 	{

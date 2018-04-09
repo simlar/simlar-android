@@ -123,6 +123,7 @@
     <string name="verify_number_activity_title">Anmeldung</string>
     <string name="verify_number_activity_verify_your_number">Überprüfe deine Telefonnummer:</string>
     <string name="verify_number_activity_put_in_your_number">Gib deine Telefonnummer ein:</string>
+    <string name="verify_number_activity_phone_number_hint">Telefonnummer</string>
     <string name="verify_number_activity_button_register">Weiter</string>
     <string name="verify_number_activity_sms_announcement">Um die Anmeldung abzuschließen, schickt Simlar im nächsten Schritt eine SMS an diese Nummer.</string>
     <string name="verify_number_activity_alert_wrong_number_text">Deine eingegebene Rufnummer wurde nicht erkannt. Kontrolliere deine Eingabe.</string>
@@ -156,6 +157,7 @@
     <string name="create_account_activity_sms_text">Willkommen bei Simlar! Falls die App bei der Anmeldung nach einem Code fragt, benutze: *CODE*. Sonst brauchst du diese SMS nicht.</string>
     <string name="create_account_activity_waiting_for_sms">Warte auf SMS</string>
     <string name="create_account_activity_waiting_for_sms_manual">Manuelle Eingabe des Bestätigungscodes</string>
+    <string name="create_account_activity_registration_code_hint">Bestätigungscode</string>
     <string name="create_account_activity_confirm">Bestätige Registrierung</string>
     <string name="create_account_activity_first_login">Überprüfe Zugang</string>
     <string name="create_account_activity_error_wrong_telephone_number">Mit der angegebenen Rufnummer ist eine Registrierung nicht möglich:\n%1$s\n\nProbiere eine andere Rufnummer oder schreibe an support@simlar.org</string>

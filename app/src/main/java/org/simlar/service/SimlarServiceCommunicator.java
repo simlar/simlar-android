@@ -154,23 +154,23 @@ public class SimlarServiceCommunicator
 		mContext = null;
 	}
 
-	public void onBoundToSimlarService()
+	protected void onBoundToSimlarService()
 	{
 	}
 
-	public void onSimlarStatusChanged()
+	protected void onSimlarStatusChanged()
 	{
 	}
 
-	public void onSimlarCallStateChanged()
+	protected void onSimlarCallStateChanged()
 	{
 	}
 
-	public void onCallConnectionDetailsChanged()
+	protected void onCallConnectionDetailsChanged()
 	{
 	}
 
-	public void onServiceFinishes()
+	protected void onServiceFinishes()
 	{
 	}
 

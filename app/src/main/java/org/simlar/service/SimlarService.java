@@ -131,7 +131,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	{
 		private boolean mInCall = false;
 
-		public boolean isInCall()
+		boolean isInCall()
 		{
 			return mInCall;
 		}

@@ -44,7 +44,7 @@ public final class CreateAccount
 
 	private static class Result
 	{
-		public static final int SUCCESS = 0;
+		static final int SUCCESS = 0;
 
 		private final int mErrorId;
 		private final String mResult1;

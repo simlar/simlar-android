@@ -36,7 +36,7 @@ final class VibratorManager
 	public static final long VIBRATE_LENGTH = 1000; // ms
 	public static final long VIBRATE_PAUSE = 1000; // ms
 
-	private Context mContext = null;
+	private final Context mContext;
 	private boolean mHasOnGoingAlarm = false;
 	private VibratorManagerImpl mImpl = null;
 	private final RingerModeReceiver mRingerModeReceiver = new RingerModeReceiver();
@@ -69,13 +69,13 @@ final class VibratorManager
 			mHandler.postDelayed(this::startVibration, VIBRATE_LENGTH + VIBRATE_PAUSE);
 		}
 
-		public void stopVibration()
+		void stopVibration()
 		{
 			mHandler.removeCallbacksAndMessages(null);
 			mVibrator.cancel();
 		}
 
-		public boolean hasVibrator()
+		boolean hasVibrator()
 		{
 			return mVibrator != null;
 		}

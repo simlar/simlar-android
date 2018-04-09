@@ -82,10 +82,10 @@ final class ContactsAdapter extends ArrayAdapter<ContactDataComplete>
 			numberView = rowView.findViewById(R.id.number);
 		}
 
-		public final TextView letterView;
-		public final View dividerLineView;
-		public final TextView nameView;
-		public final TextView numberView;
+		final TextView letterView;
+		final View dividerLineView;
+		final TextView nameView;
+		final TextView numberView;
 	}
 
 	ContactsAdapter(final Context context)

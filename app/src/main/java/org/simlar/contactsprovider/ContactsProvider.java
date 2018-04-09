@@ -88,7 +88,7 @@ public final class ContactsProvider
 
 	private static final class ContactsProviderImpl
 	{
-		private Map<String, ContactData> mContacts = new HashMap<>();
+		private final Map<String, ContactData> mContacts = new HashMap<>();
 		private State mState = State.UNINITIALIZED;
 		boolean mFakeData = false;
 		private final Set<FullContactsListener> mFullContactsListeners = new HashSet<>();
@@ -178,7 +178,8 @@ public final class ContactsProvider
 				return;
 			}
 
-			mContacts = contacts;
+			mContacts.clear();
+			mContacts.putAll(contacts);
 			mState = State.REQUESTING_CONTACTS_STATUS_FROM_SERVER;
 
 			notifyContactListeners();
@@ -457,7 +458,7 @@ public final class ContactsProvider
 			}
 		}
 
-		public boolean clearCache()
+		boolean clearCache()
 		{
 			switch (mState) {
 			case UNINITIALIZED:

@@ -81,6 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
                 android:ems="8"
+                android:hint="@string/verify_number_activity_phone_number_hint"
                 android:inputType="phone">
 
                 <requestFocus/>

@@ -34,7 +34,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v13.app.FragmentCompat;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
@@ -163,8 +162,12 @@ public final class PermissionsHelper
 
 	public static void requestContactPermission(final Fragment fragment)
 	{
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+			return;
+		}
+
 		Lg.i("requesting contact permission");
-		FragmentCompat.requestPermissions(fragment, new String[] { Type.CONTACTS.getPermission() }, REQUEST_CODE);
+		fragment.requestPermissions(new String[] { Type.CONTACTS.getPermission() }, REQUEST_CODE);
 	}
 
 	private static void requestPermissions(final Activity activity, final Set<Type> types)
