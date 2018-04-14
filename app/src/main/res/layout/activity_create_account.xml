@@ -33,8 +33,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:paddingTop="16dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingTop="16dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -134,36 +134,36 @@
 
         <Button
             android:id="@+id/buttonCancel"
+            style="?android:attr/buttonBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:onClick="onCancelClicked"
-            android:text="@string/create_account_activity_button_cancel"
-            style="?android:attr/buttonBarStyle"/>
+            android:text="@string/create_account_activity_button_cancel"/>
 
         <Button
             android:id="@+id/buttonCall"
+            style="?android:attr/buttonBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:onClick="onCallClicked"
-            android:text="@string/create_account_activity_button_call"
-            style="?android:attr/buttonBarStyle"/>
+            android:text="@string/create_account_activity_button_call"/>
 
         <Button
             android:id="@+id/buttonConfirm"
+            style="?android:attr/buttonBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="15dp"
             android:layout_weight="1"
             android:onClick="onConfirmClicked"
-            android:text="@string/create_account_activity_button_confirm"
-            style="?android:attr/buttonBarStyle"/>
+            android:text="@string/create_account_activity_button_confirm"/>
     </LinearLayout>
 
 </RelativeLayout>
