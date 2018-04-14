@@ -76,6 +76,7 @@ public final class CreateAccountActivity extends Activity
 	private EditText mEditRegistrationCode = null;
 	private TextView mDetails = null;
 	private Button mButtonConfirm = null;
+	private Button mButtonCall = null;
 	private Button mButtonCancel = null;
 
 	private int mSecondsToStillWaitForSms = 0;
@@ -215,6 +216,8 @@ public final class CreateAccountActivity extends Activity
 
 		mButtonConfirm = findViewById(R.id.buttonConfirm);
 		mButtonConfirm.setVisibility(View.GONE);
+		mButtonCall = findViewById(R.id.buttonCall);
+		mButtonCall.setVisibility(View.GONE);
 		mButtonCancel = findViewById(R.id.buttonCancel);
 		mButtonCancel.setVisibility(View.GONE);
 
@@ -516,6 +519,7 @@ public final class CreateAccountActivity extends Activity
 			mButtonConfirm.setVisibility(View.GONE);
 			mEditRegistrationCode.setVisibility(View.GONE);
 			((InputMethodManager) Util.getSystemService(this, Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);
+			mButtonCall.setVisibility(View.GONE);
 			break;
 		case R.string.create_account_activity_error_sms:
 		case R.string.create_account_activity_error_sms_timeout:
@@ -528,12 +532,14 @@ public final class CreateAccountActivity extends Activity
 			mEditRegistrationCode.requestFocus();
 			((InputMethodManager) Util.getSystemService(this, Context.INPUT_METHOD_SERVICE)).showSoftInput(mEditRegistrationCode,
 					InputMethodManager.SHOW_IMPLICIT);
+			mButtonCall.setVisibility(View.VISIBLE);
 			break;
 		default:
 			mDetails.setText(resId);
 			mButtonConfirm.setVisibility(View.GONE);
 			mEditRegistrationCode.setVisibility(View.GONE);
 			((InputMethodManager) Util.getSystemService(this, Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);
+			mButtonCall.setVisibility(View.GONE);
 		}
 	}
 
