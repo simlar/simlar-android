@@ -119,8 +119,9 @@
             android:theme="@style/dialogTheme" />
         <activity
             android:name=".widgets.CreateAccountActivity"
+            android:label="@string/create_account_activity_title"
             android:launchMode="singleTop"
-            android:theme="@style/dialogTheme" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".widgets.AgreeActivity"
             android:label="@string/agree_activity_title"

@@ -182,6 +182,7 @@
     <string name="about_activity_license">License: GNU General Public License\nhttp://www.gnu.org/licenses/old-licenses/gpl-2.0.html</string>
     <string name="about_activity_privacy_statement_and_terms_of_use"><a href="https://www.simlar.org/datenschutzerklaerung/">privacy statement</a>\nand\n<a href="https://www.simlar.org/nutzungsbedingungen/">terms of use</a></string>
 
+    <string name="create_account_activity_title">Create Account</string>
     <string name="create_account_activity_request">Request account creation</string>
     <!-- The sms text should not contain special characters like ö or ' -->
     <string name="create_account_activity_sms_text">android_en</string>
