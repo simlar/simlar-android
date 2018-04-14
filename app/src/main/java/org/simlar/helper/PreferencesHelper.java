@@ -118,7 +118,7 @@ public final class PreferencesHelper
 
 	public static String getPassword() throws NotInitedException
 	{
-		if (Util.isNullOrEmpty(mPasswordHash)) {
+		if (Util.isNullOrEmpty(mPassword)) {
 			throw new NotInitedException();
 		}
 		return mPassword;
