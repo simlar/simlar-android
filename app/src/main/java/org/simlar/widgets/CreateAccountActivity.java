@@ -514,6 +514,8 @@ public final class CreateAccountActivity extends Activity
 		case R.string.create_account_activity_error_wrong_telephone_number:
 			mDetails.setText(String.format(getString(resId), mTelephoneNumber));
 			mButtonConfirm.setVisibility(View.GONE);
+			mEditRegistrationCode.setVisibility(View.GONE);
+			((InputMethodManager) Util.getSystemService(this, Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);
 			break;
 		case R.string.create_account_activity_error_sms:
 		case R.string.create_account_activity_error_sms_timeout:
@@ -530,6 +532,8 @@ public final class CreateAccountActivity extends Activity
 		default:
 			mDetails.setText(resId);
 			mButtonConfirm.setVisibility(View.GONE);
+			mEditRegistrationCode.setVisibility(View.GONE);
+			((InputMethodManager) Util.getSystemService(this, Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);
 		}
 	}
 
