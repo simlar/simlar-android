@@ -169,6 +169,7 @@
     <string name="create_account_activity_error_too_many_confirms">Die Registrierung ist fehlgeschlagen.\n\nVersuch es erneut.</string>
     <string name="create_account_activity_error_sip_not_possible">Der Server konnte nicht erreicht werden.\n\nVersuch es später erneut.</string>
     <string name="create_account_activity_button_cancel">Abbrechen</string>
+    <string name="create_account_activity_button_call">Anrufen</string>
     <string name="create_account_activity_button_confirm">Bestätigen</string>
 
     <string name="ringing_activity_title">ruft an</string>

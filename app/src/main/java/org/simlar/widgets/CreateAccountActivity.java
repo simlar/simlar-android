@@ -495,7 +495,6 @@ public final class CreateAccountActivity extends Activity
 			}
 
 		}.execute(simlarId, registrationCode);
-
 	}
 
 	private void connectToServer()
@@ -540,6 +539,12 @@ public final class CreateAccountActivity extends Activity
 		Lg.i("onCancelClicked");
 		PreferencesHelper.saveToFileCreateAccountStatus(this, CreateAccountStatus.NONE);
 		finish();
+	}
+
+	@SuppressWarnings("unused")
+	public void onCallClicked(final View view)
+	{
+		Lg.i("onCallClicked");
 	}
 
 	@SuppressWarnings("unused")

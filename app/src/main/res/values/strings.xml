@@ -168,6 +168,7 @@
     <string name="create_account_activity_error_too_many_confirms">Account confirmation is not possible anymore.\n\nStart again.</string>
     <string name="create_account_activity_error_sip_not_possible">Couldn\'t connect to server.\n\nTry again later.</string>
     <string name="create_account_activity_button_cancel">Cancel</string>
+    <string name="create_account_activity_button_call">Call</string>
     <string name="create_account_activity_button_confirm">Confirm</string>
 
     <string name="ringing_activity_title">is calling you</string>
