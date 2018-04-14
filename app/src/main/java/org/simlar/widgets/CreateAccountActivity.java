@@ -541,10 +541,36 @@ public final class CreateAccountActivity extends Activity
 		finish();
 	}
 
+	@SuppressLint("StaticFieldLeak")
 	@SuppressWarnings("unused")
 	public void onCallClicked(final View view)
 	{
 		Lg.i("onCallClicked");
+
+		final String telephoneNumber = mTelephoneNumber;
+
+		new AsyncTask<String, Void, CreateAccount.RequestResult>()
+		{
+			@Override
+			protected CreateAccount.RequestResult doInBackground(final String... params)
+			{
+				return CreateAccount.httpPostCall(params[0], params[1]);
+			}
+
+			@Override
+			protected void onPostExecute(final CreateAccount.RequestResult result)
+			{
+				mProgressConfirm.setVisibility(View.INVISIBLE);
+
+				if (result.isError()) {
+					Lg.e("failed to parse call result");
+					onError(result.getErrorMessage());
+					return;
+				}
+
+				Lg.i("successfully requested call");
+			}
+		}.execute(telephoneNumber, PreferencesHelper.getPassword());
 	}
 
 	@SuppressWarnings("unused")
