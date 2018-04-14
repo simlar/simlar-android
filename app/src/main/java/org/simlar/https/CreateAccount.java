@@ -36,6 +36,7 @@ import java.util.Map;
 public final class CreateAccount
 {
 	private static final String URL_PATH = "create-account.php";
+	private static final String URL_PATH_CALL = "create-account-call.xml";
 
 	private CreateAccount()
 	{
@@ -133,6 +134,17 @@ public final class CreateAccount
 		return new RequestResult(httpPost(parameters, "simlarId", "password"));
 	}
 
+	public static RequestResult httpPostCall(final String telephoneNumber, final String password)
+	{
+		Lg.i("httpPostCall: ", new Lg.Anonymizer(telephoneNumber));
+
+		final Map<String, String> parameters = new HashMap<>();
+		parameters.put("telephoneNumber", telephoneNumber);
+		parameters.put("password", password);
+
+		return new RequestResult(httpPost(URL_PATH_CALL, parameters, "simlarId", "password"));
+	}
+
 	public static ConfirmResult httpPostConfirm(final String simlarId, final String registrationCode)
 	{
 		Lg.i("httpPostConfirm: simlarId=", new Lg.Anonymizer(simlarId), " registrationCode=", registrationCode);
@@ -145,11 +157,10 @@ public final class CreateAccount
 		return new ConfirmResult(httpPost(parameters, "simlarId", "registrationCode"));
 	}
 
-	@SuppressWarnings("SameParameterValue")
-	private static Result httpPost(final Map<String, String> parameters,
+	private static Result httpPost(final String url, final Map<String, String> parameters,
 	                               final String responseAttribute1, final String responseAttribute2)
 	{
-		final InputStream result = HttpsPost.post(URL_PATH, parameters);
+		final InputStream result = HttpsPost.post(url, parameters);
 
 		if (result == null) {
 			return null;
@@ -171,6 +182,13 @@ public final class CreateAccount
 		}
 
 		return parsedResult;
+	}
+
+	@SuppressWarnings("SameParameterValue")
+	private static Result httpPost(final Map<String, String> parameters,
+	                               final String responseAttribute1, final String responseAttribute2)
+	{
+		return httpPost(URL_PATH, parameters, responseAttribute1, responseAttribute2);
 	}
 
 	private static Result parseXml(final InputStream inputStream, final String attribute1, final String attribute2)
