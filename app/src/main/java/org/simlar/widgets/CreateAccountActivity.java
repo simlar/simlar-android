@@ -519,6 +519,7 @@ public final class CreateAccountActivity extends Activity
 			break;
 		case R.string.create_account_activity_error_sms:
 		case R.string.create_account_activity_error_sms_not_granted_or_timeout:
+		case R.string.create_account_activity_error_sms_call_success:
 			mDetails.setText(String.format(getString(resId), mTelephoneNumber));
 			setRegistrationCodeInputVisible(true);
 			break;
@@ -592,6 +593,11 @@ public final class CreateAccountActivity extends Activity
 
 		final String telephoneNumber = mTelephoneNumber;
 
+		mLayoutProgress.setVisibility(View.VISIBLE);
+		mLayoutMessage.setVisibility(View.GONE);
+		mWaitingForSmsText.setText(R.string.create_account_activity_waiting_for_sms_call);
+		mProgressWaitingForSMS.setVisibility(View.VISIBLE);
+
 		new AsyncTask<String, Void, CreateAccount.RequestResult>()
 		{
 			@Override
@@ -603,7 +609,7 @@ public final class CreateAccountActivity extends Activity
 			@Override
 			protected void onPostExecute(final CreateAccount.RequestResult result)
 			{
-				mProgressConfirm.setVisibility(View.INVISIBLE);
+				mProgressWaitingForSMS.setVisibility(View.INVISIBLE);
 
 				if (result.isError()) {
 					Lg.e("failed to parse call result");
@@ -612,6 +618,7 @@ public final class CreateAccountActivity extends Activity
 				}
 
 				Lg.i("successfully requested call");
+				onError(R.string.create_account_activity_error_sms_call_success);
 			}
 		}.execute(telephoneNumber, PreferencesHelper.getPassword());
 	}

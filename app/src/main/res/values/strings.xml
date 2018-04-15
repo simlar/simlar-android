@@ -156,12 +156,14 @@
     <string name="create_account_activity_sms_text">Welcome to Simlar! If the app asks for a registration code, use: *CODE*. Otherwise you do not need this SMS.</string>
     <string name="create_account_activity_waiting_for_sms">Waiting for SMS</string>
     <string name="create_account_activity_waiting_for_sms_manual">Manual input of registration code</string>
+    <string name="create_account_activity_waiting_for_sms_call">Request call</string>
     <string name="create_account_activity_registration_code_hint">registration code</string>
     <string name="create_account_activity_confirm">Confirm account creation</string>
     <string name="create_account_activity_first_login">First login</string>
     <string name="create_account_activity_error_wrong_telephone_number">It\'s not possible to create a Simlar account with the number you provided:\n%1$s\n\nTry another number and contact the mailing list.</string>
     <string name="create_account_activity_error_sms">We are currently not able to send an SMS to the number you provided:\n%1$s\n\nCheck your number or try again later.</string>
-    <string name="create_account_activity_error_sms_not_granted_or_timeout">Simlar sends an SMS to your number:\n%1$s\n\nEnter its registration code:</string>
+    <string name="create_account_activity_error_sms_not_granted_or_timeout">Simlar sends an SMS to your number:\n%1$s\n\nEnter the registration code:</string>
+    <string name="create_account_activity_error_sms_call_success">Simlar calls your number:\n%1$s\n\nEnter the registration code:</string>
     <string name="create_account_activity_error_not_possible">Account creation is not possible at the moment.\n\nTry again later.</string>
     <string name="create_account_activity_error_registration_code">The registration code is invalid.\n\nTry again.</string>
     <string name="create_account_activity_error_too_many_confirms">Account confirmation is not possible anymore.\n\nStart again.</string>
