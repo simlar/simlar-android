@@ -102,75 +102,85 @@
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/textViewDetails"
+    <RelativeLayout
+        android:id="@+id/layoutSpacer"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_below="@+id/linearLayoutProgress"/>
+
+    <RelativeLayout
+        android:id="@+id/layoutMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayoutProgress"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
-        android:gravity="center_horizontal"
-        android:minHeight="80dp"
-        android:text="@string/create_account_activity_error_sms"/>
+        android:layout_below="@+id/layoutSpacer">
 
-    <EditText
-        android:id="@+id/editTextRegistrationCode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewDetails"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
-        android:ems="8"
-        android:hint="@string/create_account_activity_registration_code_hint"
-        android:inputType="number"
-        android:maxLength="6">
+        <TextView
+            android:id="@+id/textViewDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:minHeight="80dp"
+            android:text="@string/create_account_activity_error_sms"/>
 
-        <requestFocus/>
-    </EditText>
-
-    <Button
-        android:id="@+id/buttonCall"
-        style="?android:attr/buttonBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editTextRegistrationCode"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="10dp"
-        android:enabled="false"
-        android:onClick="onCallClicked"
-        android:text="@string/create_account_activity_button_call"
-        android:textColor="@drawable/button_dialog"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/buttonCall"
-        android:layout_marginTop="20dp">
-
-        <Button
-            android:id="@+id/buttonCancel"
-            style="?android:attr/buttonBarStyle"
+        <EditText
+            android:id="@+id/editTextRegistrationCode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewDetails"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:ems="8"
+            android:hint="@string/create_account_activity_registration_code_hint"
+            android:inputType="number"
+            android:maxLength="6">
+
+            <requestFocus/>
+        </EditText>
+
+        <Button
+            android:id="@+id/buttonCall"
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editTextRegistrationCode"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:onClick="onCancelClicked"
-            android:text="@string/create_account_activity_button_cancel"
+            android:enabled="false"
+            android:onClick="onCallClicked"
+            android:text="@string/create_account_activity_button_call"
             android:textColor="@drawable/button_dialog"/>
 
-        <Button
-            android:id="@+id/buttonConfirm"
-            style="?android:attr/buttonBarStyle"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="15dp"
-            android:layout_weight="1"
-            android:enabled="false"
-            android:onClick="onConfirmClicked"
-            android:text="@string/create_account_activity_button_confirm"
-            android:textColor="@drawable/button_dialog"/>
-    </LinearLayout>
+            android:layout_below="@+id/buttonCall"
+            android:layout_marginTop="20dp">
+
+            <Button
+                style="?android:attr/buttonBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:onClick="onCancelClicked"
+                android:text="@string/create_account_activity_button_cancel"
+                android:textColor="@drawable/button_dialog"/>
+
+            <Button
+                android:id="@+id/buttonConfirm"
+                style="?android:attr/buttonBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="15dp"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:onClick="onConfirmClicked"
+                android:text="@string/create_account_activity_button_confirm"
+                android:textColor="@drawable/button_dialog"/>
+        </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

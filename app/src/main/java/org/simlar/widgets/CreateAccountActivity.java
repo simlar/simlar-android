@@ -73,11 +73,11 @@ public final class CreateAccountActivity extends Activity
 	private ProgressBar mProgressConfirm = null;
 	private ProgressBar mProgressFirstLogIn = null;
 	private TextView mWaitingForSmsText = null;
+	private View mLayoutMessage = null;
 	private EditText mEditRegistrationCode = null;
 	private TextView mDetails = null;
 	private Button mButtonConfirm = null;
 	private Button mButtonCall = null;
-	private Button mButtonCancel = null;
 
 	private int mSecondsToStillWaitForSms = 0;
 	private final Handler mHandler = new Handler();
@@ -207,19 +207,14 @@ public final class CreateAccountActivity extends Activity
 		mProgressWaitingForSMS.setVisibility(View.INVISIBLE);
 		mProgressConfirm.setVisibility(View.INVISIBLE);
 		mProgressFirstLogIn.setVisibility(View.INVISIBLE);
-
 		mWaitingForSmsText = findViewById(R.id.textViewWaitingForSMS);
-		mEditRegistrationCode = findViewById(R.id.editTextRegistrationCode);
-		mEditRegistrationCode.setVisibility(View.GONE);
-		mDetails = findViewById(R.id.textViewDetails);
-		mDetails.setVisibility(View.GONE);
 
+		mLayoutMessage = findViewById(R.id.layoutMessage);
+		mLayoutMessage.setVisibility(View.GONE);
+		mEditRegistrationCode = findViewById(R.id.editTextRegistrationCode);
+		mDetails = findViewById(R.id.textViewDetails);
 		mButtonConfirm = findViewById(R.id.buttonConfirm);
-		mButtonConfirm.setVisibility(View.GONE);
 		mButtonCall = findViewById(R.id.buttonCall);
-		mButtonCall.setVisibility(View.GONE);
-		mButtonCancel = findViewById(R.id.buttonCancel);
-		mButtonCancel.setVisibility(View.GONE);
 
 		mEditRegistrationCode.addTextChangedListener(new EditRegistrationCodeListener());
 
@@ -509,9 +504,7 @@ public final class CreateAccountActivity extends Activity
 	private void onError(final int resId)
 	{
 		mLayoutProgress.setVisibility(View.GONE);
-
-		mDetails.setVisibility(View.VISIBLE);
-		mButtonCancel.setVisibility(View.VISIBLE);
+		mLayoutMessage.setVisibility(View.VISIBLE);
 
 		switch (resId) {
 		case R.string.create_account_activity_error_wrong_telephone_number:
@@ -588,11 +581,8 @@ public final class CreateAccountActivity extends Activity
 		Lg.i("onConfirmClicked");
 		((InputMethodManager) Util.getSystemService(this, Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);
 		mWaitingForSmsText.setText(R.string.create_account_activity_waiting_for_sms_manual);
-		mDetails.setVisibility(View.GONE);
-		mEditRegistrationCode.setVisibility(View.GONE);
-		mButtonConfirm.setVisibility(View.GONE);
-		mButtonCancel.setVisibility(View.GONE);
 		mLayoutProgress.setVisibility(View.VISIBLE);
+		mLayoutMessage.setVisibility(View.GONE);
 
 		confirmRegistrationCode(mEditRegistrationCode.getText().toString());
 	}
