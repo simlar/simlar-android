@@ -509,30 +509,36 @@ public final class CreateAccountActivity extends Activity
 		switch (resId) {
 		case R.string.create_account_activity_error_wrong_telephone_number:
 			mDetails.setText(String.format(getString(resId), mTelephoneNumber));
-			mButtonConfirm.setVisibility(View.GONE);
-			mEditRegistrationCode.setVisibility(View.GONE);
-			((InputMethodManager) Util.getSystemService(this, Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);
-			mButtonCall.setVisibility(View.GONE);
+			setRegistrationCodeInputVisible(false);
 			break;
 		case R.string.create_account_activity_error_sms:
 		case R.string.create_account_activity_error_sms_not_granted_or_timeout:
 			mDetails.setText(String.format(getString(resId), mTelephoneNumber));
-			mButtonConfirm.setVisibility(View.VISIBLE);
-			mButtonConfirm.setEnabled(false);
-
-			mEditRegistrationCode.setVisibility(View.VISIBLE);
-			mEditRegistrationCode.requestFocus();
-			((InputMethodManager) Util.getSystemService(this, Context.INPUT_METHOD_SERVICE)).showSoftInput(mEditRegistrationCode,
-					InputMethodManager.SHOW_IMPLICIT);
-			mButtonCall.setVisibility(View.VISIBLE);
+			setRegistrationCodeInputVisible(true);
 			break;
 		default:
 			mDetails.setText(resId);
-			mButtonConfirm.setVisibility(View.GONE);
-			mEditRegistrationCode.setVisibility(View.GONE);
-			((InputMethodManager) Util.getSystemService(this, Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);
-			mButtonCall.setVisibility(View.GONE);
+			setRegistrationCodeInputVisible(false);
 		}
+	}
+
+	private void setRegistrationCodeInputVisible(final boolean visible)
+	{
+		final int visibility = visible ? View.VISIBLE : View.GONE;
+
+		mButtonCall.setVisibility(visibility);
+		mButtonConfirm.setVisibility(visibility);
+		mEditRegistrationCode.setVisibility(visibility);
+		if (visible) {
+			mButtonCall.setEnabled(false);
+			mButtonConfirm.setEnabled(false);
+			mEditRegistrationCode.requestFocus();
+			((InputMethodManager) Util.getSystemService(this, Context.INPUT_METHOD_SERVICE)).showSoftInput(mEditRegistrationCode,
+					InputMethodManager.SHOW_IMPLICIT);
+		} else {
+			((InputMethodManager) Util.getSystemService(this, Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);
+		}
+
 	}
 
 	@SuppressWarnings("unused")
