@@ -27,6 +27,7 @@ import org.simlar.utils.Util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 
 public final class PreferencesHelper
 {
@@ -35,6 +36,7 @@ public final class PreferencesHelper
 	private static final String PREFERENCES_PASSWORD = "password";
 	private static final String PREFERENCES_REGION = "region";
 	private static final String PREFERENCES_CREATE_ACCOUNT_STATUS = "create_account_status";
+	private static final String PREFERENCES_CREATE_ACCOUNT_REQUEST_TIMESTAMP = "create_account_request_timestamp";
 	private static final String PREFERENCES_GCM_REGISTRATION_ID = "gcm_registration_id";
 	private static final String PREFERENCES_SIMLAR_VERSION_CODE = "simlar_version_code";
 	private static final String PREFERENCES_DEBUG_MODE = "debug_mode";
@@ -47,6 +49,7 @@ public final class PreferencesHelper
 	private static String mMySimlarId = null;
 	private static String mPassword = null;
 	private static String mPasswordHash = null;
+	private static Date mCreateAccountRequestTimestamp = null;
 	private static CreateAccountStatus mCreateAccountStatus = CreateAccountStatus.NONE;
 	private static String mGcmRegistrationId = null;
 	private static int mSimlarVersionCode = -1;
@@ -58,10 +61,11 @@ public final class PreferencesHelper
 		throw new AssertionError("This class was not meant to be instantiated");
 	}
 
-	public static void init(final String mySimlarId, final String password)
+	public static void init(final String mySimlarId, final String password, final Date createAccountRequestTimestamp )
 	{
 		mMySimlarId = mySimlarId;
 		mPassword = password;
+		mCreateAccountRequestTimestamp = createAccountRequestTimestamp;
 
 		createPasswordHash();
 	}
@@ -124,6 +128,11 @@ public final class PreferencesHelper
 		return mPassword;
 	}
 
+	public static Date getCreateAccountRequestTimestamp() throws NotInitedException
+	{
+		return mCreateAccountRequestTimestamp;
+	}
+
 	public static CreateAccountStatus getCreateAccountStatus()
 	{
 		return mCreateAccountStatus;
@@ -153,6 +162,7 @@ public final class PreferencesHelper
 		mMySimlarId = settings.getString(PREFERENCES_USER, null);
 		mPassword = settings.getString(PREFERENCES_PASSWORD, null);
 		final int region = settings.getInt(PREFERENCES_REGION, -1);
+		mCreateAccountRequestTimestamp = new Date(settings.getLong(PREFERENCES_CREATE_ACCOUNT_REQUEST_TIMESTAMP, 0));
 		mCreateAccountStatus = CreateAccountStatus.fromInt(settings.getInt(PREFERENCES_CREATE_ACCOUNT_STATUS, 0));
 		mGcmRegistrationId = settings.getString(PREFERENCES_GCM_REGISTRATION_ID, null);
 		mSimlarVersionCode = settings.getInt(PREFERENCES_SIMLAR_VERSION_CODE, -1);
@@ -188,6 +198,7 @@ public final class PreferencesHelper
 		editor.putString(PREFERENCES_USER, mMySimlarId);
 		editor.putString(PREFERENCES_PASSWORD, mPassword);
 		editor.putInt(PREFERENCES_REGION, SimlarNumber.getDefaultRegion());
+		editor.putLong(PREFERENCES_CREATE_ACCOUNT_REQUEST_TIMESTAMP, mCreateAccountRequestTimestamp.getTime());
 		editor.apply();
 	}
 

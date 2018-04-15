@@ -56,8 +56,10 @@ import org.simlar.service.SimlarStatus;
 import org.simlar.utils.Util;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -333,7 +335,7 @@ public final class CreateAccountActivity extends Activity
 							" actual=", new Lg.Anonymizer(result.getSimlarId()));
 				}
 
-				PreferencesHelper.init(result.getSimlarId(), result.getPassword());
+				PreferencesHelper.init(result.getSimlarId(), result.getPassword(), Calendar.getInstance().getTime());
 				PreferencesHelper.saveToFilePreferences(CreateAccountActivity.this);
 				PreferencesHelper.saveToFileCreateAccountStatus(CreateAccountActivity.this, CreateAccountStatus.WAITING_FOR_SMS, telephoneNumber);
 				if (mSmsReceiver != null) {
@@ -539,10 +541,39 @@ public final class CreateAccountActivity extends Activity
 			mEditRegistrationCode.requestFocus();
 			((InputMethodManager) Util.getSystemService(this, Context.INPUT_METHOD_SERVICE)).showSoftInput(mEditRegistrationCode,
 					InputMethodManager.SHOW_IMPLICIT);
+
+			updateCallButton();
 		} else {
 			((InputMethodManager) Util.getSystemService(this, Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);
 		}
 
+	}
+
+	private void updateCallButton()
+	{
+		if (mButtonCall.getVisibility() == View.GONE) {
+			return;
+		}
+
+		final Date now = Calendar.getInstance().getTime();
+		final Date begin = new Date(PreferencesHelper.getCreateAccountRequestTimestamp().getTime() + 90 * 1000);
+		final Date end = new Date(PreferencesHelper.getCreateAccountRequestTimestamp().getTime() + 10 * 60 * 1000);
+
+		if (now.after(end)) {
+			mButtonCall.setText(R.string.create_account_activity_button_call_not_available);
+			mButtonCall.setEnabled(false);
+			return;
+		}
+
+		if (now.before(begin)) {
+			mButtonCall.setText(String.format(getString(R.string.create_account_activity_button_call_available_in), (begin.getTime() - now.getTime()) / 1000));
+			mButtonCall.setEnabled(false);
+		} else {
+			mButtonCall.setText(R.string.create_account_activity_button_call);
+			mButtonCall.setEnabled(true);
+		}
+
+		mHandler.postDelayed(this::updateCallButton, 1000);
 	}
 
 	@SuppressWarnings("unused")
