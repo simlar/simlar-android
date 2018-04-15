@@ -166,6 +166,7 @@
     <string name="create_account_activity_error_not_possible">Anmeldung momentan nicht möglich.\n\nÜberprüfe deine Intertverbindung und versuch es erneut.</string>
     <string name="create_account_activity_error_registration_code">Falscher Bestätigungscode.\n\nVersuch es erneut.</string>
     <string name="create_account_activity_error_too_many_confirms">Die Registrierung ist fehlgeschlagen.\n\nVersuch es erneut.</string>
+    <string name="create_account_activity_error_too_many_calls">Keine weiteren Anrufe möglich.\n\nProbiere es in 24 Stunden nochmal.</string>
     <string name="create_account_activity_error_sip_not_possible">Der Server konnte nicht erreicht werden.\n\nVersuch es später erneut.</string>
     <string name="create_account_activity_button_cancel">Abbrechen</string>
     <string name="create_account_activity_button_call">Stattdessen Anrufen (verfügbar in 01:23)</string>

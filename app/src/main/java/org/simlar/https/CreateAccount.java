@@ -90,6 +90,8 @@ public final class CreateAccount
 				return R.string.create_account_activity_error_too_many_confirms;
 			case 26:
 				return R.string.create_account_activity_error_registration_code;
+			case 68:
+				return R.string.create_account_activity_error_too_many_calls;
 			default:
 				return R.string.create_account_activity_error_not_possible;
 			}
