@@ -511,6 +511,10 @@ public final class CreateAccountActivity extends Activity
 			mDetails.setText(String.format(getString(resId), mTelephoneNumber));
 			setRegistrationCodeInputVisible(false);
 			break;
+		case R.string.create_account_activity_error_registration_code:
+			mDetails.setText(resId);
+			setRegistrationCodeInputVisible(true);
+			break;
 		case R.string.create_account_activity_error_sms:
 		case R.string.create_account_activity_error_sms_not_granted_or_timeout:
 			mDetails.setText(String.format(getString(resId), mTelephoneNumber));
