@@ -335,7 +335,7 @@ public final class CreateAccountActivity extends Activity
 							" actual=", new Lg.Anonymizer(result.getSimlarId()));
 				}
 
-				PreferencesHelper.init(result.getSimlarId(), result.getPassword(), Calendar.getInstance().getTime());
+				PreferencesHelper.init(result.getSimlarId(), result.getPassword(), Calendar.getInstance().getTime().getTime());
 				PreferencesHelper.saveToFilePreferences(CreateAccountActivity.this);
 				PreferencesHelper.saveToFileCreateAccountStatus(CreateAccountActivity.this, CreateAccountStatus.WAITING_FOR_SMS, telephoneNumber);
 				if (mSmsReceiver != null) {
@@ -550,6 +550,7 @@ public final class CreateAccountActivity extends Activity
 
 	}
 
+	@SuppressWarnings("UseOfObsoleteDateTimeApi") /// java8 one's requires android sdk version 26
 	private void updateCallButton()
 	{
 		if (mButtonCall.getVisibility() == View.GONE) {
@@ -557,8 +558,8 @@ public final class CreateAccountActivity extends Activity
 		}
 
 		final Date now = Calendar.getInstance().getTime();
-		final Date begin = new Date(PreferencesHelper.getCreateAccountRequestTimestamp().getTime() + 90 * 1000);
-		final Date end = new Date(PreferencesHelper.getCreateAccountRequestTimestamp().getTime() + 10 * 60 * 1000);
+		final Date begin = new Date(PreferencesHelper.getCreateAccountRequestTimestamp() + 90 * 1000);
+		final Date end = new Date(PreferencesHelper.getCreateAccountRequestTimestamp() + 10 * 60 * 1000);
 
 		if (now.after(end)) {
 			mButtonCall.setText(R.string.create_account_activity_button_call_not_available);
