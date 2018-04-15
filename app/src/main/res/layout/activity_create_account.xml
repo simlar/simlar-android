@@ -138,7 +138,8 @@
         android:layout_marginRight="10dp"
         android:enabled="false"
         android:onClick="onCallClicked"
-        android:text="@string/create_account_activity_button_call"/>
+        android:text="@string/create_account_activity_button_call"
+        android:textColor="@drawable/button_dialog"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -155,7 +156,8 @@
             android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:onClick="onCancelClicked"
-            android:text="@string/create_account_activity_button_cancel"/>
+            android:text="@string/create_account_activity_button_cancel"
+            android:textColor="@drawable/button_dialog"/>
 
         <Button
             android:id="@+id/buttonConfirm"
@@ -167,7 +169,8 @@
             android:layout_weight="1"
             android:enabled="false"
             android:onClick="onConfirmClicked"
-            android:text="@string/create_account_activity_button_confirm"/>
+            android:text="@string/create_account_activity_button_confirm"
+            android:textColor="@drawable/button_dialog"/>
     </LinearLayout>
 
 </RelativeLayout>
