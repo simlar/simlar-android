@@ -109,27 +109,41 @@
         android:layout_below="@+id/linearLayoutProgress"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
+        android:gravity="center_horizontal"
         android:minHeight="80dp"
         android:text="@string/create_account_activity_error_sms"/>
 
     <EditText
         android:id="@+id/editTextRegistrationCode"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textViewDetails"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
-        android:ems="6"
+        android:ems="8"
         android:hint="@string/create_account_activity_registration_code_hint"
-        android:inputType="number">
+        android:inputType="number"
+        android:maxLength="6">
 
         <requestFocus/>
     </EditText>
 
-    <LinearLayout
+    <Button
+        android:id="@+id/buttonCall"
+        style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/editTextRegistrationCode"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="10dp"
+        android:enabled="false"
+        android:onClick="onCallClicked"
+        android:text="@string/create_account_activity_button_call"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buttonCall"
         android:layout_marginTop="20dp">
 
         <Button
@@ -144,17 +158,6 @@
             android:text="@string/create_account_activity_button_cancel"/>
 
         <Button
-            android:id="@+id/buttonCall"
-            style="?android:attr/buttonBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:onClick="onCallClicked"
-            android:text="@string/create_account_activity_button_call"/>
-
-        <Button
             android:id="@+id/buttonConfirm"
             style="?android:attr/buttonBarStyle"
             android:layout_width="wrap_content"
@@ -162,6 +165,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="15dp"
             android:layout_weight="1"
+            android:enabled="false"
             android:onClick="onConfirmClicked"
             android:text="@string/create_account_activity_button_confirm"/>
     </LinearLayout>

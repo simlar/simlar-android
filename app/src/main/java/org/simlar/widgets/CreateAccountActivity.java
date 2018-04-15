@@ -399,7 +399,7 @@ public final class CreateAccountActivity extends Activity
 		mProgressWaitingForSMS.setVisibility(View.INVISIBLE);
 		mWaitingForSmsText.setText(R.string.create_account_activity_waiting_for_sms);
 
-		onError(R.string.create_account_activity_error_sms_timeout);
+		onError(R.string.create_account_activity_error_sms_not_granted_or_timeout);
 	}
 
 	private void smsNotGranted()
@@ -409,7 +409,7 @@ public final class CreateAccountActivity extends Activity
 		mProgressWaitingForSMS.setVisibility(View.INVISIBLE);
 		mWaitingForSmsText.setText(R.string.create_account_activity_waiting_for_sms);
 
-		onError(R.string.create_account_activity_error_sms_not_granted);
+		onError(R.string.create_account_activity_error_sms_not_granted_or_timeout);
 	}
 
 	private static String normalizeTelephoneNumber(final String telephoneNumber)
@@ -522,8 +522,7 @@ public final class CreateAccountActivity extends Activity
 			mButtonCall.setVisibility(View.GONE);
 			break;
 		case R.string.create_account_activity_error_sms:
-		case R.string.create_account_activity_error_sms_timeout:
-		case R.string.create_account_activity_error_sms_not_granted:
+		case R.string.create_account_activity_error_sms_not_granted_or_timeout:
 			mDetails.setText(String.format(getString(resId), mTelephoneNumber));
 			mButtonConfirm.setVisibility(View.VISIBLE);
 			mButtonConfirm.setEnabled(false);

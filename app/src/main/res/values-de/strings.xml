@@ -162,14 +162,13 @@
     <string name="create_account_activity_first_login">Überprüfe Zugang</string>
     <string name="create_account_activity_error_wrong_telephone_number">Mit der angegebenen Rufnummer ist eine Registrierung nicht möglich:\n%1$s\n\nProbiere eine andere Rufnummer oder schreibe an support@simlar.org</string>
     <string name="create_account_activity_error_sms">Simlar kann keine SMS an deine angegebene Telefonnummer schicken:\n%1$s\n\n Überprüfe deine Eingabe oder versuche es später nochmal</string>
-    <string name="create_account_activity_error_sms_timeout">Das automatische Auslesen der SMS wurde abgebrochen.\n\nÜberprüfe deine Nummer:\n\n%1$s\n\nOder warte auf die SMS und gib den Bestätigungscode manuell ein.</string>
-    <string name="create_account_activity_error_sms_not_granted">Simlar hat eine SMS an deine Telefonnummer geschickt:\n%1$s\n\nSobald du die SMS empfangen hast, gib den Bestätigungscode hier manuell ein:</string>
+    <string name="create_account_activity_error_sms_not_granted_or_timeout">Simlar schickt eine SMS an deine Nummer:\n\n%1$s\n\nGib deren Bestätigungscode ein:</string>
     <string name="create_account_activity_error_not_possible">Anmeldung momentan nicht möglich.\n\nÜberprüfe deine Intertverbindung und versuch es erneut.</string>
     <string name="create_account_activity_error_registration_code">Falscher Bestätigungscode.\n\nVersuch es erneut.</string>
     <string name="create_account_activity_error_too_many_confirms">Die Registrierung ist fehlgeschlagen.\n\nVersuch es erneut.</string>
     <string name="create_account_activity_error_sip_not_possible">Der Server konnte nicht erreicht werden.\n\nVersuch es später erneut.</string>
     <string name="create_account_activity_button_cancel">Abbrechen</string>
-    <string name="create_account_activity_button_call">Anrufen</string>
+    <string name="create_account_activity_button_call">Stattdessen Anrufen (verfügbar in 01:23)</string>
     <string name="create_account_activity_button_confirm">Bestätigen</string>
 
     <string name="ringing_activity_title">ruft an</string>
