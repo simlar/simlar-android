@@ -433,9 +433,7 @@ public final class CreateAccountActivity extends Activity
 		}
 
 		Lg.i("received sms: sender=", sender, " message=", message);
-
-		final String regex = getString(R.string.create_account_activity_sms_text).replace("*CODE*", "(\\d{6})");
-		final Matcher matcher = Pattern.compile(regex).matcher(message);
+		final Matcher matcher = Pattern.compile("(\\d{6})").matcher(message);
 		if (!matcher.find()) {
 			Lg.e("unable to parse sms message: ", message);
 			return;

@@ -153,7 +153,7 @@
 
     <string name="create_account_activity_request">Request account creation</string>
     <!-- The sms text should not contain special characters like ö or ' -->
-    <string name="create_account_activity_sms_text">Welcome to Simlar! If the app asks for a registration code, use: *CODE*. Otherwise you do not need this SMS.</string>
+    <string name="create_account_activity_sms_text">android_en</string>
     <string name="create_account_activity_waiting_for_sms">Waiting for SMS</string>
     <string name="create_account_activity_waiting_for_sms_manual">Manual input of registration code</string>
     <string name="create_account_activity_waiting_for_sms_call">Request call</string>
