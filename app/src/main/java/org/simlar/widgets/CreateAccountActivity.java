@@ -512,6 +512,7 @@ public final class CreateAccountActivity extends Activity
 			setRegistrationCodeInputVisible(false);
 			break;
 		case R.string.create_account_activity_error_registration_code:
+		case R.string.create_account_activity_error_too_many_calls:
 			mDetails.setText(resId);
 			setRegistrationCodeInputVisible(true);
 			break;
