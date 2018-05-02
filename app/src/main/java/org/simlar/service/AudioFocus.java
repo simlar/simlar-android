@@ -24,6 +24,7 @@ import android.content.Context;
 import android.media.AudioManager;
 
 import org.simlar.logging.Lg;
+import org.simlar.utils.Util;
 
 final class AudioFocus
 {
@@ -32,7 +33,7 @@ final class AudioFocus
 
 	AudioFocus(final Context context)
 	{
-		mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+		mAudioManager = Util.getSystemService(context, Context.AUDIO_SERVICE);
 	}
 
 	void request()
