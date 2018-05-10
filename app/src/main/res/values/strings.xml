@@ -170,9 +170,10 @@
     <string name="create_account_activity_error_too_many_calls">Calling is not possible anymore.\n\nTry again in 24 hours.</string>
     <string name="create_account_activity_error_sip_not_possible">Couldn\'t connect to server.\n\nTry again later.</string>
     <string name="create_account_activity_button_cancel">Cancel</string>
-    <string name="create_account_activity_button_call">Call me instead"</string>
-    <string name="create_account_activity_button_call_available_in">Call me instead (available in %ds)</string>
-    <string name="create_account_activity_button_call_not_available">Call me instead (not available)</string>
+    <string name="create_account_activity_button_call">No SMS received?\nGet registration code with call.</string>
+    <string name="create_account_activity_button_call_available_in">Get registration code with call.\n(available in %ds)</string>
+    <string name="create_account_activity_button_call_not_available">Get registration code with call.\n(not available).</string>
+
     <string name="create_account_activity_button_confirm">Confirm</string>
 
     <string name="ringing_activity_title">is calling you</string>
