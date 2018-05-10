@@ -90,13 +90,11 @@ public final class Util
 	@SuppressWarnings("SameParameterValue")
 	public static Drawable getDrawableCompatible(final Resources resources, final int id)
 	{
-		//noinspection deprecation
 		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? resources.getDrawable(id, null) : resources.getDrawable(id);
 	}
 
 	public static Spanned fromHtml(final String string)
 	{
-		//noinspection deprecation
 		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ? Html.fromHtml(string, Html.FROM_HTML_MODE_LEGACY) : Html.fromHtml(string);
 	}
 

@@ -60,10 +60,10 @@ ext {
 }
 
 dependencies {
-    pushImplementation "com.google.android.gms:play-services-gcm:12.0.1"
+    pushImplementation "com.google.android.gms:play-services-gcm:15.0.1"
     implementation "com.android.support:appcompat-v7:${androidSupportVersion}"
     implementation "com.android.support:support-v4:${androidSupportVersion}"
     implementation "com.android.support:support-v13:${androidSupportVersion}"
-    implementation "com.googlecode.libphonenumber:libphonenumber:8.9.3"
+    implementation "com.googlecode.libphonenumber:libphonenumber:8.9.5"
     implementation fileTree(dir: "libs", include: ["liblinphone-sdk.aar"])
 }

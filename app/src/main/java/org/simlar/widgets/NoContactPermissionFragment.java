@@ -168,7 +168,6 @@ public final class NoContactPermissionFragment extends Fragment
 		}
 
 		Lg.i("checking status of simlarId=", new Lg.Anonymizer(simlarId));
-		//noinspection deprecation
 		final ProgressDialog dialog = new ProgressDialog(getActivity());
 		dialog.setTitle(R.string.no_contact_permission_fragment_alert_checking_status_title);
 		dialog.setMessage(name + '\n' + telephoneNumber);
