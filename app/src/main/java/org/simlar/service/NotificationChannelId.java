@@ -21,8 +21,44 @@
 
 package org.simlar.service;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.os.Build;
+import android.support.v4.app.NotificationManagerCompat;
+
+import org.simlar.R;
+import org.simlar.utils.Util;
+
 public enum NotificationChannelId
 {
-	INCOMING_CALL,
-	MISSED_CALL
+	INCOMING_CALL(NotificationManagerCompat.IMPORTANCE_LOW, R.string.app_name, 0),
+	MISSED_CALL(NotificationManagerCompat.IMPORTANCE_DEFAULT, R.string.missed_call_notification, R.string.missed_call_notification);
+
+	private final int importance;
+	private final int title;
+	private final int description;
+
+	NotificationChannelId(final int importance, final int title, final int description)
+	{
+		this.importance = importance;
+		this.title = title;
+		this.description = description;
+	}
+
+	public static void createNotificationChannels(final Context context)
+	{
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+			return;
+		}
+
+		final NotificationManager notificationManager = Util.getSystemService(context, Context.NOTIFICATION_SERVICE);
+		for(final NotificationChannelId value: values()) {
+			final NotificationChannel channel = new NotificationChannel(value.name(), context.getString(value.title), value.importance);
+			channel.setDescription(context.getString(value.description));
+
+			notificationManager.createNotificationChannel(channel);
+		}
+	}
+
 }
