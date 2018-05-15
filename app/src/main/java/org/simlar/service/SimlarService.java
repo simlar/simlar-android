@@ -48,8 +48,8 @@ import android.telephony.TelephonyManager;
 import android.view.SurfaceView;
 import android.widget.Toast;
 
-import org.linphone.core.LinphoneCall.State;
-import org.linphone.core.LinphoneCore.RegistrationState;
+import org.linphone.core.Call.State;
+import org.linphone.core.RegistrationState;
 import org.simlar.R;
 import org.simlar.contactsprovider.ContactsProvider;
 import org.simlar.helper.CallConnectionDetails;

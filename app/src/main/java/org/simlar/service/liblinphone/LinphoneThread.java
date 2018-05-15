@@ -25,28 +25,32 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.SurfaceView;
 
-import org.linphone.core.LinphoneAddress;
-import org.linphone.core.LinphoneAuthInfo;
-import org.linphone.core.LinphoneCall;
-import org.linphone.core.LinphoneCallStats;
-import org.linphone.core.LinphoneChatMessage;
-import org.linphone.core.LinphoneChatRoom;
-import org.linphone.core.LinphoneContent;
-import org.linphone.core.LinphoneCore;
-import org.linphone.core.LinphoneCore.EcCalibratorStatus;
-import org.linphone.core.LinphoneCore.GlobalState;
-import org.linphone.core.LinphoneCore.LogCollectionUploadState;
-import org.linphone.core.LinphoneCore.RegistrationState;
-import org.linphone.core.LinphoneCore.RemoteProvisioningState;
-import org.linphone.core.LinphoneCoreListener;
-import org.linphone.core.LinphoneEvent;
-import org.linphone.core.LinphoneFriend;
-import org.linphone.core.LinphoneFriendList;
-import org.linphone.core.LinphoneInfoMessage;
-import org.linphone.core.LinphoneProxyConfig;
+import org.linphone.core.AuthInfo;
+import org.linphone.core.AuthMethod;
+import org.linphone.core.Call;
+import org.linphone.core.CallLog;
+import org.linphone.core.CallStats;
+import org.linphone.core.ChatMessage;
+import org.linphone.core.ChatRoom;
+import org.linphone.core.Content;
+import org.linphone.core.Core;
+import org.linphone.core.EcCalibratorStatus;
+import org.linphone.core.GlobalState;
+import org.linphone.core.Core.LogCollectionUploadState;
+import org.linphone.core.PresenceModel;
+import org.linphone.core.RegistrationState;
+import org.linphone.core.ConfiguringState;
+import org.linphone.core.CoreListener;
+import org.linphone.core.Event;
+import org.linphone.core.Friend;
+import org.linphone.core.FriendList;
+import org.linphone.core.InfoMessage;
+import org.linphone.core.ProxyConfig;
 import org.linphone.core.PayloadType;
 import org.linphone.core.PublishState;
+import org.linphone.core.StreamType;
 import org.linphone.core.SubscriptionState;
+import org.linphone.core.VersionUpdateCheckResult;
 import org.linphone.mediastream.video.AndroidVideoWindowImpl;
 import org.simlar.helper.FileHelper;
 import org.simlar.helper.FileHelper.NotInitedException;
@@ -57,9 +61,7 @@ import org.simlar.helper.Volumes.MicrophoneStatus;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
-import java.nio.ByteBuffer;
-
-public final class LinphoneThread extends Thread implements LinphoneCoreListener
+public final class LinphoneThread extends Thread implements CoreListener
 {
 	private Handler mLinphoneThreadHandler = null;
 	private final Handler mMainThreadHandler = new Handler();
@@ -70,7 +72,7 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 
 	// NOTICE: the following members should only be used in the MAIN-THREAD
 	private final LinphoneThreadListener mListener;
-	private RegistrationState mRegistrationState = RegistrationState.RegistrationNone;
+	private RegistrationState mRegistrationState = RegistrationState.None;
 	private Volumes mVolumes = new Volumes();
 	private final Context mContext;
 	private AndroidVideoWindowImpl mMediaStreamerVideoWindow = null;
@@ -78,7 +80,7 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 	public LinphoneThread(final LinphoneThreadListener listener, final Context context)
 	{
 		mListener = listener;
-		mListener.onCallStateChanged("", LinphoneCall.State.Idle, null);
+		mListener.onCallStateChanged("", Call.State.Idle, null);
 		mContext = context;
 
 		start();
@@ -141,7 +143,7 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 					mLinphoneHandler.unregister();
 					mLinphoneHandler.setCredentials(mySimlarId, password);
 				} else {
-					// LinphoneCore uses context only for getting audio manager. I think this is still thread safe.
+					// Core uses context only for getting audio manager. I think this is still thread safe.
 					mLinphoneHandler.initialize(this, mContext, linphoneInitialConfigFile, rootCaFile,
 							zrtpSecretsCacheFile, ringbackSoundFile, pauseSoundFile);
 					mLinphoneHandler.setVolumes(volumes);
@@ -193,7 +195,7 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 			return;
 		}
 
-		if (!RegistrationState.RegistrationOk.equals(mRegistrationState)) {
+		if (!RegistrationState.Ok.equals(mRegistrationState)) {
 			Lg.i("call: not registered");
 			return;
 		}
@@ -400,7 +402,7 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 			return;
 		}
 
-		mLinphoneThreadHandler.post(() -> mLinphoneHandler.setVideoWindow(videoWindow));
+		mLinphoneThreadHandler.post(() -> mLinphoneHandler.setNativeVideoWindowId(videoWindow));
 	}
 
 	private void setVideoPreviewWindow(final Object videoPreviewWindow)
@@ -426,9 +428,9 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 	@Lg.Anonymize
 	private static class CallLogger
 	{
-		private final LinphoneCall mCall;
+		private final Call mCall;
 
-		CallLogger(final LinphoneCall call)
+		CallLogger(final Call call)
 		{
 			mCall = call;
 		}
@@ -443,9 +445,9 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 	@Lg.Anonymize
 	private static class FriendLogger
 	{
-		private final LinphoneFriend mFriend;
+		private final Friend mFriend;
 
-		FriendLogger(final LinphoneFriend friend)
+		FriendLogger(final Friend friend)
 		{
 			mFriend = friend;
 		}
@@ -457,11 +459,11 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 				return "";
 			}
 
-			return mFriend.getAddress().getUserName();
+			return mFriend.getAddress().getUsername();
 		}
 	}
 
-	private static String getNumber(final LinphoneCall call)
+	private static String getNumber(final Call call)
 	{
 		if (call == null || call.getRemoteAddress() == null) {
 			return "";
@@ -471,15 +473,15 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 	}
 
 	//
-	// LinphoneCoreListener overloaded member functions
+	// CoreListener overloaded member functions
 	//
 	@Override
-	public void registrationState(final LinphoneCore lc, final LinphoneProxyConfig cfg, final RegistrationState state, final String message)
+	public void onRegistrationStateChanged(final Core lc, final ProxyConfig cfg, final RegistrationState state, final String message)
 	{
-		// LinphoneProxyConfig is probably mutable => use it only in the calling thread
+		// ProxyConfig is probably mutable => use it only in the calling thread
 		// RegistrationState is immutable
 
-		final String identity = cfg.getIdentity();
+		final String identity = cfg.getIdentityAddress().getUsername();
 
 		mMainThreadHandler.post(() -> {
 			if (Util.equals(mRegistrationState, state)) {
@@ -487,7 +489,7 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 				return;
 			}
 
-			if (RegistrationState.RegistrationOk.equals(mRegistrationState) && RegistrationState.RegistrationProgress.equals(state)
+			if (RegistrationState.Ok.equals(mRegistrationState) && RegistrationState.Progress.equals(state)
 					&& "Refresh registration".equals(message)) {
 				Lg.i("registration state for ", new Lg.Anonymizer(identity), " ignored: ", state,
 						" as it is caused by refreshRegisters");
@@ -502,33 +504,27 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 
 	}
 
-	@Override
-	public void displayStatus(final LinphoneCore lc, final String message)
+	private Call.State fixCallState(final Call.State onCallStateChanged)
 	{
-		Lg.v("displayStatus message=", message);
-	}
-
-	private LinphoneCall.State fixLinphoneCallState(final LinphoneCall.State callState)
-	{
-		if (LinphoneCall.State.CallReleased.equals(callState) || LinphoneCall.State.Error.equals(callState)) {
+		if (Call.State.Released.equals(onCallStateChanged) || Call.State.Error.equals(onCallStateChanged)) {
 			if (mLinphoneHandler.hasNoCurrentCalls()) {
-				Lg.i("fixLinphoneCallState: ", callState, " -> ", LinphoneCall.State.CallEnd);
-				return LinphoneCall.State.CallEnd;
+				Lg.i("fixCallState: ", onCallStateChanged, " -> ", Call.State.End);
+				return Call.State.End;
 			}
 		}
 
-		return callState;
+		return onCallStateChanged;
 	}
 
-	private VideoState createVideoState(final LinphoneCall.State state, final LinphoneCall call)
+	private VideoState createVideoState(final Call.State state, final Call call)
 	{
-		final boolean localVideo = call.getCurrentParams() != null && call.getCurrentParams().getVideoEnabled();
-		final boolean remoteVideo = call.getRemoteParams() != null && call.getRemoteParams().getVideoEnabled();
+		final boolean localVideo = call.getCurrentParams() != null && call.getCurrentParams().videoEnabled();
+		final boolean remoteVideo = call.getRemoteParams() != null && call.getRemoteParams().videoEnabled();
 
 		Lg.i("creating videoState based on localVideo= ", localVideo, " remoteVideo=", remoteVideo);
 
-		if (!LinphoneCall.State.CallEnd.equals(state) && localVideo && remoteVideo) {
-			if (call.getVideoStats() == null || mVideoState == VideoState.ENCRYPTING) {
+		if (!Call.State.End.equals(state) && localVideo && remoteVideo) {
+			if (call.getStats(StreamType.Video) == null || mVideoState == VideoState.ENCRYPTING) {
 				return VideoState.ENCRYPTING;
 			}
 
@@ -540,16 +536,16 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 		}
 
 		if (!localVideo && remoteVideo) {
-			if (LinphoneCall.State.CallUpdatedByRemote.equals(state)) {
+			if (Call.State.UpdatedByRemote.equals(state)) {
 				return VideoState.REMOTE_REQUESTED;
 			}
 
-			if (mVideoState == VideoState.REQUESTING && LinphoneCall.State.StreamsRunning.equals(state)) {
+			if (mVideoState == VideoState.REQUESTING && Call.State.StreamsRunning.equals(state)) {
 				return VideoState.ACCEPTED;
 			}
 		}
 
-		if (!remoteVideo && LinphoneCall.State.StreamsRunning.equals(state) && mVideoState == VideoState.REQUESTING) {
+		if (!remoteVideo && Call.State.StreamsRunning.equals(state) && mVideoState == VideoState.REQUESTING) {
 			return VideoState.DENIED;
 		}
 
@@ -561,16 +557,16 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 	}
 
 	@Override
-	public void callState(final LinphoneCore lc, final LinphoneCall call, final LinphoneCall.State state, final String message)
+	public void onCallStateChanged(final Core lc, final Call call, final Call.State state, final String message)
 	{
-		// LinphoneCall is mutable => use it only in the calling thread
-		// LinphoneCall.State is immutable
+		// Call is mutable => use it only in the calling thread
+		// Call.State is immutable
 
 		final String number = getNumber(call);
-		final LinphoneCall.State fixedState = fixLinphoneCallState(state);
+		final Call.State fixedState = fixCallState(state);
 		final VideoState videoState = createVideoState(fixedState, call);
 
-		Lg.i("callState changed state=", fixedState, " number=", new CallLogger(call), " message=", message, " videoState=", videoState);
+		Lg.i("onCallStateChanged changed state=", fixedState, " number=", new CallLogger(call), " message=", message, " videoState=", videoState);
 
 		if (videoState == VideoState.REMOTE_REQUESTED) {
 			Lg.i("remote requested video");
@@ -585,74 +581,62 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 	}
 
 	@Override
-	public void messageReceived(final LinphoneCore lc, final LinphoneChatRoom cr, final LinphoneChatMessage message)
+	public void onMessageReceived(final Core lc, final ChatRoom cr, final ChatMessage message)
 	{
-		Lg.i("messageReceived message=", message);
+		Lg.i("onMessageReceived message=", message);
 	}
 
 	@Override
-	public void messageReceivedUnableToDecrypted(final LinphoneCore lc, final LinphoneChatRoom cr, final LinphoneChatMessage message)
+	public void onEcCalibrationResult(final Core core, final EcCalibratorStatus ecCalibratorStatus, final int i)
 	{
-		Lg.w("messageReceivedUnableToDecrypted message=", message);
+		Lg.w("onEcCalibrationResult: ecCalibratorStatus=", ecCalibratorStatus, " i=", i);
 	}
 
 	@Override
-	public void show(final LinphoneCore lc)
+	public void onSubscribeReceived(final Core core, final Event event, final String s, final Content content)
 	{
-		Lg.i("show called");
+		Lg.w("onSubscribeReceived: event=", event, " s=", s, " content=", content);
 	}
 
 	@Override
-	public void authInfoRequested(final LinphoneCore lc, final String realm, final String username, final String domain)
+	public void onGlobalStateChanged(final Core lc, final GlobalState state, final String message)
 	{
-		Lg.w("authInfoRequested realm=", realm, " username=", new Lg.Anonymizer(username), " domain=", domain);
+		Lg.i("onGlobalStateChanged state=", state, " message=", message);
 	}
 
 	@Override
-	public void displayMessage(final LinphoneCore lc, final String message)
+	public void onNewSubscriptionRequested(final Core lc, final Friend lf, final String url)
 	{
-		Lg.i("displayMessage message=", message);
-	}
-
-	@Override
-	public void displayWarning(final LinphoneCore lc, final String message)
-	{
-		Lg.w("displayWarning message=", message);
-	}
-
-	@Override
-	public void globalState(final LinphoneCore lc, final GlobalState state, final String message)
-	{
-		Lg.i("globalState state=", state, " message=", message);
-	}
-
-	@Override
-	public void newSubscriptionRequest(final LinphoneCore lc, final LinphoneFriend lf, final String url)
-	{
-		// LinphoneFriend is mutable => use it only in the calling thread
+		// Friend is mutable => use it only in the calling thread
 
 		Lg.w("[", new FriendLogger(lf), "] wants to see your presence status => always accepting");
 	}
 
 	@Override
-	public void notifyPresenceReceived(final LinphoneCore lc, final LinphoneFriend lf)
+	public void onNotifyPresenceReceived(final Core lc, final Friend lf)
 	{
-		// LinphoneFriend is mutable => use it only in the calling thread
+		// Friend is mutable => use it only in the calling thread
 		// OnlineStatus is immutable
 
 		Lg.w("presence received: username=", new FriendLogger(lf));
 	}
 
 	@Override
-	public void callStatsUpdated(final LinphoneCore lc, final LinphoneCall call, final LinphoneCallStats statsDoNotUse)
+	public void onEcCalibrationAudioInit(final Core core)
 	{
-		// LinphoneCall is mutable => use it only in the calling thread
-		// LinphoneCallStats maybe mutable => use it only in the calling thread
+		Lg.w("onEcCalibrationAudioInit");
+	}
 
-		final LinphoneCallStats stats = call.getAudioStats();
+	@Override
+	public void onCallStatsUpdated(final Core lc, final Call call, final CallStats statsDoNotUse)
+	{
+		// Call is mutable => use it only in the calling thread
+		// CallStats maybe mutable => use it only in the calling thread
+
+		final CallStats stats = call.getStats(StreamType.Audio);
 		final int duration = call.getDuration();
-		final PayloadType payloadType = call.getCurrentParams().getUsedAudioCodec();
-		final String codec = payloadType.getMime() + ' ' + payloadType.getRate() / 1000;
+		final PayloadType payloadType = call.getCurrentParams().getUsedAudioPayloadType();
+		final String codec = payloadType.getMimeType() + ' ' + payloadType.getClockRate() / 1000;
 		final String iceState = stats.getIceState().toString();
 		final int upload = Math.round(stats.getUploadBandwidth() / 8.0f * 10.0f); // upload bandwidth in 100 Bytes / second
 		final int download = Math.round(stats.getDownloadBandwidth() / 8.0f * 10.0f); // download bandwidth in 100 Bytes / second
@@ -664,7 +648,7 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 		// set quality to unusable if up or download bandwidth is zero
 		final float quality = upload > 0 && download > 0 ? call.getCurrentQuality() : 0;
 
-		Lg.d("callStatsUpdated: number=", new CallLogger(call), " quality=", quality,
+		Lg.d("onCallStatsUpdated: number=", new CallLogger(call), " quality=", quality,
 				" duration=", duration,
 				" codec=", codec, " iceState=", iceState,
 				" upload=", upload, " download=", download,
@@ -676,19 +660,13 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 	}
 
 	@Override
-	public void ecCalibrationStatus(final LinphoneCore lc, final EcCalibratorStatus status, final int delay_ms, final Object data)
+	public void onCallEncryptionChanged(final Core lc, final Call call, final boolean encrypted, final String authenticationToken)
 	{
-		Lg.i("ecCalibrationStatus status=", status, " delay_ms=", delay_ms);
-	}
+		// Call is mutable => use it only in the calling thread
 
-	@Override
-	public void callEncryptionChanged(final LinphoneCore lc, final LinphoneCall call, final boolean encrypted, final String authenticationToken)
-	{
-		// LinphoneCall is mutable => use it only in the calling thread
+		final boolean isTokenVerified = call.getAuthenticationTokenVerified();
 
-		final boolean isTokenVerified = call.isAuthenticationTokenVerified();
-
-		Lg.i("callEncryptionChanged number=", new CallLogger(call), " encrypted=", encrypted,
+		Lg.i("onCallEncryptionChanged number=", new CallLogger(call), " encrypted=", encrypted,
 				" authenticationToken=", authenticationToken);
 
 		if (!encrypted) {
@@ -704,117 +682,149 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 	}
 
 	@Override
-	public void notifyReceived(final LinphoneCore lc, final LinphoneCall call, final LinphoneAddress from, final byte[] event)
+	public void onDtmfReceived(final Core lc, final Call call, final int dtmf)
 	{
-		Lg.w("notifyReceived number=", new CallLogger(call), " from=", from);
+		Lg.w("onDtmfReceived number=", new CallLogger(call), " dtmf=", dtmf);
 	}
 
 	@Override
-	public void dtmfReceived(final LinphoneCore lc, final LinphoneCall call, final int dtmf)
+	public void onTransferStateChanged(final Core lc, final Call call, final Call.State state)
 	{
-		Lg.w("dtmfReceived number=", new CallLogger(call), " dtmf=", dtmf);
+		Lg.w("onTransferStateChanged number=", new CallLogger(call), " State=", state);
 	}
 
 	@Override
-	public void transferState(final LinphoneCore lc, final LinphoneCall call, final LinphoneCall.State state)
+	public void onInfoReceived(final Core lc, final Call call, final InfoMessage info)
 	{
-		Lg.w("transferState number=", new CallLogger(call), " State=", state);
+		Lg.w("onInfoReceived number=", new CallLogger(call), " InfoMessage=", info.getContent().getStringBuffer());
 	}
 
 	@Override
-	public void infoReceived(final LinphoneCore lc, final LinphoneCall call, final LinphoneInfoMessage info)
+	public void onSubscriptionStateChanged(final Core lc, final Event ev, final SubscriptionState state)
 	{
-		Lg.w("infoReceived number=", new CallLogger(call), " LinphoneInfoMessage=", info.getContent().getDataAsString());
+		Lg.w("onSubscriptionStateChanged ev=", ev.getName(), " SubscriptionState=", state);
 	}
 
 	@Override
-	public void subscriptionStateChanged(final LinphoneCore lc, final LinphoneEvent ev, final SubscriptionState state)
+	public void onCallLogUpdated(final Core core, final CallLog callLog)
 	{
-		Lg.w("subscriptionStateChanged ev=", ev.getEventName(), " SubscriptionState=", state);
+		Lg.i("onCallLogUpdated: callLog=", callLog == null ? null : callLog.getStatus());
 	}
 
 	@Override
-	public void notifyReceived(final LinphoneCore lc, final LinphoneEvent ev, final String eventName, final LinphoneContent content)
+	public void onIsComposingReceived(final Core lc, final ChatRoom cr)
 	{
-		Lg.w("notifyReceived ev=", ev.getEventName(), " eventName=", eventName, " content=", content);
+		Lg.w("onIsComposingReceived PeerAddress=", cr.getPeerAddress());
 	}
 
 	@Override
-	public void publishStateChanged(final LinphoneCore lc, final LinphoneEvent ev, final PublishState state)
+	public void onMessageReceivedUnableDecrypt(final Core core, final ChatRoom chatRoom, final ChatMessage chatMessage)
 	{
-		Lg.w("publishStateChanged ev=", ev.getEventName(), " state=", state);
+		Lg.w("onMessageReceivedUnableDecrypt: chatRoom=", chatRoom, " chatMessage=", chatMessage);
 	}
 
 	@Override
-	public void isComposingReceived(final LinphoneCore lc, final LinphoneChatRoom cr)
+	public void onConfiguringStatus(final Core lc, final ConfiguringState state, final String message)
 	{
-		Lg.w("isComposingReceived PeerAddress=", cr.getPeerAddress());
-	}
-
-	@Override
-	public void configuringStatus(final LinphoneCore lc, final RemoteProvisioningState state, final String message)
-	{
-		if (RemoteProvisioningState.ConfiguringSkipped.equals(state)) {
+		if (state == ConfiguringState.Skipped) {
 			return;
 		}
-		Lg.w("configuringStatus remoteProvisioningState=", state, " message=", message);
+		Lg.w("onConfiguringStatus remoteProvisioningState=", state, " message=", message);
 	}
 
 	@Override
-	public void fileTransferProgressIndication(final LinphoneCore lc, final LinphoneChatMessage message, final LinphoneContent content,
-	                                           final int progress)
+	public void onCallCreated(final Core core, final Call call)
 	{
-		Lg.w("fileTransferProgressIndication: message=", message, " progress=", progress);
+		Lg.i("onCallCreated; call=", new CallLogger(call));
 	}
 
 	@Override
-	public void fileTransferRecv(final LinphoneCore lc, final LinphoneChatMessage message, final LinphoneContent content, final byte[] buffer,
-	                             final int size)
+	public void onPublishStateChanged(final Core core, final Event event, final PublishState publishState)
 	{
-		Lg.w("fileTransferRecv: message=", message, " size=", size);
+		Lg.w("onPublishStateChanged: event=", event, " publishState=", publishState);
 	}
 
 	@Override
-	public int fileTransferSend(final LinphoneCore lc, final LinphoneChatMessage message, final LinphoneContent content, final ByteBuffer buffer,
-	                            final int size)
+	public void onLogCollectionUploadProgressIndication(final Core lc, final int offset, final int total)
 	{
-		Lg.w("fileTransferSend: message=", message, " size=", size);
-		return 0;
+		Lg.w("onLogCollectionUploadProgressIndication: offset=", offset, " total=", total);
 	}
 
 	@Override
-	public void uploadProgressIndication(final LinphoneCore lc, final int offset, final int total)
+	public void onVersionUpdateCheckResultReceived(final Core core, final VersionUpdateCheckResult versionUpdateCheckResult, final String s, final String s1)
 	{
-		Lg.w("uploadProgressIndication: offset=", offset, " total=", total);
+		Lg.w("onVersionUpdateCheckResultReceived: versionUpdateCheckResult=", versionUpdateCheckResult, " s=", s, " s1=", s);
 	}
 
 	@Override
-	public void uploadStateChanged(final LinphoneCore lc, final LogCollectionUploadState state, final String info)
+	public void onEcCalibrationAudioUninit(final Core core)
 	{
-		Lg.w("uploadStateChanged: state=", state, " info=", info);
+		Lg.w("onEcCalibrationAudioUninit");
 	}
 
 	@Override
-	public void friendListCreated(final LinphoneCore lc, final LinphoneFriendList linphoneFriendList)
+	public void onLogCollectionUploadStateChanged(final Core lc, final LogCollectionUploadState state, final String info)
 	{
-		Lg.w("friendListCreated: linphoneFriendList=", linphoneFriendList);
+		Lg.w("onLogCollectionUploadStateChanged: state=", state, " info=", info);
 	}
 
 	@Override
-	public void friendListRemoved(final LinphoneCore lc, final LinphoneFriendList linphoneFriendList)
+	public void onFriendListCreated(final Core lc, final FriendList linphoneFriendList)
 	{
-		Lg.w("friendListRemoved: linphoneFriendList=", linphoneFriendList);
+		Lg.w("onFriendListCreated: linphoneFriendList=", linphoneFriendList);
 	}
 
 	@Override
-	public void networkReachableChanged(final LinphoneCore linphoneCore, final boolean b)
+	public void onFriendListRemoved(final Core lc, final FriendList linphoneFriendList)
 	{
-		Lg.i("networkReachableChanged reachable=", Boolean.toString(b));
+		Lg.w("onFriendListRemoved: linphoneFriendList=", linphoneFriendList);
 	}
 
 	@Override
-	public void authenticationRequested(final LinphoneCore lc, final LinphoneAuthInfo linphoneAuthInfo, final LinphoneCore.AuthMethod authMethod)
+	public void onReferReceived(final Core core, final String s)
 	{
-		Lg.w("authenticationRequested: linphoneAuthInfo=", linphoneAuthInfo, " authMethod=", authMethod);
+		Lg.w("onReferReceived: ", s);
+	}
+
+	@Override
+	public void onQrcodeFound(final Core core, final String s)
+	{
+		Lg.w("onQrcodeFound; ", s);
+	}
+
+	@Override
+	public void onNetworkReachable(final Core linphoneCore, final boolean b)
+	{
+		Lg.i("onNetworkReachable reachable=", Boolean.toString(b));
+	}
+
+	@Override
+	public void onNotifyReceived(final Core core, final Event event, final String s, final Content content)
+	{
+		Lg.w("onNotifyReceived: event=", event, " s=", s, " content=", content);
+	}
+
+	@Override
+	public void onAuthenticationRequested(final Core lc, final AuthInfo linphoneAuthInfo, final AuthMethod authMethod)
+	{
+		Lg.w("onAuthenticationRequested: linphoneAuthInfo=", linphoneAuthInfo, " authMethod=", authMethod);
+	}
+
+	@Override
+	public void onNotifyPresenceReceivedForUriOrTel(final Core core, final Friend friend, final String s, final PresenceModel presenceModel)
+	{
+		Lg.w("onNotifyPresenceReceivedForUriOrTel: ", new FriendLogger(friend), " s=", s, " presenceModel=", presenceModel);
+	}
+
+	@Override
+	public void onChatRoomStateChanged(final Core core, final ChatRoom chatRoom, final ChatRoom.State state)
+	{
+		Lg.w("onChatRoomStateChanged: chatRoom", chatRoom, " state=", state);
+	}
+
+	@Override
+	public void onBuddyInfoUpdated(final Core core, final Friend friend)
+	{
+		Lg.w("onBuddyInfoUpdated; ", new FriendLogger(friend));
 	}
 }
