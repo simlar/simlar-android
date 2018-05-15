@@ -271,6 +271,7 @@ public final class PreferencesHelper
 		editor.putInt(PREFERENCES_REGION, -1);
 		editor.putInt(PREFERENCES_CREATE_ACCOUNT_STATUS, -1);
 		editor.putString(PREFERENCES_GCM_REGISTRATION_ID, null);
+		editor.putInt(PREFERENCES_GCM_CLIENT_VERSION, -1);
 		editor.putInt(PREFERENCES_SIMLAR_VERSION_CODE, -1);
 		editor.putBoolean(PREFERENCES_DEBUG_MODE, PREFERENCES_DEBUG_MODE_DEFAULT);
 		editor.apply();
