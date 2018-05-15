@@ -20,12 +20,10 @@
 
 package org.simlar.helper;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.os.AsyncTask;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -42,73 +40,40 @@ public final class GooglePlayServicesHelper
 {
 	private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 	private static final String GOOGLE_PUSH_SENDER_ID = "772399062899";
+	private static volatile boolean gcmRegistered = false;
 
 	private GooglePlayServicesHelper()
 	{
 		throw new AssertionError("This class was not meant to be instantiated");
 	}
 
-	public static void registerGcmIfNeeded(final Context context)
+	public static void registerGcm(final Context context)
 	{
-		// Why do we check the version code here?
-		// See: http://developer.android.com/google/gcm/adv.html
-		//        Keeping the Registration State in Sync
-
-		final int versionCode = Version.getVersionCode(context);
-		if (versionCode < 1) {
-			Lg.e("unable to read simlar version code");
+		if (gcmRegistered) {
 			return;
 		}
+		gcmRegistered = true;
 
-		if (PreferencesHelper.getSimlarVersionCode() > 0
-				&& PreferencesHelper.getSimlarVersionCode() == versionCode
-				&& !Util.isNullOrEmpty(PreferencesHelper.getGcmRegistrationId()))
-		{
-			Lg.i("already registered for google push notifications");
-			return;
-		}
+		new Thread(() -> {
+			try {
+				@SuppressWarnings("deprecation")
+				final String gcmRegistrationId = GoogleCloudMessaging.getInstance(context).register(GOOGLE_PUSH_SENDER_ID);
 
-		registerGcm(context, versionCode);
-	}
-
-	@SuppressLint("StaticFieldLeak")
-	private static void registerGcm(final Context context, final int simlarVersionCode)
-	{
-		new AsyncTask<Void, Void, String>() {
-			@Override
-			protected String doInBackground(final Void... params)
-			{
-				try {
-					@SuppressWarnings("deprecation")
-					final String gcmRegistrationId = GoogleCloudMessaging.getInstance(context).register(GOOGLE_PUSH_SENDER_ID);
-
-					if (Util.isNullOrEmpty(gcmRegistrationId)) {
-						Lg.e("got empty gcm registration id from google server");
-						return "";
-					}
-
-					if (!StorePushId.httpPostStorePushId(gcmRegistrationId)) {
-						Lg.e("ERROR: failed to store gcm push notification registration id=", gcmRegistrationId, " on simlar server");
-						return "";
-					}
-
-					Lg.i("gcm push notification registration id=", gcmRegistrationId, " stored on simlar server");
-					return gcmRegistrationId;
-				} catch (final IOException e) {
-					Lg.ex(e, "gcm registration IOException");
-					return "";
+				if (Util.isNullOrEmpty(gcmRegistrationId)) {
+					Lg.e("got empty gcm registration id from google server");
+					return;
 				}
-			}
 
-			@Override
-			protected void onPostExecute(final String gcmRegistrationId)
-			{
-				if (!Util.isNullOrEmpty(gcmRegistrationId)) {
-					PreferencesHelper.saveToFileGcmRegistrationId(context, gcmRegistrationId, simlarVersionCode);
-					Lg.i("gcm push notification registration id=", gcmRegistrationId, " cached on device");
+				if (!StorePushId.httpPostStorePushId(gcmRegistrationId)) {
+					Lg.e("ERROR: failed to store gcm push notification registration id=", gcmRegistrationId, " on simlar server");
+					return;
 				}
+
+				Lg.i("gcm push notification registration id=", gcmRegistrationId, " stored on simlar server");
+			} catch (final IOException e) {
+				Lg.ex(e, "gcm registration IOException");
 			}
-		}.execute();
+		}).start();
 	}
 
 	public static void checkPlayServices(final Activity activity)

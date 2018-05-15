@@ -33,7 +33,7 @@ public final class GooglePlayServicesHelper
 	}
 
 	@SuppressWarnings({"EmptyMethod", "UnusedParameters"})
-	public static void registerGcmIfNeeded(final Context context)
+	public static void registerGcm(final Context context)
 	{
 	}
 
