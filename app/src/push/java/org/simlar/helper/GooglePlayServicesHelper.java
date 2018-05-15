@@ -79,9 +79,8 @@ public final class GooglePlayServicesHelper
 			protected String doInBackground(final Void... params)
 			{
 				try {
-					final GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(context);
 					@SuppressWarnings("deprecation")
-					final String gcmRegistrationId = gcm.register(GOOGLE_PUSH_SENDER_ID);
+					final String gcmRegistrationId = GoogleCloudMessaging.getInstance(context).register(GOOGLE_PUSH_SENDER_ID);
 
 					if (Util.isNullOrEmpty(gcmRegistrationId)) {
 						Lg.e("got empty gcm registration id from google server");
