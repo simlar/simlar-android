@@ -32,18 +32,16 @@ import org.simlar.utils.Util;
 
 public enum NotificationChannelId
 {
-	INCOMING_CALL(NotificationManagerCompat.IMPORTANCE_LOW, R.string.app_name, 0),
-	MISSED_CALL(NotificationManagerCompat.IMPORTANCE_DEFAULT, R.string.missed_call_notification, R.string.missed_call_notification);
+	INCOMING_CALL(NotificationManagerCompat.IMPORTANCE_LOW, R.string.app_name),
+	MISSED_CALL(NotificationManagerCompat.IMPORTANCE_DEFAULT, R.string.missed_call_notification);
 
 	private final int importance;
 	private final int title;
-	private final int description;
 
-	NotificationChannelId(final int importance, final int title, final int description)
+	NotificationChannelId(final int importance, final int title)
 	{
 		this.importance = importance;
 		this.title = title;
-		this.description = description;
 	}
 
 	public static void createNotificationChannels(final Context context)
@@ -55,8 +53,6 @@ public enum NotificationChannelId
 		final NotificationManager notificationManager = Util.getSystemService(context, Context.NOTIFICATION_SERVICE);
 		for(final NotificationChannelId value: values()) {
 			final NotificationChannel channel = new NotificationChannel(value.name(), context.getString(value.title), value.importance);
-			channel.setDescription(context.getString(value.description));
-
 			notificationManager.createNotificationChannel(channel);
 		}
 	}
