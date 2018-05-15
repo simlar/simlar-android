@@ -121,13 +121,18 @@ public final class GooglePlayServicesHelper
 			return;
 		}
 
-		Lg.w("google play services not available: ", googleApiAvailability.getErrorString(resultCode));
-
 		if (googleApiAvailability.isUserResolvableError(resultCode)) {
-			Lg.w("This device has no or too old google play services installed. Asking user");
-			googleApiAvailability.getErrorDialog(activity, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST).show();
+			Lg.i("google play services resolvable error: ", googleApiAvailability.getErrorString(resultCode));
+
+			if (resultCode == ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED && PreferencesHelper.getGcmClientVersion() == googleApiAvailability.getClientVersion(activity)) {
+				Lg.i("user already asked to update play services");
+			} else {
+				Lg.w("this device has too old google play services installed => asking user");
+				googleApiAvailability.getErrorDialog(activity, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST).show();
+				PreferencesHelper.saveToFileGcmClientVersion(activity, googleApiAvailability.getClientVersion(activity));
+			}
 		} else {
-			Lg.e("This device is not supported.");
+			Lg.e("this device is not supported: ", googleApiAvailability.getErrorString(resultCode));
 
 			final Dialog dialog = new AlertDialog.Builder(activity)
 				.setTitle(R.string.google_play_services_helper_alert_unavailable_title)
