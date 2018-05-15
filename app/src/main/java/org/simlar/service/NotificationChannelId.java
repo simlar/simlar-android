@@ -19,7 +19,7 @@
  *
  */
 
-package org.simlar.helper;
+package org.simlar.service;
 
 public enum NotificationChannelId
 {

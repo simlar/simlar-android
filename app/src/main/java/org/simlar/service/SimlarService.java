@@ -56,7 +56,6 @@ import org.simlar.helper.CallConnectionDetails;
 import org.simlar.helper.CallEndReason;
 import org.simlar.helper.FlavourHelper;
 import org.simlar.helper.NetworkQuality;
-import org.simlar.helper.NotificationChannelId;
 import org.simlar.helper.PermissionsHelper;
 import org.simlar.helper.PreferencesHelper;
 import org.simlar.helper.PreferencesHelper.NotInitedException;
