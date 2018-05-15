@@ -340,11 +340,6 @@ public final class LinphoneManager extends CoreListenerStub
 	@Override
 	public void onCallStateChanged(@NonNull final Core lc, @NonNull final Call call, final Call.State state, @NonNull final String message)
 	{
-		if (Call.State.End.equals(state) && !mLinphoneHandler.hasNoCurrentCalls()) {
-			Lg.w("callState change to CallEnd but we still have calls => ignoring");
-			return;
-		}
-
 		final String number = getNumber(call);
 		final Call.State fixedState = fixCallState(state);
 		final VideoState videoState = createVideoState(fixedState, call);
