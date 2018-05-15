@@ -268,6 +268,21 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 		mLinphoneThreadHandler.post(() -> mLinphoneHandler.setVolumes(volumes));
 	}
 
+	public void setMicrophoneStatus(final MicrophoneStatus microphoneStatus)
+	{
+		if (mVolumes == null) {
+			Lg.e("volumes not initialized");
+			return;
+		}
+
+		setVolumes(mVolumes.setMicrophoneStatus(microphoneStatus));
+	}
+
+	public Volumes getVolumes()
+	{
+		return mVolumes;
+	}
+
 	public void requestVideoUpdate(final boolean enable)
 	{
 		if (mLinphoneThreadHandler == null) {
@@ -792,20 +807,5 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 	public void authenticationRequested(final LinphoneCore lc, final LinphoneAuthInfo linphoneAuthInfo, final LinphoneCore.AuthMethod authMethod)
 	{
 		Lg.w("authenticationRequested: linphoneAuthInfo=", linphoneAuthInfo, " authMethod=", authMethod);
-	}
-
-	public void setMicrophoneStatus(final MicrophoneStatus microphoneStatus)
-	{
-		if (mVolumes == null) {
-			Lg.e("volumes not initialized");
-			return;
-		}
-
-		setVolumes(mVolumes.setMicrophoneStatus(microphoneStatus));
-	}
-
-	public Volumes getVolumes()
-	{
-		return mVolumes;
 	}
 }
