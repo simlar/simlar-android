@@ -100,6 +100,8 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 			return;
 		}
 
+		GooglePlayServicesHelper.checkPlayServices(this);
+
 		PermissionsHelper.checkAndRequestNotificationPolicyAccess(this);
 
 		Lg.i("onCreate ended");
@@ -201,8 +203,6 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 				return;
 			}
 		}
-
-		GooglePlayServicesHelper.checkPlayServices(this);
 
 		if (mCommunicator != null) {
 			mCommunicator.startServiceAndRegister(this, MainActivity.class, null);
