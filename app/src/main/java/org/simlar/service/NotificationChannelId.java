@@ -51,7 +51,7 @@ public enum NotificationChannelId
 		}
 
 		final NotificationManager notificationManager = Util.getSystemService(context, Context.NOTIFICATION_SERVICE);
-		for(final NotificationChannelId value: values()) {
+		for (final NotificationChannelId value: values()) {
 			final NotificationChannel channel = new NotificationChannel(value.name(), context.getString(value.title), value.importance);
 			notificationManager.createNotificationChannel(channel);
 		}
