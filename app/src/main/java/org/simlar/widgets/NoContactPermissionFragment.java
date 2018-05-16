@@ -229,7 +229,6 @@ public final class NoContactPermissionFragment extends Fragment
 					new AlertDialog.Builder(requireContext())
 							.setTitle(String.format(getString(R.string.no_contact_permission_fragment_alert_contact_not_registered_title), telephoneNumber))
 							.setMessage(Util.fromHtml(String.format(getString(R.string.no_contact_permission_fragment_alert_contact_not_registered_message), name)))
-							.setNeutralButton(R.string.main_activity_menu_tell_a_friend, (dialog1, which) -> TellFriend.sendMessage(getActivity()))
 							.create().show();
 					return;
 				}
