@@ -56,8 +56,10 @@ import org.simlar.service.SimlarStatus;
 import org.simlar.utils.Util;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -73,10 +75,11 @@ public final class CreateAccountActivity extends Activity
 	private ProgressBar mProgressConfirm = null;
 	private ProgressBar mProgressFirstLogIn = null;
 	private TextView mWaitingForSmsText = null;
+	private View mLayoutMessage = null;
 	private EditText mEditRegistrationCode = null;
 	private TextView mDetails = null;
 	private Button mButtonConfirm = null;
-	private Button mButtonCancel = null;
+	private Button mButtonCall = null;
 
 	private int mSecondsToStillWaitForSms = 0;
 	private final Handler mHandler = new Handler();
@@ -206,17 +209,14 @@ public final class CreateAccountActivity extends Activity
 		mProgressWaitingForSMS.setVisibility(View.INVISIBLE);
 		mProgressConfirm.setVisibility(View.INVISIBLE);
 		mProgressFirstLogIn.setVisibility(View.INVISIBLE);
-
 		mWaitingForSmsText = findViewById(R.id.textViewWaitingForSMS);
-		mEditRegistrationCode = findViewById(R.id.editTextRegistrationCode);
-		mEditRegistrationCode.setVisibility(View.GONE);
-		mDetails = findViewById(R.id.textViewDetails);
-		mDetails.setVisibility(View.GONE);
 
+		mLayoutMessage = findViewById(R.id.layoutMessage);
+		mLayoutMessage.setVisibility(View.GONE);
+		mEditRegistrationCode = findViewById(R.id.editTextRegistrationCode);
+		mDetails = findViewById(R.id.textViewDetails);
 		mButtonConfirm = findViewById(R.id.buttonConfirm);
-		mButtonConfirm.setVisibility(View.GONE);
-		mButtonCancel = findViewById(R.id.buttonCancel);
-		mButtonCancel.setVisibility(View.GONE);
+		mButtonCall = findViewById(R.id.buttonCall);
 
 		mEditRegistrationCode.addTextChangedListener(new EditRegistrationCodeListener());
 
@@ -335,7 +335,7 @@ public final class CreateAccountActivity extends Activity
 							" actual=", new Lg.Anonymizer(result.getSimlarId()));
 				}
 
-				PreferencesHelper.init(result.getSimlarId(), result.getPassword());
+				PreferencesHelper.init(result.getSimlarId(), result.getPassword(), Calendar.getInstance().getTime().getTime());
 				PreferencesHelper.saveToFilePreferences(CreateAccountActivity.this);
 				PreferencesHelper.saveToFileCreateAccountStatus(CreateAccountActivity.this, CreateAccountStatus.WAITING_FOR_SMS, telephoneNumber);
 				if (mSmsReceiver != null) {
@@ -396,7 +396,7 @@ public final class CreateAccountActivity extends Activity
 		mProgressWaitingForSMS.setVisibility(View.INVISIBLE);
 		mWaitingForSmsText.setText(R.string.create_account_activity_waiting_for_sms);
 
-		onError(R.string.create_account_activity_error_sms_timeout);
+		onError(R.string.create_account_activity_error_sms_not_granted_or_timeout);
 	}
 
 	private void smsNotGranted()
@@ -406,7 +406,7 @@ public final class CreateAccountActivity extends Activity
 		mProgressWaitingForSMS.setVisibility(View.INVISIBLE);
 		mWaitingForSmsText.setText(R.string.create_account_activity_waiting_for_sms);
 
-		onError(R.string.create_account_activity_error_sms_not_granted);
+		onError(R.string.create_account_activity_error_sms_not_granted_or_timeout);
 	}
 
 	private static String normalizeTelephoneNumber(final String telephoneNumber)
@@ -433,9 +433,7 @@ public final class CreateAccountActivity extends Activity
 		}
 
 		Lg.i("received sms: sender=", sender, " message=", message);
-
-		final String regex = getString(R.string.create_account_activity_sms_text).replace("*CODE*", "(\\d{6})");
-		final Matcher matcher = Pattern.compile(regex).matcher(message);
+		final Matcher matcher = Pattern.compile("(\\d{6})").matcher(message);
 		if (!matcher.find()) {
 			Lg.e("unable to parse sms message: ", message);
 			return;
@@ -495,7 +493,6 @@ public final class CreateAccountActivity extends Activity
 			}
 
 		}.execute(simlarId, registrationCode);
-
 	}
 
 	private void connectToServer()
@@ -507,31 +504,77 @@ public final class CreateAccountActivity extends Activity
 	private void onError(final int resId)
 	{
 		mLayoutProgress.setVisibility(View.GONE);
-
-		mDetails.setVisibility(View.VISIBLE);
-		mButtonCancel.setVisibility(View.VISIBLE);
+		mLayoutMessage.setVisibility(View.VISIBLE);
 
 		switch (resId) {
 		case R.string.create_account_activity_error_wrong_telephone_number:
 			mDetails.setText(String.format(getString(resId), mTelephoneNumber));
-			mButtonConfirm.setVisibility(View.GONE);
+			setRegistrationCodeInputVisible(false);
+			break;
+		case R.string.create_account_activity_error_registration_code:
+		case R.string.create_account_activity_error_too_many_calls:
+			mDetails.setText(resId);
+			setRegistrationCodeInputVisible(true);
 			break;
 		case R.string.create_account_activity_error_sms:
-		case R.string.create_account_activity_error_sms_timeout:
-		case R.string.create_account_activity_error_sms_not_granted:
+		case R.string.create_account_activity_error_sms_not_granted_or_timeout:
+		case R.string.create_account_activity_error_sms_call_success:
 			mDetails.setText(String.format(getString(resId), mTelephoneNumber));
-			mButtonConfirm.setVisibility(View.VISIBLE);
-			mButtonConfirm.setEnabled(false);
-
-			mEditRegistrationCode.setVisibility(View.VISIBLE);
-			mEditRegistrationCode.requestFocus();
-			((InputMethodManager) Util.getSystemService(this, Context.INPUT_METHOD_SERVICE)).showSoftInput(mEditRegistrationCode,
-					InputMethodManager.SHOW_IMPLICIT);
+			setRegistrationCodeInputVisible(true);
 			break;
 		default:
 			mDetails.setText(resId);
-			mButtonConfirm.setVisibility(View.GONE);
+			setRegistrationCodeInputVisible(false);
 		}
+	}
+
+	private void setRegistrationCodeInputVisible(final boolean visible)
+	{
+		final int visibility = visible ? View.VISIBLE : View.GONE;
+
+		mButtonCall.setVisibility(visibility);
+		mButtonConfirm.setVisibility(visibility);
+		mEditRegistrationCode.setVisibility(visibility);
+		if (visible) {
+			mButtonCall.setEnabled(false);
+			mButtonConfirm.setEnabled(false);
+			mEditRegistrationCode.requestFocus();
+			((InputMethodManager) Util.getSystemService(this, Context.INPUT_METHOD_SERVICE)).showSoftInput(mEditRegistrationCode,
+					InputMethodManager.SHOW_IMPLICIT);
+
+			updateCallButton();
+		} else {
+			((InputMethodManager) Util.getSystemService(this, Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);
+		}
+
+	}
+
+	@SuppressWarnings("UseOfObsoleteDateTimeApi") /// java8 one's requires android sdk version 26
+	private void updateCallButton()
+	{
+		if (mButtonCall.getVisibility() == View.GONE) {
+			return;
+		}
+
+		final Date now = Calendar.getInstance().getTime();
+		final Date begin = new Date(PreferencesHelper.getCreateAccountRequestTimestamp() + 90 * 1000);
+		final Date end = new Date(PreferencesHelper.getCreateAccountRequestTimestamp() + 10 * 60 * 1000);
+
+		if (now.after(end)) {
+			mButtonCall.setText(R.string.create_account_activity_button_call_not_available);
+			mButtonCall.setEnabled(false);
+			return;
+		}
+
+		if (now.before(begin)) {
+			mButtonCall.setText(String.format(getString(R.string.create_account_activity_button_call_available_in), (begin.getTime() - now.getTime()) / 1000));
+			mButtonCall.setEnabled(false);
+		} else {
+			mButtonCall.setText(R.string.create_account_activity_button_call);
+			mButtonCall.setEnabled(true);
+		}
+
+		mHandler.postDelayed(this::updateCallButton, 1000);
 	}
 
 	@SuppressWarnings("unused")
@@ -542,17 +585,52 @@ public final class CreateAccountActivity extends Activity
 		finish();
 	}
 
+	@SuppressLint("StaticFieldLeak")
+	@SuppressWarnings("unused")
+	public void onCallClicked(final View view)
+	{
+		Lg.i("onCallClicked");
+
+		final String telephoneNumber = mTelephoneNumber;
+
+		mLayoutProgress.setVisibility(View.VISIBLE);
+		mLayoutMessage.setVisibility(View.GONE);
+		mWaitingForSmsText.setText(R.string.create_account_activity_waiting_for_sms_call);
+		mProgressWaitingForSMS.setVisibility(View.VISIBLE);
+
+		new AsyncTask<String, Void, CreateAccount.RequestResult>()
+		{
+			@Override
+			protected CreateAccount.RequestResult doInBackground(final String... params)
+			{
+				return CreateAccount.httpPostCall(params[0], params[1]);
+			}
+
+			@Override
+			protected void onPostExecute(final CreateAccount.RequestResult result)
+			{
+				mProgressWaitingForSMS.setVisibility(View.INVISIBLE);
+
+				if (result.isError()) {
+					Lg.e("failed to parse call result");
+					onError(result.getErrorMessage());
+					return;
+				}
+
+				Lg.i("successfully requested call");
+				onError(R.string.create_account_activity_error_sms_call_success);
+			}
+		}.execute(telephoneNumber, PreferencesHelper.getPassword());
+	}
+
 	@SuppressWarnings("unused")
 	public void onConfirmClicked(final View view)
 	{
 		Lg.i("onConfirmClicked");
 		((InputMethodManager) Util.getSystemService(this, Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);
 		mWaitingForSmsText.setText(R.string.create_account_activity_waiting_for_sms_manual);
-		mDetails.setVisibility(View.GONE);
-		mEditRegistrationCode.setVisibility(View.GONE);
-		mButtonConfirm.setVisibility(View.GONE);
-		mButtonCancel.setVisibility(View.GONE);
 		mLayoutProgress.setVisibility(View.VISIBLE);
+		mLayoutMessage.setVisibility(View.GONE);
 
 		confirmRegistrationCode(mEditRegistrationCode.getText().toString());
 	}

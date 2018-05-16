@@ -94,6 +94,12 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 
 		showNoContactPermissionFragment(false);
 
+		if (!PreferencesHelper.readPreferencesFromFile(this)) {
+			Lg.i("as we are not registered yet => creating account");
+			startAccountCreation();
+			return;
+		}
+
 		PermissionsHelper.checkAndRequestNotificationPolicyAccess(this);
 
 		Lg.i("onCreate ended");
@@ -198,12 +204,6 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 
 		//noinspection ConstantConditions /// needed in alwaysOnline flavour
 		if (!GooglePlayServicesHelper.checkPlayServices(this)) {
-			return;
-		}
-
-		if (!PreferencesHelper.readPreferencesFromFile(this)) {
-			Lg.i("as we are not registered yet => creating account");
-			startAccountCreation();
 			return;
 		}
 
