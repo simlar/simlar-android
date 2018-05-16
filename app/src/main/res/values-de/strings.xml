@@ -165,11 +165,11 @@
     <string name="create_account_activity_error_sms">Simlar kann keine SMS an deine angegebene Telefonnummer schicken:\n%1$s\n\n Überprüfe deine Eingabe oder versuche es später nochmal</string>
     <string name="create_account_activity_error_sms_not_granted_or_timeout">Simlar schickt eine SMS an deine Nummer:\n\n%1$s\n\nGib den Bestätigungscode ein:</string>
     <string name="create_account_activity_error_sms_call_success">Simlar ruft deine Nummer an:\n\n%1$s\n\nGib den Bestätigungscode ein:</string>
-    <string name="create_account_activity_error_not_possible">Anmeldung momentan nicht möglich.\n\nÜberprüfe deine Intertverbindung und versuch es erneut.</string>
-    <string name="create_account_activity_error_registration_code">Falscher Bestätigungscode.\n\nVersuch es erneut.</string>
-    <string name="create_account_activity_error_too_many_confirms">Die Registrierung ist fehlgeschlagen.\n\nVersuch es erneut.</string>
+    <string name="create_account_activity_error_not_possible">Anmeldung momentan nicht möglich.\n\nÜberprüfe deine Intertverbindung und versuche es erneut.</string>
+    <string name="create_account_activity_error_registration_code">Falscher Bestätigungscode.\n\nVersuche es erneut.</string>
+    <string name="create_account_activity_error_too_many_confirms">Die Registrierung ist fehlgeschlagen.\n\nVersuche es erneut.</string>
     <string name="create_account_activity_error_too_many_calls">Keine weiteren Anrufe möglich.\n\nVersuche es in 24 Stunden erneut.</string>
-    <string name="create_account_activity_error_sip_not_possible">Der Server konnte nicht erreicht werden.\n\nVersuch es später erneut.</string>
+    <string name="create_account_activity_error_sip_not_possible">Der Server konnte nicht erreicht werden.\n\nVersuche es später erneut.</string>
     <string name="create_account_activity_button_cancel">Abbrechen</string>
     <string name="create_account_activity_button_call">Keine SMS empfangen?\nBestätigungscode als Anruf erhalten.</string>
     <string name="create_account_activity_button_call_available_in">Bestätigungscode als Anruf erhalten.\n(verfügbar in %ds)</string>
