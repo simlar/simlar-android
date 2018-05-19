@@ -31,5 +31,6 @@ idea {
         excludeDirs += file("scripts")
         excludeDirs += file(".travis.yml")
         excludeDirs += file("app/build/intermediates/manifest/androidTest/")
+        excludeDirs += file("app/google-services.json")
     }
 }
