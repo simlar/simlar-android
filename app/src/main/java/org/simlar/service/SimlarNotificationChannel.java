@@ -59,5 +59,4 @@ public enum SimlarNotificationChannel
 			notificationManager.createNotificationChannel(channel);
 		}
 	}
-
 }
