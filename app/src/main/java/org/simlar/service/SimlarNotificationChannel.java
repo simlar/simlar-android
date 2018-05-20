@@ -31,7 +31,7 @@ import org.simlar.R;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
-public enum NotificationChannelId
+public enum SimlarNotificationChannel
 {
 	CALL(NotificationManagerCompat.IMPORTANCE_LOW, R.string.notification_channel_call_name),
 	MISSED_CALL(NotificationManagerCompat.IMPORTANCE_DEFAULT, R.string.missed_call_notification);
@@ -39,7 +39,7 @@ public enum NotificationChannelId
 	private final int importance;
 	private final int title;
 
-	NotificationChannelId(final int importance, final int title)
+	SimlarNotificationChannel(final int importance, final int title)
 	{
 		this.importance = importance;
 		this.title = title;
@@ -54,7 +54,7 @@ public enum NotificationChannelId
 
 		Lg.i("creating notification channels");
 		final NotificationManager notificationManager = Util.getSystemService(context, Context.NOTIFICATION_SERVICE);
-		for (final NotificationChannelId value: values()) {
+		for (final SimlarNotificationChannel value: values()) {
 			final NotificationChannel channel = new NotificationChannel(value.name(), context.getString(value.title), value.importance);
 			notificationManager.createNotificationChannel(channel);
 		}
