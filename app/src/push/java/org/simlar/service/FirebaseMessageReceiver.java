@@ -21,13 +21,31 @@
 
 package org.simlar.service;
 
+import android.content.Intent;
+import android.os.Build;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import org.simlar.logging.Lg;
 
 public final class FirebaseMessageReceiver extends FirebaseMessagingService
 {
 	@Override
 	public void onMessageReceived(final RemoteMessage remoteMessage)
 	{
+		Lg.i("push notification received from: ", remoteMessage.getFrom(),
+				" messageId: ", remoteMessage.getMessageId(),
+				" type: ", remoteMessage.getMessageType(),
+				" collapseKey: ", remoteMessage.getCollapseKey(),
+				" data: ", remoteMessage.getData(),
+				" notification: ", remoteMessage.getNotification() == null ? null : remoteMessage.getNotification().getBody());
+
+		final Intent simlarService = new Intent(this, SimlarService.class);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			startForegroundService(simlarService);
+		} else {
+			startService(simlarService);
+		}
 	}
 }
