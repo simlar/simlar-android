@@ -172,8 +172,6 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 				showNoContactPermissionFragment(true);
 				break;
 			}
-
-			GooglePlayServicesHelper.registerGcm(this);
 		});
 	}
 
