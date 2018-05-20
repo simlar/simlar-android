@@ -184,6 +184,7 @@ dependencies {
             exclude group: "com.google.firebase", module: "firebase-measurement-connector"
         }
         pushImplementation("com.google.android.gms:play-services-base:18.5.0")
+        pushImplementation("com.firebase:firebase-jobdispatcher:0.8.5")
     }
     implementation("androidx.media:media:1.7.0")
     implementation("androidx.appcompat:appcompat:1.7.0")

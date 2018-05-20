@@ -22,11 +22,12 @@
 package org.simlar.service;
 
 import android.content.Context;
-import android.content.Intent;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
+import com.firebase.jobdispatcher.Job;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -52,7 +53,12 @@ public final class PushNotificationService extends FirebaseMessagingService
 				" priority: ", remoteMessage.getPriority(), " (", remoteMessage.getOriginalPriority(), ")",
 				" notification: ", remoteMessage.getNotification() == null ? null : remoteMessage.getNotification().getBody());
 
-		ContextCompat.startForegroundService(this, new Intent(this, SimlarService.class));
+		final FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
+		final Job job = dispatcher.newJobBuilder()
+				.setService(FirebaseJobService.class)
+				.setTag("my-job-tag")
+				.build();
+		dispatcher.schedule(job);
 	}
 
 	@Override
