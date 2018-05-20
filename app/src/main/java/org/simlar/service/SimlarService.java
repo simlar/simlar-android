@@ -304,8 +304,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		mRunning = true;
 
-		NotificationChannelId.createNotificationChannels(this);
-
 		mVibratorManager = new VibratorManager(getApplicationContext());
 		mSoundEffectManager = new SoundEffectManager(getApplicationContext());
 		mAudioFocus = new AudioFocus(this);
