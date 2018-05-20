@@ -49,14 +49,13 @@ public enum SimlarNotificationChannel
 	{
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
 			Lg.i("notification channels not supported");
-			return;
-		}
-
-		Lg.i("creating notification channels");
-		final NotificationManager notificationManager = Util.getSystemService(context, Context.NOTIFICATION_SERVICE);
-		for (final SimlarNotificationChannel value: values()) {
-			final NotificationChannel channel = new NotificationChannel(value.name(), context.getString(value.title), value.importance);
-			notificationManager.createNotificationChannel(channel);
+		} else {
+			Lg.i("creating notification channels");
+			final NotificationManager notificationManager = Util.getSystemService(context, Context.NOTIFICATION_SERVICE);
+			for (final SimlarNotificationChannel value : values()) {
+				final NotificationChannel channel = new NotificationChannel(value.name(), context.getString(value.title), value.importance);
+				notificationManager.createNotificationChannel(channel);
+			}
 		}
 	}
 }
