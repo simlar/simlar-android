@@ -60,10 +60,13 @@ ext {
 }
 
 dependencies {
-    pushImplementation "com.google.android.gms:play-services-gcm:15.0.1"
+    pushImplementation "com.google.firebase:firebase-core:15.0.2"
+    pushImplementation "com.google.firebase:firebase-messaging:15.0.2"
     implementation "com.android.support:appcompat-v7:${androidSupportVersion}"
     implementation "com.android.support:support-v4:${androidSupportVersion}"
     implementation "com.android.support:support-v13:${androidSupportVersion}"
     implementation "com.googlecode.libphonenumber:libphonenumber:8.9.7"
     implementation fileTree(dir: "libs", include: ["liblinphone-sdk.aar"])
 }
+
+apply plugin: "com.google.gms.google-services"
