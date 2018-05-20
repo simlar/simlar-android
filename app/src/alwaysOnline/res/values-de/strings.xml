@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-  Copyright (C) 2015 The Simlar Authors.
+  Copyright (C) 2018 The Simlar Authors.
 
   This file is part of Simlar. (https://www.simlar.org)
 
@@ -22,10 +22,6 @@
 
 <resources>
 
-    <string name="google_play_services_helper_alert_unavailable_title">Google Play Services nicht verfügbar</string>
-    <string name="google_play_services_helper_alert_unavailable_text">Installiere die Google Play Services, damit du Simlar benutzen kannst.</string>
-    <string name="google_play_services_helper_alert_unavailable_button_close_simlar">Simlar beenden</string>
-
-    <string name="notification_channel_call_name">Aktueller Anruf</string>
+    <string name="notification_channel_call_name">Hintergrundprozess</string>
 
 </resources>

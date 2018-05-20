@@ -33,7 +33,7 @@ import org.simlar.utils.Util;
 
 public enum NotificationChannelId
 {
-	INCOMING_CALL(NotificationManagerCompat.IMPORTANCE_LOW, R.string.app_name),
+	INCOMING_CALL(NotificationManagerCompat.IMPORTANCE_LOW, R.string.notification_channel_call_name),
 	MISSED_CALL(NotificationManagerCompat.IMPORTANCE_DEFAULT, R.string.missed_call_notification);
 
 	private final int importance;

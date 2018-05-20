@@ -26,4 +26,6 @@
     <string name="google_play_services_helper_alert_unavailable_text">Your device doesn\'t have Google Play Services installed. This is mandatory for running Simlar. Install them to run Simlar.</string>
     <string name="google_play_services_helper_alert_unavailable_button_close_simlar">Close Simlar</string>
 
+    <string name="notification_channel_call_name">Current call</string>
+
 </resources>
