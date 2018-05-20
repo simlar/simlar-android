@@ -32,9 +32,6 @@ import org.simlar.R;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public enum SimlarNotificationChannel
 {
 	/**
@@ -67,17 +64,6 @@ public enum SimlarNotificationChannel
 		} else {
 			Lg.i("creating notification channels");
 			final NotificationManager notificationManager = Util.getSystemService(context, Context.NOTIFICATION_SERVICE);
-			final List<String> ids = new ArrayList<>();
-			for (final NotificationChannel channel : notificationManager.getNotificationChannels()) {
-				ids.add(channel.getId());
-			}
-			for (final String id : ids) {
-				if (!"miscellaneous".equals(id)) {
-					Lg.i("removing notification channel: ", id);
-					notificationManager.deleteNotificationChannel(id);
-				}
-			}
-
 			for (final SimlarNotificationChannel value : values()) {
 				final NotificationChannel channel = new NotificationChannel(value.name(), context.getString(value.toDisplayId()), value.importance);
 				notificationManager.createNotificationChannel(channel);
