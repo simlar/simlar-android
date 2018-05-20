@@ -28,6 +28,7 @@ import android.os.Build;
 import android.support.v4.app.NotificationManagerCompat;
 
 import org.simlar.R;
+import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
 public enum NotificationChannelId
@@ -47,9 +48,11 @@ public enum NotificationChannelId
 	public static void createNotificationChannels(final Context context)
 	{
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+			Lg.i("notification channels not supported");
 			return;
 		}
 
+		Lg.i("creating notification channels");
 		final NotificationManager notificationManager = Util.getSystemService(context, Context.NOTIFICATION_SERVICE);
 		for (final NotificationChannelId value: values()) {
 			final NotificationChannel channel = new NotificationChannel(value.name(), context.getString(value.title), value.importance);
