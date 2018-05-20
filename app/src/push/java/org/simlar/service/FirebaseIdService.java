@@ -21,12 +21,30 @@
 
 package org.simlar.service;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+
+import org.simlar.https.StorePushId;
+import org.simlar.logging.Lg;
+import org.simlar.utils.Util;
 
 public final class FirebaseIdService extends FirebaseInstanceIdService
 {
 	@Override
 	public void onTokenRefresh()
 	{
+		final String token = FirebaseInstanceId.getInstance().getToken();
+
+		if (Util.isNullOrEmpty(token)) {
+			Lg.e("got empty token from google server");
+			return;
+		}
+
+		if (!StorePushId.httpPostStorePushId(token)) {
+			Lg.e("failed to store push notification token=", token, " on simlar server");
+			return;
+		}
+
+		Lg.i("push notification token=", token, " stored on simlar server");
 	}
 }
