@@ -33,6 +33,9 @@ import org.simlar.utils.Util;
 
 public enum SimlarNotificationChannel
 {
+	/**
+	 * @see NotificationManager#IMPORTANCE_LOW
+	 */
 	CALL(NotificationManagerCompat.IMPORTANCE_LOW, R.string.notification_channel_call_name),
 	MISSED_CALL(NotificationManagerCompat.IMPORTANCE_LOW, R.string.missed_call_notification);
 
