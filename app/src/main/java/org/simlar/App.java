@@ -29,6 +29,7 @@ import org.simlar.helper.FileHelper;
 import org.simlar.helper.PreferencesHelper;
 import org.simlar.helper.Version;
 import org.simlar.logging.Lg;
+import org.simlar.service.SimlarNotificationChannel;
 import org.simlar.service.ServiceActivities;
 import org.simlar.service.SimlarService;
 import org.simlar.widgets.CallActivity;
@@ -46,6 +47,7 @@ public final class App extends Application
 		Lg.init(PreferencesHelper.readFromFileDebugMode(this));
 		FileHelper.init(this);
 		SimlarService.initActivities(new ServiceActivities(MainActivity.class, RingingActivity.class, CallActivity.class));
+		SimlarNotificationChannel.createNotificationChannels(this);
 
 		Lg.i("simlar started with version=", Version.getVersionName(this),
 				" on device: ", Build.MANUFACTURER, " ", Build.MODEL, " (", Build.DEVICE, ") with android version=", Build.VERSION.RELEASE);
