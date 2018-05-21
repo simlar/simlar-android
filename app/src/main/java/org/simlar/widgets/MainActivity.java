@@ -44,6 +44,7 @@ import org.simlar.helper.RingtoneHelper;
 import org.simlar.helper.Version;
 import org.simlar.https.UploadLogFile;
 import org.simlar.logging.Lg;
+import org.simlar.service.FirebaseIdService;
 import org.simlar.service.SimlarService;
 import org.simlar.service.SimlarServiceCommunicator;
 
@@ -172,6 +173,8 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 				showNoContactPermissionFragment(true);
 				break;
 			}
+
+			FirebaseIdService.refreshTokenOnServer();
 		});
 	}
 

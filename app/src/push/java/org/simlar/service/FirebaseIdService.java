@@ -30,13 +30,20 @@ import org.simlar.utils.Util;
 
 public final class FirebaseIdService extends FirebaseInstanceIdService
 {
+	private static volatile boolean tokenRefreshed = false;
+
 	@Override
 	public void onTokenRefresh()
 	{
 		final String token = FirebaseInstanceId.getInstance().getToken();
+		Lg.i("onTokenRefresh: ", token);
+		sendToServer(token);
+	}
 
+	private static void sendToServer(final String token)
+	{
 		if (Util.isNullOrEmpty(token)) {
-			Lg.e("got empty token from google server");
+			Lg.e("empty token");
 			return;
 		}
 
@@ -48,5 +55,16 @@ public final class FirebaseIdService extends FirebaseInstanceIdService
 
 			Lg.i("push notification token=", token, " stored on simlar server");
 		}).start();
+	}
+
+	public static void refreshTokenOnServer()
+	{
+		if (tokenRefreshed) {
+			return;
+		}
+		tokenRefreshed = true;
+
+		Lg.i("trigger update of firebase push notification token on simlar server");
+		sendToServer(FirebaseInstanceId.getInstance().getToken());
 	}
 }
