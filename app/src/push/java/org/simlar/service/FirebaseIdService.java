@@ -40,11 +40,13 @@ public final class FirebaseIdService extends FirebaseInstanceIdService
 			return;
 		}
 
-		if (!StorePushId.httpPostStorePushId(token)) {
-			Lg.e("failed to store push notification token=", token, " on simlar server");
-			return;
-		}
+		new Thread(() -> {
+			if (!StorePushId.httpPostStorePushId(token)) {
+				Lg.e("failed to store push notification token=", token, " on simlar server");
+				return;
+			}
 
-		Lg.i("push notification token=", token, " stored on simlar server");
+			Lg.i("push notification token=", token, " stored on simlar server");
+		}).start();
 	}
 }
