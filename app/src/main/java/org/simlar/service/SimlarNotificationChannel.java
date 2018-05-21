@@ -34,11 +34,12 @@ import org.simlar.utils.Util;
 public enum SimlarNotificationChannel
 {
 	CALL(NotificationManagerCompat.IMPORTANCE_LOW, R.string.notification_channel_call_name),
-	MISSED_CALL(NotificationManagerCompat.IMPORTANCE_DEFAULT, R.string.missed_call_notification);
+	MISSED_CALL(NotificationManagerCompat.IMPORTANCE_LOW, R.string.missed_call_notification);
 
 	private final int importance;
 	private final int title;
 
+	@SuppressWarnings("SameParameterValue")
 	SimlarNotificationChannel(final int importance, final int title)
 	{
 		this.importance = importance;
