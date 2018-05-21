@@ -21,8 +21,6 @@
 package org.simlar.helper;
 
 import android.app.Activity;
-import android.content.Context;
-
 
 @SuppressWarnings("ClassOnlyUsedInOnePackage")
 public final class GooglePlayServicesHelper
@@ -33,7 +31,7 @@ public final class GooglePlayServicesHelper
 	}
 
 	@SuppressWarnings({"EmptyMethod", "UnusedParameters"})
-	public static void registerGcm(final Context context)
+	public static void refreshTokenOnServer()
 	{
 	}
 

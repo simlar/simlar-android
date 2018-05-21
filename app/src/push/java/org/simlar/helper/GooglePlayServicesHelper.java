@@ -29,6 +29,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 
 import org.simlar.R;
 import org.simlar.logging.Lg;
+import org.simlar.service.FirebaseIdService;
 
 public final class GooglePlayServicesHelper
 {
@@ -37,6 +38,11 @@ public final class GooglePlayServicesHelper
 	private GooglePlayServicesHelper()
 	{
 		throw new AssertionError("This class was not meant to be instantiated");
+	}
+
+	public static void refreshTokenOnServer()
+	{
+		FirebaseIdService.refreshTokenOnServer();
 	}
 
 	public static void checkPlayServices(final Activity activity)
