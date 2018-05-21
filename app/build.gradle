@@ -31,13 +31,13 @@ android {
         push {
             dimension "default"
             versionName = android.defaultConfig.versionName
-            buildConfigField("boolean", "IS_GCM_ENABLED", "true")
+            buildConfigField("boolean", "IS_FCM_ENABLED", "true")
         }
 
         alwaysOnline {
             dimension "default"
             versionName = android.defaultConfig.versionName + " (alwaysOnline)"
-            buildConfigField("boolean", "IS_GCM_ENABLED", "false")
+            buildConfigField("boolean", "IS_FCM_ENABLED", "false")
         }
     }
 
