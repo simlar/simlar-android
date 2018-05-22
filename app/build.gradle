@@ -36,10 +36,12 @@ android {
     flavorDimensions "default"
 
     productFlavors {
-        push {
-            dimension "default"
-            versionName = android.defaultConfig.versionName
-            buildConfigField("boolean", "IS_FCM_ENABLED", "true")
+        if (useGoogleServices()) {
+            push {
+                dimension "default"
+                versionName = android.defaultConfig.versionName
+                buildConfigField("boolean", "IS_FCM_ENABLED", "true")
+            }
         }
 
         alwaysOnline {
