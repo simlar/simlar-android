@@ -3,13 +3,23 @@
 apply plugin: "idea"
 
 buildscript {
+    ext.useGoogleServices = { ->
+        return !project.hasProperty('no-google-services')
+    }
+
     repositories {
         google()
         jcenter()
     }
     dependencies {
         classpath "com.android.tools.build:gradle:3.1.2"
-        classpath "com.google.gms:google-services:3.3.1"
+
+        if (useGoogleServices()) {
+            println("using google-services")
+            classpath "com.google.gms:google-services:3.3.1"
+        } else {
+            println("not using google-services")
+        }
     }
 }
 
