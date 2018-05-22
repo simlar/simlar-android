@@ -21,15 +21,16 @@
 
 package org.simlar.service;
 
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.WakefulBroadcastReceiver;
+import android.support.v4.content.ContextCompat;
 
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
-public class BootCompletedReceiver extends WakefulBroadcastReceiver
+public class BootCompletedReceiver extends BroadcastReceiver
 {
 	@Override
 	public final void onReceive(final Context context, final Intent intent)
@@ -51,6 +52,6 @@ public class BootCompletedReceiver extends WakefulBroadcastReceiver
 			return;
 		}
 
-		startWakefulService(context, intent.setComponent(new ComponentName(context, SimlarService.class)));
+		ContextCompat.startForegroundService(context, intent.setComponent(new ComponentName(context, SimlarService.class)));
 	}
 }
