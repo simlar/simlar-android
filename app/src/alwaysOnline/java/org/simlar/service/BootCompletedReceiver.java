@@ -51,6 +51,6 @@ public class BootCompletedReceiver extends WakefulBroadcastReceiver
 			return;
 		}
 
-		startWakefulService(context, intent.setComponent(new ComponentName(context.getPackageName(), SimlarService.class.getName())));
+		startWakefulService(context, intent.setComponent(new ComponentName(context, SimlarService.class)));
 	}
 }
