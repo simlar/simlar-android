@@ -29,6 +29,8 @@
         android:extractNativeLibs="true"
         tools:ignore="UnusedAttribute">
 
+        <!-- needed to not warn in alwaysOnline flavour -->
+        <!--suppress AndroidDomInspection -->
         <service
             android:name="org.simlar.service.FirebaseIdService"
             android:exported="false">
@@ -37,6 +39,8 @@
             </intent-filter>
         </service>
 
+        <!-- needed to not warn in alwaysOnline flavour -->
+        <!--suppress AndroidDomInspection -->
         <service
             android:name="org.simlar.service.FirebaseMessageReceiver"
             android:exported="false">
