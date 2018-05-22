@@ -22,7 +22,7 @@
 package org.simlar.service;
 
 import android.content.Intent;
-import android.os.Build;
+import android.support.v4.content.ContextCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -41,11 +41,6 @@ public final class FirebaseMessageReceiver extends FirebaseMessagingService
 				" data: ", remoteMessage.getData(),
 				" notification: ", remoteMessage.getNotification() == null ? null : remoteMessage.getNotification().getBody());
 
-		final Intent simlarService = new Intent(this, SimlarService.class);
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-			startForegroundService(simlarService);
-		} else {
-			startService(simlarService);
-		}
+		ContextCompat.startForegroundService(this, new Intent(this, SimlarService.class));
 	}
 }
