@@ -148,8 +148,7 @@ final class HttpsPost
 			return null;
 		}
 
-		final PrintWriter out = new PrintWriter(stream);
-		try {
+		try (final PrintWriter out = new PrintWriter(stream)) {
 			out.print(createQueryStringForParameters(parameters));
 			out.flush();
 
@@ -163,8 +162,6 @@ final class HttpsPost
 		} catch (final IOException e) {
 			Lg.ex(e, "IOException while posting");
 			return null;
-		} finally {
-			out.close();
 		}
 	}
 }
