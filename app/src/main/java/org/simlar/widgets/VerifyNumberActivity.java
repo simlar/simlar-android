@@ -199,7 +199,7 @@ public final class VerifyNumberActivity extends AppCompatActivity
 			Lg.e("createAccount no country code => aborting");
 			return;
 		}
-		SimlarNumber.setDefaultRegion(countryCallingCode.intValue());
+		SimlarNumber.setDefaultRegion(countryCallingCode);
 
 		final String number = mEditNumber.getText().toString();
 		if (Util.isNullOrEmpty(number)) {
