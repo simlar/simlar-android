@@ -65,7 +65,7 @@ public final class GooglePlayServicesHelper
 				}
 
 				if (!StorePushId.httpPostStorePushId(gcmRegistrationId)) {
-					Lg.e("ERROR: failed to store gcm push notification registration id=", gcmRegistrationId, " on simlar server");
+					Lg.e("failed to store gcm push notification registration id=", gcmRegistrationId, " on simlar server");
 					return;
 				}
 
