@@ -36,8 +36,7 @@ public final class PreferencesHelper
 	private static final String PREFERENCES_REGION = "region";
 	private static final String PREFERENCES_CREATE_ACCOUNT_STATUS = "create_account_status";
 	private static final String PREFERENCES_CREATE_ACCOUNT_REQUEST_TIMESTAMP = "create_account_request_timestamp";
-	private static final String PREFERENCES_GCM_REGISTRATION_ID = "gcm_registration_id";
-	private static final String PREFERENCES_SIMLAR_VERSION_CODE = "simlar_version_code";
+	private static final String PREFERENCES_GCM_CLIENT_VERSION = "gcm_client_version";
 	private static final String PREFERENCES_DEBUG_MODE = "debug_mode";
 	private static final boolean PREFERENCES_DEBUG_MODE_DEFAULT = Version.showDeveloperMenu();
 	private static final String PREFERENCES_VERIFIED_TELEPHONE_NUMBER = "verified_telephone_number";
@@ -50,8 +49,7 @@ public final class PreferencesHelper
 	private static String mPasswordHash = null;
 	private static long mCreateAccountRequestTimestamp = 0;
 	private static CreateAccountStatus mCreateAccountStatus = CreateAccountStatus.NONE;
-	private static String mGcmRegistrationId = null;
-	private static int mSimlarVersionCode = -1;
+	private static int mGcmClientVersion = -1;
 	private static String mVerifiedTelephoneNumber = null;
 	private static int mMissedCallNotificationId = MISSED_CALL_NOTIFICATION_ID_MIN;
 
@@ -143,15 +141,9 @@ public final class PreferencesHelper
 	}
 
 	@SuppressWarnings("unused") // is only used in flavour push
-	public static String getGcmRegistrationId()
+	public static int getGcmClientVersion()
 	{
-		return mGcmRegistrationId;
-	}
-
-	@SuppressWarnings("unused") // is only used in flavour push
-	public static int getSimlarVersionCode()
-	{
-		return mSimlarVersionCode;
+		return mGcmClientVersion;
 	}
 
 	public static boolean readPreferencesFromFile(final Context context)
@@ -163,8 +155,7 @@ public final class PreferencesHelper
 		final int region = settings.getInt(PREFERENCES_REGION, -1);
 		mCreateAccountRequestTimestamp = settings.getLong(PREFERENCES_CREATE_ACCOUNT_REQUEST_TIMESTAMP, 0);
 		mCreateAccountStatus = CreateAccountStatus.fromInt(settings.getInt(PREFERENCES_CREATE_ACCOUNT_STATUS, 0));
-		mGcmRegistrationId = settings.getString(PREFERENCES_GCM_REGISTRATION_ID, null);
-		mSimlarVersionCode = settings.getInt(PREFERENCES_SIMLAR_VERSION_CODE, -1);
+		mGcmClientVersion = settings.getInt(PREFERENCES_GCM_CLIENT_VERSION, -1);
 		mVerifiedTelephoneNumber = settings.getString(PREFERENCES_VERIFIED_TELEPHONE_NUMBER, null);
 		mMissedCallNotificationId = settings.getInt(PREFERENCES_MISSED_CALL_NOTIFICATION_ID, MISSED_CALL_NOTIFICATION_ID_MIN);
 
@@ -218,14 +209,12 @@ public final class PreferencesHelper
 	}
 
 	@SuppressWarnings("unused") // is only used in flavour push
-	public static void saveToFileGcmRegistrationId(final Context context, final String gcmRegistrationId, final int simlarVersionCode)
+	public static void saveToFileGcmClientVersion(final Context context, final int gcmClientVersion)
 	{
-		mGcmRegistrationId = gcmRegistrationId;
-		mSimlarVersionCode = simlarVersionCode;
+		mGcmClientVersion = gcmClientVersion;
 		final SharedPreferences settings = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
 		final SharedPreferences.Editor editor = settings.edit();
-		editor.putString(PREFERENCES_GCM_REGISTRATION_ID, gcmRegistrationId);
-		editor.putInt(PREFERENCES_SIMLAR_VERSION_CODE, simlarVersionCode);
+		editor.putInt(PREFERENCES_GCM_CLIENT_VERSION, gcmClientVersion);
 		editor.apply();
 	}
 
@@ -251,8 +240,7 @@ public final class PreferencesHelper
 		editor.putString(PREFERENCES_PASSWORD, null);
 		editor.putInt(PREFERENCES_REGION, -1);
 		editor.putInt(PREFERENCES_CREATE_ACCOUNT_STATUS, -1);
-		editor.putString(PREFERENCES_GCM_REGISTRATION_ID, null);
-		editor.putInt(PREFERENCES_SIMLAR_VERSION_CODE, -1);
+		editor.putInt(PREFERENCES_GCM_CLIENT_VERSION, -1);
 		editor.putBoolean(PREFERENCES_DEBUG_MODE, PREFERENCES_DEBUG_MODE_DEFAULT);
 		editor.apply();
 	}

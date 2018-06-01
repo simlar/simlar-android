@@ -20,12 +20,10 @@
 
 package org.simlar.helper;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.os.AsyncTask;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -42,109 +40,75 @@ public final class GooglePlayServicesHelper
 {
 	private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 	private static final String GOOGLE_PUSH_SENDER_ID = "772399062899";
+	private static volatile boolean gcmRegistered = false;
 
 	private GooglePlayServicesHelper()
 	{
 		throw new AssertionError("This class was not meant to be instantiated");
 	}
 
-	public static void registerGcmIfNeeded(final Context context)
+	public static void registerGcm(final Context context)
 	{
-		// Why do we check the version code here?
-		// See: http://developer.android.com/google/gcm/adv.html
-		//        Keeping the Registration State in Sync
-
-		final int versionCode = Version.getVersionCode(context);
-		if (versionCode < 1) {
-			Lg.e("unable to read simlar version code");
+		if (gcmRegistered) {
 			return;
 		}
+		gcmRegistered = true;
 
-		if (PreferencesHelper.getSimlarVersionCode() > 0
-				&& PreferencesHelper.getSimlarVersionCode() == versionCode
-				&& !Util.isNullOrEmpty(PreferencesHelper.getGcmRegistrationId()))
-		{
-			Lg.i("already registered for google push notifications");
-			return;
-		}
+		new Thread(() -> {
+			try {
+				@SuppressWarnings("deprecation")
+				final String gcmRegistrationId = GoogleCloudMessaging.getInstance(context).register(GOOGLE_PUSH_SENDER_ID);
 
-		registerGcm(context, versionCode);
-	}
-
-	@SuppressLint("StaticFieldLeak")
-	private static void registerGcm(final Context context, final int simlarVersionCode)
-	{
-		new AsyncTask<Void, Void, String>() {
-			@Override
-			protected String doInBackground(final Void... params)
-			{
-				try {
-					final GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(context);
-					@SuppressWarnings("deprecation")
-					final String gcmRegistrationId = gcm.register(GOOGLE_PUSH_SENDER_ID);
-
-					if (Util.isNullOrEmpty(gcmRegistrationId)) {
-						Lg.e("got empty gcm registration id from google server");
-						return "";
-					}
-
-					if (!StorePushId.httpPostStorePushId(gcmRegistrationId)) {
-						Lg.e("ERROR: failed to store gcm push notification registration id=", gcmRegistrationId, " on simlar server");
-						return "";
-					}
-
-					Lg.i("gcm push notification registration id=", gcmRegistrationId, " stored on simlar server");
-					return gcmRegistrationId;
-				} catch (final IOException e) {
-					Lg.ex(e, "gcm registration IOException");
-					return "";
+				if (Util.isNullOrEmpty(gcmRegistrationId)) {
+					Lg.e("got empty gcm registration id from google server");
+					return;
 				}
-			}
 
-			@Override
-			protected void onPostExecute(final String gcmRegistrationId)
-			{
-				if (!Util.isNullOrEmpty(gcmRegistrationId)) {
-					PreferencesHelper.saveToFileGcmRegistrationId(context, gcmRegistrationId, simlarVersionCode);
-					Lg.i("gcm push notification registration id=", gcmRegistrationId, " cached on device");
+				if (!StorePushId.httpPostStorePushId(gcmRegistrationId)) {
+					Lg.e("failed to store gcm push notification registration id=", gcmRegistrationId, " on simlar server");
+					return;
 				}
+
+				Lg.i("gcm push notification registration id=", gcmRegistrationId, " stored on simlar server");
+			} catch (final IOException e) {
+				Lg.ex(e, "gcm registration IOException");
 			}
-		}.execute();
+		}).start();
 	}
 
-	private static void showDialogAndFinishParent(final Activity activity, final Dialog dialog)
-	{
-		dialog.setOnDismissListener(dialogInterface -> {
-			dialog.dismiss();
-			activity.finish();
-		});
-		dialog.show();
-	}
-
-	public static boolean checkPlayServices(final Activity activity)
+	public static void checkPlayServices(final Activity activity)
 	{
 		final GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
 		final int resultCode = googleApiAvailability.isGooglePlayServicesAvailable(activity);
 		if (resultCode == ConnectionResult.SUCCESS) {
 			Lg.i("google play services check ok");
-			return true;
+			return;
 		}
-
-		Lg.w("google play services not available: ", googleApiAvailability.getErrorString(resultCode));
 
 		if (googleApiAvailability.isUserResolvableError(resultCode)) {
-			Lg.w("This device has no or too old google play services installed. Asking user");
-			showDialogAndFinishParent(activity, googleApiAvailability.getErrorDialog(activity, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST));
-		} else {
-			Lg.e("This device is not supported.");
-			showDialogAndFinishParent(activity,
-					new AlertDialog.Builder(activity)
-							.setTitle(R.string.google_play_services_helper_alert_unavailable_title)
-							.setMessage(R.string.google_play_services_helper_alert_unavailable_text)
-							.setNeutralButton(R.string.google_play_services_helper_alert_unavailable_button_close_simlar, null)
-							.create());
-		}
+			Lg.i("google play services resolvable error: ", googleApiAvailability.getErrorString(resultCode));
 
-		return false;
+			if (resultCode == ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED && PreferencesHelper.getGcmClientVersion() == googleApiAvailability.getClientVersion(activity)) {
+				Lg.i("user already asked to update play services");
+			} else {
+				Lg.w("this device has too old google play services installed => asking user");
+				googleApiAvailability.getErrorDialog(activity, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST).show();
+				PreferencesHelper.saveToFileGcmClientVersion(activity, googleApiAvailability.getClientVersion(activity));
+			}
+		} else {
+			Lg.e("this device is not supported: ", googleApiAvailability.getErrorString(resultCode));
+
+			final Dialog dialog = new AlertDialog.Builder(activity)
+				.setTitle(R.string.google_play_services_helper_alert_unavailable_title)
+				.setMessage(R.string.google_play_services_helper_alert_unavailable_text)
+				.setNeutralButton(R.string.google_play_services_helper_alert_unavailable_button_close_simlar, null)
+				.create();
+
+			dialog.setOnDismissListener(dialogInterface -> {
+				dialog.dismiss();
+				activity.finish();
+			});
+			dialog.show();
+		}
 	}
 }

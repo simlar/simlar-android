@@ -33,13 +33,12 @@ public final class GooglePlayServicesHelper
 	}
 
 	@SuppressWarnings({"EmptyMethod", "UnusedParameters"})
-	public static void registerGcmIfNeeded(final Context context)
+	public static void registerGcm(final Context context)
 	{
 	}
 
-	@SuppressWarnings({"SameReturnValue", "UnusedParameters"})
-	public static boolean checkPlayServices(final Activity activity)
+	@SuppressWarnings({"EmptyMethod", "UnusedParameters"})
+	public static void checkPlayServices(final Activity activity)
 	{
-		return true;
 	}
 }

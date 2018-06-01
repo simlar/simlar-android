@@ -100,6 +100,8 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 			return;
 		}
 
+		GooglePlayServicesHelper.checkPlayServices(this);
+
 		PermissionsHelper.checkAndRequestNotificationPolicyAccess(this);
 
 		Lg.i("onCreate ended");
@@ -171,7 +173,7 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 				break;
 			}
 
-			GooglePlayServicesHelper.registerGcmIfNeeded(this);
+			GooglePlayServicesHelper.registerGcm(this);
 		});
 	}
 
@@ -200,11 +202,6 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 				finish();
 				return;
 			}
-		}
-
-		//noinspection ConstantConditions /// needed in alwaysOnline flavour
-		if (!GooglePlayServicesHelper.checkPlayServices(this)) {
-			return;
 		}
 
 		if (mCommunicator != null) {

@@ -322,8 +322,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		((TelephonyManager) Util.getSystemService(this, Context.TELEPHONY_SERVICE))
 				.listen(mTelephonyCallStateListener, PhoneStateListener.LISTEN_CALL_STATE);
 
-		PreferencesHelper.readPreferencesFromFile(this);
-
 		ContactsProvider.preLoadContacts(this);
 
 		startLinphone();
