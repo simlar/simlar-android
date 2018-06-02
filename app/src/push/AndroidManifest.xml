@@ -25,8 +25,8 @@
 
     <application
         android:allowBackup="false"
-        android:fullBackupContent="false"
         android:extractNativeLibs="true"
+        android:fullBackupContent="false"
         tools:ignore="UnusedAttribute">
 
         <!-- needed to not warn in alwaysOnline flavour -->
@@ -35,7 +35,7 @@
             android:name="org.simlar.service.FirebaseIdService"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
 
@@ -45,7 +45,7 @@
             android:name="org.simlar.service.FirebaseMessageReceiver"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
 
