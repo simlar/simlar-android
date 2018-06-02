@@ -22,8 +22,6 @@
 
 <resources>
 
-    <string name="app_homepage">www.simlar.org</string>
-    <string name="app_name">Simlar</string>
     <string name="button_continue">Weiter</string>
     <string name="button_cancel">Abbrechen</string>
     <string name="simlar_service_on_destroy">Simlar wurde beendet</string>
