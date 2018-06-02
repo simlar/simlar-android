@@ -56,7 +56,6 @@
     </inspection_tool>
     <inspection_tool class="AssignmentToSuperclassField" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="AssignmentUsedAsCondition" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="AutoUnboxing" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="AwaitNotInLoop" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="AwaitWithoutCorrespondingSignal" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="BadExceptionCaught" enabled="true" level="WARNING" enabled_by_default="true">
@@ -188,9 +187,6 @@
     <inspection_tool class="DuplicateBooleanBranch" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="DuplicateCondition" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoreSideEffectConditions" value="true" />
-    </inspection_tool>
-    <inspection_tool class="DuplicateThrows" enabled="true" level="WARNING" enabled_by_default="true">
-      <option name="ignoreSubclassing" value="true" />
     </inspection_tool>
     <inspection_tool class="ElementOnlyUsedFromTestCode" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="EmptyClass" enabled="true" level="WARNING" enabled_by_default="true">
@@ -800,11 +796,9 @@
       <option name="m_allowConstructorAsInitializer" value="false" />
       <option name="m_onlyLookAtBlocks" value="false" />
     </inspection_tool>
-    <inspection_tool class="TooBroadThrows" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="TransientFieldInNonSerializableClass" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="TransientFieldNotInitialized" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="TrivialStringConcatenation" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="TryFinallyCanBeTryWithResources" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="TypeParameterExtendsFinalClass" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="TypeParameterNamingConvention" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="m_regex" value="[A-Z][A-Za-z\d]*" />
@@ -848,9 +842,6 @@
     <inspection_tool class="UnnecessaryThis" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="UnnecessaryToStringCall" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="UnnecessaryUnaryMinus" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="UnnecessaryUnboxing" enabled="true" level="WARNING" enabled_by_default="true">
-      <option name="onlyReportSuperfluouslyUnboxed" value="true" />
-    </inspection_tool>
     <inspection_tool class="UnnecessaryUnicodeEscape" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="UnpredictableBigDecimalConstructorCall" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoreReferences" value="true" />
