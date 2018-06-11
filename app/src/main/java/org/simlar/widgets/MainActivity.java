@@ -173,7 +173,7 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 				break;
 			}
 
-			GooglePlayServicesHelper.registerGcm(this);
+			GooglePlayServicesHelper.refreshTokenOnServer();
 		});
 	}
 

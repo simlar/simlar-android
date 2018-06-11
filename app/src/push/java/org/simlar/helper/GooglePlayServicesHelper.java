@@ -23,57 +23,26 @@ package org.simlar.helper;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.simlar.R;
-import org.simlar.https.StorePushId;
 import org.simlar.logging.Lg;
-import org.simlar.utils.Util;
-
-import java.io.IOException;
+import org.simlar.service.FirebaseIdService;
 
 public final class GooglePlayServicesHelper
 {
 	private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-	private static final String GOOGLE_PUSH_SENDER_ID = "772399062899";
-	private static volatile boolean gcmRegistered = false;
 
 	private GooglePlayServicesHelper()
 	{
 		throw new AssertionError("This class was not meant to be instantiated");
 	}
 
-	public static void registerGcm(final Context context)
+	public static void refreshTokenOnServer()
 	{
-		if (gcmRegistered) {
-			return;
-		}
-		gcmRegistered = true;
-
-		new Thread(() -> {
-			try {
-				@SuppressWarnings("deprecation")
-				final String gcmRegistrationId = GoogleCloudMessaging.getInstance(context).register(GOOGLE_PUSH_SENDER_ID);
-
-				if (Util.isNullOrEmpty(gcmRegistrationId)) {
-					Lg.e("got empty gcm registration id from google server");
-					return;
-				}
-
-				if (!StorePushId.httpPostStorePushId(gcmRegistrationId)) {
-					Lg.e("failed to store gcm push notification registration id=", gcmRegistrationId, " on simlar server");
-					return;
-				}
-
-				Lg.i("gcm push notification registration id=", gcmRegistrationId, " stored on simlar server");
-			} catch (final IOException e) {
-				Lg.ex(e, "gcm registration IOException");
-			}
-		}).start();
+		FirebaseIdService.refreshTokenOnServer();
 	}
 
 	public static void checkPlayServices(final Activity activity)

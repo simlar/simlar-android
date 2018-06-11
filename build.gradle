@@ -9,6 +9,7 @@ buildscript {
     }
     dependencies {
         classpath "com.android.tools.build:gradle:3.1.2"
+        classpath "com.google.gms:google-services:3.3.1"
     }
 }
 
@@ -31,5 +32,6 @@ idea {
         excludeDirs += file("scripts")
         excludeDirs += file(".travis.yml")
         excludeDirs += file("app/build/intermediates/manifest/androidTest/")
+        excludeDirs += file("app/google-services.json")
     }
 }

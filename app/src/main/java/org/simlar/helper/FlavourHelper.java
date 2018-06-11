@@ -32,6 +32,6 @@ public final class FlavourHelper
 	@SuppressWarnings("SameReturnValue")
 	public static boolean isGcmEnabled()
 	{
-		return BuildConfig.IS_GCM_ENABLED;
+		return BuildConfig.IS_FCM_ENABLED;
 	}
 }
