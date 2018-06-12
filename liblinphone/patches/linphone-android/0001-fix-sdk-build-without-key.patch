@@ -1,0 +1,30 @@
+From 2652b1af09576a27e4328d161616d6d4f1f2e24c Mon Sep 17 00:00:00 2001
+From: Ben Sartor <ben@simlar.org>
+Date: Wed, 13 Jun 2018 00:39:28 +0200
+Subject: [PATCH] fix sdk build without key
+
+---
+ build.gradle | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/build.gradle b/build.gradle
+index cc77667aa..aa26bc6e4 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -103,7 +103,12 @@ android {
+     }
+     buildTypes {
+         release {
+-            signingConfig signingConfigs.release
++            if (!file(RELEASE_STORE_FILE).exists()) {
++                signingConfig null
++                println("skip signing as key file does not exist; " + RELEASE_STORE_FILE)
++            } else {
++                signingConfig signingConfigs.release
++            }
+         }
+         packaged {
+             initWith release
+-- 
+2.11.0
+
