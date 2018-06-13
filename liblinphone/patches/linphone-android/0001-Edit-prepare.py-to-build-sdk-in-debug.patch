@@ -1,0 +1,74 @@
+From 554e77397757b3d3d6d52b0c7579772b72de675c Mon Sep 17 00:00:00 2001
+From: Erwan Croze <erwan.croze@belledonne-communications.com>
+Date: Wed, 13 Jun 2018 15:01:30 +0200
+Subject: [PATCH] Edit prepare.py to build sdk in debug
+
+---
+ liblinphone-sdk/build.gradle | 23 ++++++++++++++++++++++-
+ prepare.py                   | 10 ++++------
+ 2 files changed, 26 insertions(+), 7 deletions(-)
+
+diff --git a/liblinphone-sdk/build.gradle b/liblinphone-sdk/build.gradle
+index e8b6d6fb7..c1692f802 100644
+--- a/liblinphone-sdk/build.gradle
++++ b/liblinphone-sdk/build.gradle
+@@ -68,13 +68,34 @@ android {
+ 
+     buildTypes {
+         release {}
+-        debug{}
++        debug {}
+     }
+ 
+     defaultConfig {
+         compileSdkVersion 28
+         buildToolsVersion "28.0.0"
+         multiDexEnabled true
++        setProperty("archivesBaseName", "liblinphone-sdk")
++    }
++
++    // Signing
++    signingConfigs {
++        release {
++            storeFile file(RELEASE_STORE_FILE)
++            storePassword RELEASE_STORE_PASSWORD
++            keyAlias RELEASE_KEY_ALIAS
++            keyPassword RELEASE_KEY_PASSWORD
++        }
++    }
++    buildTypes {
++        release {
++            signingConfig signingConfigs.release
++        }
++        packaged {
++            initWith release
++            signingConfig null
++            matchingFallbacks = ['debug', 'release']
++        }
+     }
+ 
+     lintOptions {
+diff --git a/prepare.py b/prepare.py
+index ee5063a73..4ad88b5e0 100755
+--- a/prepare.py
++++ b/prepare.py
+@@ -368,12 +368,10 @@ generate-javadoc:
+ \t./gradlew -q androidJavadocsJar
+ \t./gradlew -q sourcesJar
+ 
+-liblinphone-android-sdk: java-clean build copy-libs 
+-\t./gradlew -q androidJavadocsJar
+-\t./gradlew -q sourcesJar
+-\t./gradlew -q assembleRelease
+-\tmkdir -p $(TOPDIR)/bin/outputs/aar
+-\t@mv $(TOPDIR)/liblinphone-sdk/bin/outputs/aar/*.aar $(TOPDIR)/bin/outputs/aar/liblinphone-sdk.aar
++debug-sdk: java-clean build copy-libs generate-javadoc generate-apk
++\t./gradlew -q sdkZip
++
++release-sdk: java-clean build copy-libs generate-javadoc release
+ \t./gradlew -q sdkZip
+ 
+ linphone-android-sdk: java-clean build copy-libs 
+-- 
+2.11.0
+
