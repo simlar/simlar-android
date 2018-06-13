@@ -80,6 +80,6 @@ rm -rf app/src/main/jniLibs/
 rm -rf app/libs/
 
 mkdir app/libs/
-unzip -o $(find "${BUILD_DIR}/linphone-android/bin/distributions/" -maxdepth 1 -name liblinphone-android-sdk\*.zip) -d app/libs/
+unzip -o $(find "${BUILD_DIR}/linphone-android/liblinphone-sdk/bin/distributions/" -maxdepth 1 -name liblinphone-android-sdk\*.zip) -d app/libs/
 
 echo "liblinphone build successfull with git hash: ${GIT_HASH}"
