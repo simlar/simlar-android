@@ -20,10 +20,11 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <string name="app_homepage">www.simlar.org</string>
-    <string name="app_name">Simlar</string>
+    <string name="app_homepage" tools:ignore="MissingTranslation">www.simlar.org</string>
+    <string name="app_name" tools:ignore="MissingTranslation">Simlar</string>
+
     <string name="button_continue">Continue</string>
     <string name="button_cancel">Cancel</string>
     <string name="simlar_service_on_destroy">Simlar terminated</string>

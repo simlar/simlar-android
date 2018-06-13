@@ -23,6 +23,11 @@ export ANDROID_HOME=<YOUR ANDROID SDK DIRECTORY>
 ./gradlew assembleDebug
 ```
 
+Build without Google Services
+```
+./gradlew assembleAlwaysOnlineRelease -Pno-google-services
+```
+
 Compile and run static code analysis.
 ```
 ./gradlew build connectedCheck

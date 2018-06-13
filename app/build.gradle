@@ -69,4 +69,9 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["liblinphone-sdk.aar"])
 }
 
-apply plugin: "com.google.gms.google-services"
+if (useGoogleServices()) {
+    println("using push notifications")
+    apply plugin: "com.google.gms.google-services"
+} else {
+    println("not using push notifications")
+}
