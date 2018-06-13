@@ -1,0 +1,25 @@
+From b35c85ce9640154c9cd6dc68bc1df898bc9e807f Mon Sep 17 00:00:00 2001
+From: Ben Sartor <mail@ben-sartor.de>
+Date: Wed, 13 Jun 2018 03:22:24 +0200
+Subject: [PATCH 2/3] fix sdk build
+
+---
+ prepare.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/prepare.py b/prepare.py
+index ee5063a73..f7fb4b642 100755
+--- a/prepare.py
++++ b/prepare.py
+@@ -373,7 +373,7 @@ liblinphone-android-sdk: java-clean build copy-libs
+ \t./gradlew -q sourcesJar
+ \t./gradlew -q assembleRelease
+ \tmkdir -p $(TOPDIR)/bin/outputs/aar
+-\t@mv $(TOPDIR)/liblinphone-sdk/bin/outputs/aar/*.aar $(TOPDIR)/bin/outputs/aar/liblinphone-sdk.aar
++\t@mv $(TOPDIR)/liblinphone-sdk/bin/outputs/aar/*.aar $(TOPDIR)/liblinphone-sdk/bin/outputs/aar/liblinphone-sdk.aar
+ \t./gradlew -q sdkZip
+ 
+ linphone-android-sdk: java-clean build copy-libs 
+-- 
+2.11.0
+
