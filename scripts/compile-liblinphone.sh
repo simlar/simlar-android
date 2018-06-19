@@ -73,7 +73,7 @@ rm -f liblinphone-android-sdk-*.zip
 	-DENABLE_ZRTP=ON
 
 make
-make liblinphone-android-sdk
+make debug-sdk
 cd ../../../..
 
 rm -rf app/src/main/jniLibs/
