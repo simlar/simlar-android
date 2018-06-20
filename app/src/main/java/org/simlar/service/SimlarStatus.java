@@ -34,15 +34,17 @@ public enum SimlarStatus
 
 	public static SimlarStatus fromRegistrationState(final RegistrationState state)
 	{
-		if (RegistrationState.None == state || RegistrationState.Cleared == state) {
+		switch (state) {
+		case None:
+		case Cleared:
 			return OFFLINE;
-		} else if (RegistrationState.Progress == state) {
+		case Progress:
 			return CONNECTING;
-		} else if (RegistrationState.Ok == state) {
+		case Ok:
 			return ONLINE;
-		} else if (RegistrationState.Failed == state) {
+		case Failed:
 			return ERROR;
-		} else {
+		default:
 			return UNKNOWN;
 		}
 	}
