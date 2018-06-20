@@ -34,13 +34,13 @@ public enum SimlarStatus
 
 	public static SimlarStatus fromRegistrationState(final RegistrationState state)
 	{
-		if (RegistrationState.None.equals(state) || RegistrationState.Cleared.equals(state)) {
+		if (RegistrationState.None == state || RegistrationState.Cleared == state) {
 			return OFFLINE;
-		} else if (RegistrationState.Progress.equals(state)) {
+		} else if (RegistrationState.Progress == state) {
 			return CONNECTING;
-		} else if (RegistrationState.Ok.equals(state)) {
+		} else if (RegistrationState.Ok == state) {
 			return ONLINE;
-		} else if (RegistrationState.Failed.equals(state)) {
+		} else if (RegistrationState.Failed == state) {
 			return ERROR;
 		} else {
 			return UNKNOWN;
