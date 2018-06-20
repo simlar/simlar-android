@@ -195,7 +195,7 @@ public final class LinphoneThread extends Thread implements CoreListener
 			return;
 		}
 
-		if (!RegistrationState.Ok.equals(mRegistrationState)) {
+		if (RegistrationState.Ok != mRegistrationState) {
 			Lg.i("call: not registered");
 			return;
 		}
@@ -489,7 +489,7 @@ public final class LinphoneThread extends Thread implements CoreListener
 				return;
 			}
 
-			if (RegistrationState.Ok.equals(mRegistrationState) && RegistrationState.Progress.equals(state)
+			if (RegistrationState.Ok == mRegistrationState && RegistrationState.Progress == state
 					&& "Refresh registration".equals(message)) {
 				Lg.i("registration state for ", new Lg.Anonymizer(identity), " ignored: ", state,
 						" as it is caused by refreshRegisters");
@@ -506,7 +506,7 @@ public final class LinphoneThread extends Thread implements CoreListener
 
 	private Call.State fixCallState(final Call.State onCallStateChanged)
 	{
-		if (Call.State.Released.equals(onCallStateChanged) || Call.State.Error.equals(onCallStateChanged)) {
+		if (Call.State.Released == onCallStateChanged || Call.State.Error == onCallStateChanged) {
 			if (mLinphoneHandler.hasNoCurrentCalls()) {
 				Lg.i("fixCallState: ", onCallStateChanged, " -> ", Call.State.End);
 				return Call.State.End;
@@ -523,7 +523,7 @@ public final class LinphoneThread extends Thread implements CoreListener
 
 		Lg.i("creating videoState based on localVideo= ", localVideo, " remoteVideo=", remoteVideo);
 
-		if (!Call.State.End.equals(state) && localVideo && remoteVideo) {
+		if (Call.State.End != state && localVideo && remoteVideo) {
 			if (call.getStats(StreamType.Video) == null || mVideoState == VideoState.ENCRYPTING) {
 				return VideoState.ENCRYPTING;
 			}
@@ -536,16 +536,16 @@ public final class LinphoneThread extends Thread implements CoreListener
 		}
 
 		if (!localVideo && remoteVideo) {
-			if (Call.State.UpdatedByRemote.equals(state)) {
+			if (Call.State.UpdatedByRemote == state) {
 				return VideoState.REMOTE_REQUESTED;
 			}
 
-			if (mVideoState == VideoState.REQUESTING && Call.State.StreamsRunning.equals(state)) {
+			if (mVideoState == VideoState.REQUESTING && Call.State.StreamsRunning == state) {
 				return VideoState.ACCEPTED;
 			}
 		}
 
-		if (!remoteVideo && Call.State.StreamsRunning.equals(state) && mVideoState == VideoState.REQUESTING) {
+		if (!remoteVideo && Call.State.StreamsRunning == state && mVideoState == VideoState.REQUESTING) {
 			return VideoState.DENIED;
 		}
 
