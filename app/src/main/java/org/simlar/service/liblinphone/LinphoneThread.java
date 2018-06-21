@@ -525,6 +525,8 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 		final boolean localVideo = call.getCurrentParams() != null && call.getCurrentParams().getVideoEnabled();
 		final boolean remoteVideo = call.getRemoteParams() != null && call.getRemoteParams().getVideoEnabled();
 
+		Lg.i("creating videoState based on localVideo= ", localVideo, " remoteVideo=", remoteVideo);
+
 		if (!LinphoneCall.State.CallEnd.equals(state) && localVideo && remoteVideo) {
 			if (call.getVideoStats() == null || mVideoState == VideoState.ENCRYPTING) {
 				return VideoState.ENCRYPTING;
