@@ -464,7 +464,9 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 		mVideoFragment = null;
 
-		mProximityScreenLocker.acquire();
+		if (!isFinishing()) {
+			mProximityScreenLocker.acquire();
+		}
 
 		setExternalSpeaker(false);
 
