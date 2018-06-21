@@ -344,23 +344,19 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 		switch (videoState) {
 		case OFF:
-			break;
-		case PLAYING:
-			mVideoFragment.setNowPlaying();
+		case REQUESTING:
+		case ACCEPTED:
+		case WAITING_FOR_ICE:
+		case ENCRYPTING:
 			break;
 		case REMOTE_REQUESTED:
 			showRemoteRequestedVideoAlert();
 			break;
-		case REQUESTING:
-			break;
-		case ACCEPTED:
-			break;
-		case WAITING_FOR_ICE:
-			break;
-		case ENCRYPTING:
-			break;
 		case DENIED:
 			showRemoteDeniedVideoAlert();
+			break;
+		case PLAYING:
+			mVideoFragment.setNowPlaying();
 			break;
 		}
 	}
