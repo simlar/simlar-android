@@ -323,10 +323,19 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	{
 		Lg.i("onVideoStateChanged: ", videoState);
 
-		if (VideoState.PLAYING == videoState || VideoState.ENCRYPTING == videoState || VideoState.WAITING_FOR_ICE == videoState || VideoState.ACCEPTED == videoState) {
-			startVideo();
-		} else {
+		switch (videoState) {
+		case OFF:
+		case REQUESTING:
+		case REMOTE_REQUESTED:
+		case DENIED:
 			stopVideo();
+			break;
+		case ACCEPTED:
+		case WAITING_FOR_ICE:
+		case ENCRYPTING:
+		case PLAYING:
+			startVideo();
+			break;
 		}
 
 		final boolean requestingVideo = VideoState.REQUESTING == videoState;
