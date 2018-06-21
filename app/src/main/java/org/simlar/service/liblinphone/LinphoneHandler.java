@@ -404,6 +404,20 @@ final class LinphoneHandler
 		mLinphoneCore.updateCall(currentCall, params);
 	}
 
+	public void reinviteVideo()
+	{
+		Lg.i("reinviteVideo");
+		final LinphoneCall currentCall = getCurrentCall();
+		if (currentCall == null) {
+			Lg.w("no current call to reinviteVideo");
+			return;
+		}
+
+		final LinphoneCallParams callParams = mLinphoneCore.createCallParams(currentCall);
+		callParams.setVideoEnabled(true);
+		mLinphoneCore.updateCall(currentCall, callParams);
+	}
+
 	public void preventAutoAnswer()
 	{
 		Lg.i("preventAutoAnswer");
@@ -528,19 +542,5 @@ final class LinphoneHandler
 		}
 
 		Lg.e("failed to toggle camera");
-	}
-
-	public void reinviteVideo()
-	{
-		Lg.i("reinviteVideo");
-		final LinphoneCall currentCall = getCurrentCall();
-		if (currentCall == null) {
-			Lg.w("no current call to reinviteVideo");
-			return;
-		}
-
-		final LinphoneCallParams callParams = mLinphoneCore.createCallParams(currentCall);
-		callParams.setVideoEnabled(true);
-		mLinphoneCore.updateCall(currentCall, callParams);
 	}
 }
