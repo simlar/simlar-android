@@ -541,11 +541,12 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 			return VideoState.REMOTE_REQUESTED;
 		}
 
-		if (LinphoneCall.State.StreamsRunning.equals(state) && mVideoState == VideoState.REQUESTING) {
+		if (!remoteVideo && LinphoneCall.State.StreamsRunning.equals(state) && mVideoState == VideoState.REQUESTING) {
 			return VideoState.DENIED;
 		}
 
 		if (mVideoState == VideoState.REQUESTING) {
+			mLinphoneThreadHandler.post(mLinphoneHandler::reinviteVideo);
 			return VideoState.REQUESTING;
 		}
 
