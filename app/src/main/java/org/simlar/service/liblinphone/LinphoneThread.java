@@ -568,7 +568,7 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 
 		if (videoState == VideoState.REMOTE_REQUESTED) {
 			Lg.i("remote requested video");
-			/// NOTE: this needs to happen directly, posting to linphone thread might take to log
+			/// NOTE: this needs to happen directly, posting to linphone thread might take to long
 			mLinphoneHandler.preventAutoAnswer();
 		}
 
