@@ -491,7 +491,7 @@ final class LinphoneHandler
 	{
 		Lg.i("toggleCamera");
 
-		final AndroidCameraConfiguration.AndroidCamera[] cameras = AndroidCameraConfiguration.retrieveCameras();
+		final String[] cameras = mLinphoneCore.getVideoDevicesList();
 		if (cameras.length < 1) {
 			Lg.i("not enough cameras to toggle through");
 			return;
@@ -503,17 +503,16 @@ final class LinphoneHandler
 			return;
 		}
 
-//		final int currentCameraId = mLinphoneCore.getVideoDevice();
-//
-//		for (int i = 0; i < cameras.length; i++) {
-//			if (cameras[i].id == currentCameraId) {
-//				final int newCameraId = i + 1 < cameras.length ? cameras[i + 1].id : cameras[0].id;
-//				Lg.i("toggling cameraId: ", currentCameraId, " => ", newCameraId);
-//				mLinphoneCore.setVideoDevice(newCameraId);
-//				mLinphoneCore.updateCall(currentCall, null);
-//				return;
-//			}
-//		}
+		final String currentCamera = mLinphoneCore.getVideoDevice();
+		for (int i = 0; i < cameras.length; i++) {
+			if (Util.equalString(currentCamera, cameras[i])) {
+				final String newCamera = i + 1 < cameras.length ? cameras[i + 1] : cameras[0];
+				Lg.i("toggling cameraId: ", currentCamera, " => ", newCamera);
+				mLinphoneCore.setVideoDevice(newCamera);
+				mLinphoneCore.updateCall(currentCall, null);
+				return;
+			}
+		}
 
 		Lg.e("failed to toggle camera");
 	}
