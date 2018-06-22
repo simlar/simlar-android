@@ -572,8 +572,6 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 		final LinphoneCall.State fixedState = fixLinphoneCallState(state);
 		final VideoState videoState = createVideoState(fixedState, call);
 
-		updateVideoState(videoState);
-
 		Lg.i("callState changed state=", fixedState, " number=", new CallLogger(call), " message=", message, " videoState=", videoState);
 
 		if (videoState == VideoState.REMOTE_REQUESTED) {
@@ -582,6 +580,7 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 			mLinphoneHandler.preventAutoAnswer();
 		}
 
+		updateVideoState(videoState);
 		mMainThreadHandler.post(() -> mListener.onCallStateChanged(number, fixedState, message));
 	}
 
