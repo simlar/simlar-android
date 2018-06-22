@@ -545,7 +545,6 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 			}
 
 			if (mVideoState == VideoState.REQUESTING && LinphoneCall.State.StreamsRunning.equals(state)) {
-				mLinphoneThreadHandler.post(mLinphoneHandler::reinviteVideo);
 				return VideoState.ACCEPTED;
 			}
 		}
@@ -555,7 +554,6 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 		}
 
 		if (mVideoState == VideoState.REQUESTING) {
-			mLinphoneThreadHandler.post(mLinphoneHandler::reinviteVideo);
 			return VideoState.REQUESTING;
 		}
 
@@ -578,6 +576,8 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 			Lg.i("remote requested video");
 			/// NOTE: this needs to happen directly, posting to linphone thread might take to long
 			mLinphoneHandler.preventAutoAnswer();
+		} else if (videoState == VideoState.ACCEPTED || videoState == VideoState.REQUESTING) {
+			mLinphoneThreadHandler.post(mLinphoneHandler::reinviteVideo);
 		}
 
 		updateVideoState(videoState);
