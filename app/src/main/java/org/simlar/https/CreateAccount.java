@@ -35,7 +35,7 @@ import java.util.Map;
 
 public final class CreateAccount
 {
-	private static final String URL_PATH = "create-account.php";
+	private static final String URL_PATH = "create-account.xml";
 	private static final String URL_PATH_CALL = "create-account-call.xml";
 
 	private CreateAccount()
