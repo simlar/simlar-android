@@ -24,13 +24,18 @@ package org.simlar.service;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import org.simlar.https.StorePushId;
 import org.simlar.logging.Lg;
+import org.simlar.utils.Util;
 
 public final class FirebaseMessageReceiver extends FirebaseMessagingService
 {
+	private static volatile boolean tokenRefreshed = false;
+
 	@Override
 	public void onMessageReceived(final RemoteMessage remoteMessage)
 	{
@@ -42,5 +47,40 @@ public final class FirebaseMessageReceiver extends FirebaseMessagingService
 				" notification: ", remoteMessage.getNotification() == null ? null : remoteMessage.getNotification().getBody());
 
 		ContextCompat.startForegroundService(this, new Intent(this, SimlarService.class));
+	}
+
+	@Override
+	public void onNewToken(final String token)
+	{
+		Lg.i("onTokenRefresh: ", token);
+		sendToServer(token);
+	}
+
+	private static void sendToServer(final String token)
+	{
+		if (Util.isNullOrEmpty(token)) {
+			Lg.e("empty token");
+			return;
+		}
+
+		new Thread(() -> {
+			if (!StorePushId.httpPostStorePushId(token)) {
+				Lg.e("failed to store push notification token=", token, " on simlar server");
+				return;
+			}
+
+			Lg.i("push notification token=", token, " stored on simlar server");
+		}).start();
+	}
+
+	public static void refreshTokenOnServer()
+	{
+		if (tokenRefreshed) {
+			return;
+		}
+		tokenRefreshed = true;
+
+		Lg.i("trigger update of firebase push notification token on simlar server");
+		FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(instanceIdResult -> sendToServer(instanceIdResult.getToken()));
 	}
 }
