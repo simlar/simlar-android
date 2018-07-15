@@ -56,6 +56,10 @@ android {
     }
 }
 
+dependencyCheck {
+    failBuildOnCVSS = 0
+}
+
 ext {
     androidSupportVersion = "28.0.0-rc01"
 }
