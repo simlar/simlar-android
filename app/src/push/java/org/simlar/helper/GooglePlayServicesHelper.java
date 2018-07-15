@@ -29,7 +29,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 
 import org.simlar.R;
 import org.simlar.logging.Lg;
-import org.simlar.service.FirebaseIdService;
+import org.simlar.service.FirebaseMessageReceiver;
 
 public final class GooglePlayServicesHelper
 {
@@ -42,7 +42,7 @@ public final class GooglePlayServicesHelper
 
 	public static void refreshTokenOnServer()
 	{
-		FirebaseIdService.refreshTokenOnServer();
+		FirebaseMessageReceiver.refreshTokenOnServer();
 	}
 
 	public static void checkPlayServices(final Activity activity)
