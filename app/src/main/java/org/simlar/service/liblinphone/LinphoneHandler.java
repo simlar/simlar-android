@@ -210,6 +210,7 @@ final class LinphoneHandler
 		proxyCfg.enableRegister(true);
 		proxyCfg.setExpires(60); // connection times out after 1 minute. This overrides kamailio setting which is 3600 (1 hour).
 		proxyCfg.enablePublish(false);
+		proxyCfg.setPushNotificationAllowed(false);
 		mLinphoneCore.addProxyConfig(proxyCfg);
 		mLinphoneCore.setDefaultProxyConfig(proxyCfg);
 	}
