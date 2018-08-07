@@ -164,6 +164,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mButtonToggleVideo = findViewById(R.id.buttonToggleVideo);
 		mButtonMicro = findViewById(R.id.buttonMicro);
 		mButtonSpeaker = findViewById(R.id.buttonSpeaker);
+		muteExternalSpeaker();
 
 		//
 		// Presets
@@ -605,7 +606,8 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	@SuppressWarnings("unused")
 	public void toggleSpeakerMuted(final View view)
 	{
-		mCommunicator.getService().toggleExternalSpeaker();
+		final AudioManager audioManager = Util.getSystemService(this , Context.AUDIO_SERVICE);
+		audioManager.setSpeakerphoneOn(!audioManager.isSpeakerphoneOn());
 		setButtonSpeakerMute();
 	}
 
@@ -628,9 +630,19 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		}
 	}
 
+	private boolean getExternalSpeaker()
+	{
+		return ((AudioManager) Util.getSystemService(this , Context.AUDIO_SERVICE)).isSpeakerphoneOn();
+	}
+
+	private void muteExternalSpeaker()
+	{
+		((AudioManager) Util.getSystemService(this , Context.AUDIO_SERVICE)).setSpeakerphoneOn(false);
+	}
+
 	private void setExternalSpeaker(final boolean enable)
 	{
-		if (mCommunicator.getService().getExternalSpeaker() == enable) {
+		if (getExternalSpeaker() == enable) {
 			return;
 		}
 
@@ -639,7 +651,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 	private void setButtonSpeakerMute()
 	{
-		if (mCommunicator.getService().getExternalSpeaker()) {
+		if (getExternalSpeaker()) {
 			mButtonSpeaker.setImageResource(R.drawable.speaker_on);
 			mButtonSpeaker.setContentDescription(getString(R.string.call_activity_loudspeaker_on));
 		} else {
