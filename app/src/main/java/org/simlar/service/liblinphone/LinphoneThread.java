@@ -489,13 +489,6 @@ public final class LinphoneThread extends Thread implements CoreListener
 				return;
 			}
 
-			if (RegistrationState.Ok == mRegistrationState && RegistrationState.Progress == state
-					&& "Refresh registration".equals(message)) {
-				Lg.i("registration state for ", new Lg.Anonymizer(identity), " ignored: ", state,
-						" as it is caused by refreshRegisters");
-				return;
-			}
-
 			Lg.i("registration state for ", new Lg.Anonymizer(identity), " changed: ", state, " ", message);
 			mRegistrationState = state;
 
