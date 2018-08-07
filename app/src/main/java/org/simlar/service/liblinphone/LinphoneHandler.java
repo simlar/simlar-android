@@ -26,6 +26,7 @@ import org.linphone.core.Call;
 import org.linphone.core.CallParams;
 import org.linphone.core.Core;
 import org.linphone.core.MediaEncryption;
+import org.linphone.core.NatPolicy;
 import org.linphone.core.Transports;
 import org.linphone.core.Factory;
 import org.linphone.core.CoreListener;
@@ -111,9 +112,10 @@ final class LinphoneHandler
 		mLinphoneCore.setUserAgent("Simlar", Version.getVersionName(context));
 
 		// enable STUN with ICE
-		mLinphoneCore.getNatPolicy().setStunServer(STUN_SERVER);
-		mLinphoneCore.getNatPolicy().enableStun(true);
-		mLinphoneCore.getNatPolicy().enableIce(true);
+		final NatPolicy natPolicy = mLinphoneCore.getNatPolicy();
+		natPolicy.setStunServer(STUN_SERVER);
+		natPolicy.enableStun(true);
+		natPolicy.enableIce(true);
 
 		// Use TLS for registration with random port
 		final Transports transports = mLinphoneCore.getTransports();
