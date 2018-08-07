@@ -165,6 +165,9 @@ final class LinphoneHandler
 
 		// make sure we only handle one call
 		mLinphoneCore.setMaxCalls(1);
+
+		// make sure DNS SRV is disabled
+		mLinphoneCore.enableDnsSrv(false);
 	}
 
 	void linphoneCoreIterate()
