@@ -268,8 +268,7 @@ final class LinphoneHandler
 		}
 
 		Lg.i("Picking up call: ", new Lg.Anonymizer(currentCall.getRemoteAddress().asStringUriOnly()));
-		final CallParams params = mLinphoneCore.createCallParams(null);
-		mLinphoneCore.acceptCallWithParams(currentCall, params);
+		currentCall.accept();
 	}
 
 	public void terminateAllCalls()
@@ -326,7 +325,7 @@ final class LinphoneHandler
 		}
 
 		Lg.i("resuming call");
-		mLinphoneCore.resumeCall(call);
+		call.resume();
 	}
 
 	public void setVolumes(final Volumes volumes)
@@ -390,7 +389,7 @@ final class LinphoneHandler
 		}
 
 		params.enableVideo(enable);
-		mLinphoneCore.updateCall(currentCall, params);
+		currentCall.update(params);
 	}
 
 	public void reinviteVideo()
@@ -404,7 +403,7 @@ final class LinphoneHandler
 
 		final CallParams callParams = mLinphoneCore.createCallParams(currentCall);
 		callParams.enableVideo(true);
-		mLinphoneCore.updateCall(currentCall, callParams);
+		currentCall.update(callParams);
 	}
 
 	public void preventAutoAnswer()
@@ -417,7 +416,7 @@ final class LinphoneHandler
 			return;
 		}
 
-		mLinphoneCore.deferCallUpdate(currentCall);
+		currentCall.deferUpdate();
 	}
 
 	public void acceptVideoUpdate(final boolean accept)
@@ -435,7 +434,7 @@ final class LinphoneHandler
 			params.enableVideo(true);
 		}
 
-		mLinphoneCore.acceptCallUpdate(currentCall, params);
+		currentCall.acceptUpdate(params);
 	}
 
 	public void setNativeVideoWindowId(final Object videoWindow)
@@ -491,7 +490,7 @@ final class LinphoneHandler
 			setFrontCameraAsDefault();
 		}
 
-		mLinphoneCore.updateCall(currentCall, null);
+		currentCall.update(null);
 	}
 
 	public void toggleCamera()
@@ -516,7 +515,7 @@ final class LinphoneHandler
 				final String newCamera = cameras[(i + 1) % cameras.length];
 				Lg.i("toggling cameraId: ", currentCamera, " => ", newCamera);
 				mLinphoneCore.setVideoDevice(newCamera);
-				mLinphoneCore.updateCall(currentCall, null);
+				currentCall.update(null);
 				return;
 			}
 		}
