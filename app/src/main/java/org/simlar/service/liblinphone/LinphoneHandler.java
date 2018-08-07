@@ -139,6 +139,7 @@ final class LinphoneHandler
 		// set sound files
 		mLinphoneCore.setRingback(ringbackSoundFile);
 		mLinphoneCore.setPlayFile(pauseSoundFile);
+		mLinphoneCore.setRing(null);
 
 		// enable echo cancellation
 		mLinphoneCore.enableEchoCancellation(true);
