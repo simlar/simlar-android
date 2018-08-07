@@ -27,7 +27,6 @@ public final class Volumes
 
 	private final float mPlayGain;
 	private final float mMicGain;
-	private final boolean mExternalSpeaker;
 	private final MicrophoneStatus mMicrophoneStatus;
 	private final boolean mEchoLimiter;
 
@@ -42,17 +41,14 @@ public final class Volumes
 	{
 		mPlayGain = 0.0f;
 		mMicGain = 0.0f;
-		mExternalSpeaker = false;
 		mMicrophoneStatus = MicrophoneStatus.ON;
 		mEchoLimiter = false;
 	}
 
-	private Volumes(final float playGain, final float micGain, final boolean externalSpeaker, final MicrophoneStatus microphoneStatus,
-	                final boolean echoLimiter)
+	private Volumes(final float playGain, final float micGain, final MicrophoneStatus microphoneStatus, final boolean echoLimiter)
 	{
 		mPlayGain = playGain;
 		mMicGain = micGain;
-		mExternalSpeaker = externalSpeaker;
 		mMicrophoneStatus = microphoneStatus;
 		mEchoLimiter = echoLimiter;
 	}
@@ -60,8 +56,7 @@ public final class Volumes
 	@Override
 	public String toString()
 	{
-		return "playGain: " + mPlayGain + " micGain: " + mMicGain + " micStatus: " + mMicrophoneStatus + " externalSpeaker: " + mExternalSpeaker
-				+ " echoLimiter:" + mEchoLimiter;
+		return "playGain: " + mPlayGain + " micGain: " + mMicGain + " micStatus: " + mMicrophoneStatus + " echoLimiter:" + mEchoLimiter;
 	}
 
 	public float getPlayGain()
@@ -72,11 +67,6 @@ public final class Volumes
 	public float getMicrophoneGain()
 	{
 		return mMicGain;
-	}
-
-	public boolean getExternalSpeaker()
-	{
-		return mExternalSpeaker;
 	}
 
 	public MicrophoneStatus getMicrophoneStatus()
@@ -96,12 +86,7 @@ public final class Volumes
 
 	public Volumes toggleEchoLimiter()
 	{
-		return new Volumes(mPlayGain, mMicGain, mExternalSpeaker, mMicrophoneStatus, !mEchoLimiter);
-	}
-
-	public Volumes toggleExternalSpeaker()
-	{
-		return new Volumes(mPlayGain, mMicGain, !mExternalSpeaker, mMicrophoneStatus, mEchoLimiter);
+		return new Volumes(mPlayGain, mMicGain, mMicrophoneStatus, !mEchoLimiter);
 	}
 
 	public Volumes toggleMicrophoneMuted()
@@ -111,16 +96,16 @@ public final class Volumes
 			//noinspection ReturnOfThis
 			return this;
 		case MUTED:
-			return new Volumes(mPlayGain, mMicGain, mExternalSpeaker, MicrophoneStatus.ON, mEchoLimiter);
+			return new Volumes(mPlayGain, mMicGain, MicrophoneStatus.ON, mEchoLimiter);
 		case ON:
 		default:
-			return new Volumes(mPlayGain, mMicGain, mExternalSpeaker, MicrophoneStatus.MUTED, mEchoLimiter);
+			return new Volumes(mPlayGain, mMicGain, MicrophoneStatus.MUTED, mEchoLimiter);
 		}
 	}
 
 	public Volumes setMicrophoneStatus(final MicrophoneStatus microphoneStatus)
 	{
-		return new Volumes(mPlayGain, mMicGain, mExternalSpeaker, microphoneStatus, mEchoLimiter);
+		return new Volumes(mPlayGain, mMicGain, microphoneStatus, mEchoLimiter);
 	}
 
 	public int getProgressSpeaker()
@@ -135,12 +120,12 @@ public final class Volumes
 
 	public Volumes setProgressSpeaker(final int progress)
 	{
-		return new Volumes(progress2Gain(progress), mMicGain, mExternalSpeaker, mMicrophoneStatus, mEchoLimiter);
+		return new Volumes(progress2Gain(progress), mMicGain, mMicrophoneStatus, mEchoLimiter);
 	}
 
 	public Volumes setProgressMicrophone(final int progress)
 	{
-		return new Volumes(mPlayGain, progress2Gain(progress), mExternalSpeaker, mMicrophoneStatus, mEchoLimiter);
+		return new Volumes(mPlayGain, progress2Gain(progress), mMicrophoneStatus, mEchoLimiter);
 	}
 
 	// GAIN_MIN ... GAIN_MAX -> 0 ... 100

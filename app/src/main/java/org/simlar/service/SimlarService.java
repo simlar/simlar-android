@@ -989,7 +989,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	public boolean getExternalSpeaker()
 	{
-		return getVolumes().getExternalSpeaker();
+		return ((AudioManager) Util.getSystemService(this, Context.AUDIO_SERVICE)).isSpeakerphoneOn();
 	}
 
 	public MicrophoneStatus getMicrophoneStatus()
@@ -1032,7 +1032,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	public void toggleExternalSpeaker()
 	{
-		setVolumes(getVolumes().toggleExternalSpeaker());
+		final AudioManager audioManager = Util.getSystemService(this, Context.AUDIO_SERVICE);
+		audioManager.setSpeakerphoneOn(!audioManager.isSpeakerphoneOn());
 	}
 
 	public void requestVideoUpdate(final boolean enable)
