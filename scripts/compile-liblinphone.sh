@@ -6,6 +6,8 @@ set -eu -o pipefail
 declare -r  BUILD_DIR=${1:?"Please give liblinphone dir as first parameter"}
 declare -r  GIT_HASH=${2:-"unknown"}
 
+declare -r  SIMLAR_ROOT_CA="$(dirname $(readlink -f $0))/../app/src/main/res/raw/rootca.pem"
+
 declare -rx ANDROID_NDK=${ANDROID_NDK:-""}
 declare -rx ANDROID_HOME=${ANDROID_HOME:-""}
 
@@ -74,6 +76,7 @@ rm -f liblinphone-android-sdk-*.zip
 
 make
 make debug-sdk
+find . -name rootca.pem -exec cp "${SIMLAR_ROOT_CA}"  {} \;
 cd ../../../..
 
 rm -rf app/src/main/jniLibs/
