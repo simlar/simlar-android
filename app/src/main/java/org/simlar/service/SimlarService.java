@@ -470,6 +470,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		try {
 			mLinphoneThread.register(PreferencesHelper.getMySimlarId(), PreferencesHelper.getPassword());
+			muteExternalSpeaker();
 		} catch (final NotInitedException e) {
 			Lg.ex(e, "PreferencesHelper.NotInitedException");
 		}
@@ -990,6 +991,12 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	public boolean getExternalSpeaker()
 	{
 		return ((AudioManager) Util.getSystemService(this, Context.AUDIO_SERVICE)).isSpeakerphoneOn();
+	}
+
+	private void muteExternalSpeaker()
+	{
+		Lg.i("muteExternalSpeaker");
+		((AudioManager) Util.getSystemService(this, Context.AUDIO_SERVICE)).setSpeakerphoneOn(false);
 	}
 
 	public MicrophoneStatus getMicrophoneStatus()
