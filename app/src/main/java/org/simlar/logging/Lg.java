@@ -31,7 +31,7 @@ import java.util.Arrays;
 
 public final class Lg
 {
-	private static final int FILENAME_SIZE_MAX = 42;
+	private static final int FILENAME_SIZE_MAX = 21; // android prohibits tags greater than 23 but changing it for debugging works
 	private static final int LOG_LEVEL_NORMAL = Log.WARN;
 	private static final int LOG_LEVEL_DEBUG = Log.DEBUG;
 	private static volatile int mLevel = LOG_LEVEL_NORMAL;
