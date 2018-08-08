@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.1.xsd">
+    <suppress>
+        <notes><![CDATA[
+        Android dependency kxml2-2.3.0.jar
+        ]]></notes>
+        <cpe>/a:google:android:2.3.0</cpe>
+        <cve>CVE-2013-7372</cve>
+        <cve>CVE-2014-1939</cve>
+        <cve>CVE-2014-6060</cve>
+        <cve>CVE-2016-5696</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+        Android dependency httpclient-4.2.6.jar
+        ]]></notes>
+        <cpe>/a:apache:httpclient:4.2.6</cpe>
+        <cve>CVE-2014-3577</cve>
+        <cve>CVE-2015-5262</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+        Android dependency httpmime-4.1.jar
+        ]]></notes>
+        <cpe>/a:apache:httpclient:4.1</cpe>
+        <cve>CVE-2011-1498</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+        Android dependency builder-3.1.3.jar
+        ]]></notes>
+        <cpe>/a:google:android:-</cpe>
+        <cve>CVE-2010-1807</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+        Android dependency intellij-core-26.1.3.jar protobuf-java
+        ]]></notes>
+        <cpe>/a:google:protobuf:2.6.1</cpe>
+        <cve>CVE-2015-5237</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+        Android dependency intellij-core-26.1.3.jar xstream
+        ]]></notes>
+        <cpe>/a:xstream_project:xstream:1.4.8</cpe>
+        <cve>CVE-2016-3674</cve>
+        <cve>CVE-2017-7957</cve>
+    </suppress>
+</suppressions>
