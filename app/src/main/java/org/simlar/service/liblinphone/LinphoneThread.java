@@ -646,6 +646,16 @@ public final class LinphoneThread extends Thread implements CoreListener
 				" jitter=", jitter, " loss=", packetLoss,
 				" latePackets=", latePackets, " roundTripDelay=", roundTripDelay);
 
+		final CallStats videoStats = call.getStats(StreamType.Video);
+		final PayloadType videoPayloadType = call.getCurrentParams().getUsedVideoPayloadType();
+		final String videoCodec = videoPayloadType.getMimeType() + ' ' + videoPayloadType.getClockRate() / 1000;
+		final String videoIceState = videoStats.getIceState().toString();
+
+		Lg.d("onCallStatsUpdated videoStats: number=", new CallLogger(call),
+				" upload=",  Math.round(videoStats.getUploadBandwidth() / 8.0f * 10.0f), "(", upload, ")",
+				" download=",  Math.round(videoStats.getDownloadBandwidth() / 8.0f * 10.0f), "(", download, ")",
+				" codec=", videoCodec, " iceState=", videoIceState);
+
 		mMainThreadHandler.post(() -> mListener.onCallStatsChanged(NetworkQuality.fromFloat(quality), duration, codec, iceState, upload, download,
 				jitter, packetLoss, latePackets, roundTripDelay));
 	}
