@@ -395,6 +395,9 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 	private void acceptVideoUpdate(final boolean accept)
 	{
+		if (accept) {
+			startVideo();
+		}
 		mCommunicator.getService().acceptVideoUpdate(accept);
 	}
 
