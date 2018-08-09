@@ -87,13 +87,14 @@ public final class LinphoneManager extends CoreListenerStub
 			final String zrtpSecretsCacheFile = FileHelper.getZrtpSecretsCacheFileName();
 			final String ringbackSoundFile = FileHelper.getRingbackSoundFile();
 			final String pauseSoundFile = FileHelper.getPauseSoundFile();
+			final String noCameraFile = FileHelper.getNoCameraFile();
 			final Volumes volumes = mVolumes;
 
 			if (mLinphoneHandler.isInitialized()) {
 				mLinphoneHandler.unregister();
 			} else {
 				mLinphoneHandler.initialize(this, mContext, linphoneInitialConfigFile, rootCaFile,
-						zrtpSecretsCacheFile, ringbackSoundFile, pauseSoundFile);
+						zrtpSecretsCacheFile, ringbackSoundFile, pauseSoundFile, noCameraFile);
 				mLinphoneHandler.setVolumes(volumes);
 			}
 			mLinphoneHandler.setCredentials(mySimlarId, password);
