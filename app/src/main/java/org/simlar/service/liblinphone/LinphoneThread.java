@@ -525,7 +525,7 @@ public final class LinphoneThread extends Thread implements CoreListener
 				return VideoState.WAITING_FOR_ICE;
 			}
 
-			return VideoState.PLAYING;
+			return VideoState.ENCRYPTING;
 		}
 
 		if (!localVideo && remoteVideo) {
@@ -655,6 +655,11 @@ public final class LinphoneThread extends Thread implements CoreListener
 				" upload=",  Math.round(videoStats.getUploadBandwidth() / 8.0f * 10.0f), "(", upload, ")",
 				" download=",  Math.round(videoStats.getDownloadBandwidth() / 8.0f * 10.0f), "(", download, ")",
 				" codec=", videoCodec, " iceState=", videoIceState);
+
+		if (videoStats.getDownloadBandwidth() != 0 && mVideoState == VideoState.ENCRYPTING) {
+			Lg.i("video playing");
+			updateVideoState(VideoState.PLAYING);
+		}
 
 		mMainThreadHandler.post(() -> mListener.onCallStatsChanged(NetworkQuality.fromFloat(quality), duration, codec, iceState, upload, download,
 				jitter, packetLoss, latePackets, roundTripDelay));
