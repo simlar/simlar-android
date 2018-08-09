@@ -62,7 +62,7 @@ public final class FileHelper
 		mRingbackSoundFile = basePath + "/ringback.wav";
 		mPauseSoundFile = basePath + "/pause.wav";
 
-		// Always overwrite to make updates of this file work
+		// Always overwrite to make updates of the files work
 		copyFileFromPackage(context, R.raw.rootca, new File(mRootCaFileName).getName());
 		copyFileFromPackage(context, R.raw.linphonerc, new File(mLinphoneInitialConfigFile).getName());
 		copyFileFromPackage(context, R.raw.fake_phone_book_picture, new File(mFakePhoneBookPicture).getName());
@@ -135,7 +135,7 @@ public final class FileHelper
 
 	public static String getRingbackSoundFile() throws NotInitedException
 	{
-		if (Util.isNullOrEmpty(mPauseSoundFile)) {
+		if (Util.isNullOrEmpty(mRingbackSoundFile)) {
 			throw new NotInitedException();
 		}
 		return mRingbackSoundFile;
