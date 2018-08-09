@@ -373,7 +373,7 @@ final class LinphoneHandler
 		Factory.instance().setDebugMode(enabled, "DEBUG");
 	}
 
-	public void requestVideoUpdate(final boolean enable, final boolean recreateParams)
+	public void requestVideoUpdate(final boolean enable)
 	{
 		Lg.i("requestVideoUpdate: enable=", enable);
 
@@ -383,7 +383,7 @@ final class LinphoneHandler
 			return;
 		}
 
-		final CallParams params = recreateParams ? mLinphoneCore.createCallParams(currentCall) : currentCall.getCurrentParams();
+		final CallParams params = mLinphoneCore.createCallParams(currentCall);
 		if (params.videoEnabled() == enable) {
 			Lg.i("requestVideoUpdate already: ", enable, " => aborting");
 			return;
