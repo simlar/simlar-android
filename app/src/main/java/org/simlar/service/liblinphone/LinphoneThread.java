@@ -296,7 +296,7 @@ public final class LinphoneThread extends Thread implements CoreListener
 			if (enable) {
 				updateVideoState(VideoState.REQUESTING);
 			}
-			mLinphoneHandler.requestVideoUpdate(enable);
+			mLinphoneHandler.requestVideoUpdate(enable, false);
 		});
 	}
 
@@ -566,7 +566,7 @@ public final class LinphoneThread extends Thread implements CoreListener
 			/// NOTE: this needs to happen directly, posting to linphone thread might take to long
 			LinphoneHandler.preventAutoAnswer(call);
 		} else if (videoState == VideoState.ACCEPTED || videoState == VideoState.REQUESTING) {
-			mLinphoneThreadHandler.post(mLinphoneHandler::reinviteVideo);
+			mLinphoneThreadHandler.post(() -> mLinphoneHandler.requestVideoUpdate(true, true));
 		}
 
 		updateVideoState(videoState);

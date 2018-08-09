@@ -373,7 +373,7 @@ final class LinphoneHandler
 		Factory.instance().setDebugMode(enabled, "DEBUG");
 	}
 
-	public void requestVideoUpdate(final boolean enable)
+	public void requestVideoUpdate(final boolean enable, final boolean recreateParams)
 	{
 		Lg.i("requestVideoUpdate: enable=", enable);
 
@@ -383,7 +383,7 @@ final class LinphoneHandler
 			return;
 		}
 
-		final CallParams params = currentCall.getCurrentParams();
+		final CallParams params = recreateParams ? mLinphoneCore.createCallParams(currentCall) : currentCall.getCurrentParams();
 		if (params.videoEnabled() == enable) {
 			Lg.i("requestVideoUpdate already: ", enable, " => aborting");
 			return;
@@ -391,20 +391,6 @@ final class LinphoneHandler
 
 		params.enableVideo(enable);
 		currentCall.update(params);
-	}
-
-	public void reinviteVideo()
-	{
-		Lg.i("reinviteVideo");
-		final Call currentCall = getCurrentCall();
-		if (currentCall == null) {
-			Lg.w("no current call to reinviteVideo");
-			return;
-		}
-
-		final CallParams callParams = mLinphoneCore.createCallParams(currentCall);
-		callParams.enableVideo(true);
-		currentCall.update(callParams);
 	}
 
 	public static void preventAutoAnswer(final Call currentCall)
