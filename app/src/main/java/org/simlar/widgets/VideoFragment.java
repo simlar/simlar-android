@@ -194,6 +194,10 @@ public class VideoFragment extends Fragment
 
 	public final void setNowPlaying()
 	{
+		if (mProgressBarInitializing == null) {
+			Lg.e("called setNowPlaying too early");
+			return;
+		}
 		mProgressBarInitializing.setVisibility(View.GONE);
 	}
 }
