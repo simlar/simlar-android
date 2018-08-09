@@ -51,7 +51,7 @@ import java.util.Set;
 
 public final class PermissionsHelper
 {
-	private static final int REQUEST_CODE = 23;
+	private static final int DEFAULT_REQUEST_CODE = 23;
 
 	private PermissionsHelper()
 	{
@@ -168,7 +168,7 @@ public final class PermissionsHelper
 		}
 
 		Lg.i("requesting contact permission");
-		fragment.requestPermissions(new String[] { Type.CONTACTS.getPermission() }, REQUEST_CODE);
+		fragment.requestPermissions(new String[] { Type.CONTACTS.getPermission() }, DEFAULT_REQUEST_CODE);
 	}
 
 	private static void requestPermissions(final Activity activity, final Set<Type> types)
@@ -179,7 +179,7 @@ public final class PermissionsHelper
 		}
 		Lg.i("requesting permissions: ", TextUtils.join(", ", permissions));
 
-		ActivityCompat.requestPermissions(activity, permissions.toArray(new String[permissions.size()]), REQUEST_CODE);
+		ActivityCompat.requestPermissions(activity, permissions.toArray(new String[permissions.size()]), DEFAULT_REQUEST_CODE);
 	}
 
 	@SuppressWarnings("SameParameterValue")
