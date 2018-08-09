@@ -475,6 +475,9 @@ final class LinphoneHandler
 		}
 
 		params.setVideoEnabled(enable);
+		if (enable) {
+			params.setAudioBandwidthLimit(0);
+		}
 		currentCall.update(params);
 	}
 
