@@ -32,7 +32,7 @@ import org.simlar.utils.Util;
 
 public final class Lg
 {
-	private static final int TAG_SIZE_MAX = 23; // android prohibits tags greater than 23 but changing it for debugging works
+	private static final int TAG_SIZE_MAX = 32; // android prohibits tags greater than 23 but changing it for debugging works
 	private static final int LOG_LEVEL_NORMAL = Log.WARN;
 	private static final int LOG_LEVEL_DEBUG = Log.DEBUG;
 	private static volatile int mLevel = LOG_LEVEL_NORMAL;
