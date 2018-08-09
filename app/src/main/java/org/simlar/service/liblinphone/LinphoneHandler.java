@@ -407,11 +407,10 @@ final class LinphoneHandler
 		currentCall.update(callParams);
 	}
 
-	public void preventAutoAnswer()
+	public static void preventAutoAnswer(final Call currentCall)
 	{
 		Lg.i("preventAutoAnswer");
 
-		final Call currentCall = getCurrentCall();
 		if (currentCall == null) {
 			Lg.w("no current call to prevent auto answer for");
 			return;
