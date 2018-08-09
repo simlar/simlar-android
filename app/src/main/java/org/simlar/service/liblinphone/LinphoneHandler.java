@@ -506,7 +506,7 @@ final class LinphoneHandler
 		final String currentCamera = mLinphoneCore.getVideoDevice();
 		for (int i = 0; i < cameras.length; i++) {
 			if (Util.equalString(currentCamera, cameras[i])) {
-				final String newCamera = i + 1 < cameras.length ? cameras[i + 1] : cameras[0];
+				final String newCamera = cameras[(i + 1) % cameras.length];
 				Lg.i("toggling cameraId: ", currentCamera, " => ", newCamera);
 				mLinphoneCore.setVideoDevice(newCamera);
 				mLinphoneCore.updateCall(currentCall, null);
