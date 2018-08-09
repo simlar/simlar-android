@@ -40,6 +40,7 @@ public final class FileHelper
 	private static String mFakePhoneBookPicture = null;
 	private static String mRingbackSoundFile = null;
 	private static String mPauseSoundFile = null;
+	private static String mNoCameraFile = null;
 
 	private FileHelper()
 	{
@@ -62,6 +63,7 @@ public final class FileHelper
 		mFakePhoneBookPicture = basePath + "/fake_phone_book_picture.webp";
 		mRingbackSoundFile = basePath + "/ringback.wav";
 		mPauseSoundFile = basePath + "/pause.wav";
+		mNoCameraFile = basePath + "/no_camera.jpg";
 
 		// Always overwrite to make updates of the files work
 		copyFileFromPackage(context, R.raw.rootca, new File(mRootCaFileName).getName());
@@ -69,6 +71,7 @@ public final class FileHelper
 		copyFileFromPackage(context, R.raw.fake_phone_book_picture, new File(mFakePhoneBookPicture).getName());
 		copyFileFromPackage(context, R.raw.ringback, new File(basePath + "/ringback.wav").getName());
 		copyFileFromPackage(context, R.raw.pause, new File(mPauseSoundFile).getName());
+		copyFileFromPackage(context, R.raw.no_camera, new File(mNoCameraFile).getName());
 	}
 
 	public static boolean isInitialized()
@@ -78,7 +81,8 @@ public final class FileHelper
 				!Util.isNullOrEmpty(mLinphoneInitialConfigFile) &&
 				!Util.isNullOrEmpty(mFakePhoneBookPicture) &&
 				!Util.isNullOrEmpty(mRingbackSoundFile) &&
-				!Util.isNullOrEmpty(mPauseSoundFile);
+				!Util.isNullOrEmpty(mPauseSoundFile) &&
+				!Util.isNullOrEmpty(mNoCameraFile);
 	}
 
 	private static void copyFileFromPackage(final Context context, final int resourceId, final String target)
@@ -150,5 +154,13 @@ public final class FileHelper
 			throw new NotInitedException();
 		}
 		return mPauseSoundFile;
+	}
+
+	public static String getNoCameraFile() throws NotInitedException
+	{
+		if (Util.isNullOrEmpty(mNoCameraFile)) {
+			throw new NotInitedException();
+		}
+		return mNoCameraFile;
 	}
 }
