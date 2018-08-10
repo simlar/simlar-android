@@ -629,26 +629,31 @@ public final class LinphoneThread extends Thread implements CoreListener
 			return;
 		}
 
-		final int duration = call.getDuration();
-		final String codec = getCodec(call, type);
-		final String iceState = stats.getIceState().toString();
 		final int upload = getBandwidth(stats.getUploadBandwidth());
 		final int download = getBandwidth(stats.getDownloadBandwidth());
+		final String iceState = stats.getIceState().toString();
 		final int jitter = Math.round((stats.getReceiverInterarrivalJitter() + stats.getSenderInterarrivalJitter()) * 1000.0f);
 		final int packetLoss = Math.round((stats.getReceiverLossRate() + stats.getSenderLossRate()) / 2.0f * 10.0f); // sum of up and down stream loss in per mille
 		final long latePackets = stats.getLatePacketsCumulativeNumber();
 		final int roundTripDelay = Math.round(stats.getRoundTripDelay() * 1000.0f);
+		final String codec = getCodec(call, type);
+		final int duration = call.getDuration();
 
 		// set quality to unusable if up or download bandwidth is zero
 		final float quality = upload > 0 && download > 0 ? call.getCurrentQuality() : 0;
 
-		Lg.d("onCallStatsUpdated: number=", new CallLogger(call), " quality=", quality,
+		Lg.d("onCallStatsUpdated: number=", new CallLogger(call),
 				" type=", type,
-				" duration=", duration,
-				" codec=", codec, " iceState=", iceState,
-				" upload=", upload, " download=", download,
-				" jitter=", jitter, " loss=", packetLoss,
-				" latePackets=", latePackets, " roundTripDelay=", roundTripDelay);
+				" quality=", quality,
+				" upload=", upload,
+				" download=", download,
+				" iceState=", iceState,
+				" jitter=", jitter,
+				" loss=", packetLoss,
+				" latePackets=", latePackets,
+				" roundTripDelay=", roundTripDelay,
+				" codec=", codec,
+				" duration=", duration);
 
 		if (type == StreamType.Video) {
 			if (download > 0 && mVideoState == VideoState.INITIALIZING) {
@@ -659,6 +664,11 @@ public final class LinphoneThread extends Thread implements CoreListener
 			mMainThreadHandler.post(() -> mListener.onCallStatsChanged(NetworkQuality.fromFloat(quality), duration, codec, iceState, upload, download,
 					jitter, packetLoss, latePackets, roundTripDelay));
 		}
+	}
+
+	private static int getBandwidth(final float bandwidth)
+	{
+		return Math.round(bandwidth / 8.0f * 10.0f); // download bandwidth in 100 Bytes / second
 	}
 
 	private static String getCodec(final Call call, final StreamType type)
@@ -690,11 +700,6 @@ public final class LinphoneThread extends Thread implements CoreListener
 		default:
 			return null;
 		}
-	}
-
-	private static int getBandwidth(final float bandwidth)
-	{
-		return Math.round(bandwidth / 8.0f * 10.0f); // download bandwidth in 100 Bytes / second
 	}
 
 	@Override
