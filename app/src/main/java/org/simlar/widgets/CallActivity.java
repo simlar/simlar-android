@@ -333,8 +333,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 			stopVideo();
 			break;
 		case ACCEPTED:
-		case WAITING_FOR_ICE:
-		case ENCRYPTING:
+		case INITIALIZING:
 		case PLAYING:
 			startVideo();
 			break;
@@ -348,8 +347,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		case OFF:
 		case REQUESTING:
 		case ACCEPTED:
-		case WAITING_FOR_ICE:
-		case ENCRYPTING:
+		case INITIALIZING:
 			break;
 		case REMOTE_REQUESTED:
 			showRemoteRequestedVideoAlert();

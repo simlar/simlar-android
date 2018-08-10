@@ -517,15 +517,15 @@ public final class LinphoneThread extends Thread implements CoreListener
 		Lg.i("creating videoState based on localVideo= ", localVideo, " remoteVideo=", remoteVideo);
 
 		if (Call.State.End != state && localVideo && remoteVideo) {
-			if (call.getStats(StreamType.Video) == null || mVideoState == VideoState.ENCRYPTING) {
-				return VideoState.ENCRYPTING;
+			if (call.getStats(StreamType.Video) == null || mVideoState == VideoState.INITIALIZING) {
+				return VideoState.INITIALIZING;
 			}
 
 			if (call.mediaInProgress()) {
-				return VideoState.WAITING_FOR_ICE;
+				return VideoState.INITIALIZING;
 			}
 
-			return VideoState.ENCRYPTING;
+			return VideoState.INITIALIZING;
 		}
 
 		if (!localVideo && remoteVideo) {
@@ -656,7 +656,7 @@ public final class LinphoneThread extends Thread implements CoreListener
 				" download=",  Math.round(videoStats.getDownloadBandwidth() / 8.0f * 10.0f), "(", download, ")",
 				" codec=", videoCodec, " iceState=", videoIceState);
 
-		if (videoStats.getDownloadBandwidth() != 0 && mVideoState == VideoState.ENCRYPTING) {
+		if (videoStats.getDownloadBandwidth() != 0 && mVideoState == VideoState.INITIALIZING) {
 			Lg.i("video playing");
 			updateVideoState(VideoState.PLAYING);
 		}
@@ -679,7 +679,7 @@ public final class LinphoneThread extends Thread implements CoreListener
 			Lg.e("unencrypted call: number=", new CallLogger(call), " with UserAgent ", call.getRemoteUserAgent());
 		}
 
-		if (encrypted && mVideoState == VideoState.ENCRYPTING) {
+		if (encrypted && mVideoState == VideoState.INITIALIZING) {
 			Lg.i("video encrypted");
 			updateVideoState(VideoState.PLAYING);
 		}
