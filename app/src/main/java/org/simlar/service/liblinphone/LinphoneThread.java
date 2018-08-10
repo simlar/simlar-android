@@ -618,6 +618,11 @@ public final class LinphoneThread extends Thread implements CoreListener
 		// CallStats maybe mutable => use it only in the calling thread
 
 		final CallStats stats = call.getStats(StreamType.Audio);
+		if (stats == null) {
+			Lg.e("onCallStatsUpdated with no audio CallStats");
+			return;
+		}
+
 		final int duration = call.getDuration();
 		final String codec = getCodec(getAudioPayload(call));
 		final String iceState = stats.getIceState().toString();
@@ -639,19 +644,21 @@ public final class LinphoneThread extends Thread implements CoreListener
 				" latePackets=", latePackets, " roundTripDelay=", roundTripDelay);
 
 		final CallStats videoStats = call.getStats(StreamType.Video);
-		final String videoCodec = getCodec(getVideoPayload(call));
-		final String videoIceState = videoStats.getIceState().toString();
-		final int videoUpload = getBandwidth(videoStats.getUploadBandwidth());
-		final int videoDownload = getBandwidth(videoStats.getDownloadBandwidth());
+		if (videoStats != null) {
+			final String videoCodec = getCodec(getVideoPayload(call));
+			final String videoIceState = videoStats.getIceState().toString();
+			final int videoUpload = getBandwidth(videoStats.getUploadBandwidth());
+			final int videoDownload = getBandwidth(videoStats.getDownloadBandwidth());
 
-		Lg.d("onCallStatsUpdated videoStats: number=", new CallLogger(call),
-				" upload=",  videoUpload, "(", upload, ")",
-				" download=",  videoDownload, "(", download, ")",
-				" codec=", videoCodec, " iceState=", videoIceState);
+			Lg.d("onCallStatsUpdated videoStats: number=", new CallLogger(call),
+					" upload=", videoUpload, "(", upload, ")",
+					" download=", videoDownload, "(", download, ")",
+					" codec=", videoCodec, " iceState=", videoIceState);
 
-		if (videoDownload > 0 && mVideoState == VideoState.INITIALIZING) {
-			Lg.i("detect video playing based on video download bandwidth: ", videoDownload);
-			updateVideoState(VideoState.PLAYING);
+			if (videoDownload > 0 && mVideoState == VideoState.INITIALIZING) {
+				Lg.i("detect video playing based on video download bandwidth: ", videoDownload);
+				updateVideoState(VideoState.PLAYING);
+			}
 		}
 
 		mMainThreadHandler.post(() -> mListener.onCallStatsChanged(NetworkQuality.fromFloat(quality), duration, codec, iceState, upload, download,
