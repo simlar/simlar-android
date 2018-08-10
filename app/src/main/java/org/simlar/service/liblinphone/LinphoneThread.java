@@ -642,14 +642,16 @@ public final class LinphoneThread extends Thread implements CoreListener
 		final PayloadType videoPayloadType = call.getCurrentParams().getUsedVideoPayloadType();
 		final String videoCodec = videoPayloadType.getMimeType() + ' ' + videoPayloadType.getClockRate() / 1000;
 		final String videoIceState = videoStats.getIceState().toString();
+		final int videoUpload = Math.round(videoStats.getUploadBandwidth() / 8.0f * 10.0f); // upload bandwidth in 100 Bytes / second
+		final int videoDownload = Math.round(videoStats.getDownloadBandwidth() / 8.0f * 10.0f); // download bandwidth in 100 Bytes / second
 
 		Lg.d("onCallStatsUpdated videoStats: number=", new CallLogger(call),
-				" upload=",  Math.round(videoStats.getUploadBandwidth() / 8.0f * 10.0f), "(", upload, ")",
-				" download=",  Math.round(videoStats.getDownloadBandwidth() / 8.0f * 10.0f), "(", download, ")",
+				" upload=",  videoUpload, "(", upload, ")",
+				" download=",  videoDownload, "(", download, ")",
 				" codec=", videoCodec, " iceState=", videoIceState);
 
-		if (videoStats.getDownloadBandwidth() != 0 && mVideoState == VideoState.INITIALIZING) {
-			Lg.i("video playing");
+		if (videoDownload > 0 && mVideoState == VideoState.INITIALIZING) {
+			Lg.i("detect video playing based on video download bandwidth: ", videoDownload);
 			updateVideoState(VideoState.PLAYING);
 		}
 
