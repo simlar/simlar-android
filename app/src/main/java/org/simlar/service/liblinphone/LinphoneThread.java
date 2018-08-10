@@ -621,8 +621,8 @@ public final class LinphoneThread extends Thread implements CoreListener
 		final int duration = call.getDuration();
 		final String codec = getCodec(getAudioPayload(call));
 		final String iceState = stats.getIceState().toString();
-		final int upload = Math.round(stats.getUploadBandwidth() / 8.0f * 10.0f); // upload bandwidth in 100 Bytes / second
-		final int download = Math.round(stats.getDownloadBandwidth() / 8.0f * 10.0f); // download bandwidth in 100 Bytes / second
+		final int upload = getBandwidth(stats.getUploadBandwidth());
+		final int download = getBandwidth(stats.getDownloadBandwidth());
 		final int jitter = Math.round((stats.getReceiverInterarrivalJitter() + stats.getSenderInterarrivalJitter()) * 1000.0f);
 		final int packetLoss = Math.round((stats.getReceiverLossRate() + stats.getSenderLossRate()) / 2.0f * 10.0f); // sum of up and down stream loss in per mille
 		final long latePackets = stats.getLatePacketsCumulativeNumber();
@@ -641,8 +641,8 @@ public final class LinphoneThread extends Thread implements CoreListener
 		final CallStats videoStats = call.getStats(StreamType.Video);
 		final String videoCodec = getCodec(getVideoPayload(call));
 		final String videoIceState = videoStats.getIceState().toString();
-		final int videoUpload = Math.round(videoStats.getUploadBandwidth() / 8.0f * 10.0f); // upload bandwidth in 100 Bytes / second
-		final int videoDownload = Math.round(videoStats.getDownloadBandwidth() / 8.0f * 10.0f); // download bandwidth in 100 Bytes / second
+		final int videoUpload = getBandwidth(videoStats.getUploadBandwidth());
+		final int videoDownload = getBandwidth(videoStats.getDownloadBandwidth());
 
 		Lg.d("onCallStatsUpdated videoStats: number=", new CallLogger(call),
 				" upload=",  videoUpload, "(", upload, ")",
@@ -674,6 +674,11 @@ public final class LinphoneThread extends Thread implements CoreListener
 	{
 		return payloadType == null ? null:
 				payloadType.getMimeType() + ' ' + payloadType.getClockRate() / 1000;
+	}
+
+	private static int getBandwidth(final float bandwidth)
+	{
+		return Math.round(bandwidth / 8.0f * 10.0f); // download bandwidth in 100 Bytes / second
 	}
 
 	@Override
