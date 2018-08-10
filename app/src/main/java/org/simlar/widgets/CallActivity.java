@@ -477,8 +477,6 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mProximityScreenLocker.release(false);
 
 		setExternalSpeaker(true);
-
-		mLayoutCallControlButtons.setVisibility(View.GONE);
 	}
 
 	private void stopVideo()
