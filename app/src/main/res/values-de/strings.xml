@@ -129,7 +129,7 @@
     <!-- Simlar ermöglichen, SMS zu senden und abzurufen? -->
     <string name="permission_explain_text_sms">Simlar liest einmalig deine Telefonnummer und eingehende SMS, damit du deine Nummer und den Registrierungscode nicht eingeben musst.</string>
     <!-- Simlar ermöglichen, Audio aufzunehmen? -->
-    <string name="permission_explain_text_record_audio">Simlar greift auf dein Mikrophone zu, damit deom Gesprächspartner dich hören kann.</string>
+    <string name="permission_explain_text_record_audio">Simlar greift auf dein Mikrophone zu, damit dein Gesprächspartner dich hören kann.</string>
     <!-- Simlar ermöglichen, Telefonanrufe zu tätigen und zu verwalten? -->
     <string name="permission_explain_text_phone_state">Simlar greift auf die Telefonverwaltung zu, um bei Telefonaten die Anklopf-Funktion zu ermöglichen.</string>
     <!-- Simlar ermöglichen, auf Kontakte zuzugreifen? -->
