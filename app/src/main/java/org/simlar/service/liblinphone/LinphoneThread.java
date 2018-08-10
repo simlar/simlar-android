@@ -517,7 +517,7 @@ public final class LinphoneThread extends Thread implements CoreListener
 
 		Lg.i("creating videoState based on localVideo= ", localVideo, " remoteVideo=", remoteVideo);
 
-		if (Call.State.End != state && localVideo && remoteVideo) {
+		if (state != Call.State.End && localVideo && remoteVideo) {
 			return VideoState.INITIALIZING;
 		}
 
