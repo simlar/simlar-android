@@ -618,8 +618,7 @@ public final class LinphoneThread extends Thread implements CoreListener
 
 		final CallStats stats = call.getStats(StreamType.Audio);
 		final int duration = call.getDuration();
-		final PayloadType payloadType = call.getCurrentParams().getUsedAudioPayloadType();
-		final String codec = payloadType.getMimeType() + ' ' + payloadType.getClockRate() / 1000;
+		final String codec = getCodec(call.getCurrentParams().getUsedAudioPayloadType());
 		final String iceState = stats.getIceState().toString();
 		final int upload = Math.round(stats.getUploadBandwidth() / 8.0f * 10.0f); // upload bandwidth in 100 Bytes / second
 		final int download = Math.round(stats.getDownloadBandwidth() / 8.0f * 10.0f); // download bandwidth in 100 Bytes / second
@@ -639,8 +638,7 @@ public final class LinphoneThread extends Thread implements CoreListener
 				" latePackets=", latePackets, " roundTripDelay=", roundTripDelay);
 
 		final CallStats videoStats = call.getStats(StreamType.Video);
-		final PayloadType videoPayloadType = call.getCurrentParams().getUsedVideoPayloadType();
-		final String videoCodec = videoPayloadType.getMimeType() + ' ' + videoPayloadType.getClockRate() / 1000;
+		final String videoCodec = getCodec(call.getCurrentParams().getUsedVideoPayloadType());
 		final String videoIceState = videoStats.getIceState().toString();
 		final int videoUpload = Math.round(videoStats.getUploadBandwidth() / 8.0f * 10.0f); // upload bandwidth in 100 Bytes / second
 		final int videoDownload = Math.round(videoStats.getDownloadBandwidth() / 8.0f * 10.0f); // download bandwidth in 100 Bytes / second
@@ -657,6 +655,12 @@ public final class LinphoneThread extends Thread implements CoreListener
 
 		mMainThreadHandler.post(() -> mListener.onCallStatsChanged(NetworkQuality.fromFloat(quality), duration, codec, iceState, upload, download,
 				jitter, packetLoss, latePackets, roundTripDelay));
+	}
+
+	private static String getCodec(final PayloadType payloadType)
+	{
+		return payloadType == null ? null:
+				payloadType.getMimeType() + ' ' + payloadType.getClockRate() / 1000;
 	}
 
 	@Override
