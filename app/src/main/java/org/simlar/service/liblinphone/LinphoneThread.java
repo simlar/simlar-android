@@ -617,14 +617,20 @@ public final class LinphoneThread extends Thread implements CoreListener
 		// Call is mutable => use it only in the calling thread
 		// CallStats maybe mutable => use it only in the calling thread
 
-		final CallStats stats = call.getStats(StreamType.Audio);
+		final StreamType type = statsDoNotUse.getType();
+		if (type != StreamType.Audio && type != StreamType.Video) {
+			Lg.e("onCallStatsUpdated with unexpected type: ", type);
+			return;
+		}
+
+		final CallStats stats = call.getStats(type);
 		if (stats == null) {
-			Lg.e("onCallStatsUpdated with no audio CallStats");
+			Lg.e("onCallStatsUpdated with no CallStats for type: ", type);
 			return;
 		}
 
 		final int duration = call.getDuration();
-		final String codec = getCodec(getAudioPayload(call));
+		final String codec = getCodec(call, type);
 		final String iceState = stats.getIceState().toString();
 		final int upload = getBandwidth(stats.getUploadBandwidth());
 		final int download = getBandwidth(stats.getDownloadBandwidth());
@@ -637,50 +643,53 @@ public final class LinphoneThread extends Thread implements CoreListener
 		final float quality = upload > 0 && download > 0 ? call.getCurrentQuality() : 0;
 
 		Lg.d("onCallStatsUpdated: number=", new CallLogger(call), " quality=", quality,
+				" type=", type,
 				" duration=", duration,
 				" codec=", codec, " iceState=", iceState,
 				" upload=", upload, " download=", download,
 				" jitter=", jitter, " loss=", packetLoss,
 				" latePackets=", latePackets, " roundTripDelay=", roundTripDelay);
 
-		final CallStats videoStats = call.getStats(StreamType.Video);
-		if (videoStats != null) {
-			final String videoCodec = getCodec(getVideoPayload(call));
-			final String videoIceState = videoStats.getIceState().toString();
-			final int videoUpload = getBandwidth(videoStats.getUploadBandwidth());
-			final int videoDownload = getBandwidth(videoStats.getDownloadBandwidth());
-
-			Lg.d("onCallStatsUpdated videoStats: number=", new CallLogger(call),
-					" upload=", videoUpload, "(", upload, ")",
-					" download=", videoDownload, "(", download, ")",
-					" codec=", videoCodec, " iceState=", videoIceState);
-
-			if (videoDownload > 0 && mVideoState == VideoState.INITIALIZING) {
-				Lg.i("detect video playing based on video download bandwidth: ", videoDownload);
+		if (type == StreamType.Video) {
+			if (download > 0 && mVideoState == VideoState.INITIALIZING) {
+				Lg.i("detect video playing based on video download bandwidth: ", download);
 				updateVideoState(VideoState.PLAYING);
 			}
+		} else {
+			mMainThreadHandler.post(() -> mListener.onCallStatsChanged(NetworkQuality.fromFloat(quality), duration, codec, iceState, upload, download,
+					jitter, packetLoss, latePackets, roundTripDelay));
 		}
-
-		mMainThreadHandler.post(() -> mListener.onCallStatsChanged(NetworkQuality.fromFloat(quality), duration, codec, iceState, upload, download,
-				jitter, packetLoss, latePackets, roundTripDelay));
 	}
 
-	private static PayloadType getAudioPayload(final Call call)
+	private static String getCodec(final Call call, final StreamType type)
 	{
-		final CallParams params = call.getParams();
-		return params == null ? null : params.getUsedAudioPayloadType();
-	}
-
-	private static PayloadType getVideoPayload(final Call call)
-	{
-		final CallParams params = call.getParams();
-		return params == null ? null : params.getUsedVideoPayloadType();
+		return getCodec(getPayload(call, type));
 	}
 
 	private static String getCodec(final PayloadType payloadType)
 	{
 		return payloadType == null ? null:
 				payloadType.getMimeType() + ' ' + payloadType.getClockRate() / 1000;
+	}
+
+	private static PayloadType getPayload(final Call call, final StreamType type)
+	{
+		final CallParams params = call.getParams();
+		if (params == null) {
+			return null;
+		}
+
+		switch (type) {
+		case Audio:
+			return params.getUsedAudioPayloadType();
+		case Video:
+			return params.getUsedVideoPayloadType();
+		case Text:
+			return params.getUsedTextPayloadType();
+		case Unknown:
+		default:
+			return null;
+		}
 	}
 
 	private static int getBandwidth(final float bandwidth)
