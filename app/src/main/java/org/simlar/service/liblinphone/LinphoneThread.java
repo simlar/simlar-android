@@ -29,6 +29,7 @@ import org.linphone.core.AuthInfo;
 import org.linphone.core.AuthMethod;
 import org.linphone.core.Call;
 import org.linphone.core.CallLog;
+import org.linphone.core.CallParams;
 import org.linphone.core.CallStats;
 import org.linphone.core.ChatMessage;
 import org.linphone.core.ChatRoom;
@@ -618,7 +619,7 @@ public final class LinphoneThread extends Thread implements CoreListener
 
 		final CallStats stats = call.getStats(StreamType.Audio);
 		final int duration = call.getDuration();
-		final String codec = getCodec(call.getCurrentParams().getUsedAudioPayloadType());
+		final String codec = getCodec(getAudioPayload(call));
 		final String iceState = stats.getIceState().toString();
 		final int upload = Math.round(stats.getUploadBandwidth() / 8.0f * 10.0f); // upload bandwidth in 100 Bytes / second
 		final int download = Math.round(stats.getDownloadBandwidth() / 8.0f * 10.0f); // download bandwidth in 100 Bytes / second
@@ -638,7 +639,7 @@ public final class LinphoneThread extends Thread implements CoreListener
 				" latePackets=", latePackets, " roundTripDelay=", roundTripDelay);
 
 		final CallStats videoStats = call.getStats(StreamType.Video);
-		final String videoCodec = getCodec(call.getCurrentParams().getUsedVideoPayloadType());
+		final String videoCodec = getCodec(getVideoPayload(call));
 		final String videoIceState = videoStats.getIceState().toString();
 		final int videoUpload = Math.round(videoStats.getUploadBandwidth() / 8.0f * 10.0f); // upload bandwidth in 100 Bytes / second
 		final int videoDownload = Math.round(videoStats.getDownloadBandwidth() / 8.0f * 10.0f); // download bandwidth in 100 Bytes / second
@@ -655,6 +656,18 @@ public final class LinphoneThread extends Thread implements CoreListener
 
 		mMainThreadHandler.post(() -> mListener.onCallStatsChanged(NetworkQuality.fromFloat(quality), duration, codec, iceState, upload, download,
 				jitter, packetLoss, latePackets, roundTripDelay));
+	}
+
+	private static PayloadType getAudioPayload(final Call call)
+	{
+		final CallParams params = call.getParams();
+		return params == null ? null : params.getUsedAudioPayloadType();
+	}
+
+	private static PayloadType getVideoPayload(final Call call)
+	{
+		final CallParams params = call.getParams();
+		return params == null ? null : params.getUsedVideoPayloadType();
 	}
 
 	private static String getCodec(final PayloadType payloadType)
