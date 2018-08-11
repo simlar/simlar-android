@@ -1033,6 +1033,11 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			return;
 		}
 
+		if (enable) {
+			mSimlarCallState.setVideoRequested();
+			SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
+		}
+
 		mLinphoneThread.requestVideoUpdate(enable);
 	}
 

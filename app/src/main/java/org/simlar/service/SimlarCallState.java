@@ -44,6 +44,7 @@ public final class SimlarCallState
 	private boolean mAuthenticationTokenVerified = false;
 	private NetworkQuality mQuality = NetworkQuality.UNKNOWN;
 	private long mCallStartTime = -1;
+	private boolean mVideoRequested = false;
 	private boolean mVideoEnabled = false;
 
 	private enum GuiCallState
@@ -91,6 +92,10 @@ public final class SimlarCallState
 		mLinphoneCallState = callState;
 		mVideoEnabled = videoEnabled;
 
+		if (mLinphoneCallState == LinphoneCallState.STREAMS_RUNNING) {
+			mVideoRequested = false;
+		}
+
 		final GuiCallState oldGuiCallState = mGuiCallState;
 		if (mLinphoneCallState.isNewCallJustStarted()) {
 			mGuiCallState = GuiCallState.CONNECTING_TO_SERVER;
@@ -118,6 +123,7 @@ public final class SimlarCallState
 			mAuthenticationToken = null;
 			mAuthenticationTokenVerified = false;
 			mQuality = NetworkQuality.UNKNOWN;
+			mVideoRequested = false;
 			mVideoEnabled = false;
 		}
 
@@ -209,6 +215,7 @@ public final class SimlarCallState
 				", mAuthenticationTokenVerified=" + mAuthenticationTokenVerified +
 				", mQuality=" + mQuality +
 				", mCallStartTime=" + mCallStartTime +
+				", mVideoRequested=" + mVideoRequested +
 				", mVideoEnabled=" + mVideoEnabled +
 				'}';
 	}
@@ -319,6 +326,21 @@ public final class SimlarCallState
 	public String createNotificationText(final Context context, final boolean goingDown)
 	{
 		return mLinphoneCallState.createNotificationText(context, getContactName(), goingDown);
+	}
+
+	public boolean isVideoRequestPossible()
+	{
+		return mGuiCallState == GuiCallState.TALKING;
+	}
+
+	public void setVideoRequested()
+	{
+		mVideoRequested = true;
+	}
+
+	public boolean isVideoRequested()
+	{
+		return mVideoRequested;
 	}
 
 	public boolean isVideoEnabled()
