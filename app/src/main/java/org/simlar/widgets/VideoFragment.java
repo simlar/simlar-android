@@ -24,6 +24,7 @@ package org.simlar.widgets;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
@@ -36,12 +37,12 @@ import org.simlar.logging.Lg;
 
 public class VideoFragment extends Fragment
 {
-	private Listener mListener;
+	private Listener mListener = null;
 
 	// gui elements
-	private GLSurfaceView mVideoView;
-	private SurfaceView mCaptureView;
-	private ProgressBar mProgressBarInitializing;
+	private GLSurfaceView mVideoView = null;
+	private SurfaceView mCaptureView = null;
+	private ProgressBar mProgressBarInitializing = null;
 
 	public interface Listener
 	{
@@ -53,7 +54,7 @@ public class VideoFragment extends Fragment
 	}
 
 	@Override
-	public void onAttach(final Context context)
+	public final void onAttach(final Context context)
 	{
 		super.onAttach(context);
 		Lg.i("onAttach");
@@ -67,7 +68,7 @@ public class VideoFragment extends Fragment
 	}
 
 	@Override
-	public void onDetach()
+	public final void onDetach()
 	{
 		Lg.i("onDetach");
 
@@ -82,14 +83,14 @@ public class VideoFragment extends Fragment
 	}
 
 	@Override
-	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
+	public final View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
 	{
 		Lg.i("onCreateView");
 		final View view = inflater.inflate(R.layout.fragment_video, container, false);
 
-		mVideoView = (GLSurfaceView) view.findViewById(R.id.videoSurface);
-		mCaptureView = (SurfaceView) view.findViewById(R.id.videoCaptureSurface);
-		mProgressBarInitializing = (ProgressBar) view.findViewById(R.id.progressBarInitializingVideo);
+		mVideoView = view.findViewById(R.id.videoSurface);
+		mCaptureView = view.findViewById(R.id.videoCaptureSurface);
+		mProgressBarInitializing = view.findViewById(R.id.progressBarInitializingVideo);
 
 		fixZOrder();
 
@@ -99,25 +100,15 @@ public class VideoFragment extends Fragment
 			mListener.setVideoWindows(mVideoView, mCaptureView);
 		}
 
-		mVideoView.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(final View view)
-			{
-				if (mListener != null) {
-					mListener.onVideoViewClick();
-				}
+		mVideoView.setOnClickListener(view12 -> {
+			if (mListener != null) {
+				mListener.onVideoViewClick();
 			}
 		});
 
-		mCaptureView.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(final View view)
-			{
-				if (mListener != null) {
-					mListener.onCaptureViewClick();
-				}
+		mCaptureView.setOnClickListener(view1 -> {
+			if (mListener != null) {
+				mListener.onCaptureViewClick();
 			}
 		});
 
@@ -132,7 +123,7 @@ public class VideoFragment extends Fragment
 	}
 
 	@Override
-	public void onDestroy()
+	public final void onDestroy()
 	{
 		Lg.i("onDestroy");
 
@@ -150,7 +141,7 @@ public class VideoFragment extends Fragment
 	}
 
 	@Override
-	public void onStart()
+	public final void onStart()
 	{
 		super.onStart();
 		Lg.i("onStart");
@@ -163,21 +154,21 @@ public class VideoFragment extends Fragment
 	}
 
 	@Override
-	public void onResume()
+	public final void onResume()
 	{
 		super.onResume();
 		Lg.i("onResume");
 	}
 
 	@Override
-	public void onPause()
+	public final void onPause()
 	{
 		Lg.i("onPause");
 		super.onPause();
 	}
 
 	@Override
-	public void onStop()
+	public final void onStop()
 	{
 		Lg.i("onStop");
 
@@ -201,7 +192,7 @@ public class VideoFragment extends Fragment
 		mListener.enableVideoWindow(enable);
 	}
 
-	public void setNowPlaying()
+	public final void setNowPlaying()
 	{
 		mProgressBarInitializing.setVisibility(View.GONE);
 	}

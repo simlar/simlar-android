@@ -47,7 +47,6 @@ public final class SimlarServiceBroadcast implements Serializable
 	private final Type mType;
 	private final Parameters mParameters;
 
-	@SuppressWarnings("SameParameterValue") /// will be used by video implementation
 	private SimlarServiceBroadcast(final Type type, final Parameters parameters)
 	{
 		mType = type;
@@ -61,7 +60,6 @@ public final class SimlarServiceBroadcast implements Serializable
 		LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 	}
 
-	@SuppressWarnings({"unused", "InterfaceNeverImplemented"}) /// will be used by video implementation
 	public interface Parameters extends Serializable
 	{
 	}
@@ -71,7 +69,6 @@ public final class SimlarServiceBroadcast implements Serializable
 		return mType;
 	}
 
-	@SuppressWarnings("unused") /// will be used by video implementation
 	public Parameters getParameters()
 	{
 		return mParameters;
@@ -94,9 +91,11 @@ public final class SimlarServiceBroadcast implements Serializable
 
 	public static class VideoStateChanged implements Parameters
 	{
+		private static final long serialVersionUID = 1;
+
 		public final VideoState videoState;
 
-		public VideoStateChanged(final VideoState videoState)
+		VideoStateChanged(final VideoState videoState)
 		{
 			this.videoState = videoState;
 		}

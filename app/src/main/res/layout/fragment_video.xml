@@ -30,7 +30,8 @@
     <org.linphone.mediastream.video.display.GL2JNIView
         android:id="@+id/videoSurface"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        tools:ignore="MissingRegistered"/>
 
     <SurfaceView
         android:id="@+id/videoCaptureSurface"

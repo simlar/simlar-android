@@ -272,23 +272,18 @@ public final class LinphoneThread
 			mLinphoneThreadHandler.post(() -> mLinphoneHandler.setVolumes(volumes));
 		}
 
-		public void requestVideoUpdate(final boolean enable)
+		void requestVideoUpdate(final boolean enable)
 		{
 			if (mLinphoneThreadHandler == null) {
 				Lg.e("handler is null, probably thread not started");
 				return;
 			}
 
-			mLinphoneThreadHandler.post(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					if (enable) {
-						updateVideoState(VideoState.REQUESTING);
-					}
-					mLinphoneHandler.requestVideoUpdate(enable);
+			mLinphoneThreadHandler.post(() -> {
+				if (enable) {
+					updateVideoState(VideoState.REQUESTING);
 				}
+				mLinphoneHandler.requestVideoUpdate(enable);
 			});
 		}
 
@@ -301,34 +296,20 @@ public final class LinphoneThread
 			Lg.i("updating video state: ", mVideoState, " => ", videoState);
 			mVideoState = videoState;
 
-			mMainThreadHandler.post(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					mListener.onVideoStateChanged(videoState);
-				}
-			});
+			mMainThreadHandler.post(() -> mListener.onVideoStateChanged(videoState));
 		}
 
-		public void acceptVideoUpdate(final boolean accept)
+		void acceptVideoUpdate(final boolean accept)
 		{
 			if (mLinphoneThreadHandler == null) {
 				Lg.e("handler is null, probably thread not started");
 				return;
 			}
 
-			mLinphoneThreadHandler.post(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					mLinphoneHandler.acceptVideoUpdate(accept);
-				}
-			});
+			mLinphoneThreadHandler.post(() -> mLinphoneHandler.acceptVideoUpdate(accept));
 		}
 
-		public void setVideoWindows(final SurfaceView videoView, final SurfaceView captureView)
+		void setVideoWindows(final SurfaceView videoView, final SurfaceView captureView)
 		{
 			if (videoView == null) {
 				Lg.e("setVideoWindows: videoView is null => aborting");
@@ -378,7 +359,7 @@ public final class LinphoneThread
 			});
 		}
 
-		public void destroyVideoWindows()
+		void destroyVideoWindows()
 		{
 			if (mMediaStreamerVideoWindow == null) {
 				Lg.i("destroyVideoWindows: video windows already destroyed");
@@ -392,7 +373,7 @@ public final class LinphoneThread
 			mMediaStreamerVideoWindow = null;
 		}
 
-		public void enableVideoWindow(final boolean enable)
+		void enableVideoWindow(final boolean enable)
 		{
 			if (enable && mMediaStreamerVideoWindow == null) {
 				Lg.e("enableVideoWindow with no mMediaStreamerVideoWindow => disabling");
@@ -408,14 +389,7 @@ public final class LinphoneThread
 				return;
 			}
 
-			mLinphoneThreadHandler.post(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					mLinphoneHandler.setVideoWindow(videoWindow);
-				}
-			});
+			mLinphoneThreadHandler.post(() -> mLinphoneHandler.setVideoWindow(videoWindow));
 		}
 
 		private void setVideoPreviewWindow(final Object videoPreviewWindow)
@@ -425,31 +399,17 @@ public final class LinphoneThread
 				return;
 			}
 
-			mLinphoneThreadHandler.post(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					mLinphoneHandler.setVideoPreviewWindow(videoPreviewWindow);
-				}
-			});
+			mLinphoneThreadHandler.post(() -> mLinphoneHandler.setVideoPreviewWindow(videoPreviewWindow));
 		}
 
-		public void toggleCamera()
+		void toggleCamera()
 		{
 			if (mLinphoneThreadHandler == null) {
 				Lg.e("handler is null, probably thread not started");
 				return;
 			}
 
-			mLinphoneThreadHandler.post(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					mLinphoneHandler.toggleCamera();
-				}
-			});
+			mLinphoneThreadHandler.post(mLinphoneHandler::toggleCamera);
 		}
 
 		@Lg.Anonymize
