@@ -324,13 +324,13 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	{
 		Lg.i("onVideoStateChanged: ", videoState);
 
-		if (VideoState.PLAYING.equals(videoState) || VideoState.ENCRYPTING.equals(videoState) || VideoState.WAITING_FOR_ICE.equals(videoState)) {
+		if (VideoState.PLAYING == videoState || VideoState.ENCRYPTING == videoState || VideoState.WAITING_FOR_ICE == videoState) {
 			startVideo();
 		} else {
 			stopVideo();
 		}
 
-		final boolean requestingVideo = VideoState.REQUESTING.equals(videoState);
+		final boolean requestingVideo = VideoState.REQUESTING == videoState;
 		mProgressBarRequestingVideo.setVisibility(requestingVideo ? View.VISIBLE : View.GONE);
 		mButtonToggleVideo.setVisibility(requestingVideo ? View.GONE : View.VISIBLE);
 
@@ -358,7 +358,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private void showRemoteRequestedVideoAlert()
 	{
 		if (mAlertDialogRemoteRequestedVideo == null) {
-			mAlertDialogRemoteRequestedVideo = (new AlertDialog.Builder(this))
+			mAlertDialogRemoteRequestedVideo = new AlertDialog.Builder(this)
 					.setTitle(R.string.call_activity_alert_accept_video_request_title)
 					.setMessage(R.string.call_activity_alert_accept_video_request_text)
 					.setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener()
@@ -366,7 +366,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 						@Override
 						public void onClick(final DialogInterface dialog, final int id)
 						{
-							CallActivity.this.acceptVideoUpdate(false);
+							acceptVideoUpdate(false);
 						}
 					})
 					.setPositiveButton(R.string.button_continue, new DialogInterface.OnClickListener()
@@ -374,7 +374,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 						@Override
 						public void onClick(final DialogInterface dialog, final int id)
 						{
-							CallActivity.this.acceptVideoUpdate(true);
+							acceptVideoUpdate(true);
 						}
 					})
 					.setOnCancelListener(new DialogInterface.OnCancelListener()
@@ -382,7 +382,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 						@Override
 						public void onCancel(final DialogInterface dialog)
 						{
-							CallActivity.this.acceptVideoUpdate(false);
+							acceptVideoUpdate(false);
 						}
 					})
 					.create();
@@ -397,7 +397,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private void showRemoteDeniedVideoAlert()
 	{
 		if (mAlertDialogRemoteDeniedVideo == null) {
-			mAlertDialogRemoteDeniedVideo = (new AlertDialog.Builder(this))
+			mAlertDialogRemoteDeniedVideo = new AlertDialog.Builder(this)
 					.setMessage(R.string.call_activity_video_denied)
 					.create();
 		}
@@ -436,7 +436,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	{
 		Lg.i("onVideoViewClick");
 
-		mLayoutCallControlButtons.setVisibility(mLayoutCallControlButtons.getVisibility() != View.VISIBLE ? View.VISIBLE : View.GONE);
+		mLayoutCallControlButtons.setVisibility(mLayoutCallControlButtons.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
 	}
 
 	@Override

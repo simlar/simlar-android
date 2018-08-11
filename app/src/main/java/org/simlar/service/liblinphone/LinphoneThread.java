@@ -348,24 +348,28 @@ public final class LinphoneThread
 			/// Note: AndroidVideoWindowImpl needs to initiated in the gui thread
 			mMediaStreamerVideoWindow = new AndroidVideoWindowImpl(videoView, captureView, new AndroidVideoWindowImpl.VideoWindowListener()
 			{
+				@Override
 				public void onVideoRenderingSurfaceReady(final AndroidVideoWindowImpl videoWindow, final SurfaceView surface)
 				{
 					Lg.i("onVideoRenderingSurfaceReady");
 					enableVideoWindow(true);
 				}
 
+				@Override
 				public void onVideoRenderingSurfaceDestroyed(final AndroidVideoWindowImpl videoWindow)
 				{
 					Lg.i("onVideoRenderingSurfaceDestroyed");
 					enableVideoWindow(false);
 				}
 
+				@Override
 				public void onVideoPreviewSurfaceReady(final AndroidVideoWindowImpl videoWindowPreview, final SurfaceView surface)
 				{
 					Lg.i("onVideoPreviewSurfaceReady");
 					setVideoPreviewWindow(surface);
 				}
 
+				@Override
 				public void onVideoPreviewSurfaceDestroyed(final AndroidVideoWindowImpl videoWindowPreview)
 				{
 					Lg.i("onVideoPreviewSurfaceDestroyed");
@@ -547,8 +551,8 @@ public final class LinphoneThread
 
 		private VideoState createVideoState(final LinphoneCall.State state, final LinphoneCall call)
 		{
-			final boolean localVideo = call.getCurrentParamsCopy().getVideoEnabled();
-			final boolean remoteVideo = call.getRemoteParams().getVideoEnabled();
+			final boolean localVideo = call.getCurrentParams() != null && call.getCurrentParams().getVideoEnabled();
+			final boolean remoteVideo = call.getRemoteParams() != null && call.getRemoteParams().getVideoEnabled();
 
 			if (!LinphoneCall.State.CallEnd.equals(state) && localVideo && remoteVideo) {
 				if (call.getVideoStats() == null || mVideoState == VideoState.ENCRYPTING) {
@@ -664,13 +668,6 @@ public final class LinphoneThread
 		{
 			// LinphoneCall is mutable => use it only in the calling thread
 			// LinphoneCallStats maybe mutable => use it only in the calling thread
-
-			if (LinphoneCallStats.MediaType.Video.equals(statsDoNotUse.getMediaType())) {
-				if (mVideoState == VideoState.WAITING_FOR_ICE && !call.mediaInProgress()) {
-					updateVideoState(VideoState.PLAYING);
-				}
-				return;
-			}
 
 			final LinphoneCallStats stats = call.getAudioStats();
 			final int duration = call.getDuration();

@@ -24,6 +24,7 @@ package org.simlar.widgets;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
@@ -33,7 +34,7 @@ import android.widget.ProgressBar;
 import org.simlar.R;
 import org.simlar.logging.Lg;
 
-public class VideoFragment extends android.support.v4.app.Fragment
+public class VideoFragment extends Fragment
 {
 	private Listener mListener;
 
