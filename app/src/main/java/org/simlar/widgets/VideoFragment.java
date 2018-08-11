@@ -52,22 +52,23 @@ public class VideoFragment extends android.support.v4.app.Fragment
 	}
 
 	@Override
-	public void onAttach(final Context activity)
+	public void onAttach(final Context context)
 	{
+		super.onAttach(context);
 		Lg.i("onAttach");
-		super.onAttach(activity);
-		try {
-			mListener = (Listener) activity;
-		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString() + " must implement VideoFragment.Listener");
+
+		if ( ! (context instanceof Listener )) {
+			Lg.e("not attached to listener object");
+			return;
 		}
+
+		mListener = (Listener) context;
 	}
 
 	@Override
 	public void onDetach()
 	{
 		Lg.i("onDetach");
-		super.onDetach();
 
 		if (mListener == null) {
 			Lg.e("onDestroy: no listener registered => not destroying potential video");
@@ -75,6 +76,8 @@ public class VideoFragment extends android.support.v4.app.Fragment
 			mListener.destroyVideoWindows();
 			mListener = null;
 		}
+
+		super.onDetach();
 	}
 
 	@Override
@@ -146,10 +149,10 @@ public class VideoFragment extends android.support.v4.app.Fragment
 	}
 
 	@Override
-	public void onResume()
+	public void onStart()
 	{
-		Lg.i("onResume");
-		super.onResume();
+		super.onStart();
+		Lg.i("onStart");
 
 		if (mVideoView != null) {
 			mVideoView.onResume();
@@ -159,9 +162,23 @@ public class VideoFragment extends android.support.v4.app.Fragment
 	}
 
 	@Override
+	public void onResume()
+	{
+		super.onResume();
+		Lg.i("onResume");
+	}
+
+	@Override
 	public void onPause()
 	{
 		Lg.i("onPause");
+		super.onPause();
+	}
+
+	@Override
+	public void onStop()
+	{
+		Lg.i("onStop");
 
 		enableVideoWindow(false);
 
@@ -169,7 +186,7 @@ public class VideoFragment extends android.support.v4.app.Fragment
 			mVideoView.onPause();
 		}
 
-		super.onPause();
+		super.onStop();
 	}
 
 	private void enableVideoWindow(final boolean enable)

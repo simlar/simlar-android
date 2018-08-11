@@ -519,7 +519,7 @@ final class LinphoneHandler
 
 		for (int i = 0; i < cameras.length; i++) {
 			if (cameras[i].id == currentCameraId) {
-				int newCameraId;
+				final int newCameraId;
 				if (i + 1 < cameras.length) {
 					newCameraId = cameras[i + 1].id;
 				} else {
