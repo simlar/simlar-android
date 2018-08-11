@@ -39,7 +39,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.simlar.R;
 import org.simlar.helper.VideoState;
@@ -63,6 +62,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private boolean mFinishDelayedCalled = false;
 	private boolean mHideAuthenticationToken = false;
 	private AlertDialog mAlertDialogRemoteRequestedVideo = null;
+	private AlertDialog mAlertDialogRemoteDeniedVideo = null;
 
 	// gui elements
 	private ImageView mImageViewContactImage = null;
@@ -84,13 +84,10 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private TextView mTextViewCallEndReason = null;
 
 	private LinearLayout mLayoutCallControlButtons = null;
+	private ProgressBar mProgressBarRequestingVideo = null;
 	private ImageButton mButtonToggleVideo = null;
 	private ImageButton mButtonMicro = null;
 	private ImageButton mButtonSpeaker = null;
-
-	private LinearLayout mLayoutRequestingVideo;
-	private TextView mTextViewRequestingVideo;
-	private ProgressBar mProgressBarRequestingVideo;
 
 	private ConnectionDetailsDialogFragment mConnectionDetailsDialogFragment = null;
 	private VideoFragment mVideoFragment = null;
@@ -108,10 +105,17 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		{
 			CallActivity.this.onSimlarCallStateChanged();
 		}
+
 		@Override
 		public void onCallConnectionDetailsChanged()
 		{
 			CallActivity.this.onCallConnectionDetailsChanged();
+		}
+
+		@Override
+		public void onVideoStateChanged(final VideoState videoState)
+		{
+			CallActivity.this.onVideoStateChanged(videoState);
 		}
 	}
 
@@ -157,13 +161,10 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mTextViewCallEndReason = findViewById(R.id.textViewCallEndReason);
 
 		mLayoutCallControlButtons = (LinearLayout) findViewById(R.id.linearLayoutCallControlButtons);
+		mProgressBarRequestingVideo = (ProgressBar) findViewById(R.id.progressBarRequestingVideo);
 		mButtonToggleVideo = (ImageButton) findViewById(R.id.buttonToggleVideo);
 		mButtonMicro = findViewById(R.id.buttonMicro);
 		mButtonSpeaker = findViewById(R.id.buttonSpeaker);
-
-		mLayoutRequestingVideo = (LinearLayout) findViewById(R.id.linearLayoutRequestingVideo);
-		mTextViewRequestingVideo = (TextView) findViewById(R.id.textViewRequestingVideo);
-		mProgressBarRequestingVideo = (ProgressBar) findViewById(R.id.progressBarRequestingVideo);
 
 		//
 		// Presets
@@ -172,7 +173,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mLayoutConnectionQuality.setVisibility(View.INVISIBLE);
 		mLayoutVerifiedAuthenticationToken.setVisibility(View.GONE);
 		mLayoutAuthenticationToken.setVisibility(View.GONE);
-		mLayoutRequestingVideo.setVisibility(View.GONE);
+		mProgressBarRequestingVideo.setVisibility(View.GONE);
 	}
 
 	@Override
@@ -293,16 +294,16 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		setButtonMicrophoneMute();
 		setButtonSpeakerMute();
 
-		handleVideoState(simlarCallState.getVideoState());
-
 		if (simlarCallState.isEndedCall()) {
 			if (mAlertDialogRemoteRequestedVideo != null) {
 				mAlertDialogRemoteRequestedVideo.hide();
 			}
+			if (mAlertDialogRemoteDeniedVideo != null) {
+				mAlertDialogRemoteDeniedVideo.hide();
+			}
 			mLayoutConnectionQuality.setVisibility(View.INVISIBLE);
 			mLayoutVerifiedAuthenticationToken.setVisibility(View.GONE);
 			mLayoutAuthenticationToken.setVisibility(View.GONE);
-			mLayoutRequestingVideo.setVisibility(View.GONE);
 			mLayoutCallEndReason.setVisibility(View.VISIBLE);
 			mTextViewCallEndReason.setText(simlarCallState.getCallStatusDisplayMessage(this));
 			stopCallTimer();
@@ -319,50 +320,37 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mConnectionDetailsDialogFragment.setCallConnectionDetails(mCommunicator.getService().getCallConnectionDetails());
 	}
 
-	private void handleVideoState(final VideoState videoState)
+	private void onVideoStateChanged(VideoState videoState)
 	{
-		Lg.i("handleVideoState: ", videoState);
+		Lg.i("onVideoStateChanged: ", videoState);
 
-		if (VideoState.PLAYING.equals(videoState)) {
+		if (VideoState.PLAYING.equals(videoState) || VideoState.ENCRYPTING.equals(videoState) || VideoState.WAITING_FOR_ICE.equals(videoState)) {
 			startVideo();
 		} else {
 			stopVideo();
 		}
 
+		final boolean requestingVideo = VideoState.REQUESTING.equals(videoState);
+		mProgressBarRequestingVideo.setVisibility(requestingVideo ? View.VISIBLE : View.GONE);
+		mButtonToggleVideo.setVisibility(requestingVideo ? View.GONE : View.VISIBLE);
+
 		switch (videoState) {
 		case OFF:
 			break;
 		case PLAYING:
-			mLayoutRequestingVideo.setVisibility(View.GONE);
+			mVideoFragment.setNowPlaying();
 			break;
 		case REMOTE_REQUESTED:
-			mLayoutRequestingVideo.setVisibility(View.GONE);
 			showRemoteRequestedVideoAlert();
 			break;
 		case REQUESTING:
-			mLayoutRequestingVideo.setVisibility(View.VISIBLE);
-			mProgressBarRequestingVideo.setVisibility(View.VISIBLE);
-			mTextViewRequestingVideo.setText(R.string.call_activity_requesting_video);
+			break;
+		case WAITING_FOR_ICE:
 			break;
 		case ENCRYPTING:
-			mLayoutRequestingVideo.setVisibility(View.VISIBLE);
-			mProgressBarRequestingVideo.setVisibility(View.VISIBLE);
-			mTextViewRequestingVideo.setText(R.string.call_activity_encrypting_video);
 			break;
 		case DENIED:
-			mLayoutRequestingVideo.setVisibility(View.VISIBLE);
-			mProgressBarRequestingVideo.setVisibility(View.GONE);
-			mTextViewRequestingVideo.setText(R.string.call_activity_video_denied);
-			mHandler.postDelayed(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					if (mProgressBarRequestingVideo.getVisibility() != View.VISIBLE) {
-						mLayoutRequestingVideo.setVisibility(View.GONE);
-					}
-				}
-			}, 10000);
+			showRemoteDeniedVideoAlert();
 			break;
 		}
 	}
@@ -403,6 +391,20 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		if (!mAlertDialogRemoteRequestedVideo.isShowing()) {
 			Lg.i("remote requested video => showing alert");
 			mAlertDialogRemoteRequestedVideo.show();
+		}
+	}
+
+	private void showRemoteDeniedVideoAlert()
+	{
+		if (mAlertDialogRemoteDeniedVideo == null) {
+			mAlertDialogRemoteDeniedVideo = (new AlertDialog.Builder(this))
+					.setMessage(R.string.call_activity_video_denied)
+					.create();
+		}
+
+		if (!mAlertDialogRemoteDeniedVideo.isShowing()) {
+			Lg.i("remote denied video => showing alert");
+			mAlertDialogRemoteDeniedVideo.show();
 		}
 	}
 
@@ -561,14 +563,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	@SuppressWarnings("unused")
 	public void toggleVideoClicked(final View view)
 	{
-		final boolean enableVideo = mVideoFragment == null;
-
-		if (enableVideo && !mCommunicator.getService().getSimlarCallState().isAuthenticationTokenVerified()) {
-			Toast.makeText(this, R.string.call_activity_request_video_without_verified_token, Toast.LENGTH_SHORT).show();
-			return;
-		}
-
-		mCommunicator.getService().requestVideoUpdate(enableVideo);
+		mCommunicator.getService().requestVideoUpdate(mVideoFragment == null);
 	}
 
 	@SuppressWarnings("unused")

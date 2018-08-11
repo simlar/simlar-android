@@ -109,10 +109,7 @@
     <string name="call_activity_call_ended_normally">Call ended</string>
     <string name="call_activity_alert_accept_video_request_title">Video Call</string>
     <string name="call_activity_alert_accept_video_request_text">Do you accept to update to a video call?</string>
-    <string name="call_activity_requesting_video">Waiting for contact to accept video</string>
-    <string name="call_activity_encrypting_video">Encrypting video</string>
     <string name="call_activity_video_denied">Contact denied video</string>
-    <string name="call_activity_request_video_without_verified_token">Compare Code first</string>
 
     <string name="connection_details_dialog_fragment_label_quality">Quality: </string>
     <string name="connection_details_dialog_fragment_label_codec">Codec: </string>

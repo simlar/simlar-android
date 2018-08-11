@@ -30,6 +30,7 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 
+import org.simlar.helper.VideoState;
 import org.simlar.logging.Lg;
 import org.simlar.service.SimlarService.SimlarServiceBinder;
 import org.simlar.utils.Util;
@@ -96,6 +97,9 @@ public class SimlarServiceCommunicator
 				return;
 			case CALL_CONNECTION_DETAILS:
 				onCallConnectionDetailsChanged();
+				return;
+			case VIDEO_STATE:
+				onVideoStateChanged(((SimlarServiceBroadcast.VideoStateChanged) fsb.getParameters()).videoState);
 				return;
 			case SERVICE_FINISHES:
 				onServiceFinishes();
@@ -167,6 +171,10 @@ public class SimlarServiceCommunicator
 	}
 
 	protected void onCallConnectionDetailsChanged()
+	{
+	}
+
+	protected void onVideoStateChanged(final VideoState videoState)
 	{
 	}
 

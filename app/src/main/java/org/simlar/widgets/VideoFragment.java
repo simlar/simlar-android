@@ -21,13 +21,14 @@
 package org.simlar.widgets;
 
 
-import android.app.Activity;
+import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import org.simlar.R;
 import org.simlar.logging.Lg;
@@ -39,6 +40,7 @@ public class VideoFragment extends android.support.v4.app.Fragment
 	// gui elements
 	private GLSurfaceView mVideoView;
 	private SurfaceView mCaptureView;
+	private ProgressBar mProgressBarInitializing;
 
 	public interface Listener
 	{
@@ -50,7 +52,7 @@ public class VideoFragment extends android.support.v4.app.Fragment
 	}
 
 	@Override
-	public void onAttach(final Activity activity)
+	public void onAttach(final Context activity)
 	{
 		Lg.i("onAttach");
 		super.onAttach(activity);
@@ -83,6 +85,7 @@ public class VideoFragment extends android.support.v4.app.Fragment
 
 		mVideoView = (GLSurfaceView) view.findViewById(R.id.videoSurface);
 		mCaptureView = (SurfaceView) view.findViewById(R.id.videoCaptureSurface);
+		mProgressBarInitializing = (ProgressBar) view.findViewById(R.id.progressBarInitializingVideo);
 
 		fixZOrder();
 
@@ -178,5 +181,10 @@ public class VideoFragment extends android.support.v4.app.Fragment
 
 		Lg.i("enableVideoWindow enable=", enable);
 		mListener.enableVideoWindow(enable);
+	}
+
+	public void setNowPlaying()
+	{
+		mProgressBarInitializing.setVisibility(View.GONE);
 	}
 }

@@ -106,10 +106,7 @@
     <string name="call_activity_call_ended_normally">Gespräch beendet</string>
     <string name="call_activity_alert_accept_video_request_title">Video-Anruf</string>
     <string name="call_activity_alert_accept_video_request_text">Akzeptierst Du das Update auf einen Video-Anruf?</string>
-    <string name="call_activity_requesting_video">Warte auf Videobestätigung</string>
-    <string name="call_activity_encrypting_video">Verschlüssele Video</string>
     <string name="call_activity_video_denied">Video wurde abgelehnt</string>
-    <string name="call_activity_request_video_without_verified_token">Vergleiche zuerst den Code</string>
 
     <string name="connection_details_dialog_fragment_label_quality">Qualität: </string>
     <!-- The following labels are not translated as they are intended for a technical audience. -->
