@@ -28,6 +28,7 @@ import org.simlar.R;
 import org.simlar.contactsprovider.ContactsProvider;
 import org.simlar.helper.CallEndReason;
 import org.simlar.helper.NetworkQuality;
+import org.simlar.helper.VideoState;
 import org.simlar.logging.Lg;
 import org.simlar.service.liblinphone.LinphoneCallState;
 import org.simlar.utils.Util;
@@ -44,8 +45,7 @@ public final class SimlarCallState
 	private boolean mAuthenticationTokenVerified = false;
 	private NetworkQuality mQuality = NetworkQuality.UNKNOWN;
 	private long mCallStartTime = -1;
-	private boolean mVideoRequested = false;
-	private boolean mVideoEnabled = false;
+	private VideoState mVideoState = VideoState.OFF;
 
 	private enum GuiCallState
 	{
@@ -74,9 +74,9 @@ public final class SimlarCallState
 		return true;
 	}
 
-	public boolean updateCallStateChanged(final String simlarId, final LinphoneCallState callState, final CallEndReason reason, final boolean videoEnabled)
+	public boolean updateCallStateChanged(final String simlarId, final LinphoneCallState callState, final CallEndReason reason)
 	{
-		if (!updateCallEndReason(reason) && Util.equalString(mSimlarId, simlarId) && mLinphoneCallState == callState && mVideoEnabled == videoEnabled) {
+		if (!updateCallEndReason(reason) && Util.equalString(mSimlarId, simlarId) && mLinphoneCallState == callState) {
 			return false;
 		}
 
@@ -90,11 +90,6 @@ public final class SimlarCallState
 
 		mSimlarId = simlarId;
 		mLinphoneCallState = callState;
-		mVideoEnabled = videoEnabled;
-
-		if (mLinphoneCallState == LinphoneCallState.STREAMS_RUNNING) {
-			mVideoRequested = false;
-		}
 
 		final GuiCallState oldGuiCallState = mGuiCallState;
 		if (mLinphoneCallState.isNewCallJustStarted()) {
@@ -123,8 +118,7 @@ public final class SimlarCallState
 			mAuthenticationToken = null;
 			mAuthenticationTokenVerified = false;
 			mQuality = NetworkQuality.UNKNOWN;
-			mVideoRequested = false;
-			mVideoEnabled = false;
+			mVideoState = VideoState.OFF;
 		}
 
 		return true;
@@ -196,6 +190,16 @@ public final class SimlarCallState
 		return true;
 	}
 
+	public boolean updateVideoState(final VideoState videoState)
+	{
+		if (mVideoState == videoState) {
+			return false;
+		}
+
+		mVideoState = videoState;
+		return true;
+	}
+
 	public boolean isEmpty()
 	{
 		return mLinphoneCallState == LinphoneCallState.UNKNOWN;
@@ -215,8 +219,7 @@ public final class SimlarCallState
 				", mAuthenticationTokenVerified=" + mAuthenticationTokenVerified +
 				", mQuality=" + mQuality +
 				", mCallStartTime=" + mCallStartTime +
-				", mVideoRequested=" + mVideoRequested +
-				", mVideoEnabled=" + mVideoEnabled +
+				", mVideoState=" + mVideoState +
 				'}';
 	}
 
@@ -328,23 +331,13 @@ public final class SimlarCallState
 		return mLinphoneCallState.createNotificationText(context, getContactName(), goingDown);
 	}
 
+	public VideoState getVideoState()
+	{
+		return mVideoState;
+	}
+
 	public boolean isVideoRequestPossible()
 	{
 		return mGuiCallState == GuiCallState.TALKING;
-	}
-
-	public void setVideoRequested()
-	{
-		mVideoRequested = true;
-	}
-
-	public boolean isVideoRequested()
-	{
-		return mVideoRequested;
-	}
-
-	public boolean isVideoEnabled()
-	{
-		return mVideoEnabled;
 	}
 }

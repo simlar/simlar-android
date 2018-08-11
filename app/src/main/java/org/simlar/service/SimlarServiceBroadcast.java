@@ -38,7 +38,6 @@ public final class SimlarServiceBroadcast implements Serializable
 		SIMLAR_STATUS,
 		SIMLAR_CALL_STATE,
 		CALL_CONNECTION_DETAILS,
-		REMOTE_REQUESTED_VIDEO,
 		SERVICE_FINISHES
 	}
 
@@ -88,11 +87,6 @@ public final class SimlarServiceBroadcast implements Serializable
 	public static void sendCallConnectionDetailsChanged(final Context context)
 	{
 		new SimlarServiceBroadcast(Type.CALL_CONNECTION_DETAILS, null).send(context);
-	}
-
-	public static void sendRemoteRequestedVideo(final Context context)
-	{
-		new SimlarServiceBroadcast(Type.REMOTE_REQUESTED_VIDEO, null).send(context);
 	}
 
 	public static void sendServiceFinishes(final Context context)

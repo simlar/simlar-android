@@ -59,6 +59,7 @@ import org.simlar.helper.NetworkQuality;
 import org.simlar.helper.PermissionsHelper;
 import org.simlar.helper.PreferencesHelper;
 import org.simlar.helper.PreferencesHelper.NotInitedException;
+import org.simlar.helper.VideoState;
 import org.simlar.helper.Volumes;
 import org.simlar.helper.Volumes.MicrophoneStatus;
 import org.simlar.logging.Lg;
@@ -265,9 +266,9 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			if (!Util.isNullOrEmpty(mSimlarIdToCall)) {
 				if (!FlavourHelper.isGcmEnabled()) {
 					if (mSimlarStatus.isOffline()) {
-						mSimlarCallState.updateCallStateChanged(mSimlarIdToCall, LinphoneCallState.CALL_END, CallEndReason.SERVER_CONNECTION_TIMEOUT, false);
+						mSimlarCallState.updateCallStateChanged(mSimlarIdToCall, LinphoneCallState.CALL_END, CallEndReason.SERVER_CONNECTION_TIMEOUT);
 					} else {
-						mSimlarCallState.updateCallStateChanged(mSimlarIdToCall, LinphoneCallState.OUTGOING_INIT, CallEndReason.NONE, false);
+						mSimlarCallState.updateCallStateChanged(mSimlarIdToCall, LinphoneCallState.OUTGOING_INIT, CallEndReason.NONE);
 					}
 				}
 
@@ -695,10 +696,10 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	}
 
 	@Override
-	public void onCallStateChanged(final String number, final State callState, final String message, final boolean videoEnabled)
+	public void onCallStateChanged(final String number, final State callState, final String message)
 	{
 		final boolean oldCallStateRinging = mSimlarCallState.isRinging();
-		if (!mSimlarCallState.updateCallStateChanged(number, LinphoneCallState.fromLinphoneCallState(callState), CallEndReason.fromMessage(message), videoEnabled)) {
+		if (!mSimlarCallState.updateCallStateChanged(number, LinphoneCallState.fromLinphoneCallState(callState), CallEndReason.fromMessage(message))) {
 			Lg.v("SimlarCallState staying the same: ", mSimlarCallState);
 			return;
 		}
@@ -815,9 +816,14 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	}
 
 	@Override
-	public void onRemoteRequestedVideo()
+	public void onVideoStateChanged(final VideoState videoState)
 	{
-		SimlarServiceBroadcast.sendRemoteRequestedVideo(this);
+		if (!mSimlarCallState.updateVideoState(videoState)) {
+			return;
+		}
+
+		Lg.i("updated video state: ", videoState);
+		SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
 	}
 
 	private void call(final String simlarId)
@@ -1031,11 +1037,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	{
 		if (mLinphoneThread == null) {
 			return;
-		}
-
-		if (enable) {
-			mSimlarCallState.setVideoRequested();
-			SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
 		}
 
 		mLinphoneThread.requestVideoUpdate(enable);

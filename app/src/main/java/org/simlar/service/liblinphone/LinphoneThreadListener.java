@@ -23,6 +23,7 @@ package org.simlar.service.liblinphone;
 import org.linphone.core.LinphoneCall.State;
 import org.linphone.core.LinphoneCore.RegistrationState;
 import org.simlar.helper.NetworkQuality;
+import org.simlar.helper.VideoState;
 
 public interface LinphoneThreadListener
 {
@@ -33,11 +34,11 @@ public interface LinphoneThreadListener
 	void onCallStatsChanged(final NetworkQuality quality, final int callDuration, final String codec, final String iceState,
 	                        final int upload, final int download, final int jitter, final int packetLoss, final long latePackets, final int roundTripDelay);
 
-	void onCallStateChanged(final String number, final State state, final String message, final boolean videoEnabled);
+	void onCallStateChanged(final String number, final State state, final String message);
 
 	void onCallEncryptionChanged(final String authenticationToken, final boolean authenticationTokenVerified);
 
-	void onRemoteRequestedVideo();
+	void onVideoStateChanged(final VideoState videoState);
 
 	void onJoin();
 }
