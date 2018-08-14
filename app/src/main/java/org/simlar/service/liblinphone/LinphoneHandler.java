@@ -115,12 +115,13 @@ final class LinphoneHandler
 		mLinphoneCore.setUserAgent("Simlar", Version.getVersionName(context));
 
 		// enable STUN with ICE
-		final NatPolicy natPolicy = mLinphoneCore.getNatPolicy();
+		final NatPolicy natPolicy = mLinphoneCore.createNatPolicy();
 		natPolicy.setStunServer(STUN_SERVER);
 		natPolicy.enableStun(true);
 		natPolicy.enableIce(true);
 		natPolicy.enableTurn(false);
 		natPolicy.enableUpnp(false);
+		mLinphoneCore.setNatPolicy(natPolicy);
 
 		// Use TLS for registration with random port
 		final Transports transports = mLinphoneCore.getTransports();
