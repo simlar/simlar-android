@@ -684,8 +684,9 @@ public final class LinphoneThread extends Thread implements CoreListener
 
 	private static PayloadType getPayload(final Call call, final StreamType type)
 	{
-		final CallParams params = call.getParams();
+		final CallParams params = call.getCurrentParams();
 		if (params == null) {
+			Lg.e("no call parameters no payload");
 			return null;
 		}
 
@@ -698,6 +699,7 @@ public final class LinphoneThread extends Thread implements CoreListener
 			return params.getUsedTextPayloadType();
 		case Unknown:
 		default:
+			Lg.e("unknown StreamType: ", type);
 			return null;
 		}
 	}
