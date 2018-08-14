@@ -487,7 +487,13 @@ final class LinphoneHandler
 
 	private void setFrontCameraAsDefault()
 	{
-		mLinphoneCore.setVideoDevice(mLinphoneCore.getVideoDevicesList()[getFrontCameraId()]);
+		final String[] cameras = mLinphoneCore.getVideoDevicesList();
+		if (cameras.length < 1) {
+			Lg.w("no camera found");
+			return;
+		}
+
+		mLinphoneCore.setVideoDevice(cameras[getFrontCameraId()]);
 	}
 
 	private void enableCamera(final boolean enable)
