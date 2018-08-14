@@ -114,14 +114,7 @@ final class LinphoneHandler
 		mLinphoneCore.start();
 		mLinphoneCore.setUserAgent("Simlar", Version.getVersionName(context));
 
-		// enable STUN with ICE
-		final NatPolicy natPolicy = mLinphoneCore.createNatPolicy();
-		natPolicy.setStunServer(STUN_SERVER);
-		natPolicy.enableStun(true);
-		natPolicy.enableIce(true);
-		natPolicy.enableTurn(false);
-		natPolicy.enableUpnp(false);
-		mLinphoneCore.setNatPolicy(natPolicy);
+		mLinphoneCore.setNatPolicy(createNatPolicy());
 
 		// Use TLS for registration with random port
 		final Transports transports = mLinphoneCore.getTransports();
@@ -177,6 +170,18 @@ final class LinphoneHandler
 		mLinphoneCore.enableDnsSrv(false);
 	}
 
+	private NatPolicy createNatPolicy()
+	{
+		// enable STUN with ICE
+		final NatPolicy natPolicy = mLinphoneCore.createNatPolicy();
+		natPolicy.setStunServer(STUN_SERVER);
+		natPolicy.enableStun(true);
+		natPolicy.enableIce(true);
+		natPolicy.enableTurn(false);
+		natPolicy.enableUpnp(false);
+		return natPolicy;
+	}
+
 	void linphoneCoreIterate()
 	{
 		mLinphoneCore.iterate();
@@ -224,6 +229,8 @@ final class LinphoneHandler
 		proxyCfg.setExpires(60); // connection times out after 1 minute. This overrides kamailio setting which is 3600 (1 hour).
 		proxyCfg.enablePublish(false);
 		proxyCfg.setPushNotificationAllowed(false);
+		proxyCfg.setNatPolicy(createNatPolicy());
+
 		mLinphoneCore.addProxyConfig(proxyCfg);
 		mLinphoneCore.setDefaultProxyConfig(proxyCfg);
 	}
