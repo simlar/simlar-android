@@ -127,7 +127,7 @@ final class LinphoneHandler
 		transports.setUdpPort(0);
 		transports.setTcpPort(0);
 		transports.setTlsPort(new Random().nextInt(Short.MAX_VALUE - 1023) + 1024);
-		mLinphoneCore.setTransports(transports);
+		mLinphoneCore.setTransports(transports); // liblinphone requires setting transports again.
 		Lg.i("using random port: ", transports.getTlsPort());
 
 		// set audio port range
