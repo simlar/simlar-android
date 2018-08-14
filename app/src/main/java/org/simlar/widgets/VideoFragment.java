@@ -72,7 +72,7 @@ public class VideoFragment extends Fragment
 		Lg.i("onDetach");
 
 		if (mListener == null) {
-			Lg.e("onDestroy: no listener registered => not destroying potential video");
+			Lg.e("onDetach: no listener registered => not destroying potential video");
 		} else {
 			mListener.destroyVideoWindows();
 			mListener = null;
