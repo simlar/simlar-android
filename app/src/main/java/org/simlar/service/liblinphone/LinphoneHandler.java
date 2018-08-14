@@ -119,6 +119,8 @@ final class LinphoneHandler
 		natPolicy.setStunServer(STUN_SERVER);
 		natPolicy.enableStun(true);
 		natPolicy.enableIce(true);
+		natPolicy.enableTurn(false);
+		natPolicy.enableUpnp(false);
 
 		// Use TLS for registration with random port
 		final Transports transports = mLinphoneCore.getTransports();
