@@ -481,6 +481,7 @@ final class LinphoneHandler
 			}
 		}
 
+		Lg.w("no front facing camera found");
 		return 0;
 	}
 
