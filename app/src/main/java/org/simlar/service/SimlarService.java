@@ -698,10 +698,10 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	}
 
 	@Override
-	public void onCallStateChanged(final String number, final State callState, final String message)
+	public void onCallStateChanged(final String number, final State callState, final CallEndReason callEndReason)
 	{
 		final boolean oldCallStateRinging = mSimlarCallState.isRinging();
-		if (!mSimlarCallState.updateCallStateChanged(number, LinphoneCallState.fromLinphoneCallState(callState), CallEndReason.fromMessage(message))) {
+		if (!mSimlarCallState.updateCallStateChanged(number, LinphoneCallState.fromLinphoneCallState(callState), callEndReason)) {
 			Lg.v("SimlarCallState staying the same: ", mSimlarCallState);
 			return;
 		}

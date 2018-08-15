@@ -20,8 +20,8 @@
 
 package org.simlar.helper;
 
+import org.linphone.core.Reason;
 import org.simlar.R;
-import org.simlar.utils.Util;
 
 public enum CallEndReason
 {
@@ -32,22 +32,38 @@ public enum CallEndReason
 	BUSY,
 	SERVER_CONNECTION_TIMEOUT;
 
-	public static CallEndReason fromMessage(final String message)
+	public static CallEndReason fromReason(final Reason reason)
 	{
-		if (Util.isNullOrEmpty(message)) {
+		if (reason == null) {
 			return NONE;
 		}
 
-		// see linphone-android/submodules/belle-sip/src/message.c: well_known_codes
-		switch (message) {
-		case "Call declined":
+		switch (reason) {
+		case Declined:
 			return DECLINED;
-		case "Not Found":
+		case NotFound:
 			return OFFLINE;
-		case "Unsupported media type":
+		case NotImplemented:
+		case NotAcceptable:
+		case UnsupportedContent:
 			return UNSUPPORTED_MEDIA;
-		case "Busy here":
+		case Busy:
 			return BUSY;
+		case None:
+		case NoResponse:
+		case Forbidden:
+		case NotAnswered:
+		case IOError:
+		case DoNotDisturb:
+		case Unauthorized:
+		case NoMatch:
+		case MovedPermanently:
+		case Gone:
+		case TemporarilyUnavailable:
+		case AddressIncomplete:
+		case BadGateway:
+		case ServerTimeout:
+		case Unknown:
 		default:
 			return NONE;
 		}
