@@ -40,7 +40,7 @@ public enum CallEndReason
 
 		// see linphone-android/submodules/belle-sip/src/message.c: well_known_codes
 		switch (message) {
-		case "Call declined.":
+		case "Call declined":
 			return DECLINED;
 		case "Not Found":
 			return OFFLINE;
