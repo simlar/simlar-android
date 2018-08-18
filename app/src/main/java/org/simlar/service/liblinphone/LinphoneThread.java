@@ -525,6 +525,8 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 		final boolean localVideo = call.getCurrentParams() != null && call.getCurrentParams().getVideoEnabled();
 		final boolean remoteVideo = call.getRemoteParams() != null && call.getRemoteParams().getVideoEnabled();
 
+		Lg.i("creating videoState based on localVideo= ", localVideo, " remoteVideo=", remoteVideo);
+
 		if (!LinphoneCall.State.CallEnd.equals(state) && localVideo && remoteVideo) {
 			if (call.getVideoStats() == null || mVideoState == VideoState.ENCRYPTING) {
 				return VideoState.ENCRYPTING;
@@ -537,11 +539,17 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 			return VideoState.PLAYING;
 		}
 
-		if (LinphoneCall.State.CallUpdatedByRemote.equals(state) && !localVideo && remoteVideo) {
-			return VideoState.REMOTE_REQUESTED;
+		if (!localVideo && remoteVideo) {
+			if (LinphoneCall.State.CallUpdatedByRemote.equals(state)) {
+				return VideoState.REMOTE_REQUESTED;
+			}
+
+			if (mVideoState == VideoState.REQUESTING && LinphoneCall.State.StreamsRunning.equals(state)) {
+				return VideoState.ACCEPTED;
+			}
 		}
 
-		if (LinphoneCall.State.StreamsRunning.equals(state) && mVideoState == VideoState.REQUESTING) {
+		if (!remoteVideo && LinphoneCall.State.StreamsRunning.equals(state) && mVideoState == VideoState.REQUESTING) {
 			return VideoState.DENIED;
 		}
 
@@ -562,16 +570,17 @@ public final class LinphoneThread extends Thread implements LinphoneCoreListener
 		final LinphoneCall.State fixedState = fixLinphoneCallState(state);
 		final VideoState videoState = createVideoState(fixedState, call);
 
-		updateVideoState(videoState);
-
 		Lg.i("callState changed state=", fixedState, " number=", new CallLogger(call), " message=", message, " videoState=", videoState);
 
 		if (videoState == VideoState.REMOTE_REQUESTED) {
 			Lg.i("remote requested video");
-			/// NOTE: this needs to happen directly, posting to linphone thread might take to log
+			/// NOTE: this needs to happen directly, posting to linphone thread might take to long
 			mLinphoneHandler.preventAutoAnswer();
+		} else if (videoState == VideoState.ACCEPTED || videoState == VideoState.REQUESTING) {
+			mLinphoneThreadHandler.post(mLinphoneHandler::reinviteVideo);
 		}
 
+		updateVideoState(videoState);
 		mMainThreadHandler.post(() -> mListener.onCallStateChanged(number, fixedState, message));
 	}
 
