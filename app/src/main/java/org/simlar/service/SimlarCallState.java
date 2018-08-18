@@ -316,4 +316,9 @@ public final class SimlarCallState
 	{
 		return mLinphoneCallState.createNotificationText(context, getContactName(), goingDown);
 	}
+
+	public boolean isVideoRequestPossible()
+	{
+		return mGuiCallState == GuiCallState.TALKING;
+	}
 }

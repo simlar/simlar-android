@@ -45,6 +45,7 @@ import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.view.SurfaceView;
 import android.widget.Toast;
 
 import org.linphone.core.LinphoneCall.State;
@@ -58,6 +59,7 @@ import org.simlar.helper.NetworkQuality;
 import org.simlar.helper.PermissionsHelper;
 import org.simlar.helper.PreferencesHelper;
 import org.simlar.helper.PreferencesHelper.NotInitedException;
+import org.simlar.helper.VideoState;
 import org.simlar.helper.Volumes;
 import org.simlar.helper.Volumes.MicrophoneStatus;
 import org.simlar.logging.Lg;
@@ -98,6 +100,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private int mCurrentRingerMode = -1;
 	private PendingIntent mKeepAwakePendingIntent = null;
 	private final KeepAwakeReceiver mKeepAwakeReceiver = FlavourHelper.isGcmEnabled() ? null : new KeepAwakeReceiver();
+	private VideoState mVideoState = VideoState.OFF;
 
 	public final class SimlarServiceBinder extends Binder
 	{
@@ -813,6 +816,18 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
 	}
 
+	@Override
+	public void onVideoStateChanged(final VideoState videoState)
+	{
+		if (mVideoState == videoState) {
+			return;
+		}
+
+		mVideoState = videoState;
+		Lg.i("updated video state: ", videoState);
+		SimlarServiceBroadcast.sendVideoStateChanged(this, videoState);
+	}
+
 	private void call(final String simlarId)
 	{
 		if (mLinphoneThread == null) {
@@ -1018,6 +1033,60 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	public void toggleExternalSpeaker()
 	{
 		setVolumes(getVolumes().toggleExternalSpeaker());
+	}
+
+	public void requestVideoUpdate(final boolean enable)
+	{
+		if (mLinphoneThread == null) {
+			return;
+		}
+
+		mLinphoneThread.requestVideoUpdate(enable);
+	}
+
+	public void acceptVideoUpdate(final boolean accept)
+	{
+		if (mLinphoneThread == null) {
+			return;
+		}
+
+		mLinphoneThread.acceptVideoUpdate(accept);
+	}
+
+	public void setVideoWindows(final SurfaceView videoView, final SurfaceView captureView)
+	{
+		if (mLinphoneThread == null) {
+			return;
+		}
+
+		mLinphoneThread.setVideoWindows(videoView, captureView);
+	}
+
+	public void enableVideoWindow(final boolean enable)
+	{
+		if (mLinphoneThread == null) {
+			return;
+		}
+
+		mLinphoneThread.enableVideoWindow(enable);
+	}
+
+	public void destroyVideoWindows()
+	{
+		if (mLinphoneThread == null) {
+			return;
+		}
+
+		mLinphoneThread.destroyVideoWindows();
+	}
+
+	public void toggleCamera()
+	{
+		if (mLinphoneThread == null) {
+			return;
+		}
+
+		mLinphoneThread.toggleCamera();
 	}
 
 	public CallConnectionDetails getCallConnectionDetails()

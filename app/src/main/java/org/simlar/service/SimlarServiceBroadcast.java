@@ -24,6 +24,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 
+import org.simlar.helper.VideoState;
+
 import java.io.Serializable;
 
 public final class SimlarServiceBroadcast implements Serializable
@@ -38,13 +40,13 @@ public final class SimlarServiceBroadcast implements Serializable
 		SIMLAR_STATUS,
 		SIMLAR_CALL_STATE,
 		CALL_CONNECTION_DETAILS,
+		VIDEO_STATE,
 		SERVICE_FINISHES
 	}
 
 	private final Type mType;
 	private final Parameters mParameters;
 
-	@SuppressWarnings("SameParameterValue") /// will be used by video implementation
 	private SimlarServiceBroadcast(final Type type, final Parameters parameters)
 	{
 		mType = type;
@@ -58,7 +60,6 @@ public final class SimlarServiceBroadcast implements Serializable
 		LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 	}
 
-	@SuppressWarnings({"unused", "InterfaceNeverImplemented"}) /// will be used by video implementation
 	public interface Parameters extends Serializable
 	{
 	}
@@ -68,7 +69,6 @@ public final class SimlarServiceBroadcast implements Serializable
 		return mType;
 	}
 
-	@SuppressWarnings("unused") /// will be used by video implementation
 	public Parameters getParameters()
 	{
 		return mParameters;
@@ -87,6 +87,23 @@ public final class SimlarServiceBroadcast implements Serializable
 	public static void sendCallConnectionDetailsChanged(final Context context)
 	{
 		new SimlarServiceBroadcast(Type.CALL_CONNECTION_DETAILS, null).send(context);
+	}
+
+	public static class VideoStateChanged implements Parameters
+	{
+		private static final long serialVersionUID = 1;
+
+		public final VideoState videoState;
+
+		VideoStateChanged(final VideoState videoState)
+		{
+			this.videoState = videoState;
+		}
+	}
+
+	public static void sendVideoStateChanged(final Context context, final VideoState videoState)
+	{
+		new SimlarServiceBroadcast(Type.VIDEO_STATE, new VideoStateChanged(videoState)).send(context);
 	}
 
 	public static void sendServiceFinishes(final Context context)

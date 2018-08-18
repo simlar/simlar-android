@@ -31,6 +31,7 @@ import org.linphone.core.LinphoneCoreException;
 import org.linphone.core.LinphoneCoreFactory;
 import org.linphone.core.LinphoneCoreListener;
 import org.linphone.core.LinphoneProxyConfig;
+import org.linphone.mediastream.video.capture.hwconf.AndroidCameraConfiguration;
 import org.simlar.helper.ServerSettings;
 import org.simlar.helper.Version;
 import org.simlar.helper.Volumes;
@@ -143,8 +144,13 @@ final class LinphoneHandler
 			mLinphoneCore.enableEchoCancellation(true);
 			mLinphoneCore.enableEchoLimiter(false);
 
-			// disable video
-			mLinphoneCore.enableVideo(false, false);
+			// enable video
+			if (mLinphoneCore.isVideoSupported()) {
+				mLinphoneCore.enableVideo(true, true);
+			} else {
+				mLinphoneCore.enableVideo(false, false);
+				Lg.e("video not supported by sdk");
+			}
 			mLinphoneCore.setVideoPolicy(false, false);
 
 			// set number of threads for MediaStreamer
@@ -376,5 +382,151 @@ final class LinphoneHandler
 	private static void enableDebugMode(final boolean enabled)
 	{
 		LinphoneCoreFactory.instance().setDebugMode(enabled, "DEBUG");
+	}
+
+	public void requestVideoUpdate(final boolean enable)
+	{
+		Lg.i("requestVideoUpdate: enable=", enable);
+
+		final LinphoneCall currentCall = getCurrentCall();
+		if (currentCall == null) {
+			Lg.w("no current call to add video to");
+			return;
+		}
+
+		final LinphoneCallParams params = currentCall.getCurrentParams();
+		if (params.getVideoEnabled() == enable) {
+			Lg.i("requestVideoUpdate already: ", enable, " => aborting");
+			return;
+		}
+
+		params.setVideoEnabled(enable);
+		mLinphoneCore.updateCall(currentCall, params);
+	}
+
+	public void preventAutoAnswer()
+	{
+		Lg.i("preventAutoAnswer");
+
+		final LinphoneCall currentCall = getCurrentCall();
+		if (currentCall == null) {
+			Lg.w("no current call to prevent auto answer for");
+			return;
+		}
+
+		try {
+			mLinphoneCore.deferCallUpdate(currentCall);
+		} catch (final LinphoneCoreException e) {
+			Lg.ex(e, "LinphoneCoreException during deferCallUpdate");
+		}
+	}
+
+	public void acceptVideoUpdate(final boolean accept)
+	{
+		Lg.i("acceptVideoUpdate accept=", accept);
+
+		final LinphoneCall currentCall = getCurrentCall();
+		if (currentCall == null) {
+			Lg.w("no current call to accept video for");
+			return;
+		}
+
+		final LinphoneCallParams params = currentCall.getCurrentParams();
+		if (accept) {
+			params.setVideoEnabled(true);
+		}
+
+		try {
+			mLinphoneCore.acceptCallUpdate(currentCall, params);
+		} catch (final LinphoneCoreException e) {
+			Lg.ex(e, "LinphoneCoreException during acceptCallUpdate");
+		}
+	}
+
+	public void setVideoWindow(final Object videoWindow)
+	{
+		Lg.i("setVideoWindow");
+
+		if (mLinphoneCore == null) {
+			Lg.e("setVideoWindow: mLinphoneCore is null => aborting");
+			return;
+		}
+
+		mLinphoneCore.setVideoWindow(videoWindow);
+	}
+
+	public void setVideoPreviewWindow(final Object videoPreviewWindow)
+	{
+		Lg.i("setVideoPreviewWindow");
+
+		if (mLinphoneCore == null) {
+			Lg.e("setVideoPreviewWindow: mLinphoneCore is null => aborting");
+			return;
+		}
+
+		enableCamera(videoPreviewWindow != null);
+		mLinphoneCore.setPreviewWindow(videoPreviewWindow);
+	}
+
+	private void setFrontCameraAsDefault()
+	{
+		int cameraId = 0;
+		for (final AndroidCameraConfiguration.AndroidCamera androidCamera : AndroidCameraConfiguration.retrieveCameras()) {
+			if (androidCamera.frontFacing) {
+				cameraId = androidCamera.id;
+			}
+		}
+
+		mLinphoneCore.setVideoDevice(cameraId);
+	}
+
+	private void enableCamera(final boolean enable)
+	{
+		Lg.i("enableCamera: ", enable);
+
+		final LinphoneCall currentCall = getCurrentCall();
+		if (currentCall == null) {
+			Lg.w("no current call to enable camera for");
+			return;
+		}
+
+		currentCall.enableCamera(enable);
+
+		if (enable) {
+			setFrontCameraAsDefault();
+		}
+
+		mLinphoneCore.updateCall(currentCall, null);
+	}
+
+	public void toggleCamera()
+	{
+		Lg.i("toggleCamera");
+
+		final AndroidCameraConfiguration.AndroidCamera[] cameras = AndroidCameraConfiguration.retrieveCameras();
+		if (cameras.length < 1) {
+			Lg.i("not enough cameras to toggle through");
+			return;
+		}
+
+		final LinphoneCall currentCall = getCurrentCall();
+		if (currentCall == null) {
+			Lg.w("no current call to toggle camera for");
+			return;
+		}
+
+		final int currentCameraId = mLinphoneCore.getVideoDevice();
+
+		for (int i = 0; i < cameras.length; i++) {
+			if (cameras[i].id == currentCameraId) {
+				final int newCameraId = i + 1 < cameras.length ? cameras[i + 1].id : cameras[0].id;
+				Lg.i("toggling cameraId: ", currentCameraId, " => ", newCameraId);
+				mLinphoneCore.setVideoDevice(newCameraId);
+				mLinphoneCore.updateCall(currentCall, null);
+				return;
+			}
+		}
+
+		Lg.e("failed to toggle camera");
 	}
 }
