@@ -22,7 +22,7 @@ package org.simlar.service.liblinphone;
 
 import android.content.Context;
 
-import org.linphone.core.LinphoneCall;
+import org.linphone.core.Call;
 import org.simlar.R;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
@@ -54,14 +54,14 @@ public enum LinphoneCallState
 
 	private static final LinphoneCallState[] ALL = LinphoneCallState.values();
 
-	public static LinphoneCallState fromLinphoneCallState(final LinphoneCall.State state)
+	public static LinphoneCallState fromLinphoneCallState(final Call.State state)
 	{
 		if (state == null) {
 			Lg.e("ERROR: fromLinphoneCallState: state is null");
 			return UNKNOWN;
 		}
 
-		final int value = state.value();
+		final int value = state.toInt();
 		if (0 <= value && value < ALL.length - 1) {
 			return ALL[value];
 		}

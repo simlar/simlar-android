@@ -20,8 +20,7 @@
 
 package org.simlar.service;
 
-import org.linphone.core.LinphoneCore;
-import org.linphone.core.LinphoneCore.RegistrationState;
+import org.linphone.core.RegistrationState;
 import org.simlar.R;
 
 public enum SimlarStatus
@@ -33,17 +32,19 @@ public enum SimlarStatus
 	ONGOING_CALL,
 	ERROR;
 
-	public static SimlarStatus fromRegistrationState(final LinphoneCore.RegistrationState state)
+	public static SimlarStatus fromRegistrationState(final RegistrationState state)
 	{
-		if (RegistrationState.RegistrationNone.equals(state) || RegistrationState.RegistrationCleared.equals(state)) {
+		switch (state) {
+		case None:
+		case Cleared:
 			return OFFLINE;
-		} else if (RegistrationState.RegistrationProgress.equals(state)) {
+		case Progress:
 			return CONNECTING;
-		} else if (RegistrationState.RegistrationOk.equals(state)) {
+		case Ok:
 			return ONLINE;
-		} else if (RegistrationState.RegistrationFailed.equals(state)) {
+		case Failed:
 			return ERROR;
-		} else {
+		default:
 			return UNKNOWN;
 		}
 	}

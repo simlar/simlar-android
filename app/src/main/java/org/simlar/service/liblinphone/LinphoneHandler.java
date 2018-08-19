@@ -22,15 +22,15 @@ package org.simlar.service.liblinphone;
 
 import android.content.Context;
 
-import org.linphone.core.LinphoneCall;
-import org.linphone.core.LinphoneCallParams;
-import org.linphone.core.LinphoneCore;
-import org.linphone.core.LinphoneCore.MediaEncryption;
-import org.linphone.core.LinphoneCore.Transports;
-import org.linphone.core.LinphoneCoreException;
-import org.linphone.core.LinphoneCoreFactory;
-import org.linphone.core.LinphoneCoreListener;
-import org.linphone.core.LinphoneProxyConfig;
+import org.linphone.core.Call;
+import org.linphone.core.CallParams;
+import org.linphone.core.Core;
+import org.linphone.core.MediaEncryption;
+import org.linphone.core.Transports;
+import org.linphone.core.Factory;
+import org.linphone.core.CoreListener;
+import org.linphone.core.ProxyConfig;
+import org.linphone.core.VideoActivationPolicy;
 import org.linphone.mediastream.video.capture.hwconf.AndroidCameraConfiguration;
 import org.simlar.helper.ServerSettings;
 import org.simlar.helper.Version;
@@ -44,19 +44,17 @@ final class LinphoneHandler
 {
 	private static final String STUN_SERVER = "stun.simlar.org";
 
-	private LinphoneCore mLinphoneCore = null;
+	private Core mLinphoneCore = null;
 
 	public void destroy()
 	{
 		Lg.i("destroy called => forcing unregister");
 
 		if (mLinphoneCore != null) {
-			final LinphoneCore tmp = mLinphoneCore;
-			mLinphoneCore = null;
 			try {
-				tmp.destroy();
+				mLinphoneCore = null;
 			} catch (final RuntimeException e) {
-				Lg.ex(e, "RuntimeException during mLinphoneCore.destroy()");
+				Lg.ex(e, "RuntimeException during mLinphoneCore destruction");
 			}
 		}
 		Lg.i("destroy ended");
@@ -68,7 +66,7 @@ final class LinphoneHandler
 		return mLinphoneCore != null;
 	}
 
-	public void initialize(final LinphoneCoreListener listener, final Context context, final String linphoneInitialConfigFile,
+	public void initialize(final CoreListener listener, final Context context, final String linphoneInitialConfigFile,
 	                       final String rootCaFile, final String zrtpSecretsCacheFile, final String ringbackSoundFile, final String pauseSoundFile)
 	{
 		if (listener == null) {
@@ -101,72 +99,69 @@ final class LinphoneHandler
 			return;
 		}
 
-		try {
-			Lg.i("initialize linphone");
+		Lg.i("initialize linphone");
 
-			enableDebugMode(false);
+		enableDebugMode(false);
 
-			// First instantiate the core Linphone object given only a listener.
-			// The listener will react to events in Linphone core.
-			mLinphoneCore = LinphoneCoreFactory.instance().createLinphoneCore(listener, null, linphoneInitialConfigFile, null, context);
-			mLinphoneCore.setContext(context);
-			mLinphoneCore.setUserAgent("Simlar", Version.getVersionName(context));
+		// First instantiate the core Linphone object given only a listener.
+		// The listener will react to events in Linphone core.
+		mLinphoneCore = Factory.instance().createCore(linphoneInitialConfigFile, null, context);
+		mLinphoneCore.addListener(listener);
+		mLinphoneCore.setUserAgent("Simlar", Version.getVersionName(context));
 
-			// enable STUN with ICE
-			mLinphoneCore.getNatPolicy().setStunServer(STUN_SERVER);
-			mLinphoneCore.getNatPolicy().enableStun(true);
-			mLinphoneCore.getNatPolicy().enableIce(true);
+		// enable STUN with ICE
+		mLinphoneCore.getNatPolicy().setStunServer(STUN_SERVER);
+		mLinphoneCore.getNatPolicy().enableStun(true);
+		mLinphoneCore.getNatPolicy().enableIce(true);
 
-			// Use TLS for registration with random port
-			final Transports transports = new Transports();
-			transports.udp = 0;
-			transports.tcp = 0;
-			transports.tls = new Random().nextInt(Short.MAX_VALUE - 1023) + 1024;
-			mLinphoneCore.setSignalingTransportPorts(transports);
-			Lg.i("using random port: ", transports.tls);
+		// Use TLS for registration with random port
+		final Transports transports = mLinphoneCore.getTransports();
+		transports.setUdpPort(0);
+		transports.setTcpPort(0);
+		transports.setTlsPort(new Random().nextInt(Short.MAX_VALUE - 1023) + 1024);
+		mLinphoneCore.setTransports(transports);
+		Lg.i("using random port: ", transports.getTlsPort());
 
-			// set audio port range
-			mLinphoneCore.setAudioPortRange(6000, 8000);
+		// set audio port range
+		mLinphoneCore.setAudioPortRange(6000, 8000);
 
-			// CA file
-			mLinphoneCore.setRootCA(rootCaFile);
+		// CA file
+		mLinphoneCore.setRootCa(rootCaFile);
 
-			// enable zrtp
-			mLinphoneCore.setMediaEncryption(MediaEncryption.ZRTP);
-			mLinphoneCore.setZrtpSecretsCache(zrtpSecretsCacheFile);
-			mLinphoneCore.setMediaEncryptionMandatory(true);
+		// enable zrtp
+		mLinphoneCore.setMediaEncryption(MediaEncryption.ZRTP);
+		mLinphoneCore.setZrtpSecretsFile(zrtpSecretsCacheFile);
+		mLinphoneCore.setMediaEncryptionMandatory(true);
 
-			// set sound files
-			mLinphoneCore.setRingback(ringbackSoundFile);
-			mLinphoneCore.setPlayFile(pauseSoundFile);
+		// set sound files
+		mLinphoneCore.setRingback(ringbackSoundFile);
+		mLinphoneCore.setPlayFile(pauseSoundFile);
 
-			// enable echo cancellation
-			mLinphoneCore.enableEchoCancellation(true);
-			mLinphoneCore.enableEchoLimiter(false);
+		// enable echo cancellation
+		mLinphoneCore.enableEchoCancellation(true);
+		mLinphoneCore.enableEchoLimiter(false);
 
-			// enable video
-			if (mLinphoneCore.isVideoSupported()) {
-				mLinphoneCore.enableVideo(true, true);
-			} else {
-				mLinphoneCore.enableVideo(false, false);
-				Lg.e("video not supported by sdk");
-			}
-			mLinphoneCore.setVideoPolicy(false, false);
-
-			// set number of threads for MediaStreamer
-			final int cpuCount = Runtime.getRuntime().availableProcessors();
-			Lg.i("Threads for MediaStreamer: ", cpuCount);
-			mLinphoneCore.setCpuCount(cpuCount);
-
-			// We do not want a call response with "486 busy here" if you are not on the phone. So we take a high value of 1 hour.
-			// The Simlar sip server is responsible for terminating a call. Right now it does that after 2 minutes.
-			mLinphoneCore.setIncomingTimeout(3600);
-
-			// make sure we only handle one call
-			mLinphoneCore.setMaxCalls(1);
-		} catch (final LinphoneCoreException e) {
-			Lg.ex(e, "LinphoneCoreException during initialize");
+		// enable video
+		if (mLinphoneCore.videoSupported()) {
+			mLinphoneCore.enableVideoCapture(true);
+			mLinphoneCore.enableVideoDisplay(true);
+		} else {
+			mLinphoneCore.enableVideoDisplay(false);
+			mLinphoneCore.enableVideoCapture(false);
+			Lg.e("video not supported by sdk");
 		}
+
+		final VideoActivationPolicy videoActivationPolicy = mLinphoneCore.getVideoActivationPolicy();
+		videoActivationPolicy.setAutomaticallyInitiate(false);
+		videoActivationPolicy.setAutomaticallyAccept(false);
+		mLinphoneCore.setVideoActivationPolicy(videoActivationPolicy);
+
+		// We do not want a call response with "486 busy here" if you are not on the phone. So we take a high value of 1 hour.
+		// The Simlar sip server is responsible for terminating a call. Right now it does that after 2 minutes.
+		mLinphoneCore.setIncTimeout(3600);
+
+		// make sure we only handle one call
+		mLinphoneCore.setMaxCalls(1);
 	}
 
 	void linphoneCoreIterate()
@@ -202,30 +197,28 @@ final class LinphoneHandler
 			return;
 		}
 
-		try {
-			Lg.i("registering: ", new Lg.Anonymizer(mySimlarId));
+		Lg.i("registering: ", new Lg.Anonymizer(mySimlarId));
 
-			mLinphoneCore.clearAuthInfos();
-			mLinphoneCore.addAuthInfo(LinphoneCoreFactory.instance().createAuthInfo(mySimlarId, password, ServerSettings.DOMAIN, ServerSettings.DOMAIN));
+		mLinphoneCore.clearAllAuthInfo();
+		mLinphoneCore.addAuthInfo(Factory.instance().createAuthInfo(mySimlarId, mySimlarId, password, null, ServerSettings.DOMAIN, ServerSettings.DOMAIN));
 
-			// create linphone proxy config
-			mLinphoneCore.clearProxyConfigs();
-			final LinphoneProxyConfig proxyCfg = mLinphoneCore.createProxyConfig(
-					"sip:" + mySimlarId + '@' + ServerSettings.DOMAIN, "sip:" + ServerSettings.DOMAIN, null, true);
-			proxyCfg.setExpires(60); // connection times out after 1 minute. This overrides kamailio setting which is 3600 (1 hour).
-			proxyCfg.enablePublish(false);
-			mLinphoneCore.addProxyConfig(proxyCfg);
-			mLinphoneCore.setDefaultProxyConfig(proxyCfg);
-		} catch (final LinphoneCoreException e) {
-			Lg.ex(e, "LinphoneCoreException during setCredentials");
-		}
+		// create linphone proxy config
+		mLinphoneCore.clearProxyConfig();
+		final ProxyConfig proxyCfg = mLinphoneCore.createProxyConfig();
+		proxyCfg.setIdentityAddress(Factory.instance().createAddress("sip:" + mySimlarId + '@' + ServerSettings.DOMAIN));
+		proxyCfg.setServerAddr("sip:" + ServerSettings.DOMAIN);
+		proxyCfg.enableRegister(true);
+		proxyCfg.setExpires(60); // connection times out after 1 minute. This overrides kamailio setting which is 3600 (1 hour).
+		proxyCfg.enablePublish(false);
+		mLinphoneCore.addProxyConfig(proxyCfg);
+		mLinphoneCore.setDefaultProxyConfig(proxyCfg);
 	}
 
 	public void unregister()
 	{
 		Lg.i("unregister triggered");
 
-		final LinphoneProxyConfig proxyConfig = mLinphoneCore.getDefaultProxyConfig();
+		final ProxyConfig proxyConfig = mLinphoneCore.getDefaultProxyConfig();
 		proxyConfig.edit();
 		proxyConfig.enableRegister(false);
 		proxyConfig.done();
@@ -239,24 +232,19 @@ final class LinphoneHandler
 		}
 
 		Lg.i("calling ", new Lg.Anonymizer(number));
-		try {
-			final LinphoneCall call = mLinphoneCore.invite("sip:" + number + '@' + ServerSettings.DOMAIN);
-			if (call == null) {
-				Lg.i("Could not place call to: ", new Lg.Anonymizer(number));
-				Lg.i("Aborting");
-				return;
-			}
-		} catch (final LinphoneCoreException e) {
-			Lg.ex(e, "LinphoneCoreException during invite");
+		final Call call = mLinphoneCore.invite("sip:" + number + '@' + ServerSettings.DOMAIN);
+		if (call == null) {
+			Lg.i("Could not place call to: ", new Lg.Anonymizer(number));
+			Lg.i("Aborting");
 			return;
 		}
 
 		Lg.i("Call to ", new Lg.Anonymizer(number), " is in progress...");
 	}
 
-	private LinphoneCall getCurrentCall()
+	private Call getCurrentCall()
 	{
-		/// NOTE LinphoneCore.getCurrentCall() does not return paused calls
+		/// NOTE Core.getCurrentCall() does not return paused calls
 
 		if (hasNoCurrentCalls()) {
 			return null;
@@ -267,18 +255,14 @@ final class LinphoneHandler
 
 	public void pickUp()
 	{
-		final LinphoneCall currentCall = getCurrentCall();
+		final Call currentCall = getCurrentCall();
 		if (currentCall == null) {
 			return;
 		}
 
 		Lg.i("Picking up call: ", new Lg.Anonymizer(currentCall.getRemoteAddress().asStringUriOnly()));
-		final LinphoneCallParams params = mLinphoneCore.createCallParams(null);
-		try {
-			mLinphoneCore.acceptCallWithParams(currentCall, params);
-		} catch (final LinphoneCoreException e) {
-			Lg.ex(e, "LinphoneCoreException during acceptCallWithParams");
-		}
+		final CallParams params = mLinphoneCore.createCallParams(null);
+		mLinphoneCore.acceptCallWithParams(currentCall, params);
 	}
 
 	public void terminateAllCalls()
@@ -294,7 +278,7 @@ final class LinphoneHandler
 			return;
 		}
 
-		final LinphoneCall call = mLinphoneCore.getCurrentCall();
+		final Call call = mLinphoneCore.getCurrentCall();
 
 		if (!token.equals(call.getAuthenticationToken())) {
 			Lg.e("ERROR in verifyAuthenticationToken: token(", token,
@@ -328,7 +312,7 @@ final class LinphoneHandler
 			return;
 		}
 
-		final LinphoneCall call = getCurrentCall();
+		final Call call = getCurrentCall();
 		if (call == null) {
 			Lg.e("resuming call but no current call");
 			return;
@@ -350,11 +334,9 @@ final class LinphoneHandler
 			return;
 		}
 
-		mLinphoneCore.setPlaybackGain(volumes.getPlayGain());
-		mLinphoneCore.setMicrophoneGain(volumes.getMicrophoneGain());
-
-		mLinphoneCore.enableSpeaker(volumes.getExternalSpeaker());
-		mLinphoneCore.muteMic(volumes.getMicrophoneMuted());
+		mLinphoneCore.setPlaybackGainDb(volumes.getPlayGain());
+		mLinphoneCore.setMicGainDb(volumes.getMicrophoneGain());
+		mLinphoneCore.enableMic(!volumes.getMicrophoneMuted());
 
 		setEchoLimiter(volumes.getEchoLimiter());
 
@@ -363,13 +345,13 @@ final class LinphoneHandler
 
 	private void setEchoLimiter(final boolean enable)
 	{
-		final LinphoneCall currentCall = getCurrentCall();
+		final Call currentCall = getCurrentCall();
 		if (currentCall == null) {
 			Lg.w("EchoLimiter no current call");
 			return;
 		}
 
-		if (currentCall.isEchoLimiterEnabled() == enable) {
+		if (currentCall.echoLimiterEnabled() == enable) {
 			Lg.i("EchoLimiter already: ", Boolean.toString(enable));
 			return;
 		}
@@ -381,40 +363,40 @@ final class LinphoneHandler
 	@SuppressWarnings("SameParameterValue")
 	private static void enableDebugMode(final boolean enabled)
 	{
-		LinphoneCoreFactory.instance().setDebugMode(enabled, "DEBUG");
+		Factory.instance().setDebugMode(enabled, "DEBUG");
 	}
 
 	public void requestVideoUpdate(final boolean enable)
 	{
 		Lg.i("requestVideoUpdate: enable=", enable);
 
-		final LinphoneCall currentCall = getCurrentCall();
+		final Call currentCall = getCurrentCall();
 		if (currentCall == null) {
 			Lg.w("no current call to add video to");
 			return;
 		}
 
-		final LinphoneCallParams params = currentCall.getCurrentParams();
-		if (params.getVideoEnabled() == enable) {
+		final CallParams params = currentCall.getCurrentParams();
+		if (params.videoEnabled() == enable) {
 			Lg.i("requestVideoUpdate already: ", enable, " => aborting");
 			return;
 		}
 
-		params.setVideoEnabled(enable);
+		params.enableVideo(enable);
 		mLinphoneCore.updateCall(currentCall, params);
 	}
 
 	public void reinviteVideo()
 	{
 		Lg.i("reinviteVideo");
-		final LinphoneCall currentCall = getCurrentCall();
+		final Call currentCall = getCurrentCall();
 		if (currentCall == null) {
 			Lg.w("no current call to reinviteVideo");
 			return;
 		}
 
-		final LinphoneCallParams callParams = mLinphoneCore.createCallParams(currentCall);
-		callParams.setVideoEnabled(true);
+		final CallParams callParams = mLinphoneCore.createCallParams(currentCall);
+		callParams.enableVideo(true);
 		mLinphoneCore.updateCall(currentCall, callParams);
 	}
 
@@ -422,42 +404,34 @@ final class LinphoneHandler
 	{
 		Lg.i("preventAutoAnswer");
 
-		final LinphoneCall currentCall = getCurrentCall();
+		final Call currentCall = getCurrentCall();
 		if (currentCall == null) {
 			Lg.w("no current call to prevent auto answer for");
 			return;
 		}
 
-		try {
-			mLinphoneCore.deferCallUpdate(currentCall);
-		} catch (final LinphoneCoreException e) {
-			Lg.ex(e, "LinphoneCoreException during deferCallUpdate");
-		}
+		mLinphoneCore.deferCallUpdate(currentCall);
 	}
 
 	public void acceptVideoUpdate(final boolean accept)
 	{
 		Lg.i("acceptVideoUpdate accept=", accept);
 
-		final LinphoneCall currentCall = getCurrentCall();
+		final Call currentCall = getCurrentCall();
 		if (currentCall == null) {
 			Lg.w("no current call to accept video for");
 			return;
 		}
 
-		final LinphoneCallParams params = currentCall.getCurrentParams();
+		final CallParams params = currentCall.getCurrentParams();
 		if (accept) {
-			params.setVideoEnabled(true);
+			params.enableVideo(true);
 		}
 
-		try {
-			mLinphoneCore.acceptCallUpdate(currentCall, params);
-		} catch (final LinphoneCoreException e) {
-			Lg.ex(e, "LinphoneCoreException during acceptCallUpdate");
-		}
+		mLinphoneCore.acceptCallUpdate(currentCall, params);
 	}
 
-	public void setVideoWindow(final Object videoWindow)
+	public void setNativeVideoWindowId(final Object videoWindow)
 	{
 		Lg.i("setVideoWindow");
 
@@ -466,7 +440,7 @@ final class LinphoneHandler
 			return;
 		}
 
-		mLinphoneCore.setVideoWindow(videoWindow);
+		mLinphoneCore.setNativeVideoWindowId(videoWindow);
 	}
 
 	public void setVideoPreviewWindow(final Object videoPreviewWindow)
@@ -479,7 +453,7 @@ final class LinphoneHandler
 		}
 
 		enableCamera(videoPreviewWindow != null);
-		mLinphoneCore.setPreviewWindow(videoPreviewWindow);
+		mLinphoneCore.setNativePreviewWindowId(videoPreviewWindow);
 	}
 
 	private void setFrontCameraAsDefault()
@@ -491,14 +465,14 @@ final class LinphoneHandler
 			}
 		}
 
-		mLinphoneCore.setVideoDevice(cameraId);
+		mLinphoneCore.setVideoDevice(mLinphoneCore.getVideoDevicesList()[cameraId]);
 	}
 
 	private void enableCamera(final boolean enable)
 	{
 		Lg.i("enableCamera: ", enable);
 
-		final LinphoneCall currentCall = getCurrentCall();
+		final Call currentCall = getCurrentCall();
 		if (currentCall == null) {
 			Lg.w("no current call to enable camera for");
 			return;
@@ -517,25 +491,24 @@ final class LinphoneHandler
 	{
 		Lg.i("toggleCamera");
 
-		final AndroidCameraConfiguration.AndroidCamera[] cameras = AndroidCameraConfiguration.retrieveCameras();
+		final String[] cameras = mLinphoneCore.getVideoDevicesList();
 		if (cameras.length < 1) {
 			Lg.i("not enough cameras to toggle through");
 			return;
 		}
 
-		final LinphoneCall currentCall = getCurrentCall();
+		final Call currentCall = getCurrentCall();
 		if (currentCall == null) {
 			Lg.w("no current call to toggle camera for");
 			return;
 		}
 
-		final int currentCameraId = mLinphoneCore.getVideoDevice();
-
+		final String currentCamera = mLinphoneCore.getVideoDevice();
 		for (int i = 0; i < cameras.length; i++) {
-			if (cameras[i].id == currentCameraId) {
-				final int newCameraId = i + 1 < cameras.length ? cameras[i + 1].id : cameras[0].id;
-				Lg.i("toggling cameraId: ", currentCameraId, " => ", newCameraId);
-				mLinphoneCore.setVideoDevice(newCameraId);
+			if (Util.equalString(currentCamera, cameras[i])) {
+				final String newCamera = cameras[(i + 1) % cameras.length];
+				Lg.i("toggling cameraId: ", currentCamera, " => ", newCamera);
+				mLinphoneCore.setVideoDevice(newCamera);
 				mLinphoneCore.updateCall(currentCall, null);
 				return;
 			}
