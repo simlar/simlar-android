@@ -16,7 +16,7 @@ declare -r BELLESIP_PATCH_DIR="${PATCH_DIR}/belle-sip"
 declare -r ORTP_PATCH_DIR="${PATCH_DIR}/ortp"
 declare -r BZRTP_PATCH_DIR="${PATCH_DIR}/bzrtp"
 
-declare -r BUILD_DIR="liblinphone/builds/$(date '+%Y%m%d_%H%M%S')"
+declare -r BUILD_DIR="liblinphone/builds/$(basename "${BRANCH}")_$(date '+%Y%m%d_%H%M%S')"
 mkdir -p "${BUILD_DIR}"
 cd "${BUILD_DIR}"
 

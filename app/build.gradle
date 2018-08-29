@@ -63,16 +63,16 @@ dependencyCheck {
 connectedCheck.dependsOn dependencyCheckAnalyze
 
 ext {
-    androidSupportVersion = "28.0.0-rc01"
+    androidSupportVersion = "28.0.0-rc02"
 }
 
 dependencies {
-    pushImplementation "com.google.firebase:firebase-core:16.0.1"
+    pushImplementation "com.google.firebase:firebase-core:16.0.3"
     pushImplementation "com.google.firebase:firebase-messaging:17.3.0"
     implementation "com.android.support:appcompat-v7:${androidSupportVersion}"
     implementation "com.android.support:support-v4:${androidSupportVersion}"
     implementation "com.android.support:support-v13:${androidSupportVersion}"
-    implementation "com.googlecode.libphonenumber:libphonenumber:8.9.11"
+    implementation "com.googlecode.libphonenumber:libphonenumber:8.9.12"
     implementation fileTree(dir: "libs", include: ["liblinphone-sdk-release.aar"])
 }
 

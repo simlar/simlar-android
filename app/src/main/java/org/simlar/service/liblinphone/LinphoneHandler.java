@@ -26,6 +26,7 @@ import org.linphone.core.Call;
 import org.linphone.core.CallParams;
 import org.linphone.core.Core;
 import org.linphone.core.MediaEncryption;
+import org.linphone.core.NatPolicy;
 import org.linphone.core.Transports;
 import org.linphone.core.Factory;
 import org.linphone.core.CoreListener;
@@ -107,12 +108,14 @@ final class LinphoneHandler
 		// The listener will react to events in Linphone core.
 		mLinphoneCore = Factory.instance().createCore(linphoneInitialConfigFile, null, context);
 		mLinphoneCore.addListener(listener);
+		mLinphoneCore.start();
 		mLinphoneCore.setUserAgent("Simlar", Version.getVersionName(context));
 
 		// enable STUN with ICE
-		mLinphoneCore.getNatPolicy().setStunServer(STUN_SERVER);
-		mLinphoneCore.getNatPolicy().enableStun(true);
-		mLinphoneCore.getNatPolicy().enableIce(true);
+		final NatPolicy natPolicy = mLinphoneCore.getNatPolicy();
+		natPolicy.setStunServer(STUN_SERVER);
+		natPolicy.enableStun(true);
+		natPolicy.enableIce(true);
 
 		// Use TLS for registration with random port
 		final Transports transports = mLinphoneCore.getTransports();
@@ -136,6 +139,7 @@ final class LinphoneHandler
 		// set sound files
 		mLinphoneCore.setRingback(ringbackSoundFile);
 		mLinphoneCore.setPlayFile(pauseSoundFile);
+		mLinphoneCore.setRing(null);
 
 		// enable echo cancellation
 		mLinphoneCore.enableEchoCancellation(true);
@@ -162,6 +166,9 @@ final class LinphoneHandler
 
 		// make sure we only handle one call
 		mLinphoneCore.setMaxCalls(1);
+
+		// make sure DNS SRV is disabled
+		mLinphoneCore.enableDnsSrv(false);
 	}
 
 	void linphoneCoreIterate()
@@ -210,6 +217,7 @@ final class LinphoneHandler
 		proxyCfg.enableRegister(true);
 		proxyCfg.setExpires(60); // connection times out after 1 minute. This overrides kamailio setting which is 3600 (1 hour).
 		proxyCfg.enablePublish(false);
+		proxyCfg.setPushNotificationAllowed(false);
 		mLinphoneCore.addProxyConfig(proxyCfg);
 		mLinphoneCore.setDefaultProxyConfig(proxyCfg);
 	}
@@ -261,8 +269,7 @@ final class LinphoneHandler
 		}
 
 		Lg.i("Picking up call: ", new Lg.Anonymizer(currentCall.getRemoteAddress().asStringUriOnly()));
-		final CallParams params = mLinphoneCore.createCallParams(null);
-		mLinphoneCore.acceptCallWithParams(currentCall, params);
+		currentCall.accept();
 	}
 
 	public void terminateAllCalls()
@@ -319,7 +326,7 @@ final class LinphoneHandler
 		}
 
 		Lg.i("resuming call");
-		mLinphoneCore.resumeCall(call);
+		call.resume();
 	}
 
 	public void setVolumes(final Volumes volumes)
@@ -383,7 +390,7 @@ final class LinphoneHandler
 		}
 
 		params.enableVideo(enable);
-		mLinphoneCore.updateCall(currentCall, params);
+		currentCall.update(params);
 	}
 
 	public void reinviteVideo()
@@ -397,7 +404,7 @@ final class LinphoneHandler
 
 		final CallParams callParams = mLinphoneCore.createCallParams(currentCall);
 		callParams.enableVideo(true);
-		mLinphoneCore.updateCall(currentCall, callParams);
+		currentCall.update(callParams);
 	}
 
 	public void preventAutoAnswer()
@@ -410,7 +417,7 @@ final class LinphoneHandler
 			return;
 		}
 
-		mLinphoneCore.deferCallUpdate(currentCall);
+		currentCall.deferUpdate();
 	}
 
 	public void acceptVideoUpdate(final boolean accept)
@@ -428,7 +435,7 @@ final class LinphoneHandler
 			params.enableVideo(true);
 		}
 
-		mLinphoneCore.acceptCallUpdate(currentCall, params);
+		currentCall.acceptUpdate(params);
 	}
 
 	public void setNativeVideoWindowId(final Object videoWindow)
@@ -484,7 +491,7 @@ final class LinphoneHandler
 			setFrontCameraAsDefault();
 		}
 
-		mLinphoneCore.updateCall(currentCall, null);
+		currentCall.update(null);
 	}
 
 	public void toggleCamera()
@@ -509,7 +516,7 @@ final class LinphoneHandler
 				final String newCamera = cameras[(i + 1) % cameras.length];
 				Lg.i("toggling cameraId: ", currentCamera, " => ", newCamera);
 				mLinphoneCore.setVideoDevice(newCamera);
-				mLinphoneCore.updateCall(currentCall, null);
+				currentCall.update(null);
 				return;
 			}
 		}
