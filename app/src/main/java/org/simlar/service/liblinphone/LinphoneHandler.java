@@ -383,7 +383,7 @@ final class LinphoneHandler
 			return;
 		}
 
-		final CallParams params = currentCall.getCurrentParams();
+		final CallParams params = mLinphoneCore.createCallParams(currentCall);
 		if (params.videoEnabled() == enable) {
 			Lg.i("requestVideoUpdate already: ", enable, " => aborting");
 			return;
@@ -393,25 +393,10 @@ final class LinphoneHandler
 		currentCall.update(params);
 	}
 
-	public void reinviteVideo()
-	{
-		Lg.i("reinviteVideo");
-		final Call currentCall = getCurrentCall();
-		if (currentCall == null) {
-			Lg.w("no current call to reinviteVideo");
-			return;
-		}
-
-		final CallParams callParams = mLinphoneCore.createCallParams(currentCall);
-		callParams.enableVideo(true);
-		currentCall.update(callParams);
-	}
-
-	public void preventAutoAnswer()
+	public static void preventAutoAnswer(final Call currentCall)
 	{
 		Lg.i("preventAutoAnswer");
 
-		final Call currentCall = getCurrentCall();
 		if (currentCall == null) {
 			Lg.w("no current call to prevent auto answer for");
 			return;
