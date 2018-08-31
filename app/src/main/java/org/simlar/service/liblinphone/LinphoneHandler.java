@@ -56,6 +56,7 @@ final class LinphoneHandler
 
 		if (mLinphoneCore != null) {
 			try {
+				mLinphoneCore.setNetworkReachable(false);
 				mLinphoneCore = null;
 			} catch (final RuntimeException e) {
 				Lg.ex(e, "RuntimeException during mLinphoneCore destruction");
