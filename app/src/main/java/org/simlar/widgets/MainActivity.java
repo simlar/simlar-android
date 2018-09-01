@@ -20,7 +20,6 @@
 
 package org.simlar.widgets;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -195,7 +194,7 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 		Lg.i("onStart");
 
 		if (FlavourHelper.isGcmEnabled() && SimlarService.isRunning()) {
-			final Class<? extends Activity> activity = SimlarService.getActivity();
+			final Class<? extends AppCompatActivity> activity = SimlarService.getActivity();
 			if (!getClass().equals(activity)) {
 				Lg.i("as service is running => starting: ", activity.getSimpleName());
 				startActivity(new Intent(this, activity));
