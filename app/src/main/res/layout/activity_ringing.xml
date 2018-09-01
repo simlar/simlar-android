@@ -19,6 +19,7 @@
 -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:id="@+id/layoutRingingActivity"
                 android:layout_width="match_parent"
@@ -35,7 +36,7 @@
         android:layout_alignParentTop="true"
         android:background="@color/calling_title_background_black"
         android:contentDescription="@string/ringing_activity_phone_is_ringing"
-        android:src="@drawable/contact_picture"/>
+        app:srcCompat="@drawable/contact_picture"/>
 
     <TextView
         android:id="@+id/contactName"
@@ -68,7 +69,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:src="@drawable/logo_big"
+        app:srcCompat="@drawable/logo_big"
         android:contentDescription="@string/ringing_activity_phone_is_ringing"/>
 
     <ImageButton
@@ -80,7 +81,7 @@
         android:contentDescription="@string/call_activity_sound_settings"
         android:onClick="terminateCall"
         android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:src="@drawable/button_ringing_hang_up"/>
+        app:srcCompat="@drawable/button_ringing_hang_up"/>
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -91,6 +92,6 @@
         android:contentDescription="@string/call_activity_sound_settings"
         android:onClick="pickUp"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:src="@drawable/button_ringing_pick_up"/>
+        app:srcCompat="@drawable/button_ringing_pick_up"/>
 
 </RelativeLayout>

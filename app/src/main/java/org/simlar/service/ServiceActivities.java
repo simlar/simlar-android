@@ -21,32 +21,32 @@
 
 package org.simlar.service;
 
-import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 
 public final class ServiceActivities
 {
-	private final Class<? extends Activity> mMainActivity;
-	private final Class<? extends Activity> mRingingActivity;
-	private final Class<? extends Activity> mCallActivity;
+	private final Class<? extends AppCompatActivity> mMainActivity;
+	private final Class<? extends AppCompatActivity> mRingingActivity;
+	private final Class<? extends AppCompatActivity> mCallActivity;
 
-	public ServiceActivities(final Class<? extends Activity> mainActivity, final Class<? extends Activity> ringingActivity, final Class<? extends Activity> callActivity)
+	public ServiceActivities(final Class<? extends AppCompatActivity> mainActivity, final Class<? extends AppCompatActivity> ringingActivity, final Class<? extends AppCompatActivity> callActivity)
 	{
 		mMainActivity = mainActivity;
 		mRingingActivity = ringingActivity;
 		mCallActivity = callActivity;
 	}
 
-	public Class<? extends Activity> getMainActivity()
+	public Class<? extends AppCompatActivity> getMainActivity()
 	{
 		return mMainActivity;
 	}
 
-	public Class<? extends Activity> getRingingActivity()
+	public Class<? extends AppCompatActivity> getRingingActivity()
 	{
 		return mRingingActivity;
 	}
 
-	public Class<? extends Activity> getCallActivity()
+	public Class<? extends AppCompatActivity> getCallActivity()
 	{
 		return mCallActivity;
 	}

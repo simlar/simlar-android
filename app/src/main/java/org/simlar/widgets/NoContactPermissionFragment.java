@@ -21,7 +21,6 @@
 
 package org.simlar.widgets;
 
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +29,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +42,7 @@ import org.simlar.helper.SimlarNumber;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
-import static android.app.Activity.RESULT_OK;
+import static android.support.v7.app.AppCompatActivity.RESULT_OK;
 
 
 public final class NoContactPermissionFragment extends Fragment

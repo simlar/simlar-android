@@ -59,7 +59,7 @@
 
     <!-- Buttons -->
     <style name="buttonWhite" parent="Widget.AppCompat.Light.ActionButton">
-        <item name="android:background">@drawable/button_white</item>
+        <item name="background">@drawable/button_white</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
@@ -67,7 +67,7 @@
     </style>
 
     <style name="callActivityImageButton" parent="@android:style/Widget.Button.Small">
-        <item name="android:background">@drawable/call_activity_image_button</item>
+        <item name="background">@drawable/call_activity_image_button</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">4dp</item>

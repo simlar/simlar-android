@@ -21,7 +21,6 @@
 package org.simlar.service;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -43,6 +42,7 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.SurfaceView;
@@ -89,7 +89,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private WifiLock mWifiLock = null;
 	private boolean mGoingDown = false;
 	private boolean mTerminatePrivateAlreadyCalled = false;
-	private static volatile Class<? extends Activity> mNotificationActivity = null;
+	private static volatile Class<? extends AppCompatActivity> mNotificationActivity = null;
 	private VibratorManager mVibratorManager = null;
 	private SoundEffectManager mSoundEffectManager = null;
 	private AudioFocus mAudioFocus = null;
@@ -384,7 +384,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		return true;
 	}
 
-	public void registerActivityToNotification(final Class<? extends Activity> activity)
+	public void registerActivityToNotification(final Class<? extends AppCompatActivity> activity)
 	{
 		if (activity == null) {
 			Lg.e("registerActivityToNotification with empty activity");
@@ -1108,7 +1108,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		return mRunning;
 	}
 
-	public static Class<? extends Activity> getActivity()
+	public static Class<? extends AppCompatActivity> getActivity()
 	{
 		return mNotificationActivity;
 	}

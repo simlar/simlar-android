@@ -20,12 +20,12 @@
 
 package org.simlar.proximityscreenlocker;
 
-import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -37,10 +37,10 @@ public class ProximityScreenLockerFallback implements ProximityScreenLocker, Sen
 {
 	private static final float PROXIMITY_DISTANCE_THRESHOLD = 4.0f;
 
-	private final Activity mActivity;
+	private final AppCompatActivity mActivity;
 	private final SensorManager mSensorManager;
 
-	public ProximityScreenLockerFallback(final Activity activity)
+	public ProximityScreenLockerFallback(final AppCompatActivity activity)
 	{
 		mActivity = activity;
 		mSensorManager = (SensorManager) mActivity.getSystemService(Context.SENSOR_SERVICE);

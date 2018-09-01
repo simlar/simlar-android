@@ -29,6 +29,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.SeekBar;
@@ -83,7 +84,7 @@ public final class VolumesControlDialogFragment extends DialogFragment
 				.create();
 	}
 
-	private View createView(final Activity activity)
+	private View createView(final AppCompatActivity activity)
 	{
 		@SuppressLint("InflateParams")
 		final View view = activity.getLayoutInflater().inflate(R.layout.dialog_fragment_volumes_control, null);

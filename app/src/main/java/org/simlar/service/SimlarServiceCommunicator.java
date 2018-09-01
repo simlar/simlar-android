@@ -20,7 +20,6 @@
 
 package org.simlar.service;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -29,6 +28,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AppCompatActivity;
 
 import org.simlar.helper.VideoState;
 import org.simlar.logging.Lg;
@@ -38,7 +38,7 @@ import org.simlar.utils.Util;
 public class SimlarServiceCommunicator
 {
 	private SimlarService mService = null;
-	private Class<? extends Activity> mActivity = null;
+	private Class<? extends AppCompatActivity> mActivity = null;
 	private final ServiceConnection mConnection = new SimlarServiceConnection();
 	private final BroadcastReceiver mReceiver = new SimlarServiceReceiver();
 	private Context mContext = null;
@@ -111,7 +111,7 @@ public class SimlarServiceCommunicator
 		}
 	}
 
-	public final boolean register(final Context context, final Class<? extends Activity> activity)
+	public final boolean register(final Context context, final Class<? extends AppCompatActivity> activity)
 	{
 		if (!SimlarService.isRunning()) {
 			return false;
@@ -121,12 +121,12 @@ public class SimlarServiceCommunicator
 		return true;
 	}
 
-	public final void startServiceAndRegister(final Context context, final Class<? extends Activity> activity, final String simlarId)
+	public final void startServiceAndRegister(final Context context, final Class<? extends AppCompatActivity> activity, final String simlarId)
 	{
 		startServiceAndRegister(context, activity, false, simlarId);
 	}
 
-	private void startServiceAndRegister(final Context context, final Class<? extends Activity> activity, final boolean onlyRegister,
+	private void startServiceAndRegister(final Context context, final Class<? extends AppCompatActivity> activity, final boolean onlyRegister,
 	                                     final String simlarId)
 	{
 		mContext = context;
