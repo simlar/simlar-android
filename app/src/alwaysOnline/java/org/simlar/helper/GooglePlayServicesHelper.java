@@ -20,7 +20,7 @@
 
 package org.simlar.helper;
 
-import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 
 @SuppressWarnings("ClassOnlyUsedInOnePackage")
 public final class GooglePlayServicesHelper
@@ -36,7 +36,7 @@ public final class GooglePlayServicesHelper
 	}
 
 	@SuppressWarnings({"EmptyMethod", "UnusedParameters"})
-	public static void checkPlayServices(final Activity activity)
+	public static void checkPlayServices(final AppCompatActivity activity)
 	{
 	}
 }
