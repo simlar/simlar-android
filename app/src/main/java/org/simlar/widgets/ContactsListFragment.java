@@ -21,6 +21,7 @@
 package org.simlar.widgets;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ListView;
@@ -40,7 +41,7 @@ public final class ContactsListFragment extends ListFragment
 	}
 
 	@Override
-	public void onViewCreated(final View view, final Bundle savedInstanceState)
+	public void onViewCreated(@NonNull final View view, final Bundle savedInstanceState)
 	{
 		final ListView listView = getListView();
 
