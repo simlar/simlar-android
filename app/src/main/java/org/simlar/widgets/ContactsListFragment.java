@@ -72,6 +72,6 @@ public final class ContactsListFragment extends ListFragment
 			return;
 		}
 
-		CallActivity.createCallView(getActivity(), simlarId);
+		CallActivity.createCallView(requireContext(), simlarId);
 	}
 }
