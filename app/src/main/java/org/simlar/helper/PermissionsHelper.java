@@ -23,6 +23,9 @@ package org.simlar.helper;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -32,10 +35,7 @@ import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 
 import org.simlar.R;
@@ -112,27 +112,27 @@ public final class PermissionsHelper
 		return ContextCompat.checkSelfPermission(context, type.getPermission()) == PackageManager.PERMISSION_GRANTED;
 	}
 
-	public static boolean checkAndRequestPermissions(final int requestCode, final AppCompatActivity activity, final Type type)
+	public static boolean checkAndRequestPermissions(final int requestCode, final Activity activity, final Type type)
 	{
 		return checkAndRequestPermissions(requestCode, activity, EnumSet.of(type));
 	}
 
-	public static boolean checkAndRequestPermissions(final AppCompatActivity activity, final Type type)
+	public static boolean checkAndRequestPermissions(final Activity activity, final Type type)
 	{
 		return checkAndRequestPermissions(REQUEST_CODE_DEFAULT, activity, type);
 	}
 
-	public static void requestMajorPermissions(final AppCompatActivity activity, final boolean needsExternalStorage)
+	public static void requestMajorPermissions(final Activity activity, final boolean needsExternalStorage)
 	{
 		checkAndRequestPermissions(REQUEST_CODE_DEFAULT, activity, Type.getMajorPermissions(needsExternalStorage));
 	}
 
-	public static boolean shouldShowRationale(final AppCompatActivity activity, final Type type)
+	public static boolean shouldShowRationale(final Activity activity, final Type type)
 	{
 		return ActivityCompat.shouldShowRequestPermissionRationale(activity, type.getPermission());
 	}
 
-	private static boolean checkAndRequestPermissions(final int requestCode, final AppCompatActivity activity, final Set<Type> types)
+	private static boolean checkAndRequestPermissions(final int requestCode, final Activity activity, final Set<Type> types)
 	{
 		final Set<Type> requestTypes = EnumSet.noneOf(Type.class);
 		final Set<String> rationalMessages = new HashSet<>();
@@ -160,7 +160,7 @@ public final class PermissionsHelper
 	}
 
 	@SuppressLint("NewApi")
-	private static void showPermissionsRationaleAlert(final AppCompatActivity activity, final String message, final int requestCode, final Set<Type> types)
+	private static void showPermissionsRationaleAlert(final Activity activity, final String message, final int requestCode, final Set<Type> types)
 	{
 		new AlertDialog.Builder(activity)
 				.setMessage(message)
@@ -178,7 +178,7 @@ public final class PermissionsHelper
 		fragment.requestPermissions(new String[] { Type.CONTACTS.getPermission() }, REQUEST_CODE_DEFAULT);
 	}
 
-	private static void requestPermissions(final int requestCode, final AppCompatActivity activity, final Set<Type> types)
+	private static void requestPermissions(final int requestCode, final Activity activity, final Set<Type> types)
 	{
 		final Set<String> permissions = new HashSet<>();
 		for (final Type type : types) {
@@ -238,7 +238,7 @@ public final class PermissionsHelper
 				((NotificationManager) Util.getSystemService(context, Context.NOTIFICATION_SERVICE)).isNotificationPolicyAccessGranted();
 	}
 
-	public static void checkAndRequestNotificationPolicyAccess(final AppCompatActivity activity)
+	public static void checkAndRequestNotificationPolicyAccess(final Activity activity)
 	{
 		if (isNotificationPolicyAccessGranted(activity)) {
 			return;
