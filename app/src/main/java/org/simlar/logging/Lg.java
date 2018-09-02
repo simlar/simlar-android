@@ -20,7 +20,6 @@
 
 package org.simlar.logging;
 
-import android.annotation.SuppressLint;
 import android.util.Log;
 
 import org.simlar.utils.Util;
@@ -31,7 +30,7 @@ import java.util.Arrays;
 
 public final class Lg
 {
-	private static final int FILENAME_SIZE_MAX = 42;
+	private static final int TAG_SIZE_MAX = 23; // android prohibits tags greater than 23 but changing it for debugging works
 	private static final int LOG_LEVEL_NORMAL = Log.WARN;
 	private static final int LOG_LEVEL_DEBUG = Log.DEBUG;
 	private static volatile int mLevel = LOG_LEVEL_NORMAL;
@@ -44,13 +43,31 @@ public final class Lg
 	@Retention(RetentionPolicy.RUNTIME)
 	public @interface Anonymize {}
 
-	@SuppressLint("LogConditional")
+	public static void log(final int priority, final String tagPrefix, final String tag, final Object... messageParts)
+	{
+		if (priority < mLevel) {
+			return;
+		}
+
+		println(priority, createEqualSizedTag(tagPrefix, tag, null), null, messageParts);
+	}
+
+	@SuppressWarnings("OverloadedVarargsMethod")
 	private static void println(final int priority, final Throwable exception, final Object... messageParts)
 	{
 		if (priority < mLevel) {
 			return;
 		}
 
+		final StackTraceElement stackTraceElement = Thread.currentThread().getStackTrace()[4];
+		final String fileName = stackTraceElement.getFileName() + ':' + stackTraceElement.getLineNumber();
+
+		println(priority, createEqualSizedTag("(", fileName, ")"), exception, messageParts);
+	}
+
+	@SuppressWarnings({"OverloadedVarargsMethod", "LogConditional"})
+	private static void println(final int priority, final String tag, final Throwable exception, final Object... messageParts)
+	{
 		final StringBuilder message = new StringBuilder();
 		if (messageParts != null) {
 			for (final Object part : messageParts) {
@@ -68,25 +85,33 @@ public final class Lg
 					.append(Log.getStackTraceString(exception));
 		}
 
-		Log.println(priority, createTag(), message.toString());
+		Log.println(priority, tag, message.toString());
 	}
 
-	private static String createTag()
+	private static String createEqualSizedTag(final String prefix, final String tag, final String postfix)
 	{
-		final StackTraceElement stackTraceElement = Thread.currentThread().getStackTrace()[5];
-		final String fileName = stackTraceElement.getFileName() + ':' + stackTraceElement.getLineNumber() + ')';
+		final int size = TAG_SIZE_MAX - length(prefix) - length(postfix);
+		final StringBuilder tagBuilder = new StringBuilder();
 
-		final StringBuilder tag = new StringBuilder("(");
-
-		if (fileName.length() >= FILENAME_SIZE_MAX) {
-			tag.append(fileName.substring(fileName.length() - FILENAME_SIZE_MAX));
-		} else {
-			final char[] padding = new char[FILENAME_SIZE_MAX - fileName.length()];
-			Arrays.fill(padding, '.');
-			tag.append(fileName).append(padding);
+		if (prefix != null) {
+			tagBuilder.append(prefix);
+		}
+		final int beginIndex = Math.max(tag.length() - size, 0);
+		tagBuilder.append(tag.substring(beginIndex));
+		if (postfix != null) {
+			tagBuilder.append(postfix);
 		}
 
-		return tag.toString();
+		final char[] padding = new char[Math.max(size - tag.length(), 0)];
+		Arrays.fill(padding, '.');
+		tagBuilder.append(padding);
+
+		return tagBuilder.toString();
+	}
+
+	private static int length(final String str)
+	{
+		return str == null ? 0 : str.length();
 	}
 
 	private static String anonymize(final String string)

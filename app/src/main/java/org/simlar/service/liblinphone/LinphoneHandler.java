@@ -21,10 +21,13 @@
 package org.simlar.service.liblinphone;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.linphone.core.Call;
 import org.linphone.core.CallParams;
 import org.linphone.core.Core;
+import org.linphone.core.LogCollectionState;
+import org.linphone.core.LogLevel;
 import org.linphone.core.MediaEncryption;
 import org.linphone.core.NatPolicy;
 import org.linphone.core.Transports;
@@ -367,10 +370,32 @@ final class LinphoneHandler
 		currentCall.enableEchoLimiter(enable);
 	}
 
+	private static int convertLogLevel(final LogLevel logLevel)
+	{
+		switch (logLevel) {
+		case Debug:
+			return Log.VERBOSE;
+		case Trace:
+			return Log.DEBUG;
+		case Message:
+			return Log.INFO;
+		case Warning:
+			return Log.WARN;
+		case Error:
+			return Log.ERROR;
+		case Fatal:
+		default:
+			return Log.ERROR;
+		}
+	}
+
 	@SuppressWarnings("SameParameterValue")
 	private static void enableDebugMode(final boolean enabled)
 	{
 		Factory.instance().setDebugMode(enabled, "DEBUG");
+		Factory.instance().enableLogCollection(LogCollectionState.EnabledWithoutPreviousLogHandler);
+		Factory.instance().getLoggingService().setListener(
+				(logService, domain, logLevel, message) -> Lg.log(convertLogLevel(logLevel), "liblinphone ", domain, message));
 	}
 
 	public void requestVideoUpdate(final boolean enable)
