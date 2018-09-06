@@ -398,7 +398,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private void acceptVideoUpdate(final boolean accept)
 	{
 		if (accept) {
-			if (PermissionsHelper.checkAndRequestPermissions(PermissionsHelper.PERMISSION_REQUEST_CODE_VIDEO_ACCEPT, this, PermissionsHelper.Type.CAMERA)) {
+			if (PermissionsHelper.checkAndRequestPermissions(PermissionsHelper.REQUEST_CODE_VIDEO_ACCEPT, this, PermissionsHelper.Type.CAMERA)) {
 				startVideo();
 				mCommunicator.getService().acceptVideoUpdate(true);
 			}
@@ -411,7 +411,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults)
 	{
 		switch (requestCode) {
-		case PermissionsHelper.PERMISSION_REQUEST_CODE_VIDEO_ACCEPT:
+		case PermissionsHelper.REQUEST_CODE_VIDEO_ACCEPT:
 			if (PermissionsHelper.isGranted(PermissionsHelper.Type.CAMERA, permissions, grantResults)) {
 				startVideo();
 				mCommunicator.getService().acceptVideoUpdate(true);
@@ -419,7 +419,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 				mCommunicator.getService().acceptVideoUpdate(false);
 			}
 			break;
-		case PermissionsHelper.PERMISSION_REQUEST_CODE_VIDEO_REQUEST:
+		case PermissionsHelper.REQUEST_CODE_VIDEO_REQUEST:
 			if (PermissionsHelper.isGranted(PermissionsHelper.Type.CAMERA, permissions, grantResults)) {
 				mCommunicator.getService().requestVideoUpdate(true);
 			}
@@ -583,7 +583,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	public void toggleVideoClicked(final View view)
 	{
 		if (mVideoFragment == null) {
-			if (PermissionsHelper.checkAndRequestPermissions(PermissionsHelper.PERMISSION_REQUEST_CODE_VIDEO_REQUEST, this, PermissionsHelper.Type.CAMERA)) {
+			if (PermissionsHelper.checkAndRequestPermissions(PermissionsHelper.REQUEST_CODE_VIDEO_REQUEST, this, PermissionsHelper.Type.CAMERA)) {
 				mCommunicator.getService().requestVideoUpdate(true);
 			}
 		} else {

@@ -51,9 +51,9 @@ import java.util.Set;
 
 public final class PermissionsHelper
 {
-	private static final int DEFAULT_REQUEST_CODE = 23;
-	public static final int PERMISSION_REQUEST_CODE_VIDEO_REQUEST = DEFAULT_REQUEST_CODE + 1;
-	public static final int PERMISSION_REQUEST_CODE_VIDEO_ACCEPT = DEFAULT_REQUEST_CODE + 2;
+	private static final int REQUEST_CODE_DEFAULT = 23;
+	public static final int REQUEST_CODE_VIDEO_REQUEST = REQUEST_CODE_DEFAULT + 1;
+	public static final int REQUEST_CODE_VIDEO_ACCEPT = REQUEST_CODE_DEFAULT + 2;
 
 	private PermissionsHelper()
 	{
@@ -119,12 +119,12 @@ public final class PermissionsHelper
 
 	public static boolean checkAndRequestPermissions(final Activity activity, final Type type)
 	{
-		return checkAndRequestPermissions(DEFAULT_REQUEST_CODE, activity, type);
+		return checkAndRequestPermissions(REQUEST_CODE_DEFAULT, activity, type);
 	}
 
 	public static void requestMajorPermissions(final Activity activity, final boolean needsExternalStorage)
 	{
-		checkAndRequestPermissions(DEFAULT_REQUEST_CODE, activity, Type.getMajorPermissions(needsExternalStorage));
+		checkAndRequestPermissions(REQUEST_CODE_DEFAULT, activity, Type.getMajorPermissions(needsExternalStorage));
 	}
 
 	public static boolean shouldShowRationale(final Activity activity, final Type type)
@@ -175,7 +175,7 @@ public final class PermissionsHelper
 		}
 
 		Lg.i("requesting contact permission");
-		fragment.requestPermissions(new String[] { Type.CONTACTS.getPermission() }, DEFAULT_REQUEST_CODE);
+		fragment.requestPermissions(new String[] { Type.CONTACTS.getPermission() }, REQUEST_CODE_DEFAULT);
 	}
 
 	private static void requestPermissions(final int requestCode, final Activity activity, final Set<Type> types)
