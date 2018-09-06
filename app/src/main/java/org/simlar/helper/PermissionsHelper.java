@@ -51,7 +51,9 @@ import java.util.Set;
 
 public final class PermissionsHelper
 {
-	public static final int DEFAULT_REQUEST_CODE = 23;
+	private static final int DEFAULT_REQUEST_CODE = 23;
+	public static final int PERMISSION_REQUEST_CODE_VIDEO_REQUEST = DEFAULT_REQUEST_CODE + 1;
+	public static final int PERMISSION_REQUEST_CODE_VIDEO_ACCEPT = DEFAULT_REQUEST_CODE + 2;
 
 	private PermissionsHelper()
 	{

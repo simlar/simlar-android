@@ -55,9 +55,6 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 {
 	private static final String INTENT_EXTRA_SIMLAR_ID = "simlarId";
 
-	private static final int PERMISSION_REQUEST_CODE_VIDEO_REQUEST = PermissionsHelper.DEFAULT_REQUEST_CODE + 1;
-	private static final int PERMISSION_REQUEST_CODE_VIDEO_ACCEPT = PermissionsHelper.DEFAULT_REQUEST_CODE + 2;
-
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCall();
 	private ProximityScreenLocker mProximityScreenLocker = null;
 	private long mCallStartTime = -1;
@@ -401,7 +398,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private void acceptVideoUpdate(final boolean accept)
 	{
 		if (accept) {
-			if (PermissionsHelper.checkAndRequestPermissions(PERMISSION_REQUEST_CODE_VIDEO_ACCEPT, this, PermissionsHelper.Type.CAMERA)) {
+			if (PermissionsHelper.checkAndRequestPermissions(PermissionsHelper.PERMISSION_REQUEST_CODE_VIDEO_ACCEPT, this, PermissionsHelper.Type.CAMERA)) {
 				startVideo();
 				mCommunicator.getService().acceptVideoUpdate(true);
 			}
@@ -414,7 +411,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults)
 	{
 		switch (requestCode) {
-		case PERMISSION_REQUEST_CODE_VIDEO_ACCEPT:
+		case PermissionsHelper.PERMISSION_REQUEST_CODE_VIDEO_ACCEPT:
 			if (PermissionsHelper.isGranted(PermissionsHelper.Type.CAMERA, permissions, grantResults)) {
 				startVideo();
 				mCommunicator.getService().acceptVideoUpdate(true);
@@ -422,7 +419,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 				mCommunicator.getService().acceptVideoUpdate(false);
 			}
 			break;
-		case PERMISSION_REQUEST_CODE_VIDEO_REQUEST:
+		case PermissionsHelper.PERMISSION_REQUEST_CODE_VIDEO_REQUEST:
 			if (PermissionsHelper.isGranted(PermissionsHelper.Type.CAMERA, permissions, grantResults)) {
 				mCommunicator.getService().requestVideoUpdate(true);
 			}
@@ -586,7 +583,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	public void toggleVideoClicked(final View view)
 	{
 		if (mVideoFragment == null) {
-			if (PermissionsHelper.checkAndRequestPermissions(PERMISSION_REQUEST_CODE_VIDEO_REQUEST, this, PermissionsHelper.Type.CAMERA)) {
+			if (PermissionsHelper.checkAndRequestPermissions(PermissionsHelper.PERMISSION_REQUEST_CODE_VIDEO_REQUEST, this, PermissionsHelper.Type.CAMERA)) {
 				mCommunicator.getService().requestVideoUpdate(true);
 			}
 		} else {
