@@ -27,6 +27,7 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -40,6 +41,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.simlar.R;
+import org.simlar.helper.PermissionsHelper;
 import org.simlar.helper.VideoState;
 import org.simlar.logging.Lg;
 import org.simlar.proximityscreenlocker.ProximityScreenLocker;
@@ -396,9 +398,36 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private void acceptVideoUpdate(final boolean accept)
 	{
 		if (accept) {
-			startVideo();
+			if (PermissionsHelper.checkAndRequestPermissions(PermissionsHelper.REQUEST_CODE_VIDEO_ACCEPT, this, PermissionsHelper.Type.CAMERA)) {
+				startVideo();
+				mCommunicator.getService().acceptVideoUpdate(true);
+			}
+		} else {
+			mCommunicator.getService().acceptVideoUpdate(false);
 		}
-		mCommunicator.getService().acceptVideoUpdate(accept);
+	}
+
+	@Override
+	public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults)
+	{
+		switch (requestCode) {
+		case PermissionsHelper.REQUEST_CODE_VIDEO_ACCEPT:
+			if (PermissionsHelper.isGranted(PermissionsHelper.Type.CAMERA, permissions, grantResults)) {
+				startVideo();
+				mCommunicator.getService().acceptVideoUpdate(true);
+			} else {
+				mCommunicator.getService().acceptVideoUpdate(false);
+			}
+			break;
+		case PermissionsHelper.REQUEST_CODE_VIDEO_REQUEST:
+			if (PermissionsHelper.isGranted(PermissionsHelper.Type.CAMERA, permissions, grantResults)) {
+				mCommunicator.getService().requestVideoUpdate(true);
+			}
+			break;
+		default:
+			Lg.e("onRequestPermissionsResult: unknown request code: ", requestCode);
+			break;
+		}
 	}
 
 	@Override
@@ -553,7 +582,13 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	@SuppressWarnings("unused")
 	public void toggleVideoClicked(final View view)
 	{
-		mCommunicator.getService().requestVideoUpdate(mVideoFragment == null);
+		if (mVideoFragment == null) {
+			if (PermissionsHelper.checkAndRequestPermissions(PermissionsHelper.REQUEST_CODE_VIDEO_REQUEST, this, PermissionsHelper.Type.CAMERA)) {
+				mCommunicator.getService().requestVideoUpdate(true);
+			}
+		} else {
+			mCommunicator.getService().requestVideoUpdate(false);
+		}
 	}
 
 	@SuppressWarnings("unused")

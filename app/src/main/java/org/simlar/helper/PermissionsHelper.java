@@ -51,7 +51,9 @@ import java.util.Set;
 
 public final class PermissionsHelper
 {
-	private static final int REQUEST_CODE = 23;
+	private static final int REQUEST_CODE_DEFAULT = 23;
+	public static final int REQUEST_CODE_VIDEO_REQUEST = REQUEST_CODE_DEFAULT + 1;
+	public static final int REQUEST_CODE_VIDEO_ACCEPT = REQUEST_CODE_DEFAULT + 2;
 
 	private PermissionsHelper()
 	{
@@ -59,10 +61,11 @@ public final class PermissionsHelper
 	}
 
 	public enum Type{
+		CAMERA(Manifest.permission.CAMERA, false, R.string.permission_explain_text_camera),
 		CONTACTS(Manifest.permission.READ_CONTACTS, false, R.string.permission_explain_text_contacts),
 		MICROPHONE(Manifest.permission.RECORD_AUDIO, true, R.string.permission_explain_text_record_audio),
 		PHONE(Manifest.permission.READ_PHONE_STATE, true, R.string.permission_explain_text_phone_state),
-		SMS(Manifest.permission.READ_SMS, false, R.string.permission_explain_text_sms),
+		SMS(Manifest.permission.RECEIVE_SMS, false, R.string.permission_explain_text_sms),
 		STORAGE(Manifest.permission.READ_EXTERNAL_STORAGE, false, R.string.permission_explain_text_storage);
 
 		private final String mPermission;
@@ -109,14 +112,19 @@ public final class PermissionsHelper
 		return ContextCompat.checkSelfPermission(context, type.getPermission()) == PackageManager.PERMISSION_GRANTED;
 	}
 
+	public static boolean checkAndRequestPermissions(final int requestCode, final Activity activity, final Type type)
+	{
+		return checkAndRequestPermissions(requestCode, activity, EnumSet.of(type));
+	}
+
 	public static boolean checkAndRequestPermissions(final Activity activity, final Type type)
 	{
-		return checkAndRequestPermissions(activity, EnumSet.of(type));
+		return checkAndRequestPermissions(REQUEST_CODE_DEFAULT, activity, type);
 	}
 
 	public static void requestMajorPermissions(final Activity activity, final boolean needsExternalStorage)
 	{
-		checkAndRequestPermissions(activity, Type.getMajorPermissions(needsExternalStorage));
+		checkAndRequestPermissions(REQUEST_CODE_DEFAULT, activity, Type.getMajorPermissions(needsExternalStorage));
 	}
 
 	public static boolean shouldShowRationale(final Activity activity, final Type type)
@@ -124,7 +132,7 @@ public final class PermissionsHelper
 		return ActivityCompat.shouldShowRequestPermissionRationale(activity, type.getPermission());
 	}
 
-	private static boolean checkAndRequestPermissions(final Activity activity, final Set<Type> types)
+	private static boolean checkAndRequestPermissions(final int requestCode, final Activity activity, final Set<Type> types)
 	{
 		final Set<Type> requestTypes = EnumSet.noneOf(Type.class);
 		final Set<String> rationalMessages = new HashSet<>();
@@ -143,20 +151,20 @@ public final class PermissionsHelper
 		}
 
 		if (rationalMessages.isEmpty()) {
-			requestPermissions(activity, requestTypes);
+			requestPermissions(requestCode, activity, requestTypes);
 		} else {
-			showPermissionsRationaleAlert(activity, TextUtils.join("\n\n", rationalMessages), requestTypes);
+			showPermissionsRationaleAlert(activity, TextUtils.join("\n\n", rationalMessages), requestCode, requestTypes);
 		}
 
 		return false;
 	}
 
 	@SuppressLint("NewApi")
-	private static void showPermissionsRationaleAlert(final Activity activity, final String message, final Set<Type> types)
+	private static void showPermissionsRationaleAlert(final Activity activity, final String message, final int requestCode, final Set<Type> types)
 	{
 		new AlertDialog.Builder(activity)
 				.setMessage(message)
-				.setOnDismissListener(dialog -> requestPermissions(activity, types))
+				.setOnDismissListener(dialog -> requestPermissions(requestCode, activity, types))
 				.create().show();
 	}
 
@@ -167,10 +175,10 @@ public final class PermissionsHelper
 		}
 
 		Lg.i("requesting contact permission");
-		fragment.requestPermissions(new String[] { Type.CONTACTS.getPermission() }, REQUEST_CODE);
+		fragment.requestPermissions(new String[] { Type.CONTACTS.getPermission() }, REQUEST_CODE_DEFAULT);
 	}
 
-	private static void requestPermissions(final Activity activity, final Set<Type> types)
+	private static void requestPermissions(final int requestCode, final Activity activity, final Set<Type> types)
 	{
 		final Set<String> permissions = new HashSet<>();
 		for (final Type type : types) {
@@ -178,7 +186,7 @@ public final class PermissionsHelper
 		}
 		Lg.i("requesting permissions: ", TextUtils.join(", ", permissions));
 
-		ActivityCompat.requestPermissions(activity, permissions.toArray(new String[permissions.size()]), REQUEST_CODE);
+		ActivityCompat.requestPermissions(activity, permissions.toArray(new String[permissions.size()]), requestCode);
 	}
 
 	@SuppressWarnings("SameParameterValue")
