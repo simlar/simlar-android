@@ -29,6 +29,7 @@ import org.linphone.core.AuthInfo;
 import org.linphone.core.AuthMethod;
 import org.linphone.core.Call;
 import org.linphone.core.CallLog;
+import org.linphone.core.CallParams;
 import org.linphone.core.CallStats;
 import org.linphone.core.ChatMessage;
 import org.linphone.core.ChatRoom;
@@ -516,16 +517,8 @@ public final class LinphoneThread extends Thread implements CoreListener
 
 		Lg.i("creating videoState based on localVideo= ", localVideo, " remoteVideo=", remoteVideo);
 
-		if (Call.State.End != state && localVideo && remoteVideo) {
-			if (call.getStats(StreamType.Video) == null || mVideoState == VideoState.ENCRYPTING) {
-				return VideoState.ENCRYPTING;
-			}
-
-			if (call.mediaInProgress()) {
-				return VideoState.WAITING_FOR_ICE;
-			}
-
-			return VideoState.PLAYING;
+		if (state != Call.State.End && localVideo && remoteVideo) {
+			return mVideoState == VideoState.PLAYING ? VideoState.PLAYING : VideoState.INITIALIZING;
 		}
 
 		if (!localVideo && remoteVideo) {
@@ -624,30 +617,89 @@ public final class LinphoneThread extends Thread implements CoreListener
 		// Call is mutable => use it only in the calling thread
 		// CallStats maybe mutable => use it only in the calling thread
 
-		final CallStats stats = call.getStats(StreamType.Audio);
-		final int duration = call.getDuration();
-		final PayloadType payloadType = call.getCurrentParams().getUsedAudioPayloadType();
-		final String codec = payloadType.getMimeType() + ' ' + payloadType.getClockRate() / 1000;
+		final StreamType type = statsDoNotUse.getType();
+		if (type != StreamType.Audio && type != StreamType.Video) {
+			Lg.e("onCallStatsUpdated with unexpected type: ", type);
+			return;
+		}
+
+		final CallStats stats = call.getStats(type);
+		if (stats == null) {
+			Lg.e("onCallStatsUpdated with no CallStats for type: ", type);
+			return;
+		}
+
+		final int upload = getBandwidth(stats.getUploadBandwidth());
+		final int download = getBandwidth(stats.getDownloadBandwidth());
 		final String iceState = stats.getIceState().toString();
-		final int upload = Math.round(stats.getUploadBandwidth() / 8.0f * 10.0f); // upload bandwidth in 100 Bytes / second
-		final int download = Math.round(stats.getDownloadBandwidth() / 8.0f * 10.0f); // download bandwidth in 100 Bytes / second
 		final int jitter = Math.round((stats.getReceiverInterarrivalJitter() + stats.getSenderInterarrivalJitter()) * 1000.0f);
 		final int packetLoss = Math.round((stats.getReceiverLossRate() + stats.getSenderLossRate()) / 2.0f * 10.0f); // sum of up and down stream loss in per mille
 		final long latePackets = stats.getLatePacketsCumulativeNumber();
 		final int roundTripDelay = Math.round(stats.getRoundTripDelay() * 1000.0f);
+		final String codec = getCodec(call, type);
+		final int duration = call.getDuration();
 
 		// set quality to unusable if up or download bandwidth is zero
 		final float quality = upload > 0 && download > 0 ? call.getCurrentQuality() : 0;
 
-		Lg.d("onCallStatsUpdated: number=", new CallLogger(call), " quality=", quality,
-				" duration=", duration,
-				" codec=", codec, " iceState=", iceState,
-				" upload=", upload, " download=", download,
-				" jitter=", jitter, " loss=", packetLoss,
-				" latePackets=", latePackets, " roundTripDelay=", roundTripDelay);
+		Lg.d("onCallStatsUpdated: number=", new CallLogger(call),
+				" type=", type,
+				" quality=", quality,
+				" upload=", upload,
+				" download=", download,
+				" iceState=", iceState,
+				" jitter=", jitter,
+				" loss=", packetLoss,
+				" latePackets=", latePackets,
+				" roundTripDelay=", roundTripDelay,
+				" codec=", codec,
+				" duration=", duration);
 
-		mMainThreadHandler.post(() -> mListener.onCallStatsChanged(NetworkQuality.fromFloat(quality), duration, codec, iceState, upload, download,
-				jitter, packetLoss, latePackets, roundTripDelay));
+		if (type == StreamType.Video) {
+			if (download > 0 && mVideoState == VideoState.INITIALIZING) {
+				Lg.i("detect video playing based on video download bandwidth: ", download);
+				updateVideoState(VideoState.PLAYING);
+			}
+		} else {
+			mMainThreadHandler.post(() -> mListener.onCallStatsChanged(NetworkQuality.fromFloat(quality), duration, codec, iceState, upload, download,
+					jitter, packetLoss, latePackets, roundTripDelay));
+		}
+	}
+
+	private static int getBandwidth(final float bandwidth)
+	{
+		return Math.round(bandwidth / 8.0f * 10.0f); // download bandwidth in 100 Bytes / second
+	}
+
+	private static String getCodec(final Call call, final StreamType type)
+	{
+		return getCodec(getPayload(call, type));
+	}
+
+	private static String getCodec(final PayloadType payloadType)
+	{
+		return payloadType == null ? null:
+				payloadType.getMimeType() + ' ' + payloadType.getClockRate() / 1000;
+	}
+
+	private static PayloadType getPayload(final Call call, final StreamType type)
+	{
+		final CallParams params = call.getParams();
+		if (params == null) {
+			return null;
+		}
+
+		switch (type) {
+		case Audio:
+			return params.getUsedAudioPayloadType();
+		case Video:
+			return params.getUsedVideoPayloadType();
+		case Text:
+			return params.getUsedTextPayloadType();
+		case Unknown:
+		default:
+			return null;
+		}
 	}
 
 	@Override
@@ -664,7 +716,7 @@ public final class LinphoneThread extends Thread implements CoreListener
 			Lg.e("unencrypted call: number=", new CallLogger(call), " with UserAgent ", call.getRemoteUserAgent());
 		}
 
-		if (encrypted && mVideoState == VideoState.ENCRYPTING) {
+		if (encrypted && mVideoState == VideoState.INITIALIZING) {
 			Lg.i("video encrypted");
 			updateVideoState(VideoState.PLAYING);
 		}

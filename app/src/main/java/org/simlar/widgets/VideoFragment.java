@@ -30,7 +30,6 @@ import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import org.simlar.R;
 import org.simlar.logging.Lg;
@@ -42,7 +41,7 @@ public class VideoFragment extends Fragment
 	// gui elements
 	private GLSurfaceView mVideoView = null;
 	private SurfaceView mCaptureView = null;
-	private ProgressBar mProgressBarInitializing = null;
+	private View mInitializingView = null;
 
 	public interface Listener
 	{
@@ -90,7 +89,7 @@ public class VideoFragment extends Fragment
 
 		mVideoView = view.findViewById(R.id.videoSurface);
 		mCaptureView = view.findViewById(R.id.videoCaptureSurface);
-		mProgressBarInitializing = view.findViewById(R.id.progressBarInitializingVideo);
+		mInitializingView = view.findViewById(R.id.layoutInitializingVideo);
 
 		fixZOrder();
 
@@ -194,6 +193,10 @@ public class VideoFragment extends Fragment
 
 	public final void setNowPlaying()
 	{
-		mProgressBarInitializing.setVisibility(View.GONE);
+		if (mInitializingView == null) {
+			Lg.e("called setNowPlaying too early");
+			return;
+		}
+		mInitializingView.setVisibility(View.GONE);
 	}
 }
