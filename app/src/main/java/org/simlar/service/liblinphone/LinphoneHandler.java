@@ -473,16 +473,27 @@ final class LinphoneHandler
 		mLinphoneCore.setNativePreviewWindowId(videoPreviewWindow);
 	}
 
-	private void setFrontCameraAsDefault()
+	private static int getFrontCameraId()
 	{
-		int cameraId = 0;
 		for (final AndroidCameraConfiguration.AndroidCamera androidCamera : AndroidCameraConfiguration.retrieveCameras()) {
 			if (androidCamera.frontFacing) {
-				cameraId = androidCamera.id;
+				return androidCamera.id;
 			}
 		}
 
-		mLinphoneCore.setVideoDevice(mLinphoneCore.getVideoDevicesList()[cameraId]);
+		Lg.w("no front facing camera found");
+		return 0;
+	}
+
+	private void setFrontCameraAsDefault()
+	{
+		final String[] cameras = mLinphoneCore.getVideoDevicesList();
+		if (cameras.length < 1) {
+			Lg.w("no camera found");
+			return;
+		}
+
+		mLinphoneCore.setVideoDevice(cameras[getFrontCameraId()]);
 	}
 
 	private void enableCamera(final boolean enable)
