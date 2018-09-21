@@ -36,9 +36,11 @@ import org.linphone.core.ChatRoom;
 import org.linphone.core.Content;
 import org.linphone.core.Core;
 import org.linphone.core.EcCalibratorStatus;
+import org.linphone.core.ErrorInfo;
 import org.linphone.core.GlobalState;
 import org.linphone.core.Core.LogCollectionUploadState;
 import org.linphone.core.PresenceModel;
+import org.linphone.core.Reason;
 import org.linphone.core.RegistrationState;
 import org.linphone.core.ConfiguringState;
 import org.linphone.core.CoreListener;
@@ -53,6 +55,7 @@ import org.linphone.core.StreamType;
 import org.linphone.core.SubscriptionState;
 import org.linphone.core.VersionUpdateCheckResult;
 import org.linphone.mediastream.video.AndroidVideoWindowImpl;
+import org.simlar.helper.CallEndReason;
 import org.simlar.helper.FileHelper;
 import org.simlar.helper.FileHelper.NotInitedException;
 import org.simlar.helper.NetworkQuality;
@@ -552,7 +555,11 @@ public final class LinphoneThread extends Thread implements CoreListener
 		final Call.State fixedState = fixCallState(state);
 		final VideoState videoState = createVideoState(fixedState, call);
 
-		Lg.i("onCallStateChanged changed state=", fixedState, " number=", new CallLogger(call), " message=", message, " videoState=", videoState);
+		final ErrorInfo errorInfo = call.getErrorInfo();
+		final Reason reason = errorInfo == null ? null : errorInfo.getReason();
+		final CallEndReason callEndReason = CallEndReason.fromReason(reason);
+
+		Lg.i("onCallStateChanged changed state=", fixedState, " number=", new CallLogger(call), " message=", message, " videoState=", videoState, " callEndReason=", callEndReason, "(", reason, ")");
 
 		if (videoState == VideoState.REMOTE_REQUESTED) {
 			Lg.i("remote requested video");
@@ -561,7 +568,7 @@ public final class LinphoneThread extends Thread implements CoreListener
 		}
 
 		updateVideoState(videoState);
-		mMainThreadHandler.post(() -> mListener.onCallStateChanged(number, fixedState, message));
+		mMainThreadHandler.post(() -> mListener.onCallStateChanged(number, fixedState, callEndReason));
 	}
 
 	@Override
@@ -684,8 +691,9 @@ public final class LinphoneThread extends Thread implements CoreListener
 
 	private static PayloadType getPayload(final Call call, final StreamType type)
 	{
-		final CallParams params = call.getParams();
+		final CallParams params = call.getCurrentParams();
 		if (params == null) {
+			Lg.e("no call parameters no payload");
 			return null;
 		}
 
@@ -698,6 +706,7 @@ public final class LinphoneThread extends Thread implements CoreListener
 			return params.getUsedTextPayloadType();
 		case Unknown:
 		default:
+			Lg.e("unknown StreamType: ", type);
 			return null;
 		}
 	}
