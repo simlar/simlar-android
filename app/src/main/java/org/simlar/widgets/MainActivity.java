@@ -20,14 +20,13 @@
 
 package org.simlar.widgets;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -78,7 +77,7 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 
 		mAdapter = new ContactsAdapter(this);
 
-		final FragmentManager fm = getFragmentManager();
+		final FragmentManager fm = getSupportFragmentManager();
 		mContactList = (ContactsListFragment) fm.findFragmentById(R.id.contactsListFragment);
 		if (mContactList == null) {
 			mContactList = new ContactsListFragment();
@@ -195,7 +194,7 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 		Lg.i("onStart");
 
 		if (FlavourHelper.isGcmEnabled() && SimlarService.isRunning()) {
-			final Class<? extends Activity> activity = SimlarService.getActivity();
+			final Class<? extends AppCompatActivity> activity = SimlarService.getActivity();
 			if (!getClass().equals(activity)) {
 				Lg.i("as service is running => starting: ", activity.getSimpleName());
 				startActivity(new Intent(this, activity));

@@ -20,7 +20,7 @@
 
 package org.simlar.proximityscreenlocker;
 
-import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 
 import org.simlar.logging.Lg;
 
@@ -31,7 +31,7 @@ public final class ProximityScreenLockerHelper
 		throw new AssertionError("This class was not meant to be instantiated");
 	}
 
-	public static ProximityScreenLocker createProximityScreenLocker(final Activity activity)
+	public static ProximityScreenLocker createProximityScreenLocker(final AppCompatActivity activity)
 	{
 		final ProximityScreenLocker proximityScreenLockerNative = ProximityScreenLockerNative.create(activity);
 		if (proximityScreenLockerNative == null) {

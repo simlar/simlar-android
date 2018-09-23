@@ -22,12 +22,12 @@
 package org.simlar.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.CheckBox;
@@ -72,7 +72,7 @@ public final class VolumesControlDialogFragment extends DialogFragment
 	public Dialog onCreateDialog(final Bundle savedInstanceState)
 	{
 		Lg.i("onCreateDialog");
-		final Activity activity = getActivity();
+		final FragmentActivity activity = getActivity();
 		if (activity == null) {
 			Lg.e("no activity cannot create dialog");
 			return super.onCreateDialog(savedInstanceState);
@@ -83,7 +83,7 @@ public final class VolumesControlDialogFragment extends DialogFragment
 				.create();
 	}
 
-	private View createView(final Activity activity)
+	private View createView(final FragmentActivity activity)
 	{
 		@SuppressLint("InflateParams")
 		final View view = activity.getLayoutInflater().inflate(R.layout.dialog_fragment_volumes_control, null);

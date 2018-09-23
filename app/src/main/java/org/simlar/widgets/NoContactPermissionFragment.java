@@ -21,7 +21,6 @@
 
 package org.simlar.widgets;
 
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +29,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +42,7 @@ import org.simlar.helper.SimlarNumber;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
-import static android.app.Activity.RESULT_OK;
+import static android.support.v7.app.AppCompatActivity.RESULT_OK;
 
 
 public final class NoContactPermissionFragment extends Fragment
@@ -140,7 +140,7 @@ public final class NoContactPermissionFragment extends Fragment
 		}
 
 
-		final Cursor cursor = getActivity().getContentResolver().query(contactUri, null, null, null, null);
+		final Cursor cursor = requireContext().getContentResolver().query(contactUri, null, null, null, null);
 		if (cursor == null) {
 			Lg.e("onActivityResult failed to create cursor for contactUri=", contactUri);
 			return;
@@ -160,7 +160,7 @@ public final class NoContactPermissionFragment extends Fragment
 
 		if (Util.isNullOrEmpty(simlarId)) {
 			Lg.i("not calling contact because of invalid telephoneNumber=", new Lg.Anonymizer(telephoneNumber));
-			new AlertDialog.Builder(getActivity())
+			new AlertDialog.Builder(requireContext())
 					.setTitle(R.string.no_contact_permission_fragment_alert_no_simlarId_title)
 					.setMessage(Util.fromHtml(String.format(getString(R.string.no_contact_permission_fragment_alert_no_simlarId_message), telephoneNumber)))
 					.create().show();
@@ -180,7 +180,7 @@ public final class NoContactPermissionFragment extends Fragment
 			{
 				dialog.dismiss();
 				Lg.i("no connection to the server");
-				new AlertDialog.Builder(getActivity())
+				new AlertDialog.Builder(requireContext())
 						.setTitle(R.string.no_contact_permission_fragment_alert_offline_title)
 						.setMessage(getString(R.string.no_contact_permission_fragment_alert_offline_message))
 						.create().show();
@@ -192,7 +192,7 @@ public final class NoContactPermissionFragment extends Fragment
 				dialog.dismiss();
 				if (!registered) {
 					Lg.i("simlarId=", new Lg.Anonymizer(simlarId), " not registered");
-					new AlertDialog.Builder(getActivity())
+					new AlertDialog.Builder(requireContext())
 							.setTitle(String.format(getString(R.string.no_contact_permission_fragment_alert_contact_not_registered_title), telephoneNumber))
 							.setMessage(Util.fromHtml(String.format(getString(R.string.no_contact_permission_fragment_alert_contact_not_registered_message), name)))
 							.create().show();
@@ -201,7 +201,7 @@ public final class NoContactPermissionFragment extends Fragment
 
 				ContactsProvider.addContact(simlarId, name, telephoneNumber);
 
-				CallActivity.createCallView(getActivity(), simlarId);
+				CallActivity.createCallView(requireContext(), simlarId);
 			}
 		});
 	}

@@ -20,9 +20,9 @@
 
 package org.simlar.helper;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -45,7 +45,7 @@ public final class GooglePlayServicesHelper
 		FirebaseMessageReceiver.refreshTokenOnServer();
 	}
 
-	public static void checkPlayServices(final Activity activity)
+	public static void checkPlayServices(final AppCompatActivity activity)
 	{
 		final GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
 		final int resultCode = googleApiAvailability.isGooglePlayServicesAvailable(activity);

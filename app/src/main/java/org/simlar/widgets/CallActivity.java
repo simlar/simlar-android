@@ -20,7 +20,6 @@
 
 package org.simlar.widgets;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -29,6 +28,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.SurfaceView;

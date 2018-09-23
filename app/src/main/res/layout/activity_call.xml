@@ -19,6 +19,7 @@
 -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -32,7 +33,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:background="@null"
-        android:src="@drawable/contact_picture"
+        app:srcCompat="@drawable/contact_picture"
         tools:ignore="ContentDescription"/>
 
     <TextView
@@ -90,7 +91,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/logo_big"
+            app:srcCompat="@drawable/logo_big"
             tools:ignore="ContentDescription"/>
     </RelativeLayout>
 
@@ -150,7 +151,7 @@
                     android:background="@null"
                     android:contentDescription="@string/call_activity_sound_settings"
                     android:onClick="showConnectionDetails"
-                    android:src="@drawable/button_info"/>
+                    app:srcCompat="@drawable/button_info"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -304,7 +305,7 @@
                 style="@style/callActivityImageButton"
                 android:contentDescription="@string/call_activity_toggle_video"
                 android:onClick="toggleVideoClicked"
-                android:src="@drawable/button_toggle_video"/>
+                app:srcCompat="@drawable/button_toggle_video"/>
 
             <ProgressBar
                 android:id="@+id/progressBarRequestingVideo"
@@ -316,21 +317,21 @@
                 style="@style/callActivityImageButton"
                 android:contentDescription="@string/call_activity_sound_settings"
                 android:onClick="showSoundSettingsDialog"
-                android:src="@drawable/sound_settings"/>
+                app:srcCompat="@drawable/sound_settings"/>
 
             <ImageButton
                 android:id="@+id/buttonMicro"
                 style="@style/callActivityImageButton"
                 android:contentDescription="@string/call_activity_microphone_mute"
                 android:onClick="toggleMicrophoneMuted"
-                android:src="@drawable/micro_on"/>
+                app:srcCompat="@drawable/micro_on"/>
 
             <ImageButton
                 android:id="@+id/buttonSpeaker"
                 style="@style/callActivityImageButton"
                 android:contentDescription="@string/call_activity_loudspeaker_off"
                 android:onClick="toggleSpeakerMuted"
-                android:src="@drawable/speaker_off"/>
+                app:srcCompat="@drawable/speaker_off"/>
         </LinearLayout>
 
         <ImageButton
@@ -340,6 +341,6 @@
             android:background="@drawable/button_red"
             android:contentDescription="@string/call_activity_terminate_call"
             android:onClick="terminateCall"
-            android:src="@drawable/hang_up_phone"/>
+            app:srcCompat="@drawable/hang_up_phone"/>
     </LinearLayout>
 </RelativeLayout>
