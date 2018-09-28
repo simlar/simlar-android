@@ -308,7 +308,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mAudioFocus = new AudioFocus(this);
 
 		mWakeLock = ((PowerManager) Util.getSystemService(this, Context.POWER_SERVICE))
-				.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SimlarWakeLock");
+				.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "simlar:WakeLock");
 		mDisplayWakeLock = createDisplayWakeLock();
 		mWifiLock = createWifiWakeLock();
 
@@ -343,7 +343,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private WakeLock createDisplayWakeLock()
 	{
 		return ((PowerManager) Util.getSystemService(this, Context.POWER_SERVICE))
-				.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "SimlarDisplayWakeLock");
+				.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "simlar:D   isplayWakeLock");
 	}
 
 	private WifiLock createWifiWakeLock()
