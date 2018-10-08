@@ -221,8 +221,13 @@ public final class PermissionsHelper
 			return false;
 		}
 
+		final String path = uri.getPath();
+		if (Util.isNullOrEmpty(path)) {
+			return false;
+		}
+
 		try {
-			final FileInputStream stream = new FileInputStream(uri.getPath());
+			final FileInputStream stream = new FileInputStream(path);
 			stream.close();
 			return false;
 		} catch (final FileNotFoundException e) {
