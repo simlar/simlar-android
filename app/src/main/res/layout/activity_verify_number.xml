@@ -82,7 +82,9 @@
                 android:layout_weight="5"
                 android:ems="8"
                 android:hint="@string/verify_number_activity_phone_number_hint"
-                android:inputType="phone">
+                android:autofillHints="phone"
+                android:inputType="phone"
+                tools:ignore="UnusedAttribute">
 
                 <requestFocus/>
             </EditText>
