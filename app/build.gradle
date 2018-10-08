@@ -51,7 +51,7 @@ android {
 
     lintOptions {
         checkAllWarnings true
-        disable "GoogleAppIndexingWarning", "UnknownNullness"
+        disable "GoogleAppIndexingWarning", "UnknownNullness", "SyntheticAccessor"
         warningsAsErrors true
     }
 }
