@@ -8,4 +8,7 @@
         <ignore path="src/main/res/drawable-xxhdpi/background_tile.png" />
         <ignore path="src/main/res/drawable-xxxhdpi/background_tile.png" />
     </issue>
+    <issue id="UnknownNullness">
+        <ignore path="src/main/java" />
+    </issue>
 </lint>
