@@ -38,6 +38,7 @@ import java.util.TimeZone;
 
 public final class Util
 {
+	public static final String[] EMPTY_STRING_ARRAY = {};
 	private static final int MAX_BUFFER_SIZE = 1024 * 1024;
 
 	private Util()
