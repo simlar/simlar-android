@@ -185,7 +185,7 @@ public final class PermissionsHelper
 		}
 		Lg.i("requesting permissions: ", TextUtils.join(", ", permissions));
 
-		ActivityCompat.requestPermissions(activity, permissions.toArray(new String[0]), requestCode);
+		ActivityCompat.requestPermissions(activity, permissions.toArray(Util.EMPTY_STRING_ARRAY), requestCode);
 	}
 
 	@SuppressWarnings("SameParameterValue")
