@@ -343,7 +343,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private WakeLock createDisplayWakeLock()
 	{
 		return ((PowerManager) Util.getSystemService(this, Context.POWER_SERVICE))
-				.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "simlar:D   isplayWakeLock");
+				.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "simlar:DisplayWakeLock");
 	}
 
 	private WifiLock createWifiWakeLock()
