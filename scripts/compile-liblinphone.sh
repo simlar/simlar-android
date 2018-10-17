@@ -26,7 +26,7 @@ cd "${BUILD_DIR}/linphone-android"
 rm -f liblinphone-android-sdk-*.zip
 
 ./prepare.py -c
-./prepare.py \
+./prepare.py armv7 arm64 x86\
 	-DENABLE_AMRNB=OFF \
 	-DENABLE_AMRWB=OFF \
 	-DENABLE_ARCH_SUFFIX=ON \
