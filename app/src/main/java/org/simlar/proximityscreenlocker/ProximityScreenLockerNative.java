@@ -67,7 +67,7 @@ public final class ProximityScreenLockerNative implements ProximityScreenLocker
 				return null;
 			}
 
-			return powerManager.newWakeLock(proximityScreenOffWakeLock, "SimlarProximityWakeLock");
+			return powerManager.newWakeLock(proximityScreenOffWakeLock, "simlar:ProximityWakeLock");
 		} catch (final NoSuchFieldException ex) {
 			Lg.ex(ex, "NoSuchFieldException while accessing PROXIMITY_SCREEN_OFF_WAKE_LOCK");
 		} catch (final IllegalAccessException ex) {

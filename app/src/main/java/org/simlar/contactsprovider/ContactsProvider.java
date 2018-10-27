@@ -197,7 +197,7 @@ public final class ContactsProvider
 				{
 					onContactsStatusRequestedFromServer(contactsStatus);
 				}
-			}.execute(mContacts.keySet().toArray(new String[mContacts.size()]));
+			}.execute(mContacts.keySet().toArray(Util.EMPTY_STRING_ARRAY));
 		}
 
 		private ContactData createContactData(final String simlarId)

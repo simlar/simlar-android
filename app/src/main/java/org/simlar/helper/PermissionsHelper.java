@@ -186,7 +186,7 @@ public final class PermissionsHelper
 		}
 		Lg.i("requesting permissions: ", TextUtils.join(", ", permissions));
 
-		ActivityCompat.requestPermissions(activity, permissions.toArray(new String[permissions.size()]), requestCode);
+		ActivityCompat.requestPermissions(activity, permissions.toArray(Util.EMPTY_STRING_ARRAY), requestCode);
 	}
 
 	@SuppressWarnings("SameParameterValue")
@@ -221,8 +221,13 @@ public final class PermissionsHelper
 			return false;
 		}
 
+		final String path = uri.getPath();
+		if (Util.isNullOrEmpty(path)) {
+			return false;
+		}
+
 		try {
-			final FileInputStream stream = new FileInputStream(uri.getPath());
+			final FileInputStream stream = new FileInputStream(path);
 			stream.close();
 			return false;
 		} catch (final FileNotFoundException e) {

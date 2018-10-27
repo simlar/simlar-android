@@ -133,7 +133,9 @@
             android:ems="8"
             android:hint="@string/create_account_activity_registration_code_hint"
             android:inputType="number"
-            android:maxLength="6">
+            android:maxLength="6"
+            android:importantForAutofill="no"
+            tools:ignore="UnusedAttribute">
 
             <requestFocus/>
         </EditText>
