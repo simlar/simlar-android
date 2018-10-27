@@ -12,7 +12,7 @@ def getGitVersion = { ->
 
 android {
     compileSdkVersion 28
-    buildToolsVersion "28.0.1"
+    buildToolsVersion "28.0.3"
 
     defaultConfig {
         applicationId "org.simlar"
@@ -51,7 +51,7 @@ android {
 
     lintOptions {
         checkAllWarnings true
-        disable "GoogleAppIndexingWarning"
+        disable "GoogleAppIndexingWarning", "UnknownNullness", "SyntheticAccessor"
         warningsAsErrors true
     }
 }
@@ -63,16 +63,16 @@ dependencyCheck {
 connectedCheck.dependsOn dependencyCheckAnalyze
 
 ext {
-    androidSupportVersion = "28.0.0-rc01"
+    androidSupportVersion = "28.0.0"
 }
 
 dependencies {
-    pushImplementation "com.google.firebase:firebase-core:16.0.1"
-    pushImplementation "com.google.firebase:firebase-messaging:17.1.0"
+    pushImplementation "com.google.firebase:firebase-core:16.0.4"
+    pushImplementation "com.google.firebase:firebase-messaging:17.3.4"
     implementation "com.android.support:appcompat-v7:${androidSupportVersion}"
     implementation "com.android.support:support-v4:${androidSupportVersion}"
     implementation "com.android.support:support-v13:${androidSupportVersion}"
-    implementation "com.googlecode.libphonenumber:libphonenumber:8.9.10"
+    implementation "com.googlecode.libphonenumber:libphonenumber:8.9.16"
     implementation fileTree(dir: "libs", include: ["liblinphone-sdk.aar"])
 }
 

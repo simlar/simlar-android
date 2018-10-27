@@ -62,7 +62,7 @@ public final class PermissionsHelper
 		CONTACTS(Manifest.permission.READ_CONTACTS, false, R.string.permission_explain_text_contacts),
 		MICROPHONE(Manifest.permission.RECORD_AUDIO, true, R.string.permission_explain_text_record_audio),
 		PHONE(Manifest.permission.READ_PHONE_STATE, true, R.string.permission_explain_text_phone_state),
-		SMS(Manifest.permission.READ_SMS, false, R.string.permission_explain_text_sms),
+		SMS(Manifest.permission.RECEIVE_SMS, false, R.string.permission_explain_text_sms),
 		STORAGE(Manifest.permission.READ_EXTERNAL_STORAGE, false, R.string.permission_explain_text_storage);
 
 		private final String mPermission;
@@ -101,6 +101,11 @@ public final class PermissionsHelper
 
 			return majorTypes;
 		}
+	}
+
+	public static Type readPhoneNumberPermission()
+	{
+		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.P ? PermissionsHelper.Type.PHONE : PermissionsHelper.Type.SMS;
 	}
 
 	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
@@ -178,7 +183,7 @@ public final class PermissionsHelper
 		}
 		Lg.i("requesting permissions: ", TextUtils.join(", ", permissions));
 
-		ActivityCompat.requestPermissions(activity, permissions.toArray(new String[permissions.size()]), REQUEST_CODE);
+		ActivityCompat.requestPermissions(activity, permissions.toArray(Util.EMPTY_STRING_ARRAY), REQUEST_CODE);
 	}
 
 	@SuppressWarnings("SameParameterValue")
@@ -213,8 +218,13 @@ public final class PermissionsHelper
 			return false;
 		}
 
+		final String path = uri.getPath();
+		if (Util.isNullOrEmpty(path)) {
+			return false;
+		}
+
 		try {
-			final FileInputStream stream = new FileInputStream(uri.getPath());
+			final FileInputStream stream = new FileInputStream(path);
 			stream.close();
 			return false;
 		} catch (final FileNotFoundException e) {
