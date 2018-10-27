@@ -8,8 +8,4 @@
         <ignore path="src/main/res/drawable-xxhdpi/background_tile.png" />
         <ignore path="src/main/res/drawable-xxxhdpi/background_tile.png" />
     </issue>
-
-    <issue id="all">
-        <ignore path="build/generated/res/google-services" />
-    </issue>
 </lint>
