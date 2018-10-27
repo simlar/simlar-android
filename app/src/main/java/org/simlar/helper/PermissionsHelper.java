@@ -106,6 +106,11 @@ public final class PermissionsHelper
 		}
 	}
 
+	public static Type readPhoneNumberPermission()
+	{
+		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.P ? PermissionsHelper.Type.PHONE : PermissionsHelper.Type.SMS;
+	}
+
 	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	public static boolean hasPermission(final Context context, final Type type)
 	{
