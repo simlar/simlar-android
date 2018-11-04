@@ -54,6 +54,8 @@ public final class PermissionsHelper
 	private static final int REQUEST_CODE_DEFAULT = 23;
 	public static final int REQUEST_CODE_VIDEO_REQUEST = REQUEST_CODE_DEFAULT + 1;
 	public static final int REQUEST_CODE_VIDEO_ACCEPT = REQUEST_CODE_DEFAULT + 2;
+	public static final int REQUEST_CODE_PHONE_NUMBER = REQUEST_CODE_DEFAULT + 3;
+	public static final int REQUEST_CODE_SMS = REQUEST_CODE_DEFAULT + 4;
 
 	private PermissionsHelper()
 	{
@@ -104,11 +106,6 @@ public final class PermissionsHelper
 
 			return majorTypes;
 		}
-	}
-
-	public static Type readPhoneNumberPermission()
-	{
-		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ? PermissionsHelper.Type.PHONE : PermissionsHelper.Type.SMS;
 	}
 
 	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
