@@ -133,11 +133,11 @@
     <string name="verify_number_activity_alert_wrong_number_text">The number you have entered doesn\'t seem to be a telephone number. Check it again.</string>
 
     <!-- Allow Simlar to send and view SMS messages? -->
-    <string name="permission_explain_text_sms">Simlar reads your telephone number once and incoming SMS temporarily so that you don\'t have to enter your number and registration code manually.</string>
+    <string name="permission_explain_text_sms">Simlar reads incoming SMS temporarily so that you don\'t have to enter registration code manually.</string>
     <!-- Allow Simlar to record audio? -->
     <string name="permission_explain_text_record_audio">Simlar uses your microphone during Simlar calls so that the person you are talking to can hear you.</string>
     <!-- > Allow Simlar to make and manage phone calls? -->
-    <string name="permission_explain_text_phone_state">Simlar reads your phone state during Simlar calls to manage incoming regular phone calls.</string>
+    <string name="permission_explain_text_phone_state">During registration Simlar may reads your telephone number automatically.\nDuring Simlar calls the app watches your phone state to manage incoming regular phone calls.</string>
     <!-- Allow Simlar to access your contacts? -->
     <string name="permission_explain_text_contacts">Simlar reads your contacts data to show the contacts you can talk to privately.</string>
     <!-- Allow Simlar to access photos, media and files on your device? -->
