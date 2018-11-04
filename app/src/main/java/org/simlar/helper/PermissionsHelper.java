@@ -52,6 +52,8 @@ import java.util.Set;
 public final class PermissionsHelper
 {
 	private static final int REQUEST_CODE = 23;
+	public static final int REQUEST_CODE_PHONE_NUMBER = REQUEST_CODE + 3;
+	public static final int REQUEST_CODE_SMS = REQUEST_CODE + 4;
 
 	private PermissionsHelper()
 	{
@@ -101,11 +103,6 @@ public final class PermissionsHelper
 
 			return majorTypes;
 		}
-	}
-
-	public static Type readPhoneNumberPermission()
-	{
-		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ? PermissionsHelper.Type.PHONE : PermissionsHelper.Type.SMS;
 	}
 
 	@SuppressWarnings("BooleanMethodIsAlwaysInverted")

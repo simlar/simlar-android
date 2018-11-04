@@ -109,7 +109,7 @@ public final class VerifyNumberActivity extends AppCompatActivity
 
 	private void requestPhoneNumber()
 	{
-		if (PermissionsHelper.checkAndRequestPermissions(this, PermissionsHelper.readPhoneNumberPermission())) {
+		if (PermissionsHelper.checkAndRequestPermissions(PermissionsHelper.REQUEST_CODE_PHONE_NUMBER, this, PermissionsHelper.Type.PHONE)) {
 			readPhoneNumber();
 		}
 	}
@@ -117,8 +117,18 @@ public final class VerifyNumberActivity extends AppCompatActivity
 	@Override
 	public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults)
 	{
-		if (PermissionsHelper.isGranted(PermissionsHelper.readPhoneNumberPermission(), permissions, grantResults)) {
-			readPhoneNumber();
+		switch (requestCode) {
+		case PermissionsHelper.REQUEST_CODE_PHONE_NUMBER:
+			if (PermissionsHelper.isGranted(PermissionsHelper.Type.PHONE, permissions, grantResults)) {
+				readPhoneNumber();
+			}
+			break;
+		case PermissionsHelper.REQUEST_CODE_SMS:
+			startCreateAccountActivity(new SimlarNumber(mEditNumber.getText().toString()));
+			break;
+		default:
+			Lg.e("onRequestPermissionsResult: unknown request code: ", requestCode);
+			break;
 		}
 	}
 
@@ -216,6 +226,13 @@ public final class VerifyNumberActivity extends AppCompatActivity
 			return;
 		}
 
+		if (PermissionsHelper.checkAndRequestPermissions(PermissionsHelper.REQUEST_CODE_SMS, this, PermissionsHelper.Type.SMS)) {
+			startCreateAccountActivity(simlarNumber);
+		}
+	}
+
+	private void startCreateAccountActivity(final SimlarNumber simlarNumber)
+	{
 		final Intent intent = new Intent(this, CreateAccountActivity.class);
 		intent.putExtra(CreateAccountActivity.INTENT_EXTRA_NUMBER, simlarNumber.getTelephoneNumber());
 		startActivityForResult(intent, RESULT_CREATE_ACCOUNT_ACTIVITY);
