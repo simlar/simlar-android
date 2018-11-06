@@ -47,4 +47,13 @@
         <cve>CVE-2016-3674</cve>
         <cve>CVE-2017-7957</cve>
     </suppress>
+    <suppress>
+        <notes><![CDATA[
+        Android dependency bcprov-jdk15on-1.56.jar legion-of-the-bouncy-castle-java-crytography-api
+        ]]></notes>
+        <cpe>/a:bouncycastle:legion-of-the-bouncy-castle-java-crytography-api:1.56</cpe>
+        <cve>CVE-2017-13098</cve>
+        <cve>CVE-2018-1000180</cve>
+        <cve>CVE-2018-1000613</cve>
+    </suppress>
 </suppressions>
