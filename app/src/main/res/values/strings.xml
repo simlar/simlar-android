@@ -137,7 +137,7 @@
     <!-- Allow Simlar to record audio? -->
     <string name="permission_explain_text_record_audio">Simlar uses your microphone during Simlar calls so that the person you are talking to can hear you.</string>
     <!-- > Allow Simlar to make and manage phone calls? -->
-    <string name="permission_explain_text_phone_state">During registration Simlar may reads your telephone number automatically.\nDuring Simlar calls the app watches your phone state to manage incoming regular phone calls.</string>
+    <string name="permission_explain_text_phone_state">During registration Simlar may read your telephone number automatically.\nDuring Simlar calls the app watches your phone state to manage incoming regular phone calls.</string>
     <!-- Allow Simlar to access your contacts? -->
     <string name="permission_explain_text_contacts">Simlar reads your contacts data to show the contacts you can talk to privately.</string>
     <!-- Allow Simlar to access photos, media and files on your device? -->
