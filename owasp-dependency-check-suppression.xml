@@ -56,4 +56,18 @@
         <cve>CVE-2018-1000180</cve>
         <cve>CVE-2018-1000613</cve>
     </suppress>
+    <suppress>
+        <notes><![CDATA[
+        Android dependency guava-23.0.jar
+        ]]></notes>
+        <cpe>/a:google:guava:23.0</cpe>
+        <cve>CVE-2018-10237</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+        Android dependency builder-3.2.1.jar
+        ]]></notes>
+        <cpe>/a:google:guava:21.0</cpe>
+        <cve>CVE-2018-10237</cve>
+    </suppress>
 </suppressions>
