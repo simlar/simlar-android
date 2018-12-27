@@ -223,11 +223,6 @@ public final class VerifyNumberActivity extends AppCompatActivity
 			return;
 		}
 
-		startCreateAccountActivity(simlarNumber);
-	}
-
-	private void startCreateAccountActivity(final SimlarNumber simlarNumber)
-	{
 		final Intent intent = new Intent(this, CreateAccountActivity.class);
 		intent.putExtra(CreateAccountActivity.INTENT_EXTRA_NUMBER, simlarNumber.getTelephoneNumber());
 		startActivityForResult(intent, RESULT_CREATE_ACCOUNT_ACTIVITY);
