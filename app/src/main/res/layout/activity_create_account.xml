@@ -121,7 +121,7 @@
             android:layout_centerHorizontal="true"
             android:gravity="center_horizontal"
             android:minHeight="80dp"
-            android:text="@string/create_account_activity_error_sms"/>
+            android:text="@string/create_account_activity_message_sms"/>
 
         <EditText
             android:id="@+id/editTextRegistrationCode"
