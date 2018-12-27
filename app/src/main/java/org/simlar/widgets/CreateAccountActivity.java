@@ -22,16 +22,11 @@ package org.simlar.widgets;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.telephony.SmsMessage;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -46,7 +41,6 @@ import android.widget.TextView;
 import org.simlar.R;
 import org.simlar.helper.CreateAccountStatus;
 import org.simlar.helper.FlavourHelper;
-import org.simlar.helper.PermissionsHelper;
 import org.simlar.helper.PreferencesHelper;
 import org.simlar.helper.SimlarNumber;
 import org.simlar.https.CreateAccount;
@@ -55,19 +49,12 @@ import org.simlar.service.SimlarServiceCommunicator;
 import org.simlar.service.SimlarStatus;
 import org.simlar.utils.Util;
 
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public final class CreateAccountActivity extends Activity
 {
 	public static final String INTENT_EXTRA_NUMBER = "CreateAccountActivityTelephoneNumber";
-	private static final int SECONDS_TO_WAIT_FOR_SMS = 90;
-	private static final Collection<String> SIMLAR_SMS_SOURCES = Collections.unmodifiableCollection(Arrays.asList("+4922199999930", "+14102042044"));
 
 	private View mLayoutProgress = null;
 	private ProgressBar mProgressRequest = null;
@@ -81,10 +68,8 @@ public final class CreateAccountActivity extends Activity
 	private Button mButtonConfirm = null;
 	private Button mButtonCall = null;
 
-	private int mSecondsToStillWaitForSms = 0;
 	private final Handler mHandler = new Handler();
 
-	private BroadcastReceiver mSmsReceiver = null;
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCreateAccount();
 	private String mTelephoneNumber = "";
 
@@ -152,43 +137,6 @@ public final class CreateAccountActivity extends Activity
 		}
 	}
 
-	private final class SmsReceiver extends BroadcastReceiver
-	{
-		@Override
-		public void onReceive(final Context context, final Intent intent)
-		{
-			if (intent == null) {
-				return;
-			}
-
-			final Bundle extras = intent.getExtras();
-			if (extras == null) {
-				return;
-			}
-
-			final Object[] pdus = (Object[]) extras.get("pdus");
-			if (pdus == null) {
-				return;
-			}
-
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-				final String smsFormat = extras.getString("format");
-				if (smsFormat == null) {
-					Lg.e("received sms with no format");
-					return;
-				}
-
-				for (final Object pdu : pdus) {
-					onSmsReceived(SmsMessage.createFromPdu((byte[]) pdu, smsFormat));
-				}
-			} else {
-				for (final Object pdu : pdus) {
-					onSmsReceived(SmsMessage.createFromPdu((byte[]) pdu));
-				}
-			}
-		}
-	}
-
 	@Override
 	protected void onCreate(final Bundle savedInstanceState)
 	{
@@ -220,11 +168,9 @@ public final class CreateAccountActivity extends Activity
 
 		mEditRegistrationCode.addTextChangedListener(new EditRegistrationCodeListener());
 
-		registerSmsReceiver();
-
 		if (PreferencesHelper.getCreateAccountStatus() == CreateAccountStatus.WAITING_FOR_SMS) {
 			mTelephoneNumber = PreferencesHelper.getVerifiedTelephoneNumber();
-			onWaitingForSmsTimedOut();
+			smsNotGranted();
 		} else {
 			mTelephoneNumber = getIntent().getStringExtra(INTENT_EXTRA_NUMBER);
 			getIntent().removeExtra(INTENT_EXTRA_NUMBER);
@@ -286,16 +232,6 @@ public final class CreateAccountActivity extends Activity
 		super.onStop();
 	}
 
-	@Override
-	protected void onDestroy()
-	{
-		Lg.i("onPause");
-		if (mSmsReceiver != null) {
-			unregisterReceiver(mSmsReceiver);
-		}
-		super.onDestroy();
-	}
-
 	@SuppressLint("StaticFieldLeak")
 	private void createAccountRequest()
 	{
@@ -338,65 +274,11 @@ public final class CreateAccountActivity extends Activity
 				PreferencesHelper.init(result.getSimlarId(), result.getPassword(), Calendar.getInstance().getTime().getTime());
 				PreferencesHelper.saveToFilePreferences(CreateAccountActivity.this);
 				PreferencesHelper.saveToFileCreateAccountStatus(CreateAccountActivity.this, CreateAccountStatus.WAITING_FOR_SMS, telephoneNumber);
-				if (mSmsReceiver != null) {
-					waitForSms();
-				} else {
-					smsNotGranted();
-				}
+
+				smsNotGranted();
 			}
 
 		}.execute(mTelephoneNumber, smsText);
-	}
-
-	private void registerSmsReceiver()
-	{
-		if (mSmsReceiver != null) {
-			Lg.i("SmsReceiver already registered");
-			return;
-		}
-
-		// Do not annoy user here again, as we have just asked in VerifyNumberActivity
-		if (!PermissionsHelper.hasPermission(this, PermissionsHelper.Type.SMS)) {
-			Lg.i("permission to read sms not granted");
-			return;
-		}
-
-		final IntentFilter filter = new IntentFilter();
-		filter.addAction("android.provider.Telephony.SMS_RECEIVED");
-		filter.setPriority(1002); // TextSecure uses 1001
-		mSmsReceiver = new SmsReceiver();
-		registerReceiver(mSmsReceiver, filter);
-	}
-
-	private void waitForSms()
-	{
-		Lg.i("waiting for sms");
-		mProgressWaitingForSMS.setVisibility(View.VISIBLE);
-
-		mSecondsToStillWaitForSms = SECONDS_TO_WAIT_FOR_SMS;
-		waitingForSmsIteration();
-	}
-
-	@SuppressLint("SetTextI18n")
-	private void waitingForSmsIteration()
-	{
-		mWaitingForSmsText.setText(getString(R.string.create_account_activity_waiting_for_sms) + " (" + mSecondsToStillWaitForSms + "s)");
-		--mSecondsToStillWaitForSms;
-		if (mSecondsToStillWaitForSms >= 0) {
-			mHandler.postDelayed(this::waitingForSmsIteration, 1000);
-		} else {
-			onWaitingForSmsTimedOut();
-		}
-	}
-
-	private void onWaitingForSmsTimedOut()
-	{
-		Lg.w("waiting for sms timed out");
-
-		mProgressWaitingForSMS.setVisibility(View.INVISIBLE);
-		mWaitingForSmsText.setText(R.string.create_account_activity_waiting_for_sms);
-
-		onError(R.string.create_account_activity_error_sms_not_granted_or_timeout);
 	}
 
 	private void smsNotGranted()
@@ -407,44 +289,6 @@ public final class CreateAccountActivity extends Activity
 		mWaitingForSmsText.setText(R.string.create_account_activity_waiting_for_sms);
 
 		onError(R.string.create_account_activity_error_sms_not_granted_or_timeout);
-	}
-
-	private static String normalizeTelephoneNumber(final String telephoneNumber)
-	{
-		return Util.isNullOrEmpty(telephoneNumber) || telephoneNumber.startsWith("+")
-				? telephoneNumber
-				: '+' + telephoneNumber;
-	}
-
-	private void onSmsReceived(final SmsMessage sms)
-	{
-		onSmsReceived(normalizeTelephoneNumber(sms.getOriginatingAddress()), sms.getMessageBody());
-	}
-
-	private void onSmsReceived(final String sender, final String message)
-	{
-		if (Util.isNullOrEmpty(sender) || Util.isNullOrEmpty(message)) {
-			return;
-		}
-
-		if (!SIMLAR_SMS_SOURCES.contains(sender)) {
-			Lg.i("ignoring sms from: ", new Lg.Anonymizer(sender));
-			return;
-		}
-
-		Lg.i("received sms: sender=", sender, " message=", message);
-		final Matcher matcher = Pattern.compile("(\\d{6})").matcher(message);
-		if (!matcher.find()) {
-			Lg.e("unable to parse sms message: ", message);
-			return;
-		}
-		final String registrationCode = matcher.group(1);
-
-		mHandler.removeCallbacksAndMessages(null);
-		mProgressWaitingForSMS.setVisibility(View.INVISIBLE);
-		mWaitingForSmsText.setText(R.string.create_account_activity_waiting_for_sms);
-
-		confirmRegistrationCode(registrationCode);
 	}
 
 	@SuppressLint("StaticFieldLeak")

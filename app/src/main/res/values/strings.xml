@@ -128,8 +128,6 @@
     <string name="verify_number_activity_sms_announcement">In order to register, Simlar will send an SMS to this number during the next step.</string>
     <string name="verify_number_activity_alert_wrong_number_text">The number you have entered doesn\'t seem to be a telephone number. Check it again.</string>
 
-    <!-- Allow Simlar to send and view SMS messages? -->
-    <string name="permission_explain_text_sms">Simlar reads incoming SMS temporarily so that you don\'t have to enter registration code manually.</string>
     <!-- Allow Simlar to record audio? -->
     <string name="permission_explain_text_record_audio">Simlar uses your microphone during Simlar calls so that the person you are talking to can hear you.</string>
     <!-- > Allow Simlar to make and manage phone calls? -->

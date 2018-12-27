@@ -53,7 +53,6 @@ public final class PermissionsHelper
 {
 	private static final int REQUEST_CODE = 23;
 	public static final int REQUEST_CODE_PHONE_NUMBER = REQUEST_CODE + 3;
-	public static final int REQUEST_CODE_SMS = REQUEST_CODE + 4;
 
 	private PermissionsHelper()
 	{
@@ -64,7 +63,6 @@ public final class PermissionsHelper
 		CONTACTS(Manifest.permission.READ_CONTACTS, false, R.string.permission_explain_text_contacts),
 		MICROPHONE(Manifest.permission.RECORD_AUDIO, true, R.string.permission_explain_text_record_audio),
 		PHONE(Manifest.permission.READ_PHONE_STATE, true, R.string.permission_explain_text_phone_state),
-		SMS(Manifest.permission.RECEIVE_SMS, false, R.string.permission_explain_text_sms),
 		STORAGE(Manifest.permission.READ_EXTERNAL_STORAGE, false, R.string.permission_explain_text_storage);
 
 		private final String mPermission;
