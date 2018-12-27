@@ -157,8 +157,6 @@
     <string name="create_account_activity_request">Fordere Zugang an</string>
     <!-- The sms text should not contain special characters like ö or ' -->
     <string name="create_account_activity_sms_text">android_de</string>
-    <string name="create_account_activity_waiting_for_sms">Warte auf SMS</string>
-    <string name="create_account_activity_waiting_for_sms_manual">Manuelle Eingabe des Bestätigungscodes</string>
     <string name="create_account_activity_waiting_for_sms_call">Fordere Anruf an</string>
     <string name="create_account_activity_registration_code_hint">Bestätigungscode</string>
     <string name="create_account_activity_confirm">Bestätige Registrierung</string>

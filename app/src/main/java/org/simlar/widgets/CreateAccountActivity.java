@@ -58,10 +58,9 @@ public final class CreateAccountActivity extends AppCompatActivity
 
 	private View mLayoutProgress = null;
 	private ProgressBar mProgressRequest = null;
-	private ProgressBar mProgressWaitingForSMS = null;
+	private TextView mRequestText = null;
 	private ProgressBar mProgressConfirm = null;
 	private ProgressBar mProgressFirstLogIn = null;
-	private TextView mWaitingForSmsText = null;
 	private View mLayoutMessage = null;
 	private EditText mEditRegistrationCode = null;
 	private TextView mDetails = null;
@@ -149,15 +148,13 @@ public final class CreateAccountActivity extends AppCompatActivity
 
 		mLayoutProgress = findViewById(R.id.linearLayoutProgress);
 		mProgressRequest = findViewById(R.id.progressBarRequest);
-		mProgressWaitingForSMS = findViewById(R.id.progressBarWaitingForSMS);
 		mProgressConfirm = findViewById(R.id.progressBarConfirm);
 		mProgressFirstLogIn = findViewById(R.id.progressBarFirstLogIn);
 
 		mProgressRequest.setVisibility(View.INVISIBLE);
-		mProgressWaitingForSMS.setVisibility(View.INVISIBLE);
 		mProgressConfirm.setVisibility(View.INVISIBLE);
 		mProgressFirstLogIn.setVisibility(View.INVISIBLE);
-		mWaitingForSmsText = findViewById(R.id.textViewWaitingForSMS);
+		mRequestText = findViewById(R.id.textViewRequest);
 
 		mLayoutMessage = findViewById(R.id.layoutMessage);
 		mLayoutMessage.setVisibility(View.GONE);
@@ -284,9 +281,6 @@ public final class CreateAccountActivity extends AppCompatActivity
 	private void showEnterRegistrationCode()
 	{
 		Lg.i("showEnterRegistrationCode");
-
-		mProgressWaitingForSMS.setVisibility(View.INVISIBLE);
-		mWaitingForSmsText.setText(R.string.create_account_activity_waiting_for_sms);
 
 		showMessage(R.string.create_account_activity_message_sms_not_granted_or_timeout);
 	}
@@ -439,8 +433,8 @@ public final class CreateAccountActivity extends AppCompatActivity
 
 		mLayoutProgress.setVisibility(View.VISIBLE);
 		mLayoutMessage.setVisibility(View.GONE);
-		mWaitingForSmsText.setText(R.string.create_account_activity_waiting_for_sms_call);
-		mProgressWaitingForSMS.setVisibility(View.VISIBLE);
+		mRequestText.setText(R.string.create_account_activity_waiting_for_sms_call);
+		mProgressRequest.setVisibility(View.VISIBLE);
 
 		new AsyncTask<String, Void, CreateAccount.RequestResult>()
 		{
@@ -453,7 +447,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 			@Override
 			protected void onPostExecute(final CreateAccount.RequestResult result)
 			{
-				mProgressWaitingForSMS.setVisibility(View.INVISIBLE);
+				mProgressRequest.setVisibility(View.INVISIBLE);
 
 				if (result.isError()) {
 					Lg.e("failed to parse call result");
@@ -472,7 +466,6 @@ public final class CreateAccountActivity extends AppCompatActivity
 	{
 		Lg.i("onConfirmClicked");
 		((InputMethodManager) Util.getSystemService(this, Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);
-		mWaitingForSmsText.setText(R.string.create_account_activity_waiting_for_sms_manual);
 		mLayoutProgress.setVisibility(View.VISIBLE);
 		mLayoutMessage.setVisibility(View.GONE);
 
