@@ -52,7 +52,6 @@ import java.util.Set;
 public final class PermissionsHelper
 {
 	private static final int REQUEST_CODE = 23;
-	public static final int REQUEST_CODE_PHONE_NUMBER = REQUEST_CODE + 3;
 
 	private PermissionsHelper()
 	{
