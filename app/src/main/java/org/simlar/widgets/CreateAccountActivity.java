@@ -109,7 +109,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 				setResult(RESULT_OK);
 				finish();
 			} else {
-				onError(R.string.create_account_activity_error_sip_not_possible);
+				showMessage(R.string.create_account_activity_error_sip_not_possible);
 			}
 		}
 	}
@@ -261,7 +261,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 				mProgressRequest.setVisibility(View.INVISIBLE);
 
 				if (result.isError()) {
-					onError(result.getErrorMessage());
+					showMessage(result.getErrorMessage());
 					return;
 				}
 
@@ -288,7 +288,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 		mProgressWaitingForSMS.setVisibility(View.INVISIBLE);
 		mWaitingForSmsText.setText(R.string.create_account_activity_waiting_for_sms);
 
-		onError(R.string.create_account_activity_error_sms_not_granted_or_timeout);
+		showMessage(R.string.create_account_activity_error_sms_not_granted_or_timeout);
 	}
 
 	@SuppressLint("StaticFieldLeak")
@@ -301,7 +301,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 		final String simlarId = PreferencesHelper.getMySimlarIdOrEmptyString();
 		if (Util.isNullOrEmpty(registrationCode) || Util.isNullOrEmpty(simlarId)) {
 			Lg.e("Error: registrationCode or simlarId empty");
-			onError(R.string.create_account_activity_error_not_possible);
+			showMessage(R.string.create_account_activity_error_not_possible);
 			return;
 		}
 
@@ -321,14 +321,14 @@ public final class CreateAccountActivity extends AppCompatActivity
 
 				if (result.isError()) {
 					Lg.e("failed to parse confirm result");
-					onError(result.getErrorMessage());
+					showMessage(result.getErrorMessage());
 					return;
 				}
 
 				if (!Util.equalString(result.getSimlarId(), simlarId)) {
 					Lg.e("confirm response received simlarId=", new Lg.Anonymizer(result.getSimlarId()),
 							" not equal to requested simlarId=", new Lg.Anonymizer(simlarId));
-					onError(R.string.create_account_activity_error_not_possible);
+					showMessage(R.string.create_account_activity_error_not_possible);
 					return;
 				}
 
@@ -345,7 +345,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 		mCommunicator.startServiceAndRegister(this, VerifyNumberActivity.class, null);
 	}
 
-	private void onError(final int resId)
+	private void showMessage(final int resId)
 	{
 		mLayoutProgress.setVisibility(View.GONE);
 		mLayoutMessage.setVisibility(View.VISIBLE);
@@ -457,12 +457,12 @@ public final class CreateAccountActivity extends AppCompatActivity
 
 				if (result.isError()) {
 					Lg.e("failed to parse call result");
-					onError(result.getErrorMessage());
+					showMessage(result.getErrorMessage());
 					return;
 				}
 
 				Lg.i("successfully requested call");
-				onError(R.string.create_account_activity_error_sms_call_success);
+				showMessage(R.string.create_account_activity_error_sms_call_success);
 			}
 		}.execute(telephoneNumber, PreferencesHelper.getPassword());
 	}
