@@ -123,9 +123,6 @@ public final class VerifyNumberActivity extends AppCompatActivity
 				readPhoneNumber();
 			}
 			break;
-		case PermissionsHelper.REQUEST_CODE_SMS:
-			startCreateAccountActivity(new SimlarNumber(mEditNumber.getText().toString()));
-			break;
 		default:
 			Lg.e("onRequestPermissionsResult: unknown request code: ", requestCode);
 			break;
@@ -226,9 +223,7 @@ public final class VerifyNumberActivity extends AppCompatActivity
 			return;
 		}
 
-		if (PermissionsHelper.checkAndRequestPermissions(PermissionsHelper.REQUEST_CODE_SMS, this, PermissionsHelper.Type.SMS)) {
-			startCreateAccountActivity(simlarNumber);
-		}
+		startCreateAccountActivity(simlarNumber);
 	}
 
 	private void startCreateAccountActivity(final SimlarNumber simlarNumber)

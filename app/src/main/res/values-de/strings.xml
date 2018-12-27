@@ -130,8 +130,6 @@
     <string name="verify_number_activity_sms_announcement">Um die Anmeldung abzuschließen, schickt Simlar im nächsten Schritt eine SMS an diese Nummer.</string>
     <string name="verify_number_activity_alert_wrong_number_text">Deine eingegebene Rufnummer wurde nicht erkannt. Kontrolliere deine Eingabe.</string>
 
-    <!-- Simlar ermöglichen, SMS zu senden und abzurufen? -->
-    <string name="permission_explain_text_sms">Simlar liest kurzzeitig eingehende SMS, damit du den Registrierungscode nicht eingeben musst.</string>
     <!-- Simlar ermöglichen, Audio aufzunehmen? -->
     <string name="permission_explain_text_record_audio">Simlar greift auf dein Mikrophone zu, damit dein Gesprächspartner dich hören kann.</string>
     <!-- Simlar ermöglichen, Telefonanrufe zu tätigen und zu verwalten? -->
