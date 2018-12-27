@@ -109,7 +109,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 				setResult(RESULT_OK);
 				finish();
 			} else {
-				showMessage(R.string.create_account_activity_error_sip_not_possible);
+				showMessage(R.string.create_account_activity_message_sip_not_possible);
 			}
 		}
 	}
@@ -288,7 +288,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 		mProgressWaitingForSMS.setVisibility(View.INVISIBLE);
 		mWaitingForSmsText.setText(R.string.create_account_activity_waiting_for_sms);
 
-		showMessage(R.string.create_account_activity_error_sms_not_granted_or_timeout);
+		showMessage(R.string.create_account_activity_message_sms_not_granted_or_timeout);
 	}
 
 	@SuppressLint("StaticFieldLeak")
@@ -301,7 +301,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 		final String simlarId = PreferencesHelper.getMySimlarIdOrEmptyString();
 		if (Util.isNullOrEmpty(registrationCode) || Util.isNullOrEmpty(simlarId)) {
 			Lg.e("Error: registrationCode or simlarId empty");
-			showMessage(R.string.create_account_activity_error_not_possible);
+			showMessage(R.string.create_account_activity_message_not_possible);
 			return;
 		}
 
@@ -328,7 +328,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 				if (!Util.equalString(result.getSimlarId(), simlarId)) {
 					Lg.e("confirm response received simlarId=", new Lg.Anonymizer(result.getSimlarId()),
 							" not equal to requested simlarId=", new Lg.Anonymizer(simlarId));
-					showMessage(R.string.create_account_activity_error_not_possible);
+					showMessage(R.string.create_account_activity_message_not_possible);
 					return;
 				}
 
@@ -351,18 +351,18 @@ public final class CreateAccountActivity extends AppCompatActivity
 		mLayoutMessage.setVisibility(View.VISIBLE);
 
 		switch (resId) {
-		case R.string.create_account_activity_error_wrong_telephone_number:
+		case R.string.create_account_activity_message_wrong_telephone_number:
 			mDetails.setText(String.format(getString(resId), mTelephoneNumber));
 			setRegistrationCodeInputVisible(false);
 			break;
-		case R.string.create_account_activity_error_registration_code:
-		case R.string.create_account_activity_error_too_many_calls:
+		case R.string.create_account_activity_message_registration_code:
+		case R.string.create_account_activity_message_too_many_calls:
 			mDetails.setText(resId);
 			setRegistrationCodeInputVisible(true);
 			break;
-		case R.string.create_account_activity_error_sms:
-		case R.string.create_account_activity_error_sms_not_granted_or_timeout:
-		case R.string.create_account_activity_error_sms_call_success:
+		case R.string.create_account_activity_message_sms:
+		case R.string.create_account_activity_message_sms_not_granted_or_timeout:
+		case R.string.create_account_activity_message_sms_call_success:
 			mDetails.setText(String.format(getString(resId), mTelephoneNumber));
 			setRegistrationCodeInputVisible(true);
 			break;
@@ -462,7 +462,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 				}
 
 				Lg.i("successfully requested call");
-				showMessage(R.string.create_account_activity_error_sms_call_success);
+				showMessage(R.string.create_account_activity_message_sms_call_success);
 			}
 		}.execute(telephoneNumber, PreferencesHelper.getPassword());
 	}
