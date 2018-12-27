@@ -109,7 +109,7 @@ public final class VerifyNumberActivity extends AppCompatActivity
 
 	private void requestPhoneNumber()
 	{
-		if (PermissionsHelper.checkAndRequestPermissions(PermissionsHelper.REQUEST_CODE_PHONE_NUMBER, this, PermissionsHelper.Type.PHONE)) {
+		if (PermissionsHelper.checkAndRequestPermissions(this, PermissionsHelper.Type.PHONE)) {
 			readPhoneNumber();
 		}
 	}
@@ -117,15 +117,8 @@ public final class VerifyNumberActivity extends AppCompatActivity
 	@Override
 	public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults)
 	{
-		switch (requestCode) {
-		case PermissionsHelper.REQUEST_CODE_PHONE_NUMBER:
-			if (PermissionsHelper.isGranted(PermissionsHelper.Type.PHONE, permissions, grantResults)) {
-				readPhoneNumber();
-			}
-			break;
-		default:
-			Lg.e("onRequestPermissionsResult: unknown request code: ", requestCode);
-			break;
+		if (PermissionsHelper.isGranted(PermissionsHelper.Type.PHONE, permissions, grantResults)) {
+			readPhoneNumber();
 		}
 	}
 
