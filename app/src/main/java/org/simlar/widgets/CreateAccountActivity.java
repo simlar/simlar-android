@@ -167,7 +167,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 
 		if (PreferencesHelper.getCreateAccountStatus() == CreateAccountStatus.WAITING_FOR_SMS) {
 			mTelephoneNumber = PreferencesHelper.getVerifiedTelephoneNumber();
-			showEnterRegistrationCode();
+			showMessage(R.string.create_account_activity_message_sms_not_granted_or_timeout);
 		} else {
 			mTelephoneNumber = getIntent().getStringExtra(INTENT_EXTRA_NUMBER);
 			getIntent().removeExtra(INTENT_EXTRA_NUMBER);
@@ -272,17 +272,10 @@ public final class CreateAccountActivity extends AppCompatActivity
 				PreferencesHelper.saveToFilePreferences(CreateAccountActivity.this);
 				PreferencesHelper.saveToFileCreateAccountStatus(CreateAccountActivity.this, CreateAccountStatus.WAITING_FOR_SMS, telephoneNumber);
 
-				showEnterRegistrationCode();
+				showMessage(R.string.create_account_activity_message_sms_not_granted_or_timeout);
 			}
 
 		}.execute(mTelephoneNumber, smsText);
-	}
-
-	private void showEnterRegistrationCode()
-	{
-		Lg.i("showEnterRegistrationCode");
-
-		showMessage(R.string.create_account_activity_message_sms_not_granted_or_timeout);
 	}
 
 	@SuppressLint("StaticFieldLeak")
