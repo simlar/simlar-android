@@ -170,7 +170,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 
 		if (PreferencesHelper.getCreateAccountStatus() == CreateAccountStatus.WAITING_FOR_SMS) {
 			mTelephoneNumber = PreferencesHelper.getVerifiedTelephoneNumber();
-			smsNotGranted();
+			showEnterRegistrationCode();
 		} else {
 			mTelephoneNumber = getIntent().getStringExtra(INTENT_EXTRA_NUMBER);
 			getIntent().removeExtra(INTENT_EXTRA_NUMBER);
@@ -275,15 +275,15 @@ public final class CreateAccountActivity extends AppCompatActivity
 				PreferencesHelper.saveToFilePreferences(CreateAccountActivity.this);
 				PreferencesHelper.saveToFileCreateAccountStatus(CreateAccountActivity.this, CreateAccountStatus.WAITING_FOR_SMS, telephoneNumber);
 
-				smsNotGranted();
+				showEnterRegistrationCode();
 			}
 
 		}.execute(mTelephoneNumber, smsText);
 	}
 
-	private void smsNotGranted()
+	private void showEnterRegistrationCode()
 	{
-		Lg.i("smsNotGranted");
+		Lg.i("showEnterRegistrationCode");
 
 		mProgressWaitingForSMS.setVisibility(View.INVISIBLE);
 		mWaitingForSmsText.setText(R.string.create_account_activity_waiting_for_sms);
