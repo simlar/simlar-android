@@ -44,3 +44,7 @@ Simlar heavily depends on [liblinphone](http://www.linphone.org/). In order to m
 ```
 ./scripts/bootstrap-liblinphone.sh origin/master
 ```
+Set make flags e.g. to run on multiple threads.
+```
+time bash -c "MAKEFLAGS='-j32' ./scripts/bootstrap-liblinphone.sh master"
+```
