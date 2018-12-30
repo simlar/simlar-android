@@ -108,14 +108,9 @@ public final class PermissionsHelper
 		return ContextCompat.checkSelfPermission(context, type.getPermission()) == PackageManager.PERMISSION_GRANTED;
 	}
 
-	public static boolean checkAndRequestPermissions(final int requestCode, final Activity activity, final Type type)
-	{
-		return checkAndRequestPermissions(requestCode, activity, EnumSet.of(type));
-	}
-
 	public static boolean checkAndRequestPermissions(final Activity activity, final Type type)
 	{
-		return checkAndRequestPermissions(REQUEST_CODE, activity, type);
+		return checkAndRequestPermissions(REQUEST_CODE, activity, EnumSet.of(type));
 	}
 
 	public static void requestMajorPermissions(final Activity activity, final boolean needsExternalStorage)
