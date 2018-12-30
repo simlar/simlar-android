@@ -81,19 +81,19 @@ public final class CreateAccount
 		{
 			switch (mErrorId) {
 			case 22:
-				return R.string.create_account_activity_error_wrong_telephone_number;
+				return R.string.create_account_activity_message_wrong_telephone_number;
 			case 23: // Too many requests
-				return R.string.create_account_activity_error_not_possible;
+				return R.string.create_account_activity_message_not_possible;
 			case 24:
-				return R.string.create_account_activity_error_sms;
+				return R.string.create_account_activity_message_sms;
 			case 25:
-				return R.string.create_account_activity_error_too_many_confirms;
+				return R.string.create_account_activity_message_too_many_confirms;
 			case 26:
-				return R.string.create_account_activity_error_registration_code;
+				return R.string.create_account_activity_message_registration_code;
 			case 68:
-				return R.string.create_account_activity_error_too_many_calls;
+				return R.string.create_account_activity_message_too_many_calls;
 			default:
-				return R.string.create_account_activity_error_not_possible;
+				return R.string.create_account_activity_message_not_possible;
 			}
 		}
 
