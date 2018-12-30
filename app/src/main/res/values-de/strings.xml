@@ -126,8 +126,6 @@
     <string name="verify_number_activity_sms_announcement">Um die Anmeldung abzuschließen, schickt Simlar im nächsten Schritt eine SMS an diese Nummer.</string>
     <string name="verify_number_activity_alert_wrong_number_text">Deine eingegebene Rufnummer wurde nicht erkannt. Kontrolliere deine Eingabe.</string>
 
-    <!-- Simlar ermöglichen, SMS zu senden und abzurufen? -->
-    <string name="permission_explain_text_sms">Simlar liest kurzzeitig eingehende SMS, damit du den Registrierungscode nicht eingeben musst.</string>
     <!-- Simlar ermöglichen, Audio aufzunehmen? -->
     <string name="permission_explain_text_record_audio">Simlar greift auf dein Mikrophone zu, damit dein Gesprächspartner dich hören kann.</string>
     <!-- Simlar ermöglichen, Telefonanrufe zu tätigen und zu verwalten? -->
@@ -153,21 +151,19 @@
     <string name="create_account_activity_request">Fordere Zugang an</string>
     <!-- The sms text should not contain special characters like ö or ' -->
     <string name="create_account_activity_sms_text">android_de</string>
-    <string name="create_account_activity_waiting_for_sms">Warte auf SMS</string>
-    <string name="create_account_activity_waiting_for_sms_manual">Manuelle Eingabe des Bestätigungscodes</string>
     <string name="create_account_activity_waiting_for_sms_call">Fordere Anruf an</string>
     <string name="create_account_activity_registration_code_hint">Bestätigungscode</string>
     <string name="create_account_activity_confirm">Bestätige Registrierung</string>
     <string name="create_account_activity_first_login">Überprüfe Zugang</string>
-    <string name="create_account_activity_error_wrong_telephone_number">Mit der angegebenen Rufnummer ist eine Registrierung nicht möglich:\n%1$s\n\nProbiere eine andere Rufnummer oder schreibe an support@simlar.org</string>
-    <string name="create_account_activity_error_sms">Simlar kann keine SMS an deine angegebene Telefonnummer schicken:\n%1$s\n\n Überprüfe deine Eingabe oder versuche es später nochmal</string>
-    <string name="create_account_activity_error_sms_not_granted_or_timeout">Simlar schickt eine SMS an deine Nummer:\n\n%1$s\n\nGib den Bestätigungscode ein:</string>
-    <string name="create_account_activity_error_sms_call_success">Simlar ruft deine Nummer an:\n\n%1$s\n\nGib den Bestätigungscode ein:</string>
-    <string name="create_account_activity_error_not_possible">Anmeldung momentan nicht möglich.\n\nÜberprüfe deine Intertverbindung und versuche es erneut.</string>
-    <string name="create_account_activity_error_registration_code">Falscher Bestätigungscode.\n\nVersuche es erneut.</string>
-    <string name="create_account_activity_error_too_many_confirms">Die Registrierung ist fehlgeschlagen.\n\nVersuche es erneut.</string>
-    <string name="create_account_activity_error_too_many_calls">Keine weiteren Anrufe möglich.\n\nVersuche es in 24 Stunden erneut.</string>
-    <string name="create_account_activity_error_sip_not_possible">Der Server konnte nicht erreicht werden.\n\nVersuche es später erneut.</string>
+    <string name="create_account_activity_message_wrong_telephone_number">Mit der angegebenen Rufnummer ist eine Registrierung nicht möglich:\n%1$s\n\nProbiere eine andere Rufnummer oder schreibe an support@simlar.org</string>
+    <string name="create_account_activity_message_sms">Simlar kann keine SMS an deine angegebene Telefonnummer schicken:\n%1$s\n\n Überprüfe deine Eingabe oder versuche es später nochmal</string>
+    <string name="create_account_activity_message_sms_not_granted_or_timeout">Simlar schickt eine SMS an deine Nummer:\n\n%1$s\n\nGib den Bestätigungscode ein:</string>
+    <string name="create_account_activity_message_sms_call_success">Simlar ruft deine Nummer an:\n\n%1$s\n\nGib den Bestätigungscode ein:</string>
+    <string name="create_account_activity_message_not_possible">Anmeldung momentan nicht möglich.\n\nÜberprüfe deine Intertverbindung und versuche es erneut.</string>
+    <string name="create_account_activity_message_registration_code">Falscher Bestätigungscode.\n\nVersuche es erneut.</string>
+    <string name="create_account_activity_message_too_many_confirms">Die Registrierung ist fehlgeschlagen.\n\nVersuche es erneut.</string>
+    <string name="create_account_activity_message_too_many_calls">Keine weiteren Anrufe möglich.\n\nVersuche es in 24 Stunden erneut.</string>
+    <string name="create_account_activity_message_sip_not_possible">Der Server konnte nicht erreicht werden.\n\nVersuche es später erneut.</string>
     <string name="create_account_activity_button_cancel">Abbrechen</string>
     <string name="create_account_activity_button_call">Keine SMS empfangen?\nBestätigungscode als Anruf erhalten.</string>
     <string name="create_account_activity_button_call_available_in">Bestätigungscode als Anruf erhalten.\n(verfügbar in %ds)</string>

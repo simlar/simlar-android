@@ -52,8 +52,6 @@ import java.util.Set;
 public final class PermissionsHelper
 {
 	private static final int REQUEST_CODE = 23;
-	public static final int REQUEST_CODE_PHONE_NUMBER = REQUEST_CODE + 3;
-	public static final int REQUEST_CODE_SMS = REQUEST_CODE + 4;
 
 	private PermissionsHelper()
 	{
@@ -64,7 +62,6 @@ public final class PermissionsHelper
 		CONTACTS(Manifest.permission.READ_CONTACTS, false, R.string.permission_explain_text_contacts),
 		MICROPHONE(Manifest.permission.RECORD_AUDIO, true, R.string.permission_explain_text_record_audio),
 		PHONE(Manifest.permission.READ_PHONE_STATE, true, R.string.permission_explain_text_phone_state),
-		SMS(Manifest.permission.RECEIVE_SMS, false, R.string.permission_explain_text_sms),
 		STORAGE(Manifest.permission.READ_EXTERNAL_STORAGE, false, R.string.permission_explain_text_storage);
 
 		private final String mPermission;
@@ -111,19 +108,14 @@ public final class PermissionsHelper
 		return ContextCompat.checkSelfPermission(context, type.getPermission()) == PackageManager.PERMISSION_GRANTED;
 	}
 
-	public static boolean checkAndRequestPermissions(final int requestCode, final Activity activity, final Type type)
-	{
-		return checkAndRequestPermissions(requestCode, activity, EnumSet.of(type));
-	}
-
 	public static boolean checkAndRequestPermissions(final Activity activity, final Type type)
 	{
-		return checkAndRequestPermissions(REQUEST_CODE, activity, type);
+		return checkAndRequestPermissions(activity, EnumSet.of(type));
 	}
 
 	public static void requestMajorPermissions(final Activity activity, final boolean needsExternalStorage)
 	{
-		checkAndRequestPermissions(REQUEST_CODE, activity, Type.getMajorPermissions(needsExternalStorage));
+		checkAndRequestPermissions(activity, Type.getMajorPermissions(needsExternalStorage));
 	}
 
 	public static boolean shouldShowRationale(final Activity activity, final Type type)
@@ -131,7 +123,7 @@ public final class PermissionsHelper
 		return ActivityCompat.shouldShowRequestPermissionRationale(activity, type.getPermission());
 	}
 
-	private static boolean checkAndRequestPermissions(final int requestCode, final Activity activity, final Set<Type> types)
+	private static boolean checkAndRequestPermissions(final Activity activity, final Set<Type> types)
 	{
 		final Set<Type> requestTypes = EnumSet.noneOf(Type.class);
 		final Set<String> rationalMessages = new HashSet<>();
@@ -150,20 +142,20 @@ public final class PermissionsHelper
 		}
 
 		if (rationalMessages.isEmpty()) {
-			requestPermissions(requestCode, activity, requestTypes);
+			requestPermissions(activity, requestTypes);
 		} else {
-			showPermissionsRationaleAlert(activity, TextUtils.join("\n\n", rationalMessages), requestCode, requestTypes);
+			showPermissionsRationaleAlert(activity, TextUtils.join("\n\n", rationalMessages), requestTypes);
 		}
 
 		return false;
 	}
 
 	@SuppressLint("NewApi")
-	private static void showPermissionsRationaleAlert(final Activity activity, final String message, final int requestCode, final Set<Type> types)
+	private static void showPermissionsRationaleAlert(final Activity activity, final String message, final Set<Type> types)
 	{
 		new AlertDialog.Builder(activity)
 				.setMessage(message)
-				.setOnDismissListener(dialog -> requestPermissions(requestCode, activity, types))
+				.setOnDismissListener(dialog -> requestPermissions(activity, types))
 				.create().show();
 	}
 
@@ -177,7 +169,7 @@ public final class PermissionsHelper
 		fragment.requestPermissions(new String[] { Type.CONTACTS.getPermission() }, REQUEST_CODE);
 	}
 
-	private static void requestPermissions(final int requestCode, final Activity activity, final Set<Type> types)
+	private static void requestPermissions(final Activity activity, final Set<Type> types)
 	{
 		final Set<String> permissions = new HashSet<>();
 		for (final Type type : types) {
@@ -185,7 +177,7 @@ public final class PermissionsHelper
 		}
 		Lg.i("requesting permissions: ", TextUtils.join(", ", permissions));
 
-		ActivityCompat.requestPermissions(activity, permissions.toArray(new String[permissions.size()]), requestCode);
+		ActivityCompat.requestPermissions(activity, permissions.toArray(Util.EMPTY_STRING_ARRAY), REQUEST_CODE);
 	}
 
 	@SuppressWarnings("SameParameterValue")
