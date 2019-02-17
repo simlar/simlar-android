@@ -67,7 +67,7 @@ ext {
 }
 
 dependencies {
-    pushImplementation "com.google.firebase:firebase-core:16.0.6"
+    pushImplementation "com.google.firebase:firebase-core:16.0.7"
     pushImplementation "com.google.firebase:firebase-messaging:17.3.4"
     implementation "com.android.support:appcompat-v7:${androidSupportVersion}"
     implementation "com.android.support:support-v4:${androidSupportVersion}"
