@@ -23,6 +23,7 @@ package org.simlar.service.liblinphone;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.view.SurfaceView;
 
 import org.linphone.core.AuthInfo;
@@ -439,6 +440,7 @@ public final class LinphoneThread extends Thread implements CoreListener
 			mCall = call;
 		}
 
+		@NonNull
 		@Override
 		public final String toString()
 		{
@@ -456,6 +458,7 @@ public final class LinphoneThread extends Thread implements CoreListener
 			mFriend = friend;
 		}
 
+		@NonNull
 		@Override
 		public final String toString()
 		{
