@@ -217,7 +217,13 @@ final class SoundEffectManager
 		}
 
 		mPlayers.put(type, new SoundEffectPlayer(type, now));
-		mPlayers.get(type).prepare(true);
+		final SoundEffectPlayer player = mPlayers.get(type);
+		if (player == null) {
+			Lg.e("no player");
+			return;
+		}
+
+		player.prepare(true);
 	}
 
 	@SuppressWarnings("SameParameterValue")
@@ -234,7 +240,13 @@ final class SoundEffectManager
 		}
 
 		mPlayers.put(type, new SoundEffectPlayer(type, -1));
-		mPlayers.get(type).prepare(false);
+		final SoundEffectPlayer player = mPlayers.get(type);
+		if (player == null) {
+			Lg.e("no player");
+			return;
+		}
+
+		player.prepare(false);
 	}
 
 	@SuppressWarnings("SameParameterValue")
@@ -254,7 +266,13 @@ final class SoundEffectManager
 			return;
 		}
 
-		mPlayers.get(type).startPrepared(now);
+		final SoundEffectPlayer player = mPlayers.get(type);
+		if (player == null) {
+			Lg.e("no player");
+			return;
+		}
+
+		player.startPrepared(now);
 	}
 
 	public void stop(final SoundEffectType type)
@@ -269,13 +287,14 @@ final class SoundEffectManager
 			return;
 		}
 
-		if (mPlayers.get(type) == null) {
+		final SoundEffectPlayer player = mPlayers.get(type);
+		if (player == null) {
 			Lg.e("[", type, "] not initialized");
 			mPlayers.remove(type);
 			return;
 		}
 
-		mPlayers.get(type).stopMediaPlayer();
+		player.stopMediaPlayer();
 		mPlayers.remove(type);
 
 		Lg.i("[", type, "] stopped");
