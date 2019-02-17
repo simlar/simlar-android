@@ -23,6 +23,7 @@ package org.simlar.service.liblinphone;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 
 import org.linphone.core.LinphoneAddress;
 import org.linphone.core.LinphoneAuthInfo;
@@ -277,6 +278,7 @@ public final class LinphoneThread
 				mCall = call;
 			}
 
+			@NonNull
 			@Override
 			public final String toString()
 			{
@@ -294,6 +296,7 @@ public final class LinphoneThread
 				mFriend = friend;
 			}
 
+			@NonNull
 			@Override
 			public final String toString()
 			{
