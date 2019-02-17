@@ -314,7 +314,8 @@ public final class ContactsProvider
 						? Uri.withAppendedPath(ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, contactId), ContactsContract.Contacts.Photo.CONTENT_DIRECTORY).toString()
 						: null;
 
-				if (!result.containsKey(simlarId) || Util.isNullOrEmpty(result.get(simlarId).name)) {
+				final ContactData contactData = result.get(simlarId);
+				if (contactData == null || Util.isNullOrEmpty(contactData.name)) {
 					result.put(simlarId, new ContactData(Util.equalString(name, number) ? "" : name,
 							simlarNumber.getGuiTelephoneNumber(), ContactStatus.UNKNOWN, photoUri));
 
@@ -338,7 +339,8 @@ public final class ContactsProvider
 			Lg.i("contact status received for ", statusMap.size(), " contacts");
 
 			for (final Map.Entry<String, ContactStatus> entry : statusMap.entrySet()) {
-				if (!mContacts.containsKey(entry.getKey())) {
+				final ContactData contactData = mContacts.get(entry.getKey());
+				if (contactData == null) {
 					Lg.e("received contact status ", entry.getValue(), " for unknown contact ", entry.getKey());
 					continue;
 				}
@@ -348,7 +350,7 @@ public final class ContactsProvider
 					continue;
 				}
 
-				mContacts.get(entry.getKey()).status = entry.getValue();
+				contactData.status = entry.getValue();
 			}
 
 			return true;
