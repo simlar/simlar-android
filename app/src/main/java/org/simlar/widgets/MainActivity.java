@@ -109,7 +109,7 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 
 	private void showNoContactPermissionFragment(final boolean visible)
 	{
-		Lg.i("showNoContactPermissionFragment visible=" + Boolean.toString(visible));
+		Lg.i("showNoContactPermissionFragment visible=", visible);
 		setFragmentVisible(mNoContactPermissionFragment, visible);
 		setFragmentVisible(mContactList, !visible);
 	}
