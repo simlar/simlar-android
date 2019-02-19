@@ -23,7 +23,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <string name="app_homepage" tools:ignore="MissingTranslation">www.simlar.org</string>
-    <string name="app_name" tools:ignore="MissingTranslation">Simlar</string>
+    <string name="app_name" tools:ignore="MissingTranslation">Simlar Test</string>
 
     <string name="button_continue">Continue</string>
     <string name="button_cancel">Cancel</string>
