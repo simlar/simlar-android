@@ -60,7 +60,8 @@ public final class PermissionsHelper
 		throw new AssertionError("This class was not meant to be instantiated");
 	}
 
-	public enum Type{
+	public enum Type
+	{
 		CAMERA(Manifest.permission.CAMERA, false, R.string.permission_explain_text_camera),
 		CONTACTS(Manifest.permission.READ_CONTACTS, false, R.string.permission_explain_text_contacts),
 		MICROPHONE(Manifest.permission.RECORD_AUDIO, true, R.string.permission_explain_text_record_audio),

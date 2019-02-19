@@ -12,12 +12,12 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:3.2.1"
-        classpath "org.owasp:dependency-check-gradle:4.0.1"
+        classpath 'com.android.tools.build:gradle:3.3.1'
+        classpath "org.owasp:dependency-check-gradle:4.0.2"
 
         if (useGoogleServices()) {
             println("using google-services")
-            classpath "com.google.gms:google-services:3.3.1"
+            classpath "com.google.gms:google-services:4.0.1"
         } else {
             println("not using google-services")
         }
