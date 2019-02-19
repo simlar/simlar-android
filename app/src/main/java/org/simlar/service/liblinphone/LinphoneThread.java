@@ -130,6 +130,7 @@ public final class LinphoneThread extends Thread implements CoreListener
 
 	public void register(final String mySimlarId, final String password)
 	{
+		Lg.i("register");
 		if (mLinphoneThreadHandler == null) {
 			Lg.e("handler is null, probably thread not started");
 			return;
