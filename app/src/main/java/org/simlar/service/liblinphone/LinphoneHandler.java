@@ -50,13 +50,14 @@ final class LinphoneHandler
 
 	private Core mLinphoneCore = null;
 
-	public void destroy()
+	public void destroy(final CoreListener listener)
 	{
 		Lg.i("destroy called => forcing unregister");
 
 		if (mLinphoneCore != null) {
 			try {
 				mLinphoneCore.setNetworkReachable(false);
+				mLinphoneCore.removeListener(listener);
 				mLinphoneCore = null;
 			} catch (final RuntimeException e) {
 				Lg.ex(e, "RuntimeException during mLinphoneCore destruction");

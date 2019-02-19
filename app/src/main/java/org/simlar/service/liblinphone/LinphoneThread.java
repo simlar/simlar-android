@@ -120,7 +120,7 @@ public final class LinphoneThread extends Thread implements CoreListener
 			if (looper != null) {
 				looper.quit();
 			}
-			mLinphoneHandler.destroy();
+			mLinphoneHandler.destroy(this);
 			mMainThreadHandler.post(() -> {
 				mMainThreadHandler.removeCallbacksAndMessages(null);
 				mListener.onJoin();
@@ -502,7 +502,6 @@ public final class LinphoneThread extends Thread implements CoreListener
 
 			mListener.onRegistrationStateChanged(state);
 		});
-
 	}
 
 	private Call.State fixCallState(final Call.State onCallStateChanged)
