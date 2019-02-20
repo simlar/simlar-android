@@ -21,6 +21,7 @@
 package org.simlar.logging;
 
 import android.annotation.SuppressLint;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import org.simlar.utils.Util;
@@ -112,6 +113,7 @@ public final class Lg
 			mMessagePart = messagePart;
 		}
 
+		@NonNull
 		@Override
 		public final String toString()
 		{
