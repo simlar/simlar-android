@@ -1,0 +1,25 @@
+From 28fb04bc62fbad0aedbe83677d4ee00126e548f6 Mon Sep 17 00:00:00 2001
+From: Sylvain Berfini <sylvain.berfini@belledonne-communications.com>
+Date: Fri, 12 Oct 2018 14:53:44 +0200
+Subject: [PATCH 1/6] Switched libxml2 repository from gnome to ours
+
+---
+ .gitmodules | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/.gitmodules b/.gitmodules
+index ebd5c3ad..8e0597fd 100644
+--- a/.gitmodules
++++ b/.gitmodules
+@@ -46,7 +46,7 @@
+ 	url = git://git.linphone.org/belle-sip.git
+ [submodule "submodules/externals/libxml2"]
+ 	path = submodules/externals/libxml2
+-	url = git://git.gnome.org/libxml2.git
++	url = https://gitlab.linphone.org/BC/public/external/libxml2.git
+ 	ignore = dirty
+ [submodule "submodules/externals/libupnp"]
+ 	path = submodules/externals/libupnp
+-- 
+2.20.1
+
