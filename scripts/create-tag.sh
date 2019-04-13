@@ -31,7 +31,7 @@ git pull --rebase origin "${BRANCH}"
 "${UPDATE_MANIFEST_SCRIPT}" "${ANDROID_MANIFEST}"
 
 git add "${ANDROID_MANIFEST}"
-git commit -m "[AndroidManifest] increased versionCode for release ${SIMLAR_VERSION}"
+git commit -S -m "[AndroidManifest] increased versionCode for release ${SIMLAR_VERSION}"
 git push origin "${BRANCH}":"${BRANCH}"
 
 if [ "${BRANCH}" != "master" ] ; then
@@ -43,7 +43,7 @@ if [ "${BRANCH}" != "master" ] ; then
 	git checkout "${BRANCH}"
 fi
 
-git tag -a "${SIMLAR_VERSION}" -m "Version: ${SIMLAR_VERSION}"
+git tag -s "${SIMLAR_VERSION}" -m "Version: ${SIMLAR_VERSION}"
 git push origin "${SIMLAR_VERSION}"
 git checkout "${SIMLAR_VERSION}"
 
