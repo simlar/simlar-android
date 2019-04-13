@@ -70,4 +70,11 @@
         <cpe>/a:google:guava:21.0</cpe>
         <cve>CVE-2018-10237</cve>
     </suppress>
+    <suppress>
+        <notes><![CDATA[
+        file name: builder-3.3.2.jar
+        ]]></notes>
+        <cpe>cpe:/a:r_project:r</cpe>
+        <cve>CVE-2016-8714</cve>
+    </suppress>
 </suppressions>
