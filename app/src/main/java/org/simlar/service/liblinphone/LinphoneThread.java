@@ -66,8 +66,9 @@ import org.simlar.helper.Volumes.MicrophoneStatus;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
-public final class LinphoneThread extends Thread implements CoreListener
+public final class LinphoneThread implements Runnable, CoreListener
 {
+	private final Thread mThread;
 	private Handler mLinphoneThreadHandler = null;
 	private final Handler mMainThreadHandler = new Handler();
 	private VideoState mVideoState = VideoState.OFF;
@@ -88,7 +89,8 @@ public final class LinphoneThread extends Thread implements CoreListener
 		mListener.onCallStateChanged("", Call.State.Idle, null);
 		mContext = context;
 
-		start();
+		mThread = new Thread(this);
+		mThread.start();
 	}
 
 	@Override
@@ -120,7 +122,7 @@ public final class LinphoneThread extends Thread implements CoreListener
 			if (looper != null) {
 				looper.quit();
 			}
-			mLinphoneHandler.destroy();
+			mLinphoneHandler.destroy(this);
 			mMainThreadHandler.post(() -> {
 				mMainThreadHandler.removeCallbacksAndMessages(null);
 				mListener.onJoin();
@@ -128,8 +130,15 @@ public final class LinphoneThread extends Thread implements CoreListener
 		});
 	}
 
+	@SuppressWarnings("SameParameterValue")
+	public void join(final long millis) throws InterruptedException
+	{
+		mThread.join(millis);
+	}
+
 	public void register(final String mySimlarId, final String password)
 	{
+		Lg.i("register");
 		if (mLinphoneThreadHandler == null) {
 			Lg.e("handler is null, probably thread not started");
 			return;
@@ -501,7 +510,6 @@ public final class LinphoneThread extends Thread implements CoreListener
 
 			mListener.onRegistrationStateChanged(state);
 		});
-
 	}
 
 	private Call.State fixCallState(final Call.State onCallStateChanged)
