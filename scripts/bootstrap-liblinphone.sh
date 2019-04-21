@@ -20,26 +20,21 @@ declare -r BUILD_DIR="liblinphone/builds/$(basename "${BRANCH}")_$(date '+%Y%m%d
 mkdir -p "${BUILD_DIR}"
 cd "${BUILD_DIR}"
 
-if [ "${BRANCH}" == "" ] ; then
-	git clone git://git.linphone.org/linphone-android.git --recursive
-else
-	git clone git://git.linphone.org/linphone-android.git
-	cd linphone-android
-	git checkout "${BRANCH}"
-	git submodule sync
-	git submodule update --recursive --init
-	cd ..
-fi
 
+git clone git://git.linphone.org/linphone-android.git
 cd linphone-android
+git checkout "${BRANCH}"
+git submodule sync --recursive
+
+
 declare -r GIT_HASH=$(git log -n1 --format="%H")
 
 if [ -d "${LINPHONE_ANDROID_PATCH_DIR}" ] ; then
 	git am "${LINPHONE_ANDROID_PATCH_DIR}"/*.patch
-
-	## patches to linphone-android may change submodules, so be sure to update them here
-	git submodule update --recursive --init
 fi
+
+## patches to linphone-android may change submodules, so be sure to update them here
+git submodule update --recursive --init
 
 if [ -d "${LINPHONE_PATCH_DIR}" ] ; then
 	cd submodules/linphone/
