@@ -26,14 +26,14 @@
     android:ordering="sequentially"
     tools:ignore="UnusedAttribute">
 
-    <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+    <rotate
             android:duration="500"
             android:fromDegrees="0"
             android:pivotX="50%"
             android:pivotY="50%"
             android:toDegrees="45"/>
 
-    <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+    <rotate
             android:duration="1000"
             android:fromDegrees="0"
             android:pivotX="50%"
