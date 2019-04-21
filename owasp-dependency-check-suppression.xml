@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.1.xsd">
     <suppress>
-        <notes><![CDATA[
-        Android dependency builder-3.2.1.jar
-        ]]></notes>
-        <cpe>/a:google:guava:21.0</cpe>
+        <notes>
+            <![CDATA[
+                file name: builder-3.4.0.jar: desugar_deploy.jar (shaded: com.google.guava:guava:21.0)
+            ]]>
+        </notes>
+        <gav regex="true">^com\.google\.guava:guava:.*$</gav>
         <cve>CVE-2018-10237</cve>
     </suppress>
     <suppress>
-        <notes><![CDATA[
-        file name: builder-3.3.2.jar
-        ]]></notes>
-        <cpe>cpe:/a:r_project:r</cpe>
-        <cve>CVE-2016-8714</cve>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-        file name: gradle-api-3.4.0.jar
-        ]]></notes>
-        <cpe>cpe:/a:gradle:gradle</cpe>
+        <notes>
+            <![CDATA[
+                file name: gradle-api-3.4.0.jar
+            ]]>
+        </notes>
+        <gav regex="true">^com\.android\.tools\.build:gradle-api:.*$</gav>
         <cve>CVE-2019-11065</cve>
     </suppress>
     <suppress>
-        <notes><![CDATA[
-        file name: commons-compress-1.12.jar
-        ]]></notes>
-        <cpe>cpe:/a:apache:commons-compress</cpe>
+        <notes>
+            <![CDATA[
+                file name: commons-compress-1.12.jar
+            ]]>
+        </notes>
+        <gav regex="true">^org\.apache\.commons:commons-compress:.*$</gav>
         <cve>CVE-2018-11771</cve>
+        <cve>CVE-2018-1324</cve>
     </suppress>
 </suppressions>
