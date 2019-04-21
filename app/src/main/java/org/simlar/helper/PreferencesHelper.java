@@ -88,6 +88,7 @@ public final class PreferencesHelper
 		}
 	}
 
+	@SuppressWarnings("WeakerAccess")
 	public static final class NotInitedException extends IllegalStateException
 	{
 		private static final long serialVersionUID = 1;

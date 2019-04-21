@@ -26,7 +26,7 @@ public enum CreateAccountStatus
 	WAITING_FOR_SMS(1),
 	SUCCESS(2);
 
-	final int mValue;
+	private final int mValue;
 
 	CreateAccountStatus(final int i)
 	{

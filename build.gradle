@@ -12,8 +12,8 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.2'
-        classpath "org.owasp:dependency-check-gradle:4.0.2"
+        classpath 'com.android.tools.build:gradle:3.4.0'
+        classpath "org.owasp:dependency-check-gradle:5.0.0-M2"
 
         if (useGoogleServices()) {
             println("using google-services")
@@ -45,5 +45,6 @@ idea {
         excludeDirs += file("app/build/intermediates/manifest/androidTest/")
         excludeDirs += file("app/google-services.json")
         excludeDirs += file("owasp-dependency-check-suppression.xml")
+        excludeDirs += file("gradlew")
     }
 }
