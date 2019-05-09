@@ -32,6 +32,7 @@ import org.simlar.helper.ContactDataComplete;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
+@SuppressWarnings("WeakerAccess")
 public final class ContactsListFragment extends ListFragment
 {
 	@Override
