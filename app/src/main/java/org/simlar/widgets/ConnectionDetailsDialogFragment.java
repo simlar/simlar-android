@@ -36,7 +36,7 @@ import org.simlar.R;
 import org.simlar.helper.CallConnectionDetails;
 import org.simlar.logging.Lg;
 
-public final class ConnectionDetailsDialogFragment extends DialogFragment
+final class ConnectionDetailsDialogFragment extends DialogFragment
 {
 	// gui elements
 	private TextView mTextViewQuality = null;
