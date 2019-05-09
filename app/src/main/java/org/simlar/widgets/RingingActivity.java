@@ -32,14 +32,14 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.simlar.R;
 import org.simlar.logging.Lg;
 import org.simlar.service.SimlarCallState;
 import org.simlar.service.SimlarServiceCommunicator;
 import org.simlar.utils.Util;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public final class RingingActivity extends AppCompatActivity
 {

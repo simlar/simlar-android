@@ -50,6 +50,7 @@ import android.widget.Toast;
 
 import org.linphone.core.Call.State;
 import org.linphone.core.RegistrationState;
+
 import org.simlar.R;
 import org.simlar.contactsprovider.ContactsProvider;
 import org.simlar.helper.CallConnectionDetails;

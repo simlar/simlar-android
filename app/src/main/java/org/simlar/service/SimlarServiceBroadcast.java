@@ -24,9 +24,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 
-import org.simlar.helper.VideoState;
-
 import java.io.Serializable;
+
+import org.simlar.helper.VideoState;
 
 public final class SimlarServiceBroadcast implements Serializable
 {

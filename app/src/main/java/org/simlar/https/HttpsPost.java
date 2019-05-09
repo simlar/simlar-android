@@ -20,9 +20,6 @@
 
 package org.simlar.https;
 
-import org.simlar.helper.ServerSettings;
-import org.simlar.logging.Lg;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -34,6 +31,9 @@ import java.net.URLEncoder;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import org.simlar.helper.ServerSettings;
+import org.simlar.logging.Lg;
 
 final class HttpsPost
 {

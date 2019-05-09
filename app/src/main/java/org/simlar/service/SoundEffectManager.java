@@ -28,14 +28,14 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.RawRes;
 
+import java.io.IOException;
+import java.util.EnumMap;
+import java.util.Map;
+
 import org.simlar.R;
 import org.simlar.helper.RingtoneHelper;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
-
-import java.io.IOException;
-import java.util.EnumMap;
-import java.util.Map;
 
 final class SoundEffectManager
 {

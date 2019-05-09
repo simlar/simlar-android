@@ -29,11 +29,11 @@ import android.content.Context;
 import android.os.Build;
 import android.os.PowerManager;
 
-import org.simlar.logging.Lg;
-import org.simlar.utils.Util;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
+import org.simlar.logging.Lg;
+import org.simlar.utils.Util;
 
 public final class ProximityScreenLockerNative implements ProximityScreenLocker
 {

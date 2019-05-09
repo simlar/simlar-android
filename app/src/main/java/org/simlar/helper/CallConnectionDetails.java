@@ -20,9 +20,9 @@
 
 package org.simlar.helper;
 
-import org.simlar.utils.Util;
-
 import java.text.DecimalFormat;
+
+import org.simlar.utils.Util;
 
 public final class CallConnectionDetails
 {

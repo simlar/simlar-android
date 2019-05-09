@@ -38,16 +38,16 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 
-import org.simlar.R;
-import org.simlar.logging.Lg;
-import org.simlar.utils.Util;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.simlar.R;
+import org.simlar.logging.Lg;
+import org.simlar.utils.Util;
 
 public final class PermissionsHelper
 {

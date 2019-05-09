@@ -38,6 +38,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import org.simlar.R;
 import org.simlar.helper.CreateAccountStatus;
 import org.simlar.helper.FlavourHelper;
@@ -48,9 +51,6 @@ import org.simlar.logging.Lg;
 import org.simlar.service.SimlarServiceCommunicator;
 import org.simlar.service.SimlarStatus;
 import org.simlar.utils.Util;
-
-import java.util.Calendar;
-import java.util.Date;
 
 public final class CreateAccountActivity extends AppCompatActivity
 {

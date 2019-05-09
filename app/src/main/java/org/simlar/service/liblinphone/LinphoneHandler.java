@@ -23,26 +23,27 @@ package org.simlar.service.liblinphone;
 import android.content.Context;
 import android.util.Log;
 
+import java.util.Random;
+
 import org.linphone.core.Call;
 import org.linphone.core.CallParams;
 import org.linphone.core.Core;
+import org.linphone.core.CoreListener;
+import org.linphone.core.Factory;
 import org.linphone.core.LogCollectionState;
 import org.linphone.core.LogLevel;
 import org.linphone.core.MediaEncryption;
 import org.linphone.core.NatPolicy;
-import org.linphone.core.Transports;
-import org.linphone.core.Factory;
-import org.linphone.core.CoreListener;
 import org.linphone.core.ProxyConfig;
+import org.linphone.core.Transports;
 import org.linphone.core.VideoActivationPolicy;
 import org.linphone.mediastream.video.capture.hwconf.AndroidCameraConfiguration;
+
 import org.simlar.helper.ServerSettings;
 import org.simlar.helper.Version;
 import org.simlar.helper.Volumes;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
-
-import java.util.Random;
 
 final class LinphoneHandler
 {

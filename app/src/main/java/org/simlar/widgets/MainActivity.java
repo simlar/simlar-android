@@ -32,6 +32,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import org.simlar.R;
 import org.simlar.contactsprovider.ContactsProvider;
 import org.simlar.helper.CreateAccountStatus;
@@ -45,10 +49,6 @@ import org.simlar.https.UploadLogFile;
 import org.simlar.logging.Lg;
 import org.simlar.service.SimlarService;
 import org.simlar.service.SimlarServiceCommunicator;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 public final class MainActivity extends AppCompatActivity implements NoContactPermissionFragment.Listener
 {

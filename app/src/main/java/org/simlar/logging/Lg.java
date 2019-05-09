@@ -23,11 +23,11 @@ package org.simlar.logging;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import org.simlar.utils.Util;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Arrays;
+
+import org.simlar.utils.Util;
 
 public final class Lg
 {
