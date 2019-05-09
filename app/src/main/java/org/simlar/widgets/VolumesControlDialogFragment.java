@@ -37,7 +37,7 @@ import androidx.fragment.app.FragmentActivity;
 import org.simlar.R;
 import org.simlar.logging.Lg;
 
-public final class VolumesControlDialogFragment extends DialogFragment
+final class VolumesControlDialogFragment extends DialogFragment
 {
 	private Listener mListener = null;
 
