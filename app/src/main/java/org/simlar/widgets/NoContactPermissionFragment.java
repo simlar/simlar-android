@@ -45,6 +45,7 @@ import org.simlar.utils.Util;
 
 import static android.app.Activity.RESULT_OK;
 
+@SuppressWarnings("WeakerAccess")
 public final class NoContactPermissionFragment extends Fragment
 {
 	private static final int PICK_CONTACT = 4711;
