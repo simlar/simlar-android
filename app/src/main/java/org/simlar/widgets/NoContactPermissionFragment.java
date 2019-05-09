@@ -28,12 +28,13 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
 
 import org.simlar.R;
 import org.simlar.contactsprovider.ContactsProvider;
@@ -42,8 +43,7 @@ import org.simlar.helper.SimlarNumber;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
-import static android.support.v7.app.AppCompatActivity.RESULT_OK;
-
+import static android.app.Activity.RESULT_OK;
 
 public final class NoContactPermissionFragment extends Fragment
 {

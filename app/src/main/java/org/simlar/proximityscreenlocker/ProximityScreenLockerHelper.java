@@ -20,7 +20,7 @@
 
 package org.simlar.proximityscreenlocker;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.simlar.logging.Lg;
 

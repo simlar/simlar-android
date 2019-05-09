@@ -23,8 +23,9 @@ package org.simlar.service.liblinphone;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
 import android.view.SurfaceView;
+
+import androidx.annotation.NonNull;
 
 import org.linphone.core.AuthInfo;
 import org.linphone.core.AuthMethod;
