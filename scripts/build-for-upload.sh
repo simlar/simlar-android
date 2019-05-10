@@ -23,13 +23,13 @@ cd "$(dirname $(readlink -f $0))/../"
 rm -f Simlar.apk
 rm -f Simlar-alwaysOnline.apk
 
-"${GRADLEW}" clean assemblePushRelease
-jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore "${KEYSTORE}" app/build/outputs/apk/push/release/app-push-release-unsigned.apk simlar
-zipalign -v 4 app/build/outputs/apk/push/release/app-push-release-unsigned.apk Simlar.apk
-
 "${GRADLEW}" clean assembleAlwaysOnlineRelease -Pno-google-services
 jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore "${KEYSTORE}" app/build/outputs/apk/alwaysOnline/release/app-alwaysOnline-release-unsigned.apk simlar
 zipalign -v 4 app/build/outputs/apk/alwaysOnline/release/app-alwaysOnline-release-unsigned.apk Simlar-alwaysOnline.apk
+
+"${GRADLEW}" clean assemblePushRelease
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore "${KEYSTORE}" app/build/outputs/apk/push/release/app-push-release-unsigned.apk simlar
+zipalign -v 4 app/build/outputs/apk/push/release/app-push-release-unsigned.apk Simlar.apk
 
 "${GRADLEW}" clean
 
