@@ -3,12 +3,13 @@
 ## exit if an error occurs or on unset variables
 set -eu -o pipefail
 
-declare -r SIMLAR_KEYSTORE=${SIMLAR_KEYSTORE:-""}
-declare -r KEYSTORE=${1:-"${SIMLAR_KEYSTORE}"}
+declare -r  SIMLAR_KEYSTORE=${SIMLAR_KEYSTORE:-""}
+declare -rx KEYSTORE_FILE=${1:-"${SIMLAR_KEYSTORE}"}
 
-declare -r GRADLEW="$(dirname $(readlink -f $0))/../gradlew"
+declare -r  PROJECT_DIR="$(dirname $(readlink -f $0))/.."
+declare -r  GRADLEW="${PROJECT_DIR}/gradlew"
 
-if [ -z "${KEYSTORE}" ] ; then
+if [ -z "${KEYSTORE_FILE}" ] ; then
 	echo "Please set give parameter keystore, e.g.:"
 	echo "  $0 ~/dev/android/simlar-release-key.keystore"
 	echo "or set the environment variable KEYSTORE, e.g.:"
@@ -16,21 +17,24 @@ if [ -z "${KEYSTORE}" ] ; then
 	exit
 fi
 
-echo "using keystore ${KEYSTORE}"
+echo "using keystore ${KEYSTORE_FILE}"
+echo "enter password its password:"
+declare -rx KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD:-"$( stty -echo; head -n 1; stty echo )"}
 
-cd "$(dirname $(readlink -f $0))/../"
 
+cd "${PROJECT_DIR}"
 rm -f Simlar.apk
 rm -f Simlar-alwaysOnline.apk
 
+
 "${GRADLEW}" clean assembleAlwaysOnlineRelease -Pno-google-services
-jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore "${KEYSTORE}" app/build/outputs/apk/alwaysOnline/release/app-alwaysOnline-release-unsigned.apk simlar
-zipalign -v 4 app/build/outputs/apk/alwaysOnline/release/app-alwaysOnline-release-unsigned.apk Simlar-alwaysOnline.apk
+mv ./app/build/outputs/apk/alwaysOnline/release/app-alwaysOnline-release.apk Simlar-alwaysOnline.apk
 
 "${GRADLEW}" clean assemblePushRelease
-jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore "${KEYSTORE}" app/build/outputs/apk/push/release/app-push-release-unsigned.apk simlar
-zipalign -v 4 app/build/outputs/apk/push/release/app-push-release-unsigned.apk Simlar.apk
+mv ./app/build/outputs/apk/push/release/app-push-release.apk Simlar.apk
 
 "${GRADLEW}" clean
 
+echo
+echo
 echo "successfully created: Simlar-alwaysOnline.apk and Simlar.apk"
