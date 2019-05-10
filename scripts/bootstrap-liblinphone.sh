@@ -3,69 +3,70 @@
 ## exit if an error occurs or on unset variables
 set -eu -o pipefail
 
-declare -r BRANCH=${1:-"release/4.0.1"} ## use master to build current git revision
+declare -r BRANCH=${1:-"4.2"} ## use master to build current git revision
 
-declare -r COMPILE_SCRIPT="$(dirname $(readlink -f $0))/compile-liblinphone.sh"
+declare -r PROJECT_DIR="$(dirname $(readlink -f $0))/.."
+declare -r COMPILE_SCRIPT="${PROJECT_DIR}/scripts/compile-liblinphone.sh"
 
-declare -r PATCH_DIR="$(dirname $(readlink -f $0))/../liblinphone/patches"
+declare -r PATCH_DIR="${PROJECT_DIR}/liblinphone/patches"
 
-declare -r LINPHONE_ANDROID_PATCH_DIR="${PATCH_DIR}/linphone-android"
+declare -r LINPHONE_SDK_PATCH_DIR="${PATCH_DIR}/linphone-sdk"
 declare -r LINPHONE_PATCH_DIR="${PATCH_DIR}/linphone"
 declare -r MEDIASTREAMER2_PATCH_DIR="${PATCH_DIR}/mediastreamer2"
 declare -r BELLESIP_PATCH_DIR="${PATCH_DIR}/belle-sip"
 declare -r ORTP_PATCH_DIR="${PATCH_DIR}/ortp"
 declare -r BZRTP_PATCH_DIR="${PATCH_DIR}/bzrtp"
 
-declare -r BUILD_DIR="liblinphone/builds/$(basename "${BRANCH}")_$(date '+%Y%m%d_%H%M%S')"
+declare -r BUILD_DIR="${PROJECT_DIR}/liblinphone/builds/$(basename "${BRANCH}")_$(date '+%Y%m%d_%H%M%S')"
 mkdir -p "${BUILD_DIR}"
 cd "${BUILD_DIR}"
 
 
-git clone git://git.linphone.org/linphone-android.git
-cd linphone-android
+git clone https://gitlab.linphone.org/BC/public/linphone-sdk.git
+cd linphone-sdk
 git checkout "${BRANCH}"
 git submodule sync --recursive
 
 
 declare -r GIT_HASH=$(git log -n1 --format="%H")
 
-if [ -d "${LINPHONE_ANDROID_PATCH_DIR}" ] ; then
-	git am "${LINPHONE_ANDROID_PATCH_DIR}"/*.patch
+if [ -d "${LINPHONE_SDK_PATCH_DIR}" ] ; then
+	git am "${LINPHONE_SDK_PATCH_DIR}"/*.patch
 fi
 
 ## patches to linphone-android may change submodules, so be sure to update them here
 git submodule update --recursive --init
 
 if [ -d "${LINPHONE_PATCH_DIR}" ] ; then
-	cd submodules/linphone/
+	cd linphone
 	git am "${LINPHONE_PATCH_DIR}"/*.patch
-	cd ../..
+	cd ..
 fi
 
 if [ -d "${MEDIASTREAMER2_PATCH_DIR}" ] ; then
-	cd submodules/mediastreamer2
+	cd mediastreamer2
 	git am "${MEDIASTREAMER2_PATCH_DIR}"/*.patch
-	cd ../..
+	cd ..
 fi
 
 if [ -d "${BELLESIP_PATCH_DIR}" ] ; then
-	cd submodules/belle-sip
+	cd belle-sip
 	git am "${BELLESIP_PATCH_DIR}"/*.patch
-	cd ../..
+	cd ..
 fi
 
 if [ -d "${ORTP_PATCH_DIR}" ] ; then
-	cd submodules/linphone/oRTP/
+	cd linphone/oRTP
 	git am "${ORTP_PATCH_DIR}"/*.patch
-	cd ../../..
-fi
-
-if [ -d "${BZRTP_PATCH_DIR}" ] ; then
-	cd submodules/bzrtp/
-	git am "${BZRTP_PATCH_DIR}"/*.patch
 	cd ../..
 fi
 
-cd ../../../..
+if [ -d "${BZRTP_PATCH_DIR}" ] ; then
+	cd bzrtp
+	git am "${BZRTP_PATCH_DIR}"/*.patch
+	cd ..
+fi
+
+cd "${PROJECT_DIR}"
 
 "${COMPILE_SCRIPT}" "${BUILD_DIR}" "${GIT_HASH}"
