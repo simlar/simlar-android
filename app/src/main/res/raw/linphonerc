@@ -11,3 +11,6 @@ audio_jitt_comp=60
 video_jitt_comp=60
 nortp_timeout=20
 disable_upnp=1
+
+[sip]
+srtp_crypto_suites=AES_256_CM_HMAC_SHA1_80, AES_256_CM_HMAC_SHA1_32, AES_CM_128_HMAC_SHA1_32, AES_CM_128_HMAC_SHA1_80
