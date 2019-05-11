@@ -27,7 +27,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.view.Menu;
-import android.view.SurfaceView;
+import android.view.TextureView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
@@ -430,15 +430,9 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	}
 
 	@Override
-	public void setVideoWindows(final SurfaceView videoView, final SurfaceView captureView)
+	public void setVideoWindows(final TextureView videoView, final TextureView captureView)
 	{
 		mCommunicator.getService().setVideoWindows(videoView, captureView);
-	}
-
-	@Override
-	public void enableVideoWindow(final boolean enable)
-	{
-		mCommunicator.getService().enableVideoWindow(enable);
 	}
 
 	@Override

@@ -43,7 +43,7 @@ import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import android.view.SurfaceView;
+import android.view.TextureView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -1064,22 +1064,13 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mLinphoneThread.acceptVideoUpdate(accept);
 	}
 
-	public void setVideoWindows(final SurfaceView videoView, final SurfaceView captureView)
+	public void setVideoWindows(final TextureView videoView, final TextureView captureView)
 	{
 		if (mLinphoneThread == null) {
 			return;
 		}
 
 		mLinphoneThread.setVideoWindows(videoView, captureView);
-	}
-
-	public void enableVideoWindow(final boolean enable)
-	{
-		if (mLinphoneThread == null) {
-			return;
-		}
-
-		mLinphoneThread.enableVideoWindow(enable);
 	}
 
 	public void destroyVideoWindows()

@@ -27,13 +27,13 @@
     android:layout_height="match_parent"
     tools:context="org.simlar.widgets.VideoFragment">
 
-    <org.linphone.mediastream.video.display.GL2JNIView
+    <TextureView
         android:id="@+id/videoSurface"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:ignore="MissingRegistered"/>
 
-    <SurfaceView
+    <TextureView
         android:id="@+id/videoCaptureSurface"
         android:layout_width="120dp"
         android:layout_height="145dp"/>
