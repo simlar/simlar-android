@@ -70,7 +70,6 @@ import org.simlar.helper.NetworkQuality;
 import org.simlar.helper.PermissionsHelper;
 import org.simlar.helper.PreferencesHelper;
 import org.simlar.helper.PreferencesHelper.NotInitedException;
-import org.simlar.helper.VideoSize;
 import org.simlar.helper.VideoState;
 import org.simlar.helper.Volumes;
 import org.simlar.helper.Volumes.MicrophoneStatus;
@@ -1191,15 +1190,6 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		}
 
 		mLinphoneManager.toggleCamera();
-	}
-
-	public VideoSize getVideoPreviewSize()
-	{
-		if (mLinphoneManager == null) {
-			return null;
-		}
-
-		return mLinphoneManager.getVideoPreviewSize();
 	}
 
 	public CallConnectionDetails getCallConnectionDetails()

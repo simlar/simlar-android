@@ -32,7 +32,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import org.simlar.R;
-import org.simlar.helper.VideoSize;
 import org.simlar.logging.Lg;
 
 @SuppressWarnings("WeakerAccess") /// liblinphone requires this class to be pubic
@@ -51,7 +50,6 @@ public class VideoFragment extends Fragment
 		void destroyVideoWindows();
 		void onVideoViewClick();
 		void onCaptureViewClick();
-		VideoSize getVideoPreviewSize();
 	}
 
 	@Override
@@ -144,56 +142,6 @@ public class VideoFragment extends Fragment
 	{
 		super.onResume();
 		Lg.i("onResume");
-
-		resizePreview();
-	}
-
-	private void resizePreview() {
-		mListener.getVideoPreviewSize();
-
-/*
-		Core core = LinphoneService.getCore();
-		if (core.getCallsNb() > 0) {
-			Call call = core.getCurrentCall();
-			if (call == null) {
-				call = core.getCalls()[0];
-			}
-			if (call == null) return;
-
-			DisplayMetrics metrics = new DisplayMetrics();
-			getWindowManager().getDefaultDisplay().getMetrics(metrics);
-			int screenHeight = metrics.heightPixels;
-			int maxHeight =
-					screenHeight / 4; // Let's take at most 1/4 of the screen for the camera preview
-
-			VideoDefinition videoSize =
-					call.getCurrentParams()
-							.getSentVideoDefinition(); // It already takes care of rotation
-			if (videoSize.getWidth() == 0 || videoSize.getHeight() == 0) {
-				Log.w(
-						"[Video] Couldn't get sent video definition, using default video definition");
-				videoSize = core.getPreferredVideoDefinition();
-			}
-			int width = videoSize.getWidth();
-			int height = videoSize.getHeight();
-
-			Log.d("[Video] Video height is " + height + ", width is " + width);
-			width = width * maxHeight / height;
-			height = maxHeight;
-
-			if (mCaptureView == null) {
-				Log.e("[Video] mCaptureView is null !");
-				return;
-			}
-
-			RelativeLayout.LayoutParams newLp = new RelativeLayout.LayoutParams(width, height);
-			newLp.addRule(
-					RelativeLayout.ALIGN_PARENT_BOTTOM,
-					1); // Clears the rule, as there is no removeRule until API 17.
-			newLp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
-			mCaptureView.setLayoutParams(newLp);
-			Log.d("[Video] Video preview size set to " + width + "x" + height);
-		}*/
 	}
 
 	@Override

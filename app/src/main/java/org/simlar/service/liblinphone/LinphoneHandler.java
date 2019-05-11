@@ -44,13 +44,11 @@ import org.linphone.core.MediaEncryption;
 import org.linphone.core.NatPolicy;
 import org.linphone.core.Transports;
 import org.linphone.core.VideoActivationPolicy;
-import org.linphone.core.VideoDefinition;
 import org.linphone.core.ZrtpKeyAgreement;
 import org.linphone.mediastream.video.capture.hwconf.AndroidCameraConfiguration;
 
 import org.simlar.helper.ServerSettings;
 import org.simlar.helper.Version;
-import org.simlar.helper.VideoSize;
 import org.simlar.helper.Volumes;
 import org.simlar.logging.Lg;
 import org.simlar.service.AudioOutputType;
@@ -521,33 +519,6 @@ final class LinphoneHandler
 
 		mLinphoneCore.setNativeVideoWindowId(videoWindow);
 	}
-
-	public VideoSize getVideoPreviewSize()
-	{
-		final Call currentCall = getCurrentCall();
-		if (currentCall == null) {
-			Lg.w("no current call for video preview size");
-			return null;
-		}
-
-
-		VideoDefinition videoSize = currentCall.getCurrentParams().getSentVideoDefinition();
-		if (videoSize.getWidth() == 0 || videoSize.getHeight() == 0) {
-			Lg.w("no sent video definition => using default");
-			videoSize = mLinphoneCore.getPreferredVideoDefinition();
-		}
-
-		int width = videoSize.getWidth();
-		int height = videoSize.getHeight();
-
-		Lg.w("*** ficken *** width: ", width, " height: ", height);
-
-		// private static VideoDefinition getVideoPreviewSize(final Object videoWindow)
-
-		return new VideoSize(width, height);
-	}
-
-
 
 	public void setVideoPreviewWindow(final Object videoPreviewWindow)
 	{

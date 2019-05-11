@@ -47,7 +47,6 @@ import java.util.Set;
 
 import org.simlar.R;
 import org.simlar.helper.PermissionsHelper;
-import org.simlar.helper.VideoSize;
 import org.simlar.helper.VideoState;
 import org.simlar.logging.Lg;
 import org.simlar.proximityscreenlocker.ProximityScreenLocker;
@@ -456,12 +455,6 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	{
 		Lg.i("onCaptureViewClick");
 		mCommunicator.getService().toggleCamera();
-	}
-
-	@Override
-	public VideoSize getVideoPreviewSize()
-	{
-		return mCommunicator.getService().getVideoPreviewSize();
 	}
 
 	private void startVideo()

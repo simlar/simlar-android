@@ -48,7 +48,6 @@ import org.simlar.helper.CallEndReason;
 import org.simlar.helper.FileHelper;
 import org.simlar.helper.FileHelper.NotInitedException;
 import org.simlar.helper.NetworkQuality;
-import org.simlar.helper.VideoSize;
 import org.simlar.helper.VideoState;
 import org.simlar.helper.Volumes;
 import org.simlar.helper.Volumes.MicrophoneStatus;
@@ -245,11 +244,6 @@ public final class LinphoneManager extends CoreListenerStub
 	public void toggleCamera()
 	{
 		mLinphoneHandler.toggleCamera();
-	}
-
-	public VideoSize getVideoPreviewSize()
-	{
-		return mLinphoneHandler.getVideoPreviewSize();
 	}
 
 	@Lg.Anonymize
