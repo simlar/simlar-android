@@ -25,8 +25,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -38,6 +36,12 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.Calendar;
+import java.util.Date;
+
 import org.simlar.R;
 import org.simlar.helper.CreateAccountStatus;
 import org.simlar.helper.FlavourHelper;
@@ -48,9 +52,6 @@ import org.simlar.logging.Lg;
 import org.simlar.service.SimlarServiceCommunicator;
 import org.simlar.service.SimlarStatus;
 import org.simlar.utils.Util;
-
-import java.util.Calendar;
-import java.util.Date;
 
 public final class CreateAccountActivity extends AppCompatActivity
 {

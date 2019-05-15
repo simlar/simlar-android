@@ -21,6 +21,7 @@
 package org.simlar.service;
 
 import org.linphone.core.RegistrationState;
+
 import org.simlar.R;
 
 public enum SimlarStatus

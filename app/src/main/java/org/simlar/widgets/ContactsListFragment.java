@@ -21,16 +21,18 @@
 package org.simlar.widgets;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ListView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.ListFragment;
 
 import org.simlar.R;
 import org.simlar.helper.ContactDataComplete;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
+@SuppressWarnings("WeakerAccess")
 public final class ContactsListFragment extends ListFragment
 {
 	@Override

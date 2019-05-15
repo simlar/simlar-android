@@ -23,10 +23,10 @@ package org.simlar.helper;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import org.simlar.utils.Util;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import org.simlar.utils.Util;
 
 public final class PreferencesHelper
 {

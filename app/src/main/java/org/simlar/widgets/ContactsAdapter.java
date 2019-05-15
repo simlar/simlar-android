@@ -21,22 +21,23 @@
 package org.simlar.widgets;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import org.simlar.R;
-import org.simlar.helper.ContactDataComplete;
-import org.simlar.utils.Util;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Set;
+
+import org.simlar.R;
+import org.simlar.helper.ContactDataComplete;
+import org.simlar.utils.Util;
 
 final class ContactsAdapter extends ArrayAdapter<ContactDataComplete>
 {

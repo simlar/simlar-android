@@ -21,7 +21,7 @@
 
 package org.simlar.service;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
 public final class ServiceActivities
 {

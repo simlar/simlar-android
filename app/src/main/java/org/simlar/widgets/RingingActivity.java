@@ -22,7 +22,6 @@ package org.simlar.widgets;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
@@ -32,14 +31,16 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.simlar.R;
 import org.simlar.logging.Lg;
 import org.simlar.service.SimlarCallState;
 import org.simlar.service.SimlarServiceCommunicator;
 import org.simlar.utils.Util;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public final class RingingActivity extends AppCompatActivity
 {

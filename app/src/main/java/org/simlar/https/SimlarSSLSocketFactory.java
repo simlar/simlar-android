@@ -22,9 +22,6 @@ package org.simlar.https;
 
 import android.text.TextUtils;
 
-import org.simlar.helper.FileHelper;
-import org.simlar.logging.Lg;
-
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -47,6 +44,9 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
+
+import org.simlar.helper.FileHelper;
+import org.simlar.logging.Lg;
 
 @SuppressWarnings("Singleton")
 final class SimlarSSLSocketFactory extends SSLSocketFactory

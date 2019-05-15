@@ -24,9 +24,10 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.text.Html;
 import android.text.Spanned;
+
+import androidx.annotation.NonNull;
 
 import java.io.IOException;
 import java.io.InputStream;

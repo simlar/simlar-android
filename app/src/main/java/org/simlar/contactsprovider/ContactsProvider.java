@@ -31,6 +31,14 @@ import android.os.AsyncTask;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import org.simlar.helper.ContactData;
 import org.simlar.helper.ContactDataComplete;
 import org.simlar.helper.ContactStatus;
@@ -42,14 +50,6 @@ import org.simlar.helper.SimlarNumber;
 import org.simlar.https.GetContactsStatus;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 public final class ContactsProvider
 {

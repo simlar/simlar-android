@@ -20,7 +20,7 @@
 
 package org.simlar.helper;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
 @SuppressWarnings("ClassOnlyUsedInOnePackage")
 public final class GooglePlayServicesHelper

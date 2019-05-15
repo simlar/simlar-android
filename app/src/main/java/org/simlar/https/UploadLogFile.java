@@ -27,13 +27,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.support.v7.app.AlertDialog;
 
-import org.simlar.R;
-import org.simlar.helper.ServerSettings;
-import org.simlar.helper.Version;
-import org.simlar.logging.Lg;
-import org.simlar.utils.Util;
+import androidx.appcompat.app.AlertDialog;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -45,6 +40,12 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import org.simlar.R;
+import org.simlar.helper.ServerSettings;
+import org.simlar.helper.Version;
+import org.simlar.logging.Lg;
+import org.simlar.utils.Util;
 
 public final class UploadLogFile
 {

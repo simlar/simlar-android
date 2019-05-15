@@ -25,11 +25,11 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat;
 import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 
-import org.simlar.logging.Lg;
-import org.simlar.utils.Util;
-
 import java.util.HashSet;
 import java.util.Set;
+
+import org.simlar.logging.Lg;
+import org.simlar.utils.Util;
 
 public final class SimlarNumber
 {
