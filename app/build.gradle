@@ -79,6 +79,7 @@ android {
         checkAllWarnings true
         disable "GoogleAppIndexingWarning", "UnknownNullness", "SyntheticAccessor", "DuplicateStrings"
         warningsAsErrors true
+        warning "NewerVersionAvailable"
     }
 }
 
