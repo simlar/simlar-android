@@ -22,10 +22,9 @@ package org.simlar.widgets;
 
 
 import android.content.Context;
-import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.SurfaceView;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -40,14 +39,13 @@ class VideoFragment extends Fragment
 	private Listener mListener = null;
 
 	// gui elements
-	private GLSurfaceView mVideoView = null;
-	private SurfaceView mCaptureView = null;
+	private TextureView mVideoView = null;
+	private TextureView mCaptureView = null;
 	private View mInitializingView = null;
 
 	public interface Listener
 	{
-		void setVideoWindows(final SurfaceView videoView, final SurfaceView captureView);
-		void enableVideoWindow(final boolean enable);
+		void setVideoWindows(final TextureView videoView, final TextureView captureView);
 		void destroyVideoWindows();
 		void onVideoViewClick();
 		void onCaptureViewClick();
@@ -92,8 +90,6 @@ class VideoFragment extends Fragment
 		mCaptureView = view.findViewById(R.id.videoCaptureSurface);
 		mInitializingView = view.findViewById(R.id.layoutInitializingVideo);
 
-		fixZOrder();
-
 		if (mListener == null) {
 			Lg.e("onCreateView, no listener registered => not initializing video");
 		} else {
@@ -113,13 +109,6 @@ class VideoFragment extends Fragment
 		});
 
 		return view;
-	}
-
-	private void fixZOrder()
-	{
-		mVideoView.setZOrderOnTop(false);
-		mCaptureView.setZOrderOnTop(true);
-		mCaptureView.setZOrderMediaOverlay(true);
 	}
 
 	@Override
@@ -145,12 +134,6 @@ class VideoFragment extends Fragment
 	{
 		super.onStart();
 		Lg.i("onStart");
-
-		if (mVideoView != null) {
-			mVideoView.onResume();
-		}
-
-		enableVideoWindow(true);
 	}
 
 	@Override
@@ -171,25 +154,7 @@ class VideoFragment extends Fragment
 	public final void onStop()
 	{
 		Lg.i("onStop");
-
-		enableVideoWindow(false);
-
-		if (mVideoView != null) {
-			mVideoView.onPause();
-		}
-
 		super.onStop();
-	}
-
-	private void enableVideoWindow(final boolean enable)
-	{
-		if (mListener == null) {
-			Lg.e("no listener");
-			return;
-		}
-
-		Lg.i("enableVideoWindow enable=", enable);
-		mListener.enableVideoWindow(enable);
 	}
 
 	public final void setNowPlaying()

@@ -10,6 +10,13 @@ def getGitVersion = { ->
     }
 }
 
+repositories {
+    maven {
+        url "https://linphone.org/releases/maven_repository"
+        //url "https://linphone.org/snapshots/maven_repository"
+    }
+}
+
 android {
     compileSdkVersion 28
     buildToolsVersion "28.0.3"
@@ -73,7 +80,7 @@ dependencies {
     implementation "com.android.support:support-v4:${androidSupportVersion}"
     implementation "com.android.support:support-v13:${androidSupportVersion}"
     implementation "com.googlecode.libphonenumber:libphonenumber:8.10.12"
-    implementation fileTree(dir: "libs", include: ["liblinphone-sdk-release.aar"])
+    implementation "org.linphone:linphone-sdk-android:4.2"
 }
 
 if (useGoogleServices()) {
