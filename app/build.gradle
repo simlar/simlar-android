@@ -36,10 +36,12 @@ android {
     flavorDimensions "default"
 
     productFlavors {
-        push {
-            dimension "default"
-            versionName = android.defaultConfig.versionName
-            buildConfigField("boolean", "IS_FCM_ENABLED", "true")
+        if (useGoogleServices()) {
+            push {
+                dimension "default"
+                versionName = android.defaultConfig.versionName
+                buildConfigField("boolean", "IS_FCM_ENABLED", "true")
+            }
         }
 
         alwaysOnline {
@@ -49,9 +51,26 @@ android {
         }
     }
 
+
+    def keystoreFile = System.getenv("KEYSTORE_FILE")
+    def keystorePassword = System.getenv("KEYSTORE_PASSWORD")
+
+    signingConfigs {
+        release {
+            storeFile keystoreFile == null ? null : file(keystoreFile)
+            storePassword keystorePassword
+            keyAlias "simlar"
+            keyPassword keystorePassword
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled true
+            if (keystoreFile != null && keystorePassword != null) {
+                println("signing with keystore: " + keystoreFile)
+                signingConfig signingConfigs.release
+            }
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
@@ -75,8 +94,10 @@ ext {
 }
 
 dependencies {
-    pushImplementation "com.google.firebase:firebase-core:16.0.9"
-    pushImplementation "com.google.firebase:firebase-messaging:18.0.0"
+    if (useGoogleServices()) {
+        pushImplementation "com.google.firebase:firebase-core:16.0.9"
+        pushImplementation "com.google.firebase:firebase-messaging:18.0.0"
+    }
     implementation "com.android.support:appcompat-v7:${androidSupportVersion}"
     implementation "com.android.support:support-v4:${androidSupportVersion}"
     implementation "com.android.support:support-v13:${androidSupportVersion}"
