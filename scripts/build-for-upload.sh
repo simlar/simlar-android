@@ -18,7 +18,7 @@ if [ -z "${KEYSTORE_FILE}" ] ; then
 fi
 
 echo "using keystore ${KEYSTORE_FILE}"
-echo "enter password its password:"
+echo "enter its password:"
 declare -rx KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD:-"$( stty -echo; head -n 1; stty echo )"}
 
 
