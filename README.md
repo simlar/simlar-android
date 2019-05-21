@@ -44,7 +44,7 @@ Simlar heavily depends on [liblinphone](http://www.linphone.org/). In order to m
 ```
 ./scripts/bootstrap-liblinphone.sh origin/master
 ```
-Set make flags e.g. to run on multiple threads.
+The linphone-sdk uses cmake. You may set its environment variables e.g. to compile with multiple threads.
 ```
-time bash -c "MAKEFLAGS='-j32' ./scripts/bootstrap-liblinphone.sh master"
+CMAKE_BUILD_PARALLEL_LEVEL=32 ./scripts/bootstrap-liblinphone.sh
 ```
