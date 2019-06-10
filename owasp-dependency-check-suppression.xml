@@ -39,4 +39,13 @@
         <cve>CVE-2018-1000180</cve>
         <cve>CVE-2018-1000613</cve>
     </suppress>
+    <suppress>
+        <notes>
+            <![CDATA[
+                file name:intellij-core-26.4.1.jar
+            ]]>
+        </notes>
+        <gav regex="true">^com\.google\.protobuf:protobuf-java:.*$</gav>
+        <cve>CVE-2015-5237</cve>
+    </suppress>
 </suppressions>
