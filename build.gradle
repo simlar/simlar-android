@@ -4,7 +4,7 @@ apply plugin: "idea"
 
 buildscript {
     ext.useGoogleServices = { ->
-        return !project.hasProperty('no-google-services')
+        return !project.hasProperty("no-google-services")
     }
 
     repositories {
@@ -12,8 +12,8 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.1'
-        classpath "org.owasp:dependency-check-gradle:5.0.0-M2"
+        classpath "com.android.tools.build:gradle:3.4.1"
+        classpath "org.owasp:dependency-check-gradle:5.0.0"
 
         if (useGoogleServices()) {
             println("using google-services")
