@@ -28,4 +28,15 @@
         <cve>CVE-2018-11771</cve>
         <cve>CVE-2018-1324</cve>
     </suppress>
+    <suppress>
+        <notes>
+            <![CDATA[
+                file name: bcprov-jdk15on-1.56.jar
+            ]]>
+        </notes>
+        <gav regex="true">^org\.bouncycastle:bcprov-jdk15on:.*$</gav>
+        <cve>CVE-2017-13098</cve>
+        <cve>CVE-2018-1000180</cve>
+        <cve>CVE-2018-1000613</cve>
+    </suppress>
 </suppressions>
