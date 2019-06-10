@@ -39,8 +39,15 @@ Initially importing simlar-android in Android Studio, removes the inspection set
 git checkout .idea/
 ```
 
-### liblinphone ###
-Simlar heavily depends on [liblinphone](http://www.linphone.org/). In order to make it easy to start hacking on simlar-android, pre-compiled libs are checked in. However if you would like to compile it yourself, you should start with compiling [linphone-android](https://github.com/BelledonneCommunications/linphone-android). Please follow the build instructions there. Once you have managed to compile linphone-android on your system, here is a script for checking out, compile and integrate liblinphone into simlar-android.
+### linphone-sdk ###
+Simlar heavily depends on the [linphone-sdk](http://www.linphone.org/) formally known as liblinphone.
+Since version 4.2 Belledonne publishes it in a maven repository.
+However if you would like to compile it yourself, you should start with compiling the [linphone-sdk](https://gitlab.linphone.org/BC/public/linphone-sdk) for android.
+Once it compiles on your system, here is a script for checking out, compile and integrate the linphone-sdk into simlar-android.
 ```
 ./scripts/bootstrap-liblinphone.sh origin/master
+```
+The linphone-sdk uses cmake. You may set its environment variables e.g. to compile with multiple threads.
+```
+CMAKE_BUILD_PARALLEL_LEVEL=32 ./scripts/bootstrap-liblinphone.sh
 ```
