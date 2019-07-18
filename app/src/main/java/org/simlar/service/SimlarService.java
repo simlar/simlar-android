@@ -418,7 +418,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, SimlarNotificationChannel.MISSED_CALL.name());
 		notificationBuilder.setSmallIcon(R.drawable.ic_notification_missed_calls);
-		notificationBuilder.setLargeIcon(ContactsProvider.getContactPhotoBitmap(context, R.drawable.ic_launcher, photoId));
+		notificationBuilder.setLargeIcon(ContactsProvider.getContactPhotoBitmap(context, R.drawable.contact_picture, photoId));
 		notificationBuilder.setContentTitle(context.getString(R.string.missed_call_notification));
 		notificationBuilder.setContentText(name);
 		notificationBuilder.setContentIntent(activity);
@@ -446,7 +446,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, SimlarNotificationChannel.CALL.name());
 		notificationBuilder.setSmallIcon(FlavourHelper.isGcmEnabled() ? R.drawable.ic_notification_ongoing_call : mSimlarStatus.getNotificationIcon());
-		notificationBuilder.setLargeIcon(mSimlarCallState.getContactPhotoBitmap(this, R.drawable.ic_launcher));
+		notificationBuilder.setLargeIcon(mSimlarCallState.getContactPhotoBitmap(this, R.drawable.contact_picture));
 		notificationBuilder.setContentTitle(getString(R.string.app_name));
 		notificationBuilder.setContentText(createNotificationText());
 		notificationBuilder.setOngoing(true);
