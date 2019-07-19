@@ -2,7 +2,6 @@ language: android
 jdk: oraclejdk8
 
 before_install:
-  - yes | sdkmanager "platforms;android-28"
   - sudo apt-get update
   - sudo apt-get install -y mono-runtime
 
