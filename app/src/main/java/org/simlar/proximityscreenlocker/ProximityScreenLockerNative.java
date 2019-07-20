@@ -61,7 +61,10 @@ public final class ProximityScreenLockerNative implements ProximityScreenLocker
 	{
 		final PowerManager powerManager = Util.getSystemService(context, Context.POWER_SERVICE);
 		try {
-			final int proximityScreenOffWakeLock = (Integer) PowerManager.class.getDeclaredField("PROXIMITY_SCREEN_OFF_WAKE_LOCK").get(null);
+			final Integer proximityScreenOffWakeLock = (Integer) PowerManager.class.getDeclaredField("PROXIMITY_SCREEN_OFF_WAKE_LOCK").get(null);
+			if (proximityScreenOffWakeLock == null) {
+				return null;
+			}
 
 			if (!checkNativeSupport(powerManager, proximityScreenOffWakeLock)) {
 				return null;
@@ -81,12 +84,12 @@ public final class ProximityScreenLockerNative implements ProximityScreenLocker
 		try {
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
 				final Method method = powerManager.getClass().getDeclaredMethod("isWakeLockLevelSupported", int.class);
-				return (Boolean) method.invoke(powerManager, proximityScreenOffWakeLock);
+				return Util.defaultTo((Boolean) method.invoke(powerManager, proximityScreenOffWakeLock), false);
 			}
 
 			@SuppressWarnings("JavaReflectionMemberAccess") @SuppressLint("PrivateApi") // the use of a private API is intended here
 			final Method method = powerManager.getClass().getDeclaredMethod("getSupportedWakeLockFlags");
-			final int supportedFlags = (Integer) method.invoke(powerManager);
+			final int supportedFlags = Util.defaultTo((Integer) method.invoke(powerManager), 0);
 			return (supportedFlags & proximityScreenOffWakeLock) != 0x0;
 		} catch (final NoSuchMethodException ex) {
 			Lg.ex(ex, "NoSuchMethodException while checking native support");
