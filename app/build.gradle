@@ -90,7 +90,7 @@ dependencyCheck {
 connectedCheck.dependsOn dependencyCheckAnalyze
 
 ext {
-    androidSupportVersion = "28.0.0"
+    androidSupportVersion = "1.0.0"
     liblinphoneSdk = "linphone-sdk-android-release.aar"
 }
 
@@ -99,9 +99,9 @@ dependencies {
         pushImplementation "com.google.firebase:firebase-core:16.0.9"
         pushImplementation "com.google.firebase:firebase-messaging:18.0.0"
     }
-    implementation "com.android.support:appcompat-v7:${androidSupportVersion}"
-    implementation "com.android.support:support-v4:${androidSupportVersion}"
-    implementation "com.android.support:support-v13:${androidSupportVersion}"
+    implementation "androidx.appcompat:appcompat:1.0.2"
+    implementation "androidx.legacy:legacy-support-v4:${androidSupportVersion}"
+    implementation "androidx.legacy:legacy-support-v13:${androidSupportVersion}"
     implementation "com.googlecode.libphonenumber:libphonenumber:8.10.15"
 
     if (new File("${rootDir}/app/libs/${liblinphoneSdk}").exists()) {
