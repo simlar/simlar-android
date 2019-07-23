@@ -84,7 +84,7 @@ public final class ProximityScreenLockerNative implements ProximityScreenLocker
 		try {
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
 				final Method method = powerManager.getClass().getDeclaredMethod("isWakeLockLevelSupported", int.class);
-				return Util.defaultTo((Boolean) method.invoke(powerManager, proximityScreenOffWakeLock), false);
+				return Boolean.TRUE.equals(method.invoke(powerManager, proximityScreenOffWakeLock));
 			}
 
 			@SuppressWarnings("JavaReflectionMemberAccess") @SuppressLint("PrivateApi") // the use of a private API is intended here
