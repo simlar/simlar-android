@@ -140,13 +140,7 @@ public final class Util
 		return service;
 	}
 
-	public static boolean defaultTo(final Boolean value, final boolean defaultValue)
-	{
-		return value == null ? defaultValue : value;
-	}
-
-	public static int defaultTo(final Integer value, final int defaultValue)
-	{
+	public static <T> T defaultIfNull(final T value, final T defaultValue) {
 		return value == null ? defaultValue : value;
 	}
 }

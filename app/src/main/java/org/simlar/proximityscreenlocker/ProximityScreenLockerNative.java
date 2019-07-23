@@ -89,7 +89,7 @@ public final class ProximityScreenLockerNative implements ProximityScreenLocker
 
 			@SuppressWarnings("JavaReflectionMemberAccess") @SuppressLint("PrivateApi") // the use of a private API is intended here
 			final Method method = powerManager.getClass().getDeclaredMethod("getSupportedWakeLockFlags");
-			final int supportedFlags = Util.defaultTo((Integer) method.invoke(powerManager), 0);
+			final int supportedFlags = Util.defaultIfNull((Integer) method.invoke(powerManager), 0);
 			return (supportedFlags & proximityScreenOffWakeLock) != 0x0;
 		} catch (final NoSuchMethodException ex) {
 			Lg.ex(ex, "NoSuchMethodException while checking native support");
