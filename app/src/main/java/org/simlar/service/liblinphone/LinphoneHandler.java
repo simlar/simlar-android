@@ -118,6 +118,7 @@ final class LinphoneHandler
 		mLinphoneCore.start();
 		mLinphoneCore.setUserAgent("Simlar", Version.getVersionName(context));
 
+		mLinphoneCore.enableIpv6(false);
 		mLinphoneCore.setNatPolicy(createNatPolicy());
 
 		// Use TLS for registration with random port
