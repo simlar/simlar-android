@@ -96,8 +96,11 @@ ext {
 
 dependencies {
     if (useGoogleServices()) {
-        pushImplementation("com.google.firebase:firebase-core:16.0.9")
-        pushImplementation("com.google.firebase:firebase-messaging:18.0.0")
+        pushImplementation("com.google.firebase:firebase-messaging:18.0.0") {
+            exclude group: "com.google.firebase", module: "firebase-core"
+            exclude group: "com.google.firebase", module: "firebase-analytics"
+            exclude group: "com.google.firebase", module: "firebase-measurement-connector"
+        }
     }
     implementation("androidx.appcompat:appcompat:1.1.0")
     implementation("androidx.legacy:legacy-support-v4:${androidSupportVersion}")
