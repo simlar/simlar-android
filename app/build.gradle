@@ -96,19 +96,19 @@ ext {
 
 dependencies {
     if (useGoogleServices()) {
-        pushImplementation "com.google.firebase:firebase-core:16.0.9"
-        pushImplementation "com.google.firebase:firebase-messaging:18.0.0"
+        pushImplementation("com.google.firebase:firebase-core:16.0.9")
+        pushImplementation("com.google.firebase:firebase-messaging:18.0.0")
     }
-    implementation "androidx.appcompat:appcompat:1.0.2"
-    implementation "androidx.legacy:legacy-support-v4:${androidSupportVersion}"
-    implementation "androidx.legacy:legacy-support-v13:${androidSupportVersion}"
-    implementation "com.googlecode.libphonenumber:libphonenumber:8.10.17"
+    implementation("androidx.appcompat:appcompat:1.0.2")
+    implementation("androidx.legacy:legacy-support-v4:${androidSupportVersion}")
+    implementation("androidx.legacy:legacy-support-v13:${androidSupportVersion}")
+    implementation("com.googlecode.libphonenumber:libphonenumber:8.10.17")
 
     if (new File("${rootDir}/app/libs/${liblinphoneSdk}").exists()) {
         println "using local linphone sdk build: ${liblinphoneSdk}"
         implementation fileTree(dir: "libs", include: ["${liblinphoneSdk}"])
     } else {
-        implementation "org.linphone:linphone-sdk-android:4.2"
+        implementation("org.linphone:linphone-sdk-android:4.2")
     }
 }
 
