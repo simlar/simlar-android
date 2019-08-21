@@ -114,10 +114,3 @@ dependencies {
         implementation("org.linphone:linphone-sdk-android:4.2")
     }
 }
-
-if (useGoogleServices()) {
-    println("using push notifications")
-    apply plugin: "com.google.gms.google-services"
-} else {
-    println("not using push notifications")
-}

@@ -14,13 +14,6 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.0'
         classpath "org.owasp:dependency-check-gradle:5.2.1"
-
-        if (useGoogleServices()) {
-            println("using google-services")
-            classpath "com.google.gms:google-services:4.0.1"
-        } else {
-            println("not using google-services")
-        }
     }
 }
 
@@ -41,8 +34,8 @@ idea {
         excludeDirs += file("liblinphone")
         excludeDirs += file("scripts")
         excludeDirs += file(".travis.yml")
-        excludeDirs += file("app/google-services.json")
         excludeDirs += file("owasp-dependency-check-suppression.xml")
         excludeDirs += file("gradlew")
+        excludeDirs += file("app/src/push/res/values/firebase-cloud-messaging.xml")
     }
 }
