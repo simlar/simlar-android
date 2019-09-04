@@ -13,5 +13,5 @@ android:
     - android-29
     - extra
 
-after_failure:
+after_script:
     - cat app/build/reports/lint-results*.xml
