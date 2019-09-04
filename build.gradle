@@ -37,12 +37,10 @@ task clean(type: Delete) {
 
 idea {
     module {
-        excludeDirs += file("build/intermediates/dex-cache")
         excludeDirs += file("app/src/main/res/raw/")
         excludeDirs += file("liblinphone")
         excludeDirs += file("scripts")
         excludeDirs += file(".travis.yml")
-        excludeDirs += file("app/build/intermediates/manifest/androidTest/")
         excludeDirs += file("app/google-services.json")
         excludeDirs += file("owasp-dependency-check-suppression.xml")
         excludeDirs += file("gradlew")
