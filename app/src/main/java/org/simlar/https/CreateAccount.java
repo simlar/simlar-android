@@ -84,6 +84,7 @@ public final class CreateAccount
 			case 22:
 				return R.string.create_account_activity_message_wrong_telephone_number;
 			case 23: // Too many requests
+				//noinspection DuplicateBranchesInSwitch
 				return R.string.create_account_activity_message_not_possible;
 			case 24:
 				return R.string.create_account_activity_message_sms;
