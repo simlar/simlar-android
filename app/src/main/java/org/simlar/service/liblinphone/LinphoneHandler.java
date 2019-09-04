@@ -397,7 +397,6 @@ final class LinphoneHandler
 		case Warning:
 			return Log.WARN;
 		case Error:
-			return Log.ERROR;
 		case Fatal:
 		default:
 			return Log.ERROR;
