@@ -67,7 +67,7 @@ public final class ContactsListFragment extends ListFragment
 	}
 
 	@Override
-	public void onListItemClick(final ListView l, final View v, final int position, final long id)
+	public void onListItemClick(@NonNull final ListView l, @NonNull final View v, final int position, final long id)
 	{
 		final String simlarId = getSimlarId(position);
 		if (Util.isNullOrEmpty(simlarId)) {
