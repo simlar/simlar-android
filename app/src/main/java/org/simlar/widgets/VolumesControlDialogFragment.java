@@ -57,7 +57,7 @@ final class VolumesControlDialogFragment extends DialogFragment
 	}
 
 	@Override
-	public void onAttach(final Context context)
+	public void onAttach(@NonNull final Context context)
 	{
 		super.onAttach(context);
 
