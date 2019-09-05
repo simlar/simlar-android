@@ -233,5 +233,7 @@ public final class VerifyNumberActivity extends AppCompatActivity
 				startActivity(new Intent(this, MainActivity.class));
 			}
 		}
+
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 }
