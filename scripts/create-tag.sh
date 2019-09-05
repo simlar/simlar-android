@@ -47,8 +47,6 @@ git tag -s "${SIMLAR_VERSION}" -m "Version: ${SIMLAR_VERSION}"
 git push origin "${SIMLAR_VERSION}"
 git checkout "${SIMLAR_VERSION}"
 
-"${BUILD_SCRIPT}"
-
-echo "you may now publish simlar.apk at:"
-echo "  https://play.google.com/apps/publish/"
+echo "you may now run:"
+echo "  ${BUILD_SCRIPT}"
 echo
