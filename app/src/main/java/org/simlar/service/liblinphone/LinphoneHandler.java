@@ -25,6 +25,7 @@ import android.util.Log;
 
 import java.util.Random;
 
+import org.linphone.core.AVPFMode;
 import org.linphone.core.Call;
 import org.linphone.core.CallParams;
 import org.linphone.core.Core;
@@ -150,6 +151,7 @@ final class LinphoneHandler
 		mLinphoneCore.enableEchoLimiter(false);
 
 		// enable video
+		mLinphoneCore.setAvpfMode(AVPFMode.Enabled);
 		if (mLinphoneCore.videoSupported()) {
 			mLinphoneCore.enableVideoCapture(true);
 			mLinphoneCore.enableVideoDisplay(true);
