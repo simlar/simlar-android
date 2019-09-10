@@ -61,7 +61,7 @@ public final class NoContactPermissionFragment extends Fragment
 	}
 
 	@Override
-	public void onAttach(final Context context)
+	public void onAttach(@NonNull final Context context)
 	{
 		super.onAttach(context);
 		Lg.i("onAttach");

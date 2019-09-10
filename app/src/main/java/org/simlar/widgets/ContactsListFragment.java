@@ -45,14 +45,7 @@ public final class ContactsListFragment extends ListFragment
 	@Override
 	public void onViewCreated(@NonNull final View view, final Bundle savedInstanceState)
 	{
-		final ListView listView = getListView();
-
-		if (listView == null) {
-			Lg.e("no list view");
-			return;
-		}
-
-		listView.setDivider(null);
+		getListView().setDivider(null);
 	}
 
 	private String getSimlarId(final int position)
@@ -67,7 +60,7 @@ public final class ContactsListFragment extends ListFragment
 	}
 
 	@Override
-	public void onListItemClick(final ListView l, final View v, final int position, final long id)
+	public void onListItemClick(@NonNull final ListView l, @NonNull final View v, final int position, final long id)
 	{
 		final String simlarId = getSimlarId(position);
 		if (Util.isNullOrEmpty(simlarId)) {

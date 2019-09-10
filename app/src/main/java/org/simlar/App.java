@@ -25,6 +25,8 @@ import android.app.Application;
 import android.content.res.Configuration;
 import android.os.Build;
 
+import androidx.annotation.NonNull;
+
 import org.simlar.helper.FileHelper;
 import org.simlar.helper.PreferencesHelper;
 import org.simlar.helper.Version;
@@ -62,7 +64,7 @@ public final class App extends Application
 	}
 
 	@Override
-	public void onConfigurationChanged(final Configuration newConfig)
+	public void onConfigurationChanged(@NonNull final Configuration newConfig)
 	{
 		super.onConfigurationChanged(newConfig);
 		Lg.i("onConfigurationChanged: ", newConfig);

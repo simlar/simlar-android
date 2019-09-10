@@ -52,7 +52,7 @@ class VideoFragment extends Fragment
 	}
 
 	@Override
-	public final void onAttach(final Context context)
+	public final void onAttach(@NonNull final Context context)
 	{
 		super.onAttach(context);
 		Lg.i("onAttach");
