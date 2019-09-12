@@ -34,7 +34,7 @@ import androidx.fragment.app.Fragment;
 import org.simlar.R;
 import org.simlar.logging.Lg;
 
-class VideoFragment extends Fragment
+public class VideoFragment extends Fragment
 {
 	private Listener mListener = null;
 
