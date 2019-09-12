@@ -38,3 +38,6 @@ mv ./app/build/outputs/apk/push/release/app-push-release.apk Simlar.apk
 echo
 echo
 echo "successfully created: Simlar-alwaysOnline.apk and Simlar.apk"
+echo "you may now publish simlar.apk at:"
+echo "  https://play.google.com/apps/publish/"
+echo
