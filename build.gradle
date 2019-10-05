@@ -12,8 +12,8 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.0'
-        classpath "org.owasp:dependency-check-gradle:5.2.1"
+        classpath "com.android.tools.build:gradle:3.5.1"
+        classpath "org.owasp:dependency-check-gradle:5.2.2"
     }
 }
 
