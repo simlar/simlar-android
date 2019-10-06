@@ -10,9 +10,10 @@ declare -ri VERSION_MINOR=${2?${USAGE}}
 declare -ri VERSION_BUGFIX=${3?${USAGE}}
 declare -r  BRANCH=${4:-"master"}
 
-declare -r BUILD_SCRIPT="$(dirname $(readlink -f $0))/build-for-upload.sh"
-declare -r UPDATE_VERSION_CODE_SCRIPT="$(dirname $(readlink -f $0))/update-build-gradle-versionCode.sh"
-declare -r APP_BUILD_GRADLE="$(dirname $(readlink -f $0))/../app/build.gradle"
+declare -r PROJECT_DIR="$(dirname $(readlink -f $0))/.."
+declare -r BUILD_SCRIPT="${PROJECT_DIR}/scripts/build-for-upload.sh"
+declare -r UPDATE_VERSION_CODE_SCRIPT="${PROJECT_DIR}/scripts/update-build-gradle-versionCode.sh"
+declare -r APP_BUILD_GRADLE="${PROJECT_DIR}/app/build.gradle"
 
 declare -r SIMLAR_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_BUGFIX}"
 echo "creating tag: '${SIMLAR_VERSION}'"
