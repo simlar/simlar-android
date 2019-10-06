@@ -26,7 +26,6 @@ public final class Version
 		return versionName;
 	}
 
-	@SuppressWarnings("unused") // is only used in flavour push
 	public static int getVersionCode(final Context context)
 	{
 		return getPackageInfo(context).versionCode;
