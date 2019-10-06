@@ -11,8 +11,8 @@ declare -ri VERSION_BUGFIX=${3?${USAGE}}
 declare -r  BRANCH=${4:-"master"}
 
 declare -r BUILD_SCRIPT="$(dirname $(readlink -f $0))/build-for-upload.sh"
-declare -r UPDATE_MANIFEST_SCRIPT="$(dirname $(readlink -f $0))/update-android-manifest.sh"
-declare -r ANDROID_MANIFEST="$(dirname $(readlink -f $0))/../app/src/main/AndroidManifest.xml"
+declare -r UPDATE_VERSION_CODE_SCRIPT="$(dirname $(readlink -f $0))/update-build-gradle-versionCode.sh"
+declare -r APP_BUILD_GRADLE="$(dirname $(readlink -f $0))/../app/build.gradle"
 
 declare -r SIMLAR_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_BUGFIX}"
 echo "creating tag: '${SIMLAR_VERSION}'"
@@ -28,17 +28,17 @@ git fetch
 git fetch --tags
 git pull --rebase origin "${BRANCH}"
 
-"${UPDATE_MANIFEST_SCRIPT}" "${ANDROID_MANIFEST}"
+"${UPDATE_VERSION_CODE_SCRIPT}"
 
-git add "${ANDROID_MANIFEST}"
-git commit -S -m "[AndroidManifest] increased versionCode for release ${SIMLAR_VERSION}"
+git add "${APP_BUILD_GRADLE}"
+git commit -S -m "[gradle] increased versionCode for release ${SIMLAR_VERSION}"
 git push origin "${BRANCH}":"${BRANCH}"
 
 if [ "${BRANCH}" != "master" ] ; then
-	declare -r MANIFEST_COMMIT=$(git rev-parse --verify HEAD)
+	declare -r VERSION_CODE_COMMIT=$(git rev-parse --verify HEAD)
 	git checkout master
 	git pull --rebase
-	git cherry-pick "${MANIFEST_COMMIT}"
+	git cherry-pick "${VERSION_CODE_COMMIT}"
 	git push origin master
 	git checkout "${BRANCH}"
 fi
