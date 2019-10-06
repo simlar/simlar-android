@@ -52,7 +52,7 @@ public final class App extends Application
 		SimlarService.initActivities(new ServiceActivities(MainActivity.class, RingingActivity.class, CallActivity.class));
 		SimlarNotificationChannel.createNotificationChannels(this);
 
-		Lg.i("simlar started with version=", Version.getVersionName(this),
+		Lg.i("simlar started with versionCode=", Version.getVersionCode(this), " version=", Version.getVersionName(this),
 				" on device: ", Build.MANUFACTURER, " ", Build.MODEL, " (", Build.DEVICE, ") with android version=", Build.VERSION.RELEASE);
 	}
 
