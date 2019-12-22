@@ -23,6 +23,7 @@ package org.simlar.service;
 
 import android.content.Intent;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -51,7 +52,7 @@ public final class FirebaseMessageReceiver extends FirebaseMessagingService
 	}
 
 	@Override
-	public void onNewToken(final String token)
+	public void onNewToken(@NonNull final String token)
 	{
 		Lg.i("onTokenRefresh: ", token);
 		sendToServer(token);
