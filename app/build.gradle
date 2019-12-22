@@ -12,8 +12,7 @@ def getGitVersion = { ->
 
 repositories {
     maven {
-        url "https://linphone.org/releases/maven_repository"
-        //url "https://linphone.org/snapshots/maven_repository"
+        url "https://linphone.org/maven_repository/"
     }
 }
 
@@ -93,6 +92,7 @@ connectedCheck.dependsOn dependencyCheckAnalyze
 ext {
     androidSupportVersion = "1.0.0"
     liblinphoneSdk = "linphone-sdk-android-release.aar"
+    liblinphoneVersion = "4.3.0.1+b273def"
 }
 
 dependencies {
@@ -112,6 +112,7 @@ dependencies {
         println "using local linphone sdk build: ${liblinphoneSdk}"
         implementation fileTree(dir: "libs", include: ["${liblinphoneSdk}"])
     } else {
-        implementation("org.linphone:linphone-sdk-android:4.2")
+        debugImplementation("org.linphone:linphone-sdk-android-debug:${liblinphoneVersion}")
+        releaseImplementation("org.linphone:linphone-sdk-android:${liblinphoneVersion}")
     }
 }
