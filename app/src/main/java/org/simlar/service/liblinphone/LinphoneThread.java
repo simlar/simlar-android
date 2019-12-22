@@ -701,6 +701,12 @@ public final class LinphoneThread implements Runnable, CoreListener
 	}
 
 	@Override
+	public void onMessageSent(final Core core, final ChatRoom chatRoom, final ChatMessage chatMessage)
+	{
+		Lg.w("onMessageSent chatRoom=", chatRoom, " chatMessage=", chatMessage);
+	}
+
+	@Override
 	public void onTransferStateChanged(final Core lc, final Call call, final Call.State state)
 	{
 		Lg.w("onTransferStateChanged number=", new CallLogger(call), " State=", state);
@@ -710,6 +716,12 @@ public final class LinphoneThread implements Runnable, CoreListener
 	public void onInfoReceived(final Core lc, final Call call, final InfoMessage info)
 	{
 		Lg.w("onInfoReceived number=", new CallLogger(call), " InfoMessage=", info.getContent().getStringBuffer());
+	}
+
+	@Override
+	public void onChatRoomRead(final Core core, final ChatRoom chatRoom)
+	{
+		Lg.w("onChatRoomRead chatRoom=", chatRoom);
 	}
 
 	@Override
@@ -761,6 +773,12 @@ public final class LinphoneThread implements Runnable, CoreListener
 	public void onLogCollectionUploadProgressIndication(final Core lc, final int offset, final int total)
 	{
 		Lg.w("onLogCollectionUploadProgressIndication: offset=", offset, " total=", total);
+	}
+
+	@Override
+	public void onChatRoomSubjectChanged(final Core core, final ChatRoom chatRoom)
+	{
+		Lg.w("onChatRoomSubjectChanged chatRoom=", chatRoom);
 	}
 
 	@Override
