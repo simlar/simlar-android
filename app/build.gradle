@@ -106,7 +106,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.1.0")
     implementation("androidx.legacy:legacy-support-v4:${androidSupportVersion}")
     implementation("androidx.legacy:legacy-support-v13:${androidSupportVersion}")
-    implementation("com.googlecode.libphonenumber:libphonenumber:8.11.3")
+    implementation("com.googlecode.libphonenumber:libphonenumber:8.11.4")
 
     if (new File("${rootDir}/app/libs/${liblinphoneSdk}").exists()) {
         println "using local linphone sdk build: ${liblinphoneSdk}"
