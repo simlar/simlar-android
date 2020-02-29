@@ -19,8 +19,6 @@
  *
  */
 
-apply plugin: "idea"
-
 buildscript {
     ext.useGoogleServices = { ->
         return !project.hasProperty("no-google-services")
@@ -34,6 +32,10 @@ buildscript {
         classpath "com.android.tools.build:gradle:3.6.1"
         classpath "org.owasp:dependency-check-gradle:5.3.0"
     }
+}
+
+plugins {
+    id "idea"
 }
 
 allprojects {

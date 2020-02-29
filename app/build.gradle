@@ -19,8 +19,10 @@
  *
  */
 
-apply plugin: "com.android.application"
-apply plugin: "org.owasp.dependencycheck"
+plugins {
+    id "com.android.application"
+    id "org.owasp.dependencycheck"
+}
 
 def getGitVersion = { ->
     try {
