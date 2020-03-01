@@ -14,4 +14,7 @@
         <ignore path="src/main/res/drawable-xxhdpi/background_tile.webp" />
         <ignore path="src/main/res/drawable-xxxhdpi/background_tile.webp" />
     </issue>
+    <issue id="UnusedResources">
+        <ignore path="src/push/res/values/firebase-cloud-messaging.xml" />
+    </issue>
 </lint>
