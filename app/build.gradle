@@ -21,6 +21,7 @@
 
 plugins {
     id "com.android.application"
+    id "com.github.triplet.play" version "2.7.2"
     id "org.owasp.dependencycheck"
 }
 
@@ -104,6 +105,10 @@ android {
         warningsAsErrors true
         warning "NewerVersionAvailable"
     }
+}
+
+play {
+    serviceAccountCredentials = file("simlar-play-publisher-credentials.json")
 }
 
 dependencyCheck {
