@@ -58,5 +58,11 @@ idea {
         excludeDirs += file("owasp-dependency-check-suppression.xml")
         excludeDirs += file("gradlew")
         excludeDirs += file("app/src/push/res/values/firebase-cloud-messaging.xml")
+        excludeDirs += file("app/src/push/play/listings/de-DE")
+        excludeDirs += file("app/src/push/play/listings/es-419")
+        excludeDirs += file("app/src/push/play/listings/es-ES")
+        excludeDirs += file("app/src/push/play/release-notes/de-DE")
+        excludeDirs += file("app/src/push/play/release-notes/es-419")
+        excludeDirs += file("app/src/push/play/release-notes/es-ES")
     }
 }
