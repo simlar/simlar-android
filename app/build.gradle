@@ -105,11 +105,18 @@ android {
         warningsAsErrors true
         warning "NewerVersionAvailable"
     }
+
+    playConfigs {
+        push {
+            enabled = true
+        }
+    }
 }
 
 play {
     def publisherCredentials = System.getenv("PUBLISHER_CREDENTIALS")
     serviceAccountCredentials = file(publisherCredentials ? publisherCredentials : "simlar-play-publisher-credentials.json")
+    enabled = false
 }
 
 dependencyCheck {
