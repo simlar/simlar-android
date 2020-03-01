@@ -19,8 +19,11 @@
  *
  */
 
-apply plugin: "com.android.application"
-apply plugin: "org.owasp.dependencycheck"
+plugins {
+    id "com.android.application"
+    id "com.github.triplet.play" version "2.7.2"
+    id "org.owasp.dependencycheck"
+}
 
 def getGitVersion = { ->
     try {
@@ -102,6 +105,19 @@ android {
         warningsAsErrors true
         warning "NewerVersionAvailable"
     }
+
+    playConfigs {
+        push {
+            enabled = true
+        }
+    }
+}
+
+play {
+    def publisherCredentials = System.getenv("PUBLISHER_CREDENTIALS")
+    serviceAccountCredentials = file(publisherCredentials ? publisherCredentials : "simlar-play-publisher-credentials.json")
+    enabled = false
+    track = "alpha"
 }
 
 dependencyCheck {
