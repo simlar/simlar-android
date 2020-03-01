@@ -108,7 +108,8 @@ android {
 }
 
 play {
-    serviceAccountCredentials = file("simlar-play-publisher-credentials.json")
+    def publisherCredentials = System.getenv("PUBLISHER_CREDENTIALS")
+    serviceAccountCredentials = file(publisherCredentials ? publisherCredentials : "simlar-play-publisher-credentials.json")
 }
 
 dependencyCheck {
