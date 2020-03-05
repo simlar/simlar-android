@@ -36,7 +36,8 @@ import org.simlar.R;
 import org.simlar.helper.CallConnectionDetails;
 import org.simlar.logging.Lg;
 
-final class ConnectionDetailsDialogFragment extends DialogFragment
+@SuppressWarnings("WeakerAccess") // class must be public otherwise crashes
+public final class ConnectionDetailsDialogFragment extends DialogFragment
 {
 	// gui elements
 	private TextView mTextViewQuality = null;
