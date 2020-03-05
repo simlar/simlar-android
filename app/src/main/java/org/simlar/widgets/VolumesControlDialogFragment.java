@@ -37,7 +37,8 @@ import androidx.fragment.app.FragmentActivity;
 import org.simlar.R;
 import org.simlar.logging.Lg;
 
-final class VolumesControlDialogFragment extends DialogFragment
+@SuppressWarnings("WeakerAccess") // class must be public otherwise crashes
+public final class VolumesControlDialogFragment extends DialogFragment
 {
 	private Listener mListener = null;
 
