@@ -10,9 +10,9 @@ declare -r  PROJECT_DIR="$(dirname $(readlink -f $0))/.."
 declare -r  GRADLEW="${PROJECT_DIR}/gradlew"
 
 if [ -z "${KEYSTORE_FILE}" ] ; then
-	echo "Please set give parameter keystore, e.g.:"
+	echo "Please add parameter keystore, e.g.:"
 	echo "  $0 ~/dev/android/simlar-release-key.keystore"
-	echo "or set the environment variable KEYSTORE, e.g.:"
+	echo "or set the environment variable SIMLAR_KEYSTORE, e.g.:"
 	echo "  export SIMLAR_KEYSTORE=~/dev/android/simlar-release-key.keystore ; $0"
 	exit
 fi
