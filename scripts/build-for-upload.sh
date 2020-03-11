@@ -13,7 +13,7 @@ if [ -z "${KEYSTORE_FILE}" ] ; then
 	echo "Please add parameter keystore, e.g.:"
 	echo "  $0 ~/dev/android/simlar-release-key.keystore"
 	echo "or set the environment variable SIMLAR_KEYSTORE, e.g.:"
-	echo "  export SIMLAR_KEYSTORE=~/dev/android/simlar-release-key.keystore ; $0"
+	echo "  export SIMLAR_KEYSTORE=~/dev/simlar/simlar-release-key.keystore ; $0"
 	exit
 fi
 
