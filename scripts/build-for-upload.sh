@@ -3,6 +3,7 @@
 ## exit if an error occurs or on unset variables
 set -eu -o pipefail
 
+declare -r  SKIP_PUBLISH_TO_PLAYSTORE=${SKIP_PUBLISH_TO_PLAYSTORE:-""}
 declare -r  SIMLAR_KEYSTORE=${SIMLAR_KEYSTORE:-""}
 declare -rx KEYSTORE_FILE=${1:-"${SIMLAR_KEYSTORE}"}
 
@@ -30,7 +31,11 @@ rm -f Simlar-alwaysOnline.apk
 "${GRADLEW}" clean assembleAlwaysOnlineRelease -Pno-google-services
 mv ./app/build/outputs/apk/alwaysOnline/release/app-alwaysOnline-release.apk Simlar-alwaysOnline.apk
 
-"${GRADLEW}" clean assemblePushRelease
+if [ -n "${SKIP_PUBLISH_TO_PLAYSTORE}" ] ; then
+	"${GRADLEW}" clean assemblePushRelease
+else
+	"${GRADLEW}" clean publishPushReleaseApk
+fi
 mv ./app/build/outputs/apk/push/release/app-push-release.apk Simlar.apk
 
 "${GRADLEW}" clean
@@ -38,6 +43,7 @@ mv ./app/build/outputs/apk/push/release/app-push-release.apk Simlar.apk
 echo
 echo
 echo "successfully created: Simlar-alwaysOnline.apk and Simlar.apk"
-echo "you may now publish simlar.apk at:"
-echo "  https://play.google.com/apps/publish/"
+if [ -z "${SKIP_PUBLISH_TO_PLAYSTORE}" ] ; then
+	echo "successfully published to playstore: Simlar.apk"
+fi
 echo
