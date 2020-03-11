@@ -6,7 +6,7 @@ set -eu -o pipefail
 declare -r  SKIP_PUBLISH_TO_PLAYSTORE=${SKIP_PUBLISH_TO_PLAYSTORE:-""}
 declare -rx PUBLISHER_CREDENTIALS=${PUBLISHER_CREDENTIALS:-""}
 declare -r  SIMLAR_KEYSTORE=${SIMLAR_KEYSTORE:-""}
-declare -rx KEYSTORE_FILE=${1:-"${SIMLAR_KEYSTORE}"}
+declare -rx KEYSTORE_FILE=${SIMLAR_KEYSTORE}
 
 declare -r  PROJECT_DIR="$(dirname $(readlink -f $0))/.."
 declare -r  GRADLEW="${PROJECT_DIR}/gradlew"
@@ -18,10 +18,8 @@ if [ -z "${SKIP_PUBLISH_TO_PLAYSTORE}" ] && [ -z "${PUBLISHER_CREDENTIALS}" ] ; 
 fi
 
 if [ -z "${KEYSTORE_FILE}" ] ; then
-	echo "Please add parameter keystore, e.g.:"
-	echo "  $0 ~/dev/android/simlar-release-key.keystore"
-	echo "or set the environment variable SIMLAR_KEYSTORE, e.g.:"
-	echo "  export SIMLAR_KEYSTORE=~/dev/simlar/simlar-release-key.keystore ; $0"
+	echo "Please set the environment variable SIMLAR_KEYSTORE, e.g.:"
+	echo "  export SIMLAR_KEYSTORE=~/dev/simlar/simlar-release-key.keystore"
 	exit
 fi
 
