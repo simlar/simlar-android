@@ -11,7 +11,7 @@ declare -ri VERSION_BUGFIX=${3?${USAGE}}
 declare -r  BRANCH=${4:-"master"}
 
 declare -r PROJECT_DIR="$(dirname $(readlink -f $0))/.."
-declare -r BUILD_SCRIPT="${PROJECT_DIR}/scripts/build-for-upload.sh"
+declare -r BUILD_SCRIPT="${PROJECT_DIR}/scripts/build-and-publish.sh"
 declare -r UPDATE_VERSION_CODE_SCRIPT="${PROJECT_DIR}/scripts/update-build-gradle-versionCode.sh"
 declare -r APP_BUILD_GRADLE="${PROJECT_DIR}/app/build.gradle"
 
