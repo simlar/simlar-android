@@ -4,24 +4,24 @@
 set -eu -o pipefail
 
 declare -r  SKIP_PUBLISH_TO_PLAYSTORE=${SKIP_PUBLISH_TO_PLAYSTORE:-""}
-declare -r  SIMLAR_PUBLISHER_CREDENTIALS=${SIMLAR_PUBLISHER_CREDENTIALS:-""}
-declare -r  SIMLAR_KEYSTORE=${SIMLAR_KEYSTORE:-""}
+declare -r  SIMLAR_ANDROID_PUBLISHER_CREDENTIALS=${SIMLAR_ANDROID_PUBLISHER_CREDENTIALS:-""}
+declare -r  SIMLAR_ANDROID_KEYSTORE=${SIMLAR_ANDROID_KEYSTORE:-""}
 
-declare -rx PUBLISHER_CREDENTIALS=${SIMLAR_PUBLISHER_CREDENTIALS}
-declare -rx KEYSTORE_FILE=${SIMLAR_KEYSTORE}
+declare -rx PUBLISHER_CREDENTIALS=${SIMLAR_ANDROID_PUBLISHER_CREDENTIALS}
+declare -rx KEYSTORE_FILE=${SIMLAR_ANDROID_KEYSTORE}
 
 declare -r  PROJECT_DIR="$(dirname $(readlink -f $0))/.."
 declare -r  GRADLEW="${PROJECT_DIR}/gradlew"
 
 if [ -z "${SKIP_PUBLISH_TO_PLAYSTORE}" ] && [ -z "${PUBLISHER_CREDENTIALS}" ] ; then
-	echo "Please set the environment variable SIMLAR_PUBLISHER_CREDENTIALS, e.g.:"
-	echo "  export SIMLAR_PUBLISHER_CREDENTIALS=~/dev/simlar/simlar-play-publisher-credentials.json"
+	echo "Please set the environment variable SIMLAR_ANDROID_PUBLISHER_CREDENTIALS, e.g.:"
+	echo "  export SIMLAR_ANDROID_PUBLISHER_CREDENTIALS=~/dev/simlar/simlar-play-publisher-credentials.json"
 	exit
 fi
 
 if [ -z "${KEYSTORE_FILE}" ] ; then
-	echo "Please set the environment variable SIMLAR_KEYSTORE, e.g.:"
-	echo "  export SIMLAR_KEYSTORE=~/dev/simlar/simlar-release-key.keystore"
+	echo "Please set the environment variable SIMLAR_ANDROID_KEYSTORE, e.g.:"
+	echo "  export SIMLAR_ANDROID_KEYSTORE=~/dev/simlar/simlar-release-key.keystore"
 	exit
 fi
 
