@@ -16,6 +16,8 @@ declare -r  GRADLEW="${PROJECT_DIR}/gradlew"
 if [ -z "${SKIP_PUBLISH_TO_PLAYSTORE}" ] && [ -z "${PUBLISHER_CREDENTIALS}" ] ; then
 	echo "Please set the environment variable SIMLAR_ANDROID_PUBLISHER_CREDENTIALS, e.g.:"
 	echo "  export SIMLAR_ANDROID_PUBLISHER_CREDENTIALS=~/dev/simlar/simlar-play-publisher-credentials.json"
+	echo "or skip publishing with: "
+	echo "  SKIP_PUBLISH_TO_PLAYSTORE=yes $0"
 	exit
 fi
 
