@@ -4,11 +4,18 @@
 set -eu -o pipefail
 
 declare -r  SKIP_PUBLISH_TO_PLAYSTORE=${SKIP_PUBLISH_TO_PLAYSTORE:-""}
+declare -rx PUBLISHER_CREDENTIALS=${PUBLISHER_CREDENTIALS:-""}
 declare -r  SIMLAR_KEYSTORE=${SIMLAR_KEYSTORE:-""}
 declare -rx KEYSTORE_FILE=${1:-"${SIMLAR_KEYSTORE}"}
 
 declare -r  PROJECT_DIR="$(dirname $(readlink -f $0))/.."
 declare -r  GRADLEW="${PROJECT_DIR}/gradlew"
+
+if [ -z "${SKIP_PUBLISH_TO_PLAYSTORE}" ] && [ -z "${PUBLISHER_CREDENTIALS}" ] ; then
+	echo "Please set the environment variable PUBLISHER_CREDENTIALS, e.g.:"
+	echo "  export PUBLISHER_CREDENTIALS=~/dev/simlar/simlar-play-publisher-credentials.json"
+	exit
+fi
 
 if [ -z "${KEYSTORE_FILE}" ] ; then
 	echo "Please add parameter keystore, e.g.:"
@@ -18,6 +25,7 @@ if [ -z "${KEYSTORE_FILE}" ] ; then
 	exit
 fi
 
+echo "using publisher credentials ${PUBLISHER_CREDENTIALS}"
 echo "using keystore ${KEYSTORE_FILE}"
 echo "enter its password:"
 declare -rx KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD:-"$( stty -echo; head -n 1; stty echo )"}
