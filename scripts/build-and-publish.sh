@@ -4,16 +4,13 @@
 set -eu -o pipefail
 
 declare -r  SKIP_PUBLISH_TO_PLAYSTORE=${SKIP_PUBLISH_TO_PLAYSTORE:-""}
-declare -r  SIMLAR_ANDROID_PUBLISHER_CREDENTIALS=${SIMLAR_ANDROID_PUBLISHER_CREDENTIALS:-""}
-declare -r  SIMLAR_ANDROID_KEYSTORE=${SIMLAR_ANDROID_KEYSTORE:-""}
-
-declare -rx PUBLISHER_CREDENTIALS=${SIMLAR_ANDROID_PUBLISHER_CREDENTIALS}
-declare -rx KEYSTORE_FILE=${SIMLAR_ANDROID_KEYSTORE}
+declare -rx SIMLAR_ANDROID_PUBLISHER_CREDENTIALS=${SIMLAR_ANDROID_PUBLISHER_CREDENTIALS:-""}
+declare -rx SIMLAR_ANDROID_KEYSTORE_FILE=${SIMLAR_ANDROID_KEYSTORE_FILE:-""}
 
 declare -r  PROJECT_DIR="$(dirname $(readlink -f $0))/.."
 declare -r  GRADLEW="${PROJECT_DIR}/gradlew"
 
-if [ -z "${SKIP_PUBLISH_TO_PLAYSTORE}" ] && [ -z "${PUBLISHER_CREDENTIALS}" ] ; then
+if [ -z "${SKIP_PUBLISH_TO_PLAYSTORE}" ] && [ -z "${SIMLAR_ANDROID_PUBLISHER_CREDENTIALS}" ] ; then
 	echo "Please set the environment variable SIMLAR_ANDROID_PUBLISHER_CREDENTIALS, e.g.:"
 	echo "  export SIMLAR_ANDROID_PUBLISHER_CREDENTIALS=~/dev/simlar/simlar-play-publisher-credentials.json"
 	echo "or skip publishing with: "
@@ -21,16 +18,16 @@ if [ -z "${SKIP_PUBLISH_TO_PLAYSTORE}" ] && [ -z "${PUBLISHER_CREDENTIALS}" ] ; 
 	exit
 fi
 
-if [ -z "${KEYSTORE_FILE}" ] ; then
-	echo "Please set the environment variable SIMLAR_ANDROID_KEYSTORE, e.g.:"
-	echo "  export SIMLAR_ANDROID_KEYSTORE=~/dev/simlar/simlar-release-key.keystore"
+if [ -z "${SIMLAR_ANDROID_KEYSTORE_FILE}" ] ; then
+	echo "Please set the environment variable SIMLAR_ANDROID_KEYSTORE_FILE, e.g.:"
+	echo "  export SIMLAR_ANDROID_KEYSTORE_FILE=~/dev/simlar/simlar-release-key.keystore"
 	exit
 fi
 
-echo "using publisher credentials ${PUBLISHER_CREDENTIALS}"
-echo "using keystore ${KEYSTORE_FILE}"
+echo "using publisher credentials ${SIMLAR_ANDROID_PUBLISHER_CREDENTIALS}"
+echo "using keystore ${SIMLAR_ANDROID_KEYSTORE_FILE}"
 echo "enter its password:"
-declare -rx KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD:-"$( stty -echo; head -n 1; stty echo )"}
+declare -rx SIMLAR_ANDROID_KEYSTORE_PASSWORD=${SIMLAR_ANDROID_KEYSTORE_PASSWORD:-"$( stty -echo; head -n 1; stty echo )"}
 
 
 cd "${PROJECT_DIR}"
