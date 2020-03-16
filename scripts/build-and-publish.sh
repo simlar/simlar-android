@@ -15,13 +15,13 @@ if [ -z "${SKIP_PUBLISH_TO_PLAYSTORE}" ] && [ -z "${SIMLAR_ANDROID_PUBLISHER_CRE
 	echo "  export SIMLAR_ANDROID_PUBLISHER_CREDENTIALS=~/dev/simlar/simlar-play-publisher-credentials.json"
 	echo "or skip publishing with: "
 	echo "  SKIP_PUBLISH_TO_PLAYSTORE=yes $0"
-	exit
+	exit 1
 fi
 
 if [ -z "${SIMLAR_ANDROID_KEYSTORE_FILE}" ] ; then
 	echo "Please set the environment variable SIMLAR_ANDROID_KEYSTORE_FILE, e.g.:"
 	echo "  export SIMLAR_ANDROID_KEYSTORE_FILE=~/dev/simlar/simlar-release-key.keystore"
-	exit
+	exit 1
 fi
 
 echo "using publisher credentials ${SIMLAR_ANDROID_PUBLISHER_CREDENTIALS}"
