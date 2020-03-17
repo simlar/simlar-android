@@ -24,10 +24,10 @@ if ! git diff --quiet ; then
 	exit 1
 fi
 
-git checkout "${BRANCH}"
 git fetch
 git fetch --tags
-git pull --rebase origin "${BRANCH}"
+git checkout "${BRANCH}"
+git reset "origin/${BRANCH}" --hard
 
 "${UPDATE_VERSION_CODE_SCRIPT}"
 
