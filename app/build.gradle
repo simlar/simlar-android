@@ -107,8 +107,10 @@ android {
     }
 
     playConfigs {
-        push {
-            enabled = true
+        if (useGoogleServices()) {
+            push {
+                enabled = true
+            }
         }
     }
 }
