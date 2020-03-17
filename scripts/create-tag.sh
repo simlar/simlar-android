@@ -11,7 +11,8 @@ declare -ri VERSION_BUGFIX=${3?${USAGE}}
 declare -r  BRANCH=${4:-"master"}
 
 declare -r PROJECT_DIR="$(dirname $(readlink -f $0))/.."
-declare -r BUILD_SCRIPT="${PROJECT_DIR}/scripts/build-for-upload.sh"
+declare -r BUILD_SCRIPT="${PROJECT_DIR}/scripts/build-and-publish.sh"
+declare -r RUN_WITH_DECRYPTED_PLAYSTORE_CREDENTIALS="${PROJECT_DIR}/scripts/run-with-decrypted-play-store-credentials.sh"
 declare -r UPDATE_VERSION_CODE_SCRIPT="${PROJECT_DIR}/scripts/update-build-gradle-versionCode.sh"
 declare -r APP_BUILD_GRADLE="${PROJECT_DIR}/app/build.gradle"
 
@@ -24,10 +25,10 @@ if ! git diff --quiet ; then
 	exit 1
 fi
 
-git checkout "${BRANCH}"
 git fetch
 git fetch --tags
-git pull --rebase origin "${BRANCH}"
+git checkout "${BRANCH}"
+git reset "origin/${BRANCH}" --hard
 
 "${UPDATE_VERSION_CODE_SCRIPT}"
 
@@ -49,5 +50,5 @@ git push origin "${SIMLAR_VERSION}"
 git checkout "${SIMLAR_VERSION}"
 
 echo "you may now run:"
-echo "  ${BUILD_SCRIPT}"
+echo "  ${RUN_WITH_DECRYPTED_PLAYSTORE_CREDENTIALS} ${BUILD_SCRIPT}"
 echo

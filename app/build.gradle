@@ -76,8 +76,8 @@ android {
     }
 
 
-    def keystoreFile = System.getenv("KEYSTORE_FILE")
-    def keystorePassword = System.getenv("KEYSTORE_PASSWORD")
+    def keystoreFile = System.getenv("SIMLAR_ANDROID_KEYSTORE_FILE")
+    def keystorePassword = System.getenv("SIMLAR_ANDROID_KEYSTORE_PASSWORD")
 
     signingConfigs {
         release {
@@ -107,14 +107,16 @@ android {
     }
 
     playConfigs {
-        push {
-            enabled = true
+        if (useGoogleServices()) {
+            push {
+                enabled = true
+            }
         }
     }
 }
 
 play {
-    def publisherCredentials = System.getenv("PUBLISHER_CREDENTIALS")
+    def publisherCredentials = System.getenv("SIMLAR_ANDROID_PUBLISHER_CREDENTIALS")
     serviceAccountCredentials = file(publisherCredentials ? publisherCredentials : "simlar-play-publisher-credentials.json")
     enabled = false
     track = "alpha"
