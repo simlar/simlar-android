@@ -12,6 +12,7 @@ declare -r  BRANCH=${4:-"master"}
 
 declare -r PROJECT_DIR="$(dirname $(readlink -f $0))/.."
 declare -r BUILD_SCRIPT="${PROJECT_DIR}/scripts/build-and-publish.sh"
+declare -r RUN_WITH_DECRYPTED_PLAYSTORE_CREDENTIALS="${PROJECT_DIR}/scripts/run-with-decrypted-play-store-credentials.sh"
 declare -r UPDATE_VERSION_CODE_SCRIPT="${PROJECT_DIR}/scripts/update-build-gradle-versionCode.sh"
 declare -r APP_BUILD_GRADLE="${PROJECT_DIR}/app/build.gradle"
 
@@ -49,5 +50,5 @@ git push origin "${SIMLAR_VERSION}"
 git checkout "${SIMLAR_VERSION}"
 
 echo "you may now run:"
-echo "  ${BUILD_SCRIPT}"
+echo "  ${RUN_WITH_DECRYPTED_PLAYSTORE_CREDENTIALS} ${BUILD_SCRIPT}"
 echo
