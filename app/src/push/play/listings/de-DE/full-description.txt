@@ -1,5 +1,7 @@
 Mit Simlar schützt du deine Privatsphäre. Telefoniere verschlüsselt und kostenlos über das Internet. Die Bedienung ist einfach und intuitiv. Es funktioniert wie ganz normales Telefonieren: Kontakt auswählen und anrufen. Andere Simlar-Benutzer aus deinem Telefonbuch werden automatisch gefunden. Du wirst direkt sehen, wer schon Simlar installiert hat. Im Menü kannst du Freunde einladen. Simlar gibt es auch für das iPhone.
 
-Simlar benutzt das bewährte Ende-zu-Ende-Verschlüsselungsprotokoll ZRTP. Damit können deine Gespräche nicht mitgehört werden – auch nicht von uns. Beim ersten Anruf sollte einmalig ein vierstelliger Code abgeglichen werden. Dann ist diese Verbindung dauerhaft sicher. Simlar ist eine freie Software und unterliegt der Open-Source-Lizenz GPL. Die Entwicklung von Simlar kann Schritt für Schritt nachvollzogen und geprüft werden. Der Quellcode ist auf simlar.org frei einsehbar.
+Simlar benutzt das bewährte Ende-zu-Ende-Verschlüsselungsprotokoll ZRTP. Damit können deine Gespräche nicht mitgehört werden – auch nicht von uns. Beim ersten Anruf sollte einmalig ein vierstelliger Code abgeglichen werden. Dann ist diese Verbindung dauerhaft sicher.
+
+Simlar ist eine freie Software und unterliegt der Open-Source-Lizenz GPL. Die Entwicklung von Simlar kann Schritt für Schritt nachvollzogen und geprüft werden. Der Quellcode ist auf simlar.org frei einsehbar.
 
 Die beste Ton-Qualität erreichst du über WLAN. Simlar funktioniert auch über mobiles Internet. 2 Minuten Gesprächszeit entsprechen circa 1 MB Datenvolumen. Einzelheiten findest du in den FAQ auf simlar.org.

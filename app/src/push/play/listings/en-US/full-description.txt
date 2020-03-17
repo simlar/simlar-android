@@ -1,5 +1,7 @@
 Protect your privacy and make free mobile phone calls over the internet with Simlar. Your calls are fully encrypted and tap-proof. Simlar is very easy to use. Just select your contact and call them! After installation, all of your contacts who also use Simlar will be listed in the app automatically. Maybe some of your friends already have Simlar. If not, you can invite them easily. Simlar is also available for iPhones.
 
-Simlar is based on the established end-to-end encryption protocol ZRTP. No one can listen to your conversation, not even us. During your first call, you need to match a short code with the person you are speaking to. This protects against man-in-the-middle attacks and only needs to be done once per contact. The app development is driven by the open source community. You can find the source code at simlar.org.
+Simlar is based on the established end-to-end encryption protocol ZRTP. No one can listen to your conversation, not even us. During your first call, you need to match a short code with the person you are speaking to. This protects against man-in-the-middle attacks and only needs to be done once per contact.
+
+The app development is driven by the open source community. You can find the source code at simlar.org.
 
 Simlar is free of charge. All you need is an internet connection. The more stable it is, the better your sound quality. The average “traffic” corresponds to 1 megabyte for a 2-minute call. For more details see simlar.org.

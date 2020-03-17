@@ -1,5 +1,7 @@
 Protege tu privacidad con Simlar. Llama gratis y seguro via internet. Simlar es fácil de utilizar. Simlar encontrará automáticamente todos tus contactos que también usan Simlar. Verás directamente quien tiene Simlar instalado. Elige tu contacto y llama. En el menú puedes invitar a más amigos. Simlar también se puede usar con IOS.
 
-Simlar utiliza el protocolo de codificación acreditado ZRTP.  Nadie puede interceptar tus llamadas, tampoco nosotros. En la primera llamada debes comparar un código de cuatro dígitos con tu interlocutor. Después tu línea será permanentemente segura. Simlar es un software libre y sujeto a la licencia GPL. Se puede trazar y verificar el desarrollo de Simlar paso a paso. Encontrarás el código fuente en simlar.org.
+Simlar utiliza el protocolo de codificación acreditado ZRTP.  Nadie puede interceptar tus llamadas, tampoco nosotros. En la primera llamada debes comparar un código de cuatro dígitos con tu interlocutor. Después tu línea será permanentemente segura.
+
+Simlar es un software libre y sujeto a la licencia GPL. Se puede trazar y verificar el desarrollo de Simlar paso a paso. Encontrarás el código fuente en simlar.org.
 
 La mejor calidad de sonido se consigue a través de WiFi. Simlar también funciona con Internet móvil. Pero no todos los proveedores permiten VoIP. 2 minutos corresponden con 1 MB de volumen de datos. Encontrarás más información en simlar.org.
