@@ -30,7 +30,7 @@ buildscript {
     }
     dependencies {
         classpath "com.android.tools.build:gradle:3.6.1"
-        classpath "org.owasp:dependency-check-gradle:5.3.1"
+        classpath "org.owasp:dependency-check-gradle:5.3.2.1"
     }
 }
 
