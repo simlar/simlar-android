@@ -21,7 +21,7 @@
 
 plugins {
     id "com.android.application"
-    id "com.github.triplet.play" version "2.7.2"
+    id "com.github.triplet.play" version "2.7.3"
     id "org.owasp.dependencycheck"
 }
 
