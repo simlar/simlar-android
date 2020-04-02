@@ -217,6 +217,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mSoundEffectManager.start(SoundEffectType.CALL_INTERRUPTION);
 	}
 
+	@SuppressWarnings("SameParameterValue")
 	private static void muteAudioStream(final AudioManager audioManager, final int streamType, final boolean mute)
 	{
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
