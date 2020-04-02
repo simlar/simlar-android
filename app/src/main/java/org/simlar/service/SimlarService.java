@@ -36,6 +36,7 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -99,7 +100,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private String mSimlarIdToCall = null;
 	private static volatile boolean mRunning = false;
 	private final TelephonyCallStateListener mTelephonyCallStateListener = new TelephonyCallStateListener();
-	private int mCurrentRingerMode = -1;
+	private boolean mStreamRingNeedsUnMute = false;
 	private PendingIntent mKeepAwakePendingIntent = null;
 	private final KeepAwakeReceiver mKeepAwakeReceiver = FlavourHelper.isGcmEnabled() ? null : new KeepAwakeReceiver();
 	private VideoState mVideoState = VideoState.OFF;
@@ -216,36 +217,39 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mSoundEffectManager.start(SoundEffectType.CALL_INTERRUPTION);
 	}
 
+	private static void muteAudioStream(final AudioManager audioManager, final int streamType, final boolean mute)
+	{
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			final int adJustMute = mute ? AudioManager.ADJUST_MUTE : AudioManager.ADJUST_UNMUTE;
+			audioManager.adjustStreamVolume(streamType, adJustMute, 0);
+		} else {
+			audioManager.setStreamMute(streamType, mute);
+		}
+	}
+
 	private void silenceAndStoreRingerMode()
 	{
-		// steam roller tactics to silence incoming call
-		final AudioManager audioManager = Util.getSystemService(this, Context.AUDIO_SERVICE);
-		final int ringerMode = audioManager.getRingerMode();
-		if (ringerMode == AudioManager.RINGER_MODE_SILENT) {
-			return;
-		}
-
 		if (!PermissionsHelper.isNotificationPolicyAccessGranted(this)) {
 			Lg.i("permission not granted to Do Not Disturb state");
 			return;
 		}
 
-		mCurrentRingerMode = ringerMode;
-		Lg.i("saving RingerMode: ", mCurrentRingerMode, " and switch to ringer mode silent");
-		audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+		final AudioManager audioManager = Util.getSystemService(this, Context.AUDIO_SERVICE);
+		if (!audioManager.isStreamMute(AudioManager.STREAM_RING)) {
+			mStreamRingNeedsUnMute = true;
+			muteAudioStream(audioManager, AudioManager.STREAM_RING, true);
+		}
 	}
 
 	private void restoreRingerModeIfNeeded()
 	{
-		if (mCurrentRingerMode == -1 || mCurrentRingerMode == AudioManager.RINGER_MODE_SILENT) {
+		if (!mStreamRingNeedsUnMute) {
 			return;
 		}
 
 		final AudioManager audioManager = Util.getSystemService(this, Context.AUDIO_SERVICE);
-		/// NOTE: On lollipop getRingerMode sometimes does not report silent mode correctly, so checking it here may be dangerous.
-		Lg.i("restoring RingerMode: ", audioManager.getRingerMode(), " -> ", mCurrentRingerMode);
-		audioManager.setRingerMode(mCurrentRingerMode);
-		mCurrentRingerMode = -1;
+		mStreamRingNeedsUnMute = false;
+		muteAudioStream(audioManager, AudioManager.STREAM_RING, false);
 	}
 
 	@Override
