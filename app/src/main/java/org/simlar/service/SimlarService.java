@@ -176,7 +176,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	private void onTelephonyCallStateOffHook()
 	{
-		restoreRingerModeIfNeeded();
+		restoreAudioStreamRing();
 		if (mSimlarStatus != SimlarStatus.ONGOING_CALL) {
 			return;
 		}
@@ -192,7 +192,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	private void onTelephonyCallStateIdle()
 	{
-		restoreRingerModeIfNeeded();
+		restoreAudioStreamRing();
 		if (mSimlarStatus != SimlarStatus.ONGOING_CALL) {
 			return;
 		}
@@ -212,7 +212,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			return;
 		}
 
-		silenceAndStoreRingerMode();
+		silenceAudioStreamRing();
 
 		mSoundEffectManager.start(SoundEffectType.CALL_INTERRUPTION);
 	}
@@ -228,7 +228,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 	}
 
-	private void silenceAndStoreRingerMode()
+	private void silenceAudioStreamRing()
 	{
 		if (!PermissionsHelper.isNotificationPolicyAccessGranted(this)) {
 			Lg.i("permission not granted to Do Not Disturb state");
@@ -247,7 +247,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 	}
 
-	private void restoreRingerModeIfNeeded()
+	private void restoreAudioStreamRing()
 	{
 		if (!mStreamRingNeedsUnMute) {
 			return;
@@ -779,7 +779,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			mSoundEffectManager.setInCallMode(false);
 			mAudioFocus.release();
 
-			restoreRingerModeIfNeeded();
+			restoreAudioStreamRing();
 
 			if (mCallConnectionDetails.updateEndedCall()) {
 				SimlarServiceBroadcast.sendCallConnectionDetailsChanged(this);
