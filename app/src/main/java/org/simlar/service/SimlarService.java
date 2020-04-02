@@ -235,6 +235,11 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 
 		final AudioManager audioManager = Util.getSystemService(this, Context.AUDIO_SERVICE);
+		if (audioManager.isVolumeFixed()) {
+			Lg.i("device does not support muting");
+			return;
+		}
+
 		if (!audioManager.isStreamMute(AudioManager.STREAM_RING)) {
 			mStreamRingNeedsUnMute = true;
 			muteAudioStream(audioManager, AudioManager.STREAM_RING, true);
