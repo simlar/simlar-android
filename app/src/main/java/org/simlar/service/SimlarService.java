@@ -234,6 +234,11 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && audioManager.isStreamMute(streamType);
 	}
 
+	private static boolean isVolumeFixed(final AudioManager audioManager)
+	{
+		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && audioManager.isVolumeFixed();
+	}
+
 	private void silenceAudioStreamRing()
 	{
 		if (!PermissionsHelper.isNotificationPolicyAccessGranted(this)) {
@@ -242,7 +247,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 
 		final AudioManager audioManager = Util.getSystemService(this, Context.AUDIO_SERVICE);
-		if (audioManager.isVolumeFixed()) {
+		if (isVolumeFixed(audioManager)) {
 			Lg.i("device does not support muting");
 			return;
 		}
