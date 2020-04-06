@@ -228,6 +228,12 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 	}
 
+	@SuppressWarnings("SameParameterValue")
+	private static boolean isAudioStreamMute(final AudioManager audioManager, final int streamType)
+	{
+		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && audioManager.isStreamMute(streamType);
+	}
+
 	private void silenceAudioStreamRing()
 	{
 		if (!PermissionsHelper.isNotificationPolicyAccessGranted(this)) {
@@ -241,7 +247,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			return;
 		}
 
-		if (!audioManager.isStreamMute(AudioManager.STREAM_RING)) {
+		if (!isAudioStreamMute(audioManager, AudioManager.STREAM_RING)) {
 			mStreamRingNeedsUnMute = true;
 			muteAudioStream(audioManager, AudioManager.STREAM_RING, true);
 		}
