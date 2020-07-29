@@ -4,7 +4,7 @@
     <string name="firebase_database_url" translatable="false">https://simlar-org.firebaseio.com</string>
     <string name="gcm_defaultSenderId" translatable="false">772399062899</string>
     <string name="google_api_key" translatable="false">AIzaSyDHN9-hjDtrT3NVnRFAaLhrKIcnjinKHD4</string>
-    <string name="google_app_id" translatable="false">1:772399062899:android:c55e9b2f7af34a77</string>
+    <string name="google_app_id" translatable="false">1:772399062899:android:4dec551439ef0389</string>
     <string name="google_crash_reporting_api_key" translatable="false">AIzaSyDHN9-hjDtrT3NVnRFAaLhrKIcnjinKHD4</string>
     <string name="google_storage_bucket" translatable="false">simlar-org.appspot.com</string>
     <string name="project_id" translatable="false">simlar-org</string>

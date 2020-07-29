@@ -22,7 +22,7 @@ package org.simlar.helper;
 
 public final class ServerSettings
 {
-	public static final String DOMAIN = "sip3.simlar.org";
+	public static final String DOMAIN = "sip.simlar.org";
 
 	private ServerSettings()
 	{
