@@ -701,6 +701,12 @@ public final class LinphoneThread implements Runnable, CoreListener
 	}
 
 	@Override
+	public void onChatRoomEphemeralMessageDeleted(final Core lc, final ChatRoom chatRoom)
+	{
+		Lg.w("onChatRoomEphemeralMessageDeleted chatRoom=", chatRoom);
+	}
+
+	@Override
 	public void onMessageSent(final Core core, final ChatRoom chatRoom, final ChatMessage chatMessage)
 	{
 		Lg.w("onMessageSent chatRoom=", chatRoom, " chatMessage=", chatMessage);
