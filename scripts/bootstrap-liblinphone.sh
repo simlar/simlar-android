@@ -11,7 +11,7 @@ declare -r COMPILE_SCRIPT="${PROJECT_DIR}/scripts/compile-liblinphone.sh"
 declare -r PATCH_DIR="${PROJECT_DIR}/liblinphone/patches"
 
 declare -r LINPHONE_SDK_PATCH_DIR="${PATCH_DIR}/linphone-sdk"
-declare -r LINPHONE_PATCH_DIR="${PATCH_DIR}/linphone"
+declare -r LINPHONE_PATCH_DIR="${PATCH_DIR}/liblinphone"
 declare -r MEDIASTREAMER2_PATCH_DIR="${PATCH_DIR}/mediastreamer2"
 declare -r BELLESIP_PATCH_DIR="${PATCH_DIR}/belle-sip"
 declare -r ORTP_PATCH_DIR="${PATCH_DIR}/ortp"
