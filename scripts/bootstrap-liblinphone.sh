@@ -38,7 +38,7 @@ fi
 git submodule update --recursive --init
 
 if [ -d "${LINPHONE_PATCH_DIR}" ] ; then
-	cd linphone
+	cd liblinphone
 	git am "${LINPHONE_PATCH_DIR}"/*.patch
 	cd ..
 fi
