@@ -3,7 +3,7 @@
 ## exit if an error occurs or on unset variables
 set -eu -o pipefail
 
-declare -r BRANCH=${1:-"4.3.3"} ## use master to build current git revision
+declare -r BRANCH=${1:-"4.4.0"} ## use master to build current git revision
 
 declare -r PROJECT_DIR="$(dirname $(readlink -f $0))/.."
 declare -r COMPILE_SCRIPT="${PROJECT_DIR}/scripts/compile-liblinphone.sh"
@@ -11,7 +11,7 @@ declare -r COMPILE_SCRIPT="${PROJECT_DIR}/scripts/compile-liblinphone.sh"
 declare -r PATCH_DIR="${PROJECT_DIR}/liblinphone/patches"
 
 declare -r LINPHONE_SDK_PATCH_DIR="${PATCH_DIR}/linphone-sdk"
-declare -r LINPHONE_PATCH_DIR="${PATCH_DIR}/linphone"
+declare -r LINPHONE_PATCH_DIR="${PATCH_DIR}/liblinphone"
 declare -r MEDIASTREAMER2_PATCH_DIR="${PATCH_DIR}/mediastreamer2"
 declare -r BELLESIP_PATCH_DIR="${PATCH_DIR}/belle-sip"
 declare -r ORTP_PATCH_DIR="${PATCH_DIR}/ortp"
@@ -38,7 +38,7 @@ fi
 git submodule update --recursive --init
 
 if [ -d "${LINPHONE_PATCH_DIR}" ] ; then
-	cd linphone
+	cd liblinphone
 	git am "${LINPHONE_PATCH_DIR}"/*.patch
 	cd ..
 fi

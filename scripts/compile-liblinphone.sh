@@ -26,6 +26,7 @@ declare -rx PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${
 declare -r CMAKE_BUILD_DIR="${BUILD_DIR}/linphone-sdk-build_$(date '+%Y%m%d_%H%M%S')"
 mkdir "${CMAKE_BUILD_DIR}"
 cd "${CMAKE_BUILD_DIR}"
+touch settings.gradle
 
 cmake "${BUILD_DIR}/linphone-sdk" \
 	-DLINPHONESDK_PLATFORM=Android \
