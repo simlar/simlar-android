@@ -10,15 +10,15 @@ ENV LANG "C"
 ENV DEBIAN_FRONTEND "noninteractive"
 ENV ANDROID_SDK_ROOT "/opt/android-sdks"
 
-RUN apt-get update
-RUN apt-get dist-upgrade --assume-yes
-RUN apt-get install --assume-yes --no-install-recommends default-jdk wget unzip
+RUN apt-get update && \
+    apt-get dist-upgrade --assume-yes && \
+    apt-get install --assume-yes --no-install-recommends default-jdk wget unzip
 
-RUN wget -O "${DOWNLOAD_TEMP_FILE}" "${ANDROID_SDK_COMMAND_LINE_TOOLS_URL}"
-RUN echo "${ANDROID_SDK_COMMAND_LINE_TOOLS_CHECKSUM} ${DOWNLOAD_TEMP_FILE}" | sha256sum -c
-RUN unzip "${DOWNLOAD_TEMP_FILE}" -d "${ANDROID_SDK_ROOT}"
-RUN rm -f "${DOWNLOAD_TEMP_FILE}"
-RUN mkdir "${ANDROID_SDK_ROOT}/cmdline-tools"
-RUN mv "${ANDROID_SDK_ROOT}/tools/" "${ANDROID_SDK_ROOT}/cmdline-tools/"
+RUN wget -O "${DOWNLOAD_TEMP_FILE}" "${ANDROID_SDK_COMMAND_LINE_TOOLS_URL}" && \
+    echo "${ANDROID_SDK_COMMAND_LINE_TOOLS_CHECKSUM} ${DOWNLOAD_TEMP_FILE}" | sha256sum -c && \
+    unzip "${DOWNLOAD_TEMP_FILE}" -d "${ANDROID_SDK_ROOT}" && \
+    rm -f "${DOWNLOAD_TEMP_FILE}" && \
+    mkdir "${ANDROID_SDK_ROOT}/cmdline-tools" && \
+    mv "${ANDROID_SDK_ROOT}/tools/" "${ANDROID_SDK_ROOT}/cmdline-tools/"
 
 RUN echo "y" | "${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin/sdkmanager" "platforms;android-${ANDROID_SDK_VERSION}" "ndk;${ANDROID_NDK_VERSION}"
