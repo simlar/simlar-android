@@ -20,24 +20,26 @@
 
 package org.simlar.contactsprovider;
 
-import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.simlar.helper.ContactData;
 import org.simlar.helper.ContactDataComplete;
@@ -93,6 +95,8 @@ public final class ContactsProvider
 		boolean mFakeData = false;
 		private final Set<FullContactsListener> mFullContactsListeners = new HashSet<>();
 		private final Map<ContactListener, String> mContactListener = new HashMap<>();
+		private final ExecutorService executorService = Executors.newSingleThreadExecutor();
+		private final Handler mMainLoopHandler = new Handler(Looper.getMainLooper());
 
 		private enum State
 		{
@@ -103,7 +107,6 @@ public final class ContactsProvider
 			INITIALIZED
 		}
 
-		@SuppressLint("StaticFieldLeak")
 		private void loadContacts(final Context context)
 		{
 			Lg.i("start creating contacts cache");
@@ -122,23 +125,13 @@ public final class ContactsProvider
 			}
 
 			mState = State.PARSING_PHONES_ADDRESS_BOOK;
-			new AsyncTask<Void, Void, Map<String, ContactData>>()
-			{
-				@Override
-				protected Map<String, ContactData> doInBackground(final Void... params)
-				{
-					if (mFakeData) {
-						return createFakeData();
-					}
-					return loadContactsFromTelephoneBook(context, mySimlarId);
-				}
+			executorService.execute(() -> {
+				final Map<String, ContactData> contacts = mFakeData
+						? createFakeData()
+						: loadContactsFromTelephoneBook(context, mySimlarId);
 
-				@Override
-				protected void onPostExecute(final Map<String, ContactData> contacts)
-				{
-					onContactsLoadedFromTelephoneBook(contacts);
-				}
-			}.execute();
+				mMainLoopHandler.post(() -> onContactsLoadedFromTelephoneBook(contacts));
+			});
 		}
 
 		private void onError(final Error error)
@@ -169,7 +162,6 @@ public final class ContactsProvider
 			mFullContactsListeners.clear();
 		}
 
-		@SuppressLint("StaticFieldLeak")
 		void onContactsLoadedFromTelephoneBook(final Map<String, ContactData> contacts)
 		{
 			if (contacts == null) {
@@ -184,20 +176,11 @@ public final class ContactsProvider
 
 			notifyContactListeners();
 
-			new AsyncTask<String, Void, Map<String, ContactStatus>>()
-			{
-				@Override
-				protected Map<String, ContactStatus> doInBackground(final String... params)
-				{
-					return GetContactsStatus.httpPostGetContactsStatus(new HashSet<>(Arrays.asList(params)));
-				}
+			executorService.execute(() -> {
+				final Map<String, ContactStatus> contactsStatus = GetContactsStatus.httpPostGetContactsStatus(mContacts.keySet());
 
-				@Override
-				protected void onPostExecute(final Map<String, ContactStatus> contactsStatus)
-				{
-					onContactsStatusRequestedFromServer(contactsStatus);
-				}
-			}.execute(mContacts.keySet().toArray(Util.EMPTY_STRING_ARRAY));
+				mMainLoopHandler.post(() -> onContactsStatusRequestedFromServer(contactsStatus));
+			});
 		}
 
 		private ContactData createContactData(final String simlarId)
@@ -537,7 +520,6 @@ public final class ContactsProvider
 		return BitmapFactory.decodeResource(context.getResources(), defaultResourceId);
 	}
 
-	@SuppressLint("StaticFieldLeak")
 	public static void getContactStatus(final String simlarId, final ContactStatusListener listener)
 	{
 		if (Util.isNullOrEmpty(simlarId)) {
@@ -550,23 +532,16 @@ public final class ContactsProvider
 			return;
 		}
 
-		new AsyncTask<String, Void, Map<String, ContactStatus>>()
-		{
-			@Override
-			protected Map<String, ContactStatus> doInBackground(final String... params)
-			{
-				return GetContactsStatus.httpPostGetContactsStatus(new HashSet<>(Arrays.asList(params)));
-			}
+		Executors.newSingleThreadExecutor().execute(() -> {
+			final Map<String, ContactStatus> contactsStatus = GetContactsStatus.httpPostGetContactsStatus(Collections.singleton(simlarId));
 
-			@Override
-			protected void onPostExecute(final Map<String, ContactStatus> contactsStatus)
-			{
+			new Handler(Looper.getMainLooper()).post(() -> {
 				if (contactsStatus == null) {
 					listener.onOffline();
 				} else {
 					listener.onGetStatus(contactsStatus.get(simlarId) == ContactStatus.REGISTERED);
 				}
-			}
-		}.execute(simlarId);
+			});
+		});
 	}
 }
