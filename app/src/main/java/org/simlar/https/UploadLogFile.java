@@ -86,7 +86,6 @@ public final class UploadLogFile
 
 	private static PostResult postFile(final File file)
 	{
-
 		final HttpsURLConnection connection = HttpsPost.createConnection(URL_PATH, true);
 		if (connection == null) {
 			return new PostResult(false, "Building connection failed");
