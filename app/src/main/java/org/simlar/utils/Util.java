@@ -21,14 +21,11 @@
 package org.simlar.utils;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.Html;
 import android.text.Spanned;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.res.ResourcesCompat;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -88,12 +85,6 @@ public final class Util
 		while ((length = is.read(buffer)) != -1) {
 			os.write(buffer, 0, length);
 		}
-	}
-
-	@SuppressWarnings("SameParameterValue")
-	public static Drawable getDrawableCompatible(final Resources resources, final int id)
-	{
-		return ResourcesCompat.getDrawable(resources, id, null);
 	}
 
 	public static Spanned fromHtml(final String string)
