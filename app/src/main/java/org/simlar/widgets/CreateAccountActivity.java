@@ -40,6 +40,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.simlar.R;
@@ -69,6 +70,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 	private Button mButtonCall = null;
 
 	private final Handler mHandler = new Handler(Looper.getMainLooper());
+	private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCreateAccount();
 	private String mTelephoneNumber = "";
@@ -243,7 +245,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 		final String expectedSimlarId = SimlarNumber.createSimlarId(mTelephoneNumber);
 		final String telephoneNumber = mTelephoneNumber;
 
-		Executors.newSingleThreadExecutor().execute(() -> {
+		executorService.execute(() -> {
 			final CreateAccount.RequestResult result = CreateAccount.httpPostRequest(telephoneNumber, smsText);
 
 			mHandler.post(() -> {
@@ -282,7 +284,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 			return;
 		}
 
-		Executors.newSingleThreadExecutor().execute(() -> {
+		executorService.execute(() -> {
 			final CreateAccount.ConfirmResult result = CreateAccount.httpPostConfirm(simlarId, registrationCode);
 
 			mHandler.post(() -> {
@@ -409,7 +411,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 		mRequestText.setText(R.string.create_account_activity_waiting_for_sms_call);
 		mProgressRequest.setVisibility(View.VISIBLE);
 
-		Executors.newSingleThreadExecutor().execute(() -> {
+		executorService.execute(() -> {
 			final CreateAccount.RequestResult result = CreateAccount.httpPostCall(telephoneNumber, PreferencesHelper.getPassword());
 
 			mHandler.post(() -> {
