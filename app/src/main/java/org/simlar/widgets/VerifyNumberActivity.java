@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -127,7 +128,7 @@ public final class VerifyNumberActivity extends AppCompatActivity
 	{
 		final String phoneNumber = SimCardReader.readPhoneNumber(this);
 		if (Util.isNullOrEmpty(phoneNumber)) {
-			new Handler().postDelayed(this::showSoftInputForEditNumber, 100);
+			new Handler(Looper.getMainLooper()).postDelayed(this::showSoftInputForEditNumber, 100);
 		} else {
 			mEditNumber.setText(new SimlarNumber(phoneNumber).getNationalOnly());
 			final TextView text = findViewById(R.id.textViewCheckOrVerifyYourNumber);
