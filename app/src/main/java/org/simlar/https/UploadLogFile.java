@@ -182,6 +182,23 @@ public final class UploadLogFile
 		}
 	}
 
+	private static PostResult recordAndUploadLogFile(final File logFile)
+	{
+		deleteFile(logFile);
+
+		try {
+			//noinspection UseOfProcessBuilder
+			final Process p = new ProcessBuilder("logcat", "-d", "-v", "threadtime", "-f", logFile.getAbsolutePath()).start();
+			p.waitFor();
+			return postFile(logFile);
+		} catch (final IOException | InterruptedException e) {
+			Lg.ex(e, "Exception during log file creation");
+			return new PostResult(false, "Log file creation failed");
+		} finally {
+			deleteFile(logFile);
+		}
+	}
+
 	@SuppressLint("StaticFieldLeak")
 	public void upload(final String fileName)
 	{
@@ -199,20 +216,7 @@ public final class UploadLogFile
 			@Override
 			protected PostResult doInBackground(final File... logFiles)
 			{
-				final File logFile = logFiles[0];
-				deleteFile(logFile);
-
-				try {
-					//noinspection UseOfProcessBuilder
-					final Process p = new ProcessBuilder("logcat", "-d", "-v", "threadtime", "-f", logFile.getAbsolutePath()).start();
-					p.waitFor();
-					return postFile(logFile);
-				} catch (final IOException | InterruptedException e) {
-					Lg.ex(e, "Exception during log file creation");
-					return new PostResult(false, "Log file creation failed");
-				} finally {
-					deleteFile(logFile);
-				}
+				return recordAndUploadLogFile(logFiles[0]);
 			}
 
 			@Override
