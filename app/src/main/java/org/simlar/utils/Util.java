@@ -28,6 +28,7 @@ import android.text.Html;
 import android.text.Spanned;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -92,7 +93,7 @@ public final class Util
 	@SuppressWarnings("SameParameterValue")
 	public static Drawable getDrawableCompatible(final Resources resources, final int id)
 	{
-		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? resources.getDrawable(id, null) : resources.getDrawable(id);
+		return ResourcesCompat.getDrawable(resources, id, null);
 	}
 
 	public static Spanned fromHtml(final String string)
