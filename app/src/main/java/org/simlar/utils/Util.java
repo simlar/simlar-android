@@ -21,8 +21,6 @@
 package org.simlar.utils;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.Html;
 import android.text.Spanned;
@@ -87,12 +85,6 @@ public final class Util
 		while ((length = is.read(buffer)) != -1) {
 			os.write(buffer, 0, length);
 		}
-	}
-
-	@SuppressWarnings("SameParameterValue")
-	public static Drawable getDrawableCompatible(final Resources resources, final int id)
-	{
-		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? resources.getDrawable(id, null) : resources.getDrawable(id);
 	}
 
 	public static Spanned fromHtml(final String string)

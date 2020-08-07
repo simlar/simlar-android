@@ -32,6 +32,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +41,6 @@ import org.simlar.R;
 import org.simlar.logging.Lg;
 import org.simlar.service.SimlarCallState;
 import org.simlar.service.SimlarServiceCommunicator;
-import org.simlar.utils.Util;
 
 public final class RingingActivity extends AppCompatActivity
 {
@@ -98,7 +98,7 @@ public final class RingingActivity extends AppCompatActivity
 
 		for (int i = 0; i < 3; i++) {
 			final View circle = new View(this);
-			circle.setBackground(Util.getDrawableCompatible(getResources(), R.drawable.circle));
+			circle.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.circle, null));
 
 			final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(diameter, diameter);
 			layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
