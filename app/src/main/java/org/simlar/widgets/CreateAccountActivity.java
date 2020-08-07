@@ -20,11 +20,10 @@
 
 package org.simlar.widgets;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -41,6 +40,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.Executors;
 
 import org.simlar.R;
 import org.simlar.helper.CreateAccountStatus;
@@ -230,7 +230,6 @@ public final class CreateAccountActivity extends AppCompatActivity
 		super.onStop();
 	}
 
-	@SuppressLint("StaticFieldLeak")
 	private void createAccountRequest()
 	{
 		if (Util.isNullOrEmpty(mTelephoneNumber)) {
@@ -244,18 +243,10 @@ public final class CreateAccountActivity extends AppCompatActivity
 		final String expectedSimlarId = SimlarNumber.createSimlarId(mTelephoneNumber);
 		final String telephoneNumber = mTelephoneNumber;
 
-		new AsyncTask<String, Void, CreateAccount.RequestResult>()
-		{
+		Executors.newSingleThreadExecutor().execute(() -> {
+			final CreateAccount.RequestResult result = CreateAccount.httpPostRequest(telephoneNumber, smsText);
 
-			@Override
-			protected CreateAccount.RequestResult doInBackground(final String... params)
-			{
-				return CreateAccount.httpPostRequest(params[0], params[1]);
-			}
-
-			@Override
-			protected void onPostExecute(final CreateAccount.RequestResult result)
-			{
+			new Handler(Looper.getMainLooper()).post(() -> {
 				mProgressRequest.setVisibility(View.INVISIBLE);
 
 				if (result.isError()) {
@@ -270,16 +261,14 @@ public final class CreateAccountActivity extends AppCompatActivity
 				}
 
 				PreferencesHelper.init(result.getSimlarId(), result.getPassword(), Calendar.getInstance().getTime().getTime());
-				PreferencesHelper.saveToFilePreferences(CreateAccountActivity.this);
-				PreferencesHelper.saveToFileCreateAccountStatus(CreateAccountActivity.this, CreateAccountStatus.WAITING_FOR_SMS, telephoneNumber);
+				PreferencesHelper.saveToFilePreferences(this);
+				PreferencesHelper.saveToFileCreateAccountStatus(this, CreateAccountStatus.WAITING_FOR_SMS, telephoneNumber);
 
 				showMessage(R.string.create_account_activity_message_sms_not_granted_or_timeout);
-			}
-
-		}.execute(mTelephoneNumber, smsText);
+			});
+		});
 	}
 
-	@SuppressLint("StaticFieldLeak")
 	private void confirmRegistrationCode(final String registrationCode)
 	{
 		Lg.i("confirmRegistrationCode: ", registrationCode);
@@ -293,18 +282,10 @@ public final class CreateAccountActivity extends AppCompatActivity
 			return;
 		}
 
-		new AsyncTask<String, Void, CreateAccount.ConfirmResult>()
-		{
+		Executors.newSingleThreadExecutor().execute(() -> {
+			final CreateAccount.ConfirmResult result = CreateAccount.httpPostConfirm(simlarId, registrationCode);
 
-			@Override
-			protected CreateAccount.ConfirmResult doInBackground(final String... params)
-			{
-				return CreateAccount.httpPostConfirm(params[0], params[1]);
-			}
-
-			@Override
-			protected void onPostExecute(final CreateAccount.ConfirmResult result)
-			{
+			new Handler(Looper.getMainLooper()).post(() -> {
 				mProgressConfirm.setVisibility(View.INVISIBLE);
 
 				if (result.isError()) {
@@ -320,11 +301,10 @@ public final class CreateAccountActivity extends AppCompatActivity
 					return;
 				}
 
-				PreferencesHelper.saveToFileCreateAccountStatus(CreateAccountActivity.this, CreateAccountStatus.SUCCESS);
+				PreferencesHelper.saveToFileCreateAccountStatus(this, CreateAccountStatus.SUCCESS);
 				connectToServer();
-			}
-
-		}.execute(simlarId, registrationCode);
+			});
+		});
 	}
 
 	private void connectToServer()
@@ -417,7 +397,6 @@ public final class CreateAccountActivity extends AppCompatActivity
 		finish();
 	}
 
-	@SuppressLint("StaticFieldLeak")
 	@SuppressWarnings("unused")
 	public void onCallClicked(final View view)
 	{
@@ -430,17 +409,10 @@ public final class CreateAccountActivity extends AppCompatActivity
 		mRequestText.setText(R.string.create_account_activity_waiting_for_sms_call);
 		mProgressRequest.setVisibility(View.VISIBLE);
 
-		new AsyncTask<String, Void, CreateAccount.RequestResult>()
-		{
-			@Override
-			protected CreateAccount.RequestResult doInBackground(final String... params)
-			{
-				return CreateAccount.httpPostCall(params[0], params[1]);
-			}
+		Executors.newSingleThreadExecutor().execute(() -> {
+			final CreateAccount.RequestResult result = CreateAccount.httpPostCall(telephoneNumber, PreferencesHelper.getPassword());
 
-			@Override
-			protected void onPostExecute(final CreateAccount.RequestResult result)
-			{
+			new Handler(Looper.getMainLooper()).post(() -> {
 				mProgressRequest.setVisibility(View.INVISIBLE);
 
 				if (result.isError()) {
@@ -451,8 +423,8 @@ public final class CreateAccountActivity extends AppCompatActivity
 
 				Lg.i("successfully requested call");
 				showMessage(R.string.create_account_activity_message_sms_call_success);
-			}
-		}.execute(telephoneNumber, PreferencesHelper.getPassword());
+			});
+		});
 	}
 
 	@SuppressWarnings("unused")
