@@ -71,7 +71,7 @@ public final class LinphoneThread implements Runnable, CoreListener
 {
 	private final Thread mThread;
 	private Handler mLinphoneThreadHandler = null;
-	private final Handler mMainThreadHandler = new Handler();
+	private final Handler mMainThreadHandler = new Handler(Looper.getMainLooper());
 	private VideoState mVideoState = VideoState.OFF;
 
 	// NOTICE: the linphone handler should only be used in the LINPHONE-THREAD
