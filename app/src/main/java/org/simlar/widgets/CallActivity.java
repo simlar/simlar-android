@@ -539,7 +539,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 		Lg.i("finishing activity in ", milliSeconds, " ms");
 
-		new Handler().postDelayed(() -> {
+		mHandler.postDelayed(() -> {
 			finish();
 			overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 		}, milliSeconds);
