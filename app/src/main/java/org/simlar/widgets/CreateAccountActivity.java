@@ -68,7 +68,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 	private Button mButtonConfirm = null;
 	private Button mButtonCall = null;
 
-	private final Handler mHandler = new Handler();
+	private final Handler mHandler = new Handler(Looper.getMainLooper());
 
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCreateAccount();
 	private String mTelephoneNumber = "";
