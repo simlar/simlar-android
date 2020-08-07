@@ -246,7 +246,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 		Executors.newSingleThreadExecutor().execute(() -> {
 			final CreateAccount.RequestResult result = CreateAccount.httpPostRequest(telephoneNumber, smsText);
 
-			new Handler(Looper.getMainLooper()).post(() -> {
+			mHandler.post(() -> {
 				mProgressRequest.setVisibility(View.INVISIBLE);
 
 				if (result.isError()) {
@@ -285,7 +285,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 		Executors.newSingleThreadExecutor().execute(() -> {
 			final CreateAccount.ConfirmResult result = CreateAccount.httpPostConfirm(simlarId, registrationCode);
 
-			new Handler(Looper.getMainLooper()).post(() -> {
+			mHandler.post(() -> {
 				mProgressConfirm.setVisibility(View.INVISIBLE);
 
 				if (result.isError()) {
@@ -412,7 +412,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 		Executors.newSingleThreadExecutor().execute(() -> {
 			final CreateAccount.RequestResult result = CreateAccount.httpPostCall(telephoneNumber, PreferencesHelper.getPassword());
 
-			new Handler(Looper.getMainLooper()).post(() -> {
+			mHandler.post(() -> {
 				mProgressRequest.setVisibility(View.INVISIBLE);
 
 				if (result.isError()) {
