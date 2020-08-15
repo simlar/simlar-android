@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Vibrator;
 
 import org.simlar.logging.Lg;
@@ -57,7 +58,7 @@ final class VibratorManager
 
 		VibratorManagerImpl()
 		{
-			mHandler = new Handler();
+			mHandler = new Handler(Looper.getMainLooper());
 			mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
 		}
 

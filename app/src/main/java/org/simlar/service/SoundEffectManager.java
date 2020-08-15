@@ -25,6 +25,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 
 import androidx.annotation.RawRes;
@@ -56,7 +57,7 @@ final class SoundEffectManager
 	private final class SoundEffectPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener
 	{
 		final SoundEffectType mType;
-		final Handler mHandler = new Handler();
+		final Handler mHandler = new Handler(Looper.getMainLooper());
 		private MediaPlayer mMediaPlayer;
 		private long mPlayRequestTime;
 		private long mPlayStart = -1;

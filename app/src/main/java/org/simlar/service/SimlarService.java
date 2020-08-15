@@ -39,6 +39,7 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
@@ -82,7 +83,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	public static final String INTENT_EXTRA_GCM = "SimlarServiceGCM";
 
 	private LinphoneThread mLinphoneThread = null;
-	private final Handler mHandler = new Handler();
+	private final Handler mHandler = new Handler(Looper.getMainLooper());
 	private final IBinder mBinder = new SimlarServiceBinder();
 	private SimlarStatus mSimlarStatus = SimlarStatus.OFFLINE;
 	private final SimlarCallState mSimlarCallState = new SimlarCallState();

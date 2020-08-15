@@ -2,15 +2,14 @@ language: android
 jdk: oraclejdk8
 
 before_install:
-  - sudo apt-get update
-  - sudo apt-get install -y mono-runtime
+  - yes | sdkmanager "platforms;android-30"
 
 android:
   components:
     - tools
     - platform-tools
     - build-tools-29.0.3
-    - android-29
+    - android-30
     - extra
 
 after_script:

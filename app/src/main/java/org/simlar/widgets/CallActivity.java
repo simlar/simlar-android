@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.view.Menu;
 import android.view.TextureView;
@@ -59,7 +60,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCall();
 	private ProximityScreenLocker mProximityScreenLocker = null;
 	private long mCallStartTime = -1;
-	private final Handler mHandler = new Handler();
+	private final Handler mHandler = new Handler(Looper.getMainLooper());
 	private Runnable mCallTimer = null;
 	private boolean mFinishDelayedCalled = false;
 	private boolean mHideAuthenticationToken = false;
@@ -538,7 +539,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 		Lg.i("finishing activity in ", milliSeconds, " ms");
 
-		new Handler().postDelayed(() -> {
+		mHandler.postDelayed(() -> {
 			finish();
 			overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 		}, milliSeconds);

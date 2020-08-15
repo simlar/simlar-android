@@ -20,13 +20,13 @@
 
 package org.simlar.https;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -38,6 +38,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.util.concurrent.Executors;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -182,7 +183,23 @@ public final class UploadLogFile
 		}
 	}
 
-	@SuppressLint("StaticFieldLeak")
+	private static PostResult recordAndUploadLogFile(final File logFile)
+	{
+		deleteFile(logFile);
+
+		try {
+			//noinspection UseOfProcessBuilder
+			final Process p = new ProcessBuilder("logcat", "-d", "-v", "threadtime", "-f", logFile.getAbsolutePath()).start();
+			p.waitFor();
+			return postFile(logFile);
+		} catch (final IOException | InterruptedException e) {
+			Lg.ex(e, "Exception during log file creation");
+			return new PostResult(false, "Log file creation failed");
+		} finally {
+			deleteFile(logFile);
+		}
+	}
+
 	public void upload(final String fileName)
 	{
 		if (mContext == null) {
@@ -194,41 +211,10 @@ public final class UploadLogFile
 		Lg.i("simlar version=", Version.getVersionName(mContext),
 				" on device: ", Build.MANUFACTURER, " ", Build.MODEL, " (", Build.DEVICE, ") with android version=", Build.VERSION.RELEASE);
 
-		new AsyncTask<File, Void, PostResult>()
-		{
-			@Override
-			protected PostResult doInBackground(final File... logFiles)
-			{
-				final File logFile = logFiles[0];
-				deleteFile(logFile);
+		Executors.newSingleThreadExecutor().execute(() -> {
+			final PostResult result = recordAndUploadLogFile(new File(mContext.getCacheDir(), fileName));
 
-				try {
-					//noinspection UseOfProcessBuilder
-					final Process p = new ProcessBuilder("logcat", "-d", "-v", "threadtime", "-f", logFile.getAbsolutePath()).start();
-					p.waitFor();
-					return postFile(logFile);
-				} catch (final IOException | InterruptedException e) {
-					Lg.ex(e, "Exception during log file creation");
-					return new PostResult(false, "Log file creation failed");
-				} finally {
-					deleteFile(logFile);
-				}
-			}
-
-			@Override
-			protected void onPreExecute()
-			{
-				if (mProgressDialog == null) {
-					Lg.w("no progress dialog");
-					return;
-				}
-
-				mProgressDialog.show();
-			}
-
-			@Override
-			protected void onPostExecute(final PostResult result)
-			{
+			new Handler(Looper.getMainLooper()).post(() -> {
 				mProgressDialog.dismiss();
 				if (!result.success) {
 					Lg.e("aborting uploading log file: ", result.errorMessage);
@@ -251,7 +237,7 @@ public final class UploadLogFile
 				} catch (final ActivityNotFoundException e) {
 					Lg.ex(e, "ActivityNotFoundException chooser_send_email");
 				}
-			}
-		}.execute(new File(mContext.getCacheDir(), fileName));
+			});
+		});
 	}
 }
