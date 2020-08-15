@@ -95,7 +95,7 @@ public final class ContactsProvider
 		boolean mFakeData = false;
 		private final Set<FullContactsListener> mFullContactsListeners = new HashSet<>();
 		private final Map<ContactListener, String> mContactListener = new HashMap<>();
-		private final ExecutorService executorService = Executors.newSingleThreadExecutor();
+		private final ExecutorService mExecutorService = Executors.newSingleThreadExecutor();
 		private final Handler mMainLoopHandler = new Handler(Looper.getMainLooper());
 
 		private enum State
@@ -125,7 +125,7 @@ public final class ContactsProvider
 			}
 
 			mState = State.PARSING_PHONES_ADDRESS_BOOK;
-			executorService.execute(() -> {
+			mExecutorService.execute(() -> {
 				final Map<String, ContactData> contacts = mFakeData
 						? createFakeData()
 						: loadContactsFromTelephoneBook(context, mySimlarId);
@@ -176,7 +176,7 @@ public final class ContactsProvider
 
 			notifyContactListeners();
 
-			executorService.execute(() -> {
+			mExecutorService.execute(() -> {
 				final Map<String, ContactStatus> contactsStatus = GetContactsStatus.httpPostGetContactsStatus(mContacts.keySet());
 
 				mMainLoopHandler.post(() -> onContactsStatusRequestedFromServer(contactsStatus));
