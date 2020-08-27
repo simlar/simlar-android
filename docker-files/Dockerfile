@@ -12,7 +12,9 @@ ENV ANDROID_SDK_ROOT "/opt/android-sdks"
 
 RUN apt-get update && \
     apt-get dist-upgrade --assume-yes && \
-    apt-get install --assume-yes --no-install-recommends default-jdk wget unzip
+    apt-get install --assume-yes --no-install-recommends default-jdk wget unzip && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN wget -O "${DOWNLOAD_TEMP_FILE}" "${ANDROID_SDK_COMMAND_LINE_TOOLS_URL}" && \
     echo "${ANDROID_SDK_COMMAND_LINE_TOOLS_CHECKSUM} ${DOWNLOAD_TEMP_FILE}" | sha256sum -c && \
