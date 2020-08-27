@@ -23,4 +23,8 @@ RUN wget -O "${DOWNLOAD_TEMP_FILE}" "${ANDROID_SDK_COMMAND_LINE_TOOLS_URL}" && \
     mkdir "${ANDROID_SDK_ROOT}/cmdline-tools" && \
     mv "${ANDROID_SDK_ROOT}/tools/" "${ANDROID_SDK_ROOT}/cmdline-tools/"
 
-RUN echo "y" | "${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin/sdkmanager" "platforms;android-${ANDROID_SDK_VERSION}" "ndk;${ANDROID_NDK_VERSION}"
+RUN echo "y" | "${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin/sdkmanager" \
+    "platform-tools" \
+    "emulator" \
+    "platforms;android-${ANDROID_SDK_VERSION}" \
+    "ndk;${ANDROID_NDK_VERSION}"
