@@ -6,7 +6,7 @@ ENV ANDROID_NDK_VERSION "21.0.6113669"
 ENV ANDROID_SDK_COMMAND_LINE_TOOLS_URL "https://dl.google.com/android/repository/commandlinetools-linux-6609375_latest.zip"
 ENV ANDROID_SDK_COMMAND_LINE_TOOLS_CHECKSUM "89f308315e041c93a37a79e0627c47f21d5c5edbe5e80ea8dc0aac8a649e0e92"
 ENV DOWNLOAD_TEMP_FILE "/tmp/android-sdk-commandlinetools.zip"
-ENV LANG "C"
+ENV LANG "C.UTF-8"
 ENV DEBIAN_FRONTEND "noninteractive"
 ENV ANDROID_SDK_ROOT "/opt/android-sdks"
 
