@@ -1,6 +1,6 @@
 FROM debian:buster
 
-ENV ANDROID_SDK_VERSION "29"
+ENV ANDROID_SDK_VERSION "30"
 ENV ANDROID_NDK_VERSION "21.0.6113669"
 
 ENV ANDROID_SDK_COMMAND_LINE_TOOLS_URL "https://dl.google.com/android/repository/commandlinetools-linux-6609375_latest.zip"
