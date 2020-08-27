@@ -52,3 +52,27 @@ The linphone-sdk uses cmake. You may set its environment variables e.g. to compi
 ```
 CMAKE_BUILD_PARALLEL_LEVEL=32 ./scripts/bootstrap-liblinphone.sh
 ```
+
+### Build with docker
+A docker file provides a defined build environment.
+You may create a simlar-android build container like this.
+```
+docker build --no-cache -t simlar-android-builder docker-files/
+```
+You may use the container to build simlar-android.
+```
+docker run -it --rm -v $(pwd):/pwd simlar-android-builder:latest bash -c "cd /pwd && ./gradlew clean build connectedCheck"
+```
+However, caching gradle downloads speeds up the build.
+
+```
+docker run -it --rm -v $(pwd)-docker-gradle-cache:/home/builder/.gradle -v $(pwd):/pwd simlar-android-builder:latest bash -c "cd /pwd && ./gradlew clean build connectedCheck"
+```
+It is also possible to path the keystore file to the docker container.
+```
+docker run -it --rm -v $(pwd)-docker-gradle-cache:/home/builder/.gradle -v $(pwd):/pwd -v ${SIMLAR_ANDROID_KEYSTORE_FILE}:/android-release-key.keystore -e SIMLAR_ANDROID_KEYSTORE_FILE=/android-release-key.keystore -e SIMLAR_ANDROID_KEYSTORE_PASSWORD="${SIMLAR_ANDROID_KEYSTORE_PASSWORD}" simlar-android-builder:latest bash -c "cd /pwd && ./gradlew clean assemblePushRelease"
+```
+The container can build liblinphone, too.
+```
+docker run -it --rm -v $(pwd)-docker-gradle-cache:/home/builder/.gradle -v $(pwd):/pwd -e CMAKE_BUILD_PARALLEL_LEVEL=16 simlar-android-builder:latest bash -c "cd /pwd && git config --global user.email 'ben@simlar.org' && git config --global user.name 'Ben Sartor' && ./scripts/bootstrap-liblinphone.sh"
+```
