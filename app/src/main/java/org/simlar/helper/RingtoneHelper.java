@@ -31,7 +31,8 @@ public final class RingtoneHelper
 		throw new AssertionError("This class was not meant to be instantiated");
 	}
 
-	public static Uri getDefaultRingtone() {
+	public static Uri getDefaultRingtone()
+	{
 		return RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
 	}
 }
