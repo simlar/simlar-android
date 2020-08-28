@@ -58,7 +58,7 @@ public final class PreferencesHelper
 		throw new AssertionError("This class was not meant to be instantiated");
 	}
 
-	public static void init(final String mySimlarId, final String password, final long createAccountRequestTimestamp )
+	public static void init(final String mySimlarId, final String password, final long createAccountRequestTimestamp)
 	{
 		mMySimlarId = mySimlarId;
 		mPassword = password;
