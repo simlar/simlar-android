@@ -646,7 +646,7 @@ public final class LinphoneThread implements Runnable, CoreListener
 
 	private static String getCodec(final PayloadType payloadType)
 	{
-		return payloadType == null ? null:
+		return payloadType == null ? null :
 				payloadType.getMimeType() + ' ' + payloadType.getClockRate() / 1000;
 	}
 
