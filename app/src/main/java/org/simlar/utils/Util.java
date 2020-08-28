@@ -132,7 +132,8 @@ public final class Util
 		return service;
 	}
 
-	public static <T> T defaultIfNull(final T value, final T defaultValue) {
+	public static <T> T defaultIfNull(final T value, final T defaultValue)
+	{
 		return value == null ? defaultValue : value;
 	}
 }
