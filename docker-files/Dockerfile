@@ -1,6 +1,7 @@
 FROM debian:buster
 
 ENV ANDROID_SDK_VERSION "30"
+ENV ANDROID_BUILD_TOOLS_VERSION "29.0.3"
 ENV ANDROID_NDK_VERSION "21.0.6113669"
 
 ENV ANDROID_SDK_COMMAND_LINE_TOOLS_URL "https://dl.google.com/android/repository/commandlinetools-linux-6609375_latest.zip"
@@ -27,4 +28,5 @@ RUN echo "y" | "${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin/sdkmanager" \
     "platform-tools" \
     "emulator" \
     "platforms;android-${ANDROID_SDK_VERSION}" \
+    "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
     "ndk;${ANDROID_NDK_VERSION}"
