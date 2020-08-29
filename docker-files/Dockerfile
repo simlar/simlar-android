@@ -16,6 +16,7 @@ ENV ANDROID_NDK "${ANDROID_SDK_ROOT}/ndk/${ANDROID_NDK_VERSION}"
 RUN apt-get update && \
     apt-get dist-upgrade --assume-yes && \
     apt-get install --assume-yes --no-install-recommends default-jdk wget unzip && \
+    apt-get install --assume-yes --no-install-recommends git cmake make patch pkg-config doxygen nasm yasm python-pystache python-six && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
