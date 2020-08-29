@@ -12,6 +12,7 @@ ENV DEBIAN_FRONTEND "noninteractive"
 ENV ANDROID_SDK_ROOT "/home/builder/Android/Sdk"
 ENV ANDROID_HOME "${ANDROID_SDK_ROOT}"
 ENV ANDROID_NDK "${ANDROID_SDK_ROOT}/ndk/${ANDROID_NDK_VERSION}"
+ENV PATH "${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin:${PATH}"
 
 RUN apt-get update && \
     apt-get dist-upgrade --assume-yes && \
@@ -31,7 +32,7 @@ RUN mkdir -p "${ANDROID_SDK_ROOT}" && \
     mkdir "${ANDROID_SDK_ROOT}/cmdline-tools" && \
     mv "${ANDROID_SDK_ROOT}/tools/" "${ANDROID_SDK_ROOT}/cmdline-tools/"
 
-RUN echo "y" | "${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin/sdkmanager" \
+RUN echo "y" | "sdkmanager" \
     "platform-tools" \
     "emulator" \
     "platforms;android-${ANDROID_SDK_VERSION}" \
