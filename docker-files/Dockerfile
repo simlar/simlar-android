@@ -32,7 +32,7 @@ RUN mkdir -p "${ANDROID_SDK_ROOT}" && \
     mkdir "${ANDROID_SDK_ROOT}/cmdline-tools" && \
     mv "${ANDROID_SDK_ROOT}/tools/" "${ANDROID_SDK_ROOT}/cmdline-tools/"
 
-RUN echo "y" | "sdkmanager" \
+RUN yes | "sdkmanager" \
     "platform-tools" \
     "emulator" \
     "platforms;android-${ANDROID_SDK_VERSION}" \
