@@ -9,7 +9,7 @@ ENV ANDROID_SDK_COMMAND_LINE_TOOLS_CHECKSUM "89f308315e041c93a37a79e0627c47f21d5
 ENV DOWNLOAD_TEMP_FILE "/tmp/android-sdk-commandlinetools.zip"
 ENV LANG "C.UTF-8"
 ENV DEBIAN_FRONTEND "noninteractive"
-ENV ANDROID_SDK_ROOT "/opt/android-sdks"
+ENV ANDROID_SDK_ROOT "/home/builder/Android/Sdk"
 
 RUN apt-get update && \
     apt-get dist-upgrade --assume-yes && \
@@ -17,7 +17,11 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN wget -O "${DOWNLOAD_TEMP_FILE}" "${ANDROID_SDK_COMMAND_LINE_TOOLS_URL}" && \
+RUN adduser builder
+USER builder
+
+RUN mkdir -p "${ANDROID_SDK_ROOT}" && \
+    wget -O "${DOWNLOAD_TEMP_FILE}" "${ANDROID_SDK_COMMAND_LINE_TOOLS_URL}" && \
     echo "${ANDROID_SDK_COMMAND_LINE_TOOLS_CHECKSUM} ${DOWNLOAD_TEMP_FILE}" | sha256sum -c && \
     unzip "${DOWNLOAD_TEMP_FILE}" -d "${ANDROID_SDK_ROOT}" && \
     rm -f "${DOWNLOAD_TEMP_FILE}" && \
