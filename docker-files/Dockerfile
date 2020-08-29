@@ -10,6 +10,8 @@ ENV DOWNLOAD_TEMP_FILE "/tmp/android-sdk-commandlinetools.zip"
 ENV LANG "C.UTF-8"
 ENV DEBIAN_FRONTEND "noninteractive"
 ENV ANDROID_SDK_ROOT "/home/builder/Android/Sdk"
+ENV ANDROID_HOME "${ANDROID_SDK_ROOT}"
+ENV ANDROID_NDK "${ANDROID_SDK_ROOT}/ndk/${ANDROID_NDK_VERSION}"
 
 RUN apt-get update && \
     apt-get dist-upgrade --assume-yes && \
