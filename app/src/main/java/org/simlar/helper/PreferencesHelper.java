@@ -58,7 +58,7 @@ public final class PreferencesHelper
 		throw new AssertionError("This class was not meant to be instantiated");
 	}
 
-	public static void init(final String mySimlarId, final String password, final long createAccountRequestTimestamp )
+	public static void init(final String mySimlarId, final String password, final long createAccountRequestTimestamp)
 	{
 		mMySimlarId = mySimlarId;
 		mPassword = password;
@@ -141,7 +141,7 @@ public final class PreferencesHelper
 		return mVerifiedTelephoneNumber;
 	}
 
-	@SuppressWarnings("unused") // is only used in flavour push
+	@SuppressWarnings({"unused", "RedundantSuppression"}) // is only used in flavour push
 	public static int getGcmClientVersion()
 	{
 		return mGcmClientVersion;
@@ -209,7 +209,7 @@ public final class PreferencesHelper
 		editor.apply();
 	}
 
-	@SuppressWarnings("unused") // is only used in flavour push
+	@SuppressWarnings({"unused", "RedundantSuppression"}) // is only used in flavour push
 	public static void saveToFileGcmClientVersion(final Context context, final int gcmClientVersion)
 	{
 		mGcmClientVersion = gcmClientVersion;

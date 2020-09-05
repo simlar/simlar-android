@@ -50,14 +50,14 @@ public class AgreeActivity extends AppCompatActivity
 		return true;
 	}
 
-	@SuppressWarnings("unused")
+	@SuppressWarnings({"unused", "RedundantSuppression"})
 	public final void createAccount(final View view)
 	{
 		startActivity(new Intent(this, VerifyNumberActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
 		finish();
 	}
 
-	@SuppressWarnings("unused")
+	@SuppressWarnings({"unused", "RedundantSuppression"})
 	public final void cancelAccountCreation(final View view)
 	{
 		finish();
