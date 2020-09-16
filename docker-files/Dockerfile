@@ -38,3 +38,6 @@ RUN yes | "sdkmanager" \
     "platforms;android-${ANDROID_SDK_VERSION}" \
     "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
     "ndk;${ANDROID_NDK_VERSION}"
+
+RUN git config --global user.email 'builder@simlar-android-builder' && \
+    git config --global user.name 'simlar android builder'

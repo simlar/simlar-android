@@ -74,5 +74,5 @@ docker run -it --rm -v $(pwd)-docker-gradle-cache:/home/builder/.gradle -v $(pwd
 ```
 The container can build liblinphone, too.
 ```
-docker run -it --rm -v $(pwd)-docker-gradle-cache:/home/builder/.gradle -v $(pwd):/pwd -e CMAKE_BUILD_PARALLEL_LEVEL=16 simlar-android-builder:latest bash -c "cd /pwd && git config --global user.email 'ben@simlar.org' && git config --global user.name 'Ben Sartor' && ./scripts/bootstrap-liblinphone.sh"
+docker run -it --rm -v $(pwd)-docker-gradle-cache:/home/builder/.gradle -v $(pwd):/pwd -e CMAKE_BUILD_PARALLEL_LEVEL=16 simlar-android-builder:latest bash -c "cd /pwd && ./scripts/bootstrap-liblinphone.sh"
 ```
