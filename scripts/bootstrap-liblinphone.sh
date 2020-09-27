@@ -29,7 +29,7 @@ git submodule sync --recursive
 
 
 if [ -d "${LINPHONE_SDK_PATCH_DIR}" ] ; then
-	git am --no-scissors "${LINPHONE_SDK_PATCH_DIR}"/*.patch
+	git am "${LINPHONE_SDK_PATCH_DIR}"/*.patch
 fi
 
 ## patches to linphone-android may change submodules, so be sure to update them here
@@ -37,31 +37,31 @@ git submodule update --recursive --init
 
 if [ -d "${LINPHONE_PATCH_DIR}" ] ; then
 	cd liblinphone
-	git am --no-scissors "${LINPHONE_PATCH_DIR}"/*.patch
+	git am "${LINPHONE_PATCH_DIR}"/*.patch
 	cd ..
 fi
 
 if [ -d "${MEDIASTREAMER2_PATCH_DIR}" ] ; then
 	cd mediastreamer2
-	git am --no-scissors "${MEDIASTREAMER2_PATCH_DIR}"/*.patch
+	git am "${MEDIASTREAMER2_PATCH_DIR}"/*.patch
 	cd ..
 fi
 
 if [ -d "${BELLESIP_PATCH_DIR}" ] ; then
 	cd belle-sip
-	git am --no-scissors "${BELLESIP_PATCH_DIR}"/*.patch
+	git am "${BELLESIP_PATCH_DIR}"/*.patch
 	cd ..
 fi
 
 if [ -d "${ORTP_PATCH_DIR}" ] ; then
 	cd linphone/oRTP
-	git am --no-scissors "${ORTP_PATCH_DIR}"/*.patch
+	git am "${ORTP_PATCH_DIR}"/*.patch
 	cd ../..
 fi
 
 if [ -d "${BZRTP_PATCH_DIR}" ] ; then
 	cd bzrtp
-	git am --no-scissors "${BZRTP_PATCH_DIR}"/*.patch
+	git am "${BZRTP_PATCH_DIR}"/*.patch
 	cd ..
 fi
 
