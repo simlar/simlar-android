@@ -49,7 +49,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 30
         versionName getGitVersion()
-        versionCode 54
+        versionCode 55
     }
 
     compileOptions {
