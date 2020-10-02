@@ -57,18 +57,4 @@
         <packageUrl regex="true">^pkg:maven/log4j/log4j@.*$</packageUrl>
         <cve>CVE-2020-9488</cve>
     </suppress>
-    <suppress>
-        <notes>
-            <![CDATA[
-                file names:
-                 * kotlin-reflect-1.3.72.jar
-                 * kotlin-stdlib-1.3.72.jar
-                 * kotlin-stdlib-common-1.3.72.jar
-                 * kotlin-stdlib-jdk7-1.3.72.jar
-                 * kotlin-stdlib-jdk8-1.3.72.jar
-            ]]>
-        </notes>
-        <packageUrl regex="true">^pkg:maven/org\.jetbrains\.kotlin/kotlin\-.*@1.3.72$</packageUrl>
-        <cve>CVE-2020-15824</cve>
-    </suppress>
 </suppressions>
