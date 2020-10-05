@@ -41,8 +41,3 @@ RUN yes | "sdkmanager" \
 
 RUN git config --global user.email 'builder@simlar-android-builder' && \
     git config --global user.name 'simlar android builder'
-
-## update
-RUN sdkmanager "build-tools;"$(sdkmanager --list | sed -n "s/^[[:space:]]*build-tools;\([^[:space:]]*\).*/\1/p" | sort -u | tail -1)
-RUN sdkmanager "platforms;android-"$(sdkmanager --list | sed -n "s/^[[:space:]]*platforms;android-\([^[:space:]]*\).*/\1/p" | sort -u --human-numeric-sort | tail -1)
-RUN sdkmanager "ndk;"$(sdkmanager --list | sed -n "s/^[[:space:]]*ndk;\([^[:space:]]*\).*/\1/p" | sort -u | tail -1)
