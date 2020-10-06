@@ -316,6 +316,12 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		}
 
 		if (simlarCallState.isEndedCall()) {
+			final AudioManager audioManager = Util.getSystemService(this, Context.AUDIO_SERVICE);
+			if (audioManager.isBluetoothScoOn()) {
+				audioManager.stopBluetoothSco();
+				//audioManager.setBluetoothScoOn(false);
+			}
+
 			if (mHeadsetReceiver != null) {
 				unregisterReceiver(mHeadsetReceiver);
 				mHeadsetReceiver = null;
