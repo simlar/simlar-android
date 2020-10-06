@@ -21,6 +21,7 @@
 package org.simlar.service;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothHeadset;
 import android.bluetooth.BluetoothProfile;
 import android.content.BroadcastReceiver;
@@ -29,7 +30,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
 
+import java.util.List;
+
 import org.simlar.logging.Lg;
+import org.simlar.utils.Util;
 
 public final class BluetoothManager {
     private BluetoothHeadset mBluetoothHeadset = null;
@@ -84,6 +88,13 @@ public final class BluetoothManager {
                             }
                         };
                         mContext.registerReceiver(mBluetoothScoReceiver, new IntentFilter(AudioManager.ACTION_SCO_AUDIO_STATE_UPDATED));
+
+                        final List<BluetoothDevice> devices = mBluetoothHeadset.getConnectedDevices();
+                        if (!devices.isEmpty()) {
+                            Lg.i("detected already connected devices => start using them");
+                            final AudioManager audioManager = Util.getSystemService(mContext, Context.AUDIO_SERVICE);
+                            audioManager.startBluetoothSco();
+                        }
                     }
                 }
 
