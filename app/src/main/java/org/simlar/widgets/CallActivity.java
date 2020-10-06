@@ -629,6 +629,15 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		Lg.i("showSpeakerChoices: ", available);
 		mButtonSpeakerChoices.setVisibility(available ? View.VISIBLE : View.GONE);
 		mButtonSpeaker.setVisibility(available ? View.GONE : View.VISIBLE);
+
+		if (available) {
+			final AudioManager audioManager = Util.getSystemService(this, Context.AUDIO_SERVICE);
+			if (audioManager.isBluetoothScoOn()) {
+				mButtonSpeakerChoices.setImageResource(R.drawable.bluetooth);
+			} else {
+				mButtonSpeakerChoices.setImageResource(R.drawable.speaker_choices);
+			}
+		}
 	}
 
 	@Override
@@ -701,6 +710,17 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	public void showSpeakerChoices(final View view)
 	{
 		Lg.i("button showSpeakerChoices clicked");
+
+		final AudioManager audioManager = Util.getSystemService(this, Context.AUDIO_SERVICE);
+		if (audioManager.isBluetoothScoOn()) {
+			audioManager.stopBluetoothSco();
+			audioManager.setBluetoothScoOn(false);
+			mButtonSpeakerChoices.setImageResource(R.drawable.speaker_choices);
+		} else {
+			audioManager.setBluetoothScoOn(true);
+			audioManager.startBluetoothSco();
+			mButtonSpeakerChoices.setImageResource(R.drawable.bluetooth);
+		}
 	}
 
 	private void setButtonMicrophoneMute()
