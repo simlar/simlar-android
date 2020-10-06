@@ -23,23 +23,57 @@ package org.simlar.service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothHeadset;
 import android.bluetooth.BluetoothProfile;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.media.AudioManager;
 
 import org.simlar.logging.Lg;
 
 public final class BluetoothManager {
     private BluetoothHeadset mBluetoothHeadset = null;
+    private BroadcastReceiver mBluetoothReceiver = null;
+    private BroadcastReceiver mBluetoothScoReceiver = null;
+
     private final BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+    private final Context mContext;
 
     public BluetoothManager(final Context context)
     {
+        mContext = context;
+
         if (mBluetoothAdapter != null) {
-            mBluetoothAdapter.getProfileProxy(context, new BluetoothProfile.ServiceListener()
+            mBluetoothAdapter.getProfileProxy(mContext, new BluetoothProfile.ServiceListener()
             {
                 @Override
                 public void onServiceConnected(final int profile, final BluetoothProfile proxy) {
                     if (profile == BluetoothProfile.HEADSET) {
                         mBluetoothHeadset = (BluetoothHeadset) proxy;
+
+                        mBluetoothReceiver = new BroadcastReceiver()
+                        {
+                            @Override
+                            public void onReceive(final Context context, final Intent intent)
+                            {
+                                final int state = intent.getIntExtra(BluetoothProfile.EXTRA_STATE, -2);
+                                final boolean connected = state == BluetoothProfile.STATE_CONNECTED;
+                                Lg.i("bluetooth receive state: ", state, " => headset connected: ", connected);
+                            }
+                        };
+                        mContext.registerReceiver(mBluetoothReceiver, new IntentFilter(BluetoothHeadset.ACTION_CONNECTION_STATE_CHANGED));
+
+                        mBluetoothScoReceiver = new BroadcastReceiver()
+                        {
+                            @Override
+                            public void onReceive(final Context context, final Intent intent)
+                            {
+                                final int state = intent.getIntExtra(AudioManager.EXTRA_SCO_AUDIO_STATE, -2);
+                                final boolean connected = state == AudioManager.SCO_AUDIO_STATE_CONNECTED;
+                                Lg.i("bluetooth sco receive state: ", state, " => connected: ", connected);
+                            }
+                        };
+                        mContext.registerReceiver(mBluetoothScoReceiver, new IntentFilter(AudioManager.ACTION_SCO_AUDIO_STATE_UPDATED));
                     }
                 }
 
@@ -58,6 +92,14 @@ public final class BluetoothManager {
     {
         if (mBluetoothAdapter != null && mBluetoothHeadset != null) {
             mBluetoothAdapter.closeProfileProxy(BluetoothProfile.HEADSET, mBluetoothHeadset);
+        }
+
+        if (mBluetoothReceiver != null) {
+            mContext.unregisterReceiver(mBluetoothReceiver);
+        }
+
+        if (mBluetoothScoReceiver != null) {
+            mContext.unregisterReceiver(mBluetoothScoReceiver);
         }
     }
 }
