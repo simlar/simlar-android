@@ -55,7 +55,7 @@ import org.simlar.service.SimlarService;
 import org.simlar.service.SimlarServiceCommunicator;
 import org.simlar.utils.Util;
 
-public final class CallActivity extends AppCompatActivity implements VolumesControlDialogFragment.Listener, VideoFragment.Listener, HeadsetReceiver.Listener
+public final class CallActivity extends AppCompatActivity implements VolumesControlDialogFragment.Listener, VideoFragment.Listener, HeadsetReceiver.Listener, BluetoothManager.Listener
 {
 	private static final String INTENT_EXTRA_SIMLAR_ID = "simlarId";
 
@@ -310,7 +310,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		}
 
 		if (mBluetoothManager == null) {
-			mBluetoothManager = new BluetoothManager(this);
+			mBluetoothManager = new BluetoothManager(this, this);
 		}
 
 		if (simlarCallState.isEndedCall()) {
@@ -614,6 +614,11 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	public void showSoundSettingsDialog(final View view)
 	{
 		new VolumesControlDialogFragment().show(getSupportFragmentManager(), VolumesControlDialogFragment.class.getCanonicalName());
+	}
+
+	@Override
+	public void onBlueToothHeadsetAvailable(final boolean available)
+	{
 	}
 
 	@Override
