@@ -48,6 +48,7 @@ import org.simlar.helper.VideoState;
 import org.simlar.logging.Lg;
 import org.simlar.proximityscreenlocker.ProximityScreenLocker;
 import org.simlar.proximityscreenlocker.ProximityScreenLockerHelper;
+import org.simlar.service.BluetoothManager;
 import org.simlar.service.HeadsetReceiver;
 import org.simlar.service.SimlarCallState;
 import org.simlar.service.SimlarService;
@@ -98,6 +99,8 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 	private HeadsetReceiver mHeadsetReceiver = null;
 	private boolean mWiredHeadsetConnected = false;
+
+	private BluetoothManager mBluetoothManager = null;
 
 	private final class SimlarServiceCommunicatorCall extends SimlarServiceCommunicator
 	{
@@ -306,10 +309,19 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 			mHeadsetReceiver.registerReceiver(this);
 		}
 
+		if (mBluetoothManager == null) {
+			mBluetoothManager = new BluetoothManager(this);
+		}
+
 		if (simlarCallState.isEndedCall()) {
 			if (mHeadsetReceiver != null) {
 				unregisterReceiver(mHeadsetReceiver);
 				mHeadsetReceiver = null;
+			}
+
+			if (mBluetoothManager != null) {
+				mBluetoothManager.destroy();
+				mBluetoothManager = null;
 			}
 
 			if (mAlertDialogRemoteRequestedVideo != null) {
