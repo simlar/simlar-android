@@ -136,8 +136,13 @@ final class LinphoneHandler
 		mLinphoneCore.setUploadBandwidth(0);
 		mLinphoneCore.setDownloadBandwidth(0);
 
-		// set audio port range
+		// set random audio port
+		mLinphoneCore.setAudioPort(-1);
 		mLinphoneCore.setAudioPortRange(6000, 8000);
+
+		// set random video port
+		mLinphoneCore.setVideoPort(-1);
+		mLinphoneCore.setVideoPortRange(8001, 10000);
 
 		// CA file
 		mLinphoneCore.setRootCa(rootCaFile);
