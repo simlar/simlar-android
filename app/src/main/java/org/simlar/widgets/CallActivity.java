@@ -93,6 +93,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private ImageButton mButtonToggleVideo = null;
 	private ImageButton mButtonMicro = null;
 	private ImageButton mButtonSpeaker = null;
+	private ImageButton mButtonSpeakerChoices = null;
 
 	private ConnectionDetailsDialogFragment mConnectionDetailsDialogFragment = null;
 	private VideoFragment mVideoFragment = null;
@@ -175,6 +176,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mButtonToggleVideo = findViewById(R.id.buttonToggleVideo);
 		mButtonMicro = findViewById(R.id.buttonMicro);
 		mButtonSpeaker = findViewById(R.id.buttonSpeaker);
+		mButtonSpeakerChoices = findViewById(R.id.buttonSpeakerChoices);
 
 		//
 		// Presets
@@ -619,6 +621,14 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	@Override
 	public void onBlueToothHeadsetAvailable(final boolean available)
 	{
+		showSpeakerChoices(available);
+	}
+
+	private void showSpeakerChoices(final boolean available)
+	{
+		Lg.i("showSpeakerChoices: ", available);
+		mButtonSpeakerChoices.setVisibility(available ? View.VISIBLE : View.GONE);
+		mButtonSpeaker.setVisibility(available ? View.GONE : View.VISIBLE);
 	}
 
 	@Override
@@ -685,6 +695,12 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	{
 		mCommunicator.getService().toggleExternalSpeaker();
 		setButtonSpeaker();
+	}
+
+	@SuppressWarnings({"unused", "RedundantSuppression"})
+	public void showSpeakerChoices(final View view)
+	{
+		Lg.i("button showSpeakerChoices clicked");
 	}
 
 	private void setButtonMicrophoneMute()
