@@ -44,9 +44,9 @@ public final class BluetoothManager {
     private final Context mContext;
     private final Listener mListener;
 
-    @FunctionalInterface
     public interface Listener {
         void onBlueToothHeadsetAvailable(final boolean available);
+        void onBlueToothHeadsetUsing(final boolean using);
     }
 
     public BluetoothManager(final Context context, final Listener listener)
@@ -83,8 +83,8 @@ public final class BluetoothManager {
                             {
                                 final int state = intent.getIntExtra(AudioManager.EXTRA_SCO_AUDIO_STATE, -2);
                                 final boolean connected = state == AudioManager.SCO_AUDIO_STATE_CONNECTED;
-                                Lg.i("bluetooth sco receive state: ", state, " => connected: ", connected);
-                                mListener.onBlueToothHeadsetAvailable(connected);
+                                Lg.i("bluetooth sco receive state: ", state, " => using bluetooth headset: ", connected);
+                                mListener.onBlueToothHeadsetUsing(connected);
                             }
                         };
                         mContext.registerReceiver(mBluetoothScoReceiver, new IntentFilter(AudioManager.ACTION_SCO_AUDIO_STATE_UPDATED));

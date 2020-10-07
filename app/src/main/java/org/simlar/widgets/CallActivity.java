@@ -630,6 +630,14 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		showSpeakerChoices(available);
 	}
 
+	@Override
+	public void onBlueToothHeadsetUsing(final boolean using)
+	{
+		if (using) {
+			showSpeakerChoices(true);
+		}
+	}
+
 	private void showSpeakerChoices(final boolean available)
 	{
 		Lg.i("showSpeakerChoices: ", available);
