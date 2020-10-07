@@ -84,6 +84,13 @@ public final class BluetoothManager {
                                 final int state = intent.getIntExtra(AudioManager.EXTRA_SCO_AUDIO_STATE, -2);
                                 final boolean connected = state == AudioManager.SCO_AUDIO_STATE_CONNECTED;
                                 Lg.i("bluetooth sco receive state: ", state, " => using bluetooth headset: ", connected);
+
+                                if (connected) {
+                                    // request bluetooth telephony communication
+                                    final AudioManager audioManager = Util.getSystemService(mContext, Context.AUDIO_SERVICE);
+                                    audioManager.setBluetoothScoOn(true);
+                                }
+
                                 mListener.onBlueToothHeadsetUsing(connected);
                             }
                         };
@@ -92,8 +99,7 @@ public final class BluetoothManager {
                         final List<BluetoothDevice> devices = mBluetoothHeadset.getConnectedDevices();
                         if (!devices.isEmpty()) {
                             Lg.i("detected already connected devices => start using them");
-                            final AudioManager audioManager = Util.getSystemService(mContext, Context.AUDIO_SERVICE);
-                            audioManager.startBluetoothSco();
+                            startUsingBluetoothHeadset();
                         }
                     }
                 }
@@ -107,6 +113,19 @@ public final class BluetoothManager {
                 }
             }, BluetoothProfile.HEADSET);
         }
+    }
+
+    public void startUsingBluetoothHeadset()
+    {
+        final AudioManager audioManager = Util.getSystemService(mContext, Context.AUDIO_SERVICE);
+        audioManager.startBluetoothSco();
+    }
+
+    public void stopUsingBluetoothHeadset()
+    {
+        final AudioManager audioManager = Util.getSystemService(mContext, Context.AUDIO_SERVICE);
+        audioManager.setBluetoothScoOn(false);
+        audioManager.stopBluetoothSco();
     }
 
     public void destroy()

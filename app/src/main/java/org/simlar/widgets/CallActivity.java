@@ -318,9 +318,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 		if (simlarCallState.isEndedCall()) {
 			if (mBluetoothHeadsetUsing) {
-				final AudioManager audioManager = Util.getSystemService(this, Context.AUDIO_SERVICE);
-				audioManager.stopBluetoothSco();
-				audioManager.setBluetoothScoOn(false);
+				mBluetoothManager.stopUsingBluetoothHeadset();
 			}
 
 			if (mHeadsetReceiver != null) {
@@ -637,9 +635,6 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mBluetoothHeadsetUsing = using;
 
 		if (mBluetoothHeadsetUsing) {
-			final AudioManager audioManager = Util.getSystemService(this, Context.AUDIO_SERVICE);
-			audioManager.setBluetoothScoOn(true);
-
 			showSpeakerChoices(true);
 			mProximityScreenLocker.release(false);
 		} else if (!mWiredHeadsetConnected) {
@@ -737,13 +732,11 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	{
 		Lg.i("button showSpeakerChoices clicked");
 
-		final AudioManager audioManager = Util.getSystemService(this, Context.AUDIO_SERVICE);
 		if (mBluetoothHeadsetUsing) {
-			audioManager.stopBluetoothSco();
-			audioManager.setBluetoothScoOn(false);
+			mBluetoothManager.stopUsingBluetoothHeadset();
 			mButtonSpeakerChoices.setImageResource(R.drawable.speaker_choices);
 		} else {
-			audioManager.startBluetoothSco();
+			mBluetoothManager.startUsingBluetoothHeadset();
 			mButtonSpeakerChoices.setImageResource(R.drawable.bluetooth);
 		}
 	}
