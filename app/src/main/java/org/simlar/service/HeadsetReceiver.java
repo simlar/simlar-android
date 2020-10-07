@@ -34,7 +34,7 @@ public final class HeadsetReceiver extends BroadcastReceiver {
 
     @FunctionalInterface
     public interface Listener {
-        void onWiredHeadsetAvailable(final boolean available);
+        void onWiredHeadsetConnected(final boolean connected);
     }
 
     public HeadsetReceiver(final Listener mListener)
@@ -60,8 +60,8 @@ public final class HeadsetReceiver extends BroadcastReceiver {
         }
 
         final int state = intent.getIntExtra("state", -1);
-        final boolean available = state != 0;
-        Lg.i("received state: ", state, " -> available: ", available);
-        mListener.onWiredHeadsetAvailable(available);
+        final boolean connected = state != 0;
+        Lg.i("received state: ", state, " -> wired headset connected: ", connected);
+        mListener.onWiredHeadsetConnected(connected);
     }
 }

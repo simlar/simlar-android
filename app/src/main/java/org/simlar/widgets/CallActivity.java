@@ -97,7 +97,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private VideoFragment mVideoFragment = null;
 
 	private HeadsetReceiver mHeadsetReceiver = null;
-	private boolean mWiredHeadsetAvailable = false;
+	private boolean mWiredHeadsetConnected = false;
 
 	private final class SimlarServiceCommunicatorCall extends SimlarServiceCommunicator
 	{
@@ -484,7 +484,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		final FragmentManager fm = getSupportFragmentManager();
 		fm.beginTransaction().add(R.id.layoutVideoFragmentContainer, mVideoFragment).commit();
 
-		if (!mWiredHeadsetAvailable) {
+		if (!mWiredHeadsetConnected) {
 			mProximityScreenLocker.release(false);
 			setExternalSpeaker(true);
 		}
@@ -503,7 +503,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 		mVideoFragment = null;
 
-		if (!isFinishing() && !mWiredHeadsetAvailable) {
+		if (!isFinishing() && !mWiredHeadsetConnected) {
 			mProximityScreenLocker.acquire();
 		}
 
@@ -605,10 +605,10 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	}
 
 	@Override
-	public void onWiredHeadsetAvailable(final boolean available)
+	public void onWiredHeadsetConnected(final boolean connected)
 	{
-		mWiredHeadsetAvailable = available;
-		if (mWiredHeadsetAvailable) {
+		mWiredHeadsetConnected = connected;
+		if (mWiredHeadsetConnected) {
 			mProximityScreenLocker.release(false);
 			setExternalSpeaker(false);
 		} else {
