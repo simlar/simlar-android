@@ -102,6 +102,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private boolean mWiredHeadsetConnected = false;
 
 	private BluetoothManager mBluetoothManager = null;
+	private boolean mBluetoothHeadsetUsing = false;
 
 	private final class SimlarServiceCommunicatorCall extends SimlarServiceCommunicator
 	{
@@ -504,7 +505,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		final FragmentManager fm = getSupportFragmentManager();
 		fm.beginTransaction().add(R.id.layoutVideoFragmentContainer, mVideoFragment).commit();
 
-		if (!mWiredHeadsetConnected) {
+		if (!mWiredHeadsetConnected && !mBluetoothHeadsetUsing) {
 			mProximityScreenLocker.release(false);
 			setExternalSpeaker(true);
 		}
@@ -523,7 +524,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 		mVideoFragment = null;
 
-		if (!isFinishing() && !mWiredHeadsetConnected) {
+		if (!isFinishing() && !mWiredHeadsetConnected && !mBluetoothHeadsetUsing) {
 			mProximityScreenLocker.acquire();
 		}
 
@@ -633,8 +634,17 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	@Override
 	public void onBlueToothHeadsetUsing(final boolean using)
 	{
-		if (using) {
+		mBluetoothHeadsetUsing = using;
+
+		if (mBluetoothHeadsetUsing) {
 			showSpeakerChoices(true);
+			mProximityScreenLocker.release(false);
+		} else if (!mWiredHeadsetConnected) {
+			if (mVideoFragment != null) {
+				setExternalSpeaker(true);
+			} else {
+				mProximityScreenLocker.acquire();
+			}
 		}
 	}
 
@@ -661,7 +671,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		if (mWiredHeadsetConnected) {
 			mProximityScreenLocker.release(false);
 			setExternalSpeaker(false);
-		} else {
+		} else if (!mBluetoothHeadsetUsing) {
 			if (mVideoFragment != null) {
 				setExternalSpeaker(true);
 			} else {
