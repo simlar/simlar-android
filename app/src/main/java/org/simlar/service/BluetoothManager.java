@@ -49,6 +49,37 @@ public final class BluetoothManager {
         void onBluetoothHeadsetUsing(final boolean using);
     }
 
+    private static enum BluetoothState {
+        DISCONNECTED,
+        CONNECTING,
+        CONNECTED,
+        DISCONNECTING,
+        UNKNOWN;
+
+        public static BluetoothState from(final String str) {
+            return str == null ? null : from(Integer.valueOf(str));
+        }
+
+        private static BluetoothState from(final Integer state) {
+            if (state == null) {
+                return null;
+            }
+
+            switch (state) {
+            case BluetoothProfile.STATE_DISCONNECTED:
+                return DISCONNECTED;
+            case BluetoothProfile.STATE_CONNECTING:
+                return CONNECTING;
+            case BluetoothProfile.STATE_CONNECTED:
+                return CONNECTED;
+            case BluetoothProfile.STATE_DISCONNECTING:
+                return DISCONNECTING;
+            default:
+                return UNKNOWN;
+            }
+        }
+    }
+
     public BluetoothManager(final Context context, final Listener listener)
     {
         mContext = context;
@@ -68,27 +99,10 @@ public final class BluetoothManager {
                             @Override
                             public void onReceive(final Context context, final Intent intent)
                             {
-                                final int state = intent.getIntExtra(BluetoothProfile.EXTRA_STATE, -2);
-                                final boolean connected = state == BluetoothProfile.STATE_CONNECTED;
-                                Lg.i("bluetooth receive state: ", formatState(state), " => headset connected: ", connected);
+                                final BluetoothState state = BluetoothState.from(intent.getStringExtra(BluetoothProfile.EXTRA_STATE));
+                                final boolean connected = state == BluetoothState.CONNECTED;
+                                Lg.i("bluetooth receive state: ", state, " => headset connected: ", connected);
                                 mListener.onBluetoothHeadsetAvailable(connected);
-                            }
-
-                            private String formatState(final int state) {
-                                switch (state) {
-                                case BluetoothProfile.STATE_DISCONNECTED:
-                                    return "DISCONNECTED";
-                                case BluetoothProfile.STATE_CONNECTING:
-                                    return "CONNECTING";
-                                case BluetoothProfile.STATE_CONNECTED:
-                                    return "CONNECTED";
-                                case BluetoothProfile.STATE_DISCONNECTING:
-                                    return "DISCONNECTING";
-                                case -2:
-                                    return "NONE";
-                                default:
-                                    return "UNKNOWN";
-                                }
                             }
                         };
                         mContext.registerReceiver(mBluetoothReceiver, new IntentFilter(BluetoothHeadset.ACTION_CONNECTION_STATE_CHANGED));
