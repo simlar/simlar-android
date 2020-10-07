@@ -28,7 +28,6 @@ import java.util.EnumSet;
 import java.util.Random;
 import java.util.Set;
 
-import org.linphone.call.AndroidAudioManager;
 import org.linphone.core.AVPFMode;
 import org.linphone.core.Account;
 import org.linphone.core.AccountParams;
@@ -60,7 +59,6 @@ final class LinphoneHandler
 	private static final String STUN_SERVER = "stun.simlar.org";
 
 	private Core mLinphoneCore = null;
-	private AndroidAudioManager mAndroidAudioManager = null;
 
 	public synchronized void destroy(final CoreListener listener)
 	{
@@ -129,8 +127,6 @@ final class LinphoneHandler
 		mLinphoneCore.addListener(listener);
 		mLinphoneCore.start();
 		mLinphoneCore.setUserAgent("Simlar", Version.getVersionName(context));
-
-		mAndroidAudioManager = new AndroidAudioManager(context, mLinphoneCore);
 
 		mLinphoneCore.setIpv6Enabled(false);
 		mLinphoneCore.setNatPolicy(createNatPolicy());
