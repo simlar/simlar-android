@@ -655,6 +655,8 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		if (available) {
 			if (mBluetoothHeadsetUsing) {
 				mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_bluetooth);
+			} else if (mCommunicator.getService().getExternalSpeaker()) {
+				mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_speaker);
 			} else {
 				mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_phone);
 			}
@@ -732,13 +734,50 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	{
 		Lg.i("button showSpeakerChoices clicked");
 
+		final String[] items = {
+				getString(mWiredHeadsetConnected ? R.string.call_activity_speaker_choices_wired_headset : R.string.call_activity_speaker_choices_phone),
+				getString(R.string.call_activity_speaker_choices_speaker),
+				getString(R.string.call_activity_speaker_choices_bluetooth)
+		};
+
+		final int selected;
 		if (mBluetoothHeadsetUsing) {
-			mBluetoothManager.stopUsingBluetoothHeadset();
-			mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_phone);
+			selected = 2;
+		} else if (mCommunicator.getService().getExternalSpeaker()) {
+			selected = 1;
 		} else {
-			mBluetoothManager.startUsingBluetoothHeadset();
-			mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_bluetooth);
+			selected = 0;
 		}
+
+		new AlertDialog.Builder(this)
+				.setSingleChoiceItems(items, selected, (dialog, which) -> {
+					//noinspection SwitchStatementDensity,SwitchStatementWithoutDefaultBranch
+					switch (which) {
+					case 0:
+						if (mBluetoothHeadsetUsing) {
+							mBluetoothManager.stopUsingBluetoothHeadset();
+						}
+						setExternalSpeaker(false);
+						mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_phone);
+						break;
+					case 1:
+						if (mBluetoothHeadsetUsing) {
+							mBluetoothManager.stopUsingBluetoothHeadset();
+						}
+						setExternalSpeaker(true);
+						mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_speaker);
+						break;
+					case 2:
+						if (!mBluetoothHeadsetUsing) {
+							mBluetoothManager.startUsingBluetoothHeadset();
+						}
+						setExternalSpeaker(false);
+						mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_bluetooth);
+						break;
+					}
+
+					dialog.dismiss();
+				}).create().show();
 	}
 
 	private void setButtonMicrophoneMute()
