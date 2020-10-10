@@ -76,7 +76,8 @@ public final class AudioOutputDialogFragment extends DialogFragment
 	private View createView(final FragmentActivity activity)
 	{
 		@SuppressLint("InflateParams")
-		final View view = activity.getLayoutInflater().inflate(R.layout.dialog_fragment_volumes_control, null);
+		final View view = activity.getLayoutInflater().inflate(R.layout.dialog_fragment_audio_output, null);
+
 
 		return view;
 	}
