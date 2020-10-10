@@ -36,7 +36,7 @@ import org.simlar.R;
 import org.simlar.logging.Lg;
 
 @SuppressWarnings("WeakerAccess") // class must be public otherwise crashes
-public final class AudioOutputSelectDialogFragment extends DialogFragment
+public final class AudioOutputDialogFragment extends DialogFragment
 {
 	private Listener mListener = null;
 
