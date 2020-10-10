@@ -130,8 +130,19 @@ final class LinphoneHandler
 		mLinphoneCore.setTransports(transports); // liblinphone requires setting transports again.
 		Lg.i("using random port: ", transports.getTlsPort());
 
-		// set audio port range
+		mLinphoneCore.setMtu(1300);
+
+		// set unlimited bandwidth
+		mLinphoneCore.setUploadBandwidth(0);
+		mLinphoneCore.setDownloadBandwidth(0);
+
+		// set random audio port
+		mLinphoneCore.setAudioPort(-1);
 		mLinphoneCore.setAudioPortRange(6000, 8000);
+
+		// set random video port
+		mLinphoneCore.setVideoPort(-1);
+		mLinphoneCore.setVideoPortRange(8001, 10000);
 
 		// CA file
 		mLinphoneCore.setRootCa(rootCaFile);
