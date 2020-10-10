@@ -462,16 +462,16 @@ public final class LinphoneThread implements Runnable, CoreListener
 		});
 	}
 
-	private Call.State fixCallState(final Call.State onCallStateChanged)
+	private Call.State fixCallState(final Call.State state)
 	{
-		if (Call.State.Released == onCallStateChanged || Call.State.Error == onCallStateChanged) {
+		if (Call.State.Released == state || Call.State.Error == state) {
 			if (mLinphoneHandler.hasNoCurrentCalls()) {
-				Lg.i("fixCallState: ", onCallStateChanged, " -> ", Call.State.End);
+				Lg.i("fixCallState: ", state, " -> ", Call.State.End);
 				return Call.State.End;
 			}
 		}
 
-		return onCallStateChanged;
+		return state;
 	}
 
 	private VideoState createVideoState(final Call.State state, final Call call)

@@ -295,7 +295,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mButtonToggleVideo.setEnabled(simlarCallState.isVideoRequestPossible());
 
 		setButtonMicrophoneMute();
-		setButtonSpeakerMute();
+		setButtonSpeaker();
 
 		if (simlarCallState.isEndedCall()) {
 			if (mAlertDialogRemoteRequestedVideo != null) {
@@ -636,7 +636,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	public void toggleSpeakerMuted(final View view)
 	{
 		mCommunicator.getService().toggleExternalSpeaker();
-		setButtonSpeakerMute();
+		setButtonSpeaker();
 	}
 
 	private void setButtonMicrophoneMute()
@@ -667,7 +667,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		toggleSpeakerMuted(null);
 	}
 
-	private void setButtonSpeakerMute()
+	private void setButtonSpeaker()
 	{
 		if (mCommunicator.getService().getExternalSpeaker()) {
 			mButtonSpeaker.setImageResource(R.drawable.speaker_on);
