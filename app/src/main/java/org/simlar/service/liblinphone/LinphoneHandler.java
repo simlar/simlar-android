@@ -130,6 +130,12 @@ final class LinphoneHandler
 		mLinphoneCore.setTransports(transports); // liblinphone requires setting transports again.
 		Lg.i("using random port: ", transports.getTlsPort());
 
+		mLinphoneCore.setMtu(1300);
+
+		// set unlimited bandwidth
+		mLinphoneCore.setUploadBandwidth(0);
+		mLinphoneCore.setDownloadBandwidth(0);
+
 		// set audio port range
 		mLinphoneCore.setAudioPortRange(6000, 8000);
 
