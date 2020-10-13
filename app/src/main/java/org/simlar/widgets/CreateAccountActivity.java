@@ -44,6 +44,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.simlar.R;
+import org.simlar.helper.CreateAccountMessage;
 import org.simlar.helper.CreateAccountStatus;
 import org.simlar.helper.FlavourHelper;
 import org.simlar.helper.PreferencesHelper;
@@ -111,7 +112,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 				setResult(RESULT_OK);
 				finish();
 			} else {
-				showMessage(R.string.create_account_activity_message_sip_not_possible);
+				showMessage(CreateAccountMessage.SIP_NOT_POSSIBLE);
 			}
 		}
 	}
@@ -166,7 +167,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 
 		if (PreferencesHelper.getCreateAccountStatus() == CreateAccountStatus.WAITING_FOR_SMS) {
 			mTelephoneNumber = PreferencesHelper.getVerifiedTelephoneNumber();
-			showMessage(R.string.create_account_activity_message_sms_not_granted_or_timeout);
+			showMessage(CreateAccountMessage.SMS_NOT_GRANTED_OR_TIMEOUT);
 		} else {
 			mTelephoneNumber = getIntent().getStringExtra(INTENT_EXTRA_NUMBER);
 			getIntent().removeExtra(INTENT_EXTRA_NUMBER);
@@ -262,7 +263,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 				PreferencesHelper.saveToFilePreferences(this);
 				PreferencesHelper.saveToFileCreateAccountStatus(this, CreateAccountStatus.WAITING_FOR_SMS, telephoneNumber);
 
-				showMessage(R.string.create_account_activity_message_sms_not_granted_or_timeout);
+				showMessage(CreateAccountMessage.SMS_NOT_GRANTED_OR_TIMEOUT);
 			});
 		});
 	}
@@ -276,7 +277,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 		final String simlarId = PreferencesHelper.getMySimlarIdOrEmptyString();
 		if (Util.isNullOrEmpty(registrationCode) || Util.isNullOrEmpty(simlarId)) {
 			Lg.e("Error: registrationCode or simlarId empty");
-			showMessage(R.string.create_account_activity_message_not_possible);
+			showMessage(CreateAccountMessage.NOT_POSSIBLE);
 			return;
 		}
 
@@ -295,7 +296,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 				if (!Util.equalString(result.getSimlarId(), simlarId)) {
 					Lg.e("confirm response received simlarId=", new Lg.Anonymizer(result.getSimlarId()),
 							" not equal to requested simlarId=", new Lg.Anonymizer(simlarId));
-					showMessage(R.string.create_account_activity_message_not_possible);
+					showMessage(CreateAccountMessage.NOT_POSSIBLE);
 					return;
 				}
 
@@ -311,30 +312,20 @@ public final class CreateAccountActivity extends AppCompatActivity
 		mCommunicator.startServiceAndRegister(this, VerifyNumberActivity.class, null);
 	}
 
-	private void showMessage(final int resId)
+	private void showMessage(final CreateAccountMessage message)
 	{
+		if (message == null) {
+			return;
+		}
+
 		mLayoutProgress.setVisibility(View.GONE);
 		mLayoutMessage.setVisibility(View.VISIBLE);
 
-		switch (resId) {
-		case R.string.create_account_activity_message_wrong_telephone_number:
-			mDetails.setText(String.format(getString(resId), mTelephoneNumber));
-			setRegistrationCodeInputVisible(false);
-			break;
-		case R.string.create_account_activity_message_registration_code:
-		case R.string.create_account_activity_message_too_many_calls:
-			mDetails.setText(resId);
-			setRegistrationCodeInputVisible(true);
-			break;
-		case R.string.create_account_activity_message_sms:
-		case R.string.create_account_activity_message_sms_not_granted_or_timeout:
-		case R.string.create_account_activity_message_sms_call_success:
-			mDetails.setText(String.format(getString(resId), mTelephoneNumber));
-			setRegistrationCodeInputVisible(true);
-			break;
-		default:
-			mDetails.setText(resId);
-			setRegistrationCodeInputVisible(false);
+		setRegistrationCodeInputVisible(message.isRegistrationCodeInputVisible());
+		if (message.isTelephoneNumber()) {
+			mDetails.setText(String.format(getString(message.getResourceId()), mTelephoneNumber));
+		} else {
+			mDetails.setText(message.getResourceId());
 		}
 	}
 
@@ -420,7 +411,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 				}
 
 				Lg.i("successfully requested call");
-				showMessage(R.string.create_account_activity_message_sms_call_success);
+				showMessage(CreateAccountMessage.SMS_CALL_SUCCESS);
 			});
 		});
 	}
