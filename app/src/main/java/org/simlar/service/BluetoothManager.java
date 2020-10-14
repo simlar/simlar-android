@@ -45,8 +45,8 @@ public final class BluetoothManager {
     private final Listener mListener;
 
     public interface Listener {
-        void onBlueToothHeadsetAvailable(final boolean available);
-        void onBlueToothHeadsetUsing(final boolean using);
+        void onBluetoothHeadsetAvailable(final boolean available);
+        void onBluetoothHeadsetUsing(final boolean using);
     }
 
     public BluetoothManager(final Context context, final Listener listener)
@@ -71,7 +71,7 @@ public final class BluetoothManager {
                                 final int state = intent.getIntExtra(BluetoothProfile.EXTRA_STATE, -2);
                                 final boolean connected = state == BluetoothProfile.STATE_CONNECTED;
                                 Lg.i("bluetooth receive state: ", state, " => headset connected: ", connected);
-                                mListener.onBlueToothHeadsetAvailable(connected);
+                                mListener.onBluetoothHeadsetAvailable(connected);
                             }
                         };
                         mContext.registerReceiver(mBluetoothReceiver, new IntentFilter(BluetoothHeadset.ACTION_CONNECTION_STATE_CHANGED));
@@ -91,7 +91,7 @@ public final class BluetoothManager {
                                     audioManager.setBluetoothScoOn(true);
                                 }
 
-                                mListener.onBlueToothHeadsetUsing(connected);
+                                mListener.onBluetoothHeadsetUsing(connected);
                             }
                         };
                         mContext.registerReceiver(mBluetoothScoReceiver, new IntentFilter(AudioManager.ACTION_SCO_AUDIO_STATE_UPDATED));

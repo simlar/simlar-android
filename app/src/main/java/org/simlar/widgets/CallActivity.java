@@ -624,13 +624,13 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	}
 
 	@Override
-	public void onBlueToothHeadsetAvailable(final boolean available)
+	public void onBluetoothHeadsetAvailable(final boolean available)
 	{
 		showSpeakerChoices(available);
 	}
 
 	@Override
-	public void onBlueToothHeadsetUsing(final boolean using)
+	public void onBluetoothHeadsetUsing(final boolean using)
 	{
 		mBluetoothHeadsetUsing = using;
 
