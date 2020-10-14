@@ -121,11 +121,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 		@Override
 		public void onTextChanged(final CharSequence s, final int start, final int before, final int count)
 		{
-			if (s.length() == 6) {
-				mButtonConfirm.setEnabled(true);
-			} else {
-				mButtonConfirm.setEnabled(false);
-			}
+			mButtonConfirm.setEnabled(s.length() == 6);
 		}
 
 		@Override
