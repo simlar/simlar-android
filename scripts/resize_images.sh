@@ -27,9 +27,9 @@ rm -rf "${RES_DIR}"/drawable-ldpi/*
 
 "${FIND}" "${RES_DIR}"/drawable-xxxhdpi/ -type f -printf "%f\n" | sort | while read IMAGE; do
 	git grep -q ${IMAGE%.*} || echo "WARNING: file not used: ${IMAGE}"
-	convert "${RES_DIR}"/drawable-xxxhdpi/"${IMAGE}" -strip -resize 75%    "${RES_DIR}"/drawable-xxhdpi/"${IMAGE}"
-	convert "${RES_DIR}"/drawable-xxxhdpi/"${IMAGE}" -strip -resize 50%    "${RES_DIR}"/drawable-xhdpi/"${IMAGE}"
-	convert "${RES_DIR}"/drawable-xxxhdpi/"${IMAGE}" -strip -resize 37.5%  "${RES_DIR}"/drawable-hdpi/"${IMAGE}"
-	convert "${RES_DIR}"/drawable-xxxhdpi/"${IMAGE}" -strip -resize 25%    "${RES_DIR}"/drawable-mdpi/"${IMAGE}"
-	convert "${RES_DIR}"/drawable-xxxhdpi/"${IMAGE}" -strip -resize 18.75% "${RES_DIR}"/drawable-ldpi/"${IMAGE}"
+	gm convert "${RES_DIR}"/drawable-xxxhdpi/"${IMAGE}" -strip -resize 75%    "${RES_DIR}"/drawable-xxhdpi/"${IMAGE}"
+	gm convert "${RES_DIR}"/drawable-xxxhdpi/"${IMAGE}" -strip -resize 50%    "${RES_DIR}"/drawable-xhdpi/"${IMAGE}"
+	gm convert "${RES_DIR}"/drawable-xxxhdpi/"${IMAGE}" -strip -resize 37.5%  "${RES_DIR}"/drawable-hdpi/"${IMAGE}"
+	gm convert "${RES_DIR}"/drawable-xxxhdpi/"${IMAGE}" -strip -resize 25%    "${RES_DIR}"/drawable-mdpi/"${IMAGE}"
+	gm convert "${RES_DIR}"/drawable-xxxhdpi/"${IMAGE}" -strip -resize 18.75% "${RES_DIR}"/drawable-ldpi/"${IMAGE}"
 done
