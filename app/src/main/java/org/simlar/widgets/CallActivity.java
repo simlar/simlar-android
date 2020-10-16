@@ -656,7 +656,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 			if (mBluetoothHeadsetUsing) {
 				mButtonSpeakerChoices.setImageResource(R.drawable.bluetooth);
 			} else {
-				mButtonSpeakerChoices.setImageResource(R.drawable.speaker_choices);
+				mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_phone);
 			}
 		}
 	}
@@ -734,7 +734,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 		if (mBluetoothHeadsetUsing) {
 			mBluetoothManager.stopUsingBluetoothHeadset();
-			mButtonSpeakerChoices.setImageResource(R.drawable.speaker_choices);
+			mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_phone);
 		} else {
 			mBluetoothManager.startUsingBluetoothHeadset();
 			mButtonSpeakerChoices.setImageResource(R.drawable.bluetooth);

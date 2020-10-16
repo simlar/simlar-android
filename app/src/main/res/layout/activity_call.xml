@@ -340,7 +340,7 @@
                 style="@style/callActivityImageButton"
                 android:contentDescription="@string/call_activity_speaker_choices"
                 android:onClick="showSpeakerChoices"
-                app:srcCompat="@drawable/speaker_choices"
+                app:srcCompat="@drawable/audio_output_phone"
                 android:visibility="gone"/>
         </LinearLayout>
 
