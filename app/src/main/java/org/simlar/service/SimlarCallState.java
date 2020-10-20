@@ -241,7 +241,9 @@ public final class SimlarCallState
 		case TALKING:
 			return context.getString(R.string.call_activity_talking);
 		case ENDED:
-			return context.getString(mCallEndReason.getDisplayMessageId());
+			return context.getString(mCallEndReason == null
+					? R.string.call_activity_call_ended_normally
+					: mCallEndReason.getDisplayMessageId());
 		case UNKNOWN:
 		default:
 			Lg.w("getCallStatusDisplayMessage mLinphoneCallState=", mLinphoneCallState);
