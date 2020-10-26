@@ -148,11 +148,20 @@ public final class NoContactPermissionFragment extends Fragment
 		}
 
 		cursor.moveToFirst();
-		final String name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.SORT_KEY_PRIMARY));
-		final String telephoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
+		final String name = getColumnString(cursor, ContactsContract.CommonDataKinds.Phone.SORT_KEY_PRIMARY);
+		final String telephoneNumber = getColumnString(cursor, ContactsContract.CommonDataKinds.Phone.NUMBER);
 		cursor.close();
 
 		callContact(name, telephoneNumber);
+	}
+
+	private static String getColumnString(final Cursor cursor, final String columnName)
+	{
+		final int columnIndex = cursor.getColumnIndex(columnName);
+		return columnIndex == -1
+				? null
+				: cursor.getString(columnIndex);
 	}
 
 	private void callContact(final String name, final String telephoneNumber)
