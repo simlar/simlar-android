@@ -93,7 +93,7 @@ public final class PermissionsHelper
 		static Set<Type> getMajorPermissions(final boolean needsExternalStorage)
 		{
 			final Set<Type> majorTypes = EnumSet.noneOf(Type.class);
-			for (final Type type : Type.values()) {
+			for (final Type type : values()) {
 				if (type.mMajor) {
 					majorTypes.add(type);
 				}

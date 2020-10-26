@@ -53,7 +53,7 @@ public enum LinphoneCallState
 	RELEASED, // 18
 	UNKNOWN;
 
-	private static final LinphoneCallState[] ALL = LinphoneCallState.values();
+	private static final LinphoneCallState[] ALL = values();
 
 	public static LinphoneCallState fromLinphoneCallState(final Call.State state)
 	{

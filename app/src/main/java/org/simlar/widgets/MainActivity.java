@@ -257,41 +257,59 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item)
 	{
-		// Handle item selection
-		switch (item.getItemId()) {
-		case R.id.action_reload_contacts:
+		// using switch is not possible as R.* is not final since android gradle plugin 5.0
+		final int itemId = item.getItemId();
+		if (itemId == R.id.action_reload_contacts) {
 			reloadContacts();
 			return true;
-		case R.id.action_upload_logfile:
+		}
+
+		if (itemId == R.id.action_upload_logfile) {
 			uploadLogFile();
 			return true;
-		case R.id.action_enable_debug_mode:
+		}
+
+		if (itemId == R.id.action_enable_debug_mode) {
 			toggleDebugMode();
 			return true;
-		case R.id.action_delete_account:
+		}
+
+		if (itemId == R.id.action_delete_account) {
 			deleteAccountAndQuit();
 			return true;
-		case R.id.action_fake_telephone_book:
+		}
+
+		if (itemId == R.id.action_fake_telephone_book) {
 			fakeTelephoneBook();
 			return true;
-		case R.id.action_notification_settings:
+		}
+
+		if (itemId == R.id.action_notification_settings) {
 			PermissionsHelper.openNotificationPolicyAccessSettings(this);
 			return true;
-		case R.id.action_app_settings:
+		}
+
+		if (itemId == R.id.action_app_settings) {
 			PermissionsHelper.openAppSettings(this);
 			return true;
-		case R.id.action_tell_a_friend:
+		}
+
+		if (itemId == R.id.action_tell_a_friend) {
 			tellAFriend();
 			return true;
-		case R.id.action_show_about:
+		}
+
+		if (itemId == R.id.action_show_about) {
 			showAbout();
 			return true;
-		case R.id.action_quit:
+		}
+
+		if (itemId == R.id.action_quit) {
 			quit();
 			return true;
-		default:
-			return super.onOptionsItemSelected(item);
 		}
+
+		return super.onOptionsItemSelected(item);
 	}
 
 	private static void updateMenu(final boolean visible, final int itemResource, final int stringResource, final int order, final Menu menu)

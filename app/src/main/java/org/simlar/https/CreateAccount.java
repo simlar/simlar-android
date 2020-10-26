@@ -30,7 +30,7 @@ import java.util.Map;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-import org.simlar.R;
+import org.simlar.helper.CreateAccountMessage;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
@@ -78,24 +78,24 @@ public final class CreateAccount
 			return mErrorId != SUCCESS || Util.isNullOrEmpty(mResult1) || Util.isNullOrEmpty(mResult2);
 		}
 
-		public final int getErrorMessage()
+		public final CreateAccountMessage getErrorMessage()
 		{
 			switch (mErrorId) {
 			case 22:
-				return R.string.create_account_activity_message_wrong_telephone_number;
+				return CreateAccountMessage.WRONG_TELEPHONE_NUMBER;
 			case 23: // Too many requests
 				//noinspection DuplicateBranchesInSwitch
-				return R.string.create_account_activity_message_not_possible;
+				return CreateAccountMessage.NOT_POSSIBLE;
 			case 24:
-				return R.string.create_account_activity_message_sms;
+				return CreateAccountMessage.SMS;
 			case 25:
-				return R.string.create_account_activity_message_too_many_confirms;
+				return CreateAccountMessage.TOO_MANY_CONFIRMS;
 			case 26:
-				return R.string.create_account_activity_message_registration_code;
+				return CreateAccountMessage.REGISTRATION_CODE;
 			case 68:
-				return R.string.create_account_activity_message_too_many_calls;
+				return CreateAccountMessage.TOO_MANY_CALLS;
 			default:
-				return R.string.create_account_activity_message_not_possible;
+				return CreateAccountMessage.NOT_POSSIBLE;
 			}
 		}
 
