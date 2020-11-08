@@ -765,6 +765,11 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 						}
 						setExternalSpeaker(false);
 						mButtonSpeakerChoices.setImageResource(mWiredHeadsetConnected ? R.drawable.audio_output_wired_headset : R.drawable.audio_output_phone);
+						if (mWiredHeadsetConnected) {
+							mProximityScreenLocker.release(false);
+						} else {
+							mProximityScreenLocker.acquire();
+						}
 						break;
 					case 1:
 						if (mBluetoothHeadsetUsing) {
@@ -772,6 +777,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 						}
 						setExternalSpeaker(true);
 						mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_speaker);
+						mProximityScreenLocker.release(false);
 						break;
 					case 2:
 						if (!mBluetoothHeadsetUsing) {
@@ -779,6 +785,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 						}
 						setExternalSpeaker(false);
 						mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_bluetooth);
+						mProximityScreenLocker.release(false);
 						break;
 					}
 
