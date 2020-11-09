@@ -418,8 +418,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		Lg.i("registerActivityToNotification: ", activity.getSimpleName());
 		mNotificationActivity = activity;
 
-		final NotificationManager nm = Util.getSystemService(this, Context.NOTIFICATION_SERVICE);
-		nm.notify(NOTIFICATION_ID, createNotification());
+		updateNotification();
 	}
 
 	private static void createMissedCallNotification(final Context context, final String simlarId)
@@ -449,6 +448,12 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		((NotificationManager) Util.getSystemService(context, Context.NOTIFICATION_SERVICE))
 				.notify(PreferencesHelper.getNextMissedCallNotificationId(context), notificationBuilder.build());
+	}
+
+	private void updateNotification()
+	{
+		final NotificationManager nm = Util.getSystemService(this, Context.NOTIFICATION_SERVICE);
+		nm.notify(NOTIFICATION_ID, createNotification());
 	}
 
 	private Notification createNotification()
@@ -665,8 +670,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		if (!FlavourHelper.isGcmEnabled()) {
 			Lg.i("updating notification based on registration state");
-			final NotificationManager nm = Util.getSystemService(this, Context.NOTIFICATION_SERVICE);
-			nm.notify(NOTIFICATION_ID, createNotification());
+			updateNotification();
 		}
 	}
 
@@ -815,8 +819,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		ContactsProvider.getNameAndPhotoId(number, this, (name, photoId) -> {
 			mSimlarCallState.updateContactNameAndImage(name, photoId);
 
-			final NotificationManager nm = Util.getSystemService(this, Context.NOTIFICATION_SERVICE);
-			nm.notify(NOTIFICATION_ID, createNotification());
+			updateNotification();
 
 			SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
 		});
@@ -880,8 +883,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 
 		mNotificationActivity = ACTIVITIES.getMainActivity();
-		final NotificationManager nm = Util.getSystemService(this, Context.NOTIFICATION_SERVICE);
-		nm.notify(NOTIFICATION_ID, createNotification());
+		updateNotification();
 
 		if (mSimlarStatus == SimlarStatus.ONGOING_CALL) {
 			mLinphoneThread.terminateAllCalls();
