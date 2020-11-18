@@ -18,6 +18,7 @@ declare -r APP_BUILD_GRADLE="${PROJECT_DIR}/app/build.gradle"
 
 declare -r SIMLAR_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_BUGFIX}"
 echo "creating tag: '${SIMLAR_VERSION}'"
+declare -r COMMENT=${COMMENT:-"Version: ${SIMLAR_VERSION}"}
 
 if ! git diff --quiet ; then
 	git status
@@ -45,7 +46,7 @@ if [ "${BRANCH}" != "master" ] ; then
 	git checkout "${BRANCH}"
 fi
 
-git tag -s "${SIMLAR_VERSION}" -m "Version: ${SIMLAR_VERSION}"
+git tag -s "${SIMLAR_VERSION}" -m "${COMMENT}"
 git push origin "${SIMLAR_VERSION}"
 git checkout "${SIMLAR_VERSION}"
 
