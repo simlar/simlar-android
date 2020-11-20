@@ -316,6 +316,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			}
 		}
 
+		startForeground(NOTIFICATION_ID, createNotification());
+
 		// We want this service to continue running until it is explicitly stopped, so return sticky.
 		return START_STICKY;
 	}
@@ -335,8 +337,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "simlar:WakeLock");
 		mDisplayWakeLock = createDisplayWakeLock();
 		mWifiLock = createWifiWakeLock();
-
-		startForeground(NOTIFICATION_ID, createNotification());
 
 		final IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
