@@ -415,6 +415,11 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			return;
 		}
 
+		if (activity.equals(mNotificationActivity)) {
+			Lg.i("registerActivityToNotification already registered: ", activity.getSimpleName());
+			return;
+		}
+
 		Lg.i("registerActivityToNotification: ", activity.getSimpleName());
 		mNotificationActivity = activity;
 
