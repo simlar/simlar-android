@@ -466,14 +466,16 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		final PendingIntent activity = PendingIntent.getActivity(this, 0,
 				new Intent(this, mNotificationActivity).addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED), 0);
 
-		final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, SimlarNotificationChannel.CALL.name());
-		notificationBuilder.setSmallIcon(FlavourHelper.isGcmEnabled() ? R.drawable.ic_notification_ongoing_call : mSimlarStatus.getNotificationIcon());
-		notificationBuilder.setLargeIcon(mSimlarCallState.getContactPhotoBitmap(this, R.drawable.contact_picture));
-		notificationBuilder.setContentTitle(getString(R.string.app_name));
-		notificationBuilder.setContentText(createNotificationText());
-		notificationBuilder.setOngoing(true);
-		notificationBuilder.setContentIntent(activity);
-		notificationBuilder.setWhen(System.currentTimeMillis());
+		final NotificationCompat.Builder notificationBuilder =
+				new NotificationCompat.Builder(this, SimlarNotificationChannel.CALL.name())
+						.setSmallIcon(FlavourHelper.isGcmEnabled() ? R.drawable.ic_notification_ongoing_call : mSimlarStatus.getNotificationIcon())
+						.setLargeIcon(mSimlarCallState.getContactPhotoBitmap(this, R.drawable.contact_picture))
+						.setContentTitle(getString(R.string.app_name))
+						.setContentText(createNotificationText())
+						.setOngoing(true)
+						.setContentIntent(activity)
+						.setWhen(System.currentTimeMillis());
+
 		return notificationBuilder.build();
 	}
 
