@@ -178,6 +178,8 @@
 
     <string name="ringing_activity_title">ruft an</string>
     <string name="ringing_activity_phone_is_ringing">klingelt</string>
+    <string name="ringing_activity_decline_call">Anruf ablehnen</string>
+    <string name="ringing_activity_accept_call">Anruf annehmen</string>
 
     <string name="agree_activity_title">Anmeldung</string>
     <string name="agree_activity_welcome">Willkommen bei Simlar!</string>
