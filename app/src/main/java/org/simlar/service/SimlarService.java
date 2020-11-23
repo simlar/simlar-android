@@ -810,12 +810,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			}
 
 			mAudioFocus.request();
-
-			if (mSimlarCallState.isRinging()) {
-				Lg.i("notify incoming call with full screen notification");
-				final NotificationManager nm = Util.getSystemService(this, Context.NOTIFICATION_SERVICE);
-				nm.notify(NOTIFICATION_RINGING_ID, createNotification());
-			}
 		}
 
 		if (!mSimlarCallState.isRinging()) {
@@ -851,7 +845,13 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		ContactsProvider.getNameAndPhotoId(number, this, (name, photoId) -> {
 			mSimlarCallState.updateContactNameAndImage(name, photoId);
 
-			updateNotification();
+			if (mSimlarCallState.isRinging()) {
+				Lg.i("notify incoming call with full screen notification");
+				final NotificationManager nm = Util.getSystemService(this, Context.NOTIFICATION_SERVICE);
+				nm.notify(NOTIFICATION_RINGING_ID, createNotification());
+			} else {
+				updateNotification();
+			}
 
 			SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
 		});
