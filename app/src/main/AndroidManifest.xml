@@ -85,9 +85,6 @@
             android:stopWithTask="false"
             tools:ignore="UnusedAttribute" />
 
-        <receiver
-            android:name=".service.NotificationBroadcastReceiver"/>
-
         <activity
             android:name=".widgets.MainActivity"
             android:launchMode="singleTop"
