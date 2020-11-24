@@ -34,7 +34,7 @@ import org.simlar.https.StorePushId;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
-public final class FirebaseMessageReceiver extends FirebaseMessagingService
+public final class PushNotificationService extends FirebaseMessagingService
 {
 	private static volatile boolean tokenRefreshed = false;
 
