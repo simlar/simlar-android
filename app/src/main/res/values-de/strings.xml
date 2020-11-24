@@ -185,6 +185,9 @@
     <string name="ringing_activity_decline_call">Anruf ablehnen</string>
     <string name="ringing_activity_accept_call">Anruf annehmen</string>
 
+    <string name="ringing_notification_decline">Ablehnen</string>
+    <string name="ringing_notification_accept">Annehmen</string>
+
     <string name="agree_activity_title">Anmeldung</string>
     <string name="agree_activity_welcome">Willkommen bei Simlar!</string>
     <string name="agree_activity_accept">Stimme zu</string>

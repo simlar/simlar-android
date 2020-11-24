@@ -188,6 +188,9 @@
     <string name="ringing_activity_decline_call">decline call</string>
     <string name="ringing_activity_accept_call">accept call</string>
 
+    <string name="ringing_notification_decline">Decline</string>
+    <string name="ringing_notification_accept">Accept</string>
+
     <string name="agree_activity_title">Create Account</string>
     <string name="agree_activity_welcome">Welcome to Simlar!</string>
     <string name="agree_activity_accept">I agree</string>

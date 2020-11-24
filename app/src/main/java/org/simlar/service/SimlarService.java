@@ -77,6 +77,9 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 {
 	private static final int NOTIFICATION_ID = 1;
 	private static final int NOTIFICATION_RINGING_ID = 2;
+	private static final String INTENT_ACTION_NOTIFICATION_CALL_ACCEPT = "SimlarServiceCallAccept";
+	private static final String INTENT_ACTION_NOTIFICATION_CALL_TERMINATE = "SimlarServiceCallTerminate";
+
 	private static final long TERMINATE_CHECKER_INTERVAL = 20 * 1000; // milliseconds
 	private static ServiceActivities ACTIVITIES = null;
 	public static final String INTENT_EXTRA_SIMLAR_ID = "SimlarServiceSimlarId";
@@ -274,8 +277,25 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	@Override
 	public int onStartCommand(final Intent intent, final int flags, final int startId)
 	{
-		Lg.i("onStartCommand intent=", intent, " startId=", startId);
+		final String action = intent == null ? null : intent.getAction();
+		Lg.i("onStartCommand action: ", action, " startId: ", startId, " flags: ", flags, " intent: ", intent);
 
+		if (INTENT_ACTION_NOTIFICATION_CALL_ACCEPT.equals(action)) {
+			pickUp();
+			startActivity(new Intent(this, ACTIVITIES.getCallActivity()).addFlags(
+					Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+		} else if (INTENT_ACTION_NOTIFICATION_CALL_TERMINATE.equals(action)) {
+			terminateCall();
+		} else {
+			handleStartup(intent);
+		}
+
+		// We want this service to continue running until it is explicitly stopped, so return sticky.
+		return START_STICKY;
+	}
+
+	private void handleStartup(final Intent intent)
+	{
 		if (FlavourHelper.isGcmEnabled()) {
 			Lg.i("acquiring simlar wake lock");
 			acquireWakeLock();
@@ -318,9 +338,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 
 		startForeground(NOTIFICATION_ID, createNotification());
-
-		// We want this service to continue running until it is explicitly stopped, so return sticky.
-		return START_STICKY;
 	}
 
 	@Override
@@ -480,6 +497,14 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			final PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(this, 0,
 					new Intent(this, ACTIVITIES.getRingingActivity()), PendingIntent.FLAG_UPDATE_CURRENT);
 
+			final PendingIntent declineIntent = PendingIntent.getService(this, 0,
+					new Intent(this, SimlarService.class).setAction(INTENT_ACTION_NOTIFICATION_CALL_TERMINATE),
+					PendingIntent.FLAG_UPDATE_CURRENT);
+
+			final PendingIntent acceptIntent = PendingIntent.getService(this, 0,
+					new Intent(this, SimlarService.class).setAction(INTENT_ACTION_NOTIFICATION_CALL_ACCEPT),
+					PendingIntent.FLAG_UPDATE_CURRENT);
+
 			final NotificationCompat.Builder notificationBuilder =
 					new NotificationCompat.Builder(this, SimlarNotificationChannel.INCOMING_CALL.name())
 							.setSmallIcon(FlavourHelper.isGcmEnabled() ? R.drawable.ic_notification_ongoing_call : mSimlarStatus.getNotificationIcon())
@@ -490,7 +515,9 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 							.setWhen(System.currentTimeMillis())
 							.setPriority(NotificationCompat.PRIORITY_HIGH)
 							.setCategory(NotificationCompat.CATEGORY_CALL)
-							.setFullScreenIntent(fullScreenPendingIntent, true);
+							.setFullScreenIntent(fullScreenPendingIntent, true)
+							.addAction(R.drawable.button_ringing_hang_up, getString(R.string.ringing_notification_decline), declineIntent)
+							.addAction(R.drawable.button_ringing_pick_up, getString(R.string.ringing_notification_accept), acceptIntent);
 
 			return notificationBuilder.build();
 		}
