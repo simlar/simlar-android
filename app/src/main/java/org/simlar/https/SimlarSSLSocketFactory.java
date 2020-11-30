@@ -52,7 +52,7 @@ import org.simlar.logging.Lg;
 final class SimlarSSLSocketFactory extends SSLSocketFactory
 {
 	private static final String[] PREFERRED_CIPHER_SUITES = { "TLS_DHE_RSA_WITH_AES_256_CBC_SHA", "DHE-RSA-AES256-SHA" };
-	private static final String[] PREFERRED_PROTOCOLS = { "TLSv1.3", "TLSv1.2", "TLSv1.1", "TLSv1" };
+	private static final String[] PREFERRED_PROTOCOLS = { "TLSv1.3", "TLSv1.2", "TLSv1.1" };
 
 	private static final String[] CIPHER_SUITES = createCipherSuites();
 	private static final String[] PROTOCOLS = createProtocols();
