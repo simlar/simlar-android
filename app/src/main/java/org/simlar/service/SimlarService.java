@@ -22,6 +22,7 @@ package org.simlar.service;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
+import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -880,8 +881,20 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				updateNotification();
 			}
 
+			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P && isScreenLocked() && mSimlarCallState.isRinging()) {
+				Lg.i("starting RingingActivity");
+				mNotificationActivity = ACTIVITIES.getRingingActivity();
+				startActivity(new Intent(this, ACTIVITIES.getRingingActivity()).addFlags(
+						Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+			}
+
 			SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
 		});
+	}
+
+	private boolean isScreenLocked() {
+		final KeyguardManager keyguardManager = Util.getSystemService(this, Context.KEYGUARD_SERVICE);
+		return keyguardManager.inKeyguardRestrictedInputMode();
 	}
 
 	@Override
