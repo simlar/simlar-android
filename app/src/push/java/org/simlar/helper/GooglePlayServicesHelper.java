@@ -30,7 +30,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 
 import org.simlar.R;
 import org.simlar.logging.Lg;
-import org.simlar.service.FirebaseMessageReceiver;
+import org.simlar.service.PushNotificationService;
 
 public final class GooglePlayServicesHelper
 {
@@ -43,7 +43,7 @@ public final class GooglePlayServicesHelper
 
 	public static void refreshTokenOnServer()
 	{
-		FirebaseMessageReceiver.refreshTokenOnServer();
+		PushNotificationService.refreshTokenOnServer();
 	}
 
 	public static void checkPlayServices(final AppCompatActivity activity)

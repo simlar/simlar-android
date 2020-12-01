@@ -26,7 +26,7 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
-import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -34,7 +34,7 @@ import org.simlar.https.StorePushId;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
-public final class FirebaseMessageReceiver extends FirebaseMessagingService
+public final class PushNotificationService extends FirebaseMessagingService
 {
 	private static volatile boolean tokenRefreshed = false;
 
@@ -83,6 +83,6 @@ public final class FirebaseMessageReceiver extends FirebaseMessagingService
 		tokenRefreshed = true;
 
 		Lg.i("trigger update of firebase push notification token on simlar server");
-		FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(instanceIdResult -> sendToServer(instanceIdResult.getToken()));
+		FirebaseMessaging.getInstance().getToken().addOnCompleteListener(token -> sendToServer(token.getResult()));
 	}
 }

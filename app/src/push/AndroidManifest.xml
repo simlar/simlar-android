@@ -32,7 +32,7 @@
         <!-- needed to not warn in alwaysOnline flavour -->
         <!--suppress AndroidDomInspection -->
         <service
-            android:name="org.simlar.service.FirebaseMessageReceiver"
+            android:name="org.simlar.service.PushNotificationService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>

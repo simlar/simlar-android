@@ -80,7 +80,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:background="@null"
-        android:contentDescription="@string/call_activity_sound_settings"
+        android:contentDescription="@string/ringing_activity_decline_call"
         android:onClick="terminateCall"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         app:srcCompat="@drawable/button_ringing_hang_up"/>
@@ -91,7 +91,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:background="@null"
-        android:contentDescription="@string/call_activity_sound_settings"
+        android:contentDescription="@string/ringing_activity_accept_call"
         android:onClick="pickUp"
         android:paddingRight="@dimen/activity_horizontal_margin"
         app:srcCompat="@drawable/button_ringing_pick_up"/>
