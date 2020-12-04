@@ -25,11 +25,10 @@ import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.simlar.R;
+import org.simlar.databinding.ActivityAgreeBinding;
 
 public class AgreeActivity extends AppCompatActivity
 {
@@ -37,11 +36,11 @@ public class AgreeActivity extends AppCompatActivity
 	protected final void onCreate(final Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_agree);
+		final ActivityAgreeBinding binding = ActivityAgreeBinding.inflate(getLayoutInflater());
+		setContentView(binding.getRoot());
 
 		// make hrefs work in terms and conditions
-		final TextView termsAndConditions = findViewById(R.id.textViewTermsAndConditions);
-		termsAndConditions.setMovementMethod(LinkMovementMethod.getInstance());
+		binding.textViewTermsAndConditions.setMovementMethod(LinkMovementMethod.getInstance());
 	}
 
 	@Override
