@@ -29,10 +29,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,6 +39,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.simlar.R;
+import org.simlar.databinding.ActivityCreateAccountBinding;
 import org.simlar.helper.CreateAccountMessage;
 import org.simlar.helper.CreateAccountStatus;
 import org.simlar.helper.FlavourHelper;
@@ -58,16 +55,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 {
 	public static final String INTENT_EXTRA_NUMBER = "CreateAccountActivityTelephoneNumber";
 
-	private View mLayoutProgress = null;
-	private ProgressBar mProgressRequest = null;
-	private TextView mRequestText = null;
-	private ProgressBar mProgressConfirm = null;
-	private ProgressBar mProgressFirstLogIn = null;
-	private View mLayoutMessage = null;
-	private EditText mEditRegistrationCode = null;
-	private TextView mDetails = null;
-	private Button mButtonConfirm = null;
-	private Button mButtonCall = null;
+	private ActivityCreateAccountBinding mBinding = null;
 
 	private final Handler mHandler = new Handler(Looper.getMainLooper());
 	private final ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -105,7 +93,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 
 		private void handleRegistrationResult()
 		{
-			mProgressFirstLogIn.setVisibility(View.INVISIBLE);
+			mBinding.progressBarFirstLogIn.setVisibility(View.INVISIBLE);
 
 			if (mTestRegistrationSuccess) {
 				setResult(RESULT_OK);
@@ -121,7 +109,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 		@Override
 		public void onTextChanged(final CharSequence s, final int start, final int before, final int count)
 		{
-			mButtonConfirm.setEnabled(s.length() == 6);
+			mBinding.buttonConfirm.setEnabled(s.length() == 6);
 		}
 
 		@Override
@@ -141,28 +129,12 @@ public final class CreateAccountActivity extends AppCompatActivity
 		super.onCreate(savedInstanceState);
 		Lg.i("onCreate");
 
-		setContentView(R.layout.activity_create_account);
+		mBinding = ActivityCreateAccountBinding.inflate(getLayoutInflater());
+		setContentView(mBinding.getRoot());
 
 		setFinishOnTouchOutside(false);
 
-		mLayoutProgress = findViewById(R.id.linearLayoutProgress);
-		mProgressRequest = findViewById(R.id.progressBarRequest);
-		mProgressConfirm = findViewById(R.id.progressBarConfirm);
-		mProgressFirstLogIn = findViewById(R.id.progressBarFirstLogIn);
-
-		mProgressRequest.setVisibility(View.INVISIBLE);
-		mProgressConfirm.setVisibility(View.INVISIBLE);
-		mProgressFirstLogIn.setVisibility(View.INVISIBLE);
-		mRequestText = findViewById(R.id.textViewRequest);
-
-		mLayoutMessage = findViewById(R.id.layoutMessage);
-		mLayoutMessage.setVisibility(View.GONE);
-		mEditRegistrationCode = findViewById(R.id.editTextRegistrationCode);
-		mDetails = findViewById(R.id.textViewDetails);
-		mButtonConfirm = findViewById(R.id.buttonConfirm);
-		mButtonCall = findViewById(R.id.buttonCall);
-
-		mEditRegistrationCode.addTextChangedListener(new EditRegistrationCodeListener());
+		mBinding.editTextRegistrationCode.addTextChangedListener(new EditRegistrationCodeListener());
 
 		if (PreferencesHelper.getCreateAccountStatus() == CreateAccountStatus.WAITING_FOR_SMS) {
 			mTelephoneNumber = PreferencesHelper.getVerifiedTelephoneNumber();
@@ -179,7 +151,8 @@ public final class CreateAccountActivity extends AppCompatActivity
 	public boolean onKeyUp(final int keyCode, @NonNull final KeyEvent event)
 	{
 		if (keyCode == KeyEvent.KEYCODE_ENTER) {
-			((InputMethodManager) Util.getSystemService(this, INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);
+			((InputMethodManager) Util.getSystemService(this, INPUT_METHOD_SERVICE))
+					.hideSoftInputFromWindow(mBinding.editTextRegistrationCode.getWindowToken(), 0);
 			return true;
 		}
 		return false;
@@ -197,7 +170,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 		super.onStart();
 		Lg.i("onStart");
 
-		if (mProgressFirstLogIn.getVisibility() == View.VISIBLE) {
+		if (mBinding.progressBarFirstLogIn.getVisibility() == View.VISIBLE) {
 			mCommunicator.register(this, VerifyNumberActivity.class);
 		}
 	}
@@ -221,7 +194,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 	{
 		Lg.i("onStop");
 
-		if (mProgressFirstLogIn.getVisibility() == View.VISIBLE) {
+		if (mBinding.progressBarFirstLogIn.getVisibility() == View.VISIBLE) {
 			mCommunicator.unregister();
 		}
 
@@ -235,7 +208,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 			return;
 		}
 
-		mProgressRequest.setVisibility(View.VISIBLE);
+		mBinding.progressBarRequest.setVisibility(View.VISIBLE);
 		Lg.i("createAccountRequest: ", new Lg.Anonymizer(mTelephoneNumber));
 		final String smsText = getString(R.string.create_account_activity_sms_text);
 		final String expectedSimlarId = SimlarNumber.createSimlarId(mTelephoneNumber);
@@ -245,7 +218,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 			final CreateAccount.RequestResult result = CreateAccount.httpPostRequest(telephoneNumber, smsText);
 
 			mHandler.post(() -> {
-				mProgressRequest.setVisibility(View.INVISIBLE);
+				mBinding.progressBarRequest.setVisibility(View.INVISIBLE);
 
 				if (result.isError()) {
 					showMessage(result.getErrorMessage());
@@ -271,7 +244,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 	{
 		Lg.i("confirmRegistrationCode: ", registrationCode);
 
-		mProgressConfirm.setVisibility(View.VISIBLE);
+		mBinding.progressBarConfirm.setVisibility(View.VISIBLE);
 
 		final String simlarId = PreferencesHelper.getMySimlarIdOrEmptyString();
 		if (Util.isNullOrEmpty(registrationCode) || Util.isNullOrEmpty(simlarId)) {
@@ -284,7 +257,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 			final CreateAccount.ConfirmResult result = CreateAccount.httpPostConfirm(simlarId, registrationCode);
 
 			mHandler.post(() -> {
-				mProgressConfirm.setVisibility(View.INVISIBLE);
+				mBinding.progressBarConfirm.setVisibility(View.INVISIBLE);
 
 				if (result.isError()) {
 					Lg.e("failed to parse confirm result");
@@ -307,7 +280,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 
 	private void connectToServer()
 	{
-		mProgressFirstLogIn.setVisibility(View.VISIBLE);
+		mBinding.progressBarFirstLogIn.setVisibility(View.VISIBLE);
 		mCommunicator.startServiceAndRegister(this, VerifyNumberActivity.class, null);
 	}
 
@@ -317,14 +290,14 @@ public final class CreateAccountActivity extends AppCompatActivity
 			return;
 		}
 
-		mLayoutProgress.setVisibility(View.GONE);
-		mLayoutMessage.setVisibility(View.VISIBLE);
+		mBinding.linearLayoutProgress.setVisibility(View.GONE);
+		mBinding.layoutMessage.setVisibility(View.VISIBLE);
 
 		setRegistrationCodeInputVisible(message.isRegistrationCodeInputVisible());
 		if (message.isTelephoneNumber()) {
-			mDetails.setText(String.format(getString(message.getResourceId()), mTelephoneNumber));
+			mBinding.textViewDetails.setText(String.format(getString(message.getResourceId()), mTelephoneNumber));
 		} else {
-			mDetails.setText(message.getResourceId());
+			mBinding.textViewDetails.setText(message.getResourceId());
 		}
 	}
 
@@ -332,19 +305,20 @@ public final class CreateAccountActivity extends AppCompatActivity
 	{
 		final int visibility = visible ? View.VISIBLE : View.GONE;
 
-		mButtonCall.setVisibility(visibility);
-		mButtonConfirm.setVisibility(visibility);
-		mEditRegistrationCode.setVisibility(visibility);
+		mBinding.buttonCall.setVisibility(visibility);
+		mBinding.buttonConfirm.setVisibility(visibility);
+		mBinding.editTextRegistrationCode.setVisibility(visibility);
 		if (visible) {
-			mButtonCall.setEnabled(false);
-			mButtonConfirm.setEnabled(false);
-			mEditRegistrationCode.requestFocus();
-			((InputMethodManager) Util.getSystemService(this, INPUT_METHOD_SERVICE)).showSoftInput(mEditRegistrationCode,
-					InputMethodManager.SHOW_IMPLICIT);
+			mBinding.buttonCall.setEnabled(false);
+			mBinding.buttonConfirm.setEnabled(false);
+			mBinding.editTextRegistrationCode.requestFocus();
+			((InputMethodManager) Util.getSystemService(this, INPUT_METHOD_SERVICE))
+					.showSoftInput(mBinding.editTextRegistrationCode, InputMethodManager.SHOW_IMPLICIT);
 
 			updateCallButton();
 		} else {
-			((InputMethodManager) Util.getSystemService(this, INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);
+			((InputMethodManager) Util.getSystemService(this, INPUT_METHOD_SERVICE))
+					.hideSoftInputFromWindow(mBinding.editTextRegistrationCode.getWindowToken(), 0);
 		}
 
 	}
@@ -352,7 +326,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 	@SuppressWarnings("UseOfObsoleteDateTimeApi") /// java8 one's requires android sdk version 26
 	private void updateCallButton()
 	{
-		if (mButtonCall.getVisibility() == View.GONE) {
+		if (mBinding.buttonCall.getVisibility() == View.GONE) {
 			return;
 		}
 
@@ -361,17 +335,17 @@ public final class CreateAccountActivity extends AppCompatActivity
 		final Date end = new Date(PreferencesHelper.getCreateAccountRequestTimestamp() + 10 * 60 * 1000);
 
 		if (now.after(end)) {
-			mButtonCall.setText(R.string.create_account_activity_button_call_not_available);
-			mButtonCall.setEnabled(false);
+			mBinding.buttonCall.setText(R.string.create_account_activity_button_call_not_available);
+			mBinding.buttonCall.setEnabled(false);
 			return;
 		}
 
 		if (now.before(begin)) {
-			mButtonCall.setText(String.format(getString(R.string.create_account_activity_button_call_available_in), (begin.getTime() - now.getTime()) / 1000));
-			mButtonCall.setEnabled(false);
+			mBinding.buttonCall.setText(String.format(getString(R.string.create_account_activity_button_call_available_in), (begin.getTime() - now.getTime()) / 1000));
+			mBinding.buttonCall.setEnabled(false);
 		} else {
-			mButtonCall.setText(R.string.create_account_activity_button_call);
-			mButtonCall.setEnabled(true);
+			mBinding.buttonCall.setText(R.string.create_account_activity_button_call);
+			mBinding.buttonCall.setEnabled(true);
 		}
 
 		mHandler.postDelayed(this::updateCallButton, 1000);
@@ -392,16 +366,16 @@ public final class CreateAccountActivity extends AppCompatActivity
 
 		final String telephoneNumber = mTelephoneNumber;
 
-		mLayoutProgress.setVisibility(View.VISIBLE);
-		mLayoutMessage.setVisibility(View.GONE);
-		mRequestText.setText(R.string.create_account_activity_waiting_for_sms_call);
-		mProgressRequest.setVisibility(View.VISIBLE);
+		mBinding.linearLayoutProgress.setVisibility(View.VISIBLE);
+		mBinding.layoutMessage.setVisibility(View.GONE);
+		mBinding.textViewRequest.setText(R.string.create_account_activity_waiting_for_sms_call);
+		mBinding.progressBarRequest.setVisibility(View.VISIBLE);
 
 		executorService.execute(() -> {
 			final CreateAccount.RequestResult result = CreateAccount.httpPostCall(telephoneNumber, PreferencesHelper.getPassword());
 
 			mHandler.post(() -> {
-				mProgressRequest.setVisibility(View.INVISIBLE);
+				mBinding.progressBarRequest.setVisibility(View.INVISIBLE);
 
 				if (result.isError()) {
 					Lg.e("failed to parse call result");
@@ -419,11 +393,12 @@ public final class CreateAccountActivity extends AppCompatActivity
 	public void onConfirmClicked(final View view)
 	{
 		Lg.i("onConfirmClicked");
-		((InputMethodManager) Util.getSystemService(this, INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);
-		mLayoutProgress.setVisibility(View.VISIBLE);
-		mLayoutMessage.setVisibility(View.GONE);
+		((InputMethodManager) Util.getSystemService(this, INPUT_METHOD_SERVICE))
+				.hideSoftInputFromWindow(mBinding.editTextRegistrationCode.getWindowToken(), 0);
+		mBinding.linearLayoutProgress.setVisibility(View.VISIBLE);
+		mBinding.layoutMessage.setVisibility(View.GONE);
 
-		confirmRegistrationCode(mEditRegistrationCode.getText().toString());
+		confirmRegistrationCode(mBinding.editTextRegistrationCode.getText().toString());
 	}
 
 	@Override
