@@ -23,11 +23,10 @@ package org.simlar.widgets;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.view.Menu;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.simlar.R;
+import org.simlar.databinding.ActivityAboutBinding;
 import org.simlar.helper.Version;
 
 public final class AboutActivity extends AppCompatActivity
@@ -36,14 +35,13 @@ public final class AboutActivity extends AppCompatActivity
 	protected void onCreate(final Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_about);
+		final ActivityAboutBinding binding = ActivityAboutBinding.inflate(getLayoutInflater());
+		setContentView(binding.getRoot());
 
-		final TextView version = findViewById(R.id.textViewVersion);
-		version.setText(Version.getVersionName(this));
+		binding.textViewVersion.setText(Version.getVersionName(this));
 
 		// make hrefs work in privacy statement and terms of use
-		final TextView privacyStatementAndTermsOfUse = findViewById(R.id.textViewPrivacyStatementAndTermsOfUse);
-		privacyStatementAndTermsOfUse.setMovementMethod(LinkMovementMethod.getInstance());
+		binding.textViewPrivacyStatementAndTermsOfUse.setMovementMethod(LinkMovementMethod.getInstance());
 	}
 
 	@Override
