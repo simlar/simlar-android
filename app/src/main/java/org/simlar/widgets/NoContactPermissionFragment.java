@@ -41,6 +41,7 @@ import androidx.fragment.app.Fragment;
 
 import org.simlar.R;
 import org.simlar.contactsprovider.ContactsProvider;
+import org.simlar.databinding.FragmentNoContactPermissionBinding;
 import org.simlar.helper.PermissionsHelper;
 import org.simlar.helper.SimlarNumber;
 import org.simlar.logging.Lg;
@@ -49,6 +50,7 @@ import org.simlar.utils.Util;
 @SuppressWarnings("WeakerAccess")
 public final class NoContactPermissionFragment extends Fragment
 {
+	private FragmentNoContactPermissionBinding mBinding = null;
 	private Listener mListener = null;
 	private boolean mShouldShowRationalBeforeRequest = false;
 	private final ActivityResultLauncher<Intent> mStartForContactResult = registerForActivityResult(
@@ -97,14 +99,20 @@ public final class NoContactPermissionFragment extends Fragment
 	}
 
 	@Override
-	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
+	public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
 	{
-		final View view = inflater.inflate(R.layout.fragment_no_contact_permission, container, false);
+		mBinding = FragmentNoContactPermissionBinding.inflate(inflater, container, false);
 
-		view.findViewById(R.id.buttonRequestContactsPermissions).setOnClickListener(v -> requestContactPermissionsClicked());
-		view.findViewById(R.id.buttonCallContact).setOnClickListener(v -> callContactClicked());
+		mBinding.buttonRequestContactsPermissions.setOnClickListener(v -> requestContactPermissionsClicked());
+		mBinding.buttonCallContact.setOnClickListener(v -> callContactClicked());
 
-		return view;
+		return mBinding.getRoot();
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		mBinding = null;
 	}
 
 	private void requestContactPermissionsClicked()
