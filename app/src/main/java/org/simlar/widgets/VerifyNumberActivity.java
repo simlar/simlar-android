@@ -30,10 +30,6 @@ import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -41,6 +37,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.simlar.R;
+import org.simlar.databinding.ActivityVerifyNumberBinding;
 import org.simlar.helper.CreateAccountStatus;
 import org.simlar.helper.PermissionsHelper;
 import org.simlar.helper.PreferencesHelper;
@@ -51,9 +48,7 @@ import org.simlar.utils.Util;
 
 public final class VerifyNumberActivity extends AppCompatActivity
 {
-	private Spinner mSpinner = null;
-	private EditText mEditNumber = null;
-	private Button mButtonAccept = null;
+	private ActivityVerifyNumberBinding mBinding = null;
 
 	private final ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(
 			new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -100,26 +95,24 @@ public final class VerifyNumberActivity extends AppCompatActivity
 	{
 		super.onCreate(savedInstanceState);
 		Lg.i("onCreate");
-		setContentView(R.layout.activity_verify_number);
+
+		mBinding = ActivityVerifyNumberBinding.inflate(getLayoutInflater());
+		setContentView(mBinding.getRoot());
 
 		// region code spinner
 		final int regionCode = SimlarNumber.region2RegionCode(SimCardReader.readRegionCode(this));
 		SimlarNumber.setDefaultRegion(regionCode);
 
 		final ArrayAdapter<Integer> adapter = createCountryCodeSelector();
-		mSpinner = findViewById(R.id.spinnerCountryCodes);
-		mSpinner.setAdapter(adapter);
+		mBinding.spinnerCountryCodes.setAdapter(adapter);
 
 		Lg.i("proposing region code: ", regionCode);
 		if (regionCode > 0) {
-			mSpinner.setSelection(adapter.getPosition(regionCode));
+			mBinding.spinnerCountryCodes.setSelection(adapter.getPosition(regionCode));
 		}
 
-		mButtonAccept = findViewById(R.id.buttonRegister);
-
 		// telephone number
-		mEditNumber = findViewById(R.id.editTextPhoneNumber);
-		mEditNumber.addTextChangedListener(new EditNumberTextWatcher());
+		mBinding.editTextPhoneNumber.addTextChangedListener(new EditNumberTextWatcher());
 		requestPhoneNumber();
 
 		if (PreferencesHelper.getCreateAccountStatus() == CreateAccountStatus.WAITING_FOR_SMS) {
@@ -144,9 +137,8 @@ public final class VerifyNumberActivity extends AppCompatActivity
 		if (Util.isNullOrEmpty(phoneNumber)) {
 			new Handler(Looper.getMainLooper()).postDelayed(this::showSoftInputForEditNumber, 100);
 		} else {
-			mEditNumber.setText(new SimlarNumber(phoneNumber).getNationalOnly());
-			final TextView text = findViewById(R.id.textViewCheckOrVerifyYourNumber);
-			text.setText(getString(R.string.verify_number_activity_verify_your_number));
+			mBinding.editTextPhoneNumber.setText(new SimlarNumber(phoneNumber).getNationalOnly());
+			mBinding.textViewCheckOrVerifyYourNumber.setText(getString(R.string.verify_number_activity_verify_your_number));
 		}
 
 		updateButtonAccept();
@@ -163,9 +155,9 @@ public final class VerifyNumberActivity extends AppCompatActivity
 	private void showSoftInputForEditNumber()
 	{
 		Lg.e("no number");
-		mEditNumber.requestFocus();
+		mBinding.editTextPhoneNumber.requestFocus();
 		if (((InputMethodManager) Util.getSystemService(this, INPUT_METHOD_SERVICE))
-				.showSoftInput(mEditNumber, InputMethodManager.SHOW_IMPLICIT)) {
+				.showSoftInput(mBinding.editTextPhoneNumber, InputMethodManager.SHOW_IMPLICIT)) {
 			Lg.w("showSoftInput success");
 		} else {
 			Lg.w("showSoftInput failed");
@@ -201,22 +193,22 @@ public final class VerifyNumberActivity extends AppCompatActivity
 
 	private void updateButtonAccept()
 	{
-		final boolean enabled = !Util.isNullOrEmpty(mEditNumber.getText().toString());
+		final boolean enabled = !Util.isNullOrEmpty(mBinding.editTextPhoneNumber.getText().toString());
 		Lg.i("updateButtonAccept enabled=", enabled);
-		mButtonAccept.setEnabled(enabled);
+		mBinding.buttonRegister.setEnabled(enabled);
 	}
 
 	@SuppressWarnings({ "unused", "RedundantSuppression" })
 	public void createAccount(final View view)
 	{
-		final Integer countryCallingCode = (Integer) mSpinner.getSelectedItem();
+		final Integer countryCallingCode = (Integer) mBinding.spinnerCountryCodes.getSelectedItem();
 		if (countryCallingCode == null) {
 			Lg.e("createAccount no country code => aborting");
 			return;
 		}
 		SimlarNumber.setDefaultRegion(countryCallingCode);
 
-		final String number = mEditNumber.getText().toString();
+		final String number = mBinding.editTextPhoneNumber.getText().toString();
 		if (Util.isNullOrEmpty(number)) {
 			Lg.e("createAccount no number => aborting");
 			return;
