@@ -47,6 +47,7 @@ import android.os.SystemClock;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.TextureView;
+import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -506,6 +507,12 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 					new Intent(this, SimlarService.class).setAction(INTENT_ACTION_NOTIFICATION_CALL_ACCEPT),
 					PendingIntent.FLAG_UPDATE_CURRENT);
 
+			final RemoteViews notificationHeadsUp = new RemoteViews(getPackageName(), R.layout.notification_ringing_heads_up);
+			notificationHeadsUp.setTextViewText(R.id.contactName, mSimlarCallState.getContactName());
+			notificationHeadsUp.setOnClickPendingIntent(R.id.buttonDecline, declineIntent);
+			notificationHeadsUp.setOnClickPendingIntent(R.id.buttonAccept, acceptIntent);
+			notificationHeadsUp.setImageViewBitmap(R.id.contactImage, mSimlarCallState.getContactPhotoBitmap(this, R.drawable.contact_picture));
+
 			final NotificationCompat.Builder notificationBuilder =
 					new NotificationCompat.Builder(this, SimlarNotificationChannel.INCOMING_CALL.name())
 							.setSmallIcon(FlavourHelper.isGcmEnabled() ? R.drawable.ic_notification_ongoing_call : mSimlarStatus.getNotificationIcon())
@@ -517,6 +524,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 							.setPriority(NotificationCompat.PRIORITY_HIGH)
 							.setCategory(NotificationCompat.CATEGORY_CALL)
 							.setFullScreenIntent(fullScreenPendingIntent, true)
+							.setCustomHeadsUpContentView(notificationHeadsUp)
 							.addAction(R.drawable.button_ringing_hang_up, getString(R.string.ringing_notification_decline), declineIntent)
 							.addAction(R.drawable.button_ringing_pick_up, getString(R.string.ringing_notification_accept), acceptIntent);
 
