@@ -27,7 +27,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
@@ -36,7 +38,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.simlar.R;
-import org.simlar.databinding.ActivityRingingBinding;
 import org.simlar.logging.Lg;
 import org.simlar.service.SimlarCallState;
 import org.simlar.service.SimlarServiceCommunicator;
@@ -45,7 +46,6 @@ public final class RingingActivity extends AppCompatActivity
 {
 	private final List<View> mCircles = new ArrayList<>();
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorRinging();
-	private ActivityRingingBinding mBinding = null;
 
 	private final class SimlarServiceCommunicatorRinging extends SimlarServiceCommunicator
 	{
@@ -74,8 +74,7 @@ public final class RingingActivity extends AppCompatActivity
 		super.onCreate(savedInstanceState);
 		Lg.i("onCreate");
 
-		mBinding = ActivityRingingBinding.inflate(getLayoutInflater());
-		setContentView(mBinding.getRoot());
+		setContentView(R.layout.activity_ringing);
 
 		// make sure this activity is shown even if the phone is locked
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN |
@@ -85,7 +84,8 @@ public final class RingingActivity extends AppCompatActivity
 				WindowManager.LayoutParams.FLAG_IGNORE_CHEEK_PRESSES);
 
 		final Animation logoAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate_logo);
-		mBinding.logo.startAnimation(logoAnimation);
+		final ImageView logo = findViewById(R.id.logo);
+		logo.startAnimation(logoAnimation);
 
 		createCircles();
 		animateCircles();
@@ -94,6 +94,7 @@ public final class RingingActivity extends AppCompatActivity
 	private void createCircles()
 	{
 		final int diameter = Math.round(250.0f * getResources().getDisplayMetrics().density);
+		final RelativeLayout mainLayout = findViewById(R.id.layoutRingingActivity);
 
 		for (int i = 0; i < 3; i++) {
 			final View circle = new View(this);
@@ -102,7 +103,7 @@ public final class RingingActivity extends AppCompatActivity
 			final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(diameter, diameter);
 			layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
 			circle.setLayoutParams(layoutParams);
-			mBinding.layoutRingingActivity.addView(circle);
+			mainLayout.addView(circle);
 
 			mCircles.add(circle);
 		}
@@ -208,8 +209,11 @@ public final class RingingActivity extends AppCompatActivity
 			finish();
 		}
 
-		mBinding.contactImage.setImageBitmap(simlarCallState.getContactPhotoBitmap(this, R.drawable.contact_picture));
-		mBinding.contactName.setText(simlarCallState.getContactName());
+		final ImageView contactImage = findViewById(R.id.contactImage);
+		final TextView contactName = findViewById(R.id.contactName);
+
+		contactImage.setImageBitmap(simlarCallState.getContactPhotoBitmap(this, R.drawable.contact_picture));
+		contactName.setText(simlarCallState.getContactName());
 	}
 
 	@SuppressWarnings({ "unused", "RedundantSuppression" })

@@ -21,10 +21,12 @@
 
 package org.simlar.widgets;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
@@ -32,7 +34,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 
-import org.simlar.databinding.DialogFragmentVolumesControlBinding;
+import org.simlar.R;
 import org.simlar.logging.Lg;
 
 @SuppressWarnings("WeakerAccess") // class must be public otherwise crashes
@@ -85,15 +87,20 @@ public final class VolumesControlDialogFragment extends DialogFragment
 
 	private View createView(final FragmentActivity activity)
 	{
-		final DialogFragmentVolumesControlBinding binding = DialogFragmentVolumesControlBinding.inflate(activity.getLayoutInflater());
+		@SuppressLint("InflateParams")
+		final View view = activity.getLayoutInflater().inflate(R.layout.dialog_fragment_volumes_control, null);
+
+		final SeekBar seekBarSpeaker = view.findViewById(R.id.seekBarSpeaker);
+		final SeekBar seekBarMicrophone = view.findViewById(R.id.seekBarMicrophone);
+		final CheckBox checkBoxEchoLimiter = view.findViewById(R.id.checkBoxEchoLimiter);
 
 		if (mListener != null) {
-			binding.seekBarSpeaker.setProgress(mListener.getSpeakerVolume());
-			binding.seekBarMicrophone.setProgress(mListener.getMicrophoneVolume());
-			binding.checkBoxEchoLimiter.setChecked(mListener.getEchoLimiter());
+			seekBarSpeaker.setProgress(mListener.getSpeakerVolume());
+			seekBarMicrophone.setProgress(mListener.getMicrophoneVolume());
+			checkBoxEchoLimiter.setChecked(mListener.getEchoLimiter());
 		}
 
-		binding.seekBarSpeaker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+		seekBarSpeaker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
 		{
 			@Override
 			public void onStopTrackingTouch(final SeekBar seekBar)
@@ -116,7 +123,7 @@ public final class VolumesControlDialogFragment extends DialogFragment
 			}
 		});
 
-		binding.seekBarMicrophone.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+		seekBarMicrophone.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
 		{
 			@Override
 			public void onStopTrackingTouch(final SeekBar seekBar)
@@ -139,7 +146,7 @@ public final class VolumesControlDialogFragment extends DialogFragment
 			}
 		});
 
-		binding.checkBoxEchoLimiter.setOnCheckedChangeListener((buttonView, isChecked) -> {
+		checkBoxEchoLimiter.setOnCheckedChangeListener((buttonView, isChecked) -> {
 			Lg.i("CheckBoxEchoLimiter.onCheckedChanged: ", isChecked);
 			if (mListener == null) {
 				return;
@@ -147,6 +154,6 @@ public final class VolumesControlDialogFragment extends DialogFragment
 			mListener.onEchoLimiterChanged(isChecked);
 		});
 
-		return binding.getRoot();
+		return view;
 	}
 }

@@ -31,14 +31,18 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import org.simlar.databinding.FragmentVideoBinding;
+import org.simlar.R;
 import org.simlar.logging.Lg;
 
 @SuppressWarnings("WeakerAccess") /// liblinphone requires this class to be pubic
 public class VideoFragment extends Fragment
 {
 	private Listener mListener = null;
-	private FragmentVideoBinding mBinding = null;
+
+	// gui elements
+	private TextureView mVideoView = null;
+	private TextureView mCaptureView = null;
+	private View mInitializingView = null;
 
 	public interface Listener
 	{
@@ -81,27 +85,31 @@ public class VideoFragment extends Fragment
 	public final View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
 	{
 		Lg.i("onCreateView");
-		mBinding = FragmentVideoBinding.inflate(inflater, container, false);
+		final View view = inflater.inflate(R.layout.fragment_video, container, false);
+
+		mVideoView = view.findViewById(R.id.videoSurface);
+		mCaptureView = view.findViewById(R.id.videoCaptureSurface);
+		mInitializingView = view.findViewById(R.id.layoutInitializingVideo);
 
 		if (mListener == null) {
 			Lg.e("onCreateView, no listener registered => not initializing video");
 		} else {
-			mListener.setVideoWindows(mBinding.videoSurface, mBinding.videoCaptureSurface);
+			mListener.setVideoWindows(mVideoView, mCaptureView);
 		}
 
-		mBinding.videoSurface.setOnClickListener(view12 -> {
+		mVideoView.setOnClickListener(view12 -> {
 			if (mListener != null) {
 				mListener.onVideoViewClick();
 			}
 		});
 
-		mBinding.videoCaptureSurface.setOnClickListener(view1 -> {
+		mCaptureView.setOnClickListener(view1 -> {
 			if (mListener != null) {
 				mListener.onCaptureViewClick();
 			}
 		});
 
-		return mBinding.getRoot();
+		return view;
 	}
 
 	@Override
@@ -109,15 +117,16 @@ public class VideoFragment extends Fragment
 	{
 		Lg.i("onDestroy");
 
-		if (mBinding.videoCaptureSurface != null) {
-			mBinding.videoCaptureSurface.setOnTouchListener(null);
+		if (mCaptureView != null) {
+			mCaptureView.setOnTouchListener(null);
+			mCaptureView = null;
 		}
 
-		if (mBinding.videoSurface != null) {
-			mBinding.videoSurface.setOnTouchListener(null);
+		if (mVideoView != null) {
+			mVideoView.setOnTouchListener(null);
+			mVideoView = null;
 		}
 
-		mBinding = null;
 		super.onDestroy();
 	}
 
@@ -151,10 +160,10 @@ public class VideoFragment extends Fragment
 
 	public final void setNowPlaying()
 	{
-		if (mBinding.layoutInitializingVideo == null) {
+		if (mInitializingView == null) {
 			Lg.e("called setNowPlaying too early");
 			return;
 		}
-		mBinding.layoutInitializingVideo.setVisibility(View.GONE);
+		mInitializingView.setVisibility(View.GONE);
 	}
 }

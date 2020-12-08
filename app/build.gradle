@@ -129,7 +129,6 @@ android {
     }
 
     lint {
-        checkGeneratedSources = true
         checkAllWarnings true
         warningsAsErrors true
         disable "GoogleAppIndexingWarning", "UnknownNullness", "SyntheticAccessor", "DuplicateStrings", "GradleDependency"
@@ -146,7 +145,6 @@ android {
     namespace 'org.simlar'
     buildFeatures {
         buildConfig true
-        viewBinding true
     }
 }
 

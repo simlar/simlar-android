@@ -31,6 +31,11 @@ import android.view.Menu;
 import android.view.TextureView;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -41,7 +46,6 @@ import androidx.fragment.app.FragmentManager;
 import java.util.Set;
 
 import org.simlar.R;
-import org.simlar.databinding.ActivityCallBinding;
 import org.simlar.helper.PermissionsHelper;
 import org.simlar.helper.VideoState;
 import org.simlar.logging.Lg;
@@ -68,7 +72,31 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private AlertDialog mAlertDialogRemoteDeniedVideo = null;
 	private AudioOutputType mCurrentAudioOutputType = AudioOutputType.PHONE;
 
-	private ActivityCallBinding mBinding = null;
+	// gui elements
+	private ImageView mImageViewContactImage = null;
+	private TextView mTextViewContactName = null;
+	private TextView mTextViewCallStatus = null;
+	private TextView mTextViewCallTimer = null;
+
+	private LinearLayout mLayoutConnectionQuality = null;
+	private TextView mTextViewQuality = null;
+	private ImageButton mButtonConnectionDetails = null;
+
+	private LinearLayout mLayoutVerifiedAuthenticationToken = null;
+	private TextView mTextViewVerifiedAuthenticationToken = null;
+
+	private LinearLayout mLayoutAuthenticationToken = null;
+	private TextView mTextViewAuthenticationToken = null;
+
+	private LinearLayout mLayoutCallEndReason = null;
+	private TextView mTextViewCallEndReason = null;
+
+	private LinearLayout mLayoutCallControlButtons = null;
+	private ProgressBar mProgressBarRequestingVideo = null;
+	private ImageButton mButtonToggleVideo = null;
+	private ImageButton mButtonMicro = null;
+	private ImageButton mButtonSpeaker = null;
+	private ImageButton mButtonSpeakerChoices = null;
 
 	private ConnectionDetailsDialogFragment mConnectionDetailsDialogFragment = null;
 	private VideoFragment mVideoFragment = null;
@@ -137,8 +165,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		super.onCreate(savedInstanceState);
 		Lg.i("onCreate");
 
-		mBinding = ActivityCallBinding.inflate(getLayoutInflater());
-		setContentView(mBinding.getRoot());
+		setContentView(R.layout.activity_call);
 
 		// make sure this activity is shown even if the phone is locked
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_IGNORE_CHEEK_PRESSES |
@@ -147,14 +174,39 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 		mProximityScreenLocker = ProximityScreenLockerHelper.createProximityScreenLocker(this);
 
+		mImageViewContactImage = findViewById(R.id.contactImage);
+		mTextViewContactName = findViewById(R.id.contactName);
+		mTextViewCallStatus = findViewById(R.id.textViewCallStatus);
+		mTextViewCallTimer = findViewById(R.id.textViewCallTimer);
+
+		mLayoutConnectionQuality = findViewById(R.id.linearLayoutConnectionQuality);
+		mTextViewQuality = findViewById(R.id.textViewQuality);
+		mButtonConnectionDetails = findViewById(R.id.buttonConnectionDetails);
+
+		mLayoutVerifiedAuthenticationToken = findViewById(R.id.linearLayoutVerifiedAuthenticationToken);
+		mTextViewVerifiedAuthenticationToken = findViewById(R.id.textViewVerifiedAuthenticationToken);
+
+		mLayoutAuthenticationToken = findViewById(R.id.linearLayoutAuthenticationToken);
+		mTextViewAuthenticationToken = findViewById(R.id.textViewAuthenticationToken);
+
+		mLayoutCallEndReason = findViewById(R.id.linearLayoutCallEndReason);
+		mTextViewCallEndReason = findViewById(R.id.textViewCallEndReason);
+
+		mLayoutCallControlButtons = findViewById(R.id.linearLayoutCallControlButtons);
+		mProgressBarRequestingVideo = findViewById(R.id.progressBarRequestingVideo);
+		mButtonToggleVideo = findViewById(R.id.buttonToggleVideo);
+		mButtonMicro = findViewById(R.id.buttonMicro);
+		mButtonSpeaker = findViewById(R.id.buttonSpeaker);
+		mButtonSpeakerChoices = findViewById(R.id.buttonSpeakerChoices);
+
 		//
 		// Presets
-		mBinding.textViewCallTimer.setVisibility(View.INVISIBLE);
+		mTextViewCallTimer.setVisibility(View.INVISIBLE);
 
-		mBinding.linearLayoutConnectionQuality.setVisibility(View.INVISIBLE);
-		mBinding.linearLayoutVerifiedAuthenticationToken.setVisibility(View.GONE);
-		mBinding.linearLayoutAuthenticationToken.setVisibility(View.GONE);
-		mBinding.progressBarRequestingVideo.setVisibility(View.GONE);
+		mLayoutConnectionQuality.setVisibility(View.INVISIBLE);
+		mLayoutVerifiedAuthenticationToken.setVisibility(View.GONE);
+		mLayoutAuthenticationToken.setVisibility(View.GONE);
+		mProgressBarRequestingVideo.setVisibility(View.GONE);
 	}
 
 	@Override
@@ -222,13 +274,13 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		}
 
 		if (authenticationTokenVerified) {
-			mBinding.linearLayoutVerifiedAuthenticationToken.setVisibility(View.VISIBLE);
-			mBinding.textViewVerifiedAuthenticationToken.setText(authenticationToken);
-			mBinding.linearLayoutAuthenticationToken.setVisibility(View.GONE);
+			mLayoutVerifiedAuthenticationToken.setVisibility(View.VISIBLE);
+			mTextViewVerifiedAuthenticationToken.setText(authenticationToken);
+			mLayoutAuthenticationToken.setVisibility(View.GONE);
 		} else {
-			mBinding.linearLayoutVerifiedAuthenticationToken.setVisibility(View.GONE);
-			mBinding.linearLayoutAuthenticationToken.setVisibility(mHideAuthenticationToken ? View.GONE : View.VISIBLE);
-			mBinding.textViewAuthenticationToken.setText(authenticationToken);
+			mLayoutVerifiedAuthenticationToken.setVisibility(View.GONE);
+			mLayoutAuthenticationToken.setVisibility(mHideAuthenticationToken ? View.GONE : View.VISIBLE);
+			mTextViewAuthenticationToken.setText(authenticationToken);
 		}
 	}
 
@@ -247,10 +299,10 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 		Lg.d("onSimlarCallStateChanged ", simlarCallState);
 
-		mBinding.contactImage.setImageBitmap(simlarCallState.getContactPhotoBitmap(this, R.drawable.contact_picture));
-		mBinding.contactName.setText(simlarCallState.getContactName());
+		mImageViewContactImage.setImageBitmap(simlarCallState.getContactPhotoBitmap(this, R.drawable.contact_picture));
+		mTextViewContactName.setText(simlarCallState.getContactName());
 
-		mBinding.textViewCallStatus.setText(simlarCallState.getCallStatusDisplayMessage(this));
+		mTextViewCallStatus.setText(simlarCallState.getCallStatusDisplayMessage(this));
 
 		mCallStartTime = simlarCallState.getStartTime();
 		if (mCallStartTime > 0) {
@@ -258,9 +310,9 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		}
 
 		if (simlarCallState.hasQuality()) {
-			mBinding.textViewQuality.setText(getString(simlarCallState.getQualityDescription()));
-			mBinding.linearLayoutConnectionQuality.setVisibility(View.VISIBLE);
-			mBinding.buttonConnectionDetails.setVisibility(View.VISIBLE);
+			mTextViewQuality.setText(getString(simlarCallState.getQualityDescription()));
+			mLayoutConnectionQuality.setVisibility(View.VISIBLE);
+			mButtonConnectionDetails.setVisibility(View.VISIBLE);
 			getString(simlarCallState.getQualityDescription());
 		}
 
@@ -270,7 +322,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 			setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
 		}
 
-		mBinding.buttonToggleVideo.setEnabled(simlarCallState.isVideoRequestPossible());
+		mButtonToggleVideo.setEnabled(simlarCallState.isVideoRequestPossible());
 
 		setButtonMicrophoneMute();
 
@@ -281,11 +333,11 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 			if (mAlertDialogRemoteDeniedVideo != null) {
 				mAlertDialogRemoteDeniedVideo.hide();
 			}
-			mBinding.linearLayoutConnectionQuality.setVisibility(View.INVISIBLE);
-			mBinding.linearLayoutVerifiedAuthenticationToken.setVisibility(View.GONE);
-			mBinding.linearLayoutAuthenticationToken.setVisibility(View.GONE);
-			mBinding.linearLayoutCallEndReason.setVisibility(View.VISIBLE);
-			mBinding.textViewCallEndReason.setText(simlarCallState.getCallStatusDisplayMessage(this));
+			mLayoutConnectionQuality.setVisibility(View.INVISIBLE);
+			mLayoutVerifiedAuthenticationToken.setVisibility(View.GONE);
+			mLayoutAuthenticationToken.setVisibility(View.GONE);
+			mLayoutCallEndReason.setVisibility(View.VISIBLE);
+			mTextViewCallEndReason.setText(simlarCallState.getCallStatusDisplayMessage(this));
 			stopCallTimer();
 			finishDelayed(20000);
 		}
@@ -310,8 +362,8 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		}
 
 		final boolean requestingVideo = VideoState.REQUESTING == videoState;
-		mBinding.progressBarRequestingVideo.setVisibility(requestingVideo ? View.VISIBLE : View.GONE);
-		mBinding.buttonToggleVideo.setVisibility(requestingVideo ? View.GONE : View.VISIBLE);
+		mProgressBarRequestingVideo.setVisibility(requestingVideo ? View.VISIBLE : View.GONE);
+		mButtonToggleVideo.setVisibility(requestingVideo ? View.GONE : View.VISIBLE);
 
 		switch (videoState) {
 			case OFF:
@@ -395,7 +447,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	{
 		Lg.i("onVideoViewClick");
 
-		mBinding.linearLayoutCallControlButtons.setVisibility(mBinding.linearLayoutCallControlButtons.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+		mLayoutCallControlButtons.setVisibility(mLayoutCallControlButtons.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
 	}
 
 	@Override
@@ -441,7 +493,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 			mCommunicator.getService().setCurrentAudioOutputType(AudioOutputType.PHONE);
 		}
 
-		mBinding.linearLayoutCallControlButtons.setVisibility(View.VISIBLE);
+		mLayoutCallControlButtons.setVisibility(View.VISIBLE);
 	}
 
 	private void startCallTimer()
@@ -452,7 +504,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 		mCallTimer = this::iterateTimer;
 
-		mBinding.textViewCallTimer.setVisibility(View.VISIBLE);
+		mTextViewCallTimer.setVisibility(View.VISIBLE);
 
 		iterateTimer();
 	}
@@ -462,7 +514,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		final String text = Util.formatMilliSeconds(SystemClock.elapsedRealtime() - mCallStartTime);
 		Lg.d("iterateTimer: ", text);
 
-		mBinding.textViewCallTimer.setText(text);
+		mTextViewCallTimer.setText(text);
 
 		if (mCallTimer != null) {
 			mHandler.postDelayed(mCallTimer, 1000);
@@ -503,7 +555,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	{
 		mCommunicator.getService().verifyAuthenticationTokenOfCurrentCall(false);
 		mHideAuthenticationToken = true;
-		mBinding.linearLayoutAuthenticationToken.setVisibility(View.GONE);
+		mLayoutAuthenticationToken.setVisibility(View.GONE);
 	}
 
 	@SuppressWarnings({ "unused", "RedundantSuppression" })
@@ -551,28 +603,28 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		}
 
 		if (availableAudioOutputTypes.size() <= 2 && availableAudioOutputTypes.contains(AudioOutputType.SPEAKER)) {
-			mBinding.buttonSpeaker.setVisibility(View.VISIBLE);
-			mBinding.buttonSpeakerChoices.setVisibility(View.GONE);
+			mButtonSpeaker.setVisibility(View.VISIBLE);
+			mButtonSpeakerChoices.setVisibility(View.GONE);
 
 			if (currentAudioOutput == AudioOutputType.SPEAKER) {
-				mBinding.buttonSpeaker.setImageResource(R.drawable.speaker_on);
-				mBinding.buttonSpeaker.setContentDescription(getString(R.string.call_activity_loudspeaker_on));
+				mButtonSpeaker.setImageResource(R.drawable.speaker_on);
+				mButtonSpeaker.setContentDescription(getString(R.string.call_activity_loudspeaker_on));
 			} else {
-				mBinding.buttonSpeaker.setImageResource(R.drawable.speaker_off);
-				mBinding.buttonSpeaker.setContentDescription(getString(R.string.call_activity_loudspeaker_off));
+				mButtonSpeaker.setImageResource(R.drawable.speaker_off);
+				mButtonSpeaker.setContentDescription(getString(R.string.call_activity_loudspeaker_off));
 			}
 		} else {
-			mBinding.buttonSpeaker.setVisibility(View.GONE);
-			mBinding.buttonSpeakerChoices.setVisibility(View.VISIBLE);
+			mButtonSpeaker.setVisibility(View.GONE);
+			mButtonSpeakerChoices.setVisibility(View.VISIBLE);
 
 			switch (currentAudioOutput) {
-				case PHONE -> mBinding.buttonSpeakerChoices.setImageResource(R.drawable.audio_output_phone);
-				case WIRED_HEADSET -> mBinding.buttonSpeakerChoices.setImageResource(R.drawable.audio_output_wired_headset);
-				case SPEAKER -> mBinding.buttonSpeakerChoices.setImageResource(R.drawable.audio_output_speaker);
-				case BLUETOOTH -> mBinding.buttonSpeakerChoices.setImageResource(R.drawable.audio_output_bluetooth);
+				case PHONE -> mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_phone);
+				case WIRED_HEADSET -> mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_wired_headset);
+				case SPEAKER -> mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_speaker);
+				case BLUETOOTH -> mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_bluetooth);
 			}
 
-			mBinding.buttonSpeakerChoices.setOnClickListener(view -> {
+			mButtonSpeakerChoices.setOnClickListener(view -> {
 				Lg.i("button showSpeakerChoices clicked");
 
 				//noinspection ZeroLengthArrayAllocation
@@ -654,16 +706,16 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	{
 		switch (mCommunicator.getService().getMicrophoneStatus()) {
 			case DISABLED -> {
-				mBinding.buttonMicro.setImageResource(R.drawable.micro_off_disabled);
-				mBinding.buttonMicro.setContentDescription(getString(R.string.call_activity_microphone_disabled));
+				mButtonMicro.setImageResource(R.drawable.micro_off_disabled);
+				mButtonMicro.setContentDescription(getString(R.string.call_activity_microphone_disabled));
 			}
 			case MUTED -> {
-				mBinding.buttonMicro.setImageResource(R.drawable.micro_off);
-				mBinding.buttonMicro.setContentDescription(getString(R.string.call_activity_microphone_mute));
+				mButtonMicro.setImageResource(R.drawable.micro_off);
+				mButtonMicro.setContentDescription(getString(R.string.call_activity_microphone_mute));
 			}
 			case ON -> {
-				mBinding.buttonMicro.setImageResource(R.drawable.micro_on);
-				mBinding.buttonMicro.setContentDescription(getString(R.string.call_activity_microphone_on));
+				mButtonMicro.setImageResource(R.drawable.micro_on);
+				mButtonMicro.setContentDescription(getString(R.string.call_activity_microphone_on));
 			}
 		}
 	}
