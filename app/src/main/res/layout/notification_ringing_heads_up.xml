@@ -79,7 +79,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="16dp"
             android:layout_weight="1"
-            android:background="@android:color/holo_red_dark"
+            android:background="@drawable/button_red"
             android:text="@string/ringing_notification_decline"
             android:textColor="@android:color/white" />
 
@@ -93,7 +93,7 @@
             android:layout_marginRight="16dp"
             android:layout_marginTop="16dp"
             android:layout_weight="1"
-            android:background="@android:color/holo_green_dark"
+            android:background="@drawable/button_green"
             android:text="@string/ringing_notification_accept"
             android:textColor="@android:color/white" />
 
