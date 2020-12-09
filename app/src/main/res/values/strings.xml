@@ -183,6 +183,7 @@
 
     <string name="create_account_activity_button_confirm">Confirm</string>
 
+    <string name="ringing_activity_default_contact_name">Unknown</string>
     <string name="ringing_activity_title">is calling you</string>
     <string name="ringing_activity_phone_is_ringing">your phone is ringing</string>
     <string name="ringing_activity_decline_call">decline call</string>

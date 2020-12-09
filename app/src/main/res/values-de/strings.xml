@@ -180,6 +180,7 @@
     <string name="create_account_activity_button_call_not_available">Bestätigungscode als Anruf erhalten.\n(nicht verfügbar).</string>
     <string name="create_account_activity_button_confirm">Bestätigen</string>
 
+    <string name="ringing_activity_default_contact_name">Unbekannt</string>
     <string name="ringing_activity_title">ruft an</string>
     <string name="ringing_activity_phone_is_ringing">klingelt</string>
     <string name="ringing_activity_decline_call">Anruf ablehnen</string>
