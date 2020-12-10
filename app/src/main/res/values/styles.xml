@@ -28,7 +28,7 @@
     -->
 
     <!-- Application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
         <item name="android:textColor">@color/text_black</item>
         <item name="android:windowBackground">@null</item>
@@ -36,7 +36,7 @@
         <item name="actionBarStyle">@style/MyActionBar</item>
     </style>
 
-    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:textColor">@color/text_black</item>
         <item name="android:windowBackground">@null</item>
 
@@ -49,7 +49,7 @@
     </style>
 
     <!-- Application dialog theme. -->
-    <style name="dialogTheme" parent="Theme.AppCompat.DayNight.Dialog">
+    <style name="dialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
         <item name="android:textColor">@color/text_black</item>
         <item name="android:windowBackground">@drawable/border_round_corners</item>
