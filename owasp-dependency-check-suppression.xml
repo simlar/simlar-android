@@ -57,4 +57,22 @@
         <packageUrl regex="true">^pkg:maven/log4j/log4j@.*$</packageUrl>
         <cve>CVE-2020-9488</cve>
     </suppress>
+    <suppress>
+        <notes>
+            <![CDATA[
+                file name: groovy-all-2.4.15.jar
+            ]]>
+        </notes>
+        <packageUrl regex="true">^pkg:maven/org\.codehaus\.groovy/groovy\-all@.*$</packageUrl>
+        <cve>CVE-2020-17521</cve>
+    </suppress>
+    <suppress>
+        <notes>
+            <![CDATA[
+                file name: httpclient-4.5.6.jar
+            ]]>
+        </notes>
+        <packageUrl regex="true">^pkg:maven/org\.apache\.httpcomponents/httpclient@.*$</packageUrl>
+        <cve>CVE-2020-13956</cve>
+    </suppress>
 </suppressions>
