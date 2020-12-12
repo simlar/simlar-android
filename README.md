@@ -63,16 +63,16 @@ You may use the container to build simlar-android.
 ```
 docker run -it --rm -v $(pwd):/pwd simlar-android-builder:latest bash -c "cd /pwd && ./gradlew clean build connectedCheck"
 ```
-However, caching gradle downloads speeds up the build.
+However, caching gradle downloads speeds up the build and some security options do not hurt.
 
 ```
-docker run -it --rm -v $(pwd)-docker-gradle-cache:/home/builder/.gradle -v $(pwd):/pwd simlar-android-builder:latest bash -c "cd /pwd && ./gradlew clean build connectedCheck"
+docker run --cap-drop all --security-opt=no-new-privileges -it --rm -v $(pwd)-docker-gradle-cache:/home/builder/.gradle -v $(pwd):/pwd simlar-android-builder:latest bash -c "cd /pwd && ./gradlew clean build connectedCheck"
 ```
 It is also possible to path the keystore file to the docker container.
 ```
-docker run -it --rm -v $(pwd)-docker-gradle-cache:/home/builder/.gradle -v $(pwd):/pwd -v ${SIMLAR_ANDROID_KEYSTORE_FILE}:/android-release-key.keystore -e SIMLAR_ANDROID_KEYSTORE_FILE=/android-release-key.keystore -e SIMLAR_ANDROID_KEYSTORE_PASSWORD="${SIMLAR_ANDROID_KEYSTORE_PASSWORD}" simlar-android-builder:latest bash -c "cd /pwd && ./gradlew clean assemblePushRelease"
+docker run --cap-drop all --security-opt=no-new-privileges -it --rm -v $(pwd)-docker-gradle-cache:/home/builder/.gradle -v $(pwd):/pwd -v ${SIMLAR_ANDROID_KEYSTORE_FILE}:/android-release-key.keystore -e SIMLAR_ANDROID_KEYSTORE_FILE=/android-release-key.keystore -e SIMLAR_ANDROID_KEYSTORE_PASSWORD="${SIMLAR_ANDROID_KEYSTORE_PASSWORD}" simlar-android-builder:latest bash -c "cd /pwd && ./gradlew clean assemblePushRelease"
 ```
 The container can build liblinphone, too.
 ```
-docker run -it --rm -v $(pwd)-docker-gradle-cache:/home/builder/.gradle -v $(pwd):/pwd -e CMAKE_BUILD_PARALLEL_LEVEL=16 simlar-android-builder:latest bash -c "cd /pwd && ./scripts/bootstrap-liblinphone.sh"
+docker run --cap-drop all --security-opt=no-new-privileges -it --rm -v $(pwd)-docker-gradle-cache:/home/builder/.gradle -v $(pwd):/pwd -e CMAKE_BUILD_PARALLEL_LEVEL=16 simlar-android-builder:latest bash -c "cd /pwd && ./scripts/bootstrap-liblinphone.sh"
 ```
