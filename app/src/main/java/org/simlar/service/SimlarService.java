@@ -315,16 +315,12 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 			pushNotification = false;
 			mSimlarIdToCall = null;
 		}
-		Lg.i("onStartCommand simlarIdToCall=", new Lg.Anonymizer(mSimlarIdToCall));
 
-		handlePendingCall();
+		Lg.i("onStartCommand simlarIdToCall=", new Lg.Anonymizer(mSimlarIdToCall), " pushNotification=", pushNotification);
+		startForeground(NOTIFICATION_ID, pushNotification ? createNotificationRinging() : createNotification());
 
-		if (mGoingDown) {
-			Lg.i("onStartCommand called while service is going down => recovering");
-			mGoingDown = false;
-			if (mLinphoneManager == null) {
-				startLinphone();
-			}
+		if (mLinphoneManager == null) {
+			startLinphone();
 		}
 
 		final Notification notification = pushNotification ? createNotificationRinging() : createNotification();
@@ -333,6 +329,8 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		} else {
 			startForeground(NOTIFICATION_ID, notification);
 		}
+
+		handlePendingCall();
 	}
 
 	@Override
@@ -360,8 +358,6 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		}
 
 		ContactsProvider.preLoadContacts(this);
-
-		startLinphone();
 	}
 
 	private void startLinphone()
