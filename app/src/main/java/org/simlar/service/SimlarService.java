@@ -482,6 +482,7 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 	{
 		final String text = createNotificationText();
 		Lg.i("createNotification: ", text);
+		Lg.stack();
 
 		if (mNotificationActivity == null) {
 			if (mSimlarStatus == SimlarStatus.ONGOING_CALL) {

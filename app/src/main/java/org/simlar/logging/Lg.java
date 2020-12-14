@@ -45,6 +45,17 @@ public final class Lg
 	@Retention(RetentionPolicy.RUNTIME)
 	public @interface Anonymize {}
 
+	public static void stack()
+	{
+		final StringBuilder message = new StringBuilder();
+		for (final StackTraceElement element: Thread.currentThread().getStackTrace()) {
+			message.append(element.toString());
+			message.append('\n');
+		}
+
+		println(Log.INFO, null, message);
+	}
+
 	public static void log(final int priority, final String tagPrefix, final String tag, final Object... messageParts)
 	{
 		if (priority < mLevel) {
