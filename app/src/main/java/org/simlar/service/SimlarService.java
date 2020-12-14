@@ -91,7 +91,8 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 	private static ServiceActivities ACTIVITIES = null;
 	public static final String INTENT_EXTRA_SIMLAR_ID = "SimlarServiceSimlarId";
 	@SuppressWarnings("WeakerAccess") // is only used in flavour push
-	public static final String INTENT_EXTRA_GCM = "SimlarServiceGCM";
+	public static final String INTENT_EXTRA_PUSH_NOTIFICATION_INITIALIZATION_VECTOR = "SimlarServiceGCM";
+	public static final String INTENT_EXTRA_PUSH_NOTIFICATION_ENCRYPTED_SIMLAR_ID = "SimlarServiceGCM";
 
 	private LinphoneManager mLinphoneManager = null;
 	private final Handler mHandler = new Handler(Looper.getMainLooper());
@@ -294,7 +295,9 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 
 		final boolean pushNotification;
 		if (intent != null) {
-			pushNotification = intent.getBooleanExtra(INTENT_EXTRA_GCM, false);
+			final String encryptedSimlarId = intent.getStringExtra(INTENT_EXTRA_PUSH_NOTIFICATION_ENCRYPTED_SIMLAR_ID);
+			final String initializationVector = intent.getStringExtra(INTENT_EXTRA_PUSH_NOTIFICATION_INITIALIZATION_VECTOR);
+			pushNotification = !Util.isNullOrEmpty(encryptedSimlarId) && !Util.isNullOrEmpty(initializationVector);
 
 			mSimlarIdToCall = intent.getStringExtra(INTENT_EXTRA_SIMLAR_ID);
 			intent.removeExtra(INTENT_EXTRA_SIMLAR_ID);
