@@ -513,8 +513,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	private Notification createNotificationRinging()
 	{
-		final String text = createNotificationText();
-		Lg.i("createNotification ringing: ", text);
+		Lg.i("createNotification ringing");
 
 		mNotificationActivity = ACTIVITIES.getRingingActivity();
 		final PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(this, 0,
@@ -539,7 +538,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 						.setSmallIcon(R.drawable.ic_notification_ongoing_call)
 						.setLargeIcon(mSimlarCallState.getContactPhotoBitmap(this, R.drawable.contact_picture))
 						.setContentTitle(getString(R.string.app_name))
-						.setContentText(text)
+						.setContentText(String.format(getString(R.string.ringing_notification_text), mSimlarCallState.getContactName()))
 						.setOngoing(true)
 						.setWhen(System.currentTimeMillis())
 						.setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -889,9 +888,9 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				Lg.i("notify incoming call with full screen notification");
 				final NotificationManager nm = Util.getSystemService(this, Context.NOTIFICATION_SERVICE);
 				nm.notify(NOTIFICATION_RINGING_ID, createNotificationRinging());
-			} else {
-				updateNotification();
 			}
+
+			updateNotification();
 
 			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P && isScreenLocked() && mSimlarCallState.isRinging()) {
 				Lg.i("starting RingingActivity");
