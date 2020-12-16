@@ -292,10 +292,9 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 			acquireWifiLock();
 		}
 
+		final boolean pushNotification;
 		if (intent != null) {
-			if (!Util.isNullOrEmpty(intent.getStringExtra(INTENT_EXTRA_GCM))) {
-				intent.removeExtra(INTENT_EXTRA_GCM);
-			}
+			pushNotification = intent.getBooleanExtra(INTENT_EXTRA_GCM, false);
 
 			mSimlarIdToCall = intent.getStringExtra(INTENT_EXTRA_SIMLAR_ID);
 			intent.removeExtra(INTENT_EXTRA_SIMLAR_ID);
@@ -313,6 +312,7 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 			}
 		} else {
 			Lg.w("onStartCommand: with no intent");
+			pushNotification = false;
 			mSimlarIdToCall = null;
 		}
 		Lg.i("onStartCommand simlarIdToCall=", new Lg.Anonymizer(mSimlarIdToCall));
@@ -327,10 +327,11 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 			}
 		}
 
+		final Notification notification = pushNotification ? createNotificationRinging() : createNotification();
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-			startForeground(NOTIFICATION_ID, createNotification(), ServiceInfo.FOREGROUND_SERVICE_TYPE_PHONE_CALL);
+			startForeground(NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_PHONE_CALL);
 		} else {
-			startForeground(NOTIFICATION_ID, createNotification());
+			startForeground(NOTIFICATION_ID, notification);
 		}
 	}
 
@@ -849,7 +850,7 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 			}
 		}
 
-		if (!mSimlarCallState.isRinging()) {
+		if (!FlavourHelper.isGcmEnabled() && !mSimlarCallState.isRinging()) {
 			final NotificationManager nm = Util.getSystemService(this, NOTIFICATION_SERVICE);
 			nm.cancel(NOTIFICATION_RINGING_ID);
 		}
@@ -881,13 +882,13 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		ContactsProvider.getNameAndPhotoId(number, this, (name, photoId) -> {
 			mSimlarCallState.updateContactNameAndImage(name, photoId);
 
-			if (mSimlarCallState.isRinging()) {
+			if (!FlavourHelper.isGcmEnabled() && mSimlarCallState.isRinging()) {
 				Lg.i("notify incoming call with full screen notification");
 				final NotificationManager nm = Util.getSystemService(this, NOTIFICATION_SERVICE);
 				nm.notify(NOTIFICATION_RINGING_ID, createNotificationRinging());
+			} else {
+				updateNotification();
 			}
-
-			updateNotification();
 
 			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P && isScreenLocked() && mSimlarCallState.isRinging()) {
 				Lg.i("starting RingingActivity");
