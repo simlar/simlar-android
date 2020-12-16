@@ -75,4 +75,13 @@
         <packageUrl regex="true">^pkg:maven/org\.apache\.httpcomponents/httpclient@.*$</packageUrl>
         <cve>CVE-2020-13956</cve>
     </suppress>
+    <suppress>
+        <notes>
+            <![CDATA[
+                file name: builder-4.1.1.jar: desugar_deploy.jar (shaded: com.google.guava:guava:21.0)
+            ]]>
+        </notes>
+        <packageUrl regex="true">^pkg:maven/com\.google\.guava/guava@.*$</packageUrl>
+        <cve>CVE-2020-8908</cve>
+    </suppress>
 </suppressions>
