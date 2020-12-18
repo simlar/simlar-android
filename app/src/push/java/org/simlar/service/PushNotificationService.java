@@ -44,12 +44,7 @@ public final class PushNotificationService extends FirebaseMessagingService
 	@Override
 	public void onMessageReceived(final RemoteMessage remoteMessage)
 	{
-		final String encryptedSimlarId = remoteMessage.getData().get("encryptedSimlarId");
-		final String initializationVector = remoteMessage.getData().get("initializationVector");
-		Lg.i("push notification received",
-				" encryptedSimlarId: ", encryptedSimlarId,
-				" initializationVector: ", initializationVector,
-				" from: ", remoteMessage.getFrom(),
+		Lg.i("push notification received from: ", remoteMessage.getFrom(),
 				" messageId: ", remoteMessage.getMessageId(),
 				" type: ", remoteMessage.getMessageType(),
 				" collapseKey: ", remoteMessage.getCollapseKey(),
@@ -57,11 +52,7 @@ public final class PushNotificationService extends FirebaseMessagingService
 				" priority: ", remoteMessage.getPriority(), " (", remoteMessage.getOriginalPriority(), ")",
 				" notification: ", remoteMessage.getNotification() == null ? null : remoteMessage.getNotification().getBody());
 
-		ContextCompat.startForegroundService(this,
-				new Intent(this, SimlarService.class)
-						.putExtra(SimlarService.INTENT_EXTRA_PUSH_NOTIFICATION_ENCRYPTED_SIMLAR_ID, encryptedSimlarId)
-						.putExtra(SimlarService.INTENT_EXTRA_PUSH_NOTIFICATION_INITIALIZATION_VECTOR, initializationVector)
-		);
+		ContextCompat.startForegroundService(this, new Intent(this, SimlarService.class).putExtra(SimlarService.INTENT_EXTRA_GCM, true));
 	}
 
 	@Override
