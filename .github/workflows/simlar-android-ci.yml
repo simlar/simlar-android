@@ -1,5 +1,7 @@
 name: "simlar-android-ci"
 on:
+  schedule:
+    - cron: '0 3 * * *'
   pull_request:
   push:
     branches:
