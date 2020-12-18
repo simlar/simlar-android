@@ -22,4 +22,4 @@ jobs:
       uses: android-actions/setup-android@v2
 
     - name: build
-      run: ./gradlew --no-daemon clean build connectedCheck
+      run: ./gradlew --no-daemon --warning-mode all clean build connectedCheck
