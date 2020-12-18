@@ -23,3 +23,13 @@ jobs:
 
     - name: build
       run: ./gradlew --no-daemon --warning-mode all clean build connectedCheck
+
+    - name: artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: static code analysis
+        retention-days: 5
+        if-no-files-found: ignore
+        path: |
+          app/build/reports/dependency-check-report.html
+          app/build/reports/lint-results*.xml
