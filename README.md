@@ -1,7 +1,7 @@
 simlar-android
 ==============
 
-[![Build Status](https://travis-ci.com/simlar/simlar-android.svg?branch=master)](https://travis-ci.com/simlar/simlar-android)
+[![Build Status](https://github.com/simlar/simlar-android/workflows/simlar-android-ci/badge.svg?branch=master)](https://github.com/simlar/simlar-android/actions)
 
 [Simlar](https://www.simlar.org) is a cross platform VoIP App aiming to make encrypted calls easy.
 
