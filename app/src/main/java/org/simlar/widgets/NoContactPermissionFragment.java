@@ -159,9 +159,12 @@ public final class NoContactPermissionFragment extends Fragment
 	private static String getColumnString(final Cursor cursor, final String columnName)
 	{
 		final int columnIndex = cursor.getColumnIndex(columnName);
-		return columnIndex == -1
-				? null
-				: cursor.getString(columnIndex);
+		if (columnIndex == -1) {
+			Lg.e("unknown columnName: ", columnName);
+			return null;
+		}
+
+		return cursor.getString(columnIndex);
 	}
 
 	private void callContact(final String name, final String telephoneNumber)
