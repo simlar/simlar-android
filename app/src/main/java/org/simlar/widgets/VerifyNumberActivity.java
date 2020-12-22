@@ -111,7 +111,7 @@ public final class VerifyNumberActivity extends AppCompatActivity
 
 	private void requestPhoneNumber()
 	{
-		if (PermissionsHelper.checkAndRequestPermissions(this, PermissionsHelper.Type.PHONE)) {
+		if (PermissionsHelper.checkAndRequestPermissions(this, PermissionsHelper.Type.PHONE_NUMBERS)) {
 			readPhoneNumber();
 		}
 	}
@@ -119,7 +119,7 @@ public final class VerifyNumberActivity extends AppCompatActivity
 	@Override
 	public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults)
 	{
-		if (PermissionsHelper.isGranted(PermissionsHelper.Type.PHONE, permissions, grantResults)) {
+		if (PermissionsHelper.isGranted(PermissionsHelper.Type.PHONE_NUMBERS, permissions, grantResults)) {
 			readPhoneNumber();
 		}
 	}

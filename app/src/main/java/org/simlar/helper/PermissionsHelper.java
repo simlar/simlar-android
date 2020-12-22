@@ -66,7 +66,14 @@ public final class PermissionsHelper
 		CAMERA(Manifest.permission.CAMERA, false, R.string.permission_explain_text_camera),
 		CONTACTS(Manifest.permission.READ_CONTACTS, false, R.string.permission_explain_text_contacts),
 		MICROPHONE(Manifest.permission.RECORD_AUDIO, true, R.string.permission_explain_text_record_audio),
-		PHONE(Manifest.permission.READ_PHONE_STATE, true, R.string.permission_explain_text_phone_state),
+		PHONE_NUMBERS(
+				hasPhoneNumbersPermission() ? Manifest.permission.READ_PHONE_NUMBERS : Manifest.permission.READ_PHONE_STATE,
+				false,
+				hasPhoneNumbersPermission() ? R.string.permission_explain_text_phone_number : R.string.permission_explain_text_phone_state_with_phone_number),
+		PHONE_STATE(
+				Manifest.permission.READ_PHONE_STATE,
+				true,
+				hasPhoneNumbersPermission() ? R.string.permission_explain_text_phone_state : R.string.permission_explain_text_phone_state_with_phone_number),
 		STORAGE(Manifest.permission.READ_EXTERNAL_STORAGE, false, R.string.permission_explain_text_storage);
 
 		private final String mPermission;
@@ -104,6 +111,11 @@ public final class PermissionsHelper
 			}
 
 			return majorTypes;
+		}
+
+		private static boolean hasPhoneNumbersPermission()
+		{
+			return Build.VERSION.SDK_INT >= Build.VERSION_CODES.R;
 		}
 	}
 
