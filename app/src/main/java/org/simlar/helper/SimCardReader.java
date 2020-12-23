@@ -54,7 +54,7 @@ public final class SimCardReader
 
 	public static String readPhoneNumber(final Context context)
 	{
-		if (!PermissionsHelper.hasPermission(context, PermissionsHelper.Type.PHONE)) {
+		if (!PermissionsHelper.hasPermission(context, PermissionsHelper.Type.PHONE_NUMBERS)) {
 			return "";
 		}
 
