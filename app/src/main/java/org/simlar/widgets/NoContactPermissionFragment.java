@@ -112,7 +112,8 @@ public final class NoContactPermissionFragment extends Fragment
 	{
 		Lg.i("callContactClicked");
 
-		final Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+		final Intent intent = new Intent(Intent.ACTION_PICK);
+		intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
 		startActivityForResult(intent, PICK_CONTACT);
 	}
 
@@ -129,39 +130,71 @@ public final class NoContactPermissionFragment extends Fragment
 			return;
 		}
 
+		final ActivityResultContact contact = fromData(data);
+		if (contact == null) {
+			new AlertDialog.Builder(requireContext())
+					.setMessage(R.string.no_contact_permission_fragment_alert_contact_error)
+					.create().show();
+			return;
+		}
+
+		callContact(contact.name, contact.telephoneNumber);
+	}
+
+	private static class ActivityResultContact
+	{
+		final String name;
+		final String telephoneNumber;
+
+		ActivityResultContact(final String name, final String telephoneNumber)
+		{
+			this.name = name;
+			this.telephoneNumber = telephoneNumber;
+		}
+	}
+
+	public ActivityResultContact fromData(final Intent data)
+	{
 		if (data == null) {
 			Lg.e("onActivityResult without intent data");
-			return;
+			return null;
 		}
 
 		final Uri contactUri = data.getData();
 		if (contactUri == null) {
 			Lg.e("onActivityResult without contactUri data=", data);
-			return;
+			return null;
 		}
 
-
-		final Cursor cursor = requireContext().getContentResolver().query(contactUri, null, null, null, null);
+		final String[] projection = { ContactsContract.CommonDataKinds.Phone.SORT_KEY_PRIMARY, ContactsContract.CommonDataKinds.Phone.NUMBER };
+		final Cursor cursor = requireContext().getContentResolver().query(contactUri, projection, null, null, null);
 		if (cursor == null) {
 			Lg.e("onActivityResult failed to create cursor for contactUri=", contactUri);
-			return;
+			return null;
 		}
 
-		cursor.moveToFirst();
+		if (!cursor.moveToFirst()) {
+			Lg.e("onActivityResult failed to move cursor to first result for contactUri=", contactUri);
+			cursor.close();
+			return null;
+		}
 
 		final String name = getColumnString(cursor, ContactsContract.CommonDataKinds.Phone.SORT_KEY_PRIMARY);
 		final String telephoneNumber = getColumnString(cursor, ContactsContract.CommonDataKinds.Phone.NUMBER);
 		cursor.close();
 
-		callContact(name, telephoneNumber);
+		return new ActivityResultContact(name, telephoneNumber);
 	}
 
 	private static String getColumnString(final Cursor cursor, final String columnName)
 	{
 		final int columnIndex = cursor.getColumnIndex(columnName);
-		return columnIndex == -1
-				? null
-				: cursor.getString(columnIndex);
+		if (columnIndex == -1) {
+			Lg.e("unknown columnName: ", columnName);
+			return null;
+		}
+
+		return cursor.getString(columnIndex);
 	}
 
 	private void callContact(final String name, final String telephoneNumber)
