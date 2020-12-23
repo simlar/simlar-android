@@ -52,7 +52,7 @@ public final class PushNotificationService extends FirebaseMessagingService
 				" priority: ", remoteMessage.getPriority(), " (", remoteMessage.getOriginalPriority(), ")",
 				" notification: ", remoteMessage.getNotification() == null ? null : remoteMessage.getNotification().getBody());
 
-		ContextCompat.startForegroundService(this, new Intent(this, SimlarService.class).putExtra(SimlarService.INTENT_EXTRA_GCM, true));
+		ContextCompat.startForegroundService(this, new Intent(this, SimlarService.class));
 	}
 
 	@Override

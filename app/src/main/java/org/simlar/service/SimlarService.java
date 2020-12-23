@@ -292,9 +292,10 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 			acquireWifiLock();
 		}
 
-		final boolean pushNotification;
 		if (intent != null) {
-			pushNotification = intent.getBooleanExtra(INTENT_EXTRA_GCM, false);
+			if (!Util.isNullOrEmpty(intent.getStringExtra(INTENT_EXTRA_GCM))) {
+				intent.removeExtra(INTENT_EXTRA_GCM);
+			}
 
 			mSimlarIdToCall = intent.getStringExtra(INTENT_EXTRA_SIMLAR_ID);
 			intent.removeExtra(INTENT_EXTRA_SIMLAR_ID);
@@ -312,25 +313,25 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 			}
 		} else {
 			Lg.w("onStartCommand: with no intent");
-			pushNotification = false;
 			mSimlarIdToCall = null;
 		}
-
-		Lg.i("onStartCommand simlarIdToCall=", new Lg.Anonymizer(mSimlarIdToCall), " pushNotification=", pushNotification);
-		startForeground(NOTIFICATION_ID, pushNotification ? createNotificationRinging() : createNotification());
-
-		if (mLinphoneManager == null) {
-			startLinphone();
-		}
-
-		final Notification notification = pushNotification ? createNotificationRinging() : createNotification();
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-			startForeground(NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_PHONE_CALL);
-		} else {
-			startForeground(NOTIFICATION_ID, notification);
-		}
+		Lg.i("onStartCommand simlarIdToCall=", new Lg.Anonymizer(mSimlarIdToCall));
 
 		handlePendingCall();
+
+		if (mGoingDown) {
+			Lg.i("onStartCommand called while service is going down => recovering");
+			mGoingDown = false;
+			if (mLinphoneManager == null) {
+				startLinphone();
+			}
+		}
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+			startForeground(NOTIFICATION_ID, createNotification(), ServiceInfo.FOREGROUND_SERVICE_TYPE_PHONE_CALL);
+		} else {
+			startForeground(NOTIFICATION_ID, createNotification());
+		}
 	}
 
 	@Override
@@ -358,6 +359,8 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		}
 
 		ContactsProvider.preLoadContacts(this);
+
+		startLinphone();
 	}
 
 	private void startLinphone()
@@ -846,7 +849,7 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 			}
 		}
 
-		if (!FlavourHelper.isGcmEnabled() && !mSimlarCallState.isRinging()) {
+		if (!mSimlarCallState.isRinging()) {
 			final NotificationManager nm = Util.getSystemService(this, NOTIFICATION_SERVICE);
 			nm.cancel(NOTIFICATION_RINGING_ID);
 		}
@@ -878,13 +881,13 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		ContactsProvider.getNameAndPhotoId(number, this, (name, photoId) -> {
 			mSimlarCallState.updateContactNameAndImage(name, photoId);
 
-			if (!FlavourHelper.isGcmEnabled() && mSimlarCallState.isRinging()) {
+			if (mSimlarCallState.isRinging()) {
 				Lg.i("notify incoming call with full screen notification");
 				final NotificationManager nm = Util.getSystemService(this, NOTIFICATION_SERVICE);
 				nm.notify(NOTIFICATION_RINGING_ID, createNotificationRinging());
-			} else {
-				updateNotification();
 			}
+
+			updateNotification();
 
 			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P && isScreenLocked() && mSimlarCallState.isRinging()) {
 				Lg.i("starting RingingActivity");
