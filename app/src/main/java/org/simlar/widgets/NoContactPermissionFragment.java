@@ -112,7 +112,8 @@ public final class NoContactPermissionFragment extends Fragment
 	{
 		Lg.i("callContactClicked");
 
-		final Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+		final Intent intent = new Intent(Intent.ACTION_PICK);
+		intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
 		startActivityForResult(intent, PICK_CONTACT);
 	}
 
@@ -140,8 +141,8 @@ public final class NoContactPermissionFragment extends Fragment
 			return;
 		}
 
-
-		final Cursor cursor = requireContext().getContentResolver().query(contactUri, null, null, null, null);
+		final String[] projection = { ContactsContract.CommonDataKinds.Phone.SORT_KEY_PRIMARY, ContactsContract.CommonDataKinds.Phone.NUMBER };
+		final Cursor cursor = requireContext().getContentResolver().query(contactUri, projection, null, null, null);
 		if (cursor == null) {
 			Lg.e("onActivityResult failed to create cursor for contactUri=", contactUri);
 			return;
