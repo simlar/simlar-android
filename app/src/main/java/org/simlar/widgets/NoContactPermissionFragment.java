@@ -147,7 +147,11 @@ public final class NoContactPermissionFragment extends Fragment
 			return;
 		}
 
-		cursor.moveToFirst();
+		if (!cursor.moveToFirst()) {
+			Lg.e("onActivityResult failed to move cursor to first result for contactUri=", contactUri);
+			cursor.close();
+			return;
+		}
 
 		final String name = getColumnString(cursor, ContactsContract.CommonDataKinds.Phone.SORT_KEY_PRIMARY);
 		final String telephoneNumber = getColumnString(cursor, ContactsContract.CommonDataKinds.Phone.NUMBER);
