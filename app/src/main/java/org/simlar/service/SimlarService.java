@@ -285,7 +285,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		if (INTENT_ACTION_NOTIFICATION_CALL_ACCEPT.equals(action)) {
 			pickUp();
 			startActivity(new Intent(this, ACTIVITIES.getCallActivity()).addFlags(
-					Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+					Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
 		} else if (INTENT_ACTION_NOTIFICATION_CALL_TERMINATE.equals(action)) {
 			terminateCall();
 		} else {
