@@ -21,6 +21,7 @@
 
 package org.simlar.service;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
@@ -37,6 +38,7 @@ import org.simlar.https.StorePushId;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
+@SuppressLint("Registered")
 public final class PushNotificationService extends FirebaseMessagingService
 {
 	private static volatile boolean tokenRefreshed = false;
