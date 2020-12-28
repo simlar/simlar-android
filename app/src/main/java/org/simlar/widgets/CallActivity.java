@@ -216,7 +216,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		super.onResume();
 		Lg.i("onResume");
 
-		if (mVideoFragment == null) {
+		if (mVideoFragment == null && !mWiredHeadsetConnected && !mBluetoothHeadsetUsing) {
 			mProximityScreenLocker.acquire();
 		}
 	}
