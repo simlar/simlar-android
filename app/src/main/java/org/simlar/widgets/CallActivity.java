@@ -58,6 +58,9 @@ import org.simlar.utils.Util;
 public final class CallActivity extends AppCompatActivity implements VolumesControlDialogFragment.Listener, VideoFragment.Listener, HeadsetReceiver.Listener, BluetoothManager.Listener
 {
 	private static final String INTENT_EXTRA_SIMLAR_ID = "simlarId";
+	private static final int AUDIO_OUTPUT_WIRED_HEADSET_OR_PHONE = 0;
+	private static final int AUDIO_OUTPUT_EXTERNAL_SPEAKER = 1;
+	private static final int AUDIO_OUTPUT_BLUETOOTH = 2;
 
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCall();
 	private ProximityScreenLocker mProximityScreenLocker = null;
@@ -740,26 +743,28 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	{
 		Lg.i("button showSpeakerChoices clicked");
 
-		final String[] items = {
-				getString(mWiredHeadsetConnected ? R.string.call_activity_speaker_choices_wired_headset : R.string.call_activity_speaker_choices_phone),
-				getString(R.string.call_activity_speaker_choices_speaker),
-				getString(R.string.call_activity_speaker_choices_bluetooth)
-		};
+		final String[] items = new String[3];
+		items[AUDIO_OUTPUT_WIRED_HEADSET_OR_PHONE] = getString(
+				mWiredHeadsetConnected
+						? R.string.call_activity_speaker_choices_wired_headset
+						: R.string.call_activity_speaker_choices_phone);
+		items[AUDIO_OUTPUT_EXTERNAL_SPEAKER] = getString(R.string.call_activity_speaker_choices_speaker);
+		items[AUDIO_OUTPUT_BLUETOOTH] = getString(R.string.call_activity_speaker_choices_bluetooth);
 
 		final int selected;
 		if (mBluetoothHeadsetUsing) {
-			selected = 2;
+			selected = AUDIO_OUTPUT_BLUETOOTH;
 		} else if (mCommunicator.getService().getExternalSpeaker()) {
-			selected = 1;
+			selected = AUDIO_OUTPUT_EXTERNAL_SPEAKER;
 		} else {
-			selected = 0;
+			selected = AUDIO_OUTPUT_WIRED_HEADSET_OR_PHONE;
 		}
 
 		new AlertDialog.Builder(this)
 				.setSingleChoiceItems(items, selected, (dialog, which) -> {
 					//noinspection SwitchStatementDensity,SwitchStatementWithoutDefaultBranch
 					switch (which) {
-					case 0:
+					case AUDIO_OUTPUT_WIRED_HEADSET_OR_PHONE:
 						if (mBluetoothHeadsetUsing) {
 							mBluetoothManager.stopUsingBluetoothHeadset();
 						}
@@ -771,7 +776,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 							mProximityScreenLocker.acquire();
 						}
 						break;
-					case 1:
+					case AUDIO_OUTPUT_EXTERNAL_SPEAKER:
 						if (mBluetoothHeadsetUsing) {
 							mBluetoothManager.stopUsingBluetoothHeadset();
 						}
@@ -779,7 +784,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 						mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_speaker);
 						mProximityScreenLocker.release(false);
 						break;
-					case 2:
+					case AUDIO_OUTPUT_BLUETOOTH:
 						if (!mBluetoothHeadsetUsing) {
 							mBluetoothManager.startUsingBluetoothHeadset();
 						}
