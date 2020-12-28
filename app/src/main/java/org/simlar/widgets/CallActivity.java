@@ -37,6 +37,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -765,37 +766,50 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 					//noinspection SwitchStatementDensity,SwitchStatementWithoutDefaultBranch
 					switch (which) {
 					case AUDIO_OUTPUT_WIRED_HEADSET_OR_PHONE:
-						if (mBluetoothHeadsetUsing) {
-							mBluetoothManager.stopUsingBluetoothHeadset();
-						}
-						setExternalSpeaker(false);
-						mButtonSpeakerChoices.setImageResource(mWiredHeadsetConnected ? R.drawable.audio_output_wired_headset : R.drawable.audio_output_phone);
-						if (mWiredHeadsetConnected) {
-							mProximityScreenLocker.release(false);
-						} else {
-							mProximityScreenLocker.acquire();
-						}
+						handleSpeakerChoice(
+								false,
+								false,
+								mWiredHeadsetConnected ? R.drawable.audio_output_wired_headset : R.drawable.audio_output_phone,
+								!mWiredHeadsetConnected);
 						break;
 					case AUDIO_OUTPUT_EXTERNAL_SPEAKER:
-						if (mBluetoothHeadsetUsing) {
-							mBluetoothManager.stopUsingBluetoothHeadset();
-						}
-						setExternalSpeaker(true);
-						mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_speaker);
-						mProximityScreenLocker.release(false);
+						handleSpeakerChoice(
+								false,
+								true,
+								R.drawable.audio_output_speaker,
+								false);
 						break;
 					case AUDIO_OUTPUT_BLUETOOTH:
-						if (!mBluetoothHeadsetUsing) {
-							mBluetoothManager.startUsingBluetoothHeadset();
-						}
-						setExternalSpeaker(false);
-						mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_bluetooth);
-						mProximityScreenLocker.release(false);
+						handleSpeakerChoice(
+								true,
+								false,
+								R.drawable.audio_output_bluetooth,
+								false);
 						break;
 					}
 
 					dialog.dismiss();
 				}).create().show();
+	}
+
+	private void handleSpeakerChoice(final boolean enableBluetooth, final boolean enableExternalSpeaker, @DrawableRes final int drawableId, final boolean enableProximityScreenLocker)
+	{
+		if (mBluetoothHeadsetUsing != enableBluetooth) {
+			if (enableBluetooth) {
+				mBluetoothManager.startUsingBluetoothHeadset();
+			} else {
+				mBluetoothManager.stopUsingBluetoothHeadset();
+			}
+		}
+
+		setExternalSpeaker(enableExternalSpeaker);
+		mButtonSpeakerChoices.setImageResource(drawableId);
+
+		if (enableProximityScreenLocker) {
+			mProximityScreenLocker.acquire();
+		} else {
+			mProximityScreenLocker.release(false);
+		}
 	}
 
 	private void setButtonMicrophoneMute()
