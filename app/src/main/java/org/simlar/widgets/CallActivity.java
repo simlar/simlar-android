@@ -737,6 +737,12 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	{
 		mCommunicator.getService().toggleExternalSpeaker();
 		setButtonSpeaker();
+
+		if (mCommunicator.getService().getExternalSpeaker()) {
+			mProximityScreenLocker.release(false);
+		} else {
+			mProximityScreenLocker.acquire();
+		}
 	}
 
 	private int currentAudioOutput()
