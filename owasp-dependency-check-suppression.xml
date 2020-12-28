@@ -84,4 +84,13 @@
         <packageUrl regex="true">^pkg:maven/com\.google\.guava/guava@.*$</packageUrl>
         <cve>CVE-2020-8908</cve>
     </suppress>
+    <suppress>
+        <notes>
+            <![CDATA[
+                file name: bcprov-jdk15on-1.56.jar
+            ]]>
+        </notes>
+        <packageUrl regex="true">^pkg:maven/org\.bouncycastle/bcprov\-jdk15on@.*$</packageUrl>
+        <cve>CVE-2020-26939</cve>
+    </suppress>
 </suppressions>
