@@ -33,6 +33,11 @@ public final class ProximityScreenLockerHelper
 
 	public static ProximityScreenLocker createProximityScreenLocker(final AppCompatActivity activity)
 	{
+		return new ProximityScreenOnceProxy(createProximityScreenLockerImpl(activity));
+	}
+
+	private static ProximityScreenLocker createProximityScreenLockerImpl(final AppCompatActivity activity)
+	{
 		final ProximityScreenLocker proximityScreenLockerNative = ProximityScreenLockerNative.create(activity);
 		if (proximityScreenLockerNative == null) {
 			Lg.i("native proximity screen locking is not supported => using fallback");
