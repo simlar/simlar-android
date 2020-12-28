@@ -739,6 +739,19 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		setButtonSpeaker();
 	}
 
+	private int currentAudioOutput()
+	{
+		if (mBluetoothHeadsetUsing) {
+			return AUDIO_OUTPUT_BLUETOOTH;
+		}
+
+		if (mCommunicator.getService().getExternalSpeaker()) {
+			return AUDIO_OUTPUT_EXTERNAL_SPEAKER;
+		}
+
+		return AUDIO_OUTPUT_WIRED_HEADSET_OR_PHONE;
+	}
+
 	@SuppressWarnings({"unused", "RedundantSuppression"})
 	public void showSpeakerChoices(final View view)
 	{
@@ -752,17 +765,8 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		items[AUDIO_OUTPUT_EXTERNAL_SPEAKER] = getString(R.string.call_activity_speaker_choices_speaker);
 		items[AUDIO_OUTPUT_BLUETOOTH] = getString(R.string.call_activity_speaker_choices_bluetooth);
 
-		final int selected;
-		if (mBluetoothHeadsetUsing) {
-			selected = AUDIO_OUTPUT_BLUETOOTH;
-		} else if (mCommunicator.getService().getExternalSpeaker()) {
-			selected = AUDIO_OUTPUT_EXTERNAL_SPEAKER;
-		} else {
-			selected = AUDIO_OUTPUT_WIRED_HEADSET_OR_PHONE;
-		}
-
 		new AlertDialog.Builder(this)
-				.setSingleChoiceItems(items, selected, (dialog, which) -> {
+				.setSingleChoiceItems(items, currentAudioOutput(), (dialog, which) -> {
 					//noinspection SwitchStatementDensity,SwitchStatementWithoutDefaultBranch
 					switch (which) {
 					case AUDIO_OUTPUT_WIRED_HEADSET_OR_PHONE:
