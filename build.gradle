@@ -24,6 +24,10 @@ buildscript {
         return !project.hasProperty("no-google-services")
     }
 
+    ext.ignoreGitDirtyVersion = { ->
+        return project.hasProperty("ignore-git-dirty-version")
+    }
+
     repositories {
         google()
         jcenter()

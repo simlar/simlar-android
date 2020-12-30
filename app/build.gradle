@@ -27,7 +27,11 @@ plugins {
 
 def getGitVersion = { ->
     try {
-        return "git -C ${rootDir} describe --tags --always --dirty".execute().text.trim()
+        if (ignoreGitDirtyVersion()) {
+            return "git -C ${rootDir} describe --tags --always".execute().text.trim()
+        } else {
+            return "git -C ${rootDir} describe --tags --always --dirty".execute().text.trim()
+        }
     }
     catch (ignored) {
         return "git-not-found"
