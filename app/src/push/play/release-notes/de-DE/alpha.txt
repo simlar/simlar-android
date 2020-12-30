@@ -1,3 +1,3 @@
-• Linphone Sdk Update 4.4.20
+• Linphone Sdk Update 4.4.21
 • Validierung von neuen internationalen Telefonnummern
 • Kleinere Verbesserungen und Korrekturen
