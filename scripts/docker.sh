@@ -12,13 +12,13 @@ declare DOCKER_ARGUMENTS="--rm \
     --cap-drop all --security-opt=no-new-privileges \
     -v $(pwd)-docker-gradle-cache:/home/builder/.gradle \
     -v $(pwd):/pwd
-    -e SKIP_PUBLISH_TO_PLAYSTORE=${SKIP_PUBLISH_TO_PLAYSTORE}"
+    -e SKIP_PUBLISH_TO_PLAYSTORE"
 
 if [ -e "${SIMLAR_ANDROID_KEYSTORE_FILE}" ] ; then
     DOCKER_ARGUMENTS="${DOCKER_ARGUMENTS} \
         -v ${SIMLAR_ANDROID_KEYSTORE_FILE}:/android-release-key.keystore \
         -e SIMLAR_ANDROID_KEYSTORE_FILE=/android-release-key.keystore \
-        -e SIMLAR_ANDROID_KEYSTORE_PASSWORD=${SIMLAR_ANDROID_KEYSTORE_PASSWORD}"
+        -e SIMLAR_ANDROID_KEYSTORE_PASSWORD"
 fi
 
 if [ -e "${SIMLAR_ANDROID_PUBLISHER_CREDENTIALS}" ] ; then
