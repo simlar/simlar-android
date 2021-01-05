@@ -70,7 +70,7 @@ docker run --cap-drop all --security-opt=no-new-privileges --rm -v $(pwd)-docker
 ```
 It is also possible to path the keystore file to the docker container.
 ```
-docker run --cap-drop all --security-opt=no-new-privileges --rm -v $(pwd)-docker-gradle-cache:/home/builder/.gradle -v $(pwd):/pwd -v ${SIMLAR_ANDROID_KEYSTORE_FILE}:/android-release-key.keystore -e SIMLAR_ANDROID_KEYSTORE_FILE=/android-release-key.keystore -e SIMLAR_ANDROID_KEYSTORE_PASSWORD="${SIMLAR_ANDROID_KEYSTORE_PASSWORD}" simlar-android-builder:latest bash -c "cd /pwd && ./gradlew clean assemblePushRelease"
+docker run --cap-drop all --security-opt=no-new-privileges --rm -v $(pwd)-docker-gradle-cache:/home/builder/.gradle -v $(pwd):/pwd -v ${SIMLAR_ANDROID_KEYSTORE_FILE}:/android-release-key.keystore -e SIMLAR_ANDROID_KEYSTORE_FILE=/android-release-key.keystore -e SIMLAR_ANDROID_KEYSTORE_PASSWORD simlar-android-builder:latest bash -c "cd /pwd && ./gradlew clean assemblePushRelease"
 ```
 The container can build liblinphone, too.
 ```
