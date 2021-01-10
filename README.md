@@ -61,16 +61,16 @@ docker build --no-cache -t simlar-android-builder docker-files/
 ```
 You may use the container to build simlar-android.
 ```
-docker run --rm -v $(pwd):/pwd simlar-android-builder:latest bash -c "cd /pwd && ./gradlew clean build connectedCheck"
+docker run --rm -v $(pwd):/pwd simlar-android-builder:latest bash -c "cd /pwd && ./gradlew --no-daemon --warning-mode all clean build connectedCheck"
 ```
 However, caching gradle downloads speeds up the build and some security options do not hurt.
 
 ```
-docker run --cap-drop all --security-opt=no-new-privileges --rm -v $(pwd)-docker-gradle-cache:/home/builder/.gradle -v $(pwd):/pwd simlar-android-builder:latest bash -c "cd /pwd && ./gradlew clean build connectedCheck"
+docker run --cap-drop all --security-opt=no-new-privileges --rm -v $(pwd)-docker-gradle-cache:/home/builder/.gradle -v $(pwd):/pwd simlar-android-builder:latest bash -c "cd /pwd && ./gradlew --no-daemon --warning-mode all clean build connectedCheck"
 ```
 It is also possible to path the keystore file to the docker container.
 ```
-docker run --cap-drop all --security-opt=no-new-privileges --rm -v $(pwd)-docker-gradle-cache:/home/builder/.gradle -v $(pwd):/pwd -v ${SIMLAR_ANDROID_KEYSTORE_FILE}:/android-release-key.keystore -e SIMLAR_ANDROID_KEYSTORE_FILE=/android-release-key.keystore -e SIMLAR_ANDROID_KEYSTORE_PASSWORD simlar-android-builder:latest bash -c "cd /pwd && ./gradlew clean assemblePushRelease"
+docker run --cap-drop all --security-opt=no-new-privileges --rm -v $(pwd)-docker-gradle-cache:/home/builder/.gradle -v $(pwd):/pwd -v ${SIMLAR_ANDROID_KEYSTORE_FILE}:/android-release-key.keystore -e SIMLAR_ANDROID_KEYSTORE_FILE=/android-release-key.keystore -e SIMLAR_ANDROID_KEYSTORE_PASSWORD simlar-android-builder:latest bash -c "cd /pwd && ./gradlew --no-daemon clean assemblePushRelease"
 ```
 The container can build liblinphone, too.
 ```
