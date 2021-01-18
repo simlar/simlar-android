@@ -63,7 +63,7 @@ You may use the container to build simlar-android.
 ```
 docker run --rm -v $(pwd):/pwd simlar-android-builder:latest bash -c "cd /pwd && ./gradlew --no-daemon --warning-mode all clean build connectedCheck"
 ```
-However, caching gradle downloads speeds up the build and some security options do not hurt.
+However, caching gradle downloads speeds up the build, and some security options do not hurt.
 
 ```
 docker run --cap-drop all --security-opt=no-new-privileges --rm -v $(pwd)-docker-gradle-cache:/home/builder/.gradle -v $(pwd):/pwd simlar-android-builder:latest bash -c "cd /pwd && ./gradlew --no-daemon --warning-mode all clean build connectedCheck"
