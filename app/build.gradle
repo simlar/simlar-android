@@ -152,7 +152,7 @@ play {
     def publisherCredentials = System.getenv("SIMLAR_ANDROID_PUBLISHER_CREDENTIALS")
     serviceAccountCredentials.set(file(publisherCredentials ? publisherCredentials : "simlar-play-publisher-credentials.json"))
     enabled.set(false)
-    track.set("internal")
+    track.set("alpha")
 }
 
 dependencyCheck {
