@@ -21,7 +21,7 @@
 
 plugins {
     id "com.android.application"
-    id "com.github.triplet.play" version "2.8.1"
+    id "com.github.triplet.play" version "3.2.0"
     id "org.owasp.dependencycheck"
 }
 
@@ -113,7 +113,7 @@ android {
     playConfigs {
         if (useGoogleServices()) {
             push {
-                enabled = true
+                enabled.set(true)
             }
         }
     }
@@ -121,9 +121,9 @@ android {
 
 play {
     def publisherCredentials = System.getenv("SIMLAR_ANDROID_PUBLISHER_CREDENTIALS")
-    serviceAccountCredentials = file(publisherCredentials ? publisherCredentials : "simlar-play-publisher-credentials.json")
-    enabled = false
-    track = "alpha"
+    serviceAccountCredentials.set(file(publisherCredentials ? publisherCredentials : "simlar-play-publisher-credentials.json"))
+    enabled.set(false)
+    track.set("alpha")
 }
 
 dependencyCheck {
