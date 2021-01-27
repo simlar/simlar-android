@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-  Copyright (C) 2013 The Simlar Authors.
+  Copyright (C) The Simlar Authors.
 
   This file is part of Simlar. (https://www.simlar.org)
 
@@ -20,16 +20,18 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -->
 
-<resources>
-    <color name="background_white">@android:color/white</color>
-    <color name="button_white">#E9F4F4</color>
-    <color name="text_black">@android:color/black</color>
-    <color name="border">#333333</color>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#0d572c"/>
+            <corners android:radius="10dp"/>
+        </shape>
+    </item>
 
-    <color name="calling_title_background_black">@android:color/black</color>
-    <color name="calling_title_text_white">@android:color/white</color>
-
-    <color name="actionbar_background">#006772</color>
-
-    <color name="notification_text">@android:color/black</color>
-</resources>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#087F39"/>
+            <corners android:radius="10dp"/>
+        </shape>
+    </item>
+</selector>

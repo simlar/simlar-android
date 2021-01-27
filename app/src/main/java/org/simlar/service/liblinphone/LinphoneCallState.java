@@ -128,7 +128,7 @@ public enum LinphoneCallState
 			return String.format(context.getString(R.string.linphone_call_state_notification_ended), simlarId);
 		case INCOMING_RECEIVED:
 		case INCOMING_EARLY_MEDIA:
-			return String.format(context.getString(R.string.linphone_call_state_notification_receiving_call), simlarId);
+			return context.getString(R.string.linphone_call_state_notification_receiving_call);
 		case CONNECTED:
 		case STREAMS_RUNNING:
 		case UPDATED_BY_REMOTE:

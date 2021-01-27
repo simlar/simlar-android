@@ -22,6 +22,7 @@ package org.simlar.service;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
+import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -46,6 +47,7 @@ import android.os.SystemClock;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.TextureView;
+import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -76,6 +78,10 @@ import org.simlar.utils.Util;
 public final class SimlarService extends Service implements LinphoneThreadListener
 {
 	private static final int NOTIFICATION_ID = 1;
+	private static final int NOTIFICATION_RINGING_ID = 2;
+	private static final String INTENT_ACTION_NOTIFICATION_CALL_ACCEPT = "SimlarServiceCallAccept";
+	private static final String INTENT_ACTION_NOTIFICATION_CALL_TERMINATE = "SimlarServiceCallTerminate";
+
 	private static final long TERMINATE_CHECKER_INTERVAL = 20 * 1000; // milliseconds
 	private static ServiceActivities ACTIVITIES = null;
 	public static final String INTENT_EXTRA_SIMLAR_ID = "SimlarServiceSimlarId";
@@ -273,8 +279,25 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	@Override
 	public int onStartCommand(final Intent intent, final int flags, final int startId)
 	{
-		Lg.i("onStartCommand intent=", intent, " startId=", startId);
+		final String action = intent == null ? null : intent.getAction();
+		Lg.i("onStartCommand action: ", action, " startId: ", startId, " flags: ", flags, " intent: ", intent);
 
+		if (INTENT_ACTION_NOTIFICATION_CALL_ACCEPT.equals(action)) {
+			pickUp();
+			startActivity(new Intent(this, ACTIVITIES.getCallActivity()).addFlags(
+					Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+		} else if (INTENT_ACTION_NOTIFICATION_CALL_TERMINATE.equals(action)) {
+			terminateCall();
+		} else {
+			handleStartup(intent);
+		}
+
+		// We want this service to continue running until it is explicitly stopped, so return sticky.
+		return START_STICKY;
+	}
+
+	private void handleStartup(final Intent intent)
+	{
 		if (FlavourHelper.isGcmEnabled()) {
 			Lg.i("acquiring simlar wake lock");
 			acquireWakeLock();
@@ -316,8 +339,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			}
 		}
 
-		// We want this service to continue running until it is explicitly stopped, so return sticky.
-		return START_STICKY;
+		startForeground(NOTIFICATION_ID, createNotification());
 	}
 
 	@Override
@@ -335,8 +357,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "simlar:WakeLock");
 		mDisplayWakeLock = createDisplayWakeLock();
 		mWifiLock = createWifiWakeLock();
-
-		startForeground(NOTIFICATION_ID, createNotification());
 
 		final IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -415,11 +435,15 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			return;
 		}
 
+		if (activity.equals(mNotificationActivity)) {
+			Lg.i("registerActivityToNotification already registered: ", activity.getSimpleName());
+			return;
+		}
+
 		Lg.i("registerActivityToNotification: ", activity.getSimpleName());
 		mNotificationActivity = activity;
 
-		final NotificationManager nm = Util.getSystemService(this, Context.NOTIFICATION_SERVICE);
-		nm.notify(NOTIFICATION_ID, createNotification());
+		updateNotification();
 	}
 
 	private static void createMissedCallNotification(final Context context, final String simlarId)
@@ -451,8 +475,17 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				.notify(PreferencesHelper.getNextMissedCallNotificationId(context), notificationBuilder.build());
 	}
 
+	private void updateNotification()
+	{
+		final NotificationManager nm = Util.getSystemService(this, Context.NOTIFICATION_SERVICE);
+		nm.notify(NOTIFICATION_ID, createNotification());
+	}
+
 	private Notification createNotification()
 	{
+		final String text = createNotificationText();
+		Lg.i("createNotification: ", text);
+
 		if (mNotificationActivity == null) {
 			if (mSimlarStatus == SimlarStatus.ONGOING_CALL) {
 				mNotificationActivity = mSimlarCallState.isRinging() ? ACTIVITIES.getRingingActivity() : ACTIVITIES.getCallActivity();
@@ -462,18 +495,59 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			Lg.i("no activity registered based on mSimlarStatus=", mSimlarStatus, " we now take: ", mNotificationActivity.getSimpleName());
 		}
 
-		/// Note: we do not want the TaskStackBuilder here
 		final PendingIntent activity = PendingIntent.getActivity(this, 0,
 				new Intent(this, mNotificationActivity).addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED), 0);
 
-		final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, SimlarNotificationChannel.CALL.name());
-		notificationBuilder.setSmallIcon(FlavourHelper.isGcmEnabled() ? R.drawable.ic_notification_ongoing_call : mSimlarStatus.getNotificationIcon());
-		notificationBuilder.setLargeIcon(mSimlarCallState.getContactPhotoBitmap(this, R.drawable.contact_picture));
-		notificationBuilder.setContentTitle(getString(R.string.app_name));
-		notificationBuilder.setContentText(createNotificationText());
-		notificationBuilder.setOngoing(true);
-		notificationBuilder.setContentIntent(activity);
-		notificationBuilder.setWhen(System.currentTimeMillis());
+		final NotificationCompat.Builder notificationBuilder =
+				new NotificationCompat.Builder(this, SimlarNotificationChannel.CALL.name())
+						.setSmallIcon(FlavourHelper.isGcmEnabled() ? R.drawable.ic_notification_ongoing_call : mSimlarStatus.getNotificationIcon())
+						.setLargeIcon(mSimlarCallState.getContactPhotoBitmap(this, R.drawable.contact_picture))
+						.setContentTitle(getString(R.string.app_name))
+						.setContentText(text)
+						.setOngoing(true)
+						.setContentIntent(activity)
+						.setWhen(System.currentTimeMillis());
+
+		return notificationBuilder.build();
+	}
+
+	private Notification createNotificationRinging()
+	{
+		Lg.i("createNotification ringing");
+
+		mNotificationActivity = ACTIVITIES.getRingingActivity();
+		final PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(this, 0,
+				new Intent(this, ACTIVITIES.getRingingActivity()), PendingIntent.FLAG_UPDATE_CURRENT);
+
+		final PendingIntent declineIntent = PendingIntent.getService(this, 0,
+				new Intent(this, SimlarService.class).setAction(INTENT_ACTION_NOTIFICATION_CALL_TERMINATE),
+				PendingIntent.FLAG_UPDATE_CURRENT);
+
+		final PendingIntent acceptIntent = PendingIntent.getService(this, 0,
+				new Intent(this, SimlarService.class).setAction(INTENT_ACTION_NOTIFICATION_CALL_ACCEPT),
+				PendingIntent.FLAG_UPDATE_CURRENT);
+
+		final RemoteViews notificationHeadsUp = new RemoteViews(getPackageName(), R.layout.notification_ringing_heads_up);
+		notificationHeadsUp.setTextViewText(R.id.contactName, mSimlarCallState.getContactName());
+		notificationHeadsUp.setOnClickPendingIntent(R.id.buttonDecline, declineIntent);
+		notificationHeadsUp.setOnClickPendingIntent(R.id.buttonAccept, acceptIntent);
+		notificationHeadsUp.setImageViewBitmap(R.id.contactImage, mSimlarCallState.getContactPhotoBitmap(this, R.drawable.contact_picture));
+
+		final NotificationCompat.Builder notificationBuilder =
+				new NotificationCompat.Builder(this, SimlarNotificationChannel.INCOMING_CALL.name())
+						.setSmallIcon(R.drawable.ic_notification_ongoing_call)
+						.setLargeIcon(mSimlarCallState.getContactPhotoBitmap(this, R.drawable.contact_picture))
+						.setContentTitle(getString(R.string.app_name))
+						.setContentText(String.format(getString(R.string.ringing_notification_text), mSimlarCallState.getContactName()))
+						.setOngoing(true)
+						.setWhen(System.currentTimeMillis())
+						.setPriority(NotificationCompat.PRIORITY_HIGH)
+						.setCategory(NotificationCompat.CATEGORY_CALL)
+						.setFullScreenIntent(fullScreenPendingIntent, true)
+						.setCustomHeadsUpContentView(notificationHeadsUp)
+						.addAction(R.drawable.button_ringing_hang_up, getString(R.string.ringing_notification_decline), declineIntent)
+						.addAction(R.drawable.button_ringing_pick_up, getString(R.string.ringing_notification_accept), acceptIntent);
+
 		return notificationBuilder.build();
 	}
 
@@ -663,8 +737,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		if (!FlavourHelper.isGcmEnabled()) {
 			Lg.i("updating notification based on registration state");
-			final NotificationManager nm = Util.getSystemService(this, Context.NOTIFICATION_SERVICE);
-			nm.notify(NOTIFICATION_ID, createNotification());
+			updateNotification();
 		}
 	}
 
@@ -776,13 +849,11 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			}
 
 			mAudioFocus.request();
+		}
 
-			if (mSimlarCallState.isRinging()) {
-				Lg.i("starting RingingActivity");
-				mNotificationActivity = ACTIVITIES.getRingingActivity();
-				startActivity(new Intent(this, ACTIVITIES.getRingingActivity()).addFlags(
-						Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-			}
+		if (!mSimlarCallState.isRinging()) {
+			final NotificationManager nm = Util.getSystemService(this, Context.NOTIFICATION_SERVICE);
+			nm.cancel(NOTIFICATION_RINGING_ID);
 		}
 
 		if (mSimlarCallState.isEndedCall()) {
@@ -813,11 +884,28 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		ContactsProvider.getNameAndPhotoId(number, this, (name, photoId) -> {
 			mSimlarCallState.updateContactNameAndImage(name, photoId);
 
-			final NotificationManager nm = Util.getSystemService(this, Context.NOTIFICATION_SERVICE);
-			nm.notify(NOTIFICATION_ID, createNotification());
+			if (mSimlarCallState.isRinging()) {
+				Lg.i("notify incoming call with full screen notification");
+				final NotificationManager nm = Util.getSystemService(this, Context.NOTIFICATION_SERVICE);
+				nm.notify(NOTIFICATION_RINGING_ID, createNotificationRinging());
+			}
+
+			updateNotification();
+
+			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P && isScreenLocked() && mSimlarCallState.isRinging()) {
+				Lg.i("starting RingingActivity");
+				mNotificationActivity = ACTIVITIES.getRingingActivity();
+				startActivity(new Intent(this, ACTIVITIES.getRingingActivity()).addFlags(
+						Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+			}
 
 			SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
 		});
+	}
+
+	private boolean isScreenLocked() {
+		final KeyguardManager keyguardManager = Util.getSystemService(this, Context.KEYGUARD_SERVICE);
+		return keyguardManager.inKeyguardRestrictedInputMode();
 	}
 
 	@Override
@@ -878,8 +966,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 
 		mNotificationActivity = ACTIVITIES.getMainActivity();
-		final NotificationManager nm = Util.getSystemService(this, Context.NOTIFICATION_SERVICE);
-		nm.notify(NOTIFICATION_ID, createNotification());
+		updateNotification();
 
 		if (mSimlarStatus == SimlarStatus.ONGOING_CALL) {
 			mLinphoneThread.terminateAllCalls();

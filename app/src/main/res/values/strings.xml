@@ -69,7 +69,7 @@
 
     <string name="linphone_call_state_notification_initializing">initializing</string>
     <string name="linphone_call_state_notification_calling">calling %1$s</string>
-    <string name="linphone_call_state_notification_receiving_call">%1$s is calling you</string>
+    <string name="linphone_call_state_notification_receiving_call">online</string>
     <string name="linphone_call_state_notification_talking">talking to %1$s</string>
     <string name="linphone_call_state_notification_ended">call with %1$s ended</string>
     <string name="linphone_call_state_notification_paused">paused call with %1$s</string>
@@ -183,10 +183,15 @@
 
     <string name="create_account_activity_button_confirm">Confirm</string>
 
-    <string name="ringing_activity_title">is calling you</string>
+    <string name="ringing_activity_default_contact_name">Unknown</string>
+    <string name="ringing_activity_title">calls you</string>
     <string name="ringing_activity_phone_is_ringing">your phone is ringing</string>
     <string name="ringing_activity_decline_call">decline call</string>
     <string name="ringing_activity_accept_call">accept call</string>
+
+    <string name="ringing_notification_text">%1$s calls you</string>
+    <string name="ringing_notification_decline">Decline</string>
+    <string name="ringing_notification_accept">Accept</string>
 
     <string name="agree_activity_title">Create Account</string>
     <string name="agree_activity_welcome">Welcome to Simlar!</string>

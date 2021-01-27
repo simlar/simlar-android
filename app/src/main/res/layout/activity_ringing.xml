@@ -49,6 +49,7 @@
         android:contentDescription="@string/ringing_activity_phone_is_ringing"
         android:gravity="bottom"
         android:paddingLeft="10dp"
+        android:text="@string/ringing_activity_default_contact_name"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/calling_title_text_white"
         android:textIsSelectable="true"/>

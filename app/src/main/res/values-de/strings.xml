@@ -66,7 +66,7 @@
 
     <string name="linphone_call_state_notification_initializing">Vorbereitung</string>
     <string name="linphone_call_state_notification_calling">rufe %1$s an</string>
-    <string name="linphone_call_state_notification_receiving_call">%1$s ruft an</string>
+    <string name="linphone_call_state_notification_receiving_call">online</string>
     <string name="linphone_call_state_notification_talking">spreche mit %1$s</string>
     <string name="linphone_call_state_notification_ended">Anruf mit %1$s beendet</string>
     <string name="linphone_call_state_notification_paused">Anruf mit %1$s pausiert</string>
@@ -180,10 +180,15 @@
     <string name="create_account_activity_button_call_not_available">Bestätigungscode als Anruf erhalten.\n(nicht verfügbar).</string>
     <string name="create_account_activity_button_confirm">Bestätigen</string>
 
+    <string name="ringing_activity_default_contact_name">Unbekannt</string>
     <string name="ringing_activity_title">ruft an</string>
     <string name="ringing_activity_phone_is_ringing">klingelt</string>
     <string name="ringing_activity_decline_call">Anruf ablehnen</string>
     <string name="ringing_activity_accept_call">Anruf annehmen</string>
+
+    <string name="ringing_notification_text">%1$s calls you</string>
+    <string name="ringing_notification_decline">Ablehnen</string>
+    <string name="ringing_notification_accept">Annehmen</string>
 
     <string name="agree_activity_title">Anmeldung</string>
     <string name="agree_activity_welcome">Willkommen bei Simlar!</string>
