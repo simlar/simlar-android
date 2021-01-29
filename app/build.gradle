@@ -95,6 +95,8 @@ android {
     buildTypes {
         release {
             minifyEnabled true
+            shrinkResources true
+
             if (keystoreFile != null && keystorePassword != null) {
                 println("signing with keystore: " + keystoreFile)
                 signingConfig signingConfigs.release
