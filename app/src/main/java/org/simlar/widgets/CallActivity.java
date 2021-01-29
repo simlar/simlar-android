@@ -48,12 +48,13 @@ import org.simlar.helper.VideoState;
 import org.simlar.logging.Lg;
 import org.simlar.proximityscreenlocker.ProximityScreenLocker;
 import org.simlar.proximityscreenlocker.ProximityScreenLockerHelper;
+import org.simlar.service.HeadsetReceiver;
 import org.simlar.service.SimlarCallState;
 import org.simlar.service.SimlarService;
 import org.simlar.service.SimlarServiceCommunicator;
 import org.simlar.utils.Util;
 
-public final class CallActivity extends AppCompatActivity implements VolumesControlDialogFragment.Listener, VideoFragment.Listener
+public final class CallActivity extends AppCompatActivity implements VolumesControlDialogFragment.Listener, VideoFragment.Listener, HeadsetReceiver.Listener
 {
 	private static final String INTENT_EXTRA_SIMLAR_ID = "simlarId";
 
@@ -94,6 +95,9 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 	private ConnectionDetailsDialogFragment mConnectionDetailsDialogFragment = null;
 	private VideoFragment mVideoFragment = null;
+
+	private HeadsetReceiver mHeadsetReceiver = null;
+	private boolean mWiredHeadsetConnected = false;
 
 	private final class SimlarServiceCommunicatorCall extends SimlarServiceCommunicator
 	{
@@ -297,7 +301,17 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		setButtonMicrophoneMute();
 		setButtonSpeaker();
 
+		if (mHeadsetReceiver == null) {
+			mHeadsetReceiver = new HeadsetReceiver(this);
+			mHeadsetReceiver.registerReceiver(this);
+		}
+
 		if (simlarCallState.isEndedCall()) {
+			if (mHeadsetReceiver != null) {
+				unregisterReceiver(mHeadsetReceiver);
+				mHeadsetReceiver = null;
+			}
+
 			if (mAlertDialogRemoteRequestedVideo != null) {
 				mAlertDialogRemoteRequestedVideo.hide();
 			}
@@ -470,9 +484,10 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		final FragmentManager fm = getSupportFragmentManager();
 		fm.beginTransaction().add(R.id.layoutVideoFragmentContainer, mVideoFragment).commit();
 
-		mProximityScreenLocker.release(false);
-
-		setExternalSpeaker(true);
+		if (!mWiredHeadsetConnected) {
+			mProximityScreenLocker.release(false);
+			setExternalSpeaker(true);
+		}
 	}
 
 	private void stopVideo()
@@ -488,7 +503,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 		mVideoFragment = null;
 
-		if (!isFinishing()) {
+		if (!isFinishing() && !mWiredHeadsetConnected) {
 			mProximityScreenLocker.acquire();
 		}
 
@@ -587,6 +602,22 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	public void showSoundSettingsDialog(final View view)
 	{
 		new VolumesControlDialogFragment().show(getSupportFragmentManager(), VolumesControlDialogFragment.class.getCanonicalName());
+	}
+
+	@Override
+	public void onWiredHeadsetConnected(final boolean connected)
+	{
+		mWiredHeadsetConnected = connected;
+		if (mWiredHeadsetConnected) {
+			mProximityScreenLocker.release(false);
+			setExternalSpeaker(false);
+		} else {
+			if (mVideoFragment != null) {
+				setExternalSpeaker(true);
+			} else {
+				mProximityScreenLocker.acquire();
+			}
+		}
 	}
 
 	@Override
