@@ -88,6 +88,7 @@
     <string name="call_activity_microphone_mute">Microphone mute</string>
     <string name="call_activity_microphone_on">Microphone on</string>
     <string name="call_activity_microphone_disabled">Microphone disabled</string>
+    <string name="call_activity_speaker_choices">Bluetooth, &#8230;</string>
     <string name="call_activity_loudspeaker_on">Loudspeaker</string>
     <string name="call_activity_loudspeaker_off">Loudspeaker off</string>
     <string name="call_activity_terminate_call">Terminate call</string>

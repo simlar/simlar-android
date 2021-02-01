@@ -48,13 +48,14 @@ import org.simlar.helper.VideoState;
 import org.simlar.logging.Lg;
 import org.simlar.proximityscreenlocker.ProximityScreenLocker;
 import org.simlar.proximityscreenlocker.ProximityScreenLockerHelper;
+import org.simlar.service.BluetoothManager;
 import org.simlar.service.HeadsetReceiver;
 import org.simlar.service.SimlarCallState;
 import org.simlar.service.SimlarService;
 import org.simlar.service.SimlarServiceCommunicator;
 import org.simlar.utils.Util;
 
-public final class CallActivity extends AppCompatActivity implements VolumesControlDialogFragment.Listener, VideoFragment.Listener, HeadsetReceiver.Listener
+public final class CallActivity extends AppCompatActivity implements VolumesControlDialogFragment.Listener, VideoFragment.Listener, HeadsetReceiver.Listener, BluetoothManager.Listener
 {
 	private static final String INTENT_EXTRA_SIMLAR_ID = "simlarId";
 
@@ -92,12 +93,16 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private ImageButton mButtonToggleVideo = null;
 	private ImageButton mButtonMicro = null;
 	private ImageButton mButtonSpeaker = null;
+	private ImageButton mButtonSpeakerChoices = null;
 
 	private ConnectionDetailsDialogFragment mConnectionDetailsDialogFragment = null;
 	private VideoFragment mVideoFragment = null;
 
 	private HeadsetReceiver mHeadsetReceiver = null;
 	private boolean mWiredHeadsetConnected = false;
+
+	private BluetoothManager mBluetoothManager = null;
+	private boolean mBluetoothHeadsetUsing = false;
 
 	private final class SimlarServiceCommunicatorCall extends SimlarServiceCommunicator
 	{
@@ -172,6 +177,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mButtonToggleVideo = findViewById(R.id.buttonToggleVideo);
 		mButtonMicro = findViewById(R.id.buttonMicro);
 		mButtonSpeaker = findViewById(R.id.buttonSpeaker);
+		mButtonSpeakerChoices = findViewById(R.id.buttonSpeakerChoices);
 
 		//
 		// Presets
@@ -306,10 +312,23 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 			mHeadsetReceiver.registerReceiver(this);
 		}
 
+		if (mBluetoothManager == null) {
+			mBluetoothManager = new BluetoothManager(this, this);
+		}
+
 		if (simlarCallState.isEndedCall()) {
+			if (mBluetoothHeadsetUsing) {
+				mBluetoothManager.stopUsingBluetoothHeadset();
+			}
+
 			if (mHeadsetReceiver != null) {
 				unregisterReceiver(mHeadsetReceiver);
 				mHeadsetReceiver = null;
+			}
+
+			if (mBluetoothManager != null) {
+				mBluetoothManager.destroy();
+				mBluetoothManager = null;
 			}
 
 			if (mAlertDialogRemoteRequestedVideo != null) {
@@ -484,7 +503,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		final FragmentManager fm = getSupportFragmentManager();
 		fm.beginTransaction().add(R.id.layoutVideoFragmentContainer, mVideoFragment).commit();
 
-		if (!mWiredHeadsetConnected) {
+		if (!mWiredHeadsetConnected && !mBluetoothHeadsetUsing) {
 			mProximityScreenLocker.release(false);
 			setExternalSpeaker(true);
 		}
@@ -503,7 +522,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 		mVideoFragment = null;
 
-		if (!isFinishing() && !mWiredHeadsetConnected) {
+		if (!isFinishing() && !mWiredHeadsetConnected && !mBluetoothHeadsetUsing) {
 			mProximityScreenLocker.acquire();
 		}
 
@@ -605,13 +624,51 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	}
 
 	@Override
+	public void onBluetoothHeadsetAvailable(final boolean available)
+	{
+		showSpeakerChoices(available);
+	}
+
+	@Override
+	public void onBluetoothHeadsetUsing(final boolean using)
+	{
+		mBluetoothHeadsetUsing = using;
+
+		if (mBluetoothHeadsetUsing) {
+			showSpeakerChoices(true);
+			mProximityScreenLocker.release(false);
+		} else if (!mWiredHeadsetConnected) {
+			if (mVideoFragment != null) {
+				setExternalSpeaker(true);
+			} else {
+				mProximityScreenLocker.acquire();
+			}
+		}
+	}
+
+	private void showSpeakerChoices(final boolean available)
+	{
+		Lg.i("showSpeakerChoices: ", available);
+		mButtonSpeakerChoices.setVisibility(available ? View.VISIBLE : View.GONE);
+		mButtonSpeaker.setVisibility(available ? View.GONE : View.VISIBLE);
+
+		if (available) {
+			if (mBluetoothHeadsetUsing) {
+				mButtonSpeakerChoices.setImageResource(R.drawable.bluetooth);
+			} else {
+				mButtonSpeakerChoices.setImageResource(R.drawable.speaker_choices);
+			}
+		}
+	}
+
+	@Override
 	public void onWiredHeadsetConnected(final boolean connected)
 	{
 		mWiredHeadsetConnected = connected;
 		if (mWiredHeadsetConnected) {
 			mProximityScreenLocker.release(false);
 			setExternalSpeaker(false);
-		} else {
+		} else if (!mBluetoothHeadsetUsing) {
 			if (mVideoFragment != null) {
 				setExternalSpeaker(true);
 			} else {
@@ -668,6 +725,20 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	{
 		mCommunicator.getService().toggleExternalSpeaker();
 		setButtonSpeaker();
+	}
+
+	@SuppressWarnings({"unused", "RedundantSuppression"})
+	public void showSpeakerChoices(final View view)
+	{
+		Lg.i("button showSpeakerChoices clicked");
+
+		if (mBluetoothHeadsetUsing) {
+			mBluetoothManager.stopUsingBluetoothHeadset();
+			mButtonSpeakerChoices.setImageResource(R.drawable.speaker_choices);
+		} else {
+			mBluetoothManager.startUsingBluetoothHeadset();
+			mButtonSpeakerChoices.setImageResource(R.drawable.bluetooth);
+		}
 	}
 
 	private void setButtonMicrophoneMute()

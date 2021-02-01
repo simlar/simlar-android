@@ -334,6 +334,14 @@
                 android:contentDescription="@string/call_activity_loudspeaker_off"
                 android:onClick="toggleSpeakerMuted"
                 app:srcCompat="@drawable/speaker_off"/>
+
+            <ImageButton
+                android:id="@+id/buttonSpeakerChoices"
+                style="@style/callActivityImageButton"
+                android:contentDescription="@string/call_activity_speaker_choices"
+                android:onClick="showSpeakerChoices"
+                app:srcCompat="@drawable/speaker_choices"
+                android:visibility="gone"/>
         </LinearLayout>
 
         <ImageButton
