@@ -95,11 +95,13 @@ android {
     buildTypes {
         release {
             minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+
             if (keystoreFile != null && keystorePassword != null) {
                 println("signing with keystore: " + keystoreFile)
                 signingConfig signingConfigs.release
             }
-            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
 
