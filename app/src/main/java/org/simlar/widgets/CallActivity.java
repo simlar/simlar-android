@@ -37,6 +37,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -58,6 +59,9 @@ import org.simlar.utils.Util;
 public final class CallActivity extends AppCompatActivity implements VolumesControlDialogFragment.Listener, VideoFragment.Listener, HeadsetReceiver.Listener, BluetoothManager.Listener
 {
 	private static final String INTENT_EXTRA_SIMLAR_ID = "simlarId";
+	private static final int AUDIO_OUTPUT_WIRED_HEADSET_OR_PHONE = 0;
+	private static final int AUDIO_OUTPUT_EXTERNAL_SPEAKER = 1;
+	private static final int AUDIO_OUTPUT_BLUETOOTH = 2;
 
 	private final SimlarServiceCommunicator mCommunicator = new SimlarServiceCommunicatorCall();
 	private ProximityScreenLocker mProximityScreenLocker = null;
@@ -654,9 +658,13 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 		if (available) {
 			if (mBluetoothHeadsetUsing) {
-				mButtonSpeakerChoices.setImageResource(R.drawable.bluetooth);
+				mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_bluetooth);
+			} else if (mCommunicator.getService().getExternalSpeaker()) {
+				mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_speaker);
+			} else if (mWiredHeadsetConnected) {
+				mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_wired_headset);
 			} else {
-				mButtonSpeakerChoices.setImageResource(R.drawable.speaker_choices);
+				mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_phone);
 			}
 		}
 	}
@@ -674,6 +682,10 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 			} else {
 				mProximityScreenLocker.acquire();
 			}
+		}
+
+		if (mButtonSpeakerChoices.getVisibility() == View.VISIBLE) {
+			showSpeakerChoices(true);
 		}
 	}
 
@@ -727,17 +739,80 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		setButtonSpeaker();
 	}
 
+	private int currentAudioOutput()
+	{
+		if (mBluetoothHeadsetUsing) {
+			return AUDIO_OUTPUT_BLUETOOTH;
+		}
+
+		if (mCommunicator.getService().getExternalSpeaker()) {
+			return AUDIO_OUTPUT_EXTERNAL_SPEAKER;
+		}
+
+		return AUDIO_OUTPUT_WIRED_HEADSET_OR_PHONE;
+	}
+
 	@SuppressWarnings({"unused", "RedundantSuppression"})
 	public void showSpeakerChoices(final View view)
 	{
 		Lg.i("button showSpeakerChoices clicked");
 
-		if (mBluetoothHeadsetUsing) {
-			mBluetoothManager.stopUsingBluetoothHeadset();
-			mButtonSpeakerChoices.setImageResource(R.drawable.speaker_choices);
+		final String[] items = new String[3];
+		items[AUDIO_OUTPUT_WIRED_HEADSET_OR_PHONE] = getString(
+				mWiredHeadsetConnected
+						? R.string.call_activity_speaker_choices_wired_headset
+						: R.string.call_activity_speaker_choices_phone);
+		items[AUDIO_OUTPUT_EXTERNAL_SPEAKER] = getString(R.string.call_activity_speaker_choices_speaker);
+		items[AUDIO_OUTPUT_BLUETOOTH] = getString(R.string.call_activity_speaker_choices_bluetooth);
+
+		new AlertDialog.Builder(this)
+				.setSingleChoiceItems(items, currentAudioOutput(), (dialog, which) -> {
+					//noinspection SwitchStatementDensity,SwitchStatementWithoutDefaultBranch
+					switch (which) {
+					case AUDIO_OUTPUT_WIRED_HEADSET_OR_PHONE:
+						handleSpeakerChoice(
+								false,
+								false,
+								mWiredHeadsetConnected ? R.drawable.audio_output_wired_headset : R.drawable.audio_output_phone,
+								!mWiredHeadsetConnected);
+						break;
+					case AUDIO_OUTPUT_EXTERNAL_SPEAKER:
+						handleSpeakerChoice(
+								false,
+								true,
+								R.drawable.audio_output_speaker,
+								false);
+						break;
+					case AUDIO_OUTPUT_BLUETOOTH:
+						handleSpeakerChoice(
+								true,
+								false,
+								R.drawable.audio_output_bluetooth,
+								false);
+						break;
+					}
+
+					dialog.dismiss();
+				}).create().show();
+	}
+
+	private void handleSpeakerChoice(final boolean enableBluetooth, final boolean enableExternalSpeaker, @DrawableRes final int drawableId, final boolean enableProximityScreenLocker)
+	{
+		if (mBluetoothHeadsetUsing != enableBluetooth) {
+			if (enableBluetooth) {
+				mBluetoothManager.startUsingBluetoothHeadset();
+			} else {
+				mBluetoothManager.stopUsingBluetoothHeadset();
+			}
+		}
+
+		setExternalSpeaker(enableExternalSpeaker);
+		mButtonSpeakerChoices.setImageResource(drawableId);
+
+		if (enableProximityScreenLocker) {
+			mProximityScreenLocker.acquire();
 		} else {
-			mBluetoothManager.startUsingBluetoothHeadset();
-			mButtonSpeakerChoices.setImageResource(R.drawable.bluetooth);
+			mProximityScreenLocker.release(false);
 		}
 	}
 
