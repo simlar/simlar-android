@@ -33,15 +33,6 @@
     <suppress>
         <notes>
             <![CDATA[
-                file name:intellij-core-26.4.1.jar
-            ]]>
-        </notes>
-        <gav regex="true">^com\.google\.protobuf:protobuf-java:.*$</gav>
-        <cve>CVE-2015-5237</cve>
-    </suppress>
-    <suppress>
-        <notes>
-            <![CDATA[
                 file name: intellij-core-26.5.3.jar (shaded: log4j:log4j:1.2.17)
             ]]>
         </notes>
