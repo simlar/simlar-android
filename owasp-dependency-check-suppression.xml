@@ -25,10 +25,11 @@
                 file name: bcprov-jdk15on-1.56.jar
             ]]>
         </notes>
-        <gav regex="true">^org\.bouncycastle:bcprov-jdk15on:.*$</gav>
+        <packageUrl regex="true">^pkg:maven/org\.bouncycastle/bcprov\-jdk15on@.*$</packageUrl>
         <cve>CVE-2017-13098</cve>
         <cve>CVE-2018-1000180</cve>
         <cve>CVE-2018-1000613</cve>
+        <cve>CVE-2020-26939</cve>
     </suppress>
     <suppress>
         <notes>
@@ -74,15 +75,6 @@
         </notes>
         <packageUrl regex="true">^pkg:maven/com\.google\.guava/guava@.*$</packageUrl>
         <cve>CVE-2020-8908</cve>
-    </suppress>
-    <suppress>
-        <notes>
-            <![CDATA[
-                file name: bcprov-jdk15on-1.56.jar
-            ]]>
-        </notes>
-        <packageUrl regex="true">^pkg:maven/org\.bouncycastle/bcprov\-jdk15on@.*$</packageUrl>
-        <cve>CVE-2020-26939</cve>
     </suppress>
     <suppress>
         <notes>
