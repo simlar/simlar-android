@@ -216,7 +216,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		super.onResume();
 		Lg.i("onResume");
 
-		if (mVideoFragment == null) {
+		if (mVideoFragment == null && !mWiredHeadsetConnected && !mBluetoothHeadsetUsing) {
 			mProximityScreenLocker.acquire();
 		}
 	}
@@ -737,6 +737,12 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	{
 		mCommunicator.getService().toggleExternalSpeaker();
 		setButtonSpeaker();
+
+		if (mCommunicator.getService().getExternalSpeaker()) {
+			mProximityScreenLocker.release(false);
+		} else {
+			mProximityScreenLocker.acquire();
+		}
 	}
 
 	private int currentAudioOutput()
