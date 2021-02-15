@@ -87,6 +87,11 @@
     <string name="call_activity_microphone_disabled">Mikrofon deaktiviert</string>
     <string name="call_activity_loudspeaker_on">Lautsprecher aktiviert</string>
     <string name="call_activity_loudspeaker_off">Lautsprecher deaktiviert</string>
+    <string name="call_activity_speaker_choices">Bluetooth, &#8230;</string>
+    <string name="call_activity_speaker_choices_phone">Hörer</string>
+    <string name="call_activity_speaker_choices_wired_headset">Kopfhörer</string>
+    <string name="call_activity_speaker_choices_speaker">Lautsprecher</string>
+    <string name="call_activity_speaker_choices_bluetooth">Bluetooth</string>
     <string name="call_activity_terminate_call">Anruf beenden</string>
     <string name="call_activity_no_authentication_token">&#8230;</string>
     <string name="call_activity_verified_authentication_token">Bestätigter Code: </string>
