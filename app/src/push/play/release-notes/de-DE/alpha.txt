@@ -1,4 +1,4 @@
-• Linphone Sdk Update 4.4.28
+• Linphone Sdk Update 4.4.32
 • Validierung von neuen internationalen Telefonnummern
 • Kleinere Verbesserungen und Korrekturen
 • Behebt Abstürze unter Android 11
