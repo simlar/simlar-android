@@ -1,4 +1,5 @@
+• Bluetooth Unterstützung
+• Verbesserte Benachrichtigung von Anrufen unter Android 10 und neuer
 • Linphone Sdk Update 4.4.32
 • Validierung von neuen internationalen Telefonnummern
 • Kleinere Verbesserungen und Korrekturen
-• Behebt Abstürze unter Android 11
