@@ -26,7 +26,6 @@ package org.simlar.proximityscreenlocker;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build;
 import android.os.PowerManager;
 
 import java.lang.reflect.InvocationTargetException;
@@ -82,15 +81,8 @@ public final class ProximityScreenLockerNative implements ProximityScreenLocker
 	private static boolean checkNativeSupport(final PowerManager powerManager, final int proximityScreenOffWakeLock)
 	{
 		try {
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-				final Method method = powerManager.getClass().getDeclaredMethod("isWakeLockLevelSupported", int.class);
-				return Boolean.TRUE.equals(method.invoke(powerManager, proximityScreenOffWakeLock));
-			}
-
-			@SuppressWarnings("JavaReflectionMemberAccess") @SuppressLint("PrivateApi") // the use of a private API is intended here
-			final Method method = powerManager.getClass().getDeclaredMethod("getSupportedWakeLockFlags");
-			final int supportedFlags = Util.defaultIfNull((Integer) method.invoke(powerManager), 0);
-			return (supportedFlags & proximityScreenOffWakeLock) != 0x0;
+			final Method method = powerManager.getClass().getDeclaredMethod("isWakeLockLevelSupported", int.class);
+			return Boolean.TRUE.equals(method.invoke(powerManager, proximityScreenOffWakeLock));
 		} catch (final NoSuchMethodException ex) {
 			Lg.ex(ex, "NoSuchMethodException while checking native support");
 		} catch (final IllegalAccessException ex) {
