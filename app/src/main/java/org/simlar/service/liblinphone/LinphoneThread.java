@@ -28,6 +28,7 @@ import android.view.TextureView;
 import androidx.annotation.NonNull;
 
 import org.linphone.core.Address;
+import org.linphone.core.AudioDevice;
 import org.linphone.core.AuthInfo;
 import org.linphone.core.AuthMethod;
 import org.linphone.core.Call;
@@ -36,6 +37,7 @@ import org.linphone.core.CallParams;
 import org.linphone.core.CallStats;
 import org.linphone.core.ChatMessage;
 import org.linphone.core.ChatRoom;
+import org.linphone.core.Conference;
 import org.linphone.core.ConfiguringState;
 import org.linphone.core.Content;
 import org.linphone.core.Core;
@@ -464,6 +466,12 @@ public final class LinphoneThread implements Runnable, CoreListener
 		});
 	}
 
+	@Override
+	public void onAudioDeviceChanged(@NonNull final Core core, @NonNull final AudioDevice audioDevice)
+	{
+		Lg.w("onAudioDeviceChanged: ", audioDevice);
+	}
+
 	private Call.State fixCallState(final Call.State state)
 	{
 		if (Call.State.Released == state || Call.State.Error == state) {
@@ -576,6 +584,12 @@ public final class LinphoneThread implements Runnable, CoreListener
 	}
 
 	@Override
+	public void onCallIdUpdated(@NonNull final Core core, @NonNull final String previousCallId, @NonNull final String currentCallId)
+	{
+		Lg.w("onCallIdUpdated: previousCallId=", previousCallId, " currentCallId=", currentCallId);
+	}
+
+	@Override
 	public void onEcCalibrationAudioInit(final Core core)
 	{
 		Lg.w("onEcCalibrationAudioInit");
@@ -634,6 +648,12 @@ public final class LinphoneThread implements Runnable, CoreListener
 			mMainThreadHandler.post(() -> mListener.onCallStatsChanged(NetworkQuality.fromFloat(quality), duration, codec, iceState, upload, download,
 					jitter, packetLoss, latePackets, roundTripDelay));
 		}
+	}
+
+	@Override
+	public void onFirstCallStarted(@NonNull final Core core)
+	{
+		Lg.w("onFirstCallStarted");
 	}
 
 	private static int getBandwidth(final float bandwidth)
@@ -739,6 +759,12 @@ public final class LinphoneThread implements Runnable, CoreListener
 	}
 
 	@Override
+	public void onConferenceStateChanged(@NonNull final Core core, @NonNull final Conference conference, final Conference.State state)
+	{
+		Lg.w("onConferenceStateChanged: conference=", conference, " state=", state);
+	}
+
+	@Override
 	public void onCallLogUpdated(final Core core, final CallLog callLog)
 	{
 		Lg.i("onCallLogUpdated: callLog=", callLog == null ? null : callLog.getStatus());
@@ -796,6 +822,12 @@ public final class LinphoneThread implements Runnable, CoreListener
 	}
 
 	@Override
+	public void onAudioDevicesListUpdated(@NonNull final Core core)
+	{
+		Lg.w("onAudioDevicesListUpdated");
+	}
+
+	@Override
 	public void onEcCalibrationAudioUninit(final Core core)
 	{
 		Lg.w("onEcCalibrationAudioUninit");
@@ -820,6 +852,12 @@ public final class LinphoneThread implements Runnable, CoreListener
 	}
 
 	@Override
+	public void onLastCallEnded(@NonNull final Core core)
+	{
+		Lg.w("onLastCallEnded");
+	}
+
+	@Override
 	public void onReferReceived(final Core core, final String s)
 	{
 		Lg.w("onReferReceived: ", s);
@@ -829,6 +867,12 @@ public final class LinphoneThread implements Runnable, CoreListener
 	public void onQrcodeFound(final Core core, final String s)
 	{
 		Lg.w("onQrcodeFound: ", s);
+	}
+
+	@Override
+	public void onImeeUserRegistration(@NonNull final Core core, final boolean status, @NonNull final String userId, @NonNull final String info)
+	{
+		Lg.w("onImeeUserRegistration: status=", Boolean.toString(status), " userId=", userId, " info=", info);
 	}
 
 	@Override
