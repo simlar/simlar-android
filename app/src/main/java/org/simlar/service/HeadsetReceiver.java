@@ -25,7 +25,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
-import android.os.Build;
 
 import org.simlar.logging.Lg;
 
@@ -44,10 +43,7 @@ public final class HeadsetReceiver extends BroadcastReceiver {
 
     public void registerReceiver(final Context context)
     {
-        final String action = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-                ? AudioManager.ACTION_HEADSET_PLUG
-                : Intent.ACTION_HEADSET_PLUG;
-        context.registerReceiver(this, new IntentFilter(action));
+        context.registerReceiver(this, new IntentFilter(AudioManager.ACTION_HEADSET_PLUG));
     }
 
     @Override
