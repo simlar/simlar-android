@@ -62,7 +62,15 @@ public final class GooglePlayServicesHelper
 				Lg.i("user already asked to update play services");
 			} else {
 				Lg.w("this device has too old google play services installed => asking user");
-				googleApiAvailability.getErrorDialog(activity, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST).show();
+				final Dialog dialog = googleApiAvailability.getErrorDialog(activity, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST);
+				if (dialog != null) {
+					dialog.show();
+				} else {
+					new AlertDialog.Builder(activity)
+							.setTitle(R.string.google_play_services_helper_alert_too_old_title)
+							.setMessage(R.string.google_play_services_helper_alert_too_old_text)
+							.show();
+				}
 				PreferencesHelper.saveToFileGcmClientVersion(activity, googleApiAvailability.getClientVersion(activity));
 			}
 		} else {

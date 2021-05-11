@@ -21,6 +21,8 @@
 -->
 
 <resources>
+    <string name="google_play_services_helper_alert_too_old_title">Old Version of Google Play Services</string>
+    <string name="google_play_services_helper_alert_too_old_text">Update to the latest version of Google Play Services.</string>
 
     <string name="google_play_services_helper_alert_unavailable_title">Google Play Services unavailable</string>
     <string name="google_play_services_helper_alert_unavailable_text">Your device doesn\'t have Google Play Services installed. This is mandatory for running Simlar. Install them to run Simlar.</string>
