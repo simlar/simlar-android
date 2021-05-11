@@ -147,6 +147,7 @@ dependencies {
             exclude group: "com.google.firebase", module: "firebase-analytics"
             exclude group: "com.google.firebase", module: "firebase-measurement-connector"
         }
+        pushImplementation("com.google.android.gms:play-services-base:17.6.0")
     }
     implementation("androidx.appcompat:appcompat:1.2.0")
     implementation("androidx.legacy:legacy-support-v4:${androidSupportVersion}")
