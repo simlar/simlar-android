@@ -50,6 +50,8 @@ public enum LinphoneCallState
 	INCOMING_EARLY_MEDIA,
 	UPDATING,
 	RELEASED,
+	EARLY_UPDATED_BY_REMOTE,
+	EARLY_UPDATING,
 	UNKNOWN;
 
 	public static LinphoneCallState fromLinphoneCallState(final Call.State state)
@@ -98,6 +100,10 @@ public enum LinphoneCallState
 			return UPDATING;
 		case Released:
 			return RELEASED;
+		case EarlyUpdatedByRemote:
+			return EARLY_UPDATED_BY_REMOTE;
+		case EarlyUpdating:
+			return EARLY_UPDATING;
 		}
 
 		Lg.e("ERROR: fromLinphoneCallState failed state=", state);
@@ -121,7 +127,7 @@ public enum LinphoneCallState
 
 	public boolean isTalking()
 	{
-		return this == CONNECTED || this == STREAMS_RUNNING || this == UPDATED_BY_REMOTE || this == UPDATING;
+		return this == CONNECTED || this == STREAMS_RUNNING || this == UPDATED_BY_REMOTE || this == UPDATING || this == EARLY_UPDATED_BY_REMOTE || this == EARLY_UPDATING;
 	}
 
 	public boolean isNewCallJustStarted()
@@ -166,6 +172,8 @@ public enum LinphoneCallState
 		case STREAMS_RUNNING:
 		case UPDATED_BY_REMOTE:
 		case UPDATING:
+		case EARLY_UPDATED_BY_REMOTE:
+		case EARLY_UPDATING:
 			return String.format(context.getString(R.string.linphone_call_state_notification_talking), simlarId);
 		case OUTGOING_INIT:
 		case OUTGOING_EARLY_MEDIA:
