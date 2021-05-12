@@ -18,7 +18,7 @@ declare -r GFIND=$(which gfind)
 declare -r FIND=${GFIND:-"$(which find)"}
 
 declare -r RES_DIR="$(dirname $(${READLINK} -f $0))/../app/src/main/res/"
-declare -r OPTIONS="-strip"
+declare -r OPTIONS="-strip -define webp:lossless=true"
 
 rm -rf "${RES_DIR}"/drawable-xxhdpi/*
 rm -rf "${RES_DIR}"/drawable-xhdpi/*
