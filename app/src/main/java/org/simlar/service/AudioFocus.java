@@ -68,7 +68,7 @@ final class AudioFocus
 		switch (status) {
 		case AudioManager.AUDIOFOCUS_REQUEST_GRANTED:
 			Lg.i("AudioFocus released");
-			mRequested = true;
+			mRequested = false;
 			break;
 		case AudioManager.AUDIOFOCUS_REQUEST_FAILED:
 			Lg.w("AudioFocus release not granted ");
