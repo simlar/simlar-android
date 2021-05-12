@@ -425,7 +425,7 @@ public final class LinphoneThread implements Runnable, CoreListener
 				return "";
 			}
 
-			return mFriend.getAddress().getUsername();
+			return mFriend.getAddress().asString();
 		}
 	}
 
