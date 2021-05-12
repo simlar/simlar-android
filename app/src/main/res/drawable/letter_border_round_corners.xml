@@ -21,10 +21,10 @@
 -->
 
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
-       android:shape="oval">
+    android:shape="oval">
     <stroke
         android:width="3dp"
-        android:color="@color/actionbar_background"/>
+        android:color="@color/actionbar_background" />
 
-    <solid android:color="@color/background_white"/>
+    <solid android:color="@color/background_white" />
 </shape>
