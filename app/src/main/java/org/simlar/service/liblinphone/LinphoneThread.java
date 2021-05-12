@@ -158,14 +158,13 @@ public final class LinphoneThread implements Runnable, CoreListener
 			mLinphoneThreadHandler.post(() -> {
 				if (mLinphoneHandler.isInitialized()) {
 					mLinphoneHandler.unregister();
-					mLinphoneHandler.setCredentials(mySimlarId, password);
 				} else {
 					// Core uses context only for getting audio manager. I think this is still thread safe.
 					mLinphoneHandler.initialize(this, mContext, linphoneInitialConfigFile, rootCaFile,
 							zrtpSecretsCacheFile, ringbackSoundFile, pauseSoundFile);
 					mLinphoneHandler.setVolumes(volumes);
-					mLinphoneHandler.setCredentials(mySimlarId, password);
 				}
+				mLinphoneHandler.setCredentials(mySimlarId, password);
 			});
 		} catch (final NotInitedException e) {
 			Lg.ex(e, "PreferencesHelper.NotInitedException");
