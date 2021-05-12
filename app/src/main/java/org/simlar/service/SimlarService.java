@@ -102,7 +102,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private static volatile Class<? extends AppCompatActivity> mNotificationActivity = null;
 	private VibratorManager mVibratorManager = null;
 	private SoundEffectManager mSoundEffectManager = null;
-	private AudioFocus mAudioFocus = null;
 	private final NetworkChangeReceiver mNetworkChangeReceiver = new NetworkChangeReceiver();
 	private String mSimlarIdToCall = null;
 	private static volatile boolean mRunning = false;
@@ -347,7 +346,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		mVibratorManager = new VibratorManager(getApplicationContext());
 		mSoundEffectManager = new SoundEffectManager(getApplicationContext());
-		mAudioFocus = new AudioFocus(this);
 
 		mWakeLock = ((PowerManager) Util.getSystemService(this, Context.POWER_SERVICE))
 				.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "simlar:WakeLock");
@@ -843,8 +841,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				acquireWakeLock();
 				acquireWifiLock();
 			}
-
-			mAudioFocus.request();
 		}
 
 		if (!mSimlarCallState.isRinging()) {
@@ -856,7 +852,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			notifySimlarStatusChanged(SimlarStatus.ONLINE);
 			mSoundEffectManager.stopAll();
 			mSoundEffectManager.setInCallMode(false);
-			mAudioFocus.release();
 
 			restoreAudioStreamRing();
 
