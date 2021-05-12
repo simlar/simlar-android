@@ -27,6 +27,7 @@ import android.view.TextureView;
 
 import androidx.annotation.NonNull;
 
+import org.linphone.core.Address;
 import org.linphone.core.AuthInfo;
 import org.linphone.core.AuthMethod;
 import org.linphone.core.Call;
@@ -447,7 +448,8 @@ public final class LinphoneThread implements Runnable, CoreListener
 		// ProxyConfig is probably mutable => use it only in the calling thread
 		// RegistrationState is immutable
 
-		final String identity = cfg.getIdentityAddress().getUsername();
+		final Address address = cfg.getIdentityAddress();
+		final String identity = address == null ? "" : address.asString();
 
 		mMainThreadHandler.post(() -> {
 			if (Util.equals(mRegistrationState, state)) {
