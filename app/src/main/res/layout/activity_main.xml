@@ -21,18 +21,18 @@
 -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/background"
-                tools:context="org.simlar.widgets.MainActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context="org.simlar.widgets.MainActivity">
 
     <fragment
         android:name="org.simlar.widgets.ContactsListFragment"
         android:id="@+id/contactsListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible"/>
+        android:visibility="visible" />
 
     <fragment
         android:name="org.simlar.widgets.NoContactPermissionFragment"
@@ -43,6 +43,6 @@
         android:layout_marginLeft="@dimen/fragment_no_contact_permission_horizontal_margin"
         android:layout_marginRight="@dimen/fragment_no_contact_permission_horizontal_margin"
         android:visibility="invisible"
-        tools:layout="@layout/fragment_no_contact_permission"/>
+        tools:layout="@layout/fragment_no_contact_permission" />
 
 </RelativeLayout>
