@@ -20,6 +20,5 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -->
 
-<cycleInterpolator
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:cycles="0.5"/>
+<cycleInterpolator xmlns:android="http://schemas.android.com/apk/res/android"
+    android:cycles="0.5" />

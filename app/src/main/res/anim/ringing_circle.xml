@@ -20,25 +20,24 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 -->
 
-<set
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<set xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:ordering="together"
     android:shareInterpolator="false"
     tools:ignore="UnusedAttribute">
 
     <scale
-           android:duration="2000"
-           android:fromXScale="0.4"
-           android:fromYScale="0.4"
-           android:pivotX="50%"
-           android:pivotY="50%"
-           android:toXScale="1.0"
-           android:toYScale="1.0"/>
+        android:duration="2000"
+        android:fromXScale="0.4"
+        android:fromYScale="0.4"
+        android:pivotX="50%"
+        android:pivotY="50%"
+        android:toXScale="1.0"
+        android:toYScale="1.0" />
 
     <alpha
-           android:duration="1800"
-           android:fromAlpha="0.0"
-           android:interpolator="@anim/ringing_circle_alpha_interpolator"
-           android:toAlpha="1.0"/>
+        android:duration="1800"
+        android:fromAlpha="0.0"
+        android:interpolator="@anim/ringing_circle_alpha_interpolator"
+        android:toAlpha="1.0" />
 </set>
