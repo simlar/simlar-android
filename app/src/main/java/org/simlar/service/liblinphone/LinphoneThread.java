@@ -743,7 +743,7 @@ public final class LinphoneThread implements Runnable, CoreListener
 	@Override
 	public void onInfoReceived(@NonNull final Core lc, @NonNull final Call call, final InfoMessage info)
 	{
-		Lg.w("onInfoReceived number=", new CallLogger(call), " InfoMessage=", info.getContent().getStringBuffer());
+		Lg.w("onInfoReceived number=", new CallLogger(call), " InfoMessage=", info.getContent());
 	}
 
 	@Override
