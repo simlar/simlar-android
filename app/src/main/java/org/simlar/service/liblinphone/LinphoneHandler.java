@@ -317,6 +317,10 @@ final class LinphoneHandler
 		}
 
 		final Call call = mLinphoneCore.getCurrentCall();
+		if (call == null) {
+			Lg.e("ERROR in verifyAuthenticationToken: no current call");
+			return;
+		}
 
 		if (!token.equals(call.getAuthenticationToken())) {
 			Lg.e("ERROR in verifyAuthenticationToken: token(", token,
