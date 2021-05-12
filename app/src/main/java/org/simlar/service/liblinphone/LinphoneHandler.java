@@ -440,6 +440,11 @@ final class LinphoneHandler
 		}
 
 		final CallParams params = mLinphoneCore.createCallParams(currentCall);
+		if (params == null) {
+			Lg.e("request enable video but failed to create params for current call");
+			return;
+		}
+
 		if (enable && params.videoEnabled()) {
 			Lg.i("request enable video with already enabled video => skipping");
 			return;
