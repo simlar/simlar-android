@@ -258,6 +258,11 @@ final class LinphoneHandler
 		Lg.i("unregister triggered");
 
 		final ProxyConfig proxyConfig = mLinphoneCore.getDefaultProxyConfig();
+		if (proxyConfig == null) {
+			Lg.e("unregister triggered but no default proxy config");
+			return;
+		}
+
 		proxyConfig.edit();
 		proxyConfig.enableRegister(false);
 		proxyConfig.done();
