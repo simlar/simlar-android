@@ -165,19 +165,11 @@ public final class LinphoneThread implements Runnable, CoreListener
 							zrtpSecretsCacheFile, ringbackSoundFile, pauseSoundFile);
 					mLinphoneHandler.setVolumes(volumes);
 					mLinphoneHandler.setCredentials(mySimlarId, password);
-					linphoneIterator();
 				}
 			});
 		} catch (final NotInitedException e) {
 			Lg.ex(e, "PreferencesHelper.NotInitedException");
 		}
-	}
-
-	private void linphoneIterator()
-	{
-		mLinphoneHandler.linphoneCoreIterate();
-
-		mLinphoneThreadHandler.postDelayed(this::linphoneIterator, 20);
 	}
 
 	public void unregister()

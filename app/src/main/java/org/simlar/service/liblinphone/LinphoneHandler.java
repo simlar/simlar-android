@@ -200,11 +200,6 @@ final class LinphoneHandler
 		return natPolicy;
 	}
 
-	void linphoneCoreIterate()
-	{
-		mLinphoneCore.iterate();
-	}
-
 	public void refreshRegisters()
 	{
 		if (!isInitialized()) {
