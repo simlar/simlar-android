@@ -434,7 +434,7 @@ public final class LinphoneThread implements Runnable, CoreListener
 
 	private static String getNumber(final Call call)
 	{
-		if (call == null || call.getRemoteAddress() == null) {
+		if (call == null) {
 			return "";
 		}
 
@@ -486,7 +486,7 @@ public final class LinphoneThread implements Runnable, CoreListener
 
 	private VideoState createVideoState(final Call.State state, final Call call)
 	{
-		final boolean localVideo = call.getCurrentParams() != null && call.getCurrentParams().videoEnabled();
+		final boolean localVideo = call.getCurrentParams().videoEnabled();
 		final boolean remoteVideo = call.getRemoteParams() != null && call.getRemoteParams().videoEnabled();
 
 		Lg.i("creating videoState based on localVideo= ", localVideo, " remoteVideo=", remoteVideo);
@@ -527,7 +527,7 @@ public final class LinphoneThread implements Runnable, CoreListener
 		final VideoState videoState = createVideoState(fixedState, call);
 
 		final ErrorInfo errorInfo = call.getErrorInfo();
-		final Reason reason = errorInfo == null ? null : errorInfo.getReason();
+		final Reason reason = errorInfo.getReason();
 		final CallEndReason callEndReason = CallEndReason.fromReason(reason);
 
 		Lg.i("onCallStateChanged changed state=", fixedState, " number=", new CallLogger(call), " message=", message, " videoState=", videoState, " callEndReason=", callEndReason, "(", reason, ")");
@@ -675,10 +675,6 @@ public final class LinphoneThread implements Runnable, CoreListener
 	private static PayloadType getPayload(final Call call, final StreamType type)
 	{
 		final CallParams params = call.getCurrentParams();
-		if (params == null) {
-			Lg.e("no call parameters no payload");
-			return null;
-		}
 
 		switch (type) {
 		case Audio:
@@ -767,7 +763,7 @@ public final class LinphoneThread implements Runnable, CoreListener
 	@Override
 	public void onCallLogUpdated(@NonNull final Core core, @NonNull final CallLog callLog)
 	{
-		Lg.i("onCallLogUpdated: callLog=", callLog == null ? null : callLog.getStatus());
+		Lg.i("onCallLogUpdated: callLog=", callLog.getStatus());
 	}
 
 	@Override
