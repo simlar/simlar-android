@@ -65,6 +65,7 @@ public enum LinphoneCallState
 		case Idle:
 			return IDLE;
 		case IncomingReceived:
+		case PushIncomingReceived:
 			return INCOMING_RECEIVED;
 		case OutgoingInit:
 			return OUTGOING_INIT;
