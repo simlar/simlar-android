@@ -31,29 +31,28 @@ import org.simlar.utils.Util;
 /// TODO: think about renaming to SimlarCallState
 public enum LinphoneCallState
 {
-	/// Attention: Keep in sync with linphone
-	IDLE, // 0
-	INCOMING_RECEIVED, // 1
-	OUTGOING_INIT, // 2
-	OUTGOING_PROGRESS, // 3
-	OUTGOING_RINGING, // 4
-	OUTGOING_EARLY_MEDIA, // 5
-	CONNECTED, // 6
-	STREAMS_RUNNING, // 7
-	PAUSING, // 8
-	PAUSED, // 9
-	RESUMING, // 10
-	REFERED, // 11
-	ERROR, // 12
-	CALL_END, // 13
-	PAUSED_BY_REMOTE, // 14
-	UPDATED_BY_REMOTE, // 15
-	INCOMING_EARLY_MEDIA, // 16
-	UPDATING, // 17
-	RELEASED, // 18
+	IDLE,
+	INCOMING_RECEIVED,
+	OUTGOING_INIT,
+	OUTGOING_PROGRESS,
+	OUTGOING_RINGING,
+	OUTGOING_EARLY_MEDIA,
+	CONNECTED,
+	STREAMS_RUNNING,
+	PAUSING,
+	PAUSED,
+	RESUMING,
+	REFERED,
+	ERROR,
+	CALL_END,
+	PAUSED_BY_REMOTE,
+	UPDATED_BY_REMOTE,
+	INCOMING_EARLY_MEDIA,
+	UPDATING,
+	RELEASED,
+	EARLY_UPDATED_BY_REMOTE,
+	EARLY_UPDATING,
 	UNKNOWN;
-
-	private static final LinphoneCallState[] ALL = values();
 
 	public static LinphoneCallState fromLinphoneCallState(final Call.State state)
 	{
@@ -62,9 +61,49 @@ public enum LinphoneCallState
 			return UNKNOWN;
 		}
 
-		final int value = state.toInt();
-		if (0 <= value && value < ALL.length - 1) {
-			return ALL[value];
+		switch (state) {
+		case Idle:
+			return IDLE;
+		case IncomingReceived:
+			return INCOMING_RECEIVED;
+		case OutgoingInit:
+			return OUTGOING_INIT;
+		case OutgoingProgress:
+			return OUTGOING_PROGRESS;
+		case OutgoingRinging:
+			return OUTGOING_RINGING;
+		case OutgoingEarlyMedia:
+			return OUTGOING_EARLY_MEDIA;
+		case Connected:
+			return CONNECTED;
+		case StreamsRunning:
+			return STREAMS_RUNNING;
+		case Pausing:
+			return PAUSING;
+		case Paused:
+			return PAUSED;
+		case Resuming:
+			return RESUMING;
+		case Referred:
+			return REFERED;
+		case Error:
+			return ERROR;
+		case End:
+			return CALL_END;
+		case PausedByRemote:
+			return PAUSED_BY_REMOTE;
+		case UpdatedByRemote:
+			return UPDATED_BY_REMOTE;
+		case IncomingEarlyMedia:
+			return INCOMING_EARLY_MEDIA;
+		case Updating:
+			return UPDATING;
+		case Released:
+			return RELEASED;
+		case EarlyUpdatedByRemote:
+			return EARLY_UPDATED_BY_REMOTE;
+		case EarlyUpdating:
+			return EARLY_UPDATING;
 		}
 
 		Lg.e("ERROR: fromLinphoneCallState failed state=", state);
@@ -88,7 +127,7 @@ public enum LinphoneCallState
 
 	public boolean isTalking()
 	{
-		return this == CONNECTED || this == STREAMS_RUNNING || this == UPDATED_BY_REMOTE || this == UPDATING;
+		return this == CONNECTED || this == STREAMS_RUNNING || this == UPDATED_BY_REMOTE || this == UPDATING || this == EARLY_UPDATED_BY_REMOTE || this == EARLY_UPDATING;
 	}
 
 	public boolean isNewCallJustStarted()
@@ -133,6 +172,8 @@ public enum LinphoneCallState
 		case STREAMS_RUNNING:
 		case UPDATED_BY_REMOTE:
 		case UPDATING:
+		case EARLY_UPDATED_BY_REMOTE:
+		case EARLY_UPDATING:
 			return String.format(context.getString(R.string.linphone_call_state_notification_talking), simlarId);
 		case OUTGOING_INIT:
 		case OUTGOING_EARLY_MEDIA:
