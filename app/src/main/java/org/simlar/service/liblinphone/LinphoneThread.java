@@ -828,7 +828,7 @@ public final class LinphoneThread implements Runnable, CoreListener
 	@Override
 	public void onQrcodeFound(final Core core, final String s)
 	{
-		Lg.w("onQrcodeFound; ", s);
+		Lg.w("onQrcodeFound: ", s);
 	}
 
 	@Override
