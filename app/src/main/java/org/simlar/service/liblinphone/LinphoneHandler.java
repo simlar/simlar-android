@@ -258,6 +258,11 @@ final class LinphoneHandler
 		Lg.i("unregister triggered");
 
 		final ProxyConfig proxyConfig = mLinphoneCore.getDefaultProxyConfig();
+		if (proxyConfig == null) {
+			Lg.e("unregister triggered but no default proxy config");
+			return;
+		}
+
 		proxyConfig.edit();
 		proxyConfig.enableRegister(false);
 		proxyConfig.done();
@@ -317,6 +322,10 @@ final class LinphoneHandler
 		}
 
 		final Call call = mLinphoneCore.getCurrentCall();
+		if (call == null) {
+			Lg.e("ERROR in verifyAuthenticationToken: no current call");
+			return;
+		}
 
 		if (!token.equals(call.getAuthenticationToken())) {
 			Lg.e("ERROR in verifyAuthenticationToken: token(", token,
@@ -436,6 +445,11 @@ final class LinphoneHandler
 		}
 
 		final CallParams params = mLinphoneCore.createCallParams(currentCall);
+		if (params == null) {
+			Lg.e("request enable video but failed to create params for current call");
+			return;
+		}
+
 		if (enable && params.videoEnabled()) {
 			Lg.i("request enable video with already enabled video => skipping");
 			return;
