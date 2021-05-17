@@ -61,6 +61,7 @@ idea {
         excludeDirs += file(".travis.yml")
         excludeDirs += file("owasp-dependency-check-suppression.xml")
         excludeDirs += file("gradlew")
+        excludeDirs += file("gradlew.bat")
         excludeDirs += file("app/src/push/res/values/firebase-cloud-messaging.xml")
         excludeDirs += file("app/src/push/play/listings/de-DE")
         excludeDirs += file("app/src/push/play/listings/es-419")
