@@ -21,6 +21,8 @@
 -->
 
 <resources>
+    <string name="google_play_services_helper_alert_too_old_title">Alte Version der Google Play Services</string>
+    <string name="google_play_services_helper_alert_too_old_text">Installiere die letzte Version der Google Play Services.</string>
 
     <string name="google_play_services_helper_alert_unavailable_title">Google Play Services nicht verfügbar</string>
     <string name="google_play_services_helper_alert_unavailable_text">Installiere die Google Play Services, damit du Simlar benutzen kannst.</string>
