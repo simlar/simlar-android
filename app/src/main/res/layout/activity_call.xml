@@ -21,12 +21,12 @@
 -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/calling_title_background_black"
-                tools:context="org.simlar.widgets.CallActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/calling_title_background_black"
+    tools:context="org.simlar.widgets.CallActivity">
 
     <ImageView
         android:id="@+id/contactImage"
@@ -36,7 +36,7 @@
         android:layout_alignParentTop="true"
         android:background="@null"
         app:srcCompat="@drawable/contact_picture"
-        tools:ignore="ContentDescription"/>
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/contactName"
@@ -47,7 +47,7 @@
         android:paddingLeft="10dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/calling_title_text_white"
-        android:textIsSelectable="true"/>
+        android:textIsSelectable="true" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -66,7 +66,7 @@
             android:paddingLeft="10dp"
             android:text="@string/call_activity_outgoing_connecting"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/calling_title_text_white"/>
+            android:textColor="@color/calling_title_text_white" />
 
         <TextView
             android:id="@+id/textViewCallTimer"
@@ -78,7 +78,7 @@
             android:text="00:00"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/calling_title_text_white"
-            tools:ignore="HardcodedText"/>
+            tools:ignore="HardcodedText" />
     </LinearLayout>
 
     <RelativeLayout
@@ -94,7 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             app:srcCompat="@drawable/logo_big"
-            tools:ignore="ContentDescription"/>
+            tools:ignore="ContentDescription" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -125,7 +125,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="5dp"
                     android:text="@string/call_activity_label_quality"
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <TextView
                     android:id="@+id/textViewQuality"
@@ -135,7 +135,7 @@
                     android:paddingRight="5dp"
                     android:text="@string/network_quality_good"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
@@ -153,7 +153,7 @@
                     android:background="@null"
                     android:contentDescription="@string/call_activity_sound_settings"
                     android:onClick="showConnectionDetails"
-                    app:srcCompat="@drawable/button_info"/>
+                    app:srcCompat="@drawable/button_info" />
             </LinearLayout>
         </LinearLayout>
 
@@ -172,7 +172,7 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="5dp"
                 android:text="@string/call_activity_verified_authentication_token"
-                android:textAppearance="?android:attr/textAppearanceSmall"/>
+                android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <TextView
                 android:id="@+id/textViewVerifiedAuthenticationToken"
@@ -182,7 +182,7 @@
                 android:paddingRight="5dp"
                 android:text="@string/call_activity_no_authentication_token"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -208,7 +208,7 @@
                 android:gravity="center_horizontal"
                 android:text="@string/call_activity_please_verify_authentication_token"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="18sp"/>
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/textViewAuthenticationToken"
@@ -217,7 +217,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
                 android:text="@string/call_activity_no_authentication_token"
-                android:textSize="24sp"/>
+                android:textSize="24sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -234,7 +234,7 @@
                     android:layout_width="match_parent"
                     android:drawableLeft="@drawable/button_ok"
                     android:onClick="verifyAuthenticationToken"
-                    android:text="@string/call_activity_button_authentication_token_verify"/>
+                    android:text="@string/call_activity_button_authentication_token_verify" />
 
                 <Button
                     style="@style/buttonWhiteWithIcon"
@@ -243,7 +243,7 @@
                     android:layout_marginTop="8dp"
                     android:drawableLeft="@drawable/button_cancel"
                     android:onClick="wrongAuthenticationToken"
-                    android:text="@string/call_activity_button_authentication_token_wrong"/>
+                    android:text="@string/call_activity_button_authentication_token_wrong" />
             </LinearLayout>
         </LinearLayout>
 
@@ -270,7 +270,7 @@
                 android:layout_gravity="center"
                 android:gravity="center_horizontal"
                 android:text="@string/call_activity_call_ended_normally"
-                android:textAppearance="?android:attr/textAppearanceLarge"/>
+                android:textAppearance="?android:attr/textAppearanceLarge" />
         </LinearLayout>
     </RelativeLayout>
 
@@ -278,7 +278,7 @@
         android:id="@+id/layoutVideoFragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"/>
+        android:orientation="horizontal" />
 
     <LinearLayout
         android:id="@+id/linearLayoutCallControlButtons"
@@ -307,33 +307,33 @@
                 style="@style/callActivityImageButton"
                 android:contentDescription="@string/call_activity_toggle_video"
                 android:onClick="toggleVideoClicked"
-                app:srcCompat="@drawable/button_toggle_video"/>
+                app:srcCompat="@drawable/button_toggle_video" />
 
             <ProgressBar
                 android:id="@+id/progressBarRequestingVideo"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <ImageButton
                 style="@style/callActivityImageButton"
                 android:contentDescription="@string/call_activity_sound_settings"
                 android:onClick="showSoundSettingsDialog"
-                app:srcCompat="@drawable/sound_settings"/>
+                app:srcCompat="@drawable/sound_settings" />
 
             <ImageButton
                 android:id="@+id/buttonMicro"
                 style="@style/callActivityImageButton"
                 android:contentDescription="@string/call_activity_microphone_mute"
                 android:onClick="toggleMicrophoneMuted"
-                app:srcCompat="@drawable/micro_on"/>
+                app:srcCompat="@drawable/micro_on" />
 
             <ImageButton
                 android:id="@+id/buttonSpeaker"
                 style="@style/callActivityImageButton"
                 android:contentDescription="@string/call_activity_loudspeaker_off"
                 android:onClick="toggleSpeakerMuted"
-                app:srcCompat="@drawable/speaker_off"/>
+                app:srcCompat="@drawable/speaker_off" />
 
             <ImageButton
                 android:id="@+id/buttonSpeakerChoices"
@@ -341,7 +341,7 @@
                 android:contentDescription="@string/call_activity_speaker_choices"
                 android:onClick="showSpeakerChoices"
                 app:srcCompat="@drawable/audio_output_phone"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </LinearLayout>
 
         <ImageButton
@@ -351,6 +351,6 @@
             android:background="@drawable/button_red"
             android:contentDescription="@string/call_activity_terminate_call"
             android:onClick="terminateCall"
-            app:srcCompat="@drawable/hang_up_phone"/>
+            app:srcCompat="@drawable/hang_up_phone" />
     </LinearLayout>
 </RelativeLayout>

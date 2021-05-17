@@ -21,9 +21,9 @@
 -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="false"
@@ -38,8 +38,8 @@
             android:exported="false">
 
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <category android:name="org.simlar"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="org.simlar" />
             </intent-filter>
         </receiver>
     </application>

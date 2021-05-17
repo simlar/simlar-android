@@ -24,7 +24,7 @@
     <!-- This is the line -->
     <item>
         <shape>
-            <solid android:color="@color/text_black"/>
+            <solid android:color="@color/text_black" />
         </shape>
     </item>
     <!-- This is the main color -->
@@ -33,7 +33,7 @@
         android:right="1dp"
         android:top="1dp">
         <shape>
-            <solid android:color="@color/background_white"/>
+            <solid android:color="@color/background_white" />
         </shape>
     </item>
 </layer-list>

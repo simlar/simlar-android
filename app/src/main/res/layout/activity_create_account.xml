@@ -21,14 +21,14 @@
 -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingBottom="@dimen/activity_vertical_margin"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/activity_vertical_margin"
-                tools:context="org.simlar.widgets.CreateAccountActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="org.simlar.widgets.CreateAccountActivity">
 
     <LinearLayout
         android:id="@+id/linearLayoutProgress"
@@ -46,13 +46,13 @@
                 android:id="@+id/progressBarRequest"
                 style="?android:attr/progressBarStyleSmall"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/textViewRequest"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/create_account_activity_request"/>
+                android:text="@string/create_account_activity_request" />
         </LinearLayout>
 
         <LinearLayout
@@ -63,12 +63,12 @@
                 android:id="@+id/progressBarConfirm"
                 style="?android:attr/progressBarStyleSmall"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/create_account_activity_confirm"/>
+                android:text="@string/create_account_activity_confirm" />
         </LinearLayout>
 
         <LinearLayout
@@ -79,12 +79,12 @@
                 android:id="@+id/progressBarFirstLogIn"
                 style="?android:attr/progressBarStyleSmall"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/create_account_activity_first_login"/>
+                android:text="@string/create_account_activity_first_login" />
         </LinearLayout>
     </LinearLayout>
 
@@ -92,7 +92,7 @@
         android:id="@+id/layoutSpacer"
         android:layout_width="match_parent"
         android:layout_height="25dp"
-        android:layout_below="@+id/linearLayoutProgress"/>
+        android:layout_below="@+id/linearLayoutProgress" />
 
     <RelativeLayout
         android:id="@+id/layoutMessage"
@@ -107,7 +107,7 @@
             android:layout_centerHorizontal="true"
             android:gravity="center_horizontal"
             android:minHeight="80dp"
-            android:text="@string/create_account_activity_message_sms"/>
+            android:text="@string/create_account_activity_message_sms" />
 
         <EditText
             android:id="@+id/editTextRegistrationCode"
@@ -123,7 +123,7 @@
             android:importantForAutofill="no"
             tools:ignore="UnusedAttribute">
 
-            <requestFocus/>
+            <requestFocus />
         </EditText>
 
         <Button
@@ -137,7 +137,7 @@
             android:enabled="false"
             android:onClick="onCallClicked"
             android:text="@string/create_account_activity_button_call"
-            android:textColor="@drawable/button_dialog"/>
+            android:textColor="@drawable/button_dialog" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -154,7 +154,7 @@
                 android:layout_weight="1"
                 android:onClick="onCancelClicked"
                 android:text="@string/create_account_activity_button_cancel"
-                android:textColor="@drawable/button_dialog"/>
+                android:textColor="@drawable/button_dialog" />
 
             <Button
                 android:id="@+id/buttonConfirm"
@@ -167,7 +167,7 @@
                 android:enabled="false"
                 android:onClick="onConfirmClicked"
                 android:text="@string/create_account_activity_button_confirm"
-                android:textColor="@drawable/button_dialog"/>
+                android:textColor="@drawable/button_dialog" />
         </LinearLayout>
     </RelativeLayout>
 

@@ -21,68 +21,68 @@
 -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto"
-      xmlns:tools="http://schemas.android.com/tools"
-      tools:context=".MainActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
 
     <item
         android:id="@+id/action_reload_contacts"
         android:orderInCategory="1"
         android:title="@string/main_activity_menu_reload_contacts"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_enable_debug_mode"
         android:orderInCategory="2"
         android:title="@string/main_activity_menu_enable_debug_mode"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_upload_logfile"
         android:orderInCategory="3"
         android:title="@string/main_activity_menu_upload_logfile"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_delete_account"
         android:orderInCategory="4"
         android:title="@string/main_activity_menu_delete_account"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_fake_telephone_book"
         android:orderInCategory="5"
         android:title="@string/main_activity_menu_fake_telephone_book"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_notification_settings"
         android:orderInCategory="6"
         android:title="@string/main_activity_menu_notification_settings"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_app_settings"
         android:orderInCategory="7"
         android:title="@string/main_activity_menu_app_settings"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_tell_a_friend"
         android:orderInCategory="8"
         android:title="@string/main_activity_menu_tell_a_friend"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_show_about"
         android:orderInCategory="9"
         android:title="@string/main_activity_menu_show_about"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_quit"
         android:orderInCategory="10"
         android:title="@string/main_activity_menu_quit"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
 
 </menu>

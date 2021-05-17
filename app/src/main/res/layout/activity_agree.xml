@@ -21,15 +21,15 @@
 -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/background"
-                android:paddingBottom="@dimen/activity_vertical_margin"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/activity_vertical_margin"
-                tools:context="org.simlar.widgets.AgreeActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="org.simlar.widgets.AgreeActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -50,7 +50,7 @@
             android:layout_marginTop="10dp"
             android:gravity="center_horizontal"
             android:text="@string/agree_activity_welcome"
-            android:textSize="25sp"/>
+            android:textSize="25sp" />
 
         <TextView
             android:id="@+id/textViewTermsAndConditions"
@@ -59,7 +59,7 @@
             android:layout_marginTop="20dp"
             android:gravity="center_horizontal"
             android:text="@string/agree_activity_privacy_statement_and_terms_of_use"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -77,7 +77,7 @@
                 android:layout_width="match_parent"
                 android:drawableLeft="@drawable/button_ok"
                 android:onClick="createAccount"
-                android:text="@string/agree_activity_accept"/>
+                android:text="@string/agree_activity_accept" />
 
             <Button
                 style="@style/buttonWhiteWithIcon"
@@ -86,7 +86,7 @@
                 android:layout_marginTop="15dp"
                 android:drawableLeft="@drawable/button_cancel"
                 android:onClick="cancelAccountCreation"
-                android:text="@string/agree_activity_cancel"/>
+                android:text="@string/agree_activity_cancel" />
         </LinearLayout>
     </LinearLayout>
 
