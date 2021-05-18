@@ -89,5 +89,6 @@
         </notes>
         <packageUrl regex="true">^pkg:maven/org\.jetbrains\.kotlin/kotlin\-.*@.*$</packageUrl>
         <cve>CVE-2020-29582</cve>
+        <cve>CVE-2020-15824</cve>
     </suppress>
 </suppressions>
