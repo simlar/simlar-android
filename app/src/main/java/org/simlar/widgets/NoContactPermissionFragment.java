@@ -21,6 +21,7 @@
 
 package org.simlar.widgets;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -32,6 +33,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
@@ -43,15 +46,21 @@ import org.simlar.helper.SimlarNumber;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
-import static android.app.Activity.RESULT_OK;
-
 @SuppressWarnings("WeakerAccess")
 public final class NoContactPermissionFragment extends Fragment
 {
-	private static final int PICK_CONTACT = 4711;
-
 	private Listener mListener = null;
 	private boolean mShouldShowRationalBeforeRequest = false;
+	private final ActivityResultLauncher<Intent> mStartForContactResult = registerForActivityResult(
+			new ActivityResultContracts.StartActivityForResult(), result -> {
+				final int resultCode = result.getResultCode();
+				if (resultCode != Activity.RESULT_OK) {
+					Lg.i("start activity for contact result ended with resultCode=", resultCode);
+					return;
+				}
+
+				callContact(fromData(result.getData()));
+			});
 
 	@FunctionalInterface
 	public interface Listener
@@ -114,31 +123,7 @@ public final class NoContactPermissionFragment extends Fragment
 
 		final Intent intent = new Intent(Intent.ACTION_PICK);
 		intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
-		startActivityForResult(intent, PICK_CONTACT);
-	}
-
-	@Override
-	public void onActivityResult(final int requestCode, final int resultCode, final Intent data)
-	{
-		if (requestCode != PICK_CONTACT) {
-			Lg.e("onActivityResult with unknown requestCode=", requestCode);
-			return;
-		}
-
-		if (resultCode != RESULT_OK) {
-			Lg.i("onActivityResult with resultCode=", resultCode);
-			return;
-		}
-
-		final ActivityResultContact contact = fromData(data);
-		if (contact == null) {
-			new AlertDialog.Builder(requireContext())
-					.setMessage(R.string.no_contact_permission_fragment_alert_contact_error)
-					.create().show();
-			return;
-		}
-
-		callContact(contact.name, contact.telephoneNumber);
+		mStartForContactResult.launch(intent);
 	}
 
 	private static class ActivityResultContact
@@ -195,6 +180,18 @@ public final class NoContactPermissionFragment extends Fragment
 		}
 
 		return cursor.getString(columnIndex);
+	}
+
+	private void callContact(final ActivityResultContact contact)
+	{
+		if (contact == null) {
+			new AlertDialog.Builder(requireContext())
+					.setMessage(R.string.no_contact_permission_fragment_alert_contact_error)
+					.create().show();
+			return;
+		}
+
+		callContact(contact.name, contact.telephoneNumber);
 	}
 
 	private void callContact(final String name, final String telephoneNumber)
