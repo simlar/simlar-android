@@ -141,6 +141,8 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 		if (mAdapter.isEmpty()) {
 			loadContacts();
 		}
+
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 	}
 
 	private void loadContacts()
