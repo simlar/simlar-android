@@ -465,6 +465,8 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 			Lg.e("onRequestPermissionsResult: unknown request code: ", requestCode);
 			break;
 		}
+
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 	}
 
 	@Override
