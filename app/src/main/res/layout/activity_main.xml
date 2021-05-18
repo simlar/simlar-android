@@ -27,14 +27,14 @@
     android:background="@drawable/background"
     tools:context="org.simlar.widgets.MainActivity">
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:name="org.simlar.widgets.ContactsListFragment"
         android:id="@+id/contactsListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="visible" />
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:name="org.simlar.widgets.NoContactPermissionFragment"
         android:id="@+id/noContactPermissionFragment"
         android:layout_width="match_parent"
