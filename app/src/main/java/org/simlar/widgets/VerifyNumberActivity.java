@@ -20,6 +20,7 @@
 
 package org.simlar.widgets;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -36,6 +37,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -51,11 +54,23 @@ import org.simlar.utils.Util;
 
 public final class VerifyNumberActivity extends AppCompatActivity
 {
-	private static final int RESULT_CREATE_ACCOUNT_ACTIVITY = 0;
-
 	private Spinner mSpinner = null;
 	private EditText mEditNumber = null;
 	private Button mButtonAccept = null;
+
+	private final ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(
+			new ActivityResultContracts.StartActivityForResult(), result -> {
+				if (result.getResultCode() == Activity.RESULT_OK) {
+					startMainActivity();
+				}
+			});
+
+	private void startMainActivity()
+	{
+		Lg.i("finishing on CreateAccount request");
+		finish();
+		startActivity(new Intent(this, MainActivity.class));
+	}
 
 	private final class EditNumberTextWatcher implements TextWatcher
 	{
@@ -105,7 +120,7 @@ public final class VerifyNumberActivity extends AppCompatActivity
 
 		if (PreferencesHelper.getCreateAccountStatus() == CreateAccountStatus.WAITING_FOR_SMS) {
 			Lg.i("CreateAccountStatus = WAITING FOR SMS");
-			startActivityForResult(new Intent(this, CreateAccountActivity.class), RESULT_CREATE_ACCOUNT_ACTIVITY);
+			mStartForResult.launch(new Intent(this, CreateAccountActivity.class));
 		}
 	}
 
@@ -221,21 +236,6 @@ public final class VerifyNumberActivity extends AppCompatActivity
 
 		final Intent intent = new Intent(this, CreateAccountActivity.class);
 		intent.putExtra(CreateAccountActivity.INTENT_EXTRA_NUMBER, simlarNumber.getTelephoneNumber());
-		startActivityForResult(intent, RESULT_CREATE_ACCOUNT_ACTIVITY);
-	}
-
-	@Override
-	protected void onActivityResult(final int requestCode, final int resultCode, final Intent data)
-	{
-		Lg.i("onActivityResult requestCode=", requestCode, " resultCode=", resultCode);
-		if (requestCode == RESULT_CREATE_ACCOUNT_ACTIVITY) {
-			if (resultCode == RESULT_OK) {
-				Lg.i("finishing on CreateAccount request");
-				finish();
-				startActivity(new Intent(this, MainActivity.class));
-			}
-		}
-
-		super.onActivityResult(requestCode, resultCode, data);
+		mStartForResult.launch(intent);
 	}
 }
