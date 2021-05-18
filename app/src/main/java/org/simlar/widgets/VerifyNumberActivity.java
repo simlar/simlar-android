@@ -122,6 +122,8 @@ public final class VerifyNumberActivity extends AppCompatActivity
 		if (PermissionsHelper.isGranted(PermissionsHelper.Type.PHONE_NUMBERS, permissions, grantResults)) {
 			readPhoneNumber();
 		}
+
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 	}
 
 	private void readPhoneNumber()
