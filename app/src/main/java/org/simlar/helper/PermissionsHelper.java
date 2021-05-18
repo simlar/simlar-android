@@ -182,7 +182,6 @@ public final class PermissionsHelper
 
 	public static void requestContactPermission(final Fragment fragment)
 	{
-
 		Lg.i("requesting contact permission");
 		fragment.requestPermissions(new String[] { Type.CONTACTS.getPermission() }, REQUEST_CODE_DEFAULT);
 	}
