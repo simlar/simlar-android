@@ -153,8 +153,7 @@ public final class VerifyNumberActivity extends AppCompatActivity
 		Lg.e("no number");
 		mEditNumber.requestFocus();
 		if (((InputMethodManager) Util.getSystemService(this, Context.INPUT_METHOD_SERVICE))
-				.showSoftInput(mEditNumber, InputMethodManager.SHOW_IMPLICIT))
-		{
+				.showSoftInput(mEditNumber, InputMethodManager.SHOW_IMPLICIT)) {
 			Lg.w("showSoftInput success");
 		} else {
 			Lg.w("showSoftInput failed");
