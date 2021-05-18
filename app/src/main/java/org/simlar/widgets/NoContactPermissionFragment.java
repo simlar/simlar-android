@@ -153,7 +153,7 @@ public final class NoContactPermissionFragment extends Fragment
 		}
 	}
 
-	public ActivityResultContact fromData(final Intent data)
+	private ActivityResultContact fromData(final Intent data)
 	{
 		if (data == null) {
 			Lg.e("onActivityResult without intent data");
