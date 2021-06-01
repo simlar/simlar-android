@@ -52,8 +52,6 @@ import org.simlar.utils.Util;
 public final class PermissionsHelper
 {
 	private static final int REQUEST_CODE_DEFAULT = 23;
-	public static final int REQUEST_CODE_VIDEO_REQUEST = REQUEST_CODE_DEFAULT + 1;
-	public static final int REQUEST_CODE_VIDEO_ACCEPT = REQUEST_CODE_DEFAULT + 2;
 
 	private PermissionsHelper()
 	{
