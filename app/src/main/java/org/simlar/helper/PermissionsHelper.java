@@ -86,12 +86,12 @@ public final class PermissionsHelper
 			mRationalMessageId = rationalMessageId;
 		}
 
-		String getPermission()
+		public String getPermission()
 		{
 			return mPermission;
 		}
 
-		int getRationalMessageId()
+		public int getRationalMessageId()
 		{
 			return mRationalMessageId;
 		}

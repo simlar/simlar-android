@@ -39,7 +39,6 @@ import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -62,6 +61,13 @@ public final class VerifyNumberActivity extends AppCompatActivity
 			new ActivityResultContracts.StartActivityForResult(), result -> {
 				if (result.getResultCode() == Activity.RESULT_OK) {
 					startMainActivity();
+				}
+			});
+
+	private final ActivityResultLauncher<String> mRequestPermissionLauncher = registerForActivityResult(
+			new ActivityResultContracts.RequestPermission(), isGranted -> {
+				if (isGranted) {
+					readPhoneNumber();
 				}
 			});
 
@@ -126,19 +132,16 @@ public final class VerifyNumberActivity extends AppCompatActivity
 
 	private void requestPhoneNumber()
 	{
-		if (PermissionsHelper.checkAndRequestPermissions(this, PermissionsHelper.Type.PHONE_NUMBERS)) {
+		if (PermissionsHelper.hasPermission(this, PermissionsHelper.Type.PHONE_NUMBERS)) {
 			readPhoneNumber();
+		} else if (shouldShowRequestPermissionRationale(PermissionsHelper.Type.PHONE_NUMBERS.getPermission())) {
+			new AlertDialog.Builder(this)
+					.setMessage(PermissionsHelper.Type.PHONE_NUMBERS.getRationalMessageId())
+					.setOnDismissListener(dialog -> mRequestPermissionLauncher.launch(PermissionsHelper.Type.PHONE_NUMBERS.getPermission()))
+					.create().show();
+		} else {
+			mRequestPermissionLauncher.launch(PermissionsHelper.Type.PHONE_NUMBERS.getPermission());
 		}
-	}
-
-	@Override
-	public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults)
-	{
-		if (PermissionsHelper.isGranted(PermissionsHelper.Type.PHONE_NUMBERS, permissions, grantResults)) {
-			readPhoneNumber();
-		}
-
-		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 	}
 
 	private void readPhoneNumber()
