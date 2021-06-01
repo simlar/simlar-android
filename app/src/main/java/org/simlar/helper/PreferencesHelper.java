@@ -27,7 +27,6 @@ import java.io.Serial;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
 public final class PreferencesHelper
@@ -150,33 +149,18 @@ public final class PreferencesHelper
 		return mGcmClientVersion;
 	}
 
-	@SuppressWarnings({"UnusedAssignment", "ReuseOfLocalVariable", "ConstantConditions", "RedundantSuppression"})
 	public static boolean readPreferencesFromFile(final Context context)
 	{
 		final SharedPreferences settings = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
 
 		mMySimlarId = settings.getString(PREFERENCES_USER, null);
 		mPassword = settings.getString(PREFERENCES_PASSWORD, null);
-		int region = settings.getInt(PREFERENCES_REGION, -1);
+		final int region = settings.getInt(PREFERENCES_REGION, -1);
 		mCreateAccountRequestTimestamp = settings.getLong(PREFERENCES_CREATE_ACCOUNT_REQUEST_TIMESTAMP, 0);
 		mCreateAccountStatus = CreateAccountStatus.fromInt(settings.getInt(PREFERENCES_CREATE_ACCOUNT_STATUS, 0));
 		mGcmClientVersion = settings.getInt(PREFERENCES_GCM_CLIENT_VERSION, -1);
 		mVerifiedTelephoneNumber = settings.getString(PREFERENCES_VERIFIED_TELEPHONE_NUMBER, null);
 		mMissedCallNotificationId = settings.getInt(PREFERENCES_MISSED_CALL_NOTIFICATION_ID, MISSED_CALL_NOTIFICATION_ID_MIN);
-
-		mMySimlarId = "*0010*";
-		mPassword = "1234";
-		region = 49;
-		mCreateAccountStatus = CreateAccountStatus.SUCCESS;
-
-		Lg.i("mMySimlarId = \"", mMySimlarId, "\";");
-		Lg.i("mPassword = \"", mPassword, "\";");
-		Lg.i("region = \"", region, "\";");
-		Lg.i("mCreateAccountRequestTimestamp = \"", mCreateAccountRequestTimestamp, "\";");
-		Lg.i("mCreateAccountStatus = \"", mCreateAccountStatus, "\";");
-		Lg.i("mGcmClientVersion = \"", mGcmClientVersion, "\";");
-		Lg.i("mVerifiedTelephoneNumber = \"", mVerifiedTelephoneNumber, "\";");
-		Lg.i("mMissedCallNotificationId = \"", mMissedCallNotificationId, "\";");
 
 		if (Util.isNullOrEmpty(mMySimlarId)) {
 			return false;
