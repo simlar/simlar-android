@@ -178,6 +178,40 @@ public final class PermissionsHelper
 				.create().show();
 	}
 
+	@FunctionalInterface
+	public interface RequestPermissionsListener
+	{
+		void requestPermissions(final Set<String> types);
+	}
+
+	public static void showRationalForMissingMajorPermissions(final FragmentActivity activity, final boolean needsExternalStorage, final RequestPermissionsListener listener)
+	{
+		final Set<String> requestPermissions = new HashSet<>();
+		final Set<String> rationalMessages = new HashSet<>();
+		for (final Type type : Type.getMajorPermissions(needsExternalStorage)) {
+			if (!hasPermission(activity, type)) {
+				requestPermissions.add(type.getPermission());
+				if (shouldShowRationale(activity, type)) {
+					rationalMessages.add(activity.getString(type.getRationalMessageId()));
+				}
+			}
+		}
+
+		if (requestPermissions.isEmpty()) {
+			// all permissions granted
+			return;
+		}
+
+		if (rationalMessages.isEmpty()) {
+			listener.requestPermissions(requestPermissions);
+		} else {
+			new AlertDialog.Builder(activity)
+					.setMessage(TextUtils.join("\n\n", rationalMessages))
+					.setOnDismissListener(dialog -> listener.requestPermissions(requestPermissions))
+					.create().show();
+		}
+	}
+
 	public static void requestContactPermission(final Fragment fragment)
 	{
 		Lg.i("requesting contact permission");

@@ -27,7 +27,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import androidx.annotation.NonNull;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -50,6 +51,7 @@ import org.simlar.https.UploadLogFile;
 import org.simlar.logging.Lg;
 import org.simlar.service.SimlarService;
 import org.simlar.service.SimlarServiceCommunicator;
+import org.simlar.utils.Util;
 
 public final class MainActivity extends AppCompatActivity implements NoContactPermissionFragment.Listener
 {
@@ -58,6 +60,8 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 	private NoContactPermissionFragment mNoContactPermissionFragment = null;
 
 	private final SimlarServiceCommunicator mCommunicator = FlavourHelper.isGcmEnabled() ? null : new SimlarServiceCommunicatorContacts();
+
+	private final ActivityResultLauncher<String[]> mRequestPermissionsLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), p -> {});
 
 	private final class SimlarServiceCommunicatorContacts extends SimlarServiceCommunicator
 	{
@@ -128,23 +132,6 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 		view.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
 	}
 
-	private void requestContacts()
-	{
-		if (PermissionsHelper.checkAndRequestPermissions(this, PermissionsHelper.Type.CONTACTS)) {
-			loadContacts();
-		}
-	}
-
-	@Override
-	public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults)
-	{
-		if (mAdapter.isEmpty()) {
-			loadContacts();
-		}
-
-		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-	}
-
 	private void loadContacts()
 	{
 		showNoContactPermissionFragment(false);
@@ -210,7 +197,10 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 			mCommunicator.startServiceAndRegister(this, MainActivity.class, null);
 		}
 
-		PermissionsHelper.requestMajorPermissions(this, PermissionsHelper.needsExternalStoragePermission(this, RingtoneHelper.getDefaultRingtone()));
+		PermissionsHelper.showRationalForMissingMajorPermissions(
+				this,
+				PermissionsHelper.needsExternalStoragePermission(this, RingtoneHelper.getDefaultRingtone()),
+				types -> mRequestPermissionsLauncher.launch(types.toArray(Util.EMPTY_STRING_ARRAY)));
 
 		if (mAdapter.isEmpty()) {
 			loadContacts();
@@ -349,7 +339,7 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 		Lg.i("reloadContacts");
 		if (ContactsProvider.clearCache()) {
 			mAdapter.clear();
-			requestContacts();
+			loadContacts();
 		}
 	}
 
