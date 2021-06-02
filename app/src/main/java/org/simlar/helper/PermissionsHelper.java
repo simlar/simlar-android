@@ -31,11 +31,9 @@ import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import java.io.FileInputStream;
@@ -45,13 +43,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.simlar.R;
-import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
 public final class PermissionsHelper
 {
-	private static final int REQUEST_CODE_DEFAULT = 23;
-
 	private PermissionsHelper()
 	{
 		throw new AssertionError("This class was not meant to be instantiated");
@@ -158,34 +153,6 @@ public final class PermissionsHelper
 					.setMessage(TextUtils.join("\n\n", rationalMessages))
 					.setOnDismissListener(dialog -> listener.requestPermissions(requestPermissions))
 					.create().show();
-		}
-	}
-
-	public static void requestContactPermission(final Fragment fragment)
-	{
-		Lg.i("requesting contact permission");
-		fragment.requestPermissions(new String[] { Type.CONTACTS.getPermission() }, REQUEST_CODE_DEFAULT);
-	}
-
-	@SuppressWarnings("SameParameterValue")
-	public static boolean isGranted(final Type type, @NonNull final String[] permissions, @NonNull final int[] grantResults)
-	{
-		if (permissions.length != 1) {
-			Lg.w("expected exactly one permission but got: ", TextUtils.join(", ", permissions));
-		}
-
-		final String permission = permissions[0];
-		if (!Util.equalString(permission, type.getPermission())) {
-			Lg.w("expected permission: ", type.getPermission(), " but got: ", permission);
-			return false;
-		}
-
-		if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-			Lg.i("permission granted: ", permission);
-			return true;
-		} else {
-			Lg.i("permission denied: ", permission);
-			return false;
 		}
 	}
 
