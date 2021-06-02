@@ -121,6 +121,23 @@ public final class PermissionsHelper
 		return ActivityCompat.shouldShowRequestPermissionRationale(activity, type.getPermission());
 	}
 
+	@FunctionalInterface
+	public interface RequestPermissionListener
+	{
+		void requestPermission(final String permission);
+	}
+
+	public static void showRationalIfNeeded(final FragmentActivity activity, final Type type, final RequestPermissionListener listener)
+	{
+		if (shouldShowRationale(activity, type)) {
+			new AlertDialog.Builder(activity)
+					.setMessage(PermissionsHelper.Type.PHONE_NUMBERS.getRationalMessageId())
+					.setOnDismissListener(dialog -> listener.requestPermission(type.getPermission()))
+					.create().show();
+		} else {
+			listener.requestPermission(type.getPermission());
+		}
+	}
 
 	@FunctionalInterface
 	public interface RequestPermissionsListener

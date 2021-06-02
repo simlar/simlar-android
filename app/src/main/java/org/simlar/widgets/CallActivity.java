@@ -456,13 +456,9 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 			if (PermissionsHelper.hasPermission(this, PermissionsHelper.Type.CAMERA)) {
 				startVideo();
 				mCommunicator.getService().acceptVideoUpdate(true);
-			} else if (shouldShowRequestPermissionRationale(PermissionsHelper.Type.CAMERA.getPermission())) {
-				new AlertDialog.Builder(this)
-						.setMessage(PermissionsHelper.Type.CAMERA.getRationalMessageId())
-						.setOnDismissListener(dialog -> mRequestPermissionLauncherAcceptVideo.launch(PermissionsHelper.Type.CAMERA.getPermission()))
-						.create().show();
 			} else {
-				mRequestPermissionLauncherAcceptVideo.launch(PermissionsHelper.Type.CAMERA.getPermission());
+				PermissionsHelper.showRationalIfNeeded(this, PermissionsHelper.Type.CAMERA,
+						mRequestPermissionLauncherAcceptVideo::launch);
 			}
 		} else {
 			mCommunicator.getService().acceptVideoUpdate(false);
@@ -617,13 +613,9 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		if (mVideoFragment == null) {
 			if (PermissionsHelper.hasPermission(this, PermissionsHelper.Type.CAMERA)) {
 				mCommunicator.getService().requestVideoUpdate(true);
-			} else if (shouldShowRequestPermissionRationale(PermissionsHelper.Type.CAMERA.getPermission())) {
-				new AlertDialog.Builder(this)
-						.setMessage(PermissionsHelper.Type.CAMERA.getRationalMessageId())
-						.setOnDismissListener(dialog -> mRequestPermissionLauncherRequestVideo.launch(PermissionsHelper.Type.CAMERA.getPermission()))
-						.create().show();
 			} else {
-				mRequestPermissionLauncherRequestVideo.launch(PermissionsHelper.Type.CAMERA.getPermission());
+				PermissionsHelper.showRationalIfNeeded(this, PermissionsHelper.Type.CAMERA,
+						mRequestPermissionLauncherRequestVideo::launch);
 			}
 		} else {
 			mCommunicator.getService().requestVideoUpdate(false);

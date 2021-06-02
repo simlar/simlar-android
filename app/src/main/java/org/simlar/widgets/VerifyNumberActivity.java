@@ -134,13 +134,9 @@ public final class VerifyNumberActivity extends AppCompatActivity
 	{
 		if (PermissionsHelper.hasPermission(this, PermissionsHelper.Type.PHONE_NUMBERS)) {
 			readPhoneNumber();
-		} else if (shouldShowRequestPermissionRationale(PermissionsHelper.Type.PHONE_NUMBERS.getPermission())) {
-			new AlertDialog.Builder(this)
-					.setMessage(PermissionsHelper.Type.PHONE_NUMBERS.getRationalMessageId())
-					.setOnDismissListener(dialog -> mRequestPermissionLauncher.launch(PermissionsHelper.Type.PHONE_NUMBERS.getPermission()))
-					.create().show();
 		} else {
-			mRequestPermissionLauncher.launch(PermissionsHelper.Type.PHONE_NUMBERS.getPermission());
+			PermissionsHelper.showRationalIfNeeded(this, PermissionsHelper.Type.PHONE_NUMBERS,
+					mRequestPermissionLauncher::launch);
 		}
 	}
 
