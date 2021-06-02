@@ -62,11 +62,24 @@ public final class NoContactPermissionFragment extends Fragment
 				callContact(fromData(result.getData()));
 			});
 
+	private final ActivityResultLauncher<String> mRequestPermissionLauncher = registerForActivityResult(
+			new ActivityResultContracts.RequestPermission(), isGranted -> {
+				// if shouldShowRationale returns false before and after requesting contacts permission,
+				// we assume the user has checked "Never Ask again" before and no dialog has been shown.
+				// In this case Simlar opens the settings app.
+				if (!isGranted && !mShouldShowRationalBeforeRequest && !PermissionsHelper.shouldShowRationale(getActivity(), PermissionsHelper.Type.CONTACTS)) {
+					PermissionsHelper.openAppSettings(getActivity());
+				}
+
+				if (isGranted) {
+					mListener.onContactPermissionGranted();
+				}
+			});
+
 	@FunctionalInterface
 	public interface Listener
 	{
-		@SuppressWarnings("UnusedParameters")
-		void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults);
+		void onContactPermissionGranted();
 	}
 
 	@Override
@@ -98,23 +111,7 @@ public final class NoContactPermissionFragment extends Fragment
 	{
 		Lg.i("requestContactPermissionsClicked");
 		mShouldShowRationalBeforeRequest = PermissionsHelper.shouldShowRationale(getActivity(), PermissionsHelper.Type.CONTACTS);
-		PermissionsHelper.requestContactPermission(this);
-	}
-
-	@Override
-	public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults)
-	{
-		// if shouldShowRationale returns false before and after requesting contacts permission,
-		// we assume the user has checked "Never Ask again" before and no dialog has been shown.
-		// In this case Simlar opens the settings app.
-		if (!PermissionsHelper.isGranted(PermissionsHelper.Type.CONTACTS, permissions, grantResults)
-				&& !mShouldShowRationalBeforeRequest && !PermissionsHelper.shouldShowRationale(getActivity(), PermissionsHelper.Type.CONTACTS)) {
-			PermissionsHelper.openAppSettings(getActivity());
-		}
-
-		if (mListener != null) {
-			mListener.onRequestPermissionsResult(requestCode, permissions, grantResults);
-		}
+		mRequestPermissionLauncher.launch(PermissionsHelper.Type.CONTACTS.getPermission());
 	}
 
 	private void callContactClicked()

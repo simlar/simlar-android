@@ -132,6 +132,12 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 		view.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
 	}
 
+	@Override
+	public void onContactPermissionGranted()
+	{
+		loadContacts();
+	}
+
 	private void loadContacts()
 	{
 		showNoContactPermissionFragment(false);
