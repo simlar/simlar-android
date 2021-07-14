@@ -9,11 +9,11 @@ declare -r OLD_VERSION=${1?${USAGE}}
 declare -r NEW_VERSION=${2?${USAGE}}
 
 
-git-create-space-commits.sh "${NEW_VERSION}"
+git-create-space-commits.sh "liblinphone ${NEW_VERSION}"
 
 
 sed -i "s/liblinphoneVersion = \"${OLD_VERSION}\"/liblinphoneVersion = \"${NEW_VERSION}\"/" app/build.gradle
-git commit -am "[gradle] update ${OLD_VERSION} -> ${NEW_VERSION}"
+git commit -am "[gradle] update liblinphone ${OLD_VERSION} -> ${NEW_VERSION}"
 
 
 find app/src/push/play/release-notes/ -name alpha.txt -exec sed -i "s/${OLD_VERSION}/${NEW_VERSION}/" {} \;
