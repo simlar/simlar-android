@@ -31,8 +31,7 @@
         android:name="org.simlar.widgets.ContactsListFragment"
         android:id="@+id/contactsListFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible" />
+        android:layout_height="match_parent" />
 
     <androidx.fragment.app.FragmentContainerView
         android:name="org.simlar.widgets.NoContactPermissionFragment"
@@ -42,7 +41,6 @@
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginLeft="@dimen/fragment_no_contact_permission_horizontal_margin"
         android:layout_marginRight="@dimen/fragment_no_contact_permission_horizontal_margin"
-        android:visibility="invisible"
         tools:layout="@layout/fragment_no_contact_permission" />
 
 </RelativeLayout>
