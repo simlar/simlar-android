@@ -436,13 +436,21 @@ public final class LinphoneThread implements Runnable, CoreListener
 	//
 	// CoreListener overloaded member functions
 	//
+	@SuppressWarnings("deprecation")
 	@Override
-	public void onRegistrationStateChanged(@NonNull final Core lc, final ProxyConfig cfg, final RegistrationState state, @NonNull final String message)
+	public void onRegistrationStateChanged(@NonNull final Core lc, @NonNull final ProxyConfig cfg, final RegistrationState state, @NonNull final String message)
+	{
+		// ProxyConfig is probably mutable => use it only in the calling thread
+		// RegistrationState is immutable
+	}
+
+	@Override
+	public void onAccountRegistrationStateChanged(@NonNull final Core core, @NonNull final Account account, final RegistrationState state, @NonNull final String message)
 	{
 		// ProxyConfig is probably mutable => use it only in the calling thread
 		// RegistrationState is immutable
 
-		final Address address = cfg.getIdentityAddress();
+		final Address address = account.getParams().getIdentityAddress();
 		final String identity = address == null ? "" : address.asString();
 
 		mMainThreadHandler.post(() -> {
@@ -777,12 +785,6 @@ public final class LinphoneThread implements Runnable, CoreListener
 			return;
 		}
 		Lg.w("onConfiguringStatus remoteProvisioningState=", state, " message=", message);
-	}
-
-	@Override
-	public void onAccountRegistrationStateChanged(@NonNull final Core core, @NonNull final Account account, final RegistrationState state, @NonNull final String message)
-	{
-		Lg.w("onAccountRegistrationStateChanged: account=", account, " state=", state, " message=", message);
 	}
 
 	@Override
