@@ -939,6 +939,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	public void onAudioOutputChanged(final AudioOutputType currentAudioOutputType, final Set<AudioOutputType> availableAudioOutputTypes)
 	{
 		Lg.i("onAudioOutputChanged: currentAudioOutputType=", currentAudioOutputType, " availableAudioOutputTypes=", TextUtils.join(",", availableAudioOutputTypes));
+		SimlarServiceBroadcast.sendAudioOutputChanged(this, currentAudioOutputType, availableAudioOutputTypes);
 	}
 
 	private void call(final String simlarId)

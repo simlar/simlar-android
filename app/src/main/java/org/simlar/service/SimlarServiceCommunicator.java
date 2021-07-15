@@ -31,6 +31,8 @@ import android.os.IBinder;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import java.util.Set;
+
 import org.simlar.helper.VideoState;
 import org.simlar.logging.Lg;
 import org.simlar.service.SimlarService.SimlarServiceBinder;
@@ -101,6 +103,10 @@ public class SimlarServiceCommunicator
 				return;
 			case VIDEO_STATE:
 				onVideoStateChanged(((SimlarServiceBroadcast.VideoStateChanged) fsb.getParameters()).videoState);
+				return;
+			case AUDIO_STATE:
+				final SimlarServiceBroadcast.AudioOutputChanged audioOutputChanged = (SimlarServiceBroadcast.AudioOutputChanged) fsb.getParameters();
+				onAudioOutputChanged(audioOutputChanged.currentAudioOutputType, audioOutputChanged.availableAudioOutputTypes);
 				return;
 			case SERVICE_FINISHES:
 				onServiceFinishes();
@@ -176,6 +182,10 @@ public class SimlarServiceCommunicator
 	}
 
 	protected void onVideoStateChanged(final VideoState videoState)
+	{
+	}
+
+	protected void onAudioOutputChanged(final AudioOutputType currentAudioOutputType, final Set<AudioOutputType> availableAudioOutputTypes)
 	{
 	}
 
