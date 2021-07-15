@@ -46,12 +46,15 @@ import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.view.TextureView;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+
+import java.util.Set;
 
 import org.linphone.core.Call.State;
 import org.linphone.core.RegistrationState;
@@ -930,6 +933,12 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mVideoState = videoState;
 		Lg.i("updated video state: ", videoState);
 		SimlarServiceBroadcast.sendVideoStateChanged(this, videoState);
+	}
+
+	@Override
+	public void onAudioOutputChanged(final AudioOutputType currentAudioOutputType, final Set<AudioOutputType> availableAudioOutputTypes)
+	{
+		Lg.i("onAudioOutputChanged: currentAudioOutputType=", currentAudioOutputType, " availableAudioOutputTypes=", TextUtils.join(",", availableAudioOutputTypes));
 	}
 
 	private void call(final String simlarId)

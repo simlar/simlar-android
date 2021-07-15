@@ -850,12 +850,15 @@ public final class LinphoneThread implements Runnable, CoreListener
 		final Set<AudioOutputType> availableAudioOutputTypes = mLinphoneHandler.getAvailableAudioOutputTypes();
 		final AudioOutputType currentAudioOutputType = mLinphoneHandler.getCurrentAudioOutputType();
 		Lg.i("onAudioDevicesListUpdated: ", TextUtils.join(", ", availableAudioOutputTypes), " current type=", currentAudioOutputType);
+
+		mMainThreadHandler.post(() -> mListener.onAudioOutputChanged(currentAudioOutputType, availableAudioOutputTypes));
 	}
 
 	@Override
 	public void onAudioDeviceChanged(@NonNull final Core core, @NonNull final AudioDevice audioDevice)
 	{
-		Lg.w("onAudioDeviceChanged: id=", audioDevice.getId(), " type=", audioDevice.getType(), " name=", audioDevice.getDeviceName());
+		Lg.i("onAudioDeviceChanged: id=", audioDevice.getId(), " type=", audioDevice.getType(), " name=", audioDevice.getDeviceName());
+		mMainThreadHandler.post(() -> mListener.onAudioOutputChanged(mLinphoneHandler.getCurrentAudioOutputType(), mLinphoneHandler.getAvailableAudioOutputTypes()));
 	}
 
 	@Override
