@@ -820,7 +820,7 @@ public final class LinphoneThread implements Runnable, CoreListener
 	@Override
 	public void onAudioDeviceChanged(@NonNull final Core core, @NonNull final AudioDevice audioDevice)
 	{
-		Lg.w("onAudioDeviceChanged: ", audioDevice);
+		Lg.w("onAudioDeviceChanged: id=", audioDevice.getId(), " type=", audioDevice.getType(), " name=", audioDevice.getDeviceName());
 	}
 
 	@Override
