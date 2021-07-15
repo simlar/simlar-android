@@ -1104,8 +1104,11 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	public void toggleExternalSpeaker()
 	{
 		Lg.i("toggleExternalSpeaker");
-		final AudioManager audioManager = Util.getSystemService(this, Context.AUDIO_SERVICE);
-		audioManager.setSpeakerphoneOn(!audioManager.isSpeakerphoneOn());
+		if (mLinphoneThread == null) {
+			return;
+		}
+
+		mLinphoneThread.toggleExternalSpeaker();
 	}
 
 	public MicrophoneStatus getMicrophoneStatus()
