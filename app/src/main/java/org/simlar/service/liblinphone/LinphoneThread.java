@@ -466,12 +466,6 @@ public final class LinphoneThread implements Runnable, CoreListener
 		});
 	}
 
-	@Override
-	public void onAudioDeviceChanged(@NonNull final Core core, @NonNull final AudioDevice audioDevice)
-	{
-		Lg.w("onAudioDeviceChanged: ", audioDevice);
-	}
-
 	private Call.State fixCallState(final Call.State state)
 	{
 		if (Call.State.Released == state || Call.State.Error == state) {
@@ -821,6 +815,12 @@ public final class LinphoneThread implements Runnable, CoreListener
 	public void onAudioDevicesListUpdated(@NonNull final Core core)
 	{
 		Lg.w("onAudioDevicesListUpdated");
+	}
+
+	@Override
+	public void onAudioDeviceChanged(@NonNull final Core core, @NonNull final AudioDevice audioDevice)
+	{
+		Lg.w("onAudioDeviceChanged: ", audioDevice);
 	}
 
 	@Override
