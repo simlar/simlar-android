@@ -23,9 +23,12 @@ package org.simlar.service.liblinphone;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.view.TextureView;
 
 import androidx.annotation.NonNull;
+
+import java.util.Set;
 
 import org.linphone.core.Account;
 import org.linphone.core.Address;
@@ -69,6 +72,7 @@ import org.simlar.helper.VideoState;
 import org.simlar.helper.Volumes;
 import org.simlar.helper.Volumes.MicrophoneStatus;
 import org.simlar.logging.Lg;
+import org.simlar.service.AudioOutputType;
 import org.simlar.utils.Util;
 
 public final class LinphoneThread implements Runnable, CoreListener
@@ -814,7 +818,9 @@ public final class LinphoneThread implements Runnable, CoreListener
 	@Override
 	public void onAudioDevicesListUpdated(@NonNull final Core core)
 	{
-		Lg.w("onAudioDevicesListUpdated");
+		final Set<AudioOutputType> availableAudioOutputTypes = mLinphoneHandler.getAvailableAudioOutputTypes();
+		final AudioOutputType currentAudioOutputType = mLinphoneHandler.getCurrentAudioOutputType();
+		Lg.i("onAudioDevicesListUpdated: ", TextUtils.join(", ", availableAudioOutputTypes), " current type=", currentAudioOutputType);
 	}
 
 	@Override
