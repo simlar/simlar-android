@@ -1146,6 +1146,15 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		setVolumes(getVolumes().toggleMicrophoneMuted());
 	}
 
+	public void setCurrentAudioOutputType(final AudioOutputType type)
+	{
+		if (mLinphoneThread == null) {
+			return;
+		}
+
+		mLinphoneThread.setCurrentAudioOutputType(type);
+	}
+
 	public void requestVideoUpdate(final boolean enable)
 	{
 		if (mLinphoneThread == null) {

@@ -298,6 +298,16 @@ public final class LinphoneThread implements Runnable, CoreListener
 		return mVolumes;
 	}
 
+	public void setCurrentAudioOutputType(final AudioOutputType type)
+	{
+		if (mLinphoneThreadHandler == null) {
+			Lg.e("handler is null, probably thread not started");
+			return;
+		}
+
+		mLinphoneThreadHandler.post(() -> mLinphoneHandler.setCurrentAudioOutputType(type));
+	}
+
 	public void requestVideoUpdate(final boolean enable)
 	{
 		if (mLinphoneThreadHandler == null) {
