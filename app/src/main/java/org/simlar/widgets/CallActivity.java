@@ -44,12 +44,15 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import java.util.Set;
+
 import org.simlar.R;
 import org.simlar.helper.PermissionsHelper;
 import org.simlar.helper.VideoState;
 import org.simlar.logging.Lg;
 import org.simlar.proximityscreenlocker.ProximityScreenLocker;
 import org.simlar.proximityscreenlocker.ProximityScreenLockerHelper;
+import org.simlar.service.AudioOutputType;
 import org.simlar.service.BluetoothManager;
 import org.simlar.service.HeadsetReceiver;
 import org.simlar.service.SimlarCallState;
@@ -150,6 +153,12 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		public void onVideoStateChanged(final VideoState videoState)
 		{
 			CallActivity.this.onVideoStateChanged(videoState);
+		}
+
+		@Override
+		public void onAudioOutputChanged(final AudioOutputType currentAudioOutputType, final Set<AudioOutputType> availableAudioOutputTypes)
+		{
+			CallActivity.this.onAudioOutputChanged(currentAudioOutputType, availableAudioOutputTypes);
 		}
 	}
 
@@ -647,6 +656,42 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 				setExternalSpeaker(true);
 			} else {
 				mProximityScreenLocker.acquire();
+			}
+		}
+	}
+
+	private void onAudioOutputChanged(final AudioOutputType currentAudioOutput, final Set<AudioOutputType> availableAudioOutputTypes)
+	{
+		Lg.i("onAudioOutputChanged");
+
+		if (availableAudioOutputTypes.size() <= 2 && availableAudioOutputTypes.contains(AudioOutputType.SPEAKER)) {
+			mButtonSpeaker.setVisibility(View.VISIBLE);
+			mButtonSpeakerChoices.setVisibility(View.GONE);
+
+			if (currentAudioOutput == AudioOutputType.SPEAKER) {
+				mButtonSpeaker.setImageResource(R.drawable.speaker_on);
+				mButtonSpeaker.setContentDescription(getString(R.string.call_activity_loudspeaker_on));
+			} else {
+				mButtonSpeaker.setImageResource(R.drawable.speaker_off);
+				mButtonSpeaker.setContentDescription(getString(R.string.call_activity_loudspeaker_off));
+			}
+		} else {
+			mButtonSpeaker.setVisibility(View.GONE);
+			mButtonSpeakerChoices.setVisibility(View.VISIBLE);
+
+			switch (currentAudioOutput) {
+			case PHONE:
+				mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_phone);
+				break;
+			case WIRED_HEADSET:
+				mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_wired_headset);
+				break;
+			case SPEAKER:
+				mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_speaker);
+				break;
+			case BLUETOOTH:
+				mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_bluetooth);
+				break;
 			}
 		}
 	}
