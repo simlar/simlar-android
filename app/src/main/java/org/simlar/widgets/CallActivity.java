@@ -693,6 +693,27 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 				mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_bluetooth);
 				break;
 			}
+
+			mButtonSpeakerChoices.setOnClickListener(view -> {
+				Lg.i("button showSpeakerChoices clicked");
+
+				//noinspection ZeroLengthArrayAllocation
+				final AudioOutputType[] types = availableAudioOutputTypes.toArray(new AudioOutputType[0]);
+				int currentItem = 0;
+				final String[] items = new String[types.length];
+				for (int i = 0; i < types.length; i++) {
+					items[i] = types[i].toDisplayName(this);
+					if (types[i] == currentAudioOutput) {
+						currentItem = i;
+					}
+				}
+
+				new AlertDialog.Builder(this)
+						.setSingleChoiceItems(items, currentItem, (dialog, which) -> {
+							mCommunicator.getService().setCurrentAudioOutputType(types[which]);
+							dialog.dismiss();
+						}).create().show();
+			});
 		}
 	}
 
