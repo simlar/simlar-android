@@ -44,6 +44,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import java.util.EnumSet;
 import java.util.Set;
 
 import org.simlar.R;
@@ -76,6 +77,8 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private boolean mHideAuthenticationToken = false;
 	private AlertDialog mAlertDialogRemoteRequestedVideo = null;
 	private AlertDialog mAlertDialogRemoteDeniedVideo = null;
+	private AudioOutputType mCurrentAudioOutputType = AudioOutputType.PHONE;
+	private Set<AudioOutputType> mAvailableAudioOutputTypes = EnumSet.of(AudioOutputType.PHONE, AudioOutputType.SPEAKER);
 
 	// gui elements
 	private ImageView mImageViewContactImage = null;
@@ -663,6 +666,8 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private void onAudioOutputChanged(final AudioOutputType currentAudioOutput, final Set<AudioOutputType> availableAudioOutputTypes)
 	{
 		Lg.i("onAudioOutputChanged");
+		mCurrentAudioOutputType = currentAudioOutput;
+		mAvailableAudioOutputTypes = availableAudioOutputTypes;
 
 		if (availableAudioOutputTypes.size() <= 2 && availableAudioOutputTypes.contains(AudioOutputType.SPEAKER)) {
 			mButtonSpeaker.setVisibility(View.VISIBLE);
