@@ -43,7 +43,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
-import java.util.EnumSet;
 import java.util.Set;
 
 import org.simlar.R;
@@ -72,7 +71,6 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private AlertDialog mAlertDialogRemoteRequestedVideo = null;
 	private AlertDialog mAlertDialogRemoteDeniedVideo = null;
 	private AudioOutputType mCurrentAudioOutputType = AudioOutputType.PHONE;
-	private Set<AudioOutputType> mAvailableAudioOutputTypes = EnumSet.of(AudioOutputType.PHONE, AudioOutputType.SPEAKER);
 
 	// gui elements
 	private ImageView mImageViewContactImage = null;
@@ -606,7 +604,6 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	{
 		Lg.i("onAudioOutputChanged");
 		mCurrentAudioOutputType = currentAudioOutput;
-		mAvailableAudioOutputTypes = availableAudioOutputTypes;
 
 		if (currentAudioOutput == AudioOutputType.PHONE) {
 			mProximityScreenLocker.acquire();
