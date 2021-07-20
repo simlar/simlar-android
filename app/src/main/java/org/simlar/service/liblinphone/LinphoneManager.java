@@ -110,7 +110,6 @@ public final class LinphoneManager implements CoreListener
 			if (mLinphoneHandler.isInitialized()) {
 				mLinphoneHandler.unregister();
 			} else {
-				// Core uses context only for getting audio manager. I think this is still thread safe.
 				mLinphoneHandler.initialize(this, mContext, linphoneInitialConfigFile, rootCaFile,
 						zrtpSecretsCacheFile, ringbackSoundFile, pauseSoundFile);
 				mLinphoneHandler.setVolumes(volumes);
@@ -321,8 +320,6 @@ public final class LinphoneManager implements CoreListener
 	@Override
 	public void onRegistrationStateChanged(@NonNull final Core lc, @NonNull final ProxyConfig cfg, final RegistrationState state, @NonNull final String message)
 	{
-		// ProxyConfig is probably mutable => use it only in the calling thread
-		// RegistrationState is immutable
 	}
 
 	@Override
@@ -389,9 +386,6 @@ public final class LinphoneManager implements CoreListener
 	@Override
 	public void onCallStateChanged(@NonNull final Core lc, @NonNull final Call call, final Call.State state, @NonNull final String message)
 	{
-		// Call is mutable => use it only in the calling thread
-		// Call.State is immutable
-
 		final String number = getNumber(call);
 		final Call.State fixedState = fixCallState(state);
 		final VideoState videoState = createVideoState(fixedState, call);
@@ -439,17 +433,12 @@ public final class LinphoneManager implements CoreListener
 	@Override
 	public void onNewSubscriptionRequested(@NonNull final Core lc, @NonNull final Friend lf, @NonNull final String url)
 	{
-		// Friend is mutable => use it only in the calling thread
-
 		Lg.w("[", new FriendLogger(lf), "] wants to see your presence status => always accepting");
 	}
 
 	@Override
 	public void onNotifyPresenceReceived(@NonNull final Core lc, @NonNull final Friend lf)
 	{
-		// Friend is mutable => use it only in the calling thread
-		// OnlineStatus is immutable
-
 		Lg.w("presence received: username=", new FriendLogger(lf));
 	}
 
@@ -468,9 +457,6 @@ public final class LinphoneManager implements CoreListener
 	@Override
 	public void onCallStatsUpdated(@NonNull final Core lc, @NonNull final Call call, final CallStats statsDoNotUse)
 	{
-		// Call is mutable => use it only in the calling thread
-		// CallStats maybe mutable => use it only in the calling thread
-
 		final StreamType type = statsDoNotUse.getType();
 		if (type != StreamType.Audio && type != StreamType.Video) {
 			Lg.e("onCallStatsUpdated with unexpected type: ", type);
@@ -563,8 +549,6 @@ public final class LinphoneManager implements CoreListener
 	@Override
 	public void onCallEncryptionChanged(@NonNull final Core lc, final Call call, final boolean encrypted, final String authenticationToken)
 	{
-		// Call is mutable => use it only in the calling thread
-
 		final boolean isTokenVerified = call.getAuthenticationTokenVerified();
 
 		Lg.i("onCallEncryptionChanged number=", new CallLogger(call), " encrypted=", encrypted,
