@@ -669,6 +669,12 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mCurrentAudioOutputType = currentAudioOutput;
 		mAvailableAudioOutputTypes = availableAudioOutputTypes;
 
+		if (currentAudioOutput == AudioOutputType.PHONE) {
+			mProximityScreenLocker.acquire();
+		} else {
+			mProximityScreenLocker.release(false);
+		}
+
 		if (availableAudioOutputTypes.size() <= 2 && availableAudioOutputTypes.contains(AudioOutputType.SPEAKER)) {
 			mButtonSpeaker.setVisibility(View.VISIBLE);
 			mButtonSpeakerChoices.setVisibility(View.GONE);
