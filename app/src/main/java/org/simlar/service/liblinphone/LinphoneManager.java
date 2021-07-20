@@ -73,17 +73,17 @@ import org.simlar.logging.Lg;
 import org.simlar.service.AudioOutputType;
 import org.simlar.utils.Util;
 
-public final class LinphoneThread implements CoreListener
+public final class LinphoneManager implements CoreListener
 {
 	private VideoState mVideoState = VideoState.OFF;
 	private final LinphoneHandler mLinphoneHandler = new LinphoneHandler();
 
-	private final LinphoneThreadListener mListener;
+	private final LinphoneManagerListener mListener;
 	private RegistrationState mRegistrationState = RegistrationState.None;
 	private Volumes mVolumes = new Volumes();
 	private final Context mContext;
 
-	public LinphoneThread(final LinphoneThreadListener listener, final Context context)
+	public LinphoneManager(final LinphoneManagerListener listener, final Context context)
 	{
 		mListener = listener;
 		mListener.onCallStateChanged("", Call.State.Idle, null);

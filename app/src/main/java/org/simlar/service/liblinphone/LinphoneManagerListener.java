@@ -30,7 +30,7 @@ import org.simlar.helper.NetworkQuality;
 import org.simlar.helper.VideoState;
 import org.simlar.service.AudioOutputType;
 
-public interface LinphoneThreadListener
+public interface LinphoneManagerListener
 {
 	void onRegistrationStateChanged(final RegistrationState state);
 
