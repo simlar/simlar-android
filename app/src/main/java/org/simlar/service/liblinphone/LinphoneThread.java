@@ -298,25 +298,6 @@ public final class LinphoneThread implements Runnable, CoreListener
 		return mVolumes;
 	}
 
-	public void toggleExternalSpeaker()
-	{
-		if (mLinphoneThreadHandler == null) {
-			Lg.e("handler is null, probably thread not started");
-			return;
-		}
-
-		mLinphoneThreadHandler.post(() -> {
-			final AudioOutputType currentType = mLinphoneHandler.getCurrentAudioOutputType();
-			if (currentType == AudioOutputType.PHONE) {
-				mLinphoneHandler.setCurrentAudioOutputType(AudioOutputType.SPEAKER);
-			} else if (currentType == AudioOutputType.SPEAKER) {
-				mLinphoneHandler.setCurrentAudioOutputType(AudioOutputType.PHONE);
-			} else {
-				Lg.e("toggleExternalSpeaker not possible for current type: ", currentType);
-			}
-		});
-	}
-
 	public void setCurrentAudioOutputType(final AudioOutputType type)
 	{
 		if (mLinphoneThreadHandler == null) {

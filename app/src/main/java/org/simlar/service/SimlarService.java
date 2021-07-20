@@ -1100,11 +1100,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		return getVolumes().getEchoLimiter();
 	}
 
-	public boolean getExternalSpeaker()
-	{
-		return ((AudioManager) Util.getSystemService(this, Context.AUDIO_SERVICE)).isSpeakerphoneOn();
-	}
-
 	private void muteExternalSpeaker()
 	{
 		Lg.i("toggleExternalSpeaker");
@@ -1113,16 +1108,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 
 		mLinphoneThread.setCurrentAudioOutputType(AudioOutputType.PHONE);
-	}
-
-	public void toggleExternalSpeaker()
-	{
-		Lg.i("toggleExternalSpeaker");
-		if (mLinphoneThread == null) {
-			return;
-		}
-
-		mLinphoneThread.toggleExternalSpeaker();
 	}
 
 	public MicrophoneStatus getMicrophoneStatus()
