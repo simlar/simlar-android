@@ -833,6 +833,12 @@ public final class LinphoneThread implements Runnable, CoreListener
 		Lg.i("onAudioDevicesListUpdated: ", TextUtils.join(", ", availableAudioOutputTypes), " current type=", currentAudioOutputType);
 
 		mMainThreadHandler.post(() -> mListener.onAudioOutputChanged(currentAudioOutputType, availableAudioOutputTypes));
+
+		if (currentAudioOutputType != AudioOutputType.WIRED_HEADSET && availableAudioOutputTypes.contains(AudioOutputType.WIRED_HEADSET)) {
+			mLinphoneHandler.setCurrentAudioOutputType(AudioOutputType.WIRED_HEADSET);
+		} else if (currentAudioOutputType != AudioOutputType.BLUETOOTH && availableAudioOutputTypes.contains(AudioOutputType.BLUETOOTH)) {
+			mLinphoneHandler.setCurrentAudioOutputType(AudioOutputType.BLUETOOTH);
+		}
 	}
 
 	@Override
