@@ -44,6 +44,4 @@ public interface LinphoneThreadListener
 	void onVideoStateChanged(final VideoState videoState);
 
 	void onAudioOutputChanged(final AudioOutputType currentAudioOutputType, final Set<AudioOutputType> availableAudioOutputTypes);
-
-	void onJoin();
 }

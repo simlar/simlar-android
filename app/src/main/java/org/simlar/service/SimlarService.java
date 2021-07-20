@@ -1009,15 +1009,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		Lg.i("terminatePrivate");
 		if (mLinphoneThread != null) {
 			mLinphoneThread.finish();
-		} else {
-			onJoin();
-		}
-	}
-
-	@Override
-	public void onJoin()
-	{
-		if (mLinphoneThread != null) {
 			mLinphoneThread = null;
 		}
 

@@ -93,7 +93,6 @@ public final class LinphoneThread implements CoreListener
 	public void finish()
 	{
 		mLinphoneHandler.destroy(this);
-		mListener.onJoin();
 	}
 
 	public void register(final String mySimlarId, final String password)
