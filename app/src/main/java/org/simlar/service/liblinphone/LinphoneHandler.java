@@ -58,7 +58,7 @@ final class LinphoneHandler
 
 	private Core mLinphoneCore = null;
 
-	public void destroy(final CoreListener listener)
+	public synchronized void destroy(final CoreListener listener)
 	{
 		Lg.i("destroy called => forcing unregister");
 
@@ -81,7 +81,7 @@ final class LinphoneHandler
 		return mLinphoneCore != null;
 	}
 
-	public void initialize(final CoreListener listener, final Context context, final String linphoneInitialConfigFile,
+	public synchronized void initialize(final CoreListener listener, final Context context, final String linphoneInitialConfigFile,
 	                       final String rootCaFile, final String zrtpSecretsCacheFile, final String ringbackSoundFile, final String pauseSoundFile)
 	{
 		if (listener == null) {
@@ -217,7 +217,7 @@ final class LinphoneHandler
 		mLinphoneCore.refreshRegisters();
 	}
 
-	public void setCredentials(final String mySimlarId, final String password)
+	public synchronized void setCredentials(final String mySimlarId, final String password)
 	{
 		if (mLinphoneCore == null) {
 			Lg.e("setCredentials called with: mLinphoneCore == null");
@@ -618,7 +618,7 @@ final class LinphoneHandler
 		return null;
 	}
 
-	public Set<AudioOutputType> getAvailableAudioOutputTypes()
+	public synchronized Set<AudioOutputType> getAvailableAudioOutputTypes()
 	{
 		final Set<AudioOutputType> result = EnumSet.noneOf(AudioOutputType.class);
 
@@ -634,7 +634,7 @@ final class LinphoneHandler
 		return Collections.unmodifiableSet(result);
 	}
 
-	public AudioOutputType getCurrentAudioOutputType()
+	public synchronized AudioOutputType getCurrentAudioOutputType()
 	{
 		final Call currentCall = getCurrentCall();
 		if (currentCall == null) {
@@ -649,7 +649,7 @@ final class LinphoneHandler
 		return fromAudioDeviceType(audioDevice.getType());
 	}
 
-	public void setCurrentAudioOutputType(final AudioOutputType type)
+	public synchronized void setCurrentAudioOutputType(final AudioOutputType type)
 	{
 		if (type == null) {
 			return;
