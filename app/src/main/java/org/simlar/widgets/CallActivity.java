@@ -246,7 +246,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		super.onResume();
 		Lg.i("onResume");
 
-		if (mVideoFragment == null && !mWiredHeadsetConnected && !mBluetoothHeadsetUsing) {
+		if (mCurrentAudioOutputType == AudioOutputType.PHONE) {
 			mProximityScreenLocker.acquire();
 		}
 	}
@@ -517,9 +517,9 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		final FragmentManager fm = getSupportFragmentManager();
 		fm.beginTransaction().add(R.id.layoutVideoFragmentContainer, mVideoFragment).commit();
 
-		if (!mWiredHeadsetConnected && !mBluetoothHeadsetUsing) {
-			mProximityScreenLocker.release(false);
-			setExternalSpeaker(true);
+		mProximityScreenLocker.release(false);
+		if (mCurrentAudioOutputType == AudioOutputType.PHONE) {
+			mCommunicator.getService().setCurrentAudioOutputType(AudioOutputType.SPEAKER);
 		}
 	}
 
@@ -536,11 +536,9 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 		mVideoFragment = null;
 
-		if (!isFinishing() && !mWiredHeadsetConnected && !mBluetoothHeadsetUsing) {
-			mProximityScreenLocker.acquire();
+		if (mCurrentAudioOutputType == AudioOutputType.SPEAKER) {
+			mCommunicator.getService().setCurrentAudioOutputType(AudioOutputType.PHONE);
 		}
-
-		setExternalSpeaker(false);
 
 		mLayoutCallControlButtons.setVisibility(View.VISIBLE);
 	}
@@ -813,13 +811,12 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	@SuppressWarnings({"unused", "RedundantSuppression"})
 	public void toggleSpeakerMuted(final View view)
 	{
-		mCommunicator.getService().toggleExternalSpeaker();
-		setButtonSpeaker();
-
-		if (mCommunicator.getService().getExternalSpeaker()) {
-			mProximityScreenLocker.release(false);
+		if (mCurrentAudioOutputType == AudioOutputType.PHONE) {
+			mCommunicator.getService().setCurrentAudioOutputType(AudioOutputType.SPEAKER);
+		} else if (mCurrentAudioOutputType == AudioOutputType.SPEAKER) {
+			mCommunicator.getService().setCurrentAudioOutputType(AudioOutputType.PHONE);
 		} else {
-			mProximityScreenLocker.acquire();
+			Lg.e("toggleSpeakerMuted with unexpected AudioOutputType: ", mCurrentAudioOutputType);
 		}
 	}
 
