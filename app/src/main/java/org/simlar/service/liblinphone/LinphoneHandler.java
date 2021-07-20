@@ -626,7 +626,7 @@ final class LinphoneHandler
 			Lg.d("getAvailableAudioOutputType: id=", audioDevice.getId(), " type=", audioDevice.getType(), " name=", audioDevice.getDeviceName());
 			final AudioOutputType type = fromAudioDeviceType(audioDevice.getType());
 			Lg.d("getAvailableAudioOutputType: type=", type);
-			if (type != null) {
+			if (type != null && audioDevice.hasCapability(AudioDevice.Capabilities.CapabilityPlay)) {
 				result.add(type);
 			}
 		}
@@ -661,7 +661,7 @@ final class LinphoneHandler
 		}
 
 		for (final AudioDevice audioDevice : mLinphoneCore.getAudioDevices()) {
-			if (fromAudioDeviceType(audioDevice.getType()) == type)  {
+			if (fromAudioDeviceType(audioDevice.getType()) == type && audioDevice.hasCapability(AudioDevice.Capabilities.CapabilityPlay))  {
 				Lg.i("setCurrentAudioOutputType type=", type, " found: ", audioDevice.getDeviceName(), " with id=", audioDevice.getId());
 				currentCall.setOutputAudioDevice(audioDevice);
 				return;
