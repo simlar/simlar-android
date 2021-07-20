@@ -88,14 +88,6 @@ public final class LinphoneThread implements CoreListener
 		mListener = listener;
 		mListener.onCallStateChanged("", Call.State.Idle, null);
 		mContext = context;
-
-		run();
-	}
-
-	public void run()
-	{
-		Lg.i("run");
-		mListener.onInitialized();
 	}
 
 	public void finish()

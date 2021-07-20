@@ -32,8 +32,6 @@ import org.simlar.service.AudioOutputType;
 
 public interface LinphoneThreadListener
 {
-	void onInitialized();
-
 	void onRegistrationStateChanged(final RegistrationState state);
 
 	void onCallStatsChanged(final NetworkQuality quality, final int callDuration, final String codec, final String iceState,

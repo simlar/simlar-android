@@ -370,8 +370,15 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private void startLinphone()
 	{
 		Lg.i("startLinphone");
+		if (!PreferencesHelper.readPreferencesFromFile(this)) {
+			Lg.e("failed to initialize credentials");
+			return;
+		}
+
 		mLinphoneThread = new LinphoneThread(this, this);
 		mTerminatePrivateAlreadyCalled = false;
+		notifySimlarStatusChanged(SimlarStatus.OFFLINE);
+		connect();
 
 		if (FlavourHelper.isGcmEnabled()) {
 			terminateChecker();
@@ -558,6 +565,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private void connect()
 	{
 		if (mLinphoneThread == null) {
+			Lg.e("no LinphoneThread on connect");
 			return;
 		}
 
@@ -704,19 +712,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				releaseWakeLock();
 			}
 		}, 4000);
-	}
-
-	@Override
-	public void onInitialized()
-	{
-		notifySimlarStatusChanged(SimlarStatus.OFFLINE);
-
-		if (!PreferencesHelper.readPreferencesFromFile(this)) {
-			Lg.e("failed to initialize credentials");
-			return;
-		}
-
-		connect();
 	}
 
 	@Override
