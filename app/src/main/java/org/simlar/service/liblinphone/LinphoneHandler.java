@@ -237,7 +237,7 @@ final class LinphoneHandler
 		mLinphoneCore.refreshRegisters();
 	}
 
-	public synchronized void setCredentials(@Lg.Anonymize final String mySimlarId, @Lg.Anonymize final String password)
+	public synchronized void setCredentials(final String mySimlarId, final String password)
 	{
 		if (mLinphoneCore == null) {
 			Lg.e("setCredentials called with: mLinphoneCore == null");
@@ -254,7 +254,7 @@ final class LinphoneHandler
 			return;
 		}
 
-		Lg.i("registering: ", mySimlarId);
+		Lg.i("registering: ", new Lg.Anonymizer(mySimlarId));
 
 		mLinphoneCore.clearAllAuthInfo();
 		mLinphoneCore.addAuthInfo(Factory.instance().createAuthInfo(mySimlarId, mySimlarId, password, null, ServerSettings.DOMAIN, ServerSettings.DOMAIN));
@@ -292,22 +292,22 @@ final class LinphoneHandler
 		account.setParams(params);
 	}
 
-	public void call(@Lg.Anonymize final String number)
+	public void call(final String number)
 	{
 		if (Util.isNullOrEmpty(number)) {
 			Lg.e("call: empty number aborting");
 			return;
 		}
 
-		Lg.i("calling ", number);
+		Lg.i("calling ", new Lg.Anonymizer(number));
 		final Call call = mLinphoneCore.invite("sip:" + number + '@' + ServerSettings.DOMAIN);
 		if (call == null) {
-			Lg.i("Could not place call to: ", number);
+			Lg.i("Could not place call to: ", new Lg.Anonymizer(number));
 			Lg.i("Aborting");
 			return;
 		}
 
-		Lg.i("Call to ", number, " is in progress...");
+		Lg.i("Call to ", new Lg.Anonymizer(number), " is in progress...");
 	}
 
 	private Call getCurrentCall()
@@ -328,9 +328,7 @@ final class LinphoneHandler
 			return;
 		}
 
-		@Lg.Anonymize
-		final String simlarId = currentCall.getRemoteAddress().asStringUriOnly();
-		Lg.i("Picking up call: ", simlarId);
+		Lg.i("Picking up call: ", new Lg.Anonymizer(currentCall.getRemoteAddress().asStringUriOnly()));
 		currentCall.accept();
 	}
 

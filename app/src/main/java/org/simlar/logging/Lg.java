@@ -24,10 +24,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import java.util.Arrays;
 
 import org.simlar.utils.Util;
@@ -44,7 +42,6 @@ public final class Lg
 		throw new AssertionError("This class was not meant to be instantiated");
 	}
 
-	@Target({ElementType.PARAMETER, ElementType.FIELD, ElementType.LOCAL_VARIABLE, ElementType.TYPE})
 	@Retention(RetentionPolicy.RUNTIME)
 	public @interface Anonymize {}
 
@@ -76,11 +73,7 @@ public final class Lg
 		if (messageParts != null) {
 			for (final Object part : messageParts) {
 				if (part != null && part.getClass().isAnnotationPresent(Anonymize.class)) {
-					if (part instanceof String) {
-						message.append(anonymize((String)part));
-					} else {
-						message.append(anonymize(part.toString()));
-					}
+					message.append(anonymize(part.toString()));
 				} else {
 					message.append(part);
 				}
@@ -133,6 +126,28 @@ public final class Lg
 			sb.append(i % 2 == 0 ? string.charAt(i) : '*');
 		}
 		return sb.toString();
+	}
+
+	@Anonymize
+	public static class Anonymizer
+	{
+		private final String mMessagePart;
+
+		public Anonymizer(final String messagePart)
+		{
+			mMessagePart = messagePart;
+		}
+
+		@NonNull
+		@Override
+		public final String toString()
+		{
+			if (mMessagePart == null) {
+				return "";
+			}
+
+			return mMessagePart;
+		}
 	}
 
 	public static void init(final boolean debugMode)

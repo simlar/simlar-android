@@ -108,7 +108,6 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 	private VibratorManager mVibratorManager = null;
 	private SoundEffectManager mSoundEffectManager = null;
 	private final NetworkChangeReceiver mNetworkChangeReceiver = new NetworkChangeReceiver();
-	@Lg.Anonymize
 	private String mSimlarIdToCall = null;
 	private static volatile boolean mRunning = false;
 	private final TelephonyCallStateListener mTelephonyCallStateListener = new TelephonyCallStateListener();
@@ -154,7 +153,7 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		}
 
 		@Override
-		public void onCallStateChanged(final int state, @Lg.Anonymize final String incomingNumber)
+		public void onCallStateChanged(final int state, final String incomingNumber)
 		{
 			switch (state) {
 				case TelephonyManager.CALL_STATE_IDLE -> {
@@ -163,16 +162,16 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 					onTelephonyCallStateIdle();
 				}
 				case TelephonyManager.CALL_STATE_OFFHOOK -> {
-					Lg.i("onTelephonyCallStateChanged: [", incomingNumber, "] state=OFFHOOK");
+					Lg.i("onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=OFFHOOK");
 					mInCall = true;
 					onTelephonyCallStateOffHook();
 				}
 				case TelephonyManager.CALL_STATE_RINGING -> {
-					Lg.i("onTelephonyCallStateChanged: [", incomingNumber, "] state=RINGING");
+					Lg.i("onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=RINGING");
 					mInCall = false; /// TODO Think about
 					onTelephonyCallStateRinging();
 				}
-				default -> Lg.i("onTelephonyCallStateChanged: [", incomingNumber, "] state=", state);
+				default -> Lg.i("onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=", state);
 			}
 		}
 	}
@@ -316,7 +315,9 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 			Lg.w("onStartCommand: with no intent");
 			mSimlarIdToCall = null;
 		}
-		Lg.i("onStartCommand simlarIdToCall=", mSimlarIdToCall);
+		Lg.i("onStartCommand simlarIdToCall=", new Lg.Anonymizer(mSimlarIdToCall));
+
+		handlePendingCall();
 
 		if (mGoingDown) {
 			Lg.i("onStartCommand called while service is going down => recovering");
@@ -445,14 +446,14 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		updateNotification();
 	}
 
-	private static void createMissedCallNotification(final Context context, @Lg.Anonymize final String simlarId)
+	private static void createMissedCallNotification(final Context context, final String simlarId)
 	{
 		if (Util.isNullOrEmpty(simlarId)) {
 			Lg.w("no simlarId for missed call");
 			return;
 		}
 
-		Lg.i("missed call: ", simlarId);
+		Lg.i("missed call: ", new Lg.Anonymizer(simlarId));
 		ContactsProvider.getNameAndPhotoId(simlarId, context, (name, photoId) -> createMissedCallNotification(context, name, photoId));
 	}
 
