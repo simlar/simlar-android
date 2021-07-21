@@ -27,10 +27,10 @@ import org.simlar.R;
 
 public enum AudioOutputType
 {
-	PHONE(R.string.call_activity_speaker_choices_phone),
-	WIRED_HEADSET(R.string.call_activity_speaker_choices_wired_headset),
-	SPEAKER(R.string.call_activity_speaker_choices_speaker),
-	BLUETOOTH(R.string.call_activity_speaker_choices_bluetooth);
+	PHONE(R.string.audio_output_type_phone),
+	WIRED_HEADSET(R.string.audio_output_type_wired_headset),
+	SPEAKER(R.string.audio_output_type_speaker),
+	BLUETOOTH(R.string.audio_output_type_bluetooth);
 
 	private final int mResourceId;
 

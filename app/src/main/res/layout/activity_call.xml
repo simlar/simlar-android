@@ -339,7 +339,7 @@
             <ImageButton
                 android:id="@+id/buttonSpeakerChoices"
                 style="@style/callActivityImageButton"
-                android:contentDescription="@string/call_activity_speaker_choices"
+                android:contentDescription="@string/audio_output_type"
                 app:srcCompat="@drawable/audio_output_phone"
                 android:visibility="gone" />
         </LinearLayout>
