@@ -38,12 +38,13 @@ rm -f Simlar-alwaysOnline.apk
 "${GRADLEW}" clean assembleAlwaysOnlineRelease -Pno-google-services
 mv ./app/build/outputs/apk/alwaysOnline/release/app-alwaysOnline-release.apk Simlar-alwaysOnline.apk
 
-if [ -n "${SKIP_PUBLISH_TO_PLAYSTORE}" ] ; then
-	"${GRADLEW}" clean assemblePushRelease
-else
-	"${GRADLEW}" clean publishPushReleaseApk
-fi
+"${GRADLEW}" clean assemblePushRelease
 mv ./app/build/outputs/apk/push/release/app-push-release.apk Simlar.apk
+
+if [ -z "${SKIP_PUBLISH_TO_PLAYSTORE}" ] ; then
+	"${GRADLEW}" clean publishPushReleaseBundle
+	mv ./app/build/outputs/bundle/pushRelease/app-push-release.aab Simlar.aab
+fi
 
 "${GRADLEW}" clean
 
