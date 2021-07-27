@@ -25,7 +25,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/calling_title_background_black"
     tools:context="org.simlar.widgets.CallActivity">
 
     <ImageView
@@ -34,7 +33,7 @@
         android:layout_height="70dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:background="@null"
+        android:background="@color/calling_title_background_black"
         app:srcCompat="@drawable/contact_picture"
         tools:ignore="ContentDescription" />
 
@@ -43,6 +42,7 @@
         android:layout_width="fill_parent"
         android:layout_height="40dp"
         android:layout_toRightOf="@+id/contactImage"
+        android:background="@color/calling_title_background_black"
         android:gravity="bottom"
         android:paddingLeft="10dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -54,6 +54,7 @@
         android:layout_height="30dp"
         android:layout_below="@+id/contactName"
         android:layout_toRightOf="@+id/contactImage"
+        android:background="@color/calling_title_background_black"
         android:gravity="top"
         android:orientation="horizontal">
 

@@ -58,7 +58,7 @@ public final class FileHelper
 		mRootCaFileName = basePath + "/rootca.pem";
 		mZrtpSecretsCacheFileName = basePath + "/zrtp_secrets";
 		mLinphoneInitialConfigFile = basePath + "/linphonerc";
-		mFakePhoneBookPicture = basePath + "/fake_phone_book_picture.png";
+		mFakePhoneBookPicture = basePath + "/fake_phone_book_picture.webp";
 		mRingbackSoundFile = basePath + "/ringback.wav";
 		mPauseSoundFile = basePath + "/pause.wav";
 

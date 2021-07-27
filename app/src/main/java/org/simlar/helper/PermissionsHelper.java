@@ -40,7 +40,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -183,9 +182,6 @@ public final class PermissionsHelper
 
 	public static void requestContactPermission(final Fragment fragment)
 	{
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-			return;
-		}
 
 		Lg.i("requesting contact permission");
 		fragment.requestPermissions(new String[] { Type.CONTACTS.getPermission() }, REQUEST_CODE_DEFAULT);
@@ -239,12 +235,11 @@ public final class PermissionsHelper
 			return false;
 		}
 
+		//noinspection OverlyBroadCatchBlock
 		try {
 			final FileInputStream stream = new FileInputStream(path);
 			stream.close();
 			return false;
-		} catch (final FileNotFoundException e) {
-			return true;
 		} catch (final IOException e) {
 			return true;
 		}

@@ -227,12 +227,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	@SuppressWarnings("SameParameterValue")
 	private static void muteAudioStream(final AudioManager audioManager, final int streamType, final boolean mute)
 	{
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			final int adJustMute = mute ? AudioManager.ADJUST_MUTE : AudioManager.ADJUST_UNMUTE;
-			audioManager.adjustStreamVolume(streamType, adJustMute, 0);
-		} else {
-			audioManager.setStreamMute(streamType, mute);
-		}
+		final int adJustMute = mute ? AudioManager.ADJUST_MUTE : AudioManager.ADJUST_UNMUTE;
+		audioManager.adjustStreamVolume(streamType, adJustMute, 0);
 	}
 
 	@SuppressWarnings("SameParameterValue")
@@ -243,7 +239,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	private static boolean isVolumeFixed(final AudioManager audioManager)
 	{
-		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && audioManager.isVolumeFixed();
+		return audioManager.isVolumeFixed();
 	}
 
 	private void silenceAudioStreamRing()

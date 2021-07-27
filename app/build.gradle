@@ -50,7 +50,7 @@ android {
 
     defaultConfig {
         applicationId "org.simlar"
-        minSdkVersion 16
+        minSdkVersion 23
         targetSdkVersion 30
         versionName getGitVersion()
         versionCode 69
