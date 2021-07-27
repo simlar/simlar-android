@@ -1,5 +1,5 @@
 • Bluetooth support
 • Proper incoming call notifications on Android 10 and newer
-• Linphone Sdk Update 4.5.23
+• Linphone Sdk Update 4.5.25
 • Validate more international telephone numbers
 • Small improvements and fixes
