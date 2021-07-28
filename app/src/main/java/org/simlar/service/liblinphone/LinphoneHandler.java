@@ -200,11 +200,6 @@ final class LinphoneHandler
 		return natPolicy;
 	}
 
-	void linphoneCoreIterate()
-	{
-		mLinphoneCore.iterate();
-	}
-
 	public void refreshRegisters()
 	{
 		if (!isInitialized()) {
@@ -430,7 +425,7 @@ final class LinphoneHandler
 	{
 		Factory.instance().setDebugMode(enabled, "DEBUG");
 		Factory.instance().enableLogCollection(LogCollectionState.EnabledWithoutPreviousLogHandler);
-		Factory.instance().getLoggingService().setListener(
+		Factory.instance().getLoggingService().addListener(
 				(logService, domain, logLevel, message) -> Lg.log(convertLogLevel(logLevel), "liblinphone ", domain, message));
 	}
 
