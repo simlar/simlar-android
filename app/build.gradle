@@ -149,7 +149,7 @@ dependencies {
         }
         pushImplementation("com.google.android.gms:play-services-base:17.6.0")
     }
-    implementation("androidx.appcompat:appcompat:1.2.0")
+    implementation("androidx.appcompat:appcompat:1.3.1")
     implementation("androidx.legacy:legacy-support-v4:${androidSupportVersion}")
     implementation("androidx.legacy:legacy-support-v13:${androidSupportVersion}")
     implementation("com.googlecode.libphonenumber:libphonenumber:8.12.28")

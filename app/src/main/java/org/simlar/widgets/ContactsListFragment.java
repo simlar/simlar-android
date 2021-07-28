@@ -36,15 +36,9 @@ import org.simlar.utils.Util;
 public final class ContactsListFragment extends ListFragment
 {
 	@Override
-	public void onActivityCreated(final Bundle savedInstanceState)
-	{
-		super.onActivityCreated(savedInstanceState);
-		setEmptyText(getString(R.string.main_activity_contact_list_no_contacts_found));
-	}
-
-	@Override
 	public void onViewCreated(@NonNull final View view, final Bundle savedInstanceState)
 	{
+		setEmptyText(getString(R.string.main_activity_contact_list_no_contacts_found));
 		getListView().setDivider(null);
 	}
 

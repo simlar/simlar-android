@@ -37,8 +37,9 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.DrawableRes;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -107,6 +108,23 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 
 	private BluetoothManager mBluetoothManager = null;
 	private boolean mBluetoothHeadsetUsing = false;
+
+	private final ActivityResultLauncher<String> mRequestPermissionLauncherRequestVideo = registerForActivityResult(
+			new ActivityResultContracts.RequestPermission(), isGranted -> {
+				if (isGranted) {
+					mCommunicator.getService().requestVideoUpdate(true);
+				}
+			});
+
+	private final ActivityResultLauncher<String> mRequestPermissionLauncherAcceptVideo = registerForActivityResult(
+			new ActivityResultContracts.RequestPermission(), isGranted -> {
+				if (isGranted) {
+					startVideo();
+					mCommunicator.getService().acceptVideoUpdate(true);
+				} else {
+					mCommunicator.getService().acceptVideoUpdate(false);
+				}
+			});
 
 	private final class SimlarServiceCommunicatorCall extends SimlarServiceCommunicator
 	{
@@ -435,35 +453,15 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private void acceptVideoUpdate(final boolean accept)
 	{
 		if (accept) {
-			if (PermissionsHelper.checkAndRequestPermissions(PermissionsHelper.REQUEST_CODE_VIDEO_ACCEPT, this, PermissionsHelper.Type.CAMERA)) {
-				startVideo();
-				mCommunicator.getService().acceptVideoUpdate(true);
-			}
-		} else {
-			mCommunicator.getService().acceptVideoUpdate(false);
-		}
-	}
-
-	@Override
-	public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults)
-	{
-		switch (requestCode) {
-		case PermissionsHelper.REQUEST_CODE_VIDEO_ACCEPT:
-			if (PermissionsHelper.isGranted(PermissionsHelper.Type.CAMERA, permissions, grantResults)) {
+			if (PermissionsHelper.hasPermission(this, PermissionsHelper.Type.CAMERA)) {
 				startVideo();
 				mCommunicator.getService().acceptVideoUpdate(true);
 			} else {
-				mCommunicator.getService().acceptVideoUpdate(false);
+				PermissionsHelper.showRationalIfNeeded(this, PermissionsHelper.Type.CAMERA,
+						mRequestPermissionLauncherAcceptVideo::launch);
 			}
-			break;
-		case PermissionsHelper.REQUEST_CODE_VIDEO_REQUEST:
-			if (PermissionsHelper.isGranted(PermissionsHelper.Type.CAMERA, permissions, grantResults)) {
-				mCommunicator.getService().requestVideoUpdate(true);
-			}
-			break;
-		default:
-			Lg.e("onRequestPermissionsResult: unknown request code: ", requestCode);
-			break;
+		} else {
+			mCommunicator.getService().acceptVideoUpdate(false);
 		}
 	}
 
@@ -613,8 +611,11 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	public void toggleVideoClicked(final View view)
 	{
 		if (mVideoFragment == null) {
-			if (PermissionsHelper.checkAndRequestPermissions(PermissionsHelper.REQUEST_CODE_VIDEO_REQUEST, this, PermissionsHelper.Type.CAMERA)) {
+			if (PermissionsHelper.hasPermission(this, PermissionsHelper.Type.CAMERA)) {
 				mCommunicator.getService().requestVideoUpdate(true);
+			} else {
+				PermissionsHelper.showRationalIfNeeded(this, PermissionsHelper.Type.CAMERA,
+						mRequestPermissionLauncherRequestVideo::launch);
 			}
 		} else {
 			mCommunicator.getService().requestVideoUpdate(false);
