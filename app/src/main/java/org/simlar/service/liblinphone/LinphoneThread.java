@@ -27,6 +27,7 @@ import android.view.TextureView;
 
 import androidx.annotation.NonNull;
 
+import org.linphone.core.Account;
 import org.linphone.core.Address;
 import org.linphone.core.AudioDevice;
 import org.linphone.core.AuthInfo;
@@ -776,6 +777,12 @@ public final class LinphoneThread implements Runnable, CoreListener
 			return;
 		}
 		Lg.w("onConfiguringStatus remoteProvisioningState=", state, " message=", message);
+	}
+
+	@Override
+	public void onAccountRegistrationStateChanged(@NonNull final Core core, @NonNull final Account account, final RegistrationState state, @NonNull final String message)
+	{
+		Lg.w("onAccountRegistrationStateChanged: account=", account, " state=", state, " message=", message);
 	}
 
 	@Override
