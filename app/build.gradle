@@ -45,13 +45,13 @@ repositories {
 }
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdkVersion 31
+    buildToolsVersion "31.0.0"
 
     defaultConfig {
         applicationId "org.simlar"
         minSdkVersion 23
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionName getGitVersion()
         versionCode 70
     }
