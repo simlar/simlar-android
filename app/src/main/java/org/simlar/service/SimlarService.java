@@ -233,17 +233,6 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		audioManager.adjustStreamVolume(streamType, adJustMute, 0);
 	}
 
-	@SuppressWarnings("SameParameterValue")
-	private static boolean isAudioStreamMute(final AudioManager audioManager, final int streamType)
-	{
-		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && audioManager.isStreamMute(streamType);
-	}
-
-	private static boolean isVolumeFixed(final AudioManager audioManager)
-	{
-		return audioManager.isVolumeFixed();
-	}
-
 	private void silenceAudioStreamRing()
 	{
 		if (!PermissionsHelper.isNotificationPolicyAccessGranted(this)) {
@@ -252,12 +241,12 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		}
 
 		final AudioManager audioManager = Util.getSystemService(this, Context.AUDIO_SERVICE);
-		if (isVolumeFixed(audioManager)) {
+		if (audioManager.isVolumeFixed()) {
 			Lg.i("device does not support muting");
 			return;
 		}
 
-		if (!isAudioStreamMute(audioManager, AudioManager.STREAM_RING)) {
+		if (!audioManager.isStreamMute(AudioManager.STREAM_RING)) {
 			mStreamRingNeedsUnMute = true;
 			muteAudioStream(audioManager, AudioManager.STREAM_RING, true);
 		}
