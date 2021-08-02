@@ -116,7 +116,7 @@ public final class UploadLogFile
 				inputStream = connection.getInputStream();
 				responseStream = new ByteArrayOutputStream();
 				Util.copyStream(inputStream, responseStream);
-				final String response = new String(responseStream.toByteArray());
+				final String response = responseStream.toString();
 				Lg.i("used CipherSuite: ", connection.getCipherSuite());
 				Lg.i("Response ", response);
 
