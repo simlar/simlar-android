@@ -26,6 +26,8 @@ import android.util.Log;
 import java.util.Random;
 
 import org.linphone.core.AVPFMode;
+import org.linphone.core.Account;
+import org.linphone.core.AccountParams;
 import org.linphone.core.Call;
 import org.linphone.core.CallParams;
 import org.linphone.core.Core;
@@ -35,7 +37,6 @@ import org.linphone.core.LogCollectionState;
 import org.linphone.core.LogLevel;
 import org.linphone.core.MediaEncryption;
 import org.linphone.core.NatPolicy;
-import org.linphone.core.ProxyConfig;
 import org.linphone.core.Transports;
 import org.linphone.core.VideoActivationPolicy;
 import org.linphone.mediastream.video.capture.hwconf.AndroidCameraConfiguration;
@@ -233,34 +234,37 @@ final class LinphoneHandler
 		mLinphoneCore.clearAllAuthInfo();
 		mLinphoneCore.addAuthInfo(Factory.instance().createAuthInfo(mySimlarId, mySimlarId, password, null, ServerSettings.DOMAIN, ServerSettings.DOMAIN));
 
-		// create linphone proxy config
-		mLinphoneCore.clearProxyConfig();
-		final ProxyConfig proxyCfg = mLinphoneCore.createProxyConfig();
-		proxyCfg.setIdentityAddress(Factory.instance().createAddress("sip:" + mySimlarId + '@' + ServerSettings.DOMAIN));
-		proxyCfg.setServerAddr("sip:" + ServerSettings.DOMAIN);
-		proxyCfg.enableRegister(true);
-		proxyCfg.setExpires(60); // connection times out after 1 minute. This overrides kamailio setting which is 3600 (1 hour).
-		proxyCfg.enablePublish(false);
-		proxyCfg.setPushNotificationAllowed(false);
-		proxyCfg.setNatPolicy(createNatPolicy());
+		// create linphone account
+		mLinphoneCore.clearAccounts();
 
-		mLinphoneCore.addProxyConfig(proxyCfg);
-		mLinphoneCore.setDefaultProxyConfig(proxyCfg);
+		final AccountParams params = mLinphoneCore.createAccountParams();
+		params.setIdentityAddress(mLinphoneCore.interpretUrl("sip:" + mySimlarId + '@' + ServerSettings.DOMAIN));
+		params.setServerAddress(mLinphoneCore.interpretUrl("sip:" + ServerSettings.DOMAIN));
+		params.setRegisterEnabled(true);
+		params.setExpires(60); // connection times out after 1 minute. This overrides kamailio setting which is 3600 (1 hour).
+		params.setPublishEnabled(false);
+		params.setPushNotificationAllowed(false);
+		params.setNatPolicy(createNatPolicy());
+
+		final Account account = mLinphoneCore.createAccount(params);
+		mLinphoneCore.addAccount(account);
+		mLinphoneCore.setDefaultAccount(account);
 	}
 
 	public void unregister()
 	{
 		Lg.i("unregister triggered");
 
-		final ProxyConfig proxyConfig = mLinphoneCore.getDefaultProxyConfig();
-		if (proxyConfig == null) {
-			Lg.e("unregister triggered but no default proxy config");
+		final Account account = mLinphoneCore.getDefaultAccount();
+		if (account == null) {
+			Lg.e("unregister triggered but no default account");
 			return;
 		}
 
-		proxyConfig.edit();
-		proxyConfig.enableRegister(false);
-		proxyConfig.done();
+		@SuppressWarnings("UseOfClone") // linphone api
+		final AccountParams params = account.getParams().clone();
+		params.setRegisterEnabled(false);
+		account.setParams(params);
 	}
 
 	public void call(final String number)
