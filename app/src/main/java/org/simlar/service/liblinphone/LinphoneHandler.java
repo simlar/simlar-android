@@ -23,11 +23,15 @@ package org.simlar.service.liblinphone;
 import android.content.Context;
 import android.util.Log;
 
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Random;
+import java.util.Set;
 
 import org.linphone.core.AVPFMode;
 import org.linphone.core.Account;
 import org.linphone.core.AccountParams;
+import org.linphone.core.AudioDevice;
 import org.linphone.core.Call;
 import org.linphone.core.CallParams;
 import org.linphone.core.Core;
@@ -45,6 +49,7 @@ import org.simlar.helper.ServerSettings;
 import org.simlar.helper.Version;
 import org.simlar.helper.Volumes;
 import org.simlar.logging.Lg;
+import org.simlar.service.AudioOutputType;
 import org.simlar.utils.Util;
 
 final class LinphoneHandler
@@ -583,5 +588,86 @@ final class LinphoneHandler
 		}
 
 		Lg.e("failed to toggle camera");
+	}
+
+	private static AudioOutputType fromAudioDeviceType(final AudioDevice.Type type)
+	{
+		if (type == null) {
+			return null;
+		}
+
+		switch (type) {
+		case Unknown:
+		case Microphone:
+			return null;
+		case Earpiece:
+		case Telephony:
+			return AudioOutputType.PHONE;
+		case Speaker:
+			return AudioOutputType.SPEAKER;
+		case Bluetooth:
+		case BluetoothA2DP:
+			return AudioOutputType.BLUETOOTH;
+		case AuxLine:
+		case GenericUsb:
+		case Headset:
+		case Headphones:
+			return AudioOutputType.WIRED_HEADSET;
+		}
+
+		return null;
+	}
+
+	public Set<AudioOutputType> getAvailableAudioOutputTypes()
+	{
+		final Set<AudioOutputType> result = EnumSet.noneOf(AudioOutputType.class);
+
+		for (final AudioDevice audioDevice : mLinphoneCore.getAudioDevices()) {
+			Lg.d("getAvailableAudioOutputType: id=", audioDevice.getId(), " type=", audioDevice.getType(), " name=", audioDevice.getDeviceName());
+			final AudioOutputType type = fromAudioDeviceType(audioDevice.getType());
+			Lg.d("getAvailableAudioOutputType: type=", type);
+			if (type != null && audioDevice.hasCapability(AudioDevice.Capabilities.CapabilityPlay)) {
+				result.add(type);
+			}
+		}
+
+		return Collections.unmodifiableSet(result);
+	}
+
+	public AudioOutputType getCurrentAudioOutputType()
+	{
+		final Call currentCall = getCurrentCall();
+		if (currentCall == null) {
+			return null;
+		}
+
+		final AudioDevice audioDevice = currentCall.getOutputAudioDevice();
+		if (audioDevice == null) {
+			return null;
+		}
+
+		return fromAudioDeviceType(audioDevice.getType());
+	}
+
+	public void setCurrentAudioOutputType(final AudioOutputType type)
+	{
+		if (type == null) {
+			return;
+		}
+
+		final Call currentCall = getCurrentCall();
+		if (currentCall == null) {
+			return;
+		}
+
+		for (final AudioDevice audioDevice : mLinphoneCore.getAudioDevices()) {
+			if (fromAudioDeviceType(audioDevice.getType()) == type && audioDevice.hasCapability(AudioDevice.Capabilities.CapabilityPlay))  {
+				Lg.i("setCurrentAudioOutputType type=", type, " found: ", audioDevice.getDeviceName(), " with id=", audioDevice.getId());
+				currentCall.setOutputAudioDevice(audioDevice);
+				return;
+			}
+		}
+
+		Lg.w("setCurrentAudioOutputType type=", type, " no suitable audio device found");
 	}
 }

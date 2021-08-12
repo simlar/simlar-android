@@ -23,9 +23,12 @@ package org.simlar.service.liblinphone;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.view.TextureView;
 
 import androidx.annotation.NonNull;
+
+import java.util.Set;
 
 import org.linphone.core.Account;
 import org.linphone.core.Address;
@@ -69,6 +72,7 @@ import org.simlar.helper.VideoState;
 import org.simlar.helper.Volumes;
 import org.simlar.helper.Volumes.MicrophoneStatus;
 import org.simlar.logging.Lg;
+import org.simlar.service.AudioOutputType;
 import org.simlar.utils.Util;
 
 public final class LinphoneThread implements Runnable, CoreListener
@@ -294,6 +298,16 @@ public final class LinphoneThread implements Runnable, CoreListener
 		return mVolumes;
 	}
 
+	public void setCurrentAudioOutputType(final AudioOutputType type)
+	{
+		if (mLinphoneThreadHandler == null) {
+			Lg.e("handler is null, probably thread not started");
+			return;
+		}
+
+		mLinphoneThreadHandler.post(() -> mLinphoneHandler.setCurrentAudioOutputType(type));
+	}
+
 	public void requestVideoUpdate(final boolean enable)
 	{
 		if (mLinphoneThreadHandler == null) {
@@ -464,12 +478,6 @@ public final class LinphoneThread implements Runnable, CoreListener
 
 			mListener.onRegistrationStateChanged(state);
 		});
-	}
-
-	@Override
-	public void onAudioDeviceChanged(@NonNull final Core core, @NonNull final AudioDevice audioDevice)
-	{
-		Lg.w("onAudioDeviceChanged: ", audioDevice);
 	}
 
 	private Call.State fixCallState(final Call.State state)
@@ -820,7 +828,24 @@ public final class LinphoneThread implements Runnable, CoreListener
 	@Override
 	public void onAudioDevicesListUpdated(@NonNull final Core core)
 	{
-		Lg.w("onAudioDevicesListUpdated");
+		final Set<AudioOutputType> availableAudioOutputTypes = mLinphoneHandler.getAvailableAudioOutputTypes();
+		final AudioOutputType currentAudioOutputType = mLinphoneHandler.getCurrentAudioOutputType();
+		Lg.i("onAudioDevicesListUpdated: ", TextUtils.join(", ", availableAudioOutputTypes), " current type=", currentAudioOutputType);
+
+		mMainThreadHandler.post(() -> mListener.onAudioOutputChanged(currentAudioOutputType, availableAudioOutputTypes));
+
+		if (currentAudioOutputType != AudioOutputType.WIRED_HEADSET && availableAudioOutputTypes.contains(AudioOutputType.WIRED_HEADSET)) {
+			mLinphoneHandler.setCurrentAudioOutputType(AudioOutputType.WIRED_HEADSET);
+		} else if (currentAudioOutputType != AudioOutputType.BLUETOOTH && availableAudioOutputTypes.contains(AudioOutputType.BLUETOOTH)) {
+			mLinphoneHandler.setCurrentAudioOutputType(AudioOutputType.BLUETOOTH);
+		}
+	}
+
+	@Override
+	public void onAudioDeviceChanged(@NonNull final Core core, @NonNull final AudioDevice audioDevice)
+	{
+		Lg.i("onAudioDeviceChanged: id=", audioDevice.getId(), " type=", audioDevice.getType(), " name=", audioDevice.getDeviceName());
+		mMainThreadHandler.post(() -> mListener.onAudioOutputChanged(mLinphoneHandler.getCurrentAudioOutputType(), mLinphoneHandler.getAvailableAudioOutputTypes()));
 	}
 
 	@Override

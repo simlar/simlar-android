@@ -20,12 +20,15 @@
 
 package org.simlar.service.liblinphone;
 
+import java.util.Set;
+
 import org.linphone.core.Call.State;
 import org.linphone.core.RegistrationState;
 
 import org.simlar.helper.CallEndReason;
 import org.simlar.helper.NetworkQuality;
 import org.simlar.helper.VideoState;
+import org.simlar.service.AudioOutputType;
 
 public interface LinphoneThreadListener
 {
@@ -41,6 +44,8 @@ public interface LinphoneThreadListener
 	void onCallEncryptionChanged(final String authenticationToken, final boolean authenticationTokenVerified);
 
 	void onVideoStateChanged(final VideoState videoState);
+
+	void onAudioOutputChanged(final AudioOutputType currentAudioOutputType, final Set<AudioOutputType> availableAudioOutputTypes);
 
 	void onJoin();
 }

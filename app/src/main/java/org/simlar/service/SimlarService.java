@@ -46,12 +46,15 @@ import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.view.TextureView;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+
+import java.util.Set;
 
 import org.linphone.core.Call.State;
 import org.linphone.core.RegistrationState;
@@ -932,6 +935,13 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		SimlarServiceBroadcast.sendVideoStateChanged(this, videoState);
 	}
 
+	@Override
+	public void onAudioOutputChanged(final AudioOutputType currentAudioOutputType, final Set<AudioOutputType> availableAudioOutputTypes)
+	{
+		Lg.i("onAudioOutputChanged: currentAudioOutputType=", currentAudioOutputType, " availableAudioOutputTypes=", TextUtils.join(",", availableAudioOutputTypes));
+		SimlarServiceBroadcast.sendAudioOutputChanged(this, currentAudioOutputType, availableAudioOutputTypes);
+	}
+
 	private void call(final String simlarId)
 	{
 		if (mLinphoneThread == null) {
@@ -1090,22 +1100,14 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		return getVolumes().getEchoLimiter();
 	}
 
-	public boolean getExternalSpeaker()
-	{
-		return ((AudioManager) Util.getSystemService(this, Context.AUDIO_SERVICE)).isSpeakerphoneOn();
-	}
-
 	private void muteExternalSpeaker()
 	{
-		Lg.i("muteExternalSpeaker");
-		((AudioManager) Util.getSystemService(this, Context.AUDIO_SERVICE)).setSpeakerphoneOn(false);
-	}
-
-	public void toggleExternalSpeaker()
-	{
 		Lg.i("toggleExternalSpeaker");
-		final AudioManager audioManager = Util.getSystemService(this, Context.AUDIO_SERVICE);
-		audioManager.setSpeakerphoneOn(!audioManager.isSpeakerphoneOn());
+		if (mLinphoneThread == null) {
+			return;
+		}
+
+		mLinphoneThread.setCurrentAudioOutputType(AudioOutputType.PHONE);
 	}
 
 	public MicrophoneStatus getMicrophoneStatus()
@@ -1144,6 +1146,15 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	public void toggleMicrophoneMuted()
 	{
 		setVolumes(getVolumes().toggleMicrophoneMuted());
+	}
+
+	public void setCurrentAudioOutputType(final AudioOutputType type)
+	{
+		if (mLinphoneThread == null) {
+			return;
+		}
+
+		mLinphoneThread.setCurrentAudioOutputType(type);
 	}
 
 	public void requestVideoUpdate(final boolean enable)
