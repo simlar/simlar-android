@@ -30,10 +30,8 @@ import org.simlar.helper.NetworkQuality;
 import org.simlar.helper.VideoState;
 import org.simlar.service.AudioOutputType;
 
-public interface LinphoneThreadListener
+public interface LinphoneManagerListener
 {
-	void onInitialized();
-
 	void onRegistrationStateChanged(final RegistrationState state);
 
 	void onCallStatsChanged(final NetworkQuality quality, final int callDuration, final String codec, final String iceState,
@@ -46,6 +44,4 @@ public interface LinphoneThreadListener
 	void onVideoStateChanged(final VideoState videoState);
 
 	void onAudioOutputChanged(final AudioOutputType currentAudioOutputType, final Set<AudioOutputType> availableAudioOutputTypes);
-
-	void onJoin();
 }

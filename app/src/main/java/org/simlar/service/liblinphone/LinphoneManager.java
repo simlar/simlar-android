@@ -21,8 +21,6 @@
 package org.simlar.service.liblinphone;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.TextUtils;
 import android.view.TextureView;
 
@@ -75,82 +73,31 @@ import org.simlar.logging.Lg;
 import org.simlar.service.AudioOutputType;
 import org.simlar.utils.Util;
 
-public final class LinphoneThread implements Runnable, CoreListener
+public final class LinphoneManager implements CoreListener
 {
-	private final Thread mThread;
-	private Handler mLinphoneThreadHandler = null;
-	private final Handler mMainThreadHandler = new Handler(Looper.getMainLooper());
 	private VideoState mVideoState = VideoState.OFF;
-
-	// NOTICE: the linphone handler should only be used in the LINPHONE-THREAD
 	private final LinphoneHandler mLinphoneHandler = new LinphoneHandler();
 
-	// NOTICE: the following members should only be used in the MAIN-THREAD
-	private final LinphoneThreadListener mListener;
+	private final LinphoneManagerListener mListener;
 	private RegistrationState mRegistrationState = RegistrationState.None;
 	private Volumes mVolumes = new Volumes();
 	private final Context mContext;
 
-	public LinphoneThread(final LinphoneThreadListener listener, final Context context)
+	public LinphoneManager(final LinphoneManagerListener listener, final Context context)
 	{
 		mListener = listener;
 		mListener.onCallStateChanged("", Call.State.Idle, null);
 		mContext = context;
-
-		mThread = new Thread(this);
-		mThread.start();
-	}
-
-	@Override
-	public void run()
-	{
-		Lg.i("run");
-		Looper.prepare();
-
-		mLinphoneThreadHandler = new Handler();
-
-		Lg.i("handler initialized");
-
-		mMainThreadHandler.post(mListener::onInitialized);
-
-		Looper.loop();
 	}
 
 	public void finish()
 	{
-		if (mLinphoneThreadHandler == null) {
-			Lg.e("handler is null, probably thread not started");
-			return;
-		}
-
-		mLinphoneThreadHandler.post(() -> {
-			mLinphoneThreadHandler.removeCallbacksAndMessages(null);
-			mLinphoneThreadHandler = null;
-			final Looper looper = Looper.myLooper();
-			if (looper != null) {
-				looper.quit();
-			}
-			mLinphoneHandler.destroy(this);
-			mMainThreadHandler.post(() -> {
-				mMainThreadHandler.removeCallbacksAndMessages(null);
-				mListener.onJoin();
-			});
-		});
-	}
-
-	@SuppressWarnings("SameParameterValue")
-	public void join(final long millis) throws InterruptedException
-	{
-		mThread.join(millis);
+		mLinphoneHandler.destroy(this);
 	}
 
 	public void register(final String mySimlarId, final String password)
 	{
 		Lg.i("register");
-		if (mLinphoneThreadHandler == null) {
-			Lg.e("handler is null, probably thread not started");
-			return;
-		}
 
 		try {
 			final String linphoneInitialConfigFile = FileHelper.getLinphoneInitialConfigFile();
@@ -160,17 +107,14 @@ public final class LinphoneThread implements Runnable, CoreListener
 			final String pauseSoundFile = FileHelper.getPauseSoundFile();
 			final Volumes volumes = mVolumes;
 
-			mLinphoneThreadHandler.post(() -> {
-				if (mLinphoneHandler.isInitialized()) {
-					mLinphoneHandler.unregister();
-				} else {
-					// Core uses context only for getting audio manager. I think this is still thread safe.
-					mLinphoneHandler.initialize(this, mContext, linphoneInitialConfigFile, rootCaFile,
-							zrtpSecretsCacheFile, ringbackSoundFile, pauseSoundFile);
-					mLinphoneHandler.setVolumes(volumes);
-				}
-				mLinphoneHandler.setCredentials(mySimlarId, password);
-			});
+			if (mLinphoneHandler.isInitialized()) {
+				mLinphoneHandler.unregister();
+			} else {
+				mLinphoneHandler.initialize(this, mContext, linphoneInitialConfigFile, rootCaFile,
+						zrtpSecretsCacheFile, ringbackSoundFile, pauseSoundFile);
+				mLinphoneHandler.setVolumes(volumes);
+			}
+			mLinphoneHandler.setCredentials(mySimlarId, password);
 		} catch (final NotInitedException e) {
 			Lg.ex(e, "PreferencesHelper.NotInitedException");
 		}
@@ -178,31 +122,16 @@ public final class LinphoneThread implements Runnable, CoreListener
 
 	public void unregister()
 	{
-		if (mLinphoneThreadHandler == null) {
-			Lg.e("handler is null, probably thread not started");
-			return;
-		}
-
-		mLinphoneThreadHandler.post(mLinphoneHandler::unregister);
+		mLinphoneHandler.unregister();
 	}
 
 	public void refreshRegisters()
 	{
-		if (mLinphoneThreadHandler == null) {
-			Lg.e("handler is null, probably thread not started");
-			return;
-		}
-
-		mLinphoneThreadHandler.post(mLinphoneHandler::refreshRegisters);
+		mLinphoneHandler.refreshRegisters();
 	}
 
 	public void call(final String number)
 	{
-		if (mLinphoneThreadHandler == null) {
-			Lg.e("handler is null, probably thread not started");
-			return;
-		}
-
 		if (Util.isNullOrEmpty(number)) {
 			Lg.e("call: empty number aborting");
 			return;
@@ -213,74 +142,43 @@ public final class LinphoneThread implements Runnable, CoreListener
 			return;
 		}
 
-		mLinphoneThreadHandler.post(() -> mLinphoneHandler.call(number));
+		mLinphoneHandler.call(number);
 	}
 
 	public void pickUp()
 	{
-		if (mLinphoneThreadHandler == null) {
-			Lg.e("handler is null, probably thread not started");
-			return;
-		}
-
-		mLinphoneThreadHandler.post(mLinphoneHandler::pickUp);
+		mLinphoneHandler.pickUp();
 	}
 
 	public void terminateAllCalls()
 	{
-		if (mLinphoneThreadHandler == null) {
-			Lg.e("handler is null, probably thread not started");
-			return;
-		}
-
-		mLinphoneThreadHandler.post(mLinphoneHandler::terminateAllCalls);
+		mLinphoneHandler.terminateAllCalls();
 	}
 
 	public void verifyAuthenticationToken(final String token, final boolean verified)
 	{
-		if (mLinphoneThreadHandler == null) {
-			Lg.e("handler is null, probably thread not started");
-			return;
-		}
-
-		mLinphoneThreadHandler.post(() -> mLinphoneHandler.verifyAuthenticationToken(token, verified));
+		mLinphoneHandler.verifyAuthenticationToken(token, verified);
 	}
 
 	public void pauseAllCalls()
 	{
-		if (mLinphoneThreadHandler == null) {
-			Lg.e("handler is null, probably thread not started");
-			return;
-		}
-
-		mLinphoneThreadHandler.post(mLinphoneHandler::pauseAllCalls);
+		mLinphoneHandler.pauseAllCalls();
 	}
 
 	public void resumeCall()
 	{
-		if (mLinphoneThreadHandler == null) {
-			Lg.e("handler is null, probably thread not started");
-			return;
-		}
-
-		mLinphoneThreadHandler.post(mLinphoneHandler::resumeCall);
+		mLinphoneHandler.resumeCall();
 	}
 
 	public void setVolumes(final Volumes volumes)
 	{
-		if (mLinphoneThreadHandler == null) {
-			Lg.e("handler is null, probably thread not started");
-			return;
-		}
-
 		if (volumes == null) {
 			Lg.e("volumes is null");
 			return;
 		}
 
 		mVolumes = volumes;
-
-		mLinphoneThreadHandler.post(() -> mLinphoneHandler.setVolumes(volumes));
+		mLinphoneHandler.setVolumes(volumes);
 	}
 
 	public void setMicrophoneStatus(final MicrophoneStatus microphoneStatus)
@@ -300,27 +198,15 @@ public final class LinphoneThread implements Runnable, CoreListener
 
 	public void setCurrentAudioOutputType(final AudioOutputType type)
 	{
-		if (mLinphoneThreadHandler == null) {
-			Lg.e("handler is null, probably thread not started");
-			return;
-		}
-
-		mLinphoneThreadHandler.post(() -> mLinphoneHandler.setCurrentAudioOutputType(type));
+		mLinphoneHandler.setCurrentAudioOutputType(type);
 	}
 
 	public void requestVideoUpdate(final boolean enable)
 	{
-		if (mLinphoneThreadHandler == null) {
-			Lg.e("handler is null, probably thread not started");
-			return;
+		if (enable) {
+			updateVideoState(VideoState.REQUESTING);
 		}
-
-		mLinphoneThreadHandler.post(() -> {
-			if (enable) {
-				updateVideoState(VideoState.REQUESTING);
-			}
-			mLinphoneHandler.requestVideoUpdate(enable);
-		});
+		mLinphoneHandler.requestVideoUpdate(enable);
 	}
 
 	private void updateVideoState(final VideoState videoState)
@@ -332,17 +218,12 @@ public final class LinphoneThread implements Runnable, CoreListener
 		Lg.i("updating video state: ", mVideoState, " => ", videoState);
 		mVideoState = videoState;
 
-		mMainThreadHandler.post(() -> mListener.onVideoStateChanged(videoState));
+		mListener.onVideoStateChanged(videoState);
 	}
 
 	public void acceptVideoUpdate(final boolean accept)
 	{
-		if (mLinphoneThreadHandler == null) {
-			Lg.e("handler is null, probably thread not started");
-			return;
-		}
-
-		mLinphoneThreadHandler.post(() -> mLinphoneHandler.acceptVideoUpdate(accept));
+		mLinphoneHandler.acceptVideoUpdate(accept);
 	}
 
 	public void setVideoWindows(final TextureView videoView, final TextureView captureView)
@@ -370,32 +251,17 @@ public final class LinphoneThread implements Runnable, CoreListener
 
 	private void setVideoWindow(final Object videoWindow)
 	{
-		if (mLinphoneThreadHandler == null) {
-			Lg.e("handler is null, probably thread not started");
-			return;
-		}
-
-		mLinphoneThreadHandler.post(() -> mLinphoneHandler.setNativeVideoWindowId(videoWindow));
+		mLinphoneHandler.setNativeVideoWindowId(videoWindow);
 	}
 
 	private void setVideoPreviewWindow(final Object videoPreviewWindow)
 	{
-		if (mLinphoneThreadHandler == null) {
-			Lg.e("handler is null, probably thread not started");
-			return;
-		}
-
-		mLinphoneThreadHandler.post(() -> mLinphoneHandler.setVideoPreviewWindow(videoPreviewWindow));
+		mLinphoneHandler.setVideoPreviewWindow(videoPreviewWindow);
 	}
 
 	public void toggleCamera()
 	{
-		if (mLinphoneThreadHandler == null) {
-			Lg.e("handler is null, probably thread not started");
-			return;
-		}
-
-		mLinphoneThreadHandler.post(mLinphoneHandler::toggleCamera);
+		mLinphoneHandler.toggleCamera();
 	}
 
 	@Lg.Anonymize
@@ -454,30 +320,23 @@ public final class LinphoneThread implements Runnable, CoreListener
 	@Override
 	public void onRegistrationStateChanged(@NonNull final Core lc, @NonNull final ProxyConfig cfg, final RegistrationState state, @NonNull final String message)
 	{
-		// ProxyConfig is probably mutable => use it only in the calling thread
-		// RegistrationState is immutable
 	}
 
 	@Override
 	public void onAccountRegistrationStateChanged(@NonNull final Core core, @NonNull final Account account, final RegistrationState state, @NonNull final String message)
 	{
-		// ProxyConfig is probably mutable => use it only in the calling thread
-		// RegistrationState is immutable
-
 		final Address address = account.getParams().getIdentityAddress();
 		final String identity = address == null ? "" : address.asString();
 
-		mMainThreadHandler.post(() -> {
-			if (Util.equals(mRegistrationState, state)) {
-				Lg.v("registration state for ", new Lg.Anonymizer(identity), " not changed: state=", state, " message=", message);
-				return;
-			}
+		if (Util.equals(mRegistrationState, state)) {
+			Lg.v("registration state for ", new Lg.Anonymizer(identity), " not changed: state=", state, " message=", message);
+			return;
+		}
 
-			Lg.i("registration state for ", new Lg.Anonymizer(identity), " changed: ", state, " ", message);
-			mRegistrationState = state;
+		Lg.i("registration state for ", new Lg.Anonymizer(identity), " changed: ", state, " ", message);
+		mRegistrationState = state;
 
-			mListener.onRegistrationStateChanged(state);
-		});
+		mListener.onRegistrationStateChanged(state);
 	}
 
 	private Call.State fixCallState(final Call.State state)
@@ -527,9 +386,6 @@ public final class LinphoneThread implements Runnable, CoreListener
 	@Override
 	public void onCallStateChanged(@NonNull final Core lc, @NonNull final Call call, final Call.State state, @NonNull final String message)
 	{
-		// Call is mutable => use it only in the calling thread
-		// Call.State is immutable
-
 		final String number = getNumber(call);
 		final Call.State fixedState = fixCallState(state);
 		final VideoState videoState = createVideoState(fixedState, call);
@@ -547,7 +403,7 @@ public final class LinphoneThread implements Runnable, CoreListener
 		}
 
 		updateVideoState(videoState);
-		mMainThreadHandler.post(() -> mListener.onCallStateChanged(number, fixedState, callEndReason));
+		mListener.onCallStateChanged(number, fixedState, callEndReason);
 	}
 
 	@Override
@@ -577,17 +433,12 @@ public final class LinphoneThread implements Runnable, CoreListener
 	@Override
 	public void onNewSubscriptionRequested(@NonNull final Core lc, @NonNull final Friend lf, @NonNull final String url)
 	{
-		// Friend is mutable => use it only in the calling thread
-
 		Lg.w("[", new FriendLogger(lf), "] wants to see your presence status => always accepting");
 	}
 
 	@Override
 	public void onNotifyPresenceReceived(@NonNull final Core lc, @NonNull final Friend lf)
 	{
-		// Friend is mutable => use it only in the calling thread
-		// OnlineStatus is immutable
-
 		Lg.w("presence received: username=", new FriendLogger(lf));
 	}
 
@@ -606,9 +457,6 @@ public final class LinphoneThread implements Runnable, CoreListener
 	@Override
 	public void onCallStatsUpdated(@NonNull final Core lc, @NonNull final Call call, final CallStats statsDoNotUse)
 	{
-		// Call is mutable => use it only in the calling thread
-		// CallStats maybe mutable => use it only in the calling thread
-
 		final StreamType type = statsDoNotUse.getType();
 		if (type != StreamType.Audio && type != StreamType.Video) {
 			Lg.e("onCallStatsUpdated with unexpected type: ", type);
@@ -653,8 +501,8 @@ public final class LinphoneThread implements Runnable, CoreListener
 				updateVideoState(VideoState.PLAYING);
 			}
 		} else {
-			mMainThreadHandler.post(() -> mListener.onCallStatsChanged(NetworkQuality.fromFloat(quality), duration, codec, iceState, upload, download,
-					jitter, packetLoss, latePackets, roundTripDelay));
+			mListener.onCallStatsChanged(NetworkQuality.fromFloat(quality), duration, codec, iceState, upload, download,
+					jitter, packetLoss, latePackets, roundTripDelay);
 		}
 	}
 
@@ -701,8 +549,6 @@ public final class LinphoneThread implements Runnable, CoreListener
 	@Override
 	public void onCallEncryptionChanged(@NonNull final Core lc, final Call call, final boolean encrypted, final String authenticationToken)
 	{
-		// Call is mutable => use it only in the calling thread
-
 		final boolean isTokenVerified = call.getAuthenticationTokenVerified();
 
 		Lg.i("onCallEncryptionChanged number=", new CallLogger(call), " encrypted=", encrypted,
@@ -717,7 +563,7 @@ public final class LinphoneThread implements Runnable, CoreListener
 			updateVideoState(VideoState.PLAYING);
 		}
 
-		mMainThreadHandler.post(() -> mListener.onCallEncryptionChanged(authenticationToken, isTokenVerified));
+		mListener.onCallEncryptionChanged(authenticationToken, isTokenVerified);
 	}
 
 	@Override
@@ -832,7 +678,7 @@ public final class LinphoneThread implements Runnable, CoreListener
 		final AudioOutputType currentAudioOutputType = mLinphoneHandler.getCurrentAudioOutputType();
 		Lg.i("onAudioDevicesListUpdated: ", TextUtils.join(", ", availableAudioOutputTypes), " current type=", currentAudioOutputType);
 
-		mMainThreadHandler.post(() -> mListener.onAudioOutputChanged(currentAudioOutputType, availableAudioOutputTypes));
+		mListener.onAudioOutputChanged(currentAudioOutputType, availableAudioOutputTypes);
 
 		if (currentAudioOutputType != AudioOutputType.WIRED_HEADSET && availableAudioOutputTypes.contains(AudioOutputType.WIRED_HEADSET)) {
 			mLinphoneHandler.setCurrentAudioOutputType(AudioOutputType.WIRED_HEADSET);
@@ -845,7 +691,7 @@ public final class LinphoneThread implements Runnable, CoreListener
 	public void onAudioDeviceChanged(@NonNull final Core core, @NonNull final AudioDevice audioDevice)
 	{
 		Lg.i("onAudioDeviceChanged: id=", audioDevice.getId(), " type=", audioDevice.getType(), " name=", audioDevice.getDeviceName());
-		mMainThreadHandler.post(() -> mListener.onAudioOutputChanged(mLinphoneHandler.getCurrentAudioOutputType(), mLinphoneHandler.getAvailableAudioOutputTypes()));
+		mListener.onAudioOutputChanged(mLinphoneHandler.getCurrentAudioOutputType(), mLinphoneHandler.getAvailableAudioOutputTypes());
 	}
 
 	@Override

@@ -74,11 +74,11 @@ import org.simlar.helper.Volumes.MicrophoneStatus;
 import org.simlar.logging.Lg;
 import org.simlar.service.SoundEffectManager.SoundEffectType;
 import org.simlar.service.liblinphone.LinphoneCallState;
-import org.simlar.service.liblinphone.LinphoneThread;
-import org.simlar.service.liblinphone.LinphoneThreadListener;
+import org.simlar.service.liblinphone.LinphoneManager;
+import org.simlar.service.liblinphone.LinphoneManagerListener;
 import org.simlar.utils.Util;
 
-public final class SimlarService extends Service implements LinphoneThreadListener
+public final class SimlarService extends Service implements LinphoneManagerListener
 {
 	private static final int NOTIFICATION_ID = 1;
 	private static final int NOTIFICATION_RINGING_ID = 2;
@@ -91,7 +91,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	@SuppressWarnings("WeakerAccess") // is only used in flavour push
 	public static final String INTENT_EXTRA_GCM = "SimlarServiceGCM";
 
-	private LinphoneThread mLinphoneThread = null;
+	private LinphoneManager mLinphoneManager = null;
 	private final Handler mHandler = new Handler(Looper.getMainLooper());
 	private final IBinder mBinder = new SimlarServiceBinder();
 	private SimlarStatus mSimlarStatus = SimlarStatus.OFFLINE;
@@ -190,13 +190,13 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			return;
 		}
 
-		if (mLinphoneThread == null) {
+		if (mLinphoneManager == null) {
 			return;
 		}
 
 		mSoundEffectManager.stop(SoundEffectType.CALL_INTERRUPTION);
 
-		mLinphoneThread.pauseAllCalls();
+		mLinphoneManager.pauseAllCalls();
 	}
 
 	private void onTelephonyCallStateIdle()
@@ -206,13 +206,13 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			return;
 		}
 
-		if (mLinphoneThread == null) {
+		if (mLinphoneManager == null) {
 			return;
 		}
 
 		mSoundEffectManager.stop(SoundEffectType.CALL_INTERRUPTION);
 
-		mLinphoneThread.resumeCall();
+		mLinphoneManager.resumeCall();
 	}
 
 	private void onTelephonyCallStateRinging()
@@ -332,7 +332,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		if (mGoingDown) {
 			Lg.i("onStartCommand called while service is going down => recovering");
 			mGoingDown = false;
-			if (mLinphoneThread == null) {
+			if (mLinphoneManager == null) {
 				startLinphone();
 			}
 		}
@@ -370,8 +370,15 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private void startLinphone()
 	{
 		Lg.i("startLinphone");
-		mLinphoneThread = new LinphoneThread(this, this);
+		if (!PreferencesHelper.readPreferencesFromFile(this)) {
+			Lg.e("failed to initialize credentials");
+			return;
+		}
+
+		mLinphoneManager = new LinphoneManager(this, this);
 		mTerminatePrivateAlreadyCalled = false;
+		notifySimlarStatusChanged(SimlarStatus.OFFLINE);
+		connect();
 
 		if (FlavourHelper.isGcmEnabled()) {
 			terminateChecker();
@@ -557,14 +564,15 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	private void connect()
 	{
-		if (mLinphoneThread == null) {
+		if (mLinphoneManager == null) {
+			Lg.e("no LinphoneManager on connect");
 			return;
 		}
 
 		notifySimlarStatusChanged(SimlarStatus.CONNECTING);
 
 		try {
-			mLinphoneThread.register(PreferencesHelper.getMySimlarId(), PreferencesHelper.getPassword());
+			mLinphoneManager.register(PreferencesHelper.getMySimlarId(), PreferencesHelper.getPassword());
 			muteExternalSpeaker();
 		} catch (final NotInitedException e) {
 			Lg.ex(e, "PreferencesHelper.NotInitedException");
@@ -648,7 +656,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	private void checkNetworkConnectivityAndRefreshRegisters()
 	{
-		if (mLinphoneThread == null) {
+		if (mLinphoneManager == null) {
 			Lg.w("checkNetworkConnectivityAndRefreshRegisters triggered but no linphone thread");
 			return;
 		}
@@ -661,7 +669,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		Lg.i("NetworkInfo ", ni.getTypeName(), " ", ni.getState());
 		if (ni.isConnected()) {
-			mLinphoneThread.refreshRegisters();
+			mLinphoneManager.refreshRegisters();
 		}
 	}
 
@@ -704,19 +712,6 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 				releaseWakeLock();
 			}
 		}, 4000);
-	}
-
-	@Override
-	public void onInitialized()
-	{
-		notifySimlarStatusChanged(SimlarStatus.OFFLINE);
-
-		if (!PreferencesHelper.readPreferencesFromFile(this)) {
-			Lg.e("failed to initialize credentials");
-			return;
-		}
-
-		connect();
 	}
 
 	@Override
@@ -828,7 +823,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		}
 
 		if (mSimlarCallState.isBeforeEncryption()) {
-			mLinphoneThread.setMicrophoneStatus(MicrophoneStatus.DISABLED);
+			mLinphoneManager.setMicrophoneStatus(MicrophoneStatus.DISABLED);
 			mSoundEffectManager.setInCallMode(true);
 			mSoundEffectManager.startPrepared(SoundEffectType.ENCRYPTION_HANDSHAKE);
 		}
@@ -917,7 +912,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 		Lg.i("SimlarCallState updated encryption: authenticationToken=", authenticationToken, " authenticationTokenVerified=", authenticationTokenVerified);
 
-		mLinphoneThread.setMicrophoneStatus(MicrophoneStatus.ON);
+		mLinphoneManager.setMicrophoneStatus(MicrophoneStatus.ON);
 		mSoundEffectManager.stop(SoundEffectType.ENCRYPTION_HANDSHAKE);
 
 		SimlarServiceBroadcast.sendSimlarCallStateChanged(this);
@@ -944,25 +939,25 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	private void call(final String simlarId)
 	{
-		if (mLinphoneThread == null) {
+		if (mLinphoneManager == null) {
 			return;
 		}
 
-		mLinphoneThread.call(simlarId);
+		mLinphoneManager.call(simlarId);
 	}
 
 	public void pickUp()
 	{
-		if (mLinphoneThread == null) {
+		if (mLinphoneManager == null) {
 			return;
 		}
 
-		mLinphoneThread.pickUp();
+		mLinphoneManager.pickUp();
 	}
 
 	public void terminateCall()
 	{
-		if (mLinphoneThread == null) {
+		if (mLinphoneManager == null) {
 			return;
 		}
 
@@ -970,7 +965,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		updateNotification();
 
 		if (mSimlarStatus == SimlarStatus.ONGOING_CALL) {
-			mLinphoneThread.terminateAllCalls();
+			mLinphoneManager.terminateAllCalls();
 		} else if (FlavourHelper.isGcmEnabled()) {
 			terminate();
 		}
@@ -992,8 +987,8 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mGoingDown = true;
 		SimlarServiceBroadcast.sendSimlarStatusChanged(this);
 
-		if (mLinphoneThread != null && mSimlarStatus.isConnectedToSipServer()) {
-			mLinphoneThread.unregister();
+		if (mLinphoneManager != null && mSimlarStatus.isConnectedToSipServer()) {
+			mLinphoneManager.unregister();
 
 			// make sure terminatePrivate is called after at least 5 seconds
 			mHandler.postDelayed(this::terminatePrivate, 5000);
@@ -1012,23 +1007,9 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 		mTerminatePrivateAlreadyCalled = true;
 
 		Lg.i("terminatePrivate");
-		if (mLinphoneThread != null) {
-			mLinphoneThread.finish();
-		} else {
-			onJoin();
-		}
-	}
-
-	@Override
-	public void onJoin()
-	{
-		if (mLinphoneThread != null) {
-			try {
-				mLinphoneThread.join(2000);
-			} catch (final InterruptedException e) {
-				Lg.ex(e, "join interrupted");
-			}
-			mLinphoneThread = null;
+		if (mLinphoneManager != null) {
+			mLinphoneManager.finish();
+			mLinphoneManager = null;
 		}
 
 		SimlarServiceBroadcast.sendServiceFinishes(this);
@@ -1053,7 +1034,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	public void verifyAuthenticationTokenOfCurrentCall(final boolean verified)
 	{
-		if (mLinphoneThread == null) {
+		if (mLinphoneManager == null) {
 			Lg.e("ERROR: verifyAuthenticationToken called but no linphone thread");
 			return;
 		}
@@ -1063,7 +1044,7 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 			return;
 		}
 
-		mLinphoneThread.verifyAuthenticationToken(mSimlarCallState.getAuthenticationToken(), verified);
+		mLinphoneManager.verifyAuthenticationToken(mSimlarCallState.getAuthenticationToken(), verified);
 	}
 
 	public SimlarStatus getSimlarStatus()
@@ -1078,11 +1059,11 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	private Volumes getVolumes()
 	{
-		if (mLinphoneThread == null) {
+		if (mLinphoneManager == null) {
 			return new Volumes();
 		}
 
-		return mLinphoneThread.getVolumes();
+		return mLinphoneManager.getVolumes();
 	}
 
 	public int getMicrophoneVolume()
@@ -1103,11 +1084,11 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 	private void muteExternalSpeaker()
 	{
 		Lg.i("toggleExternalSpeaker");
-		if (mLinphoneThread == null) {
+		if (mLinphoneManager == null) {
 			return;
 		}
 
-		mLinphoneThread.setCurrentAudioOutputType(AudioOutputType.PHONE);
+		mLinphoneManager.setCurrentAudioOutputType(AudioOutputType.PHONE);
 	}
 
 	public MicrophoneStatus getMicrophoneStatus()
@@ -1117,11 +1098,11 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	private void setVolumes(final Volumes volumes)
 	{
-		if (mLinphoneThread == null) {
+		if (mLinphoneManager == null) {
 			return;
 		}
 
-		mLinphoneThread.setVolumes(volumes);
+		mLinphoneManager.setVolumes(volumes);
 	}
 
 	public void setMicrophoneVolume(final int progress)
@@ -1150,56 +1131,56 @@ public final class SimlarService extends Service implements LinphoneThreadListen
 
 	public void setCurrentAudioOutputType(final AudioOutputType type)
 	{
-		if (mLinphoneThread == null) {
+		if (mLinphoneManager == null) {
 			return;
 		}
 
-		mLinphoneThread.setCurrentAudioOutputType(type);
+		mLinphoneManager.setCurrentAudioOutputType(type);
 	}
 
 	public void requestVideoUpdate(final boolean enable)
 	{
-		if (mLinphoneThread == null) {
+		if (mLinphoneManager == null) {
 			return;
 		}
 
-		mLinphoneThread.requestVideoUpdate(enable);
+		mLinphoneManager.requestVideoUpdate(enable);
 	}
 
 	public void acceptVideoUpdate(final boolean accept)
 	{
-		if (mLinphoneThread == null) {
+		if (mLinphoneManager == null) {
 			return;
 		}
 
-		mLinphoneThread.acceptVideoUpdate(accept);
+		mLinphoneManager.acceptVideoUpdate(accept);
 	}
 
 	public void setVideoWindows(final TextureView videoView, final TextureView captureView)
 	{
-		if (mLinphoneThread == null) {
+		if (mLinphoneManager == null) {
 			return;
 		}
 
-		mLinphoneThread.setVideoWindows(videoView, captureView);
+		mLinphoneManager.setVideoWindows(videoView, captureView);
 	}
 
 	public void destroyVideoWindows()
 	{
-		if (mLinphoneThread == null) {
+		if (mLinphoneManager == null) {
 			return;
 		}
 
-		mLinphoneThread.destroyVideoWindows();
+		mLinphoneManager.destroyVideoWindows();
 	}
 
 	public void toggleCamera()
 	{
-		if (mLinphoneThread == null) {
+		if (mLinphoneManager == null) {
 			return;
 		}
 
-		mLinphoneThread.toggleCamera();
+		mLinphoneManager.toggleCamera();
 	}
 
 	public CallConnectionDetails getCallConnectionDetails()
