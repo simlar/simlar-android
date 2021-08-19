@@ -15,7 +15,7 @@ simlar-android
 * Java Development Kit
 * Android SDK
 * Android Studio
- * Android Studio is not really needed but is the recommended way to hack on simlar-android.
+  * Android Studio is not really needed but is the recommended way to hack on simlar-android.
 
 ### Compile (Console) ###
 Linux/MacOS
