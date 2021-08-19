@@ -15,7 +15,7 @@ simlar-android
 * Java Development Kit
 * Android SDK
 * Android Studio
- * Android Studio is not really needed but is the recommended way to hack on simlar-android.
+  * Android Studio is not really needed but is the recommended way to hack on simlar-android.
 
 ### Compile (Console) ###
 Linux/MacOS
@@ -76,3 +76,8 @@ The container can build liblinphone, too.
 ```
 docker run --cap-drop all --security-opt=no-new-privileges --rm -v $(pwd)-docker-gradle-cache:/home/builder/.gradle -v $(pwd):/pwd -e CMAKE_BUILD_PARALLEL_LEVEL=16 simlar-android-builder:latest bash -c "cd /pwd && ./scripts/bootstrap-liblinphone.sh"
 ```
+
+### License
+Copyright (C) The Simlar Authors.
+
+Licensed under the [GPLv2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html) or any later version.
