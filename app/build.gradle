@@ -105,10 +105,10 @@ android {
         }
     }
 
-    lintOptions {
+    lint {
         checkAllWarnings true
-        disable "GoogleAppIndexingWarning", "UnknownNullness", "SyntheticAccessor", "DuplicateStrings"
         warningsAsErrors true
+        disable "GoogleAppIndexingWarning", "UnknownNullness", "SyntheticAccessor", "DuplicateStrings"
         warning "NewerVersionAvailable"
     }
 
