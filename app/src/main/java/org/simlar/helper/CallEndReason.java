@@ -50,6 +50,7 @@ public enum CallEndReason
 			return UNSUPPORTED_MEDIA;
 		case Busy:
 			return BUSY;
+		case Transferred:
 		case BadEvent:
 		case SessionIntervalTooSmall:
 		case None:
