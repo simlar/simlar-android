@@ -22,7 +22,6 @@
 package org.simlar.helper;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -32,30 +31,22 @@ import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.simlar.R;
-import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
 public final class PermissionsHelper
 {
-	private static final int REQUEST_CODE_DEFAULT = 23;
-	public static final int REQUEST_CODE_VIDEO_REQUEST = REQUEST_CODE_DEFAULT + 1;
-	public static final int REQUEST_CODE_VIDEO_ACCEPT = REQUEST_CODE_DEFAULT + 2;
-
 	private PermissionsHelper()
 	{
 		throw new AssertionError("This class was not meant to be instantiated");
@@ -87,12 +78,12 @@ public final class PermissionsHelper
 			mRationalMessageId = rationalMessageId;
 		}
 
-		String getPermission()
+		public String getPermission()
 		{
 			return mPermission;
 		}
 
-		int getRationalMessageId()
+		public int getRationalMessageId()
 		{
 			return mRationalMessageId;
 		}
@@ -125,102 +116,60 @@ public final class PermissionsHelper
 		return ContextCompat.checkSelfPermission(context, type.getPermission()) == PackageManager.PERMISSION_GRANTED;
 	}
 
-	public static boolean checkAndRequestPermissions(final int requestCode, final FragmentActivity activity, final Type type)
-	{
-		return checkAndRequestPermissions(requestCode, activity, EnumSet.of(type));
-	}
-
-	public static boolean checkAndRequestPermissions(final FragmentActivity activity, final Type type)
-	{
-		return checkAndRequestPermissions(REQUEST_CODE_DEFAULT, activity, type);
-	}
-
-	public static void requestMajorPermissions(final FragmentActivity activity, final boolean needsExternalStorage)
-	{
-		checkAndRequestPermissions(REQUEST_CODE_DEFAULT, activity, Type.getMajorPermissions(needsExternalStorage));
-	}
-
 	public static boolean shouldShowRationale(final FragmentActivity activity, final Type type)
 	{
 		return ActivityCompat.shouldShowRequestPermissionRationale(activity, type.getPermission());
 	}
 
-	private static boolean checkAndRequestPermissions(final int requestCode, final FragmentActivity activity, final Set<Type> types)
+	@FunctionalInterface
+	public interface RequestPermissionListener
 	{
-		final Set<Type> requestTypes = EnumSet.noneOf(Type.class);
+		void requestPermission(final String permission);
+	}
+
+	public static void showRationalIfNeeded(final FragmentActivity activity, final Type type, final RequestPermissionListener listener)
+	{
+		if (shouldShowRationale(activity, type)) {
+			new AlertDialog.Builder(activity)
+					.setMessage(PermissionsHelper.Type.PHONE_NUMBERS.getRationalMessageId())
+					.setOnDismissListener(dialog -> listener.requestPermission(type.getPermission()))
+					.create().show();
+		} else {
+			listener.requestPermission(type.getPermission());
+		}
+	}
+
+	@FunctionalInterface
+	public interface RequestPermissionsListener
+	{
+		void requestPermissions(final Set<String> types);
+	}
+
+	public static void showRationalForMissingMajorPermissions(final FragmentActivity activity, final boolean needsExternalStorage, final RequestPermissionsListener listener)
+	{
+		final Set<String> requestPermissions = new HashSet<>();
 		final Set<String> rationalMessages = new HashSet<>();
-		for (final Type type : types) {
+		for (final Type type : Type.getMajorPermissions(needsExternalStorage)) {
 			if (!hasPermission(activity, type)) {
-				requestTypes.add(type);
+				requestPermissions.add(type.getPermission());
 				if (shouldShowRationale(activity, type)) {
 					rationalMessages.add(activity.getString(type.getRationalMessageId()));
 				}
 			}
 		}
 
-		if (requestTypes.isEmpty()) {
+		if (requestPermissions.isEmpty()) {
 			// all permissions granted
-			return true;
-		}
-
-		if (rationalMessages.isEmpty()) {
-			requestPermissions(requestCode, activity, requestTypes);
-		} else {
-			showPermissionsRationaleAlert(activity, TextUtils.join("\n\n", rationalMessages), requestCode, requestTypes);
-		}
-
-		return false;
-	}
-
-	@SuppressLint("NewApi")
-	private static void showPermissionsRationaleAlert(final FragmentActivity activity, final String message, final int requestCode, final Set<Type> types)
-	{
-		new AlertDialog.Builder(activity)
-				.setMessage(message)
-				.setOnDismissListener(dialog -> requestPermissions(requestCode, activity, types))
-				.create().show();
-	}
-
-	public static void requestContactPermission(final Fragment fragment)
-	{
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
 			return;
 		}
 
-		Lg.i("requesting contact permission");
-		fragment.requestPermissions(new String[] { Type.CONTACTS.getPermission() }, REQUEST_CODE_DEFAULT);
-	}
-
-	private static void requestPermissions(final int requestCode, final FragmentActivity activity, final Set<Type> types)
-	{
-		final Set<String> permissions = new HashSet<>();
-		for (final Type type : types) {
-			permissions.add(type.getPermission());
-		}
-		Lg.i("requesting permissions: ", TextUtils.join(", ", permissions));
-
-		ActivityCompat.requestPermissions(activity, permissions.toArray(Util.EMPTY_STRING_ARRAY), requestCode);
-	}
-
-	@SuppressWarnings("SameParameterValue")
-	public static boolean isGranted(final Type type, @NonNull final String[] permissions, @NonNull final int[] grantResults)
-	{
-		if (permissions.length != 1) {
-			Lg.w("expected exactly one permission but got: ", TextUtils.join(", ", permissions));
-		}
-
-		final String permission = permissions[0];
-		if (!Util.equalString(permission, type.getPermission())) {
-			Lg.w("expected permission: ", type.getPermission(), " but got: ", permission);
-			return false;
-		}
-
-		if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-			Lg.i("permission granted: ", permission);
-			return true;
+		if (rationalMessages.isEmpty()) {
+			listener.requestPermissions(requestPermissions);
 		} else {
-			Lg.i("permission denied: ", permission);
-			return false;
+			new AlertDialog.Builder(activity)
+					.setMessage(TextUtils.join("\n\n", rationalMessages))
+					.setOnDismissListener(dialog -> listener.requestPermissions(requestPermissions))
+					.create().show();
 		}
 	}
 
@@ -239,12 +188,11 @@ public final class PermissionsHelper
 			return false;
 		}
 
+		//noinspection OverlyBroadCatchBlock
 		try {
 			final FileInputStream stream = new FileInputStream(path);
 			stream.close();
 			return false;
-		} catch (final FileNotFoundException e) {
-			return true;
 		} catch (final IOException e) {
 			return true;
 		}

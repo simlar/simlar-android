@@ -37,9 +37,10 @@
     </style>
 
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
         <item name="android:textColor">@color/text_black</item>
         <item name="android:windowBackground">@null</item>
+
+        <item name="android:statusBarColor">@android:color/black</item>
     </style>
 
     <!-- ActionBar styles -->

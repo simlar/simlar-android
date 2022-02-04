@@ -17,7 +17,7 @@ ENV PATH "${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin:${PATH}"
 RUN apt-get update && \
     apt-get dist-upgrade --assume-yes && \
     apt-get install --assume-yes --no-install-recommends default-jdk wget unzip && \
-    apt-get install --assume-yes --no-install-recommends git cmake make patch pkg-config doxygen nasm yasm python-pystache python-six graphicsmagick && \
+    apt-get install --assume-yes --no-install-recommends git cmake make patch pkg-config doxygen nasm yasm python3-pystache python3-six python-pystache python-six graphicsmagick && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 

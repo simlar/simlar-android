@@ -79,6 +79,12 @@
     <string name="network_quality_unusable">nicht nutzbar</string>
     <string name="network_quality_unknown">unbekannt</string>
 
+    <string name="audio_output_type">Bluetooth, &#8230;</string>
+    <string name="audio_output_type_phone">Hörer</string>
+    <string name="audio_output_type_wired_headset">Kopfhörer</string>
+    <string name="audio_output_type_speaker">Lautsprecher</string>
+    <string name="audio_output_type_bluetooth">Bluetooth</string>
+
     <string name="call_activity_label_quality">Netzwerkqualität: </string>
     <string name="call_activity_toggle_video">Video Anruf</string>
     <string name="call_activity_sound_settings">Ton-Einstellungen</string>
@@ -87,11 +93,6 @@
     <string name="call_activity_microphone_disabled">Mikrofon deaktiviert</string>
     <string name="call_activity_loudspeaker_on">Lautsprecher aktiviert</string>
     <string name="call_activity_loudspeaker_off">Lautsprecher deaktiviert</string>
-    <string name="call_activity_speaker_choices">Bluetooth, &#8230;</string>
-    <string name="call_activity_speaker_choices_phone">Hörer</string>
-    <string name="call_activity_speaker_choices_wired_headset">Kopfhörer</string>
-    <string name="call_activity_speaker_choices_speaker">Lautsprecher</string>
-    <string name="call_activity_speaker_choices_bluetooth">Bluetooth</string>
     <string name="call_activity_terminate_call">Anruf beenden</string>
     <string name="call_activity_no_authentication_token">&#8230;</string>
     <string name="call_activity_verified_authentication_token">Bestätigter Code: </string>

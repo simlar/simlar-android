@@ -82,17 +82,18 @@
     <string name="network_quality_unusable">unusable</string>
     <string name="network_quality_unknown">unknown</string>
 
+    <string name="audio_output_type">Bluetooth, &#8230;</string>
+    <string name="audio_output_type_phone">Phone</string>
+    <string name="audio_output_type_wired_headset">Headset</string>
+    <string name="audio_output_type_speaker">Speaker</string>
+    <string name="audio_output_type_bluetooth">Bluetooth</string>
+
     <string name="call_activity_label_quality">Network Quality: </string>
     <string name="call_activity_toggle_video">Video Call</string>
     <string name="call_activity_sound_settings">Sound Settings</string>
     <string name="call_activity_microphone_mute">Microphone mute</string>
     <string name="call_activity_microphone_on">Microphone on</string>
     <string name="call_activity_microphone_disabled">Microphone disabled</string>
-    <string name="call_activity_speaker_choices">Bluetooth, &#8230;</string>
-    <string name="call_activity_speaker_choices_phone">Phone</string>
-    <string name="call_activity_speaker_choices_wired_headset">Headset</string>
-    <string name="call_activity_speaker_choices_speaker">Speaker</string>
-    <string name="call_activity_speaker_choices_bluetooth">Bluetooth</string>
     <string name="call_activity_loudspeaker_on">Loudspeaker</string>
     <string name="call_activity_loudspeaker_off">Loudspeaker off</string>
     <string name="call_activity_terminate_call">Terminate call</string>

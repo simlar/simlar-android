@@ -26,6 +26,8 @@ import android.content.Intent;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.Set;
 
 import org.simlar.helper.VideoState;
 
@@ -42,6 +44,7 @@ public final class SimlarServiceBroadcast implements Serializable
 		SIMLAR_CALL_STATE,
 		CALL_CONNECTION_DETAILS,
 		VIDEO_STATE,
+		AUDIO_STATE,
 		SERVICE_FINISHES
 	}
 
@@ -105,6 +108,25 @@ public final class SimlarServiceBroadcast implements Serializable
 	public static void sendVideoStateChanged(final Context context, final VideoState videoState)
 	{
 		new SimlarServiceBroadcast(Type.VIDEO_STATE, new VideoStateChanged(videoState)).send(context);
+	}
+
+	public static class AudioOutputChanged implements Parameters
+	{
+		private static final long serialVersionUID = 1;
+
+		final AudioOutputType currentAudioOutputType;
+		final Set<AudioOutputType> availableAudioOutputTypes;
+
+		AudioOutputChanged(final AudioOutputType currentAudioOutputType, final Set<AudioOutputType> availableAudioOutputTypes)
+		{
+			this.currentAudioOutputType = currentAudioOutputType;
+			this.availableAudioOutputTypes = Collections.unmodifiableSet(availableAudioOutputTypes);
+		}
+	}
+
+	public static void sendAudioOutputChanged(final Context context, final AudioOutputType currentAudioOutputType, final Set<AudioOutputType> availableAudioOutputTypes)
+	{
+		new SimlarServiceBroadcast(Type.AUDIO_STATE, new AudioOutputChanged(currentAudioOutputType, availableAudioOutputTypes)).send(context);
 	}
 
 	public static void sendServiceFinishes(final Context context)

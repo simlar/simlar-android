@@ -23,9 +23,15 @@ package org.simlar.service.liblinphone;
 import android.content.Context;
 import android.util.Log;
 
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Random;
+import java.util.Set;
 
 import org.linphone.core.AVPFMode;
+import org.linphone.core.Account;
+import org.linphone.core.AccountParams;
+import org.linphone.core.AudioDevice;
 import org.linphone.core.Call;
 import org.linphone.core.CallParams;
 import org.linphone.core.Core;
@@ -35,7 +41,6 @@ import org.linphone.core.LogCollectionState;
 import org.linphone.core.LogLevel;
 import org.linphone.core.MediaEncryption;
 import org.linphone.core.NatPolicy;
-import org.linphone.core.ProxyConfig;
 import org.linphone.core.Transports;
 import org.linphone.core.VideoActivationPolicy;
 import org.linphone.mediastream.video.capture.hwconf.AndroidCameraConfiguration;
@@ -44,6 +49,7 @@ import org.simlar.helper.ServerSettings;
 import org.simlar.helper.Version;
 import org.simlar.helper.Volumes;
 import org.simlar.logging.Lg;
+import org.simlar.service.AudioOutputType;
 import org.simlar.utils.Util;
 
 final class LinphoneHandler
@@ -52,7 +58,7 @@ final class LinphoneHandler
 
 	private Core mLinphoneCore = null;
 
-	public void destroy(final CoreListener listener)
+	public synchronized void destroy(final CoreListener listener)
 	{
 		Lg.i("destroy called => forcing unregister");
 
@@ -75,7 +81,7 @@ final class LinphoneHandler
 		return mLinphoneCore != null;
 	}
 
-	public void initialize(final CoreListener listener, final Context context, final String linphoneInitialConfigFile,
+	public synchronized void initialize(final CoreListener listener, final Context context, final String linphoneInitialConfigFile,
 	                       final String rootCaFile, final String zrtpSecretsCacheFile, final String ringbackSoundFile, final String pauseSoundFile)
 	{
 		if (listener == null) {
@@ -200,11 +206,6 @@ final class LinphoneHandler
 		return natPolicy;
 	}
 
-	void linphoneCoreIterate()
-	{
-		mLinphoneCore.iterate();
-	}
-
 	public void refreshRegisters()
 	{
 		if (!isInitialized()) {
@@ -216,7 +217,7 @@ final class LinphoneHandler
 		mLinphoneCore.refreshRegisters();
 	}
 
-	public void setCredentials(final String mySimlarId, final String password)
+	public synchronized void setCredentials(final String mySimlarId, final String password)
 	{
 		if (mLinphoneCore == null) {
 			Lg.e("setCredentials called with: mLinphoneCore == null");
@@ -238,34 +239,37 @@ final class LinphoneHandler
 		mLinphoneCore.clearAllAuthInfo();
 		mLinphoneCore.addAuthInfo(Factory.instance().createAuthInfo(mySimlarId, mySimlarId, password, null, ServerSettings.DOMAIN, ServerSettings.DOMAIN));
 
-		// create linphone proxy config
-		mLinphoneCore.clearProxyConfig();
-		final ProxyConfig proxyCfg = mLinphoneCore.createProxyConfig();
-		proxyCfg.setIdentityAddress(Factory.instance().createAddress("sip:" + mySimlarId + '@' + ServerSettings.DOMAIN));
-		proxyCfg.setServerAddr("sip:" + ServerSettings.DOMAIN);
-		proxyCfg.enableRegister(true);
-		proxyCfg.setExpires(60); // connection times out after 1 minute. This overrides kamailio setting which is 3600 (1 hour).
-		proxyCfg.enablePublish(false);
-		proxyCfg.setPushNotificationAllowed(false);
-		proxyCfg.setNatPolicy(createNatPolicy());
+		// create linphone account
+		mLinphoneCore.clearAccounts();
 
-		mLinphoneCore.addProxyConfig(proxyCfg);
-		mLinphoneCore.setDefaultProxyConfig(proxyCfg);
+		final AccountParams params = mLinphoneCore.createAccountParams();
+		params.setIdentityAddress(mLinphoneCore.interpretUrl("sip:" + mySimlarId + '@' + ServerSettings.DOMAIN));
+		params.setServerAddress(mLinphoneCore.interpretUrl("sip:" + ServerSettings.DOMAIN));
+		params.setRegisterEnabled(true);
+		params.setExpires(60); // connection times out after 1 minute. This overrides kamailio setting which is 3600 (1 hour).
+		params.setPublishEnabled(false);
+		params.setPushNotificationAllowed(false);
+		params.setNatPolicy(createNatPolicy());
+
+		final Account account = mLinphoneCore.createAccount(params);
+		mLinphoneCore.addAccount(account);
+		mLinphoneCore.setDefaultAccount(account);
 	}
 
 	public void unregister()
 	{
 		Lg.i("unregister triggered");
 
-		final ProxyConfig proxyConfig = mLinphoneCore.getDefaultProxyConfig();
-		if (proxyConfig == null) {
-			Lg.e("unregister triggered but no default proxy config");
+		final Account account = mLinphoneCore.getDefaultAccount();
+		if (account == null) {
+			Lg.e("unregister triggered but no default account");
 			return;
 		}
 
-		proxyConfig.edit();
-		proxyConfig.enableRegister(false);
-		proxyConfig.done();
+		@SuppressWarnings("UseOfClone") // linphone api
+		final AccountParams params = account.getParams().clone();
+		params.setRegisterEnabled(false);
+		account.setParams(params);
 	}
 
 	public void call(final String number)
@@ -430,7 +434,7 @@ final class LinphoneHandler
 	{
 		Factory.instance().setDebugMode(enabled, "DEBUG");
 		Factory.instance().enableLogCollection(LogCollectionState.EnabledWithoutPreviousLogHandler);
-		Factory.instance().getLoggingService().setListener(
+		Factory.instance().getLoggingService().addListener(
 				(logService, domain, logLevel, message) -> Lg.log(convertLogLevel(logLevel), "liblinphone ", domain, message));
 	}
 
@@ -584,5 +588,86 @@ final class LinphoneHandler
 		}
 
 		Lg.e("failed to toggle camera");
+	}
+
+	private static AudioOutputType fromAudioDeviceType(final AudioDevice.Type type)
+	{
+		if (type == null) {
+			return null;
+		}
+
+		switch (type) {
+		case Unknown:
+		case Microphone:
+			return null;
+		case Earpiece:
+		case Telephony:
+			return AudioOutputType.PHONE;
+		case Speaker:
+			return AudioOutputType.SPEAKER;
+		case Bluetooth:
+		case BluetoothA2DP:
+			return AudioOutputType.BLUETOOTH;
+		case AuxLine:
+		case GenericUsb:
+		case Headset:
+		case Headphones:
+			return AudioOutputType.WIRED_HEADSET;
+		}
+
+		return null;
+	}
+
+	public synchronized Set<AudioOutputType> getAvailableAudioOutputTypes()
+	{
+		final Set<AudioOutputType> result = EnumSet.noneOf(AudioOutputType.class);
+
+		for (final AudioDevice audioDevice : mLinphoneCore.getAudioDevices()) {
+			Lg.d("getAvailableAudioOutputType: id=", audioDevice.getId(), " type=", audioDevice.getType(), " name=", audioDevice.getDeviceName());
+			final AudioOutputType type = fromAudioDeviceType(audioDevice.getType());
+			Lg.d("getAvailableAudioOutputType: type=", type);
+			if (type != null && audioDevice.hasCapability(AudioDevice.Capabilities.CapabilityPlay)) {
+				result.add(type);
+			}
+		}
+
+		return Collections.unmodifiableSet(result);
+	}
+
+	public synchronized AudioOutputType getCurrentAudioOutputType()
+	{
+		final Call currentCall = getCurrentCall();
+		if (currentCall == null) {
+			return null;
+		}
+
+		final AudioDevice audioDevice = currentCall.getOutputAudioDevice();
+		if (audioDevice == null) {
+			return null;
+		}
+
+		return fromAudioDeviceType(audioDevice.getType());
+	}
+
+	public synchronized void setCurrentAudioOutputType(final AudioOutputType type)
+	{
+		if (type == null) {
+			return;
+		}
+
+		final Call currentCall = getCurrentCall();
+		if (currentCall == null) {
+			return;
+		}
+
+		for (final AudioDevice audioDevice : mLinphoneCore.getAudioDevices()) {
+			if (fromAudioDeviceType(audioDevice.getType()) == type && audioDevice.hasCapability(AudioDevice.Capabilities.CapabilityPlay))  {
+				Lg.i("setCurrentAudioOutputType type=", type, " found: ", audioDevice.getDeviceName(), " with id=", audioDevice.getId());
+				currentCall.setOutputAudioDevice(audioDevice);
+				return;
+			}
+		}
+
+		Lg.w("setCurrentAudioOutputType type=", type, " no suitable audio device found");
 	}
 }
