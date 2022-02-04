@@ -20,6 +20,8 @@
 
 package org.simlar.helper;
 
+import androidx.annotation.NonNull;
+
 import java.text.DecimalFormat;
 
 import org.simlar.utils.Util;
@@ -116,6 +118,7 @@ public final class CallConnectionDetails
 		return ' ' + name + '=' + value;
 	}
 
+	@NonNull
 	@Override
 	public String toString()
 	{
