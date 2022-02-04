@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
+    <issue id="ConvertToWebp">
+        <ignore path="src/main/res/mipmap-xxxhdpi/ic_launcher.png" />
+    </issue>
     <issue id="IconDipSize">
         <ignore path="src/main/res/drawable-hdpi/background_tile.webp" />
         <ignore path="src/main/res/drawable-ldpi/background_tile.webp" />
