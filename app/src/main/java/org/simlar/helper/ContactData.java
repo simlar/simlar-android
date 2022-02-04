@@ -21,6 +21,8 @@
 
 package org.simlar.helper;
 
+import androidx.annotation.NonNull;
+
 public class ContactData
 {
 	public final String name;
@@ -42,6 +44,7 @@ public class ContactData
 		return status.isRegistered();
 	}
 
+	@NonNull
 	@Override
 	public final String toString()
 	{
