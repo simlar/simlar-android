@@ -20,6 +20,8 @@
 
 package org.simlar.helper;
 
+import androidx.annotation.NonNull;
+
 public final class Volumes
 {
 	private static final float GAIN_MAX = 15.0f;
@@ -53,6 +55,7 @@ public final class Volumes
 		mEchoLimiter = echoLimiter;
 	}
 
+	@NonNull
 	@Override
 	public String toString()
 	{
