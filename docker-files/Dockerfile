@@ -12,7 +12,7 @@ ENV DEBIAN_FRONTEND "noninteractive"
 ENV ANDROID_SDK_ROOT "/home/builder/Android/Sdk"
 ENV ANDROID_HOME "${ANDROID_SDK_ROOT}"
 ENV ANDROID_NDK "${ANDROID_SDK_ROOT}/ndk/${ANDROID_NDK_VERSION}"
-ENV PATH "${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin:${PATH}"
+ENV PATH "${ANDROID_NDK}:${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin:${PATH}"
 
 RUN apt-get update && \
     apt-get dist-upgrade --assume-yes && \
