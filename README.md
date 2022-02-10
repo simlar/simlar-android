@@ -5,6 +5,13 @@ simlar-android
 
 [Simlar](https://www.simlar.org) is a cross platform VoIP App aiming to make encrypted calls easy.
 
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/org.simlar/)
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
+     alt="Get it on Google Play"
+     height="80">](https://play.google.com/store/apps/details?id=org.simlar)
+
 <!--suppress HtmlUnknownAttribute -->
 <div id="screenshots" align="center">
 <img src="https://www.simlar.org/press/screenshots/Android/en/contact-list.png" alt="Screenshot address book" text-align="center" width="200" margin="15">
