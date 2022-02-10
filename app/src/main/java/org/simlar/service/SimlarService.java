@@ -142,7 +142,7 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		}
 	}
 
-
+	@SuppressWarnings("deprecation")
 	private final class TelephonyCallStateListener extends PhoneStateListener
 	{
 		private boolean mInCall = false;
