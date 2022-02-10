@@ -40,6 +40,8 @@ import org.linphone.core.CallStats;
 import org.linphone.core.ChatMessage;
 import org.linphone.core.ChatRoom;
 import org.linphone.core.Conference;
+import org.linphone.core.ConferenceInfo;
+import org.linphone.core.ConferenceInfoError;
 import org.linphone.core.ConfiguringState;
 import org.linphone.core.Content;
 import org.linphone.core.Core;
@@ -443,6 +445,12 @@ public final class LinphoneManager implements CoreListener
 	}
 
 	@Override
+	public void onConferenceInfoOnParticipantSent(@NonNull final Core core, @NonNull final ConferenceInfo conferenceInfo, @NonNull final Address participant)
+	{
+		Lg.w("onConferenceInfoOnParticipantSent: conferenceInfo=", conferenceInfo, " participant=", participant);
+	}
+
+	@Override
 	public void onCallIdUpdated(@NonNull final Core core, @NonNull final String previousCallId, @NonNull final String currentCallId)
 	{
 		Lg.w("onCallIdUpdated: previousCallId=", previousCallId, " currentCallId=", currentCallId);
@@ -452,6 +460,12 @@ public final class LinphoneManager implements CoreListener
 	public void onEcCalibrationAudioInit(@NonNull final Core core)
 	{
 		Lg.w("onEcCalibrationAudioInit");
+	}
+
+	@Override
+	public void onConferenceInfoOnParticipantError(@NonNull final Core core, @NonNull final ConferenceInfo conferenceInfo, @NonNull final Address participant, final ConferenceInfoError error)
+	{
+		Lg.w("onConferenceInfoOnParticipantError: conferenceInfo=", conferenceInfo, " participant=", participant, " error=", error);
 	}
 
 	@Override
@@ -698,6 +712,12 @@ public final class LinphoneManager implements CoreListener
 	public void onEcCalibrationAudioUninit(@NonNull final Core core)
 	{
 		Lg.w("onEcCalibrationAudioUninit");
+	}
+
+	@Override
+	public void onConferenceInfoOnSent(@NonNull final Core core, @NonNull final ConferenceInfo conferenceInfo)
+	{
+		Lg.w("onConferenceInfoOnSent: conferenceInfo=", conferenceInfo);
 	}
 
 	@Override
