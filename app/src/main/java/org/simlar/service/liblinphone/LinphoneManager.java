@@ -355,8 +355,8 @@ public final class LinphoneManager implements CoreListener
 
 	private VideoState createVideoState(final Call.State state, final Call call)
 	{
-		final boolean localVideo = call.getCurrentParams().videoEnabled();
-		final boolean remoteVideo = call.getRemoteParams() != null && call.getRemoteParams().videoEnabled();
+		final boolean localVideo = call.getCurrentParams().isVideoEnabled();
+		final boolean remoteVideo = call.getRemoteParams() != null && call.getRemoteParams().isVideoEnabled();
 
 		Lg.i("creating videoState based on localVideo= ", localVideo, " remoteVideo=", remoteVideo);
 
