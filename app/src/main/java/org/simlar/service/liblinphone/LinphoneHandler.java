@@ -432,9 +432,10 @@ final class LinphoneHandler
 	@SuppressWarnings("SameParameterValue")
 	private static void enableDebugMode(final boolean enabled)
 	{
-		Factory.instance().setDebugMode(enabled, "DEBUG");
-		Factory.instance().enableLogCollection(LogCollectionState.EnabledWithoutPreviousLogHandler);
-		Factory.instance().getLoggingService().addListener(
+		final Factory factory = Factory.instance();
+		factory.setDebugMode(enabled, "DEBUG");
+		factory.enableLogCollection(LogCollectionState.EnabledWithoutPreviousLogHandler);
+		factory.getLoggingService().addListener(
 				(logService, domain, logLevel, message) -> Lg.log(convertLogLevel(logLevel), "liblinphone ", domain, message));
 	}
 
