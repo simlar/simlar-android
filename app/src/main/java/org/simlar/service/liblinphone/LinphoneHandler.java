@@ -39,6 +39,7 @@ import org.linphone.core.CoreListener;
 import org.linphone.core.Factory;
 import org.linphone.core.LogCollectionState;
 import org.linphone.core.LogLevel;
+import org.linphone.core.LoggingService;
 import org.linphone.core.MediaEncryption;
 import org.linphone.core.NatPolicy;
 import org.linphone.core.Transports;
@@ -433,9 +434,10 @@ final class LinphoneHandler
 	private static void enableDebugMode(final boolean enabled)
 	{
 		final Factory factory = Factory.instance();
-		factory.setDebugMode(enabled, "DEBUG");
 		factory.enableLogCollection(LogCollectionState.EnabledWithoutPreviousLogHandler);
-		factory.getLoggingService().addListener(
+		final LoggingService loggingService = factory.getLoggingService();
+		loggingService.setLogLevel(enabled ? LogLevel.Debug : LogLevel.Warning);
+		loggingService.addListener(
 				(logService, domain, logLevel, message) -> Lg.log(convertLogLevel(logLevel), "liblinphone ", domain, message));
 	}
 
