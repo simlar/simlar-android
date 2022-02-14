@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/simlar-android.iml" filepath="$PROJECT_DIR$/simlar-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/simlar-android.iml" filepath="$PROJECT_DIR$/.idea/modules/simlar-android.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/simlar-android.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/simlar-android.app.iml" />
     </modules>
   </component>

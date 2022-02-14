@@ -64,6 +64,7 @@
         android:label="@string/app_name"
         android:supportsRtl="false"
         android:theme="@style/AppTheme"
+        android:dataExtractionRules="@xml/data_extraction_rules"
         tools:ignore="UnusedAttribute">
 
         <meta-data
@@ -84,8 +85,8 @@
 
         <activity
             android:name=".widgets.MainActivity"
-            android:label="@string/app_name"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

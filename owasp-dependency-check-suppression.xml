@@ -95,4 +95,50 @@
         <cve>CVE-2020-29582</cve>
         <cve>CVE-2020-15824</cve>
     </suppress>
+    <suppress>
+        <notes>
+            <![CDATA[
+                file names:
+                    netty-buffer-4.1.34.Final.jar
+                    netty-codec-4.1.34.Final.jar
+                    netty-codec-http-4.1.34.Final.jar
+                    netty-codec-http2-4.1.34.Final.jar
+                    netty-codec-socks-4.1.34.Final.jar
+                    netty-common-4.1.34.Final.jar
+                    netty-handler-4.1.34.Final.jar
+                    netty-handler-proxy-4.1.34.Final.jar
+                    netty-resolver-4.1.34.Final.jar
+                    netty-transport-4.1.34.Final.jar
+            ]]>
+        </notes>
+        <packageUrl regex="true">^pkg:maven/io\.netty/netty\-.*@.*$</packageUrl>
+        <cve>CVE-2019-16869</cve>
+        <cve>CVE-2019-20444</cve>
+        <cve>CVE-2019-20445</cve>
+        <cve>CVE-2020-11612</cve>
+        <cve>CVE-2021-21290</cve>
+        <cve>CVE-2021-21295</cve>
+        <cve>CVE-2021-21409</cve>
+        <cve>CVE-2021-37136</cve>
+        <cve>CVE-2021-37137</cve>
+        <cve>CVE-2021-43797</cve>
+    </suppress>
+    <suppress>
+        <notes>
+            <![CDATA[
+                file name: protobuf-java-3.10.0.jar
+            ]]>
+        </notes>
+        <packageUrl regex="true">^pkg:maven/com\.google\.protobuf/protobuf\-java@.*$</packageUrl>
+        <cve>CVE-2021-22569</cve>
+    </suppress>
+    <suppress>
+        <notes>
+            <![CDATA[
+                file name: commons-io-2.4.jar
+            ]]>
+        </notes>
+        <packageUrl regex="true">^pkg:maven/commons\-io/commons\-io@.*$</packageUrl>
+        <cve>CVE-2021-29425</cve>
+    </suppress>
 </suppressions>

@@ -30,7 +30,7 @@ touch settings.gradle
 
 cmake "${BUILD_DIR}/linphone-sdk" \
 	-DLINPHONESDK_PLATFORM=Android \
-	-DLINPHONESDK_ANDROID_ARCHS=armv7,arm64,x86 \
+	-DLINPHONESDK_ANDROID_ARCHS=armv7,arm64,x86,x86_64 \
 	-DENABLE_AAUDIO=OFF \
 	-DENABLE_AMRNB=OFF \
 	-DENABLE_AMRWB=OFF \

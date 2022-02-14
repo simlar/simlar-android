@@ -24,6 +24,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.SystemClock;
 
+import androidx.annotation.NonNull;
+
 import org.simlar.R;
 import org.simlar.contactsprovider.ContactsProvider;
 import org.simlar.helper.CallEndReason;
@@ -192,6 +194,7 @@ public final class SimlarCallState
 		return mLinphoneCallState == LinphoneCallState.UNKNOWN;
 	}
 
+	@NonNull
 	@Override
 	public String toString()
 	{

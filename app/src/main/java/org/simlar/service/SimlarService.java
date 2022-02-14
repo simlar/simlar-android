@@ -233,17 +233,6 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		audioManager.adjustStreamVolume(streamType, adJustMute, 0);
 	}
 
-	@SuppressWarnings("SameParameterValue")
-	private static boolean isAudioStreamMute(final AudioManager audioManager, final int streamType)
-	{
-		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && audioManager.isStreamMute(streamType);
-	}
-
-	private static boolean isVolumeFixed(final AudioManager audioManager)
-	{
-		return audioManager.isVolumeFixed();
-	}
-
 	private void silenceAudioStreamRing()
 	{
 		if (!PermissionsHelper.isNotificationPolicyAccessGranted(this)) {
@@ -252,12 +241,12 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		}
 
 		final AudioManager audioManager = Util.getSystemService(this, Context.AUDIO_SERVICE);
-		if (isVolumeFixed(audioManager)) {
+		if (audioManager.isVolumeFixed()) {
 			Lg.i("device does not support muting");
 			return;
 		}
 
-		if (!isAudioStreamMute(audioManager, AudioManager.STREAM_RING)) {
+		if (!audioManager.isStreamMute(AudioManager.STREAM_RING)) {
 			mStreamRingNeedsUnMute = true;
 			muteAudioStream(audioManager, AudioManager.STREAM_RING, true);
 		}
@@ -464,7 +453,7 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 	private static void createMissedCallNotification(final Context context, final String name, final String photoId)
 	{
 		final PendingIntent activity = PendingIntent.getActivity(context, 0,
-				new Intent(context, ACTIVITIES.getMainActivity()).addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED), 0);
+				new Intent(context, ACTIVITIES.getMainActivity()).addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED), PendingIntent.FLAG_IMMUTABLE);
 
 		final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, SimlarNotificationChannel.MISSED_CALL.name());
 		notificationBuilder.setSmallIcon(R.drawable.ic_notification_missed_calls);
@@ -500,7 +489,7 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		}
 
 		final PendingIntent activity = PendingIntent.getActivity(this, 0,
-				new Intent(this, mNotificationActivity).addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED), 0);
+				new Intent(this, mNotificationActivity).addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED), PendingIntent.FLAG_IMMUTABLE);
 
 		final NotificationCompat.Builder notificationBuilder =
 				new NotificationCompat.Builder(this, SimlarNotificationChannel.CALL.name())
@@ -521,15 +510,16 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 
 		mNotificationActivity = ACTIVITIES.getRingingActivity();
 		final PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(this, 0,
-				new Intent(this, ACTIVITIES.getRingingActivity()), PendingIntent.FLAG_UPDATE_CURRENT);
+				new Intent(this, ACTIVITIES.getRingingActivity()),
+				PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
 		final PendingIntent declineIntent = PendingIntent.getService(this, 0,
 				new Intent(this, SimlarService.class).setAction(INTENT_ACTION_NOTIFICATION_CALL_TERMINATE),
-				PendingIntent.FLAG_UPDATE_CURRENT);
+				PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
 		final PendingIntent acceptIntent = PendingIntent.getService(this, 0,
 				new Intent(this, SimlarService.class).setAction(INTENT_ACTION_NOTIFICATION_CALL_ACCEPT),
-				PendingIntent.FLAG_UPDATE_CURRENT);
+				PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
 		final RemoteViews notificationHeadsUp = new RemoteViews(getPackageName(), R.layout.notification_ringing_heads_up);
 		notificationHeadsUp.setTextViewText(R.id.contactName, mSimlarCallState.getContactName());
@@ -673,6 +663,15 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		}
 	}
 
+	@SuppressLint("UnspecifiedImmutableFlag")
+	private static PendingIntent getPendingIntent(final Context context, final Intent startIntent) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+			return PendingIntent.getBroadcast(context, 0, startIntent, PendingIntent.FLAG_MUTABLE);
+		} else {
+			return PendingIntent.getBroadcast(context, 0, startIntent, 0);
+		}
+	}
+
 	private void startKeepAwake()
 	{
 		if (mKeepAwakeReceiver == null) {
@@ -680,7 +679,7 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		}
 
 		final Intent startIntent = new Intent("org.simlar.keepAwake");
-		mKeepAwakePendingIntent = PendingIntent.getBroadcast(this, 0, startIntent, 0);
+		mKeepAwakePendingIntent = getPendingIntent(this, startIntent);
 
 		((AlarmManager) Util.getSystemService(this, Context.ALARM_SERVICE))
 				.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 600000, 600000, mKeepAwakePendingIntent);
