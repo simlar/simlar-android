@@ -109,7 +109,7 @@ android {
         checkAllWarnings true
         warningsAsErrors true
         disable "GoogleAppIndexingWarning", "UnknownNullness", "SyntheticAccessor", "DuplicateStrings"
-        warning "NewerVersionAvailable"
+        warning "NewerVersionAvailable", "GradleDependency"
     }
 
     playConfigs {
