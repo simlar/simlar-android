@@ -3,24 +3,6 @@
     <suppress>
         <notes>
             <![CDATA[
-                file name: intellij-core-26.5.3.jar (shaded: log4j:log4j:1.2.17)
-            ]]>
-        </notes>
-        <gav regex="true">^log4j:log4j:.*$</gav>
-        <cve>CVE-2019-17571</cve>
-    </suppress>
-    <suppress>
-        <notes>
-            <![CDATA[
-                file name: intellij-core-26.6.3.jar (shaded: log4j:log4j:1.2.17)
-            ]]>
-        </notes>
-        <packageUrl regex="true">^pkg:maven/log4j/log4j@.*$</packageUrl>
-        <cve>CVE-2020-9488</cve>
-    </suppress>
-    <suppress>
-        <notes>
-            <![CDATA[
                 file name: groovy-all-2.4.15.jar
             ]]>
         </notes>
