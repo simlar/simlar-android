@@ -84,8 +84,7 @@ final class LinphoneHandler
 	}
 
 	public synchronized void initialize(final CoreListener listener, final Context context, final String linphoneInitialConfigFile,
-	                                    final String rootCaFile, final String zrtpSecretsCacheFile, final String ringbackSoundFile,
-	                                    final String pauseSoundFile, final String noCameraFile)
+	                                    final String rootCaFile, final String zrtpSecretsCacheFile, final String ringbackSoundFile, final String pauseSoundFile)
 	{
 		if (listener == null) {
 			Lg.e("Error: initialize without listener");
@@ -114,11 +113,6 @@ final class LinphoneHandler
 
 		if (Util.isNullOrEmpty(pauseSoundFile)) {
 			Lg.e("Error: pauseSoundFile not set");
-			return;
-		}
-
-		if (Util.isNullOrEmpty(noCameraFile)) {
-			Lg.e("Error: noCameraFile not set");
 			return;
 		}
 
@@ -198,7 +192,6 @@ final class LinphoneHandler
 		if (mLinphoneCore.videoSupported()) {
 			mLinphoneCore.setVideoCaptureEnabled(true);
 			mLinphoneCore.setVideoDisplayEnabled(true);
-			mLinphoneCore.setStaticPicture(noCameraFile);
 		} else {
 			mLinphoneCore.setVideoCaptureEnabled(false);
 			mLinphoneCore.setVideoDisplayEnabled(false);
