@@ -147,7 +147,7 @@ dependencies {
             exclude group: "com.google.firebase", module: "firebase-analytics"
             exclude group: "com.google.firebase", module: "firebase-measurement-connector"
         }
-        pushImplementation("com.google.android.gms:play-services-base:18.0.1")
+        pushImplementation("com.google.android.gms:play-services-base:18.1.0")
     }
     implementation("androidx.media:media:1.5.0")
     implementation("androidx.appcompat:appcompat:1.4.1")
