@@ -3,15 +3,6 @@
     <suppress>
         <notes>
             <![CDATA[
-                file name: builder-3.4.0.jar: desugar_deploy.jar (shaded: com.google.guava:guava:21.0)
-            ]]>
-        </notes>
-        <gav regex="true">^com\.google\.guava:guava:.*$</gav>
-        <cve>CVE-2018-10237</cve>
-    </suppress>
-    <suppress>
-        <notes>
-            <![CDATA[
                 file name: commons-compress-1.12.jar
             ]]>
         </notes>
