@@ -3,20 +3,6 @@
     <suppress>
         <notes>
             <![CDATA[
-                file name: commons-compress-1.12.jar
-            ]]>
-        </notes>
-        <gav regex="true">^org\.apache\.commons:commons-compress:.*$</gav>
-        <cve>CVE-2018-11771</cve>
-        <cve>CVE-2018-1324</cve>
-        <cve>CVE-2021-35515</cve>
-        <cve>CVE-2021-35516</cve>
-        <cve>CVE-2021-35517</cve>
-        <cve>CVE-2021-36090</cve>
-    </suppress>
-    <suppress>
-        <notes>
-            <![CDATA[
                 file name: bcprov-jdk15on-1.56.jar
             ]]>
         </notes>
