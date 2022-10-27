@@ -108,8 +108,8 @@ android {
     lint {
         checkAllWarnings true
         warningsAsErrors true
-        disable "GoogleAppIndexingWarning", "UnknownNullness", "SyntheticAccessor", "DuplicateStrings"
-        warning "NewerVersionAvailable", "GradleDependency"
+        disable "GoogleAppIndexingWarning", "UnknownNullness", "SyntheticAccessor", "DuplicateStrings", "GradleDependency"
+        warning "NewerVersionAvailable"
     }
 
     playConfigs {
