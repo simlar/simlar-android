@@ -119,6 +119,7 @@ android {
             }
         }
     }
+    namespace 'org.simlar'
 }
 
 play {
