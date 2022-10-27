@@ -587,6 +587,12 @@ public final class LinphoneManager implements CoreListener
 	}
 
 	@Override
+	public void onNotifySent(@NonNull final Core core, @NonNull final Event linphoneEvent, @NonNull final Content body)
+	{
+		Lg.w("onNotifySent linphoneEvent=", linphoneEvent, " body=", body);
+	}
+
+	@Override
 	public void onChatRoomEphemeralMessageDeleted(@NonNull final Core lc, @NonNull final ChatRoom chatRoom)
 	{
 		Lg.w("onChatRoomEphemeralMessageDeleted chatRoom=", chatRoom);
