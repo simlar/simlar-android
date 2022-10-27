@@ -63,7 +63,7 @@ public final class FileHelper
 		mFakePhoneBookPicture = basePath + "/fake_phone_book_picture.webp";
 		mRingbackSoundFile = basePath + "/ringback.wav";
 		mPauseSoundFile = basePath + "/pause.wav";
-		mNoCameraFile = basePath + "/no_camera.webp";
+		mNoCameraFile = basePath + "/no_camera.jpg";
 
 		// Always overwrite to make updates of the files work
 		copyFileFromPackage(context, R.raw.rootca, new File(mRootCaFileName).getName());
