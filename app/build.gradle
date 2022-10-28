@@ -45,13 +45,13 @@ repositories {
 }
 
 android {
-    compileSdkVersion 32
-    buildToolsVersion "32.0.0"
+    compileSdkVersion 33
+    buildToolsVersion "33.0.0"
 
     defaultConfig {
         applicationId "org.simlar"
         minSdkVersion 23
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionName getGitVersion()
         versionCode 71
     }
@@ -108,7 +108,7 @@ android {
     lint {
         checkAllWarnings true
         warningsAsErrors true
-        disable "GoogleAppIndexingWarning", "UnknownNullness", "SyntheticAccessor", "DuplicateStrings"
+        disable "GoogleAppIndexingWarning", "UnknownNullness", "SyntheticAccessor", "DuplicateStrings", "GradleDependency"
         warning "NewerVersionAvailable"
     }
 
@@ -119,6 +119,7 @@ android {
             }
         }
     }
+    namespace 'org.simlar'
 }
 
 play {
@@ -147,7 +148,7 @@ dependencies {
             exclude group: "com.google.firebase", module: "firebase-analytics"
             exclude group: "com.google.firebase", module: "firebase-measurement-connector"
         }
-        pushImplementation("com.google.android.gms:play-services-base:18.0.1")
+        pushImplementation("com.google.android.gms:play-services-base:18.1.0")
     }
     implementation("androidx.media:media:1.5.0")
     implementation("androidx.appcompat:appcompat:1.4.1")

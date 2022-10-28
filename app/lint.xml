@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
+    <issue id="InvalidPackage">
+        <ignore path="**/kotlinx-coroutines-core-*.jar"/>
+    </issue>
     <issue id="ConvertToWebp">
         <ignore path="src/main/res/mipmap-xxxhdpi/ic_launcher.png" />
     </issue>
