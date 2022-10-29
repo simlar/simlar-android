@@ -39,6 +39,7 @@ import org.linphone.core.CoreListener;
 import org.linphone.core.Factory;
 import org.linphone.core.LogCollectionState;
 import org.linphone.core.LogLevel;
+import org.linphone.core.LoggingService;
 import org.linphone.core.MediaEncryption;
 import org.linphone.core.NatPolicy;
 import org.linphone.core.Transports;
@@ -125,7 +126,7 @@ final class LinphoneHandler
 		mLinphoneCore.start();
 		mLinphoneCore.setUserAgent("Simlar", Version.getVersionName(context));
 
-		mLinphoneCore.enableIpv6(false);
+		mLinphoneCore.setIpv6Enabled(false);
 		mLinphoneCore.setNatPolicy(createNatPolicy());
 
 		// Use TLS for registration with random port
@@ -164,17 +165,17 @@ final class LinphoneHandler
 		mLinphoneCore.setRing(null);
 
 		// enable echo cancellation
-		mLinphoneCore.enableEchoCancellation(true);
-		mLinphoneCore.enableEchoLimiter(false);
+		mLinphoneCore.setEchoCancellationEnabled(true);
+		mLinphoneCore.setEchoLimiterEnabled(false);
 
 		// enable video
 		mLinphoneCore.setAvpfMode(AVPFMode.Enabled);
 		if (mLinphoneCore.videoSupported()) {
-			mLinphoneCore.enableVideoCapture(true);
-			mLinphoneCore.enableVideoDisplay(true);
+			mLinphoneCore.setVideoCaptureEnabled(true);
+			mLinphoneCore.setVideoDisplayEnabled(true);
 		} else {
-			mLinphoneCore.enableVideoDisplay(false);
-			mLinphoneCore.enableVideoCapture(false);
+			mLinphoneCore.setVideoCaptureEnabled(false);
+			mLinphoneCore.setVideoDisplayEnabled(false);
 			Lg.e("video not supported by sdk");
 		}
 
@@ -191,7 +192,7 @@ final class LinphoneHandler
 		mLinphoneCore.setMaxCalls(1);
 
 		// make sure DNS SRV is disabled
-		mLinphoneCore.enableDnsSrv(false);
+		mLinphoneCore.setDnsSrvEnabled(false);
 	}
 
 	private NatPolicy createNatPolicy()
@@ -199,10 +200,10 @@ final class LinphoneHandler
 		// enable STUN with ICE
 		final NatPolicy natPolicy = mLinphoneCore.createNatPolicy();
 		natPolicy.setStunServer(STUN_SERVER);
-		natPolicy.enableStun(true);
-		natPolicy.enableIce(true);
-		natPolicy.enableTurn(false);
-		natPolicy.enableUpnp(false);
+		natPolicy.setStunEnabled(true);
+		natPolicy.setIceEnabled(true);
+		natPolicy.setTurnEnabled(false);
+		natPolicy.setUpnpEnabled(false);
 		return natPolicy;
 	}
 
@@ -387,7 +388,7 @@ final class LinphoneHandler
 
 		mLinphoneCore.setPlaybackGainDb(volumes.getPlayGain());
 		mLinphoneCore.setMicGainDb(volumes.getMicrophoneGain());
-		mLinphoneCore.enableMic(!volumes.getMicrophoneMuted());
+		mLinphoneCore.setMicEnabled(!volumes.getMicrophoneMuted());
 
 		setEchoLimiter(volumes.getEchoLimiter());
 
@@ -402,13 +403,13 @@ final class LinphoneHandler
 			return;
 		}
 
-		if (currentCall.echoLimiterEnabled() == enable) {
+		if (currentCall.isEchoLimiterEnabled() == enable) {
 			Lg.i("EchoLimiter already: ", Boolean.toString(enable));
 			return;
 		}
 
 		Lg.i("set EchoLimiter: ", Boolean.toString(enable));
-		currentCall.enableEchoLimiter(enable);
+		currentCall.setEchoLimiterEnabled(enable);
 	}
 
 	private static int convertLogLevel(final LogLevel logLevel)
@@ -432,9 +433,11 @@ final class LinphoneHandler
 	@SuppressWarnings("SameParameterValue")
 	private static void enableDebugMode(final boolean enabled)
 	{
-		Factory.instance().setDebugMode(enabled, "DEBUG");
-		Factory.instance().enableLogCollection(LogCollectionState.EnabledWithoutPreviousLogHandler);
-		Factory.instance().getLoggingService().addListener(
+		final Factory factory = Factory.instance();
+		factory.enableLogCollection(LogCollectionState.EnabledWithoutPreviousLogHandler);
+		final LoggingService loggingService = factory.getLoggingService();
+		loggingService.setLogLevel(enabled ? LogLevel.Debug : LogLevel.Warning);
+		loggingService.addListener(
 				(logService, domain, logLevel, message) -> Lg.log(convertLogLevel(logLevel), "liblinphone ", domain, message));
 	}
 
@@ -454,12 +457,12 @@ final class LinphoneHandler
 			return;
 		}
 
-		if (enable && params.videoEnabled()) {
+		if (enable && params.isVideoEnabled()) {
 			Lg.i("request enable video with already enabled video => skipping");
 			return;
 		}
 
-		params.enableVideo(enable);
+		params.setVideoEnabled(enable);
 		currentCall.update(params);
 	}
 
@@ -487,7 +490,7 @@ final class LinphoneHandler
 
 		final CallParams params = currentCall.getCurrentParams();
 		if (accept) {
-			params.enableVideo(true);
+			params.setVideoEnabled(true);
 		}
 
 		currentCall.acceptUpdate(params);
@@ -551,7 +554,7 @@ final class LinphoneHandler
 			return;
 		}
 
-		currentCall.enableCamera(enable);
+		currentCall.setCameraEnabled(enable);
 
 		if (enable) {
 			setFrontCameraAsDefault();
