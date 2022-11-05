@@ -72,6 +72,15 @@
     <string name="linphone_call_state_notification_paused">Anruf mit %1$s pausiert</string>
     <string name="linphone_call_state_notification_resuming">Anruf mit %1$s zurückholen</string>
 
+    <string name="linphone_ice_state_none">keiner</string>
+    <string name="linphone_ice_state_not_activated">nicht aktiviert</string>
+    <string name="linphone_ice_state_failed">fehlgeschlagen</string>
+    <string name="linphone_ice_state_in_progress">im Aufbau</string>
+    <string name="linphone_ice_state_host_connection">direkte Verbindung</string>
+    <string name="linphone_ice_state_reflexive_connection">direkte Verbindung mit NAT</string>
+    <string name="linphone_ice_state_relay_connection">weitergeleitete Verbindung</string>
+    <string name="linphone_ice_state_unknown">unbekannt</string>
+
     <string name="network_quality_good">sehr gut</string>
     <string name="network_quality_average">gut</string>
     <string name="network_quality_poor">schlecht</string>
