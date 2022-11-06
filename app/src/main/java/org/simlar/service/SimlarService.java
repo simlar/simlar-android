@@ -348,8 +348,10 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 		registerReceiver(mNetworkChangeReceiver, intentFilter);
 
-		((TelephonyManager) Util.getSystemService(this, Context.TELEPHONY_SERVICE))
-				.listen(mTelephonyCallStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+		if (PermissionsHelper.isNotificationPolicyAccessGranted(this)) {
+			((TelephonyManager) Util.getSystemService(this, Context.TELEPHONY_SERVICE))
+					.listen(mTelephonyCallStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+		}
 
 		ContactsProvider.preLoadContacts(this);
 
