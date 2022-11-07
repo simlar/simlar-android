@@ -53,6 +53,7 @@ import org.linphone.core.Event;
 import org.linphone.core.Friend;
 import org.linphone.core.FriendList;
 import org.linphone.core.GlobalState;
+import org.linphone.core.IceState;
 import org.linphone.core.InfoMessage;
 import org.linphone.core.PayloadType;
 import org.linphone.core.PresenceModel;
@@ -64,6 +65,7 @@ import org.linphone.core.StreamType;
 import org.linphone.core.SubscriptionState;
 import org.linphone.core.VersionUpdateCheckResult;
 
+import org.simlar.R;
 import org.simlar.helper.CallEndReason;
 import org.simlar.helper.FileHelper;
 import org.simlar.helper.FileHelper.NotInitedException;
@@ -485,7 +487,7 @@ public final class LinphoneManager implements CoreListener
 
 		final int upload = getBandwidth(stats.getUploadBandwidth());
 		final int download = getBandwidth(stats.getDownloadBandwidth());
-		final String iceState = stats.getIceState().toString();
+		final String iceState = getIceStateUiString(stats.getIceState());
 		final int jitter = Math.round((stats.getReceiverInterarrivalJitter() + stats.getSenderInterarrivalJitter()) * 1000.0f);
 		final int packetLoss = Math.round((stats.getReceiverLossRate() + stats.getSenderLossRate()) / 2.0f * 10.0f); // sum of up and down stream loss in per mille
 		final long latePackets = stats.getLatePacketsCumulativeNumber();
@@ -517,6 +519,30 @@ public final class LinphoneManager implements CoreListener
 		} else {
 			mListener.onCallStatsChanged(NetworkQuality.fromFloat(quality), duration, codec, iceState, upload, download,
 					jitter, packetLoss, latePackets, roundTripDelay);
+		}
+	}
+
+	private String getIceStateUiString(final IceState iceState)
+	{
+		if (iceState == null) {
+			return mContext.getString(R.string.linphone_ice_state_none);
+		}
+
+		switch (iceState) {
+		case NotActivated:
+			return mContext.getString(R.string.linphone_ice_state_not_activated);
+		case Failed:
+			return mContext.getString(R.string.linphone_ice_state_failed);
+		case InProgress:
+			return mContext.getString(R.string.linphone_ice_state_in_progress);
+		case HostConnection:
+			return mContext.getString(R.string.linphone_ice_state_host_connection);
+		case ReflexiveConnection:
+			return mContext.getString(R.string.linphone_ice_state_reflexive_connection);
+		case RelayConnection:
+			return mContext.getString(R.string.linphone_ice_state_relay_connection);
+		default:
+			return mContext.getString(R.string.linphone_ice_state_unknown);
 		}
 	}
 
