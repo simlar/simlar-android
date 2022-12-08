@@ -1,4 +1,4 @@
 • Support Android 12
-• Linphone Sdk Update 5.1.66
+• Linphone Sdk Update 5.2.0
 • Validate more international telephone numbers
 • Small improvements and fixes
