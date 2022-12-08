@@ -615,6 +615,7 @@ final class LinphoneHandler
 		case GenericUsb:
 		case Headset:
 		case Headphones:
+		case HearingAid:
 			return AudioOutputType.WIRED_HEADSET;
 		}
 
