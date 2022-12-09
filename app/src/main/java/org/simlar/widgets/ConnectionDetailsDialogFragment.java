@@ -49,6 +49,7 @@ public final class ConnectionDetailsDialogFragment extends DialogFragment
 	private TextView mTextViewPacketLoss = null;
 	private TextView mTextViewLatePackets = null;
 	private TextView mTextViewRoundTripDelay = null;
+	private TextView mTextViewEncryptionDescription = null;
 
 	@NonNull
 	@Override
@@ -80,6 +81,7 @@ public final class ConnectionDetailsDialogFragment extends DialogFragment
 		mTextViewPacketLoss = view.findViewById(R.id.textViewPacketLoss);
 		mTextViewLatePackets = view.findViewById(R.id.textViewLatePackets);
 		mTextViewRoundTripDelay = view.findViewById(R.id.textViewRoundTripDelay);
+		mTextViewEncryptionDescription = view.findViewById(R.id.textViewEncryptionDescription);
 
 		return view;
 	}
@@ -103,5 +105,6 @@ public final class ConnectionDetailsDialogFragment extends DialogFragment
 		mTextViewPacketLoss.setText(getString(R.string.connection_details_dialog_fragment_percent, callConnectionDetails.getPacketLoss()));
 		mTextViewLatePackets.setText(callConnectionDetails.getLatePackets());
 		mTextViewRoundTripDelay.setText(getString(R.string.connection_details_dialog_fragment_milli_seconds, callConnectionDetails.getRoundTripDelay()));
+		mTextViewEncryptionDescription.setText(callConnectionDetails.getEncryptionDescription());
 	}
 }
