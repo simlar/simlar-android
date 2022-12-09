@@ -35,7 +35,8 @@ public interface LinphoneManagerListener
 	void onRegistrationStateChanged(final RegistrationState state);
 
 	void onCallStatsChanged(final NetworkQuality quality, final int callDuration, final String codec, final String iceState,
-	                        final int upload, final int download, final int jitter, final int packetLoss, final long latePackets, final int roundTripDelay);
+	                        final int upload, final int download, final int jitter, final int packetLoss, final long latePackets,
+	                        final int roundTripDelay, final String encryptionDescription);
 
 	void onCallStateChanged(final String number, final State callState, final CallEndReason callEndReason);
 

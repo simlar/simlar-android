@@ -40,13 +40,14 @@ public final class CallConnectionDetails
 	private long mLatePackets = -1;
 	private int mRoundTripDelay = -1;
 	private boolean mEndedCall = false;
+	private String mEncryptionDescription = null;
 
 	public boolean updateCallStats(final NetworkQuality quality, final String codec, final String iceState, final int upload, final int download,
-	                               final int jitter, final int packetLoss, final long latePackets, final int roundTripDelay)
+	                               final int jitter, final int packetLoss, final long latePackets, final int roundTripDelay, final String encryptionDescription)
 	{
 		if (quality == mQuality && Util.equalString(codec, mCodec) && Util.equalString(iceState, mIceState)
 				&& upload == mUpload && download == mDownload && jitter == mJitter && packetLoss == mPacketLoss
-				&& latePackets == mLatePackets && roundTripDelay == mRoundTripDelay)
+				&& latePackets == mLatePackets && roundTripDelay == mRoundTripDelay && Util.equalString(encryptionDescription, mEncryptionDescription))
 		{
 			return false;
 		}
@@ -60,6 +61,7 @@ public final class CallConnectionDetails
 		mPacketLoss = packetLoss;
 		mLatePackets = latePackets;
 		mRoundTripDelay = roundTripDelay;
+		mEncryptionDescription = encryptionDescription;
 
 		return true;
 	}
@@ -124,7 +126,8 @@ public final class CallConnectionDetails
 	{
 		return "quality=" + mQuality + formatIceState() + formatCodec()
 				+ formatValue("upload", mUpload) + formatValue("download", mDownload) + formatValue("jitter", mJitter)
-				+ formatValue("PacketLoss", mPacketLoss) + formatValue("LatePackets", mLatePackets) + formatValue("RoundTripDelay", mRoundTripDelay);
+				+ formatValue("PacketLoss", mPacketLoss) + formatValue("LatePackets", mLatePackets) + formatValue("RoundTripDelay", mRoundTripDelay)
+				+ " encryption=" + mEncryptionDescription;
 	}
 
 	public int getQualityDescription()
@@ -170,5 +173,10 @@ public final class CallConnectionDetails
 	public String getRoundTripDelay()
 	{
 		return String.valueOf(mRoundTripDelay);
+	}
+
+	public String getEncryptionDescription()
+	{
+		return mEncryptionDescription;
 	}
 }

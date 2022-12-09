@@ -488,6 +488,7 @@ public final class LinphoneManager implements CoreListener
 		final int roundTripDelay = Math.round(stats.getRoundTripDelay() * 1000.0f);
 		final String codec = getCodec(call, type);
 		final int duration = call.getDuration();
+		final String encryptionDescription = stats.getZrtpKeyAgreementAlgo() + ' ' + stats.getZrtpHashAlgo() + ' ' + stats.getZrtpCipherAlgo();
 
 		// set quality to unusable if up or download bandwidth is zero
 		final float quality = upload > 0 && download > 0 ? call.getCurrentQuality() : 0;
@@ -503,6 +504,7 @@ public final class LinphoneManager implements CoreListener
 				" latePackets=", latePackets,
 				" roundTripDelay=", roundTripDelay,
 				" codec=", codec,
+				" encryption=", encryptionDescription,
 				" duration=", duration);
 
 		if (type == StreamType.Video) {
@@ -512,7 +514,7 @@ public final class LinphoneManager implements CoreListener
 			}
 		} else {
 			mListener.onCallStatsChanged(NetworkQuality.fromFloat(quality), duration, codec, iceState, upload, download,
-					jitter, packetLoss, latePackets, roundTripDelay);
+					jitter, packetLoss, latePackets, roundTripDelay, encryptionDescription);
 		}
 	}
 

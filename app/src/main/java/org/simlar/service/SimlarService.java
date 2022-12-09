@@ -762,7 +762,8 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 
 	@Override
 	public void onCallStatsChanged(final NetworkQuality quality, final int callDuration, final String codec, final String iceState,
-	                               final int upload, final int download, final int jitter, final int packetLoss, final long latePackets, final int roundTripDelay)
+	                               final int upload, final int download, final int jitter, final int packetLoss, final long latePackets,
+	                               final int roundTripDelay, final String encryptionDescription)
 	{
 		final boolean simlarCallStateChanged = mSimlarCallState.updateCallStats(quality, callDuration);
 
@@ -778,7 +779,7 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 			Lg.v("SimlarCallState staying the same: ", mSimlarCallState);
 		}
 
-		if (!mCallConnectionDetails.updateCallStats(quality, codec, iceState, upload, download, jitter, packetLoss, latePackets, roundTripDelay)) {
+		if (!mCallConnectionDetails.updateCallStats(quality, codec, iceState, upload, download, jitter, packetLoss, latePackets, roundTripDelay, encryptionDescription)) {
 			Lg.v("CallConnectionDetails staying the same: ", mCallConnectionDetails);
 			return;
 		}
