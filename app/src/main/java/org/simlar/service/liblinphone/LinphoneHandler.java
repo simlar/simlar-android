@@ -44,6 +44,7 @@ import org.linphone.core.MediaEncryption;
 import org.linphone.core.NatPolicy;
 import org.linphone.core.Transports;
 import org.linphone.core.VideoActivationPolicy;
+import org.linphone.core.ZrtpKeyAgreement;
 import org.linphone.mediastream.video.capture.hwconf.AndroidCameraConfiguration;
 
 import org.simlar.helper.ServerSettings;
@@ -158,6 +159,12 @@ final class LinphoneHandler
 		mLinphoneCore.setMediaEncryption(MediaEncryption.ZRTP);
 		mLinphoneCore.setZrtpSecretsFile(zrtpSecretsCacheFile);
 		mLinphoneCore.setMediaEncryptionMandatory(true);
+		// limited to seven elements
+		mLinphoneCore.setZrtpKeyAgreementSuites(new ZrtpKeyAgreement[]{
+				ZrtpKeyAgreement.K448Kyb1024Hqc256, ZrtpKeyAgreement.K255Kyb512Hqc128,
+				ZrtpKeyAgreement.K448Kyb1024, ZrtpKeyAgreement.K255Kyb512,
+				ZrtpKeyAgreement.Ec52, ZrtpKeyAgreement.X448, ZrtpKeyAgreement.Dh3K,
+		});
 
 		// set sound files
 		mLinphoneCore.setRingback(ringbackSoundFile);
