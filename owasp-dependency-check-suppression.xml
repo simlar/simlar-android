@@ -38,6 +38,8 @@
         <cve>CVE-2021-37137</cve>
         <cve>CVE-2021-43797</cve>
         <cve>CVE-2022-24823</cve>
+        <cve>CVE-2022-41881</cve>
+        <cve>CVE-2022-41915</cve>
     </suppress>
     <suppress>
         <notes>
@@ -67,14 +69,5 @@
         </notes>
         <packageUrl regex="true">^pkg:maven/com\.google\.code\.gson/gson@.*$</packageUrl>
         <cve>CVE-2022-25647</cve>
-    </suppress>
-    <suppress>
-        <notes>
-            <![CDATA[
-                file name: commons-io-2.4.jar
-            ]]>
-        </notes>
-        <packageUrl regex="true">^pkg:maven/commons\-io/commons\-io@.*$</packageUrl>
-        <cve>CVE-2021-37533</cve>
     </suppress>
 </suppressions>
