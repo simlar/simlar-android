@@ -123,8 +123,8 @@ final class SimlarSSLSocketFactory extends SSLSocketFactory
 
 	private static String[] createProtocols()
 	{
-		try {
-			final String[] deviceSupports = ((SSLSocket) HttpsURLConnection.getDefaultSSLSocketFactory().createSocket()).getSupportedProtocols();
+		try (final SSLSocket socket = (SSLSocket) HttpsURLConnection.getDefaultSSLSocketFactory().createSocket()) {
+			final String[] deviceSupports = socket.getSupportedProtocols();
 			final String[] protocols = getPreferred(PREFERRED_PROTOCOLS, deviceSupports, deviceSupports);
 			Lg.i("using protocols: ", TextUtils.join(", ", protocols));
 			return protocols;
