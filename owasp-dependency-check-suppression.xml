@@ -88,4 +88,26 @@
         <packageUrl regex="true">^pkg:maven/androidx\.legacy/legacy\-support\-core\-utils@.*$</packageUrl>
         <cve>CVE-2021-4277</cve>
     </suppress>
+    <suppress>
+        <notes>
+            <![CDATA[
+                file name: core-0.0.8-alpha08.jar
+            ]]>
+        </notes>
+        <packageUrl regex="true">^pkg:maven/com\.google\.testing\.platform/core@.*$</packageUrl>
+        <cve>CVE-2014-3488</cve>
+        <cve>CVE-2015-2156</cve>
+        <cve>CVE-2019-16869</cve>
+        <cve>CVE-2019-20444</cve>
+        <cve>CVE-2019-20445</cve>
+        <cve>CVE-2021-21290</cve>
+        <cve>CVE-2021-21295</cve>
+        <cve>CVE-2021-21409</cve>
+        <cve>CVE-2021-37136</cve>
+        <cve>CVE-2021-37137</cve>
+        <cve>CVE-2021-43797</cve>
+        <cve>CVE-2022-24823</cve>
+        <cve>CVE-2022-41881</cve>
+        <cve>CVE-2022-41915</cve>
+    </suppress>
 </suppressions>
