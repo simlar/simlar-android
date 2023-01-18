@@ -605,6 +605,7 @@ public final class LinphoneManager implements CoreListener
 	{
 		Lg.w("onDtmfReceived number=", new CallLogger(call), " dtmf=", dtmf);
 	}
+
 	@Override
 	public void onConferenceInfoReceived(@NonNull final Core core, @NonNull final ConferenceInfo conferenceInfo)
 	{
