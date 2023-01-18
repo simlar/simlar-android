@@ -244,8 +244,8 @@ final class LinphoneHandler
 		mLinphoneCore.clearAccounts();
 
 		final AccountParams params = mLinphoneCore.createAccountParams();
-		params.setIdentityAddress(mLinphoneCore.interpretUrl("sip:" + mySimlarId + '@' + ServerSettings.DOMAIN));
-		params.setServerAddress(mLinphoneCore.interpretUrl("sip:" + ServerSettings.DOMAIN));
+		params.setIdentityAddress(mLinphoneCore.interpretUrl("sip:" + mySimlarId + '@' + ServerSettings.DOMAIN, false));
+		params.setServerAddress(mLinphoneCore.interpretUrl("sip:" + ServerSettings.DOMAIN, false));
 		params.setRegisterEnabled(true);
 		params.setExpires(60); // connection times out after 1 minute. This overrides kamailio setting which is 3600 (1 hour).
 		params.setPublishEnabled(false);
@@ -615,6 +615,7 @@ final class LinphoneHandler
 		case GenericUsb:
 		case Headset:
 		case Headphones:
+		case HearingAid:
 			return AudioOutputType.WIRED_HEADSET;
 		}
 

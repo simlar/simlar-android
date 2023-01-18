@@ -138,7 +138,7 @@ connectedCheck.dependsOn dependencyCheckAnalyze
 ext {
     androidSupportVersion = "1.0.0"
     liblinphoneSdk = "linphone-sdk-android-release.aar"
-    liblinphoneVersion = "5.1.66"
+    liblinphoneVersion = "5.2.7"
 }
 
 dependencies {
