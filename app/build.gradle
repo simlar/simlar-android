@@ -25,7 +25,7 @@ plugins {
     id "org.owasp.dependencycheck"
 }
 
-def getGitVersion = { ->
+def createVersionName = { ->
     try {
         if (ignoreGitDirtyVersion()) {
             return "git -C ${rootDir} describe --tags --always".execute().text.trim()
@@ -52,7 +52,7 @@ android {
         applicationId "org.simlar"
         minSdkVersion 23
         targetSdkVersion 33
-        versionName getGitVersion()
+        versionName createVersionName()
         versionCode 75
     }
 
