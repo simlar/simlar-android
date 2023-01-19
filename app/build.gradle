@@ -38,6 +38,17 @@ def createVersionName = { ->
     }
 }
 
+def createVersionCode = { versionName ->
+    try {
+        def (major, minor, patch) = versionName.tokenize('-')[0].tokenize('.').collect{it.toInteger()}
+        //noinspection GroovyOverlyComplexArithmeticExpression
+        return 10000 * major + 100 * minor + patch
+    }
+    catch (ignored) {
+        return 1
+    }
+}
+
 repositories {
     maven {
         url "https://linphone.org/maven_repository/"
@@ -53,7 +64,9 @@ android {
         minSdkVersion 23
         targetSdkVersion 33
         versionName createVersionName()
-        versionCode 75
+        versionCode createVersionCode(versionName)
+        printf ("versionName: $versionName\n")
+        printf ("versionCode: $versionCode\n")
     }
 
     compileOptions {
