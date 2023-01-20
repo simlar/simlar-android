@@ -1,4 +1,4 @@
-• Ünterstützt Android 12
+• Verbesserter Verbindungsaufbau
 • Linphone Sdk Update 5.2.7
 • Validierung von neuen internationalen Telefonnummern
 • Kleinere Verbesserungen und Korrekturen
