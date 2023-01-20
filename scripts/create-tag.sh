@@ -13,8 +13,6 @@ declare -r  BRANCH=${4:-"master"}
 declare -r PROJECT_DIR="$(dirname $(readlink -f $0))/.."
 declare -r BUILD_SCRIPT="${PROJECT_DIR}/scripts/build-and-publish.sh"
 declare -r RUN_WITH_DECRYPTED_PLAYSTORE_CREDENTIALS="${PROJECT_DIR}/scripts/run-with-decrypted-play-store-credentials.sh"
-declare -r UPDATE_VERSION_CODE_SCRIPT="${PROJECT_DIR}/scripts/update-build-gradle-versionCode.sh"
-declare -r APP_BUILD_GRADLE="${PROJECT_DIR}/app/build.gradle"
 
 declare -r SIMLAR_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_BUGFIX}"
 echo "creating tag: '${SIMLAR_VERSION}'"
@@ -30,21 +28,6 @@ git fetch
 git fetch --tags
 git checkout "${BRANCH}"
 git reset "origin/${BRANCH}" --hard
-
-"${UPDATE_VERSION_CODE_SCRIPT}"
-
-git add "${APP_BUILD_GRADLE}"
-git commit -S -m "[gradle] increased versionCode for release ${SIMLAR_VERSION}"
-git push origin "${BRANCH}":"${BRANCH}"
-
-if [ "${BRANCH}" != "master" ] ; then
-	declare -r VERSION_CODE_COMMIT=$(git rev-parse --verify HEAD)
-	git checkout master
-	git pull --rebase
-	git cherry-pick "${VERSION_CODE_COMMIT}"
-	git push origin master
-	git checkout "${BRANCH}"
-fi
 
 git tag -s "${SIMLAR_VERSION}" -m "${COMMENT}"
 git push origin "${SIMLAR_VERSION}"
