@@ -1,4 +1,4 @@
 • Verbesserter Verbindungsaufbau
-• Linphone Sdk Update 5.2.7
+• Linphone Sdk Update 5.2.15
 • Validierung von neuen internationalen Telefonnummern
 • Kleinere Verbesserungen und Korrekturen

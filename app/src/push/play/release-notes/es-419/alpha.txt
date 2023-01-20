@@ -1,4 +1,4 @@
 • Improve Call establishment
-• Linphone Sdk Update 5.2.7
+• Linphone Sdk Update 5.2.15
 • Validate more international telephone numbers
 • Small improvements and fixes
