@@ -159,6 +159,7 @@ final class LinphoneHandler
 		mLinphoneCore.setMediaEncryption(MediaEncryption.ZRTP);
 		mLinphoneCore.setZrtpSecretsFile(zrtpSecretsCacheFile);
 		mLinphoneCore.setMediaEncryptionMandatory(true);
+		Lg.i("Zrtp post quantum encryption available: ", mLinphoneCore.getPostQuantumAvailable() ? "true" : "false");
 		// limited to seven elements
 		mLinphoneCore.setZrtpKeyAgreementSuites(new ZrtpKeyAgreement[]{
 				ZrtpKeyAgreement.K448Kyb1024Hqc256, ZrtpKeyAgreement.K255Kyb512Hqc128,
