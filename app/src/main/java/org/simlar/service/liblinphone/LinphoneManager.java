@@ -403,6 +403,12 @@ public final class LinphoneManager extends CoreListenerStub
 				" encryption=", encryptionDescription,
 				" duration=", duration);
 
+		Lg.i("onCallStatsUpdated: ZrtpAuthTagAlgo=", stats.getZrtpAuthTagAlgo(),
+				" ZrtpCipherAlgo=", stats.getZrtpCipherAlgo(),
+				" ZrtpHashAlgo=", stats.getZrtpHashAlgo(),
+				" ZrtpSasAlgo=", stats.getZrtpSasAlgo(),
+				" ZrtpKeyAgreementAlgo ", stats.getZrtpKeyAgreementAlgo());
+
 		if (type == StreamType.Video) {
 			if (download > 0 && mVideoState == VideoState.INITIALIZING) {
 				Lg.i("detect video playing based on video download bandwidth: ", download);
