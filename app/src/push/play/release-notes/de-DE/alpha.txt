@@ -1,4 +1,5 @@
 • Verschlüsselt mit Post Quantum Cryptographie
+• Unterstützt IPv6
 • Verbesserter Verbindungsaufbau
 • Linphone Sdk Update 5.3.100
 • Validierung von neuen internationalen Telefonnummern

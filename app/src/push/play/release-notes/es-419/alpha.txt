@@ -1,4 +1,5 @@
 • Use post quantum encryption
+• Support IPv6
 • Improve Call establishment
 • Linphone Sdk Update 5.3.100
 • Validate more international telephone numbers
