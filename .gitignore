@@ -15,4 +15,3 @@ app/build/
 ## bootstrap liblinphone
 build.log
 liblinphone/builds/
-app/libs/
