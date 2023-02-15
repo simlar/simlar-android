@@ -164,7 +164,7 @@ final class LinphoneHandler
 		mLinphoneCore.setZrtpKeyAgreementSuites(new ZrtpKeyAgreement[]{
 				ZrtpKeyAgreement.K448Kyb1024Hqc256, ZrtpKeyAgreement.K255Kyb512Hqc128,
 				ZrtpKeyAgreement.K448Kyb1024, ZrtpKeyAgreement.K255Kyb512,
-				ZrtpKeyAgreement.Ec52, ZrtpKeyAgreement.X448, ZrtpKeyAgreement.Dh3K,
+				ZrtpKeyAgreement.Ec52, ZrtpKeyAgreement.X448, ZrtpKeyAgreement.Dh3K
 		});
 
 		// set sound files
