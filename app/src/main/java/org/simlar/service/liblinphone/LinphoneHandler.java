@@ -84,7 +84,7 @@ final class LinphoneHandler
 	}
 
 	public synchronized void initialize(final CoreListener listener, final Context context, final String linphoneInitialConfigFile,
-	                       final String rootCaFile, final String zrtpSecretsCacheFile, final String ringbackSoundFile, final String pauseSoundFile)
+	                                    final String rootCaFile, final String zrtpSecretsCacheFile, final String ringbackSoundFile, final String pauseSoundFile)
 	{
 		if (listener == null) {
 			Lg.e("Error: initialize without listener");
@@ -683,7 +683,7 @@ final class LinphoneHandler
 		}
 
 		for (final AudioDevice audioDevice : mLinphoneCore.getAudioDevices()) {
-			if (fromAudioDeviceType(audioDevice.getType()) == type && audioDevice.hasCapability(AudioDevice.Capabilities.CapabilityPlay))  {
+			if (fromAudioDeviceType(audioDevice.getType()) == type && audioDevice.hasCapability(AudioDevice.Capabilities.CapabilityPlay)) {
 				Lg.i("setCurrentAudioOutputType type=", type, " found: ", audioDevice.getDeviceName(), " with id=", audioDevice.getId());
 				currentCall.setOutputAudioDevice(audioDevice);
 				return;
