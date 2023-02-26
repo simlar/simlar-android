@@ -162,9 +162,19 @@ final class LinphoneHandler
 		Lg.i("Zrtp post quantum encryption available: ", mLinphoneCore.getPostQuantumAvailable() ? "true" : "false");
 		// limited to seven elements
 		mLinphoneCore.setZrtpKeyAgreementSuites(new ZrtpKeyAgreement[]{
-				ZrtpKeyAgreement.K448Kyb1024Hqc256, ZrtpKeyAgreement.K255Kyb512Hqc128,
-				ZrtpKeyAgreement.K448Kyb1024, ZrtpKeyAgreement.K255Kyb512,
-				ZrtpKeyAgreement.Ec52, ZrtpKeyAgreement.X448, ZrtpKeyAgreement.Dh3K
+				//ZrtpKeyAgreement.K255Kyb512Hqc128, // Bernstein Curve25519, Crystal Kyber, Hamming Quasi-Cyclic
+				//ZrtpKeyAgreement.K448Kyb1024Hqc256, // Goldilocks Curve448, Crystal Kyber, Hamming Quasi-Cyclic
+				ZrtpKeyAgreement.K255Kyb512, // Bernstein Curve25519, Crystal Kyber
+				ZrtpKeyAgreement.K448Kyb1024, // Goldilocks Curve448, Crystal Kyber
+				//ZrtpKeyAgreement.K255Hqc128, // Bernstein Curve25519, Hamming Quasi-Cyclic
+				//ZrtpKeyAgreement.K448Hqc256, // Goldilocks Curve448, Hamming Quasi-Cyclic
+				//ZrtpKeyAgreement.Ec52,
+				//ZrtpKeyAgreement.Ec38,
+				//ZrtpKeyAgreement.Ec25,
+				ZrtpKeyAgreement.X255, // Bernstein Curve25519
+				ZrtpKeyAgreement.X448, // Goldilocks Curve448
+				ZrtpKeyAgreement.Dh3K, // Diffie Hellman
+				ZrtpKeyAgreement.Dh2K  // Diffie Hellman
 		});
 
 		// set sound files
