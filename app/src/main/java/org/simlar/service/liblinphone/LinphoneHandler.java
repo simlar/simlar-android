@@ -44,6 +44,7 @@ import org.linphone.core.MediaEncryption;
 import org.linphone.core.NatPolicy;
 import org.linphone.core.Transports;
 import org.linphone.core.VideoActivationPolicy;
+import org.linphone.core.ZrtpKeyAgreement;
 import org.linphone.mediastream.video.capture.hwconf.AndroidCameraConfiguration;
 
 import org.simlar.helper.ServerSettings;
@@ -83,7 +84,7 @@ final class LinphoneHandler
 	}
 
 	public synchronized void initialize(final CoreListener listener, final Context context, final String linphoneInitialConfigFile,
-	                       final String rootCaFile, final String zrtpSecretsCacheFile, final String ringbackSoundFile, final String pauseSoundFile)
+	                                    final String rootCaFile, final String zrtpSecretsCacheFile, final String ringbackSoundFile, final String pauseSoundFile)
 	{
 		if (listener == null) {
 			Lg.e("Error: initialize without listener");
@@ -158,6 +159,23 @@ final class LinphoneHandler
 		mLinphoneCore.setMediaEncryption(MediaEncryption.ZRTP);
 		mLinphoneCore.setZrtpSecretsFile(zrtpSecretsCacheFile);
 		mLinphoneCore.setMediaEncryptionMandatory(true);
+		Lg.i("Zrtp post quantum encryption available: ", mLinphoneCore.getPostQuantumAvailable() ? "true" : "false");
+		// limited to seven elements
+		mLinphoneCore.setZrtpKeyAgreementSuites(new ZrtpKeyAgreement[]{
+				//ZrtpKeyAgreement.K255Kyb512Hqc128, // Bernstein Curve25519, Crystal Kyber, Hamming Quasi-Cyclic
+				//ZrtpKeyAgreement.K448Kyb1024Hqc256, // Goldilocks Curve448, Crystal Kyber, Hamming Quasi-Cyclic
+				ZrtpKeyAgreement.K255Kyb512, // Bernstein Curve25519, Crystal Kyber
+				ZrtpKeyAgreement.K448Kyb1024, // Goldilocks Curve448, Crystal Kyber
+				//ZrtpKeyAgreement.K255Hqc128, // Bernstein Curve25519, Hamming Quasi-Cyclic
+				//ZrtpKeyAgreement.K448Hqc256, // Goldilocks Curve448, Hamming Quasi-Cyclic
+				//ZrtpKeyAgreement.Ec52,
+				//ZrtpKeyAgreement.Ec38,
+				//ZrtpKeyAgreement.Ec25,
+				ZrtpKeyAgreement.X255, // Bernstein Curve25519
+				ZrtpKeyAgreement.X448, // Goldilocks Curve448
+				ZrtpKeyAgreement.Dh3K, // Diffie Hellman
+				ZrtpKeyAgreement.Dh2K  // Diffie Hellman
+		});
 
 		// set sound files
 		mLinphoneCore.setRingback(ringbackSoundFile);
@@ -665,7 +683,7 @@ final class LinphoneHandler
 		}
 
 		for (final AudioDevice audioDevice : mLinphoneCore.getAudioDevices()) {
-			if (fromAudioDeviceType(audioDevice.getType()) == type && audioDevice.hasCapability(AudioDevice.Capabilities.CapabilityPlay))  {
+			if (fromAudioDeviceType(audioDevice.getType()) == type && audioDevice.hasCapability(AudioDevice.Capabilities.CapabilityPlay)) {
 				Lg.i("setCurrentAudioOutputType type=", type, " found: ", audioDevice.getDeviceName(), " with id=", audioDevice.getId());
 				currentCall.setOutputAudioDevice(audioDevice);
 				return;
