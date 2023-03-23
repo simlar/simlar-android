@@ -34,7 +34,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.4.2'
-        classpath "org.owasp:dependency-check-gradle:8.1.2"
+        classpath "org.owasp:dependency-check-gradle:8.2.1"
     }
 }
 
