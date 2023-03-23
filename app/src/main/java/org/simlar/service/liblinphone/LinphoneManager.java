@@ -441,6 +441,12 @@ public final class LinphoneManager implements CoreListener
 	}
 
 	@Override
+	public void onCallReceiveMasterKeyChanged(@NonNull final Core core, @NonNull final Call call, @Nullable final String masterKey)
+	{
+		Lg.w("onCallReceiveMasterKeyChanged=", new CallLogger(call));
+	}
+
+	@Override
 	public void onNewSubscriptionRequested(@NonNull final Core lc, @NonNull final Friend lf, @NonNull final String url)
 	{
 		Lg.w("[", new FriendLogger(lf), "] wants to see your presence status => always accepting");
@@ -516,6 +522,12 @@ public final class LinphoneManager implements CoreListener
 			mListener.onCallStatsChanged(NetworkQuality.fromFloat(quality), duration, codec, iceState, upload, download,
 					jitter, packetLoss, latePackets, roundTripDelay, encryptionDescription);
 		}
+	}
+
+	@Override
+	public void onCallSendMasterKeyChanged(@NonNull final Core core, @NonNull final Call call, @Nullable final String masterKey)
+	{
+		Lg.w("onCallSendMasterKeyChanged=", new CallLogger(call));
 	}
 
 	private String getIceStateUiString(final IceState iceState)
