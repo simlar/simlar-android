@@ -216,10 +216,10 @@
 
     <string name="missed_call_notification">Missed call</string>
 
-    <string name="no_contact_permission_fragment_title">Simlar can\'t access your contacts</string>
-    <string name="no_contact_permission_fragment_request_contacts_permissions_text">By accessing your contacts Simlar automatically detects other Simlar users you can talk to in privacy.</string>
-    <string name="no_contact_permission_fragment_request_contacts_permissions_button">Request permission</string>
-    <string name="no_contact_permission_fragment_call_contact_text">Otherwise, you\'ll have to find other Simlar contacts by trying to call each contact individually.</string>
+    <string name="no_contact_permission_fragment_title">Access to your contacts telephone numbers</string>
+    <string name="no_contact_permission_fragment_request_contacts_permissions_text">Simlar reads the telephone numbers in your address book and sends them to the Simlar Server in order to automatically detect other users. The server does not store these numbers.</string>
+    <string name="no_contact_permission_fragment_request_contacts_permissions_button">I accept</string>
+    <string name="no_contact_permission_fragment_call_contact_text">Otherwise, you could try calling a contact directly.</string>
     <string name="no_contact_permission_fragment_call_contact_button">Call Contact</string>
     <string name="no_contact_permission_fragment_alert_no_simlarId_title">Invalid telephone number</string>
     <string name="no_contact_permission_fragment_alert_no_simlarId_message">The number &lt;b>%1$s&lt;/b> is not usable with Simlar. Choose another contact.</string>

@@ -213,9 +213,9 @@
 
     <string name="missed_call_notification">Verpasster Anruf</string>
 
-    <string name="no_contact_permission_fragment_title">Simlar darf nicht auf deine Kontakte zugreifen</string>
-    <string name="no_contact_permission_fragment_request_contacts_permissions_text">Simlar liest die Nummern in deinem Telefonbuch, um andere Simlar-Nutzer zu finden.</string>
-    <string name="no_contact_permission_fragment_request_contacts_permissions_button">Berechtigung anfordern</string>
+    <string name="no_contact_permission_fragment_title">Zugriff auf die Telefonnummern deiner Kontakte</string>
+    <string name="no_contact_permission_fragment_request_contacts_permissions_text">Simlar liest die Telefonnummern in deinem Telefonbuch und überträgt diese an den Simlar-Server, um andere Nutzer zu finden. Der Server speichert diese Nummern nicht.</string>
+    <string name="no_contact_permission_fragment_request_contacts_permissions_button">Ich stimme zu</string>
     <string name="no_contact_permission_fragment_call_contact_text">Stattdessen kannst du probieren, einen Kontakt direkt anzurufen.</string>
     <string name="no_contact_permission_fragment_call_contact_button">Kontakt anrufen</string>
     <string name="no_contact_permission_fragment_alert_no_simlarId_title">Ungültige Telefonnummer</string>
