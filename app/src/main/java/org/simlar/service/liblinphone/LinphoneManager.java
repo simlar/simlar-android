@@ -25,45 +25,24 @@ import android.text.TextUtils;
 import android.view.TextureView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import java.util.Set;
 
 import org.linphone.core.Account;
 import org.linphone.core.Address;
 import org.linphone.core.AudioDevice;
-import org.linphone.core.AuthInfo;
-import org.linphone.core.AuthMethod;
 import org.linphone.core.Call;
-import org.linphone.core.CallLog;
 import org.linphone.core.CallParams;
 import org.linphone.core.CallStats;
-import org.linphone.core.ChatMessage;
-import org.linphone.core.ChatRoom;
-import org.linphone.core.Conference;
-import org.linphone.core.ConferenceInfo;
 import org.linphone.core.ConfiguringState;
-import org.linphone.core.Content;
 import org.linphone.core.Core;
-import org.linphone.core.Core.LogCollectionUploadState;
-import org.linphone.core.CoreListener;
-import org.linphone.core.EcCalibratorStatus;
+import org.linphone.core.CoreListenerStub;
 import org.linphone.core.ErrorInfo;
-import org.linphone.core.Event;
-import org.linphone.core.Friend;
-import org.linphone.core.FriendList;
-import org.linphone.core.GlobalState;
 import org.linphone.core.IceState;
-import org.linphone.core.InfoMessage;
 import org.linphone.core.PayloadType;
-import org.linphone.core.PresenceModel;
-import org.linphone.core.ProxyConfig;
-import org.linphone.core.PublishState;
 import org.linphone.core.Reason;
 import org.linphone.core.RegistrationState;
 import org.linphone.core.StreamType;
-import org.linphone.core.SubscriptionState;
-import org.linphone.core.VersionUpdateCheckResult;
 
 import org.simlar.R;
 import org.simlar.helper.CallEndReason;
@@ -77,7 +56,7 @@ import org.simlar.logging.Lg;
 import org.simlar.service.AudioOutputType;
 import org.simlar.utils.Util;
 
-public final class LinphoneManager implements CoreListener
+public final class LinphoneManager extends CoreListenerStub
 {
 	private VideoState mVideoState = VideoState.OFF;
 	private final LinphoneHandler mLinphoneHandler = new LinphoneHandler();
@@ -286,28 +265,6 @@ public final class LinphoneManager implements CoreListener
 		}
 	}
 
-	@Lg.Anonymize
-	private static class FriendLogger
-	{
-		private final Friend mFriend;
-
-		FriendLogger(final Friend friend)
-		{
-			mFriend = friend;
-		}
-
-		@NonNull
-		@Override
-		public final String toString()
-		{
-			if (mFriend == null || mFriend.getAddress() == null) {
-				return "";
-			}
-
-			return mFriend.getAddress().asString();
-		}
-	}
-
 	private static String getNumber(final Call call)
 	{
 		if (call == null) {
@@ -320,12 +277,6 @@ public final class LinphoneManager implements CoreListener
 	//
 	// CoreListener overloaded member functions
 	//
-	@SuppressWarnings("deprecation")
-	@Override
-	public void onRegistrationStateChanged(@NonNull final Core lc, @NonNull final ProxyConfig cfg, final RegistrationState state, @NonNull final String message)
-	{
-	}
-
 	@Override
 	public void onAccountRegistrationStateChanged(@NonNull final Core core, @NonNull final Account account, final RegistrationState state, @NonNull final String message)
 	{
@@ -411,60 +362,6 @@ public final class LinphoneManager implements CoreListener
 	}
 
 	@Override
-	public void onMessagesReceived(@NonNull final Core core, @NonNull final ChatRoom chatRoom, @NonNull final ChatMessage[] messages)
-	{
-		Lg.w("onMessagesReceived: ", TextUtils.join(", ", messages));
-	}
-
-	@Override
-	public void onMessageReceived(@NonNull final Core lc, @NonNull final ChatRoom cr, @NonNull final ChatMessage message)
-	{
-		Lg.i("onMessageReceived message=", message);
-	}
-
-	@Override
-	public void onEcCalibrationResult(@NonNull final Core core, final EcCalibratorStatus ecCalibratorStatus, final int i)
-	{
-		Lg.w("onEcCalibrationResult: ecCalibratorStatus=", ecCalibratorStatus, " i=", i);
-	}
-
-	@Override
-	public void onSubscribeReceived(@NonNull final Core core, @NonNull final Event event, @NonNull final String s, @NonNull final Content content)
-	{
-		Lg.w("onSubscribeReceived: event=", event, " s=", s, " content=", content);
-	}
-
-	@Override
-	public void onGlobalStateChanged(@NonNull final Core lc, final GlobalState state, @NonNull final String message)
-	{
-		Lg.i("onGlobalStateChanged state=", state, " message=", message);
-	}
-
-	@Override
-	public void onNewSubscriptionRequested(@NonNull final Core lc, @NonNull final Friend lf, @NonNull final String url)
-	{
-		Lg.w("[", new FriendLogger(lf), "] wants to see your presence status => always accepting");
-	}
-
-	@Override
-	public void onNotifyPresenceReceived(@NonNull final Core lc, @NonNull final Friend lf)
-	{
-		Lg.w("presence received: username=", new FriendLogger(lf));
-	}
-
-	@Override
-	public void onCallIdUpdated(@NonNull final Core core, @NonNull final String previousCallId, @NonNull final String currentCallId)
-	{
-		Lg.w("onCallIdUpdated: previousCallId=", previousCallId, " currentCallId=", currentCallId);
-	}
-
-	@Override
-	public void onEcCalibrationAudioInit(@NonNull final Core core)
-	{
-		Lg.w("onEcCalibrationAudioInit");
-	}
-
-	@Override
 	public void onCallStatsUpdated(@NonNull final Core lc, @NonNull final Call call, final CallStats statsDoNotUse)
 	{
 		final StreamType type = statsDoNotUse.getType();
@@ -542,12 +439,6 @@ public final class LinphoneManager implements CoreListener
 		}
 	}
 
-	@Override
-	public void onFirstCallStarted(@NonNull final Core core)
-	{
-		Lg.w("onFirstCallStarted");
-	}
-
 	private static int getBandwidth(final float bandwidth)
 	{
 		return Math.round(bandwidth / 8.0f * 10.0f); // download bandwidth in 100 Bytes / second
@@ -603,132 +494,12 @@ public final class LinphoneManager implements CoreListener
 	}
 
 	@Override
-	public void onDtmfReceived(@NonNull final Core lc, @NonNull final Call call, final int dtmf)
-	{
-		Lg.w("onDtmfReceived number=", new CallLogger(call), " dtmf=", dtmf);
-	}
-
-	@Override
-	public void onConferenceInfoReceived(@NonNull final Core core, @NonNull final ConferenceInfo conferenceInfo)
-	{
-		Lg.w("onConferenceInfoReceived: ", conferenceInfo);
-	}
-
-	@Override
-	public void onNotifySent(@NonNull final Core core, @NonNull final Event linphoneEvent, @NonNull final Content body)
-	{
-		Lg.w("onNotifySent linphoneEvent=", linphoneEvent, " body=", body);
-	}
-
-	@Override
-	public void onChatRoomEphemeralMessageDeleted(@NonNull final Core lc, @NonNull final ChatRoom chatRoom)
-	{
-		Lg.w("onChatRoomEphemeralMessageDeleted chatRoom=", chatRoom);
-	}
-
-	@Override
-	public void onMessageSent(@NonNull final Core core, @NonNull final ChatRoom chatRoom, @NonNull final ChatMessage chatMessage)
-	{
-		Lg.w("onMessageSent chatRoom=", chatRoom, " chatMessage=", chatMessage);
-	}
-
-	@Override
-	public void onTransferStateChanged(@NonNull final Core lc, @NonNull final Call call, final Call.State state)
-	{
-		Lg.w("onTransferStateChanged number=", new CallLogger(call), " State=", state);
-	}
-
-	@Override
-	public void onInfoReceived(@NonNull final Core lc, @NonNull final Call call, final InfoMessage info)
-	{
-		Lg.w("onInfoReceived number=", new CallLogger(call), " InfoMessage=", info.getContent());
-	}
-
-	@Override
-	public void onChatRoomRead(@NonNull final Core core, @NonNull final ChatRoom chatRoom)
-	{
-		Lg.w("onChatRoomRead chatRoom=", chatRoom);
-	}
-
-	@Override
-	public void onSubscriptionStateChanged(@NonNull final Core lc, final Event ev, final SubscriptionState state)
-	{
-		Lg.w("onSubscriptionStateChanged ev=", ev.getName(), " SubscriptionState=", state);
-	}
-
-	@Override
-	public void onConferenceStateChanged(@NonNull final Core core, @NonNull final Conference conference, final Conference.State state)
-	{
-		Lg.w("onConferenceStateChanged: conference=", conference, " state=", state);
-	}
-
-	@Override
-	public void onCallLogUpdated(@NonNull final Core core, @NonNull final CallLog callLog)
-	{
-		Lg.i("onCallLogUpdated: callLog=", callLog.getStatus());
-	}
-
-	@Override
-	public void onIsComposingReceived(@NonNull final Core lc, final ChatRoom cr)
-	{
-		Lg.w("onIsComposingReceived PeerAddress=", cr.getPeerAddress());
-	}
-
-	@Override
-	public void onMessageReceivedUnableDecrypt(@NonNull final Core core, @NonNull final ChatRoom chatRoom, @NonNull final ChatMessage chatMessage)
-	{
-		Lg.w("onMessageReceivedUnableDecrypt: chatRoom=", chatRoom, " chatMessage=", chatMessage);
-	}
-
-	@Override
 	public void onConfiguringStatus(@NonNull final Core lc, final ConfiguringState state, final String message)
 	{
 		if (state == ConfiguringState.Skipped) {
 			return;
 		}
 		Lg.w("onConfiguringStatus remoteProvisioningState=", state, " message=", message);
-	}
-
-	@Override
-	public void onCallCreated(@NonNull final Core core, @NonNull final Call call)
-	{
-		Lg.i("onCallCreated; call=", new CallLogger(call));
-	}
-
-	@Override
-	public void onPushNotificationReceived(@NonNull final Core core, @Nullable final String payload)
-	{
-		Lg.w("onPushNotificationReceived: ", payload);
-	}
-
-	@Override
-	public void onPublishStateChanged(@NonNull final Core core, @NonNull final Event event, final PublishState publishState)
-	{
-		Lg.w("onPublishStateChanged: event=", event, " publishState=", publishState);
-	}
-
-	@Override
-	public void onCallGoclearAckSent(@NonNull final Core core, @NonNull final Call call)
-	{
-		Lg.w("onCallGoClearAckSent number=", new CallLogger(call));
-	}
-
-	@Override
-	public void onLogCollectionUploadProgressIndication(@NonNull final Core lc, final int offset, final int total)
-	{
-		Lg.w("onLogCollectionUploadProgressIndication: offset=", offset, " total=", total);
-	}
-
-	@Override
-	public void onChatRoomSubjectChanged(@NonNull final Core core, @NonNull final ChatRoom chatRoom)
-	{
-		Lg.w("onChatRoomSubjectChanged chatRoom=", chatRoom);
-	}
-
-	@Override
-	public void onVersionUpdateCheckResultReceived(@NonNull final Core core, @NonNull final VersionUpdateCheckResult versionUpdateCheckResult, final String s, final String s1)
-	{
-		Lg.w("onVersionUpdateCheckResultReceived: versionUpdateCheckResult=", versionUpdateCheckResult, " s=", s, " s1=", s);
 	}
 
 	@Override
@@ -752,89 +523,5 @@ public final class LinphoneManager implements CoreListener
 	{
 		Lg.i("onAudioDeviceChanged: id=", audioDevice.getId(), " type=", audioDevice.getType(), " name=", audioDevice.getDeviceName());
 		mListener.onAudioOutputChanged(mLinphoneHandler.getCurrentAudioOutputType(), mLinphoneHandler.getAvailableAudioOutputTypes());
-	}
-
-	@Override
-	public void onEcCalibrationAudioUninit(@NonNull final Core core)
-	{
-		Lg.w("onEcCalibrationAudioUninit");
-	}
-
-	@Override
-	public void onLogCollectionUploadStateChanged(@NonNull final Core lc, final LogCollectionUploadState state, @NonNull final String info)
-	{
-		Lg.w("onLogCollectionUploadStateChanged: state=", state, " info=", info);
-	}
-
-	@Override
-	public void onFriendListCreated(@NonNull final Core lc, @NonNull final FriendList linphoneFriendList)
-	{
-		Lg.w("onFriendListCreated: linphoneFriendList=", linphoneFriendList);
-	}
-
-	@Override
-	public void onFriendListRemoved(@NonNull final Core lc, @NonNull final FriendList linphoneFriendList)
-	{
-		Lg.w("onFriendListRemoved: linphoneFriendList=", linphoneFriendList);
-	}
-
-	@Override
-	public void onLastCallEnded(@NonNull final Core core)
-	{
-		Lg.w("onLastCallEnded");
-	}
-
-	@Override
-	public void onReferReceived(@NonNull final Core core, @NonNull final String s)
-	{
-		Lg.w("onReferReceived: ", s);
-	}
-
-	@Override
-	public void onQrcodeFound(@NonNull final Core core, final String s)
-	{
-		Lg.w("onQrcodeFound: ", s);
-	}
-
-	@Override
-	public void onImeeUserRegistration(@NonNull final Core core, final boolean status, @NonNull final String userId, @NonNull final String info)
-	{
-		Lg.w("onImeeUserRegistration: status=", Boolean.toString(status), " userId=", userId, " info=", info);
-	}
-
-	@Override
-	public void onNetworkReachable(@NonNull final Core linphoneCore, final boolean b)
-	{
-		Lg.i("onNetworkReachable reachable=", Boolean.toString(b));
-	}
-
-	@Override
-	public void onNotifyReceived(@NonNull final Core core, @NonNull final Event event, @NonNull final String s, @NonNull final Content content)
-	{
-		Lg.w("onNotifyReceived: event=", event, " s=", s, " content=", content);
-	}
-
-	@Override
-	public void onAuthenticationRequested(@NonNull final Core lc, @NonNull final AuthInfo linphoneAuthInfo, @NonNull final AuthMethod authMethod)
-	{
-		Lg.w("onAuthenticationRequested: linphoneAuthInfo=", linphoneAuthInfo, " authMethod=", authMethod);
-	}
-
-	@Override
-	public void onNotifyPresenceReceivedForUriOrTel(@NonNull final Core core, @NonNull final Friend friend, @NonNull final String s, @NonNull final PresenceModel presenceModel)
-	{
-		Lg.w("onNotifyPresenceReceivedForUriOrTel: ", new FriendLogger(friend), " s=", s, " presenceModel=", presenceModel);
-	}
-
-	@Override
-	public void onChatRoomStateChanged(@NonNull final Core core, @NonNull final ChatRoom chatRoom, final ChatRoom.State state)
-	{
-		Lg.w("onChatRoomStateChanged: chatRoom", chatRoom, " state=", state);
-	}
-
-	@Override
-	public void onBuddyInfoUpdated(@NonNull final Core core, @NonNull final Friend friend)
-	{
-		Lg.w("onBuddyInfoUpdated; ", new FriendLogger(friend));
 	}
 }

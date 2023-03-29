@@ -116,13 +116,14 @@ final class LinphoneHandler
 			return;
 		}
 
-		Lg.i("initialize linphone");
+		Lg.i("initialize liblinphone");
 
 		enableDebugMode(false);
 
 		// First instantiate the core Linphone object given only a listener.
 		// The listener will react to events in Linphone core.
 		mLinphoneCore = Factory.instance().createCore(linphoneInitialConfigFile, null, context);
+		Lg.i("liblinphone version: ", mLinphoneCore.getVersion());
 		mLinphoneCore.addListener(listener);
 		mLinphoneCore.start();
 		mLinphoneCore.setUserAgent("Simlar", Version.getVersionName(context));
