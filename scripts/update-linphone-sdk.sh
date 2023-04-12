@@ -8,6 +8,12 @@ declare -r USAGE="Usage example: $0 \"4.4.15\" \"4.4.20\""
 declare -r OLD_VERSION=${1?${USAGE}}
 declare -r NEW_VERSION=${2?${USAGE}}
 
+if [ -d app/libs ] ; then
+  echo "ERROR: app/libs exists e.g.:"
+  echo "  mv app/libs app/libs_${OLD_VERSION}"
+  exit 1
+fi
+
 
 git-create-space-commits.sh "liblinphone ${NEW_VERSION}"
 
@@ -25,6 +31,7 @@ git commit -am "[bootstrap-liblinphone.sh] default to version ${NEW_VERSION}"
 
 
 time docker run --cap-drop all --security-opt=no-new-privileges -it --rm -v $(pwd)-docker-gradle-cache:/home/builder/.gradle -v $(pwd):/pwd -e CMAKE_BUILD_PARALLEL_LEVEL=16 simlar-android-builder:latest bash -c "cd /pwd && ./scripts/bootstrap-liblinphone.sh"
-git add app/libs/
-git commit -m "[liblinphone] rebuild version ${NEW_VERSION}"
-git revert HEAD --no-edit
+
+#git add app/libs/
+#git commit -m "[liblinphone] rebuild version ${NEW_VERSION}"
+#git revert HEAD --no-edit
