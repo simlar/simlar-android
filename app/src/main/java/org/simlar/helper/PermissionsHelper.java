@@ -43,6 +43,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.simlar.R;
+import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
 
 public final class PermissionsHelper
@@ -174,6 +175,13 @@ public final class PermissionsHelper
 	}
 
 	public static boolean needsExternalStoragePermission(final Context context, final Uri uri)
+	{
+		final boolean needsExternalStoragePermission = needsExternalStoragePermissionInternal(context, uri);
+		Lg.i("uri '", uri, "' needsExternalStoragePermission: ", needsExternalStoragePermission);
+		return needsExternalStoragePermission;
+	}
+
+	private static boolean needsExternalStoragePermissionInternal(final Context context, final Uri uri)
 	{
 		if (context == null) {
 			return false;
