@@ -4,20 +4,6 @@
         <notes>
             <![CDATA[
                 file names:
-                  kotlin-reflect-1.3.72.jar
-                  kotlin-stdlib-1.3.72.jar
-                  kotlin-stdlib-common-1.3.72.jar
-                  kotlin-stdlib-jdk7-1.3.72.jar
-                  kotlin-stdlib-jdk8-1.3.72.jar
-            ]]>
-        </notes>
-        <packageUrl regex="true">^pkg:maven/org\.jetbrains\.kotlin/kotlin\-.*@.*$</packageUrl>
-        <cve>CVE-2022-24329</cve>
-    </suppress>
-    <suppress>
-        <notes>
-            <![CDATA[
-                file names:
                     netty-buffer-4.1.34.Final.jar
                     netty-codec-4.1.34.Final.jar
                     netty-codec-http-4.1.34.Final.jar
