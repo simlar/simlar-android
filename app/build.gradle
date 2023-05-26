@@ -151,7 +151,7 @@ connectedCheck.dependsOn dependencyCheckAnalyze
 ext {
     androidSupportVersion = "1.0.0"
     liblinphoneSdk = "linphone-sdk-android-release.aar"
-    liblinphoneVersion = "5.2.50"
+    liblinphoneVersion = "5.2.62"
 }
 
 dependencies {
@@ -169,9 +169,10 @@ dependencies {
     implementation("androidx.legacy:legacy-support-v13:${androidSupportVersion}")
     implementation("com.googlecode.libphonenumber:libphonenumber:8.13.13")
 
-    if (new File("${rootDir}/app/libs/${liblinphoneSdk}").exists()) {
-        println "using local linphone sdk build: ${liblinphoneSdk}"
-        implementation fileTree(dir: "libs", include: ["${liblinphoneSdk}"])
+    def liblinphoneSdkDir = "libs/linphone-sdk/${liblinphoneVersion}"
+    if (new File("${rootDir}/app/${liblinphoneSdkDir}/${liblinphoneSdk}").exists()) {
+        println "using local linphone sdk build: ${liblinphoneSdkDir}"
+        implementation fileTree(dir: "${liblinphoneSdkDir}", include: ["${liblinphoneSdk}"])
     } else {
         debugImplementation("org.linphone:linphone-sdk-android-debug:${liblinphoneVersion}")
         releaseImplementation("org.linphone:linphone-sdk-android:${liblinphoneVersion}")

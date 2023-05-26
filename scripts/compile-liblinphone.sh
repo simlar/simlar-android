@@ -4,7 +4,7 @@
 set -eu -o pipefail
 
 declare -r  BUILD_DIR=${1:?"Please give liblinphone dir as first parameter"}
-declare -r  GIT_HASH=${2:-"unknown"}
+declare -r  VERSION=${2:?"Please specify version as second parameter"}
 
 declare -r PROJECT_DIR="$(dirname $(readlink -f $0))/.."
 
@@ -47,7 +47,7 @@ cd "${PROJECT_DIR}"
 rm -rf app/src/main/jniLibs/
 rm -rf app/libs/
 
-mkdir app/libs/
-unzip -o $(find "${CMAKE_BUILD_DIR}/linphone-sdk/bin/distributions" -maxdepth 1 -name linphone-sdk-android\*.zip) -d app/libs/
+mkdir -p "app/libs/linphone-sdk/${VERSION}"
+unzip -o $(find "${CMAKE_BUILD_DIR}/linphone-sdk/bin/distributions" -maxdepth 1 -name linphone-sdk-android\*.zip) -d "app/libs/linphone-sdk/${VERSION}"
 
-echo "liblinphone build successfull with git hash: ${GIT_HASH}"
+echo "liblinphone build successfull"
