@@ -30,7 +30,7 @@ sed -i "s/${OLD_VERSION}/${NEW_VERSION}/" scripts/bootstrap-liblinphone.sh
 git commit -am "[bootstrap-liblinphone.sh] default to version ${NEW_VERSION}"
 
 
-time docker run --cap-drop all --security-opt=no-new-privileges -it --rm -v $(pwd)-docker-gradle-cache:/home/builder/.gradle -v $(pwd):/pwd -e CMAKE_BUILD_PARALLEL_LEVEL=16 simlar-android-builder:latest bash -c "cd /pwd && ./scripts/bootstrap-liblinphone.sh"
+time docker run --cap-drop all --security-opt=no-new-privileges -it --rm -v $(pwd)-docker-gradle-cache:/home/builder/.gradle -v $(pwd):/pwd -e CMAKE_BUILD_PARALLEL_LEVEL=16 -e JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64 simlar-android-builder:latest bash -c "cd /pwd && ./scripts/bootstrap-liblinphone.sh"
 
 #git add app/libs/
 #git commit -m "[liblinphone] rebuild version ${NEW_VERSION}"
