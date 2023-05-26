@@ -91,7 +91,7 @@ final class SoundEffectManager
 					// in case we do have permissions to read the ringtone
 					try {
 						mediaPlayer.setDataSource(mContext, RingtoneHelper.getDefaultRingtone());
-					} catch (final IOException e) {
+					} catch (final SecurityException e) {
 						Lg.w("[", mType, "] falling back to provided ringtone");
 						mediaPlayer.setDataSource(mContext, createSoundUri(R.raw.ringtone));
 					}
