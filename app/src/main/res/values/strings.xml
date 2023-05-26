@@ -157,8 +157,6 @@
     <string name="permission_explain_text_phone_state_with_phone_number">During registration Simlar may read your telephone number automatically.\nDuring Simlar calls the app watches your phone state to manage incoming regular phone calls.</string>
     <!-- Allow Simlar to access your contacts? -->
     <string name="permission_explain_text_contacts">Simlar reads your contacts data to show the contacts you can talk to privately.</string>
-    <!-- Allow Simlar to access photos, media and files on your device? -->
-    <string name="permission_explain_text_storage">Simlar reads the ringtone of your device if you chose a custom one to play it on incoming Simlar calls.</string>
     <!-- Allow Simlar to take pictures and record video? -->
     <string name="permission_explain_text_camera">Simlar uses your camera during Simlar video calls so that the person you are talking to can see you.</string>
 

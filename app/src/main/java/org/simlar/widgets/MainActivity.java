@@ -45,7 +45,6 @@ import org.simlar.helper.FlavourHelper;
 import org.simlar.helper.GooglePlayServicesHelper;
 import org.simlar.helper.PermissionsHelper;
 import org.simlar.helper.PreferencesHelper;
-import org.simlar.helper.RingtoneHelper;
 import org.simlar.helper.Version;
 import org.simlar.https.UploadLogFile;
 import org.simlar.logging.Lg;
@@ -205,7 +204,6 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 
 		PermissionsHelper.showRationalForMissingMajorPermissions(
 				this,
-				PermissionsHelper.needsExternalStoragePermission(this, RingtoneHelper.getDefaultRingtone()),
 				types -> mRequestPermissionsLauncher.launch(types.toArray(Util.EMPTY_STRING_ARRAY)));
 
 		if (mAdapter.isEmpty()) {

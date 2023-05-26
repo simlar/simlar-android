@@ -36,8 +36,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
@@ -64,8 +62,7 @@ public final class PermissionsHelper
 		PHONE_STATE(
 				Manifest.permission.READ_PHONE_STATE,
 				true,
-				hasPhoneNumbersPermission() ? R.string.permission_explain_text_phone_state : R.string.permission_explain_text_phone_state_with_phone_number),
-		STORAGE(Manifest.permission.READ_EXTERNAL_STORAGE, false, R.string.permission_explain_text_storage);
+				hasPhoneNumbersPermission() ? R.string.permission_explain_text_phone_state : R.string.permission_explain_text_phone_state_with_phone_number);
 
 		private final String mPermission;
 		private final boolean mMajor;
@@ -88,7 +85,7 @@ public final class PermissionsHelper
 			return mRationalMessageId;
 		}
 
-		static Set<Type> getMajorPermissions(final boolean needsExternalStorage)
+		static Set<Type> getMajorPermissions()
 		{
 			final Set<Type> majorTypes = EnumSet.noneOf(Type.class);
 			for (final Type type : values()) {
@@ -96,11 +93,6 @@ public final class PermissionsHelper
 					majorTypes.add(type);
 				}
 			}
-
-			if (needsExternalStorage) {
-				majorTypes.add(STORAGE);
-			}
-
 			return majorTypes;
 		}
 
@@ -145,11 +137,11 @@ public final class PermissionsHelper
 		void requestPermissions(final Set<String> types);
 	}
 
-	public static void showRationalForMissingMajorPermissions(final FragmentActivity activity, final boolean needsExternalStorage, final RequestPermissionsListener listener)
+	public static void showRationalForMissingMajorPermissions(final FragmentActivity activity, final RequestPermissionsListener listener)
 	{
 		final Set<String> requestPermissions = new HashSet<>();
 		final Set<String> rationalMessages = new HashSet<>();
-		for (final Type type : Type.getMajorPermissions(needsExternalStorage)) {
+		for (final Type type : Type.getMajorPermissions()) {
 			if (!hasPermission(activity, type)) {
 				requestPermissions.add(type.getPermission());
 				if (shouldShowRationale(activity, type)) {
@@ -170,31 +162,6 @@ public final class PermissionsHelper
 					.setMessage(TextUtils.join("\n\n", rationalMessages))
 					.setOnDismissListener(dialog -> listener.requestPermissions(requestPermissions))
 					.create().show();
-		}
-	}
-
-	public static boolean needsExternalStoragePermission(final Context context, final Uri uri)
-	{
-		if (context == null) {
-			return false;
-		}
-
-		if (uri == null) {
-			return false;
-		}
-
-		final String path = uri.getPath();
-		if (Util.isNullOrEmpty(path)) {
-			return false;
-		}
-
-		//noinspection OverlyBroadCatchBlock
-		try {
-			final FileInputStream stream = new FileInputStream(path);
-			stream.close();
-			return false;
-		} catch (final IOException e) {
-			return true;
 		}
 	}
 

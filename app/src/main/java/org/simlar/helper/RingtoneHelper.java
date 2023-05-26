@@ -21,8 +21,11 @@
 
 package org.simlar.helper;
 
+import android.content.Context;
 import android.media.RingtoneManager;
 import android.net.Uri;
+
+import org.simlar.logging.Lg;
 
 public final class RingtoneHelper
 {
@@ -31,8 +34,26 @@ public final class RingtoneHelper
 		throw new AssertionError("This class was not meant to be instantiated");
 	}
 
-	public static Uri getDefaultRingtone()
+	private static Uri getActualDefaultRingtoneUri(final Context context)
 	{
-		return RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+		// in case we do have permissions to read the ringtone
+		try {
+			return RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE);
+		} catch (final SecurityException e) {
+			Lg.w("getActualDefaultRingtoneUri failed: ", e);
+			return null;
+		}
+	}
+
+	public static Uri getRingtoneUri(final Context context, final Uri fallbackUri)
+	{
+		final Uri uri = getActualDefaultRingtoneUri(context);
+		if (uri != null) {
+			Lg.i("using Uri for ringtone: ", uri);
+			return uri;
+		}
+
+		Lg.i("using fallback Uri for ringtone: ", fallbackUri);
+		return fallbackUri;
 	}
 }
