@@ -28,8 +28,6 @@ git checkout "${BRANCH}"
 git submodule sync --recursive
 
 
-declare -r GIT_HASH=$(git log -n1 --format="%H")
-
 if [ -d "${LINPHONE_SDK_PATCH_DIR}" ] ; then
 	git am "${LINPHONE_SDK_PATCH_DIR}"/*.patch
 fi
@@ -69,4 +67,4 @@ fi
 
 cd "${PROJECT_DIR}"
 
-"${COMPILE_SCRIPT}" "${BUILD_DIR}" "${GIT_HASH}"
+"${COMPILE_SCRIPT}" "${BUILD_DIR}" "${BRANCH}"
