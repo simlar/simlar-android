@@ -354,6 +354,7 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		registerReceiver(mNetworkChangeReceiver, intentFilter);
 
 		if (PermissionsHelper.isNotificationPolicyAccessGranted(this)) {
+			//noinspection deprecation
 			((TelephonyManager) Util.getSystemService(this, TELEPHONY_SERVICE))
 					.listen(mTelephonyCallStateListener, PhoneStateListener.LISTEN_CALL_STATE);
 		}
@@ -590,6 +591,7 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 
 		stopKeepAwake();
 
+		//noinspection deprecation
 		((TelephonyManager) Util.getSystemService(this, TELEPHONY_SERVICE))
 				.listen(mTelephonyCallStateListener, PhoneStateListener.LISTEN_NONE);
 
@@ -665,6 +667,7 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		}
 
 		Lg.i("NetworkInfo ", ni.getTypeName(), " ", ni.getState());
+		//noinspection deprecation
 		if (ni.isConnected()) {
 			mLinphoneManager.refreshRegisters();
 		}
