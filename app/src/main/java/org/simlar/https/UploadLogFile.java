@@ -168,6 +168,7 @@ public final class UploadLogFile
 		return result;
 	}
 
+	@SuppressWarnings("deprecation")
 	public UploadLogFile(final Context context)
 	{
 		mContext = context;
