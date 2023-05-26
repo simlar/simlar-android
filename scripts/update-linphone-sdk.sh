@@ -8,9 +8,9 @@ declare -r USAGE="Usage example: $0 \"4.4.15\" \"4.4.20\""
 declare -r OLD_VERSION=${1?${USAGE}}
 declare -r NEW_VERSION=${2?${USAGE}}
 
-if [ -d app/libs ] ; then
-  echo "ERROR: app/libs exists e.g.:"
-  echo "  mv app/libs app/libs_${OLD_VERSION}"
+declare -r LIBS_DIRECTRORY="app/libs/linphone-sdk/${NEW_VERSION}"
+if [ -d "${LIBS_DIRECTRORY}" ] ; then
+  echo "ERROR: "${LIBS_DIRECTRORY}" exists"
   exit 1
 fi
 
