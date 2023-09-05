@@ -73,4 +73,14 @@
         <vulnerabilityName>CVE-2020-8908</vulnerabilityName>
         <vulnerabilityName>CVE-2023-2976</vulnerabilityName>
     </suppress>
+    <suppress>
+        <notes>
+            <![CDATA[
+                file name: grpc-*-1.45.1.jar
+            ]]>
+        </notes>
+        <packageUrl regex="true">^pkg:maven/io\.grpc/grpc\-.*@.*$</packageUrl>
+        <vulnerabilityName>CVE-2023-32732</vulnerabilityName>
+        <vulnerabilityName>CVE-2023-33953</vulnerabilityName>
+    </suppress>
 </suppressions>
