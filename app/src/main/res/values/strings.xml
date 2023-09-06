@@ -56,7 +56,7 @@
     <string name="main_activity_tell_a_friend_chooser_title">Invite friends</string>
     <!-- TextSecure messages do not have a subject. WhatsApp puts the subject just in front of the message text. Emails simply use this subject as usual. -->
     <string name="main_activity_tell_a_friend_subject">Simlar</string>
-    <string name="main_activity_tell_a_friend_text">Let\'s make free and encrypted calls with Simlar: https://www.simlar.org/download</string>
+    <string name="main_activity_tell_a_friend_text">Let\’s make free and encrypted calls with Simlar: https://www.simlar.org/download</string>
 
     <string name="upload_log_file_send_email_to_developer">Send email to developer</string>
     <string name="upload_log_file_progress">Uploading log file&#8230;</string>
@@ -110,7 +110,7 @@
     <string name="call_activity_verified_authentication_token">Verified Code: </string>
     <string name="call_activity_please_verify_authentication_token">Does the person you are speaking to have the same code?</string>
     <string name="call_activity_button_authentication_token_verify">safe connection</string>
-    <string name="call_activity_button_authentication_token_wrong">I don\'t care</string>
+    <string name="call_activity_button_authentication_token_wrong">I don\’t care</string>
     <string name="call_activity_connecting_to_server">Connecting to server&#8230;</string>
     <string name="call_activity_connecting_to_server_timed_out">Connecting to server timed out</string>
     <string name="call_activity_outgoing_connecting">Waiting for contact&#8230;</string>
@@ -145,7 +145,7 @@
     <string name="verify_number_activity_phone_number_hint">telephone number</string>
     <string name="verify_number_activity_button_register">Continue</string>
     <string name="verify_number_activity_sms_announcement">In order to register, Simlar will send an SMS to this number during the next step.</string>
-    <string name="verify_number_activity_alert_wrong_number_text">The number you have entered doesn\'t seem to be a telephone number. Check it again.</string>
+    <string name="verify_number_activity_alert_wrong_number_text">The number you have entered doesn\’t seem to be a telephone number. Check it again.</string>
 
     <!-- Allow Simlar to record audio? -->
     <string name="permission_explain_text_record_audio">Simlar uses your microphone during Simlar calls so that the person you are talking to can hear you.</string>
@@ -180,7 +180,7 @@
     <string name="create_account_activity_registration_code_hint">registration code</string>
     <string name="create_account_activity_confirm">Confirm account creation</string>
     <string name="create_account_activity_first_login">First login</string>
-    <string name="create_account_activity_message_wrong_telephone_number">It\'s not possible to create a Simlar account with the number you provided:\n%1$s\n\nTry another number and contact the mailing list.</string>
+    <string name="create_account_activity_message_wrong_telephone_number">It\’s not possible to create a Simlar account with the number you provided:\n%1$s\n\nTry another number and contact the mailing list.</string>
     <string name="create_account_activity_message_sms">We are currently not able to send an SMS to the number you provided:\n%1$s\n\nCheck your number or try again later.</string>
     <string name="create_account_activity_message_sms_not_granted_or_timeout">Simlar sends an SMS to your number:\n%1$s\n\nEnter the registration code:</string>
     <string name="create_account_activity_message_sms_call_success">Simlar calls your number:\n%1$s\n\nEnter the registration code:</string>
@@ -188,7 +188,7 @@
     <string name="create_account_activity_message_registration_code">The registration code is invalid.\n\nTry again.</string>
     <string name="create_account_activity_message_too_many_confirms">Account confirmation is not possible anymore.\n\nStart again.</string>
     <string name="create_account_activity_message_too_many_calls">Calling is not possible anymore.\n\nTry again in 24 hours.</string>
-    <string name="create_account_activity_message_sip_not_possible">Couldn\'t connect to server.\n\nTry again later.</string>
+    <string name="create_account_activity_message_sip_not_possible">Couldn\’t connect to server.\n\nTry again later.</string>
     <string name="create_account_activity_button_cancel">Cancel</string>
     <string name="create_account_activity_button_call">No SMS received?\nGet registration code with call.</string>
     <string name="create_account_activity_button_call_available_in">Get registration code with call.\n(available in %ds)</string>
