@@ -21,6 +21,15 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+## java 11 needed to build linphone sdk
+RUN echo "deb https://deb.debian.org/debian bullseye main"                    > /etc/apt/sources.list.d/bullseye.list && \
+    echo "deb https://deb.debian.org/debian-security bullseye-security main" >> /etc/apt/sources.list.d/bullseye.list && \
+    apt-get update && \
+    apt-get dist-upgrade --assume-yes && \
+    apt-get install --assume-yes --no-install-recommends openjdk-11-jdk-headless && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 RUN useradd --create-home builder
 USER builder
 
