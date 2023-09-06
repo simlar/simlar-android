@@ -56,13 +56,13 @@ repositories {
 }
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
     buildToolsVersion "33.0.1"
 
     defaultConfig {
         applicationId "org.simlar"
         minSdkVersion 23
-        targetSdkVersion 33
+        targetSdkVersion 34
         versionName createVersionName()
         versionCode createVersionCode(versionName)
         printf ("versionName: $versionName\n")
