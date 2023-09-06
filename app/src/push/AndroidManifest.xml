@@ -25,7 +25,6 @@
 
     <application
         android:allowBackup="false"
-        android:extractNativeLibs="true"
         android:fullBackupContent="false"
         tools:ignore="UnusedAttribute">
 
