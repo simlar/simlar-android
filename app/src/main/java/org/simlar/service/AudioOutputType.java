@@ -27,20 +27,23 @@ import org.simlar.R;
 
 public enum AudioOutputType
 {
-	PHONE(R.string.audio_output_type_phone),
-	WIRED_HEADSET(R.string.audio_output_type_wired_headset),
-	SPEAKER(R.string.audio_output_type_speaker),
-	BLUETOOTH(R.string.audio_output_type_bluetooth);
+	PHONE,
+	WIRED_HEADSET,
+	SPEAKER,
+	BLUETOOTH;
 
-	private final int mResourceId;
-
-	AudioOutputType(final int resourceId)
+	private int toDisplayId()
 	{
-		mResourceId = resourceId;
+		return switch (this) {
+			case PHONE -> R.string.audio_output_type_phone;
+			case WIRED_HEADSET -> R.string.audio_output_type_wired_headset;
+			case SPEAKER -> R.string.audio_output_type_speaker;
+			case BLUETOOTH -> R.string.audio_output_type_bluetooth;
+		};
 	}
 
 	public String toDisplayName(final Context context)
 	{
-		return context.getString(mResourceId);
+		return context.getString(toDisplayId());
 	}
 }
