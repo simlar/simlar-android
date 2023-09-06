@@ -41,6 +41,7 @@ public enum SimlarStatus
 			return OFFLINE;
 		case Progress:
 			return CONNECTING;
+		case Refreshing:
 		case Ok:
 			return ONLINE;
 		case Failed:
