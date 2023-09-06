@@ -79,7 +79,7 @@ android {
         }
     }
 
-    flavorDimensions "default"
+    flavorDimensions = [ "default" ]
 
     productFlavors {
         if (useGoogleServices()) {
