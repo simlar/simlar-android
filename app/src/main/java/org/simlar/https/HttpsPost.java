@@ -20,6 +20,8 @@
 
 package org.simlar.https;
 
+import android.os.Build;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -52,6 +54,20 @@ final class HttpsPost
 		throw new AssertionError("This class was not meant to be instantiated");
 	}
 
+	private static String urlEncode(final String value)
+	{
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+			return URLEncoder.encode(value, StandardCharsets.UTF_8);
+		}
+
+		try {
+			return URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
+		} catch (final UnsupportedEncodingException e) {
+			Lg.ex(e, "UnsupportedEncodingException");
+			throw new RuntimeException(e);
+		}
+	}
+
 	private static String createQueryStringForParameters(final Map<String, String> parameters)
 	{
 		final StringBuilder parametersAsQueryString = new StringBuilder();
@@ -65,7 +81,7 @@ final class HttpsPost
 
 				parametersAsQueryString.append(parameter.getKey())
 						.append(PARAMETER_EQUALS_CHAR)
-						.append(URLEncoder.encode(parameter.getValue(), StandardCharsets.UTF_8));
+						.append(urlEncode(parameter.getValue()));
 
 				firstParameter = false;
 			}
