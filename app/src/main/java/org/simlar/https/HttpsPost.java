@@ -28,6 +28,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -62,13 +63,9 @@ final class HttpsPost
 					parametersAsQueryString.append(PARAMETER_DELIMITER);
 				}
 
-				try {
-					parametersAsQueryString.append(parameter.getKey())
-							.append(PARAMETER_EQUALS_CHAR)
-							.append(URLEncoder.encode(parameter.getValue(), "UTF-8"));
-				} catch (final UnsupportedEncodingException e) {
-					Lg.ex(e, "UnsupportedEncodingException");
-				}
+				parametersAsQueryString.append(parameter.getKey())
+						.append(PARAMETER_EQUALS_CHAR)
+						.append(URLEncoder.encode(parameter.getValue(), StandardCharsets.UTF_8));
 
 				firstParameter = false;
 			}
