@@ -122,6 +122,7 @@ public final class PermissionsHelper
 	@FunctionalInterface
 	public interface RequestPermissionListener
 	{
+		@SuppressWarnings("unused")
 		void requestPermission(final String permission);
 	}
 
