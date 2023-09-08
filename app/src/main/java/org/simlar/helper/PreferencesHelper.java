@@ -23,6 +23,7 @@ package org.simlar.helper;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.io.Serial;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -91,6 +92,7 @@ public final class PreferencesHelper
 	@SuppressWarnings("WeakerAccess")
 	public static final class NotInitedException extends IllegalStateException
 	{
+		@Serial
 		private static final long serialVersionUID = 1;
 	}
 
