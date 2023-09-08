@@ -61,6 +61,7 @@ final class HttpsPost
 		}
 
 		try {
+			//noinspection CharsetObjectCanBeUsed
 			return URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
 		} catch (final UnsupportedEncodingException e) {
 			Lg.ex(e, "UnsupportedEncodingException");
