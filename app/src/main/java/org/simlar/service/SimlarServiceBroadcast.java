@@ -25,6 +25,7 @@ import android.content.Intent;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Set;
@@ -33,6 +34,7 @@ import org.simlar.helper.VideoState;
 
 public final class SimlarServiceBroadcast implements Serializable
 {
+	@Serial
 	private static final long serialVersionUID = 1;
 
 	public static final String BROADCAST_NAME = "SimlarServiceBroadcast";
@@ -95,6 +97,7 @@ public final class SimlarServiceBroadcast implements Serializable
 
 	public static class VideoStateChanged implements Parameters
 	{
+		@Serial
 		private static final long serialVersionUID = 1;
 
 		public final VideoState videoState;
@@ -112,6 +115,7 @@ public final class SimlarServiceBroadcast implements Serializable
 
 	public static class AudioOutputChanged implements Parameters
 	{
+		@Serial
 		private static final long serialVersionUID = 1;
 
 		final AudioOutputType currentAudioOutputType;
