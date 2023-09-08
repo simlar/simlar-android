@@ -123,17 +123,7 @@ public final class NoContactPermissionFragment extends Fragment
 		mStartForContactResult.launch(intent);
 	}
 
-	private static class ActivityResultContact
-	{
-		final String name;
-		final String telephoneNumber;
-
-		ActivityResultContact(final String name, final String telephoneNumber)
-		{
-			this.name = name;
-			this.telephoneNumber = telephoneNumber;
-		}
-	}
+	private record ActivityResultContact(String name, String telephoneNumber) {}
 
 	private ActivityResultContact fromData(final Intent data)
 	{
@@ -188,7 +178,7 @@ public final class NoContactPermissionFragment extends Fragment
 			return;
 		}
 
-		callContact(contact.name, contact.telephoneNumber);
+		callContact(contact.name(), contact.telephoneNumber());
 	}
 
 	private void callContact(final String name, final String telephoneNumber)
