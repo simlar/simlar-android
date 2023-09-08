@@ -58,7 +58,6 @@
     <string name="upload_log_file_send_email_to_developer">Entwickler per E-Mail kontaktieren</string>
     <string name="upload_log_file_progress">Bitte warten. Die Logdatei wird hochgeladen&#8230;</string>
 
-    <string name="notification_simlar_status_unknown">unbekannter Status</string>
     <string name="notification_simlar_status_offline">offline</string>
     <string name="notification_simlar_status_connecting">verbinde mit Server</string>
     <string name="notification_simlar_status_online">online</string>

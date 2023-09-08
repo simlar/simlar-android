@@ -26,7 +26,6 @@ import org.simlar.R;
 
 public enum SimlarStatus
 {
-	UNKNOWN,
 	OFFLINE,
 	CONNECTING,
 	ONLINE,
@@ -40,7 +39,6 @@ public enum SimlarStatus
 			case Progress -> CONNECTING;
 			case Refreshing, Ok -> ONLINE;
 			case Failed -> ERROR;
-			default -> UNKNOWN;
 		};
 	}
 
@@ -48,7 +46,7 @@ public enum SimlarStatus
 	{
 		return switch (this) {
 			case ONLINE, ONGOING_CALL -> true;
-			case OFFLINE, CONNECTING, ERROR, UNKNOWN -> false;
+			case OFFLINE, CONNECTING, ERROR -> false;
 		};
 	}
 
@@ -56,7 +54,7 @@ public enum SimlarStatus
 	{
 		return switch (this) {
 			case ONLINE, ONGOING_CALL, CONNECTING -> false;
-			case OFFLINE, ERROR, UNKNOWN -> true;
+			case OFFLINE, ERROR -> true;
 		};
 	}
 
@@ -64,7 +62,7 @@ public enum SimlarStatus
 	{
 		return switch (this) {
 			case ERROR -> true;
-			case ONLINE, ONGOING_CALL, OFFLINE, CONNECTING, UNKNOWN -> false;
+			case ONLINE, ONGOING_CALL, OFFLINE, CONNECTING -> false;
 		};
 	}
 
@@ -72,7 +70,7 @@ public enum SimlarStatus
 	{
 		return switch (this) {
 			case ONLINE, ONGOING_CALL -> R.drawable.ic_notification_ongoing_call;
-			case UNKNOWN, OFFLINE, CONNECTING, ERROR -> R.drawable.ic_notification_offline;
+			case OFFLINE, CONNECTING, ERROR -> R.drawable.ic_notification_offline;
 		};
 	}
 
@@ -83,7 +81,6 @@ public enum SimlarStatus
 			case CONNECTING -> R.string.notification_simlar_status_connecting;
 			case ONLINE, ONGOING_CALL -> R.string.notification_simlar_status_online;
 			case ERROR -> R.string.notification_simlar_status_error;
-			case UNKNOWN -> R.string.notification_simlar_status_unknown;
 		};
 	}
 

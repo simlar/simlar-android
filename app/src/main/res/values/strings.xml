@@ -61,7 +61,6 @@
     <string name="upload_log_file_send_email_to_developer">Send email to developer</string>
     <string name="upload_log_file_progress">Uploading log file&#8230;</string>
 
-    <string name="notification_simlar_status_unknown">unknown status</string>
     <string name="notification_simlar_status_offline">offline</string>
     <string name="notification_simlar_status_connecting">connecting</string>
     <string name="notification_simlar_status_online">online</string>
