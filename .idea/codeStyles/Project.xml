@@ -6,6 +6,7 @@
         <option name="SMART_TABS" value="true" />
       </value>
     </option>
+    <option name="RIGHT_MARGIN" value="140" />
     <JavaCodeStyleSettings>
       <option name="IMPORT_LAYOUT_TABLE">
         <value>
