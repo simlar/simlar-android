@@ -1,4 +1,4 @@
-FROM debian:bullseye
+FROM debian:bookworm
 
 ENV ANDROID_SDK_VERSION "34"
 ENV ANDROID_BUILD_TOOLS_VERSION "34.0.0"
@@ -17,7 +17,16 @@ ENV PATH "${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin:${PATH}"
 RUN apt-get update && \
     apt-get dist-upgrade --assume-yes && \
     apt-get install --assume-yes --no-install-recommends openjdk-17-jdk-headless wget unzip && \
-    apt-get install --assume-yes --no-install-recommends openjdk-11-jdk-headless git cmake make patch pkg-config doxygen nasm yasm python3-pystache python3-six graphicsmagick && \
+    apt-get install --assume-yes --no-install-recommends git cmake make patch pkg-config doxygen nasm yasm python3-pystache python3-six graphicsmagick && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+## java 11 needed to build linphone sdk
+RUN echo "deb https://deb.debian.org/debian bullseye main"                    > /etc/apt/sources.list.d/bullseye.list && \
+    echo "deb https://deb.debian.org/debian-security bullseye-security main" >> /etc/apt/sources.list.d/bullseye.list && \
+    apt-get update && \
+    apt-get dist-upgrade --assume-yes && \
+    apt-get install --assume-yes --no-install-recommends openjdk-11-jdk-headless && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
