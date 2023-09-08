@@ -92,28 +92,19 @@ public class SimlarServiceCommunicator
 
 			// NOTE: the app crashes if the cast fails but I want it this way
 			switch (fsb.getType()) {
-				case SIMLAR_STATUS:
-					onSimlarStatusChanged();
-					return;
-				case SIMLAR_CALL_STATE:
-					onSimlarCallStateChanged();
-					return;
-				case CALL_CONNECTION_DETAILS:
-					onCallConnectionDetailsChanged();
-					return;
-				case VIDEO_STATE:
-					onVideoStateChanged(((SimlarServiceBroadcast.VideoStateChanged) fsb.getParameters()).videoState);
-					return;
-				case AUDIO_STATE:
+				case SIMLAR_STATUS -> onSimlarStatusChanged();
+				case SIMLAR_CALL_STATE -> onSimlarCallStateChanged();
+				case CALL_CONNECTION_DETAILS -> onCallConnectionDetailsChanged();
+				case VIDEO_STATE -> onVideoStateChanged(((SimlarServiceBroadcast.VideoStateChanged) fsb.getParameters()).videoState);
+				case AUDIO_STATE -> {
 					final SimlarServiceBroadcast.AudioOutputChanged audioOutputChanged = (SimlarServiceBroadcast.AudioOutputChanged) fsb.getParameters();
 					onAudioOutputChanged(audioOutputChanged.currentAudioOutputType, audioOutputChanged.availableAudioOutputTypes);
-					return;
-				case SERVICE_FINISHES:
+				}
+				case SERVICE_FINISHES -> {
 					onServiceFinishes();
 					unregister();
-					return;
-				default:
-					Lg.e("Error in onReceive: unknown type");
+				}
+				default -> Lg.e("Error in onReceive: unknown type");
 			}
 		}
 	}
