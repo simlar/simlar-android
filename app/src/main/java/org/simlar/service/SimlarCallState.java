@@ -232,26 +232,17 @@ public final class SimlarCallState
 			return null;
 		}
 
-		switch (mGuiCallState) {
-			case CONNECTING_TO_SERVER:
-				return context.getString(R.string.call_activity_connecting_to_server);
-			case WAITING_FOR_CONTACT:
-				return context.getString(R.string.call_activity_outgoing_connecting);
-			case RINGING:
-				return context.getString(R.string.call_activity_outgoing_ringing);
-			case ENCRYPTING:
-				return context.getString(R.string.call_activity_encrypting);
-			case TALKING:
-				return context.getString(R.string.call_activity_talking);
-			case ENDED:
-				return context.getString(mCallEndReason == null
-						? R.string.call_activity_call_ended_normally
-						: mCallEndReason.getDisplayMessageId());
-			case UNKNOWN:
-			default:
-				Lg.w("getCallStatusDisplayMessage mLinphoneCallState=", mLinphoneCallState);
-				return "";
-		}
+		return switch (mGuiCallState) {
+			case CONNECTING_TO_SERVER -> context.getString(R.string.call_activity_connecting_to_server);
+			case WAITING_FOR_CONTACT -> context.getString(R.string.call_activity_outgoing_connecting);
+			case RINGING -> context.getString(R.string.call_activity_outgoing_ringing);
+			case ENCRYPTING -> context.getString(R.string.call_activity_encrypting);
+			case TALKING -> context.getString(R.string.call_activity_talking);
+			case ENDED -> context.getString(mCallEndReason == null
+					? R.string.call_activity_call_ended_normally
+					: mCallEndReason.getDisplayMessageId());
+			case UNKNOWN -> "";
+		};
 	}
 
 	public String getAuthenticationToken()
