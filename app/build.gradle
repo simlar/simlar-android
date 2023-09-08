@@ -82,6 +82,21 @@ android {
         jniLibs {
             useLegacyPackaging = true
         }
+
+        // Suppress warning: Unable to strip the following libraries, packaging them as they are: ...
+        doNotStrip "**/libZXing.so"
+        doNotStrip "**/libbctoolbox.so"
+        doNotStrip "**/libc++_shared.so"
+        doNotStrip "**/libjsoncpp.so"
+        doNotStrip "**/liblinphone.so"
+        doNotStrip "**/libmediastreamer.so"
+        doNotStrip "**/libmsandroidcamera2.so"
+        doNotStrip "**/libmswebrtc.so"
+        doNotStrip "**/libortp.so"
+        doNotStrip "**/libsrtp2.so"
+        doNotStrip "**/libbctoolbox-tester.so"
+        doNotStrip "**/liblinphonetester.so"
+        doNotStrip "**/libmsaaudio.so"
     }
 
     flavorDimensions = ["default"]
