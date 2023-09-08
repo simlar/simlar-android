@@ -35,98 +35,56 @@ public enum SimlarStatus
 
 	public static SimlarStatus fromRegistrationState(final RegistrationState state)
 	{
-		switch (state) {
-			case None:
-			case Cleared:
-				return OFFLINE;
-			case Progress:
-				return CONNECTING;
-			case Refreshing:
-			case Ok:
-				return ONLINE;
-			case Failed:
-				return ERROR;
-			default:
-				return UNKNOWN;
-		}
+		return switch (state) {
+			case None, Cleared -> OFFLINE;
+			case Progress -> CONNECTING;
+			case Refreshing, Ok -> ONLINE;
+			case Failed -> ERROR;
+			default -> UNKNOWN;
+		};
 	}
 
 	public boolean isConnectedToSipServer()
 	{
-		switch (this) {
-			case ONLINE:
-			case ONGOING_CALL:
-				return true;
-			case OFFLINE:
-			case CONNECTING:
-			case ERROR:
-			case UNKNOWN:
-			default:
-				return false;
-		}
+		return switch (this) {
+			case ONLINE, ONGOING_CALL -> true;
+			case OFFLINE, CONNECTING, ERROR, UNKNOWN -> false;
+		};
 	}
 
 	public boolean isOffline()
 	{
-		switch (this) {
-			case ONLINE:
-			case ONGOING_CALL:
-			case CONNECTING:
-				return false;
-			case OFFLINE:
-			case ERROR:
-			case UNKNOWN:
-			default:
-				return true;
-		}
+		return switch (this) {
+			case ONLINE, ONGOING_CALL, CONNECTING -> false;
+			case OFFLINE, ERROR, UNKNOWN -> true;
+		};
 	}
 
 	public boolean isRegistrationAtSipServerFailed()
 	{
-		switch (this) {
-			case ERROR:
-				return true;
-			case ONLINE:
-			case ONGOING_CALL:
-			case OFFLINE:
-			case CONNECTING:
-			case UNKNOWN:
-			default:
-				return false;
-		}
+		return switch (this) {
+			case ERROR -> true;
+			case ONLINE, ONGOING_CALL, OFFLINE, CONNECTING, UNKNOWN -> false;
+		};
 	}
 
 	public int getNotificationIcon()
 	{
-		switch (this) {
-			case ONLINE:
-			case ONGOING_CALL:
-				return R.drawable.ic_notification_ongoing_call;
-			case UNKNOWN:
-			case OFFLINE:
-			case CONNECTING:
-			case ERROR:
-			default:
-				return R.drawable.ic_notification_offline;
-		}
+		return switch (this) {
+			case ONLINE, ONGOING_CALL -> R.drawable.ic_notification_ongoing_call;
+			case UNKNOWN, OFFLINE, CONNECTING, ERROR -> R.drawable.ic_notification_offline;
+		};
 	}
 
 	public int getNotificationTextId()
 	{
-		switch (this) {
-			case OFFLINE:
-				return R.string.notification_simlar_status_offline;
-			case CONNECTING:
-				return R.string.notification_simlar_status_connecting;
-			case ONLINE:
-			case ONGOING_CALL:
-				return R.string.notification_simlar_status_online;
-			case ERROR:
-				return R.string.notification_simlar_status_error;
-			case UNKNOWN:
-			default:
-				return R.string.notification_simlar_status_unknown;
-		}
+		return switch (this) {
+			case OFFLINE -> R.string.notification_simlar_status_offline;
+			case CONNECTING -> R.string.notification_simlar_status_connecting;
+			case ONLINE, ONGOING_CALL -> R.string.notification_simlar_status_online;
+			case ERROR -> R.string.notification_simlar_status_error;
+			case UNKNOWN -> R.string.notification_simlar_status_unknown;
+		};
 	}
 
 }
