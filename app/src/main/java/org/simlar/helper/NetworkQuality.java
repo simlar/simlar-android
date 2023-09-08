@@ -58,21 +58,14 @@ public enum NetworkQuality
 
 	public int getDescription()
 	{
-		switch (this) {
-			case GOOD:
-				return R.string.network_quality_good;
-			case AVERAGE:
-				return R.string.network_quality_average;
-			case POOR:
-				return R.string.network_quality_poor;
-			case VERY_POOR:
-				return R.string.network_quality_very_poor;
-			case UNUSABLE:
-				return R.string.network_quality_unusable;
-			case UNKNOWN:
-			default:
-				return R.string.network_quality_unknown;
-		}
+		return switch (this) {
+			case GOOD -> R.string.network_quality_good;
+			case AVERAGE -> R.string.network_quality_average;
+			case POOR -> R.string.network_quality_poor;
+			case VERY_POOR -> R.string.network_quality_very_poor;
+			case UNUSABLE -> R.string.network_quality_unusable;
+			case UNKNOWN -> R.string.network_quality_unknown;
+		};
 	}
 
 	public boolean isKnown()
