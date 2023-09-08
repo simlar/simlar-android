@@ -85,8 +85,9 @@ final class SoundEffectManager
 		{
 			try {
 				final MediaPlayer mediaPlayer = new MediaPlayer();
+				//noinspection SwitchStatementDensity
 				switch (mType) {
-					case RINGTONE:
+					case RINGTONE -> {
 						mediaPlayer.setAudioStreamType(AudioManager.STREAM_RING);
 						// in case we do have permissions to read the ringtone
 						try {
@@ -97,24 +98,29 @@ final class SoundEffectManager
 						}
 						mediaPlayer.setLooping(false);
 						return mediaPlayer;
-					case WAITING_FOR_CONTACT:
+					}
+					case WAITING_FOR_CONTACT -> {
 						mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
 						mediaPlayer.setDataSource(mContext, createSoundUri(R.raw.waiting_for_contact));
 						mediaPlayer.setLooping(true);
 						return mediaPlayer;
-					case ENCRYPTION_HANDSHAKE:
+					}
+					case ENCRYPTION_HANDSHAKE -> {
 						mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
 						mediaPlayer.setDataSource(mContext, createSoundUri(R.raw.encryption_handshake));
 						mediaPlayer.setLooping(true);
 						return mediaPlayer;
-					case CALL_INTERRUPTION:
+					}
+					case CALL_INTERRUPTION -> {
 						mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
 						mediaPlayer.setDataSource(mContext, createSoundUri(R.raw.call_interruption));
 						mediaPlayer.setLooping(true);
 						return mediaPlayer;
-					default:
+					}
+					default -> {
 						Lg.e("[", mType, "] unknown type");
 						return null;
+					}
 				}
 			} catch (final IOException e) {
 				Lg.ex(e, "[", mType, "] Media Player IOException");
