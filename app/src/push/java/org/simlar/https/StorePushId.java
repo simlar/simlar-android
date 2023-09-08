@@ -95,8 +95,7 @@ public final class StorePushId
 		if ("error".equalsIgnoreCase(xmlRootElement)
 				&& parser.getAttributeCount() >= 2
 				&& "id".equalsIgnoreCase(parser.getAttributeName(0))
-				&& "message".equalsIgnoreCase(parser.getAttributeName(1)))
-		{
+				&& "message".equalsIgnoreCase(parser.getAttributeName(1))) {
 			Lg.e("server returned error: ", parser.getAttributeValue(1));
 			return false;
 		}
@@ -106,8 +105,7 @@ public final class StorePushId
 				&& "deviceType".equalsIgnoreCase(parser.getAttributeName(0))
 				&& parser.getAttributeValue(0).equals(Integer.toString(DEVICE_TYPE_ANDROID))
 				&& "pushId".equalsIgnoreCase(parser.getAttributeName(1))
-				&& parser.getAttributeValue(1).equals(pushId))
-		{
+				&& parser.getAttributeValue(1).equals(pushId)) {
 			return true;
 		}
 

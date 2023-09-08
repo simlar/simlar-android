@@ -40,7 +40,7 @@ def createVersionName = { ->
 
 def createVersionCode = { versionName ->
     try {
-        def (major, minor, patch) = versionName.tokenize('-')[0].tokenize('.').collect{it.toInteger()}
+        def (major, minor, patch) = versionName.tokenize('-')[0].tokenize('.').collect { it.toInteger() }
         //noinspection GroovyOverlyComplexArithmeticExpression
         return 10000 * major + 100 * minor + patch
     }
@@ -64,8 +64,8 @@ android {
         buildToolsVersion = "34.0.0"
         versionName createVersionName()
         versionCode createVersionCode(versionName)
-        printf ("versionName: $versionName\n")
-        printf ("versionCode: $versionCode\n")
+        printf("versionName: $versionName\n")
+        printf("versionCode: $versionCode\n")
     }
 
     compileOptions {
@@ -79,7 +79,7 @@ android {
         }
     }
 
-    flavorDimensions = [ "default" ]
+    flavorDimensions = ["default"]
 
     productFlavors {
         if (useGoogleServices()) {

@@ -216,7 +216,7 @@ public final class RingingActivity extends AppCompatActivity
 		contactName.setText(simlarCallState.getContactName());
 	}
 
-	@SuppressWarnings({"unused", "RedundantSuppression"})
+	@SuppressWarnings({ "unused", "RedundantSuppression" })
 	public void pickUp(final View view)
 	{
 		mCommunicator.getService().pickUp();
@@ -224,7 +224,7 @@ public final class RingingActivity extends AppCompatActivity
 		finish();
 	}
 
-	@SuppressWarnings({"unused", "RedundantSuppression"})
+	@SuppressWarnings({ "unused", "RedundantSuppression" })
 	public void terminateCall(final View view)
 	{
 		mCommunicator.getService().terminateCall();

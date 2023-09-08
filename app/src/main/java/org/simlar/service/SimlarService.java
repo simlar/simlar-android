@@ -667,7 +667,8 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 	}
 
 	@SuppressLint("UnspecifiedImmutableFlag")
-	private static PendingIntent getPendingIntent(final Context context, final Intent startIntent) {
+	private static PendingIntent getPendingIntent(final Context context, final Intent startIntent)
+	{
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
 			return PendingIntent.getBroadcast(context, 0, startIntent, PendingIntent.FLAG_MUTABLE);
 		} else {
@@ -895,7 +896,8 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		});
 	}
 
-	private boolean isScreenLocked() {
+	private boolean isScreenLocked()
+	{
 		final KeyguardManager keyguardManager = Util.getSystemService(this, Context.KEYGUARD_SERVICE);
 		return keyguardManager.inKeyguardRestrictedInputMode();
 	}

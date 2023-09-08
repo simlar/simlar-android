@@ -95,8 +95,7 @@ public final class GetContactsStatus
 		if ("error".equalsIgnoreCase(xmlRootElement)
 				&& parser.getAttributeCount() >= 2
 				&& "id".equalsIgnoreCase(parser.getAttributeName(0))
-				&& "message".equalsIgnoreCase(parser.getAttributeName(1)))
-		{
+				&& "message".equalsIgnoreCase(parser.getAttributeName(1))) {
 			Lg.e("server returned error: ", parser.getAttributeValue(1));
 			return null;
 		}
@@ -115,8 +114,7 @@ public final class GetContactsStatus
 			if (!"contact".equalsIgnoreCase(parser.getName())
 					|| parser.getAttributeCount() < 2
 					|| !"id".equalsIgnoreCase(parser.getAttributeName(0))
-					|| !"status".equalsIgnoreCase(parser.getAttributeName(1)))
-			{
+					|| !"status".equalsIgnoreCase(parser.getAttributeName(1))) {
 				continue;
 			}
 

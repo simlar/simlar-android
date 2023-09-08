@@ -378,7 +378,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 		mHandler.postDelayed(this::updateCallButton, 1000);
 	}
 
-	@SuppressWarnings({"unused", "RedundantSuppression"})
+	@SuppressWarnings({ "unused", "RedundantSuppression" })
 	public void onCancelClicked(final View view)
 	{
 		Lg.i("onCancelClicked");
@@ -386,7 +386,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 		finish();
 	}
 
-	@SuppressWarnings({"unused", "RedundantSuppression"})
+	@SuppressWarnings({ "unused", "RedundantSuppression" })
 	public void onCallClicked(final View view)
 	{
 		Lg.i("onCallClicked");
@@ -416,7 +416,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 		});
 	}
 
-	@SuppressWarnings({"unused", "RedundantSuppression"})
+	@SuppressWarnings({ "unused", "RedundantSuppression" })
 	public void onConfirmClicked(final View view)
 	{
 		Lg.i("onConfirmClicked");

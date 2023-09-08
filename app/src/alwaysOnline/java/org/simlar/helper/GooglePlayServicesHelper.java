@@ -30,12 +30,12 @@ public final class GooglePlayServicesHelper
 		throw new AssertionError("This class was not meant to be instantiated");
 	}
 
-	@SuppressWarnings({"EmptyMethod", "UnusedParameters"})
+	@SuppressWarnings({ "EmptyMethod", "UnusedParameters" })
 	public static void refreshTokenOnServer()
 	{
 	}
 
-	@SuppressWarnings({"EmptyMethod", "UnusedParameters"})
+	@SuppressWarnings({ "EmptyMethod", "UnusedParameters" })
 	public static void checkPlayServices(final AppCompatActivity activity)
 	{
 	}

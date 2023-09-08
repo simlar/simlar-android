@@ -553,13 +553,13 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		}, milliSeconds);
 	}
 
-	@SuppressWarnings({"unused", "RedundantSuppression"})
+	@SuppressWarnings({ "unused", "RedundantSuppression" })
 	public void verifyAuthenticationToken(final View view)
 	{
 		mCommunicator.getService().verifyAuthenticationTokenOfCurrentCall(true);
 	}
 
-	@SuppressWarnings({"unused", "RedundantSuppression"})
+	@SuppressWarnings({ "unused", "RedundantSuppression" })
 	public void wrongAuthenticationToken(final View view)
 	{
 		mCommunicator.getService().verifyAuthenticationTokenOfCurrentCall(false);
@@ -567,7 +567,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mLayoutAuthenticationToken.setVisibility(View.GONE);
 	}
 
-	@SuppressWarnings({"unused", "RedundantSuppression"})
+	@SuppressWarnings({ "unused", "RedundantSuppression" })
 	public void showConnectionDetails(final View view)
 	{
 		if (mConnectionDetailsDialogFragment == null) {
@@ -579,7 +579,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		}
 	}
 
-	@SuppressWarnings({"unused", "RedundantSuppression"})
+	@SuppressWarnings({ "unused", "RedundantSuppression" })
 	public void toggleVideoClicked(final View view)
 	{
 		if (mVideoFragment == null) {
@@ -594,7 +594,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		}
 	}
 
-	@SuppressWarnings({"unused", "RedundantSuppression"})
+	@SuppressWarnings({ "unused", "RedundantSuppression" })
 	public void showSoundSettingsDialog(final View view)
 	{
 		new VolumesControlDialogFragment().show(getSupportFragmentManager(), VolumesControlDialogFragment.class.getCanonicalName());
@@ -700,14 +700,14 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mCommunicator.getService().setEchoLimiter(enabled);
 	}
 
-	@SuppressWarnings({"unused", "RedundantSuppression"})
+	@SuppressWarnings({ "unused", "RedundantSuppression" })
 	public void toggleMicrophoneMuted(final View view)
 	{
 		mCommunicator.getService().toggleMicrophoneMuted();
 		setButtonMicrophoneMute();
 	}
 
-	@SuppressWarnings({"unused", "RedundantSuppression"})
+	@SuppressWarnings({ "unused", "RedundantSuppression" })
 	public void toggleSpeakerMuted(final View view)
 	{
 		if (mCurrentAudioOutputType == AudioOutputType.PHONE) {
@@ -738,7 +738,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		}
 	}
 
-	@SuppressWarnings({"unused", "RedundantSuppression"})
+	@SuppressWarnings({ "unused", "RedundantSuppression" })
 	public void terminateCall(final View view)
 	{
 		final SimlarService service = mCommunicator.getService();

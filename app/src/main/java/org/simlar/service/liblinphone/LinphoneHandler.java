@@ -162,7 +162,7 @@ final class LinphoneHandler
 		mLinphoneCore.setMediaEncryptionMandatory(true);
 		Lg.i("Zrtp post quantum encryption available: ", mLinphoneCore.getPostQuantumAvailable() ? "true" : "false");
 		// limited to seven elements
-		mLinphoneCore.setZrtpKeyAgreementSuites(new ZrtpKeyAgreement[]{
+		mLinphoneCore.setZrtpKeyAgreementSuites(new ZrtpKeyAgreement[] {
 				//ZrtpKeyAgreement.K255Kyb512Hqc128, // Bernstein Curve25519, Crystal Kyber, Hamming Quasi-Cyclic
 				//ZrtpKeyAgreement.K448Kyb1024Hqc256, // Goldilocks Curve448, Crystal Kyber, Hamming Quasi-Cyclic
 				ZrtpKeyAgreement.K255Kyb512, // Bernstein Curve25519, Crystal Kyber
