@@ -24,30 +24,38 @@ import org.simlar.R;
 
 public enum CreateAccountMessage
 {
-	WRONG_TELEPHONE_NUMBER(R.string.create_account_activity_message_wrong_telephone_number, true, false),
-	SMS(R.string.create_account_activity_message_sms, true, true),
-	SMS_NOT_GRANTED_OR_TIMEOUT(R.string.create_account_activity_message_sms_not_granted_or_timeout, true, true),
-	SMS_CALL_SUCCESS(R.string.create_account_activity_message_sms_call_success, true, true),
-	NOT_POSSIBLE(R.string.create_account_activity_message_not_possible, false, false),
-	REGISTRATION_CODE(R.string.create_account_activity_message_registration_code, false, true),
-	TOO_MANY_CONFIRMS(R.string.create_account_activity_message_too_many_confirms, false, false),
-	TOO_MANY_CALLS(R.string.create_account_activity_message_too_many_calls, false, true),
-	SIP_NOT_POSSIBLE(R.string.create_account_activity_message_sip_not_possible, false, false);
+	WRONG_TELEPHONE_NUMBER(true, false),
+	SMS(true, true),
+	SMS_NOT_GRANTED_OR_TIMEOUT(true, true),
+	SMS_CALL_SUCCESS(true, true),
+	NOT_POSSIBLE(false, false),
+	REGISTRATION_CODE(false, true),
+	TOO_MANY_CONFIRMS(false, false),
+	TOO_MANY_CALLS(false, true),
+	SIP_NOT_POSSIBLE(false, false);
 
-	final int resourceId;
 	final boolean telephoneNumber;
 	final boolean registrationCodeInputVisible;
 
-	CreateAccountMessage(final int resourceId, final boolean telephoneNumber, final boolean registrationCodeInputVisible)
+	CreateAccountMessage(final boolean telephoneNumber, final boolean registrationCodeInputVisible)
 	{
-		this.resourceId = resourceId;
 		this.telephoneNumber = telephoneNumber;
 		this.registrationCodeInputVisible = registrationCodeInputVisible;
 	}
 
 	public int getResourceId()
 	{
-		return resourceId;
+		return switch (this) {
+			case WRONG_TELEPHONE_NUMBER -> R.string.create_account_activity_message_wrong_telephone_number;
+			case SMS -> R.string.create_account_activity_message_sms;
+			case SMS_NOT_GRANTED_OR_TIMEOUT -> R.string.create_account_activity_message_sms_not_granted_or_timeout;
+			case SMS_CALL_SUCCESS -> R.string.create_account_activity_message_sms_call_success;
+			case NOT_POSSIBLE -> R.string.create_account_activity_message_not_possible;
+			case REGISTRATION_CODE -> R.string.create_account_activity_message_registration_code;
+			case TOO_MANY_CONFIRMS -> R.string.create_account_activity_message_too_many_confirms;
+			case TOO_MANY_CALLS -> R.string.create_account_activity_message_too_many_calls;
+			case SIP_NOT_POSSIBLE -> R.string.create_account_activity_message_sip_not_possible;
+		};
 	}
 
 	public boolean isTelephoneNumber()
