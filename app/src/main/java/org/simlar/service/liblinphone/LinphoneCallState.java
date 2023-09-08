@@ -62,49 +62,49 @@ public enum LinphoneCallState
 		}
 
 		switch (state) {
-		case Idle:
-			return IDLE;
-		case IncomingReceived:
-		case PushIncomingReceived:
-			return INCOMING_RECEIVED;
-		case OutgoingInit:
-			return OUTGOING_INIT;
-		case OutgoingProgress:
-			return OUTGOING_PROGRESS;
-		case OutgoingRinging:
-			return OUTGOING_RINGING;
-		case OutgoingEarlyMedia:
-			return OUTGOING_EARLY_MEDIA;
-		case Connected:
-			return CONNECTED;
-		case StreamsRunning:
-			return STREAMS_RUNNING;
-		case Pausing:
-			return PAUSING;
-		case Paused:
-			return PAUSED;
-		case Resuming:
-			return RESUMING;
-		case Referred:
-			return REFERED;
-		case Error:
-			return ERROR;
-		case End:
-			return CALL_END;
-		case PausedByRemote:
-			return PAUSED_BY_REMOTE;
-		case UpdatedByRemote:
-			return UPDATED_BY_REMOTE;
-		case IncomingEarlyMedia:
-			return INCOMING_EARLY_MEDIA;
-		case Updating:
-			return UPDATING;
-		case Released:
-			return RELEASED;
-		case EarlyUpdatedByRemote:
-			return EARLY_UPDATED_BY_REMOTE;
-		case EarlyUpdating:
-			return EARLY_UPDATING;
+			case Idle:
+				return IDLE;
+			case IncomingReceived:
+			case PushIncomingReceived:
+				return INCOMING_RECEIVED;
+			case OutgoingInit:
+				return OUTGOING_INIT;
+			case OutgoingProgress:
+				return OUTGOING_PROGRESS;
+			case OutgoingRinging:
+				return OUTGOING_RINGING;
+			case OutgoingEarlyMedia:
+				return OUTGOING_EARLY_MEDIA;
+			case Connected:
+				return CONNECTED;
+			case StreamsRunning:
+				return STREAMS_RUNNING;
+			case Pausing:
+				return PAUSING;
+			case Paused:
+				return PAUSED;
+			case Resuming:
+				return RESUMING;
+			case Referred:
+				return REFERED;
+			case Error:
+				return ERROR;
+			case End:
+				return CALL_END;
+			case PausedByRemote:
+				return PAUSED_BY_REMOTE;
+			case UpdatedByRemote:
+				return UPDATED_BY_REMOTE;
+			case IncomingEarlyMedia:
+				return INCOMING_EARLY_MEDIA;
+			case Updating:
+				return UPDATING;
+			case Released:
+				return RELEASED;
+			case EarlyUpdatedByRemote:
+				return EARLY_UPDATED_BY_REMOTE;
+			case EarlyUpdating:
+				return EARLY_UPDATING;
 		}
 
 		Lg.e("ERROR: fromLinphoneCallState failed state=", state);
@@ -162,38 +162,38 @@ public enum LinphoneCallState
 		}
 
 		switch (this) {
-		case CALL_END:
-		case ERROR:
-		case RELEASED:
-			return String.format(context.getString(R.string.linphone_call_state_notification_ended), simlarId);
-		case INCOMING_RECEIVED:
-		case INCOMING_EARLY_MEDIA:
-			return context.getString(R.string.linphone_call_state_notification_receiving_call);
-		case CONNECTED:
-		case STREAMS_RUNNING:
-		case UPDATED_BY_REMOTE:
-		case UPDATING:
-		case EARLY_UPDATED_BY_REMOTE:
-		case EARLY_UPDATING:
-			return String.format(context.getString(R.string.linphone_call_state_notification_talking), simlarId);
-		case OUTGOING_INIT:
-		case OUTGOING_EARLY_MEDIA:
-		case OUTGOING_PROGRESS:
-		case OUTGOING_RINGING:
-			return String.format(context.getString(R.string.linphone_call_state_notification_calling), simlarId);
-		case PAUSED:
-		case PAUSED_BY_REMOTE:
-		case PAUSING:
-			return String.format(context.getString(R.string.linphone_call_state_notification_paused), simlarId);
-		case RESUMING:
-			return String.format(context.getString(R.string.linphone_call_state_notification_resuming), simlarId);
-		case REFERED:
-			Lg.w("createNotificationText falling back to initializing for SimlarCallState=", this);
-			//$FALL-THROUGH$
-		case UNKNOWN:
-		case IDLE:
-		default:
-			return context.getString(R.string.linphone_call_state_notification_initializing);
+			case CALL_END:
+			case ERROR:
+			case RELEASED:
+				return String.format(context.getString(R.string.linphone_call_state_notification_ended), simlarId);
+			case INCOMING_RECEIVED:
+			case INCOMING_EARLY_MEDIA:
+				return context.getString(R.string.linphone_call_state_notification_receiving_call);
+			case CONNECTED:
+			case STREAMS_RUNNING:
+			case UPDATED_BY_REMOTE:
+			case UPDATING:
+			case EARLY_UPDATED_BY_REMOTE:
+			case EARLY_UPDATING:
+				return String.format(context.getString(R.string.linphone_call_state_notification_talking), simlarId);
+			case OUTGOING_INIT:
+			case OUTGOING_EARLY_MEDIA:
+			case OUTGOING_PROGRESS:
+			case OUTGOING_RINGING:
+				return String.format(context.getString(R.string.linphone_call_state_notification_calling), simlarId);
+			case PAUSED:
+			case PAUSED_BY_REMOTE:
+			case PAUSING:
+				return String.format(context.getString(R.string.linphone_call_state_notification_paused), simlarId);
+			case RESUMING:
+				return String.format(context.getString(R.string.linphone_call_state_notification_resuming), simlarId);
+			case REFERED:
+				Lg.w("createNotificationText falling back to initializing for SimlarCallState=", this);
+				//$FALL-THROUGH$
+			case UNKNOWN:
+			case IDLE:
+			default:
+				return context.getString(R.string.linphone_call_state_notification_initializing);
 		}
 	}
 }

@@ -40,55 +40,55 @@ public enum CallEndReason
 		}
 
 		switch (reason) {
-		case Declined:
-			return DECLINED;
-		case NotFound:
-			return OFFLINE;
-		case NotImplemented:
-		case NotAcceptable:
-		case UnsupportedContent:
-			return UNSUPPORTED_MEDIA;
-		case Busy:
-			return BUSY;
-		case Transferred:
-		case BadEvent:
-		case SessionIntervalTooSmall:
-		case None:
-		case NoResponse:
-		case Forbidden:
-		case NotAnswered:
-		case IOError:
-		case DoNotDisturb:
-		case Unauthorized:
-		case NoMatch:
-		case MovedPermanently:
-		case Gone:
-		case TemporarilyUnavailable:
-		case AddressIncomplete:
-		case BadGateway:
-		case ServerTimeout:
-		case Unknown:
-		default:
-			return NONE;
+			case Declined:
+				return DECLINED;
+			case NotFound:
+				return OFFLINE;
+			case NotImplemented:
+			case NotAcceptable:
+			case UnsupportedContent:
+				return UNSUPPORTED_MEDIA;
+			case Busy:
+				return BUSY;
+			case Transferred:
+			case BadEvent:
+			case SessionIntervalTooSmall:
+			case None:
+			case NoResponse:
+			case Forbidden:
+			case NotAnswered:
+			case IOError:
+			case DoNotDisturb:
+			case Unauthorized:
+			case NoMatch:
+			case MovedPermanently:
+			case Gone:
+			case TemporarilyUnavailable:
+			case AddressIncomplete:
+			case BadGateway:
+			case ServerTimeout:
+			case Unknown:
+			default:
+				return NONE;
 		}
 	}
 
 	public int getDisplayMessageId()
 	{
 		switch (this) {
-		case DECLINED:
-			return R.string.call_activity_call_ended_because_declined;
-		case OFFLINE:
-			return R.string.call_activity_call_ended_because_user_offline;
-		case UNSUPPORTED_MEDIA:
-			return R.string.call_activity_call_ended_because_incompatible_media;
-		case BUSY:
-			return R.string.call_activity_call_ended_because_user_busy;
-		case SERVER_CONNECTION_TIMEOUT:
-			return R.string.call_activity_connecting_to_server_timed_out;
-		case NONE:
-		default:
-			return R.string.call_activity_call_ended_normally;
+			case DECLINED:
+				return R.string.call_activity_call_ended_because_declined;
+			case OFFLINE:
+				return R.string.call_activity_call_ended_because_user_offline;
+			case UNSUPPORTED_MEDIA:
+				return R.string.call_activity_call_ended_because_incompatible_media;
+			case BUSY:
+				return R.string.call_activity_call_ended_because_user_busy;
+			case SERVER_CONNECTION_TIMEOUT:
+				return R.string.call_activity_connecting_to_server_timed_out;
+			case NONE:
+			default:
+				return R.string.call_activity_call_ended_normally;
 		}
 	}
 }

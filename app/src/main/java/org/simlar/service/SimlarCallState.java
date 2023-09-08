@@ -233,24 +233,24 @@ public final class SimlarCallState
 		}
 
 		switch (mGuiCallState) {
-		case CONNECTING_TO_SERVER:
-			return context.getString(R.string.call_activity_connecting_to_server);
-		case WAITING_FOR_CONTACT:
-			return context.getString(R.string.call_activity_outgoing_connecting);
-		case RINGING:
-			return context.getString(R.string.call_activity_outgoing_ringing);
-		case ENCRYPTING:
-			return context.getString(R.string.call_activity_encrypting);
-		case TALKING:
-			return context.getString(R.string.call_activity_talking);
-		case ENDED:
-			return context.getString(mCallEndReason == null
-					? R.string.call_activity_call_ended_normally
-					: mCallEndReason.getDisplayMessageId());
-		case UNKNOWN:
-		default:
-			Lg.w("getCallStatusDisplayMessage mLinphoneCallState=", mLinphoneCallState);
-			return "";
+			case CONNECTING_TO_SERVER:
+				return context.getString(R.string.call_activity_connecting_to_server);
+			case WAITING_FOR_CONTACT:
+				return context.getString(R.string.call_activity_outgoing_connecting);
+			case RINGING:
+				return context.getString(R.string.call_activity_outgoing_ringing);
+			case ENCRYPTING:
+				return context.getString(R.string.call_activity_encrypting);
+			case TALKING:
+				return context.getString(R.string.call_activity_talking);
+			case ENDED:
+				return context.getString(mCallEndReason == null
+						? R.string.call_activity_call_ended_normally
+						: mCallEndReason.getDisplayMessageId());
+			case UNKNOWN:
+			default:
+				Lg.w("getCallStatusDisplayMessage mLinphoneCallState=", mLinphoneCallState);
+				return "";
 		}
 	}
 

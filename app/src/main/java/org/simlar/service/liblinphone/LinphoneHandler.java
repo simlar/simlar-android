@@ -434,18 +434,18 @@ final class LinphoneHandler
 	private static int convertLogLevel(final LogLevel logLevel)
 	{
 		switch (logLevel) {
-		case Debug:
-			return Log.VERBOSE;
-		case Trace:
-			return Log.DEBUG;
-		case Message:
-			return Log.INFO;
-		case Warning:
-			return Log.WARN;
-		case Error:
-		case Fatal:
-		default:
-			return Log.ERROR;
+			case Debug:
+				return Log.VERBOSE;
+			case Trace:
+				return Log.DEBUG;
+			case Message:
+				return Log.INFO;
+			case Warning:
+				return Log.WARN;
+			case Error:
+			case Fatal:
+			default:
+				return Log.ERROR;
 		}
 	}
 
@@ -619,23 +619,23 @@ final class LinphoneHandler
 		}
 
 		switch (type) {
-		case Unknown:
-		case Microphone:
-			return null;
-		case Earpiece:
-		case Telephony:
-			return AudioOutputType.PHONE;
-		case Speaker:
-			return AudioOutputType.SPEAKER;
-		case Bluetooth:
-		case BluetoothA2DP:
-			return AudioOutputType.BLUETOOTH;
-		case AuxLine:
-		case GenericUsb:
-		case Headset:
-		case Headphones:
-		case HearingAid:
-			return AudioOutputType.WIRED_HEADSET;
+			case Unknown:
+			case Microphone:
+				return null;
+			case Earpiece:
+			case Telephony:
+				return AudioOutputType.PHONE;
+			case Speaker:
+				return AudioOutputType.SPEAKER;
+			case Bluetooth:
+			case BluetoothA2DP:
+				return AudioOutputType.BLUETOOTH;
+			case AuxLine:
+			case GenericUsb:
+			case Headset:
+			case Headphones:
+			case HearingAid:
+				return AudioOutputType.WIRED_HEADSET;
 		}
 
 		return null;
