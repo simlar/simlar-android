@@ -1,4 +1,4 @@
-FROM debian:bullseye
+FROM debian:bookworm
 
 ENV ANDROID_SDK_VERSION "34"
 ENV ANDROID_BUILD_TOOLS_VERSION "34.0.0"
