@@ -421,22 +421,14 @@ public final class LinphoneManager extends CoreListenerStub
 			return mContext.getString(R.string.linphone_ice_state_none);
 		}
 
-		switch (iceState) {
-			case NotActivated:
-				return mContext.getString(R.string.linphone_ice_state_not_activated);
-			case Failed:
-				return mContext.getString(R.string.linphone_ice_state_failed);
-			case InProgress:
-				return mContext.getString(R.string.linphone_ice_state_in_progress);
-			case HostConnection:
-				return mContext.getString(R.string.linphone_ice_state_host_connection);
-			case ReflexiveConnection:
-				return mContext.getString(R.string.linphone_ice_state_reflexive_connection);
-			case RelayConnection:
-				return mContext.getString(R.string.linphone_ice_state_relay_connection);
-			default:
-				return mContext.getString(R.string.linphone_ice_state_unknown);
-		}
+		return switch (iceState) {
+			case NotActivated -> mContext.getString(R.string.linphone_ice_state_not_activated);
+			case Failed -> mContext.getString(R.string.linphone_ice_state_failed);
+			case InProgress -> mContext.getString(R.string.linphone_ice_state_in_progress);
+			case HostConnection -> mContext.getString(R.string.linphone_ice_state_host_connection);
+			case ReflexiveConnection -> mContext.getString(R.string.linphone_ice_state_reflexive_connection);
+			case RelayConnection -> mContext.getString(R.string.linphone_ice_state_relay_connection);
+		};
 	}
 
 	private static int getBandwidth(final float bandwidth)
@@ -459,18 +451,12 @@ public final class LinphoneManager extends CoreListenerStub
 	{
 		final CallParams params = call.getCurrentParams();
 
-		switch (type) {
-			case Audio:
-				return params.getUsedAudioPayloadType();
-			case Video:
-				return params.getUsedVideoPayloadType();
-			case Text:
-				return params.getUsedTextPayloadType();
-			case Unknown:
-			default:
-				Lg.e("unknown StreamType: ", type);
-				return null;
-		}
+		return switch (type) {
+			case Audio -> params.getUsedAudioPayloadType();
+			case Video -> params.getUsedVideoPayloadType();
+			case Text -> params.getUsedTextPayloadType();
+			case Unknown -> null;
+		};
 	}
 
 	@Override

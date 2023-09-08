@@ -82,7 +82,6 @@
     <string name="linphone_ice_state_host_connection">direct connection</string>
     <string name="linphone_ice_state_reflexive_connection">direct connection with NAT</string>
     <string name="linphone_ice_state_relay_connection">relay connection</string>
-    <string name="linphone_ice_state_unknown">unknown</string>
 
     <string name="network_quality_good">good</string>
     <string name="network_quality_average">average</string>
