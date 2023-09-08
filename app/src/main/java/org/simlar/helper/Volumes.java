@@ -94,16 +94,11 @@ public final class Volumes
 
 	public Volumes toggleMicrophoneMuted()
 	{
-		switch (mMicrophoneStatus) {
-			case DISABLED:
-				//noinspection ReturnOfThis
-				return this;
-			case MUTED:
-				return new Volumes(mPlayGain, mMicGain, MicrophoneStatus.ON, mEchoLimiter);
-			case ON:
-			default:
-				return new Volumes(mPlayGain, mMicGain, MicrophoneStatus.MUTED, mEchoLimiter);
-		}
+		return switch (mMicrophoneStatus) {
+			case DISABLED -> this;
+			case MUTED -> new Volumes(mPlayGain, mMicGain, MicrophoneStatus.ON, mEchoLimiter);
+			case ON -> new Volumes(mPlayGain, mMicGain, MicrophoneStatus.MUTED, mEchoLimiter);
+		};
 	}
 
 	public Volumes setMicrophoneStatus(final MicrophoneStatus microphoneStatus)
