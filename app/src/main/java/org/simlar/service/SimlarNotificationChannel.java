@@ -37,18 +37,24 @@ public enum SimlarNotificationChannel
 	/**
 	 * @see NotificationManager#IMPORTANCE_LOW
 	 */
-	CALL(NotificationManagerCompat.IMPORTANCE_LOW, R.string.notification_channel_call_name),
-	MISSED_CALL(NotificationManagerCompat.IMPORTANCE_LOW, R.string.missed_call_notification),
-	INCOMING_CALL(NotificationManagerCompat.IMPORTANCE_HIGH, R.string.notification_channel_call_name);
+	CALL(NotificationManagerCompat.IMPORTANCE_LOW),
+	MISSED_CALL(NotificationManagerCompat.IMPORTANCE_LOW),
+	INCOMING_CALL(NotificationManagerCompat.IMPORTANCE_HIGH);
 
 	private final int importance;
-	private final int title;
 
 	@SuppressWarnings("SameParameterValue")
-	SimlarNotificationChannel(final int importance, final int title)
+	SimlarNotificationChannel(final int importance)
 	{
 		this.importance = importance;
-		this.title = title;
+	}
+
+	private int toDisplayId()
+	{
+		return switch (this) {
+			case CALL, INCOMING_CALL -> R.string.notification_channel_call_name;
+			case MISSED_CALL -> R.string.missed_call_notification;
+		};
 	}
 
 	public static void createNotificationChannels(final Context context)
@@ -59,7 +65,7 @@ public enum SimlarNotificationChannel
 			Lg.i("creating notification channels");
 			final NotificationManager notificationManager = Util.getSystemService(context, Context.NOTIFICATION_SERVICE);
 			for (final SimlarNotificationChannel value : values()) {
-				final NotificationChannel channel = new NotificationChannel(value.name(), context.getString(value.title), value.importance);
+				final NotificationChannel channel = new NotificationChannel(value.name(), context.getString(value.toDisplayId()), value.importance);
 				notificationManager.createNotificationChannel(channel);
 			}
 		}
