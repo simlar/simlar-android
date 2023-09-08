@@ -61,54 +61,30 @@ public enum LinphoneCallState
 			return UNKNOWN;
 		}
 
-		switch (state) {
-			case Idle:
-				return IDLE;
-			case IncomingReceived:
-			case PushIncomingReceived:
-				return INCOMING_RECEIVED;
-			case OutgoingInit:
-				return OUTGOING_INIT;
-			case OutgoingProgress:
-				return OUTGOING_PROGRESS;
-			case OutgoingRinging:
-				return OUTGOING_RINGING;
-			case OutgoingEarlyMedia:
-				return OUTGOING_EARLY_MEDIA;
-			case Connected:
-				return CONNECTED;
-			case StreamsRunning:
-				return STREAMS_RUNNING;
-			case Pausing:
-				return PAUSING;
-			case Paused:
-				return PAUSED;
-			case Resuming:
-				return RESUMING;
-			case Referred:
-				return REFERED;
-			case Error:
-				return ERROR;
-			case End:
-				return CALL_END;
-			case PausedByRemote:
-				return PAUSED_BY_REMOTE;
-			case UpdatedByRemote:
-				return UPDATED_BY_REMOTE;
-			case IncomingEarlyMedia:
-				return INCOMING_EARLY_MEDIA;
-			case Updating:
-				return UPDATING;
-			case Released:
-				return RELEASED;
-			case EarlyUpdatedByRemote:
-				return EARLY_UPDATED_BY_REMOTE;
-			case EarlyUpdating:
-				return EARLY_UPDATING;
-		}
+		return switch (state) {
+			case Idle -> IDLE;
+			case IncomingReceived, PushIncomingReceived -> INCOMING_RECEIVED;
+			case OutgoingInit -> OUTGOING_INIT;
+			case OutgoingProgress -> OUTGOING_PROGRESS;
+			case OutgoingRinging -> OUTGOING_RINGING;
+			case OutgoingEarlyMedia -> OUTGOING_EARLY_MEDIA;
+			case Connected -> CONNECTED;
+			case StreamsRunning -> STREAMS_RUNNING;
+			case Pausing -> PAUSING;
+			case Paused -> PAUSED;
+			case Resuming -> RESUMING;
+			case Referred -> REFERED;
+			case Error -> ERROR;
+			case End -> CALL_END;
+			case PausedByRemote -> PAUSED_BY_REMOTE;
+			case UpdatedByRemote -> UPDATED_BY_REMOTE;
+			case IncomingEarlyMedia -> INCOMING_EARLY_MEDIA;
+			case Updating -> UPDATING;
+			case Released -> RELEASED;
+			case EarlyUpdatedByRemote -> EARLY_UPDATED_BY_REMOTE;
+			case EarlyUpdating -> EARLY_UPDATING;
+		};
 
-		Lg.e("ERROR: fromLinphoneCallState failed state=", state);
-		return UNKNOWN;
 	}
 
 	public boolean isPossibleCallEndedMessage()
