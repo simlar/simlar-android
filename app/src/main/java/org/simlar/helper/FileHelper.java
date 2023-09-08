@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serial;
 
 import org.simlar.R;
 import org.simlar.logging.Lg;
@@ -99,6 +100,7 @@ public final class FileHelper
 	@SuppressWarnings("WeakerAccess")
 	public static final class NotInitedException extends IllegalStateException
 	{
+		@Serial
 		private static final long serialVersionUID = 1;
 	}
 
