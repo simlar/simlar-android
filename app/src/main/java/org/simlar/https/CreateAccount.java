@@ -78,25 +78,18 @@ public final class CreateAccount
 			return mErrorId != SUCCESS || Util.isNullOrEmpty(mResult1) || Util.isNullOrEmpty(mResult2);
 		}
 
+		@SuppressWarnings("DuplicateBranchesInSwitch")
 		public final CreateAccountMessage getErrorMessage()
 		{
-			switch (mErrorId) {
-				case 22:
-					return CreateAccountMessage.WRONG_TELEPHONE_NUMBER;
-				case 23: // Too many requests
-					//noinspection DuplicateBranchesInSwitch
-					return CreateAccountMessage.NOT_POSSIBLE;
-				case 24:
-					return CreateAccountMessage.SMS;
-				case 25:
-					return CreateAccountMessage.TOO_MANY_CONFIRMS;
-				case 26:
-					return CreateAccountMessage.REGISTRATION_CODE;
-				case 68:
-					return CreateAccountMessage.TOO_MANY_CALLS;
-				default:
-					return CreateAccountMessage.NOT_POSSIBLE;
-			}
+			return switch (mErrorId) {
+				case 22 -> CreateAccountMessage.WRONG_TELEPHONE_NUMBER;
+				case 23 -> CreateAccountMessage.NOT_POSSIBLE; // Too many requests
+				case 24 -> CreateAccountMessage.SMS;
+				case 25 -> CreateAccountMessage.TOO_MANY_CONFIRMS;
+				case 26 -> CreateAccountMessage.REGISTRATION_CODE;
+				case 68 -> CreateAccountMessage.TOO_MANY_CALLS;
+				default -> CreateAccountMessage.NOT_POSSIBLE;
+			};
 		}
 
 		public final String getSimlarId()
