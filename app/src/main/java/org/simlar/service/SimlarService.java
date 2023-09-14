@@ -53,6 +53,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 
 import java.util.Set;
 
@@ -688,7 +689,7 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 
 		final IntentFilter filter = new IntentFilter();
 		filter.addAction("org.simlar.keepAwake");
-		registerReceiver(mKeepAwakeReceiver, filter);
+		ContextCompat.registerReceiver(this, mKeepAwakeReceiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED);
 	}
 
 	private void stopKeepAwake()
