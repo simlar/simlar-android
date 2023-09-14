@@ -44,8 +44,7 @@ cmake --build .
 
 
 cd "${PROJECT_DIR}"
-rm -rf app/src/main/jniLibs/
-rm -rf app/libs/
+rm -rf "app/libs/linphone-sdk/${VERSION}"
 
 mkdir -p "app/libs/linphone-sdk/${VERSION}"
 unzip -o $(find "${CMAKE_BUILD_DIR}/linphone-sdk/bin/distributions" -maxdepth 1 -name linphone-sdk-android\*.zip) -d "app/libs/linphone-sdk/${VERSION}"
