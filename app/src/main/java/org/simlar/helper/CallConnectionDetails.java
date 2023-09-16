@@ -47,8 +47,7 @@ public final class CallConnectionDetails
 	{
 		if (quality == mQuality && Util.equalString(codec, mCodec) && Util.equalString(iceState, mIceState)
 				&& upload == mUpload && download == mDownload && jitter == mJitter && packetLoss == mPacketLoss
-				&& latePackets == mLatePackets && roundTripDelay == mRoundTripDelay && Util.equalString(encryptionDescription, mEncryptionDescription))
-		{
+				&& latePackets == mLatePackets && roundTripDelay == mRoundTripDelay && Util.equalString(encryptionDescription, mEncryptionDescription)) {
 			return false;
 		}
 

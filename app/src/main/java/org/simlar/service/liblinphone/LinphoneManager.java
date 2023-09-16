@@ -422,20 +422,20 @@ public final class LinphoneManager extends CoreListenerStub
 		}
 
 		switch (iceState) {
-		case NotActivated:
-			return mContext.getString(R.string.linphone_ice_state_not_activated);
-		case Failed:
-			return mContext.getString(R.string.linphone_ice_state_failed);
-		case InProgress:
-			return mContext.getString(R.string.linphone_ice_state_in_progress);
-		case HostConnection:
-			return mContext.getString(R.string.linphone_ice_state_host_connection);
-		case ReflexiveConnection:
-			return mContext.getString(R.string.linphone_ice_state_reflexive_connection);
-		case RelayConnection:
-			return mContext.getString(R.string.linphone_ice_state_relay_connection);
-		default:
-			return mContext.getString(R.string.linphone_ice_state_unknown);
+			case NotActivated:
+				return mContext.getString(R.string.linphone_ice_state_not_activated);
+			case Failed:
+				return mContext.getString(R.string.linphone_ice_state_failed);
+			case InProgress:
+				return mContext.getString(R.string.linphone_ice_state_in_progress);
+			case HostConnection:
+				return mContext.getString(R.string.linphone_ice_state_host_connection);
+			case ReflexiveConnection:
+				return mContext.getString(R.string.linphone_ice_state_reflexive_connection);
+			case RelayConnection:
+				return mContext.getString(R.string.linphone_ice_state_relay_connection);
+			default:
+				return mContext.getString(R.string.linphone_ice_state_unknown);
 		}
 	}
 
@@ -460,16 +460,16 @@ public final class LinphoneManager extends CoreListenerStub
 		final CallParams params = call.getCurrentParams();
 
 		switch (type) {
-		case Audio:
-			return params.getUsedAudioPayloadType();
-		case Video:
-			return params.getUsedVideoPayloadType();
-		case Text:
-			return params.getUsedTextPayloadType();
-		case Unknown:
-		default:
-			Lg.e("unknown StreamType: ", type);
-			return null;
+			case Audio:
+				return params.getUsedAudioPayloadType();
+			case Video:
+				return params.getUsedVideoPayloadType();
+			case Text:
+				return params.getUsedTextPayloadType();
+			case Unknown:
+			default:
+				Lg.e("unknown StreamType: ", type);
+				return null;
 		}
 	}
 

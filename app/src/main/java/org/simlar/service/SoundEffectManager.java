@@ -86,35 +86,35 @@ final class SoundEffectManager
 			try {
 				final MediaPlayer mediaPlayer = new MediaPlayer();
 				switch (mType) {
-				case RINGTONE:
-					mediaPlayer.setAudioStreamType(AudioManager.STREAM_RING);
-					// in case we do have permissions to read the ringtone
-					try {
-						mediaPlayer.setDataSource(mContext, RingtoneHelper.getRingtoneUri(mContext, createSoundUri(R.raw.ringtone)));
-					} catch (final SecurityException e) {
-						Lg.w("[", mType, "] falling back to provided ringtone");
-						mediaPlayer.setDataSource(mContext, createSoundUri(R.raw.ringtone));
-					}
-					mediaPlayer.setLooping(false);
-					return mediaPlayer;
-				case WAITING_FOR_CONTACT:
-					mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-					mediaPlayer.setDataSource(mContext, createSoundUri(R.raw.waiting_for_contact));
-					mediaPlayer.setLooping(true);
-					return mediaPlayer;
-				case ENCRYPTION_HANDSHAKE:
-					mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-					mediaPlayer.setDataSource(mContext, createSoundUri(R.raw.encryption_handshake));
-					mediaPlayer.setLooping(true);
-					return mediaPlayer;
-				case CALL_INTERRUPTION:
-					mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-					mediaPlayer.setDataSource(mContext, createSoundUri(R.raw.call_interruption));
-					mediaPlayer.setLooping(true);
-					return mediaPlayer;
-				default:
-					Lg.e("[", mType, "] unknown type");
-					return null;
+					case RINGTONE:
+						mediaPlayer.setAudioStreamType(AudioManager.STREAM_RING);
+						// in case we do have permissions to read the ringtone
+						try {
+							mediaPlayer.setDataSource(mContext, RingtoneHelper.getRingtoneUri(mContext, createSoundUri(R.raw.ringtone)));
+						} catch (final SecurityException e) {
+							Lg.w("[", mType, "] falling back to provided ringtone");
+							mediaPlayer.setDataSource(mContext, createSoundUri(R.raw.ringtone));
+						}
+						mediaPlayer.setLooping(false);
+						return mediaPlayer;
+					case WAITING_FOR_CONTACT:
+						mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+						mediaPlayer.setDataSource(mContext, createSoundUri(R.raw.waiting_for_contact));
+						mediaPlayer.setLooping(true);
+						return mediaPlayer;
+					case ENCRYPTION_HANDSHAKE:
+						mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+						mediaPlayer.setDataSource(mContext, createSoundUri(R.raw.encryption_handshake));
+						mediaPlayer.setLooping(true);
+						return mediaPlayer;
+					case CALL_INTERRUPTION:
+						mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+						mediaPlayer.setDataSource(mContext, createSoundUri(R.raw.call_interruption));
+						mediaPlayer.setLooping(true);
+						return mediaPlayer;
+					default:
+						Lg.e("[", mType, "] unknown type");
+						return null;
 				}
 			} catch (final IOException e) {
 				Lg.ex(e, "[", mType, "] Media Player IOException");

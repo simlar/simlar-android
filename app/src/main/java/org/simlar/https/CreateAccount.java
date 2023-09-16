@@ -81,21 +81,21 @@ public final class CreateAccount
 		public final CreateAccountMessage getErrorMessage()
 		{
 			switch (mErrorId) {
-			case 22:
-				return CreateAccountMessage.WRONG_TELEPHONE_NUMBER;
-			case 23: // Too many requests
-				//noinspection DuplicateBranchesInSwitch
-				return CreateAccountMessage.NOT_POSSIBLE;
-			case 24:
-				return CreateAccountMessage.SMS;
-			case 25:
-				return CreateAccountMessage.TOO_MANY_CONFIRMS;
-			case 26:
-				return CreateAccountMessage.REGISTRATION_CODE;
-			case 68:
-				return CreateAccountMessage.TOO_MANY_CALLS;
-			default:
-				return CreateAccountMessage.NOT_POSSIBLE;
+				case 22:
+					return CreateAccountMessage.WRONG_TELEPHONE_NUMBER;
+				case 23: // Too many requests
+					//noinspection DuplicateBranchesInSwitch
+					return CreateAccountMessage.NOT_POSSIBLE;
+				case 24:
+					return CreateAccountMessage.SMS;
+				case 25:
+					return CreateAccountMessage.TOO_MANY_CONFIRMS;
+				case 26:
+					return CreateAccountMessage.REGISTRATION_CODE;
+				case 68:
+					return CreateAccountMessage.TOO_MANY_CALLS;
+				default:
+					return CreateAccountMessage.NOT_POSSIBLE;
 			}
 		}
 
@@ -206,8 +206,7 @@ public final class CreateAccount
 		if ("error".equalsIgnoreCase(xmlRootElement)
 				&& parser.getAttributeCount() >= 2
 				&& "id".equalsIgnoreCase(parser.getAttributeName(0))
-				&& "message".equalsIgnoreCase(parser.getAttributeName(1)))
-		{
+				&& "message".equalsIgnoreCase(parser.getAttributeName(1))) {
 			final int errorId = Integer.parseInt(parser.getAttributeValue(0));
 			Lg.i("server returned error: ", parser.getAttributeValue(1), " (", errorId, ")");
 			return new Result(errorId, null, null);
@@ -216,8 +215,7 @@ public final class CreateAccount
 		if ("success".equalsIgnoreCase(xmlRootElement)
 				&& parser.getAttributeCount() >= 2
 				&& parser.getAttributeName(0).equals(attribute1)
-				&& parser.getAttributeName(1).equals(attribute2))
-		{
+				&& parser.getAttributeName(1).equals(attribute2)) {
 			Lg.i("request success");
 			return new Result(Result.SUCCESS, parser.getAttributeValue(0), parser.getAttributeValue(1));
 		}

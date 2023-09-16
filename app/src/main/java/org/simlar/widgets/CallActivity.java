@@ -357,17 +357,17 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		Lg.i("onVideoStateChanged: ", videoState);
 
 		switch (videoState) {
-		case OFF:
-		case REQUESTING:
-		case REMOTE_REQUESTED:
-		case DENIED:
-			stopVideo();
-			break;
-		case ACCEPTED:
-		case INITIALIZING:
-		case PLAYING:
-			startVideo();
-			break;
+			case OFF:
+			case REQUESTING:
+			case REMOTE_REQUESTED:
+			case DENIED:
+				stopVideo();
+				break;
+			case ACCEPTED:
+			case INITIALIZING:
+			case PLAYING:
+				startVideo();
+				break;
 		}
 
 		final boolean requestingVideo = VideoState.REQUESTING == videoState;
@@ -375,20 +375,20 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mButtonToggleVideo.setVisibility(requestingVideo ? View.GONE : View.VISIBLE);
 
 		switch (videoState) {
-		case OFF:
-		case REQUESTING:
-		case ACCEPTED:
-		case INITIALIZING:
-			break;
-		case REMOTE_REQUESTED:
-			showRemoteRequestedVideoAlert();
-			break;
-		case DENIED:
-			showRemoteDeniedVideoAlert();
-			break;
-		case PLAYING:
-			mVideoFragment.setNowPlaying();
-			break;
+			case OFF:
+			case REQUESTING:
+			case ACCEPTED:
+			case INITIALIZING:
+				break;
+			case REMOTE_REQUESTED:
+				showRemoteRequestedVideoAlert();
+				break;
+			case DENIED:
+				showRemoteDeniedVideoAlert();
+				break;
+			case PLAYING:
+				mVideoFragment.setNowPlaying();
+				break;
 		}
 	}
 
@@ -553,13 +553,13 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		}, milliSeconds);
 	}
 
-	@SuppressWarnings({"unused", "RedundantSuppression"})
+	@SuppressWarnings({ "unused", "RedundantSuppression" })
 	public void verifyAuthenticationToken(final View view)
 	{
 		mCommunicator.getService().verifyAuthenticationTokenOfCurrentCall(true);
 	}
 
-	@SuppressWarnings({"unused", "RedundantSuppression"})
+	@SuppressWarnings({ "unused", "RedundantSuppression" })
 	public void wrongAuthenticationToken(final View view)
 	{
 		mCommunicator.getService().verifyAuthenticationTokenOfCurrentCall(false);
@@ -567,7 +567,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mLayoutAuthenticationToken.setVisibility(View.GONE);
 	}
 
-	@SuppressWarnings({"unused", "RedundantSuppression"})
+	@SuppressWarnings({ "unused", "RedundantSuppression" })
 	public void showConnectionDetails(final View view)
 	{
 		if (mConnectionDetailsDialogFragment == null) {
@@ -579,7 +579,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		}
 	}
 
-	@SuppressWarnings({"unused", "RedundantSuppression"})
+	@SuppressWarnings({ "unused", "RedundantSuppression" })
 	public void toggleVideoClicked(final View view)
 	{
 		if (mVideoFragment == null) {
@@ -594,7 +594,7 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		}
 	}
 
-	@SuppressWarnings({"unused", "RedundantSuppression"})
+	@SuppressWarnings({ "unused", "RedundantSuppression" })
 	public void showSoundSettingsDialog(final View view)
 	{
 		new VolumesControlDialogFragment().show(getSupportFragmentManager(), VolumesControlDialogFragment.class.getCanonicalName());
@@ -627,18 +627,18 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 			mButtonSpeakerChoices.setVisibility(View.VISIBLE);
 
 			switch (currentAudioOutput) {
-			case PHONE:
-				mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_phone);
-				break;
-			case WIRED_HEADSET:
-				mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_wired_headset);
-				break;
-			case SPEAKER:
-				mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_speaker);
-				break;
-			case BLUETOOTH:
-				mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_bluetooth);
-				break;
+				case PHONE:
+					mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_phone);
+					break;
+				case WIRED_HEADSET:
+					mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_wired_headset);
+					break;
+				case SPEAKER:
+					mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_speaker);
+					break;
+				case BLUETOOTH:
+					mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_bluetooth);
+					break;
 			}
 
 			mButtonSpeakerChoices.setOnClickListener(view -> {
@@ -700,14 +700,14 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mCommunicator.getService().setEchoLimiter(enabled);
 	}
 
-	@SuppressWarnings({"unused", "RedundantSuppression"})
+	@SuppressWarnings({ "unused", "RedundantSuppression" })
 	public void toggleMicrophoneMuted(final View view)
 	{
 		mCommunicator.getService().toggleMicrophoneMuted();
 		setButtonMicrophoneMute();
 	}
 
-	@SuppressWarnings({"unused", "RedundantSuppression"})
+	@SuppressWarnings({ "unused", "RedundantSuppression" })
 	public void toggleSpeakerMuted(final View view)
 	{
 		if (mCurrentAudioOutputType == AudioOutputType.PHONE) {
@@ -722,23 +722,23 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private void setButtonMicrophoneMute()
 	{
 		switch (mCommunicator.getService().getMicrophoneStatus()) {
-		case DISABLED:
-			mButtonMicro.setImageResource(R.drawable.micro_off_disabled);
-			mButtonMicro.setContentDescription(getString(R.string.call_activity_microphone_disabled));
-			break;
-		case MUTED:
-			mButtonMicro.setImageResource(R.drawable.micro_off);
-			mButtonMicro.setContentDescription(getString(R.string.call_activity_microphone_mute));
-			break;
-		case ON:
-		default:
-			mButtonMicro.setImageResource(R.drawable.micro_on);
-			mButtonMicro.setContentDescription(getString(R.string.call_activity_microphone_on));
-			break;
+			case DISABLED:
+				mButtonMicro.setImageResource(R.drawable.micro_off_disabled);
+				mButtonMicro.setContentDescription(getString(R.string.call_activity_microphone_disabled));
+				break;
+			case MUTED:
+				mButtonMicro.setImageResource(R.drawable.micro_off);
+				mButtonMicro.setContentDescription(getString(R.string.call_activity_microphone_mute));
+				break;
+			case ON:
+			default:
+				mButtonMicro.setImageResource(R.drawable.micro_on);
+				mButtonMicro.setContentDescription(getString(R.string.call_activity_microphone_on));
+				break;
 		}
 	}
 
-	@SuppressWarnings({"unused", "RedundantSuppression"})
+	@SuppressWarnings({ "unused", "RedundantSuppression" })
 	public void terminateCall(final View view)
 	{
 		final SimlarService service = mCommunicator.getService();

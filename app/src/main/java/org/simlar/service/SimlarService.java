@@ -155,24 +155,24 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		public void onCallStateChanged(final int state, final String incomingNumber)
 		{
 			switch (state) {
-			case TelephonyManager.CALL_STATE_IDLE:
-				Lg.i("onTelephonyCallStateChanged: state=IDLE");
-				mInCall = false;
-				onTelephonyCallStateIdle();
-				break;
-			case TelephonyManager.CALL_STATE_OFFHOOK:
-				Lg.i("onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=OFFHOOK");
-				mInCall = true;
-				onTelephonyCallStateOffHook();
-				break;
-			case TelephonyManager.CALL_STATE_RINGING:
-				Lg.i("onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=RINGING");
-				mInCall = false; /// TODO Think about
-				onTelephonyCallStateRinging();
-				break;
-			default:
-				Lg.i("onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=", state);
-				break;
+				case TelephonyManager.CALL_STATE_IDLE:
+					Lg.i("onTelephonyCallStateChanged: state=IDLE");
+					mInCall = false;
+					onTelephonyCallStateIdle();
+					break;
+				case TelephonyManager.CALL_STATE_OFFHOOK:
+					Lg.i("onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=OFFHOOK");
+					mInCall = true;
+					onTelephonyCallStateOffHook();
+					break;
+				case TelephonyManager.CALL_STATE_RINGING:
+					Lg.i("onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=RINGING");
+					mInCall = false; /// TODO Think about
+					onTelephonyCallStateRinging();
+					break;
+				default:
+					Lg.i("onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=", state);
+					break;
 			}
 		}
 	}
@@ -667,7 +667,8 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 	}
 
 	@SuppressLint("UnspecifiedImmutableFlag")
-	private static PendingIntent getPendingIntent(final Context context, final Intent startIntent) {
+	private static PendingIntent getPendingIntent(final Context context, final Intent startIntent)
+	{
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
 			return PendingIntent.getBroadcast(context, 0, startIntent, PendingIntent.FLAG_MUTABLE);
 		} else {
@@ -895,7 +896,8 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		});
 	}
 
-	private boolean isScreenLocked() {
+	private boolean isScreenLocked()
+	{
 		final KeyguardManager keyguardManager = Util.getSystemService(this, Context.KEYGUARD_SERVICE);
 		return keyguardManager.inKeyguardRestrictedInputMode();
 	}

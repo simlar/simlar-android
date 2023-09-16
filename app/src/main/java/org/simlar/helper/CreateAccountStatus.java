@@ -36,12 +36,12 @@ public enum CreateAccountStatus
 	public static CreateAccountStatus fromInt(final int i)
 	{
 		switch (i) {
-		case 1:
-			return WAITING_FOR_SMS;
-		case 2:
-			return SUCCESS;
-		default:
-			return NONE;
+			case 1:
+				return WAITING_FOR_SMS;
+			case 2:
+				return SUCCESS;
+			default:
+				return NONE;
 		}
 	}
 

@@ -347,17 +347,17 @@ public final class ContactsProvider
 			}
 
 			switch (mState) {
-			case INITIALIZED:
-			case PARSING_PHONES_ADDRESS_BOOK:
-			case REQUESTING_CONTACTS_STATUS_FROM_SERVER:
-				break;
-			case UNINITIALIZED:
-			case ERROR:
-				loadContacts(context);
-				break;
-			default:
-				Lg.e("unknown state=", mState);
-				break;
+				case INITIALIZED:
+				case PARSING_PHONES_ADDRESS_BOOK:
+				case REQUESTING_CONTACTS_STATUS_FROM_SERVER:
+					break;
+				case UNINITIALIZED:
+				case ERROR:
+					loadContacts(context);
+					break;
+				default:
+					Lg.e("unknown state=", mState);
+					break;
 			}
 		}
 
@@ -385,22 +385,22 @@ public final class ContactsProvider
 			}
 
 			switch (mState) {
-			case INITIALIZED:
-				Lg.i("using cached data for all contacts");
-				listener.onGetContacts(createFullContactDataSet(), Error.NONE);
-				break;
-			case PARSING_PHONES_ADDRESS_BOOK:
-			case REQUESTING_CONTACTS_STATUS_FROM_SERVER:
-				mFullContactsListeners.add(listener);
-				break;
-			case UNINITIALIZED:
-			case ERROR:
-				mFullContactsListeners.add(listener);
-				loadContacts(context);
-				break;
-			default:
-				Lg.e("unknown state=", mState);
-				break;
+				case INITIALIZED:
+					Lg.i("using cached data for all contacts");
+					listener.onGetContacts(createFullContactDataSet(), Error.NONE);
+					break;
+				case PARSING_PHONES_ADDRESS_BOOK:
+				case REQUESTING_CONTACTS_STATUS_FROM_SERVER:
+					mFullContactsListeners.add(listener);
+					break;
+				case UNINITIALIZED:
+				case ERROR:
+					mFullContactsListeners.add(listener);
+					loadContacts(context);
+					break;
+				default:
+					Lg.e("unknown state=", mState);
+					break;
 			}
 		}
 
@@ -423,43 +423,43 @@ public final class ContactsProvider
 			}
 
 			switch (mState) {
-			case INITIALIZED:
-			case REQUESTING_CONTACTS_STATUS_FROM_SERVER:
-				Lg.i("using cached data for name and photoId");
-				final ContactData cd = createContactData(simlarId);
-				listener.onGetNameAndPhotoId(cd.name, cd.photoId);
-				break;
-			case PARSING_PHONES_ADDRESS_BOOK:
-				mContactListener.put(listener, simlarId);
-				break;
-			case UNINITIALIZED:
-			case ERROR:
-				mContactListener.put(listener, simlarId);
-				loadContacts(context);
-				break;
-			default:
-				Lg.e("unknown state=", mState);
-				break;
+				case INITIALIZED:
+				case REQUESTING_CONTACTS_STATUS_FROM_SERVER:
+					Lg.i("using cached data for name and photoId");
+					final ContactData cd = createContactData(simlarId);
+					listener.onGetNameAndPhotoId(cd.name, cd.photoId);
+					break;
+				case PARSING_PHONES_ADDRESS_BOOK:
+					mContactListener.put(listener, simlarId);
+					break;
+				case UNINITIALIZED:
+				case ERROR:
+					mContactListener.put(listener, simlarId);
+					loadContacts(context);
+					break;
+				default:
+					Lg.e("unknown state=", mState);
+					break;
 			}
 		}
 
 		boolean clearCache()
 		{
 			switch (mState) {
-			case UNINITIALIZED:
-				return true;
-			case REQUESTING_CONTACTS_STATUS_FROM_SERVER:
-				Lg.w("clearCache while requesting contacts from server => aborting");
-				return false;
-			case PARSING_PHONES_ADDRESS_BOOK:
-				Lg.w("clearCache while parsing phone book => aborting");
-				return false;
-			case INITIALIZED:
-			case ERROR:
-				break;
-			default:
-				Lg.e("unknown state=", mState);
-				break;
+				case UNINITIALIZED:
+					return true;
+				case REQUESTING_CONTACTS_STATUS_FROM_SERVER:
+					Lg.w("clearCache while requesting contacts from server => aborting");
+					return false;
+				case PARSING_PHONES_ADDRESS_BOOK:
+					Lg.w("clearCache while parsing phone book => aborting");
+					return false;
+				case INITIALIZED:
+				case ERROR:
+					break;
+				default:
+					Lg.e("unknown state=", mState);
+					break;
 			}
 
 			mState = State.UNINITIALIZED;

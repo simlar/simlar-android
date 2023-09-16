@@ -77,10 +77,10 @@ public final class GooglePlayServicesHelper
 			Lg.e("this device is not supported: ", googleApiAvailability.getErrorString(resultCode));
 
 			final Dialog dialog = new AlertDialog.Builder(activity)
-				.setTitle(R.string.google_play_services_helper_alert_unavailable_title)
-				.setMessage(R.string.google_play_services_helper_alert_unavailable_text)
-				.setNeutralButton(R.string.google_play_services_helper_alert_unavailable_button_close_simlar, null)
-				.create();
+					.setTitle(R.string.google_play_services_helper_alert_unavailable_title)
+					.setMessage(R.string.google_play_services_helper_alert_unavailable_text)
+					.setNeutralButton(R.string.google_play_services_helper_alert_unavailable_button_close_simlar, null)
+					.create();
 
 			dialog.setOnDismissListener(dialogInterface -> {
 				dialog.dismiss();

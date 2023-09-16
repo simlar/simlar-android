@@ -24,15 +24,15 @@ import org.simlar.R;
 
 public enum CreateAccountMessage
 {
-	WRONG_TELEPHONE_NUMBER    (R.string.create_account_activity_message_wrong_telephone_number, true, false),
-	SMS                       (R.string.create_account_activity_message_sms, true, true),
+	WRONG_TELEPHONE_NUMBER(R.string.create_account_activity_message_wrong_telephone_number, true, false),
+	SMS(R.string.create_account_activity_message_sms, true, true),
 	SMS_NOT_GRANTED_OR_TIMEOUT(R.string.create_account_activity_message_sms_not_granted_or_timeout, true, true),
-	SMS_CALL_SUCCESS          (R.string.create_account_activity_message_sms_call_success, true, true),
-	NOT_POSSIBLE              (R.string.create_account_activity_message_not_possible, false, false),
-	REGISTRATION_CODE         (R.string.create_account_activity_message_registration_code, false, true),
-	TOO_MANY_CONFIRMS         (R.string.create_account_activity_message_too_many_confirms, false, false),
-	TOO_MANY_CALLS            (R.string.create_account_activity_message_too_many_calls, false, true),
-	SIP_NOT_POSSIBLE          (R.string.create_account_activity_message_sip_not_possible, false, false);
+	SMS_CALL_SUCCESS(R.string.create_account_activity_message_sms_call_success, true, true),
+	NOT_POSSIBLE(R.string.create_account_activity_message_not_possible, false, false),
+	REGISTRATION_CODE(R.string.create_account_activity_message_registration_code, false, true),
+	TOO_MANY_CONFIRMS(R.string.create_account_activity_message_too_many_confirms, false, false),
+	TOO_MANY_CALLS(R.string.create_account_activity_message_too_many_calls, false, true),
+	SIP_NOT_POSSIBLE(R.string.create_account_activity_message_sip_not_possible, false, false);
 
 	final int resourceId;
 	final boolean telephoneNumber;

@@ -208,7 +208,7 @@ public final class VerifyNumberActivity extends AppCompatActivity
 		mButtonAccept.setEnabled(enabled);
 	}
 
-	@SuppressWarnings({"unused", "RedundantSuppression"})
+	@SuppressWarnings({ "unused", "RedundantSuppression" })
 	public void createAccount(final View view)
 	{
 		final Integer countryCallingCode = (Integer) mSpinner.getSelectedItem();
