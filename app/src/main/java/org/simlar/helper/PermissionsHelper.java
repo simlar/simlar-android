@@ -52,27 +52,23 @@ public final class PermissionsHelper
 
 	public enum Type
 	{
-		CAMERA(Manifest.permission.CAMERA, false, R.string.permission_explain_text_camera),
-		CONTACTS(Manifest.permission.READ_CONTACTS, false, R.string.permission_explain_text_contacts),
-		MICROPHONE(Manifest.permission.RECORD_AUDIO, true, R.string.permission_explain_text_record_audio),
+		CAMERA(Manifest.permission.CAMERA, false),
+		CONTACTS(Manifest.permission.READ_CONTACTS, false),
+		MICROPHONE(Manifest.permission.RECORD_AUDIO, true),
 		PHONE_NUMBERS(
-				hasPhoneNumbersPermission() ? Manifest.permission.READ_PHONE_NUMBERS : Manifest.permission.READ_PHONE_STATE,
-				false,
-				hasPhoneNumbersPermission() ? R.string.permission_explain_text_phone_number : R.string.permission_explain_text_phone_state_with_phone_number),
-		PHONE_STATE(
-				Manifest.permission.READ_PHONE_STATE,
-				true,
-				hasPhoneNumbersPermission() ? R.string.permission_explain_text_phone_state : R.string.permission_explain_text_phone_state_with_phone_number);
+				hasPhoneNumbersPermission()
+						? Manifest.permission.READ_PHONE_NUMBERS
+						: Manifest.permission.READ_PHONE_STATE,
+				false),
+		PHONE_STATE(Manifest.permission.READ_PHONE_STATE, true);
 
 		private final String mPermission;
 		private final boolean mMajor;
-		private final int mRationalMessageId;
 
-		Type(final String permission, final boolean major, final int rationalMessageId)
+		Type(final String permission, final boolean major)
 		{
 			mPermission = permission;
 			mMajor = major;
-			mRationalMessageId = rationalMessageId;
 		}
 
 		public String getPermission()
@@ -82,7 +78,17 @@ public final class PermissionsHelper
 
 		public int getRationalMessageId()
 		{
-			return mRationalMessageId;
+			return switch (this) {
+				case CAMERA -> R.string.permission_explain_text_camera;
+				case CONTACTS -> R.string.permission_explain_text_contacts;
+				case MICROPHONE -> R.string.permission_explain_text_record_audio;
+				case PHONE_NUMBERS -> hasPhoneNumbersPermission()
+						? R.string.permission_explain_text_phone_number
+						: R.string.permission_explain_text_phone_state_with_phone_number;
+				case PHONE_STATE -> hasPhoneNumbersPermission()
+						? R.string.permission_explain_text_phone_state
+						: R.string.permission_explain_text_phone_state_with_phone_number;
+			};
 		}
 
 		static Set<Type> getMajorPermissions()
@@ -116,6 +122,7 @@ public final class PermissionsHelper
 	@FunctionalInterface
 	public interface RequestPermissionListener
 	{
+		@SuppressWarnings("unused")
 		void requestPermission(final String permission);
 	}
 

@@ -58,7 +58,6 @@
     <string name="upload_log_file_send_email_to_developer">Entwickler per E-Mail kontaktieren</string>
     <string name="upload_log_file_progress">Bitte warten. Die Logdatei wird hochgeladen&#8230;</string>
 
-    <string name="notification_simlar_status_unknown">unbekannter Status</string>
     <string name="notification_simlar_status_offline">offline</string>
     <string name="notification_simlar_status_connecting">verbinde mit Server</string>
     <string name="notification_simlar_status_online">online</string>
@@ -79,7 +78,6 @@
     <string name="linphone_ice_state_host_connection">direkte Verbindung</string>
     <string name="linphone_ice_state_reflexive_connection">direkte Verbindung mit NAT</string>
     <string name="linphone_ice_state_relay_connection">weitergeleitete Verbindung</string>
-    <string name="linphone_ice_state_unknown">unbekannt</string>
 
     <string name="network_quality_good">sehr gut</string>
     <string name="network_quality_average">gut</string>

@@ -52,11 +52,13 @@ public final class UploadLogFile
 {
 	private static final String EMAIL_ADDRESS = "support@simlar.org";
 	private static final String EMAIL_SUBJECT = "bug report to log file ";
-	private static final String EMAIL_TEXT = "\r\n\r\n"
-			+ "Please put in your bug description here. It may be in German or English"
-			+ "\r\n\r\n"
-			+ "Please do not delete the following link as it helps developers to identify your logfile"
-			+ "\r\n";
+	private static final String EMAIL_TEXT = """
+			\r
+			\r
+			Please put in your bug description here. It may be in German or English\r
+			\r
+			Please do not delete the following link as it helps developers to identify your logfile\r
+			""";
 	private static final String URL_PATH = "upload-logfile.php";
 	private static final String UPLOAD_SFTP_LINK = "sftp://root@" + ServerSettings.DOMAIN + "/var/www/simlar/logfiles/";
 

@@ -28,14 +28,11 @@ public enum ContactStatus
 
 	public static ContactStatus fromInt(final int i)
 	{
-		switch (i) {
-			case 0:
-				return NOT_REGISTERED;
-			case 1:
-				return REGISTERED;
-			default:
-				return UNKNOWN;
-		}
+		return switch (i) {
+			case 0 -> NOT_REGISTERED;
+			case 1 -> REGISTERED;
+			default -> UNKNOWN;
+		};
 	}
 
 	public boolean isRegistered()

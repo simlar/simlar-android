@@ -385,22 +385,16 @@ public final class ContactsProvider
 			}
 
 			switch (mState) {
-				case INITIALIZED:
+				case INITIALIZED -> {
 					Lg.i("using cached data for all contacts");
 					listener.onGetContacts(createFullContactDataSet(), Error.NONE);
-					break;
-				case PARSING_PHONES_ADDRESS_BOOK:
-				case REQUESTING_CONTACTS_STATUS_FROM_SERVER:
-					mFullContactsListeners.add(listener);
-					break;
-				case UNINITIALIZED:
-				case ERROR:
+				}
+				case PARSING_PHONES_ADDRESS_BOOK, REQUESTING_CONTACTS_STATUS_FROM_SERVER -> mFullContactsListeners.add(listener);
+				case UNINITIALIZED, ERROR -> {
 					mFullContactsListeners.add(listener);
 					loadContacts(context);
-					break;
-				default:
-					Lg.e("unknown state=", mState);
-					break;
+				}
+				default -> Lg.e("unknown state=", mState);
 			}
 		}
 
@@ -423,23 +417,17 @@ public final class ContactsProvider
 			}
 
 			switch (mState) {
-				case INITIALIZED:
-				case REQUESTING_CONTACTS_STATUS_FROM_SERVER:
+				case INITIALIZED, REQUESTING_CONTACTS_STATUS_FROM_SERVER -> {
 					Lg.i("using cached data for name and photoId");
 					final ContactData cd = createContactData(simlarId);
 					listener.onGetNameAndPhotoId(cd.name, cd.photoId);
-					break;
-				case PARSING_PHONES_ADDRESS_BOOK:
-					mContactListener.put(listener, simlarId);
-					break;
-				case UNINITIALIZED:
-				case ERROR:
+				}
+				case PARSING_PHONES_ADDRESS_BOOK -> mContactListener.put(listener, simlarId);
+				case UNINITIALIZED, ERROR -> {
 					mContactListener.put(listener, simlarId);
 					loadContacts(context);
-					break;
-				default:
-					Lg.e("unknown state=", mState);
-					break;
+				}
+				default -> Lg.e("unknown state=", mState);
 			}
 		}
 

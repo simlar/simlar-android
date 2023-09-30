@@ -357,17 +357,8 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		Lg.i("onVideoStateChanged: ", videoState);
 
 		switch (videoState) {
-			case OFF:
-			case REQUESTING:
-			case REMOTE_REQUESTED:
-			case DENIED:
-				stopVideo();
-				break;
-			case ACCEPTED:
-			case INITIALIZING:
-			case PLAYING:
-				startVideo();
-				break;
+			case OFF, REQUESTING, REMOTE_REQUESTED, DENIED -> stopVideo();
+			case ACCEPTED, INITIALIZING, PLAYING -> startVideo();
 		}
 
 		final boolean requestingVideo = VideoState.REQUESTING == videoState;
@@ -627,18 +618,10 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 			mButtonSpeakerChoices.setVisibility(View.VISIBLE);
 
 			switch (currentAudioOutput) {
-				case PHONE:
-					mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_phone);
-					break;
-				case WIRED_HEADSET:
-					mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_wired_headset);
-					break;
-				case SPEAKER:
-					mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_speaker);
-					break;
-				case BLUETOOTH:
-					mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_bluetooth);
-					break;
+				case PHONE -> mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_phone);
+				case WIRED_HEADSET -> mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_wired_headset);
+				case SPEAKER -> mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_speaker);
+				case BLUETOOTH -> mButtonSpeakerChoices.setImageResource(R.drawable.audio_output_bluetooth);
 			}
 
 			mButtonSpeakerChoices.setOnClickListener(view -> {
@@ -722,19 +705,18 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 	private void setButtonMicrophoneMute()
 	{
 		switch (mCommunicator.getService().getMicrophoneStatus()) {
-			case DISABLED:
+			case DISABLED -> {
 				mButtonMicro.setImageResource(R.drawable.micro_off_disabled);
 				mButtonMicro.setContentDescription(getString(R.string.call_activity_microphone_disabled));
-				break;
-			case MUTED:
+			}
+			case MUTED -> {
 				mButtonMicro.setImageResource(R.drawable.micro_off);
 				mButtonMicro.setContentDescription(getString(R.string.call_activity_microphone_mute));
-				break;
-			case ON:
-			default:
+			}
+			case ON -> {
 				mButtonMicro.setImageResource(R.drawable.micro_on);
 				mButtonMicro.setContentDescription(getString(R.string.call_activity_microphone_on));
-				break;
+			}
 		}
 	}
 

@@ -155,24 +155,22 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		public void onCallStateChanged(final int state, final String incomingNumber)
 		{
 			switch (state) {
-				case TelephonyManager.CALL_STATE_IDLE:
+				case TelephonyManager.CALL_STATE_IDLE -> {
 					Lg.i("onTelephonyCallStateChanged: state=IDLE");
 					mInCall = false;
 					onTelephonyCallStateIdle();
-					break;
-				case TelephonyManager.CALL_STATE_OFFHOOK:
+				}
+				case TelephonyManager.CALL_STATE_OFFHOOK -> {
 					Lg.i("onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=OFFHOOK");
 					mInCall = true;
 					onTelephonyCallStateOffHook();
-					break;
-				case TelephonyManager.CALL_STATE_RINGING:
+				}
+				case TelephonyManager.CALL_STATE_RINGING -> {
 					Lg.i("onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=RINGING");
 					mInCall = false; /// TODO Think about
 					onTelephonyCallStateRinging();
-					break;
-				default:
-					Lg.i("onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=", state);
-					break;
+				}
+				default -> Lg.i("onTelephonyCallStateChanged: [", new Lg.Anonymizer(incomingNumber), "] state=", state);
 			}
 		}
 	}

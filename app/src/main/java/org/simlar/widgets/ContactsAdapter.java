@@ -30,6 +30,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -46,6 +47,7 @@ final class ContactsAdapter extends ArrayAdapter<ContactDataComplete>
 
 	private static final class SortByName implements Comparator<ContactDataComplete>, Serializable
 	{
+		@Serial
 		private static final long serialVersionUID = 1;
 
 		@Override

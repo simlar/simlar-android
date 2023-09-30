@@ -433,20 +433,13 @@ final class LinphoneHandler
 
 	private static int convertLogLevel(final LogLevel logLevel)
 	{
-		switch (logLevel) {
-			case Debug:
-				return Log.VERBOSE;
-			case Trace:
-				return Log.DEBUG;
-			case Message:
-				return Log.INFO;
-			case Warning:
-				return Log.WARN;
-			case Error:
-			case Fatal:
-			default:
-				return Log.ERROR;
-		}
+		return switch (logLevel) {
+			case Debug -> Log.VERBOSE;
+			case Trace -> Log.DEBUG;
+			case Message -> Log.INFO;
+			case Warning -> Log.WARN;
+			case Error, Fatal -> Log.ERROR;
+		};
 	}
 
 	@SuppressWarnings("SameParameterValue")
@@ -618,27 +611,14 @@ final class LinphoneHandler
 			return null;
 		}
 
-		switch (type) {
-			case Unknown:
-			case Microphone:
-				return null;
-			case Earpiece:
-			case Telephony:
-				return AudioOutputType.PHONE;
-			case Speaker:
-				return AudioOutputType.SPEAKER;
-			case Bluetooth:
-			case BluetoothA2DP:
-				return AudioOutputType.BLUETOOTH;
-			case AuxLine:
-			case GenericUsb:
-			case Headset:
-			case Headphones:
-			case HearingAid:
-				return AudioOutputType.WIRED_HEADSET;
-		}
+		return switch (type) {
+			case Unknown, Microphone -> null;
+			case Earpiece, Telephony -> AudioOutputType.PHONE;
+			case Speaker -> AudioOutputType.SPEAKER;
+			case Bluetooth, BluetoothA2DP -> AudioOutputType.BLUETOOTH;
+			case AuxLine, GenericUsb, Headset, Headphones, HearingAid -> AudioOutputType.WIRED_HEADSET;
+		};
 
-		return null;
 	}
 
 	public synchronized Set<AudioOutputType> getAvailableAudioOutputTypes()
