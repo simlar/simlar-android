@@ -93,5 +93,6 @@
         <packageUrl regex="true">^pkg:maven/io\.grpc/grpc\-.*@.*$</packageUrl>
         <vulnerabilityName>CVE-2023-32732</vulnerabilityName>
         <vulnerabilityName>CVE-2023-33953</vulnerabilityName>
+        <vulnerabilityName>CVE-2023-4785</vulnerabilityName>
     </suppress>
 </suppressions>
