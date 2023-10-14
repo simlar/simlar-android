@@ -21,6 +21,7 @@
         <vulnerabilityName>CVE-2022-41881</vulnerabilityName>
         <vulnerabilityName>CVE-2022-41915</vulnerabilityName>
         <vulnerabilityName>CVE-2023-34462</vulnerabilityName>
+        <vulnerabilityName>CVE-2023-4586</vulnerabilityName>
     </suppress>
     <suppress>
         <notes>
@@ -93,5 +94,6 @@
         <packageUrl regex="true">^pkg:maven/io\.grpc/grpc\-.*@.*$</packageUrl>
         <vulnerabilityName>CVE-2023-32732</vulnerabilityName>
         <vulnerabilityName>CVE-2023-33953</vulnerabilityName>
+        <vulnerabilityName>CVE-2023-4785</vulnerabilityName>
     </suppress>
 </suppressions>
