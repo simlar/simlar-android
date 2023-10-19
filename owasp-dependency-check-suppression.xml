@@ -96,5 +96,6 @@
         <vulnerabilityName>CVE-2023-32732</vulnerabilityName>
         <vulnerabilityName>CVE-2023-33953</vulnerabilityName>
         <vulnerabilityName>CVE-2023-4785</vulnerabilityName>
+        <vulnerabilityName>CVE-2023-44487</vulnerabilityName>
     </suppress>
 </suppressions>
