@@ -75,6 +75,7 @@
         <vulnerabilityName>CVE-2022-41881</vulnerabilityName>
         <vulnerabilityName>CVE-2022-41915</vulnerabilityName>
         <vulnerabilityName>CVE-2023-34462</vulnerabilityName>
+        <vulnerabilityName>CVE-2023-44487</vulnerabilityName>
     </suppress>
     <suppress>
         <notes>
