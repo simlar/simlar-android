@@ -22,7 +22,7 @@ jobs:
         distribution: 'adopt'
 
     - name: Setup Android SDK
-      uses: android-actions/setup-android@v2
+      uses: android-actions/setup-android@v3
 
     - name: Cache dependencies
       id: cache-dependencies
