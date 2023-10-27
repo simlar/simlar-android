@@ -161,7 +161,7 @@ ext {
 
 dependencies {
     if (useGoogleServices()) {
-        pushImplementation("com.google.firebase:firebase-messaging:23.2.1") {
+        pushImplementation("com.google.firebase:firebase-messaging:23.3.0") {
             exclude group: "com.google.firebase", module: "firebase-core"
             exclude group: "com.google.firebase", module: "firebase-analytics"
             exclude group: "com.google.firebase", module: "firebase-measurement-connector"

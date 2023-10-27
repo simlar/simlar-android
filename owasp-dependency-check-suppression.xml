@@ -90,4 +90,14 @@
         <vulnerabilityName>CVE-2023-4785</vulnerabilityName>
         <vulnerabilityName>CVE-2023-44487</vulnerabilityName>
     </suppress>
+    <suppress>
+        <notes>
+            <![CDATA[
+                file name: kotlinx-coroutines-play-services-1.6.4.jar
+            ]]>
+        </notes>
+        <packageUrl regex="true">^pkg:maven/org\.jetbrains\.kotlinx/kotlinx\-coroutines\-play\-services@.*$</packageUrl>
+        <vulnerabilityName>CVE-2020-22475</vulnerabilityName>
+        <vulnerabilityName>CVE-2022-39349</vulnerabilityName>
+    </suppress>
 </suppressions>
