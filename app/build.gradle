@@ -28,9 +28,13 @@ plugins {
 def createVersionName = { ->
     try {
         if (ignoreGitDirtyVersion()) {
-            return "git -C ${rootDir} describe --tags --always".execute().text.trim()
+            return providers.exec {
+                commandLine("git", "describe", "--tags", "--always")
+            }.standardOutput.asText.get().trim()
         } else {
-            return "git -C ${rootDir} describe --tags --always --dirty".execute().text.trim()
+            return providers.exec {
+                commandLine("git", "describe", "--tags", "--always", "--dirty")
+            }.standardOutput.asText.get().trim()
         }
     }
     catch (ignored) {
