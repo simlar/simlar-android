@@ -54,7 +54,6 @@ public final class Lg
 		println(priority, createEqualSizedTag(tagPrefix, tag, null), null, messageParts);
 	}
 
-	@SuppressWarnings("OverloadedVarargsMethod")
 	private static void println(final int priority, final Throwable exception, final Object... messageParts)
 	{
 		if (priority < mLevel) {
@@ -67,7 +66,7 @@ public final class Lg
 		println(priority, createEqualSizedTag("(", fileName, ")"), exception, messageParts);
 	}
 
-	@SuppressWarnings({ "OverloadedVarargsMethod", "LogConditional" })
+	@SuppressWarnings("LogConditional")
 	private static void println(final int priority, final String tag, final Throwable exception, final Object... messageParts)
 	{
 		final StringBuilder message = new StringBuilder();
