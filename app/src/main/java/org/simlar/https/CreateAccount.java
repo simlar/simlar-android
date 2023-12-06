@@ -78,7 +78,6 @@ public final class CreateAccount
 			return mErrorId != SUCCESS || Util.isNullOrEmpty(mResult1) || Util.isNullOrEmpty(mResult2);
 		}
 
-		@SuppressWarnings("DuplicateBranchesInSwitch")
 		public final CreateAccountMessage getErrorMessage()
 		{
 			return switch (mErrorId) {
