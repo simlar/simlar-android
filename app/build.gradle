@@ -154,11 +154,10 @@ play {
     track.set("alpha")
 }
 
-def nvdApiKey = System.getenv("SIMLAR_NVD_API_KEY")
-
 dependencyCheck {
     suppressionFile = "owasp-dependency-check-suppression.xml"
     failBuildOnCVSS = 0
+    def nvdApiKey = System.getenv("SIMLAR_NVD_API_KEY")
     if (nvdApiKey != null) {
         nvd {
             apiKey = "${nvdApiKey}"
