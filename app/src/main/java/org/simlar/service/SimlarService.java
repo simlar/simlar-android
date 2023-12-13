@@ -668,7 +668,7 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 	private static PendingIntent getPendingIntent(final Context context, final Intent startIntent)
 	{
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-			return PendingIntent.getBroadcast(context, 0, startIntent, PendingIntent.FLAG_MUTABLE);
+			return PendingIntent.getBroadcast(context, 0, startIntent, PendingIntent.FLAG_IMMUTABLE);
 		} else {
 			return PendingIntent.getBroadcast(context, 0, startIntent, 0);
 		}
