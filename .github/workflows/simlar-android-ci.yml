@@ -33,6 +33,8 @@ jobs:
         key: ${{ runner.os }}-dependencies
 
     - name: Build app
+      env:
+        SIMLAR_NVD_API_KEY: ${{ secrets.SIMLAR_NVD_API_KEY }}
       run: ./gradlew --no-daemon --warning-mode all clean build connectedCheck
 
     - name: Save artifacts
