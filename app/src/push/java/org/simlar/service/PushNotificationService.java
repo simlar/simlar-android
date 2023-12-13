@@ -46,6 +46,7 @@ public final class PushNotificationService extends FirebaseMessagingService
 				" type: ", remoteMessage.getMessageType(),
 				" collapseKey: ", remoteMessage.getCollapseKey(),
 				" data: ", remoteMessage.getData(),
+				" priority: ", remoteMessage.getPriority(), " (", remoteMessage.getOriginalPriority(), ")",
 				" notification: ", remoteMessage.getNotification() == null ? null : remoteMessage.getNotification().getBody());
 
 		ContextCompat.startForegroundService(this, new Intent(this, SimlarService.class));
