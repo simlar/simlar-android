@@ -34,7 +34,6 @@ import org.linphone.core.AudioDevice;
 import org.linphone.core.Call;
 import org.linphone.core.CallParams;
 import org.linphone.core.CallStats;
-import org.linphone.core.ConfiguringState;
 import org.linphone.core.Core;
 import org.linphone.core.CoreListenerStub;
 import org.linphone.core.ErrorInfo;
@@ -477,15 +476,6 @@ public final class LinphoneManager extends CoreListenerStub
 		}
 
 		mListener.onCallEncryptionChanged(authenticationToken, isTokenVerified);
-	}
-
-	@Override
-	public void onConfiguringStatus(@NonNull final Core lc, final ConfiguringState state, final String message)
-	{
-		if (state == ConfiguringState.Skipped) {
-			return;
-		}
-		Lg.w("onConfiguringStatus remoteProvisioningState=", state, " message=", message);
 	}
 
 	@Override
