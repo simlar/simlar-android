@@ -22,17 +22,19 @@ fi
 
 declare -rx PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_NDK}
 
+cd "${BUILD_DIR}/linphone-sdk"
 
-declare -r CMAKE_BUILD_DIR="${BUILD_DIR}/linphone-sdk-build_$(date '+%Y%m%d_%H%M%S')"
+declare -r CMAKE_BUILD_DIR="${BUILD_DIR}/linphone-sdk/build-android_$(date '+%Y%m%d_%H%M%S')"
 mkdir "${CMAKE_BUILD_DIR}"
-cd "${CMAKE_BUILD_DIR}"
-touch settings.gradle
+touch "${CMAKE_BUILD_DIR}/settings.gradle"
 
-cmake "${BUILD_DIR}/linphone-sdk" \
-	-DLINPHONESDK_PLATFORM=Android \
+cmake  \
+	--preset=android-sdk \
+	-B "${CMAKE_BUILD_DIR}" \
 	-DLINPHONESDK_ANDROID_ARCHS=armv7,arm64,x86,x86_64 \
 	-DENABLE_AAUDIO=OFF \
 	-DENABLE_GPL_THIRD_PARTIES=ON \
+	-DENABLE_NON_FREE_FEATURES=ON \
 	-DENABLE_PQCRYPTO=ON \
 	-DENABLE_GSM=OFF \
 	-DENABLE_ILBC=OFF \
@@ -40,8 +42,7 @@ cmake "${BUILD_DIR}/linphone-sdk" \
 	-DENABLE_MKV=OFF \
 	-DENABLE_VCARD=OFF
 
-cmake --build .
-
+cmake --build "${CMAKE_BUILD_DIR}"
 
 cd "${PROJECT_DIR}"
 rm -rf "app/libs/linphone-sdk/${VERSION}"
