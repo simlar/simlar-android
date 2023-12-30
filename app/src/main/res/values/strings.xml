@@ -157,6 +157,8 @@
     <string name="permission_explain_text_contacts">Simlar reads your contacts data to show the contacts you can talk to privately.</string>
     <!-- Allow Simlar to take pictures and record video? -->
     <string name="permission_explain_text_camera">Simlar uses your camera during Simlar video calls so that the person you are talking to can see you.</string>
+    <!-- Allow Simlar to send you notifications -->
+    <string name="permission_explain_text_post_notification">With notifications Simlar informs you about incoming calls.</string>
 
     <!-- Do Not Disturb -->
     <!-- Allow access to Do Not Disturb for Simlar? -->
