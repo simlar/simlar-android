@@ -60,7 +60,12 @@ public final class PermissionsHelper
 						? Manifest.permission.READ_PHONE_NUMBERS
 						: Manifest.permission.READ_PHONE_STATE,
 				false),
-		PHONE_STATE(Manifest.permission.READ_PHONE_STATE, true);
+		PHONE_STATE(Manifest.permission.READ_PHONE_STATE, true),
+		POST_NOTIFICATION(
+				hasPostNotificationPermission()
+						? Manifest.permission.POST_NOTIFICATIONS
+						: null,
+				true);
 
 		private final String mPermission;
 		private final boolean mMajor;
@@ -88,6 +93,7 @@ public final class PermissionsHelper
 				case PHONE_STATE -> hasPhoneNumbersPermission()
 						? R.string.permission_explain_text_phone_state
 						: R.string.permission_explain_text_phone_state_with_phone_number;
+				case POST_NOTIFICATION -> R.string.permission_explain_text_post_notification;
 			};
 		}
 
@@ -95,7 +101,7 @@ public final class PermissionsHelper
 		{
 			final Set<Type> majorTypes = EnumSet.noneOf(Type.class);
 			for (final Type type : values()) {
-				if (type.mMajor) {
+				if (type.mMajor && type.mPermission != null) {
 					majorTypes.add(type);
 				}
 			}
@@ -105,6 +111,11 @@ public final class PermissionsHelper
 		private static boolean hasPhoneNumbersPermission()
 		{
 			return Build.VERSION.SDK_INT >= Build.VERSION_CODES.R;
+		}
+
+		private static boolean hasPostNotificationPermission()
+		{
+			return Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU;
 		}
 	}
 

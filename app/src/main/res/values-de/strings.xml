@@ -155,6 +155,8 @@
     <string name="permission_explain_text_contacts">Simlar liest die Nummern in deinem Telefonbuch, um andere Simlar-Nutzer zu finden.</string>
     <!-- Zulassen, dass die App Simlar Bilder und Video aufnehmen darf? -->
     <string name="permission_explain_text_camera">Simlar greift auf deine Kamera zu, damit dein Gesprächspartner dich sehen kann.</string>
+    <!-- Simlar erlauben, dir Benachrichtigungen zu senden? -->
+    <string name="permission_explain_text_post_notification">Mit Benachrichtigungen informiert Simlar dich über eingehende Anrufe.</string>
 
     <!-- Zugriff während "Nicht stören" -->
     <!-- Zugriff auf "Nicht stören" für Simlar zu lassen?-->
