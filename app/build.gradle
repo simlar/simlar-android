@@ -64,6 +64,7 @@ android {
         applicationId "org.simlar"
         minSdkVersion 23
         compileSdk 34
+        //noinspection OldTargetApi
         targetSdkVersion 34
         buildToolsVersion = "34.0.0"
         versionName createVersionName()
@@ -186,7 +187,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.legacy:legacy-support-v4:${androidSupportVersion}")
     implementation("androidx.legacy:legacy-support-v13:${androidSupportVersion}")
-    implementation("com.googlecode.libphonenumber:libphonenumber:8.13.27")
+    implementation("com.googlecode.libphonenumber:libphonenumber:8.13.45")
 
     def liblinphoneSdkDir = "libs/linphone-sdk/${liblinphoneVersion}"
     if (new File("${rootDir}/app/${liblinphoneSdkDir}/${liblinphoneSdk}").exists()) {
