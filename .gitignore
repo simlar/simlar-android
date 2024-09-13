@@ -7,6 +7,7 @@
 /.idea/libraries
 /.idea/vcs.xml
 /.idea/.name
+/.idea/deploymentTargetSelector.xml
 .DS_Store
 /build
 app/build/
