@@ -64,6 +64,7 @@ android {
         applicationId "org.simlar.test"
         minSdkVersion 23
         compileSdk 35
+        //noinspection OldTargetApi
         targetSdkVersion 35
         buildToolsVersion = "35.0.0"
         versionName createVersionName()
