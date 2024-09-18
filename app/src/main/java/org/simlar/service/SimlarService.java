@@ -240,7 +240,7 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 			return;
 		}
 
-		final AudioManager audioManager = Util.getSystemService(this, Context.AUDIO_SERVICE);
+		final AudioManager audioManager = Util.getSystemService(this, AUDIO_SERVICE);
 		if (audioManager.isVolumeFixed()) {
 			Lg.i("device does not support muting");
 			return;
@@ -258,7 +258,7 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 			return;
 		}
 
-		final AudioManager audioManager = Util.getSystemService(this, Context.AUDIO_SERVICE);
+		final AudioManager audioManager = Util.getSystemService(this, AUDIO_SERVICE);
 		mStreamRingNeedsUnMute = false;
 		muteAudioStream(audioManager, AudioManager.STREAM_RING, false);
 	}
@@ -344,7 +344,7 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		mVibratorManager = new VibratorManager(getApplicationContext());
 		mSoundEffectManager = new SoundEffectManager(getApplicationContext());
 
-		mWakeLock = ((PowerManager) Util.getSystemService(this, Context.POWER_SERVICE))
+		mWakeLock = ((PowerManager) Util.getSystemService(this, POWER_SERVICE))
 				.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "simlar:WakeLock");
 		mDisplayWakeLock = createDisplayWakeLock();
 		mWifiLock = createWifiWakeLock();
@@ -354,7 +354,7 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		registerReceiver(mNetworkChangeReceiver, intentFilter);
 
 		if (PermissionsHelper.isNotificationPolicyAccessGranted(this)) {
-			((TelephonyManager) Util.getSystemService(this, Context.TELEPHONY_SERVICE))
+			((TelephonyManager) Util.getSystemService(this, TELEPHONY_SERVICE))
 					.listen(mTelephonyCallStateListener, PhoneStateListener.LISTEN_CALL_STATE);
 		}
 
@@ -386,13 +386,13 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 	@SuppressWarnings("deprecation")
 	private WakeLock createDisplayWakeLock()
 	{
-		return ((PowerManager) Util.getSystemService(this, Context.POWER_SERVICE))
+		return ((PowerManager) Util.getSystemService(this, POWER_SERVICE))
 				.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "simlar:DisplayWakeLock");
 	}
 
 	private WifiLock createWifiWakeLock()
 	{
-		return ((WifiManager) Util.getSystemService(this, Context.WIFI_SERVICE))
+		return ((WifiManager) Util.getSystemService(this, WIFI_SERVICE))
 				.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "SimlarWifiLock");
 	}
 
@@ -471,13 +471,13 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		notificationBuilder.setAutoCancel(true);
 		notificationBuilder.setWhen(System.currentTimeMillis());
 
-		((NotificationManager) Util.getSystemService(context, Context.NOTIFICATION_SERVICE))
+		((NotificationManager) Util.getSystemService(context, NOTIFICATION_SERVICE))
 				.notify(PreferencesHelper.getNextMissedCallNotificationId(context), notificationBuilder.build());
 	}
 
 	private void updateNotification()
 	{
-		final NotificationManager nm = Util.getSystemService(this, Context.NOTIFICATION_SERVICE);
+		final NotificationManager nm = Util.getSystemService(this, NOTIFICATION_SERVICE);
 		nm.notify(NOTIFICATION_ID, createNotification());
 	}
 
@@ -581,7 +581,7 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 	{
 		Lg.i("onDestroy");
 
-		((NotificationManager) Util.getSystemService(this, Context.NOTIFICATION_SERVICE)).cancel(NOTIFICATION_ID);
+		((NotificationManager) Util.getSystemService(this, NOTIFICATION_SERVICE)).cancel(NOTIFICATION_ID);
 
 		mVibratorManager.stop();
 		mSoundEffectManager.stopAll();
@@ -590,7 +590,7 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 
 		stopKeepAwake();
 
-		((TelephonyManager) Util.getSystemService(this, Context.TELEPHONY_SERVICE))
+		((TelephonyManager) Util.getSystemService(this, TELEPHONY_SERVICE))
 				.listen(mTelephonyCallStateListener, PhoneStateListener.LISTEN_NONE);
 
 		// just in case
@@ -658,7 +658,7 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 			return;
 		}
 
-		final NetworkInfo ni = ((ConnectivityManager) Util.getSystemService(this, Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+		final NetworkInfo ni = ((ConnectivityManager) Util.getSystemService(this, CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
 		if (ni == null) {
 			Lg.e("no NetworkInfo found");
 			return;
@@ -689,7 +689,7 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		final Intent startIntent = new Intent("org.simlar.keepAwake");
 		mKeepAwakePendingIntent = getPendingIntent(this, startIntent);
 
-		((AlarmManager) Util.getSystemService(this, Context.ALARM_SERVICE))
+		((AlarmManager) Util.getSystemService(this, ALARM_SERVICE))
 				.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 600000, 600000, mKeepAwakePendingIntent);
 
 		final IntentFilter filter = new IntentFilter();
@@ -704,7 +704,7 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		}
 
 		unregisterReceiver(mKeepAwakeReceiver);
-		((AlarmManager) Util.getSystemService(this, Context.ALARM_SERVICE)).cancel(mKeepAwakePendingIntent);
+		((AlarmManager) Util.getSystemService(this, ALARM_SERVICE)).cancel(mKeepAwakePendingIntent);
 	}
 
 	private void keepAwake()
@@ -850,7 +850,7 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 		}
 
 		if (!mSimlarCallState.isRinging()) {
-			final NotificationManager nm = Util.getSystemService(this, Context.NOTIFICATION_SERVICE);
+			final NotificationManager nm = Util.getSystemService(this, NOTIFICATION_SERVICE);
 			nm.cancel(NOTIFICATION_RINGING_ID);
 		}
 
@@ -883,7 +883,7 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 
 			if (mSimlarCallState.isRinging()) {
 				Lg.i("notify incoming call with full screen notification");
-				final NotificationManager nm = Util.getSystemService(this, Context.NOTIFICATION_SERVICE);
+				final NotificationManager nm = Util.getSystemService(this, NOTIFICATION_SERVICE);
 				nm.notify(NOTIFICATION_RINGING_ID, createNotificationRinging());
 			}
 
@@ -902,7 +902,7 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 
 	private boolean isScreenLocked()
 	{
-		final KeyguardManager keyguardManager = Util.getSystemService(this, Context.KEYGUARD_SERVICE);
+		final KeyguardManager keyguardManager = Util.getSystemService(this, KEYGUARD_SERVICE);
 		return keyguardManager.inKeyguardRestrictedInputMode();
 	}
 
@@ -1028,7 +1028,7 @@ public final class SimlarService extends Service implements LinphoneManagerListe
 
 		if (mGoingDown) {
 			Lg.i("onJoin: canceling notification");
-			((NotificationManager) Util.getSystemService(this, Context.NOTIFICATION_SERVICE)).cancel(NOTIFICATION_ID);
+			((NotificationManager) Util.getSystemService(this, NOTIFICATION_SERVICE)).cancel(NOTIFICATION_ID);
 			Lg.i("onJoin: calling stopSelf");
 			stopSelf();
 			Lg.i("onJoin: stopSelf called");

@@ -20,8 +20,6 @@
 
 package org.simlar.widgets;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -59,7 +57,7 @@ public final class VerifyNumberActivity extends AppCompatActivity
 
 	private final ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(
 			new ActivityResultContracts.StartActivityForResult(), result -> {
-				if (result.getResultCode() == Activity.RESULT_OK) {
+				if (result.getResultCode() == RESULT_OK) {
 					startMainActivity();
 				}
 			});
@@ -166,7 +164,7 @@ public final class VerifyNumberActivity extends AppCompatActivity
 	{
 		Lg.e("no number");
 		mEditNumber.requestFocus();
-		if (((InputMethodManager) Util.getSystemService(this, Context.INPUT_METHOD_SERVICE))
+		if (((InputMethodManager) Util.getSystemService(this, INPUT_METHOD_SERVICE))
 				.showSoftInput(mEditNumber, InputMethodManager.SHOW_IMPLICIT)) {
 			Lg.w("showSoftInput success");
 		} else {
