@@ -100,19 +100,19 @@
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
         <activity
             android:name=".widgets.CallActivity"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
         <activity
             android:name=".widgets.VerifyNumberActivity"
             android:label="@string/verify_number_activity_title"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
         <activity
             android:name=".widgets.AboutActivity"
             android:label="@string/about_activity_title"
@@ -126,7 +126,7 @@
             android:label="@string/agree_activity_title"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
     </application>
 
 </manifest>
