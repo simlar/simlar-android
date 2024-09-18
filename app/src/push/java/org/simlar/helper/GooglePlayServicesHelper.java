@@ -21,6 +21,7 @@
 package org.simlar.helper;
 
 import android.app.Dialog;
+import android.content.Context;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,9 +42,9 @@ public final class GooglePlayServicesHelper
 		throw new AssertionError("This class was not meant to be instantiated");
 	}
 
-	public static void refreshTokenOnServer()
+	public static void refreshTokenOnServer(final Context context)
 	{
-		PushNotificationService.refreshTokenOnServer();
+		PushNotificationService.refreshTokenOnServer(context);
 	}
 
 	public static void checkPlayServices(final AppCompatActivity activity)

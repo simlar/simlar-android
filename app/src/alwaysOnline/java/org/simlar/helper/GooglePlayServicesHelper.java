@@ -20,6 +20,8 @@
 
 package org.simlar.helper;
 
+import android.content.Context;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 @SuppressWarnings("ClassOnlyUsedInOnePackage")
@@ -31,7 +33,7 @@ public final class GooglePlayServicesHelper
 	}
 
 	@SuppressWarnings({ "EmptyMethod", "UnusedParameters" })
-	public static void refreshTokenOnServer()
+	public static void refreshTokenOnServer(final Context context)
 	{
 	}
 

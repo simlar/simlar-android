@@ -28,6 +28,7 @@
     <string name="google_play_services_helper_alert_unavailable_text">Installiere die Google Play Services, damit du Simlar benutzen kannst.</string>
     <string name="google_play_services_helper_alert_unavailable_button_close_simlar">Simlar beenden</string>
 
-    <string name="notification_channel_call_name">Aktueller Anruf</string>
+    <string name="push_notification_service_toast_refresh_token_error">Push Notification Error: %1$s</string>
 
+    <string name="notification_channel_call_name">Aktueller Anruf</string>
 </resources>

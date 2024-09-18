@@ -21,7 +21,9 @@
 
 package org.simlar.service;
 
+import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -30,6 +32,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import org.simlar.R;
 import org.simlar.https.StorePushId;
 import org.simlar.logging.Lg;
 import org.simlar.utils.Util;
@@ -76,7 +79,7 @@ public final class PushNotificationService extends FirebaseMessagingService
 		}).start();
 	}
 
-	public static void refreshTokenOnServer()
+	public static void refreshTokenOnServer(final Context context)
 	{
 		if (tokenRefreshed) {
 			return;
@@ -84,6 +87,14 @@ public final class PushNotificationService extends FirebaseMessagingService
 		tokenRefreshed = true;
 
 		Lg.i("trigger update of firebase push notification token on simlar server");
-		FirebaseMessaging.getInstance().getToken().addOnCompleteListener(token -> sendToServer(token.getResult()));
+		FirebaseMessaging.getInstance().getToken().addOnCompleteListener(token -> {
+			if (!token.isSuccessful()) {
+				Lg.w("Getting firebase push notification token failed: ", token.getException());
+				Toast.makeText(context, String.format(context.getString(R.string.push_notification_service_toast_refresh_token_error), token.getException()), Toast.LENGTH_LONG).show();
+				return;
+			}
+
+			sendToServer(token.getResult());
+		});
 	}
 }

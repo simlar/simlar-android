@@ -165,7 +165,7 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 				case PERMISSION_DENIED -> showNoContactPermissionFragment(true);
 			}
 
-			GooglePlayServicesHelper.refreshTokenOnServer();
+			GooglePlayServicesHelper.refreshTokenOnServer(this);
 		});
 	}
 
