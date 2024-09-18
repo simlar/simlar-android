@@ -20,7 +20,6 @@
 
 package org.simlar.widgets;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -180,7 +179,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 	public boolean onKeyUp(final int keyCode, @NonNull final KeyEvent event)
 	{
 		if (keyCode == KeyEvent.KEYCODE_ENTER) {
-			((InputMethodManager) Util.getSystemService(this, Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);
+			((InputMethodManager) Util.getSystemService(this, INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);
 			return true;
 		}
 		return false;
@@ -340,12 +339,12 @@ public final class CreateAccountActivity extends AppCompatActivity
 			mButtonCall.setEnabled(false);
 			mButtonConfirm.setEnabled(false);
 			mEditRegistrationCode.requestFocus();
-			((InputMethodManager) Util.getSystemService(this, Context.INPUT_METHOD_SERVICE)).showSoftInput(mEditRegistrationCode,
+			((InputMethodManager) Util.getSystemService(this, INPUT_METHOD_SERVICE)).showSoftInput(mEditRegistrationCode,
 					InputMethodManager.SHOW_IMPLICIT);
 
 			updateCallButton();
 		} else {
-			((InputMethodManager) Util.getSystemService(this, Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);
+			((InputMethodManager) Util.getSystemService(this, INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);
 		}
 
 	}
@@ -420,7 +419,7 @@ public final class CreateAccountActivity extends AppCompatActivity
 	public void onConfirmClicked(final View view)
 	{
 		Lg.i("onConfirmClicked");
-		((InputMethodManager) Util.getSystemService(this, Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);
+		((InputMethodManager) Util.getSystemService(this, INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditRegistrationCode.getWindowToken(), 0);
 		mLayoutProgress.setVisibility(View.VISIBLE);
 		mLayoutMessage.setVisibility(View.GONE);
 
