@@ -175,6 +175,10 @@ ext {
 }
 
 dependencies {
+    constraints {
+        add("implementation", "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.20")
+    }
+
     if (useGoogleServices()) {
         pushImplementation("com.google.firebase:firebase-messaging:24.0.1") {
             exclude group: "com.google.firebase", module: "firebase-core"
