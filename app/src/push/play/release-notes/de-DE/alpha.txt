@@ -1,5 +1,5 @@
 • Verschlüsselt mit Post Quantum Cryptographie
 • Verbesserter Verbindungsaufbau
-• Linphone Sdk Update 5.3.2
+• Linphone Sdk Update 5.3.84
 • Validierung von neuen internationalen Telefonnummern
 • Kleinere Verbesserungen und Korrekturen
