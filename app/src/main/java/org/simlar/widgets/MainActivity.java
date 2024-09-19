@@ -276,6 +276,11 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 	{
 		// using switch is not possible as R.* is not final since android gradle plugin 5.0
 		final int itemId = item.getItemId();
+		if (itemId == R.id.action_unmaintained) {
+			showUnmaintainedWarning();
+			return true;
+		}
+
 		if (itemId == R.id.action_reload_contacts) {
 			reloadContacts();
 			return true;
@@ -357,6 +362,12 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 
 		updateMenu(Lg.isDebugModeEnabled(), R.id.action_upload_logfile, R.string.main_activity_menu_upload_logfile, 3, menu);
 		return true;
+	}
+
+	private void showUnmaintainedWarning()
+	{
+		Lg.i("showUnmaintainedWarning");
+		UnmaintainedWarningDialog.show(this);
 	}
 
 	private void reloadContacts()
