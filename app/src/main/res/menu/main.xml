@@ -29,8 +29,7 @@
         android:id="@+id/action_unmaintained"
         android:orderInCategory="0"
         android:title="@string/main_activity_menu_unmaintained"
-        android:icon="@drawable/warning"
-        app:showAsAction="ifRoom|withText" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_reload_contacts"
