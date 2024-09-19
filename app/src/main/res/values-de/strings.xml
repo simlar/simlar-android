@@ -33,6 +33,7 @@
     <string name="main_activity_contact_list_error_loading_contacts_wrong_credentials">Autorisierung fehlgeschlagen. Erstelle erneut einen Account.</string>
     <string name="main_activity_contact_list_error_loading_contacts_wrong_credentials_dialog_title">Autorisierung fehlgeschlagen.</string>
     <string name="main_activity_contact_list_error_loading_contacts_wrong_credentials_dialog_message">Registriere dich erneut.</string>
+    <string name="main_activity_menu_unmaintained">&#10071; unbetreut</string>
     <string name="main_activity_menu_reload_contacts">Kontakte neu laden</string>
     <string name="main_activity_menu_upload_logfile">Fehler melden</string>
     <string name="main_activity_menu_enable_debug_mode">Debug-Modus einschalten</string>

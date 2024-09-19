@@ -26,6 +26,12 @@
     tools:context=".MainActivity">
 
     <item
+        android:id="@+id/action_unmaintained"
+        android:orderInCategory="0"
+        android:title="@string/main_activity_menu_unmaintained"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_reload_contacts"
         android:orderInCategory="1"
         android:title="@string/main_activity_menu_reload_contacts"
