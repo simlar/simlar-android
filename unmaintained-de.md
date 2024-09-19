@@ -9,5 +9,5 @@ Im Moment ist Simlar noch verfügbar (wie immer auf eigene Gefahr). Aber es ist 
 
 Ich möchte mich ganz herzlich beim Simlar-Team bedanken - ohne Euch wäre dieses Projekt nicht möglich gewesen.
 
-Janz liebe Grüße,
-Ben Sartor
+Janz liebe Grüße
+ Ben Sartor
