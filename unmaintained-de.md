@@ -5,7 +5,7 @@ Simlar war schon immer ein persönliches Herzensprojekt für mich, an dem ich se
 
 Ich werde die Server vorerst weiterlaufen lassen, möchte aber vorwarnen: Sollten größere Probleme auftreten, kann es sein, dass ich sie ohne Vorankündigung abschalten muss. In der Zwischenzeit hoffe ich, hier und da etwas Zeit zu finden, um die Abhängigkeiten der Apps zu aktualisieren.
 
-Im Moment ist Simlar noch verfügbar (wie immer auf eigene Gefahr). Aber es ist an der Zeit, sich nach Alternativen umzusehen. Sowohl Signal als auch Matrix leisten Hervorragendes.
+Im Moment ist Simlar noch verfügbar (wie immer auf eigene Gefahr). Aber es ist an der Zeit, sich nach Alternativen umzusehen. Sowohl <a href="https://signal.org">Signal</a> and <a href="https://element.io">Matrix</a> leisten Hervorragendes.
 
 Ich möchte mich ganz herzlich beim Simlar-Team bedanken - ohne Euch wäre dieses Projekt nicht möglich gewesen.
 
