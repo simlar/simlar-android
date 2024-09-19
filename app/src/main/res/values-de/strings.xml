@@ -235,4 +235,7 @@
     <string name="no_contact_permission_fragment_alert_contact_error">Kontakt konnte nicht geladen werden</string>
 
     <string name="video_fragment_initializing">initialisiere Video&#8230;</string>
+
+    <string name="unmaintained_warning_alert_title">Simlar wird jetzt nicht mehr gewartet</string>
+    <string name="unmaintained_warning_alert_message">Simlar war schon immer ein persönliches Herzensprojekt für mich, an dem ich seit seiner Gründung im Jahr 2013 mit viel Freude gearbeitet habe. Vor ein paar Monaten erblickte jedoch mein Sohn das Licht der Welt und ich habe beschlossen, meine Freizeit ihm zu widmen.\n\nIch werde die Server vorerst weiterlaufen lassen, möchte aber vorwarnen: Sollten größere Probleme auftreten, kann es sein, dass ich sie ohne Vorankündigung abschalten muss. In der Zwischenzeit hoffe ich, hier und da etwas Zeit zu finden, um die Abhängigkeiten der Apps zu aktualisieren.\n\nIm Moment ist Simlar noch verfügbar (wie immer auf eigene Gefahr). Aber es ist an der Zeit, sich nach Alternativen umzusehen. Sowohl <a href="https://signal.org">Signal</a> and <a href="https://element.io">Matrix</a> leisten Hervorragendes.\n\nIch möchte mich ganz herzlich beim Simlar-Team bedanken - ohne Euch wäre dieses Projekt nicht möglich gewesen.\n\nJanz liebe Grüße\n Ben Sartor</string>
 </resources>
