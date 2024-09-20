@@ -175,6 +175,10 @@ ext {
 }
 
 dependencies {
+    constraints {
+        add("implementation", "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.20")
+    }
+
     if (useGoogleServices()) {
         pushImplementation("com.google.firebase:firebase-messaging:24.0.1") {
             exclude group: "com.google.firebase", module: "firebase-core"
@@ -184,7 +188,7 @@ dependencies {
         pushImplementation("com.google.android.gms:play-services-base:18.5.0")
     }
     implementation("androidx.media:media:1.7.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("androidx.legacy:legacy-support-v4:${androidSupportVersion}")
     implementation("androidx.legacy:legacy-support-v13:${androidSupportVersion}")
     implementation("com.googlecode.libphonenumber:libphonenumber:8.13.45")
