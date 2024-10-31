@@ -118,4 +118,13 @@
         <packageUrl regex="true">^pkg:maven/commons-io/commons-io@.*$</packageUrl>
         <vulnerabilityName>CVE-2024-47554</vulnerabilityName>
     </suppress>
+    <suppress>
+        <notes>
+            <![CDATA[
+                file name: protobuf-java-3.22.3.jar
+            ]]>
+        </notes>
+        <packageUrl regex="true">^pkg:maven/com\.google\.protobuf/protobuf-java@.*$</packageUrl>
+        <vulnerabilityName>CVE-2024-7254</vulnerabilityName>
+    </suppress>
 </suppressions>
