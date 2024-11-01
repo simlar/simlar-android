@@ -191,7 +191,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("androidx.legacy:legacy-support-v4:${androidSupportVersion}")
     implementation("androidx.legacy:legacy-support-v13:${androidSupportVersion}")
-    implementation("com.googlecode.libphonenumber:libphonenumber:8.13.45")
+    implementation("com.googlecode.libphonenumber:libphonenumber:8.13.49")
 
     def liblinphoneSdkDir = "libs/linphone-sdk/${liblinphoneVersion}"
     if (new File("${rootDir}/app/${liblinphoneSdkDir}/${liblinphoneSdk}").exists()) {
