@@ -85,6 +85,7 @@ The container can build liblinphone, too.
 ```
 docker run --cap-drop all --security-opt=no-new-privileges --rm -v $(pwd)-docker-gradle-cache:/home/builder/.gradle -v $(pwd):/pwd -e CMAKE_BUILD_PARALLEL_LEVEL=16 simlar-android-builder:latest bash -c "cd /pwd && ./scripts/bootstrap-liblinphone.sh"
 ```
+When using podman add ```--userns=keep-id``` to the ```run``` commands.
 
 ### Post quantum encryption
 Simlar uses post quantum encryption since version 2.9 as liblinphone supports it since version 5.2.
