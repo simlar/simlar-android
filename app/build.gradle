@@ -176,7 +176,7 @@ ext {
 
 dependencies {
     constraints {
-        add("implementation", "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.20")
+        add("implementation", "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.25")
     }
 
     if (useGoogleServices()) {
