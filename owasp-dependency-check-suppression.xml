@@ -27,30 +27,6 @@
     <suppress>
         <notes>
             <![CDATA[
-                file name: core-0.0.8-alpha08.jar
-            ]]>
-        </notes>
-        <packageUrl regex="true">^pkg:maven/com\.google\.testing\.platform/core@.*$</packageUrl>
-        <vulnerabilityName>CVE-2014-3488</vulnerabilityName>
-        <vulnerabilityName>CVE-2015-2156</vulnerabilityName>
-        <vulnerabilityName>CVE-2019-16869</vulnerabilityName>
-        <vulnerabilityName>CVE-2019-20444</vulnerabilityName>
-        <vulnerabilityName>CVE-2019-20445</vulnerabilityName>
-        <vulnerabilityName>CVE-2021-21290</vulnerabilityName>
-        <vulnerabilityName>CVE-2021-21295</vulnerabilityName>
-        <vulnerabilityName>CVE-2021-21409</vulnerabilityName>
-        <vulnerabilityName>CVE-2021-37136</vulnerabilityName>
-        <vulnerabilityName>CVE-2021-37137</vulnerabilityName>
-        <vulnerabilityName>CVE-2021-43797</vulnerabilityName>
-        <vulnerabilityName>CVE-2022-24823</vulnerabilityName>
-        <vulnerabilityName>CVE-2022-41881</vulnerabilityName>
-        <vulnerabilityName>CVE-2022-41915</vulnerabilityName>
-        <vulnerabilityName>CVE-2023-34462</vulnerabilityName>
-        <vulnerabilityName>CVE-2023-44487</vulnerabilityName>
-    </suppress>
-    <suppress>
-        <notes>
-            <![CDATA[
                 file name: guava-31.0.1-android.jar
             ]]>
         </notes>
