@@ -33,6 +33,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.view.WindowCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,7 @@ import org.simlar.R;
 import org.simlar.logging.Lg;
 import org.simlar.service.SimlarCallState;
 import org.simlar.service.SimlarServiceCommunicator;
+import org.simlar.utils.Util;
 
 public final class RingingActivity extends AppCompatActivity
 {
@@ -75,9 +77,12 @@ public final class RingingActivity extends AppCompatActivity
 		Lg.i("onCreate");
 
 		setContentView(R.layout.activity_ringing);
+		WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+		Util.edge2edgeLayout(findViewById(R.id.layoutRingingActivity));
+		Util.setFullscreen(getWindow());
 
 		// make sure this activity is shown even if the phone is locked
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN |
+		getWindow().addFlags(
 				WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
 				WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
 				WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
