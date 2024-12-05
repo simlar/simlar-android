@@ -78,6 +78,7 @@ public final class ContactsProvider
 	{
 		void onGetStatus(final boolean registered);
 		void onOffline();
+		void wrongCredentials();
 	}
 
 	public enum Error
@@ -85,6 +86,7 @@ public final class ContactsProvider
 		NONE,
 		BUG,
 		NO_INTERNET_CONNECTION,
+		WRONG_CREDENTIALS,
 		PERMISSION_DENIED
 	}
 
@@ -177,9 +179,16 @@ public final class ContactsProvider
 			notifyContactListeners();
 
 			mExecutorService.execute(() -> {
-				final Map<String, ContactStatus> contactsStatus = GetContactsStatus.httpPostGetContactsStatus(mContacts.keySet());
-
-				mMainLoopHandler.post(() -> onContactsStatusRequestedFromServer(contactsStatus));
+				try {
+					final Map<String, ContactStatus> contactsStatus = GetContactsStatus.httpPostGetContactsStatus(mContacts.keySet());
+					mMainLoopHandler.post(() -> onContactsStatusRequestedFromServer(contactsStatus));
+				} catch (final GetContactsStatus.SimlarErrorException e) {
+					if (e.getId() == GetContactsStatus.SimlarErrorException.WRONG_CREDENTIALS_ID) {
+						mMainLoopHandler.post(() -> onError(Error.WRONG_CREDENTIALS));
+					} else {
+						mMainLoopHandler.post(() -> onError(Error.NO_INTERNET_CONNECTION));
+					}
+				}
 			});
 		}
 
@@ -521,15 +530,24 @@ public final class ContactsProvider
 		}
 
 		Executors.newSingleThreadExecutor().execute(() -> {
-			final Map<String, ContactStatus> contactsStatus = GetContactsStatus.httpPostGetContactsStatus(Collections.singleton(simlarId));
-
-			new Handler(Looper.getMainLooper()).post(() -> {
-				if (contactsStatus == null) {
-					listener.onOffline();
-				} else {
-					listener.onGetStatus(contactsStatus.get(simlarId) == ContactStatus.REGISTERED);
-				}
-			});
+			try {
+				final Map<String, ContactStatus> contactsStatus = GetContactsStatus.httpPostGetContactsStatus(Collections.singleton(simlarId));
+				new Handler(Looper.getMainLooper()).post(() -> {
+					if (contactsStatus == null) {
+						listener.onOffline();
+					} else {
+						listener.onGetStatus(contactsStatus.get(simlarId) == ContactStatus.REGISTERED);
+					}
+				});
+			} catch (final GetContactsStatus.SimlarErrorException e) {
+				new Handler(Looper.getMainLooper()).post(() -> {
+					if (e.getId() == GetContactsStatus.SimlarErrorException.WRONG_CREDENTIALS_ID) {
+						listener.wrongCredentials();
+					} else {
+						listener.onOffline();
+					}
+				});
+			}
 		});
 	}
 }
