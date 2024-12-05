@@ -55,7 +55,7 @@ def createVersionCode = { versionName ->
 
 repositories {
     maven {
-        url "https://linphone.org/maven_repository/"
+        url "https://download.linphone.org/maven_repository/"
     }
 }
 
