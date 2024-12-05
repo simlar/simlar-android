@@ -26,10 +26,12 @@ import android.os.Build;
 import android.text.Html;
 import android.text.Spanned;
 import android.view.View;
+import android.view.Window;
 
 import androidx.annotation.NonNull;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.io.IOException;
@@ -145,5 +147,10 @@ public final class Util
 			v.setBackgroundColor(Color.BLACK);
 			return WindowInsetsCompat.CONSUMED;
 		});
+	}
+
+	public static void setFullscreen(final Window window)
+	{
+		WindowCompat.getInsetsController(window, window.getDecorView()).hide(WindowInsetsCompat.Type.systemBars());
 	}
 }
