@@ -41,6 +41,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
 import androidx.fragment.app.FragmentManager;
 
 import java.util.Set;
@@ -166,6 +167,8 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		Lg.i("onCreate");
 
 		setContentView(R.layout.activity_call);
+		WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+		Util.edge2edgeLayout(findViewById(R.id.layoutCallActivity));
 
 		// make sure this activity is shown even if the phone is locked
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_IGNORE_CHEEK_PRESSES |
