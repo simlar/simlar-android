@@ -41,6 +41,7 @@ import org.simlar.R;
 import org.simlar.logging.Lg;
 import org.simlar.service.SimlarCallState;
 import org.simlar.service.SimlarServiceCommunicator;
+import org.simlar.utils.Util;
 
 public final class RingingActivity extends AppCompatActivity
 {
@@ -75,6 +76,7 @@ public final class RingingActivity extends AppCompatActivity
 		Lg.i("onCreate");
 
 		setContentView(R.layout.activity_ringing);
+		Util.edge2edgeLayout(findViewById(R.id.layoutRingingActivity));
 
 		// make sure this activity is shown even if the phone is locked
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN |
