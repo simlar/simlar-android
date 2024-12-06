@@ -23,6 +23,8 @@ package org.simlar.widgets;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,6 +39,7 @@ import androidx.fragment.app.FragmentManager;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.Executors;
 
 import org.simlar.R;
 import org.simlar.contactsprovider.ContactsProvider;
@@ -46,6 +49,7 @@ import org.simlar.helper.GooglePlayServicesHelper;
 import org.simlar.helper.PermissionsHelper;
 import org.simlar.helper.PreferencesHelper;
 import org.simlar.helper.Version;
+import org.simlar.https.DeleteAccount;
 import org.simlar.https.UploadLogFile;
 import org.simlar.logging.Lg;
 import org.simlar.service.SimlarService;
@@ -240,7 +244,6 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 	{
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
-		updateMenu(Version.showDeveloperMenu(), R.id.action_delete_account, R.string.main_activity_menu_delete_account, Menu.NONE, menu);
 		updateMenu(Version.showDeveloperMenu(), R.id.action_fake_telephone_book, R.string.main_activity_menu_fake_telephone_book, Menu.NONE, menu);
 		updateMenu(Version.showDeveloperMenu() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N, R.id.action_notification_settings, R.string.main_activity_menu_notification_settings, Menu.NONE, menu);
 		updateMenu(Version.showDeveloperMenu(), R.id.action_app_settings, R.string.main_activity_menu_app_settings, Menu.NONE, menu);
@@ -384,12 +387,38 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 
 	private void deleteAccountAndQuit()
 	{
-		PreferencesHelper.resetPreferencesFile(this);
-		if (mCommunicator == null) {
-			finish();
-		} else {
-			mCommunicator.getService().terminate();
-		}
+		new AlertDialog.Builder(this)
+				.setTitle(R.string.main_activity_alert_delete_account_title)
+				.setMessage(R.string.main_activity_alert_delete_account_text)
+				.setNegativeButton(R.string.button_cancel, null)
+				.setPositiveButton(R.string.button_continue, (dialog, id) -> Executors.newSingleThreadExecutor().execute(() -> {
+					final boolean success = DeleteAccount.httpPostDeleteAccount();
+					Lg.i("delete account success: ", success);
+
+					new Handler(Looper.getMainLooper()).post(() -> {
+						if (!success) {
+							new AlertDialog.Builder(this)
+									.setTitle(R.string.main_activity_alert_delete_account_error_title)
+									.setMessage(R.string.main_activity_alert_delete_account_error_text)
+									.create().show();
+							return;
+						}
+
+						PreferencesHelper.resetPreferencesFile(this);
+						new AlertDialog.Builder(this)
+								.setTitle(R.string.main_activity_alert_delete_account_success_title)
+								.setMessage(R.string.main_activity_alert_delete_account_success_text)
+								.setOnDismissListener(d -> {
+									if (mCommunicator == null) {
+										finish();
+									} else {
+										mCommunicator.getService().terminate();
+									}
+								})
+								.create().show();
+					});
+				}))
+				.create().show();
 	}
 
 	private void tellAFriend()
