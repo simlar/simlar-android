@@ -76,10 +76,10 @@ public final class NoContactPermissionFragment extends Fragment
 				}
 			});
 
-	@FunctionalInterface
 	public interface Listener
 	{
 		void onContactPermissionGranted();
+		void onWrongCredentials();
 	}
 
 	@Override
@@ -211,6 +211,13 @@ public final class NoContactPermissionFragment extends Fragment
 						.setTitle(R.string.no_contact_permission_fragment_alert_offline_title)
 						.setMessage(getString(R.string.no_contact_permission_fragment_alert_offline_message))
 						.create().show();
+			}
+
+			@Override
+			public void wrongCredentials()
+			{
+				dialog.dismiss();
+				mListener.onWrongCredentials();
 			}
 
 			@Override

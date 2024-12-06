@@ -25,6 +25,7 @@ import android.util.Xml;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -46,7 +47,28 @@ public final class GetContactsStatus
 		throw new AssertionError("This class was not meant to be instantiated");
 	}
 
-	public static Map<String, ContactStatus> httpPostGetContactsStatus(final Set<String> contacts)
+	/** @noinspection CheckedExceptionClass*/
+	public static final class SimlarErrorException extends Exception
+	{
+		public static final int WRONG_CREDENTIALS_ID = 10;
+
+		@Serial
+		private static final long serialVersionUID = 1L;
+		private final int id;
+
+		private SimlarErrorException(final int id, final String message)
+		{
+			super(message);
+			this.id = id;
+		}
+
+		public int getId()
+		{
+			return id;
+		}
+	}
+
+	public static Map<String, ContactStatus> httpPostGetContactsStatus(final Set<String> contacts) throws SimlarErrorException
 	{
 		Lg.i("httpPostGetContactsStatus requested");
 
@@ -78,14 +100,13 @@ public final class GetContactsStatus
 			}
 
 			return parsedResult;
-
 		} catch (final NotInitedException e) {
 			Lg.ex(e, "PreferencesHelper.NotInitedException");
 			return null;
 		}
 	}
 
-	private static Map<String, ContactStatus> parseXml(final InputStream inputStream) throws XmlPullParserException, IOException
+	private static Map<String, ContactStatus> parseXml(final InputStream inputStream) throws XmlPullParserException, IOException, SimlarErrorException
 	{
 		final XmlPullParser parser = Xml.newPullParser();
 		parser.setInput(inputStream, null);
@@ -97,7 +118,7 @@ public final class GetContactsStatus
 				&& "id".equalsIgnoreCase(parser.getAttributeName(0))
 				&& "message".equalsIgnoreCase(parser.getAttributeName(1))) {
 			Lg.e("server returned error: ", parser.getAttributeValue(1));
-			return null;
+			throw new SimlarErrorException(Integer.parseInt(parser.getAttributeValue(0)), parser.getAttributeValue(1));
 		}
 
 		if (!"contacts".equalsIgnoreCase(xmlRootElement)) {
