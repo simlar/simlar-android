@@ -141,6 +141,20 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 		loadContacts();
 	}
 
+	@Override
+	public void onWrongCredentials()
+	{
+		new AlertDialog.Builder(this)
+				.setTitle(R.string.main_activity_contact_list_error_loading_contacts_wrong_credentials_dialog_title)
+				.setMessage(R.string.main_activity_contact_list_error_loading_contacts_wrong_credentials_dialog_message)
+				.setOnDismissListener(d -> {
+					Lg.i("reset account and start recreation");
+					PreferencesHelper.resetPreferencesFile(this);
+					startAccountCreation();
+				})
+				.create().show();
+	}
+
 	private void loadContacts()
 	{
 		showNoContactPermissionFragment(false);
@@ -165,6 +179,12 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 				case NO_INTERNET_CONNECTION -> {
 					mAdapter.clear();
 					mContactList.setEmptyText(getString(R.string.main_activity_contact_list_error_loading_contacts_no_internet));
+				}
+				case WRONG_CREDENTIALS -> {
+					mAdapter.clear();
+					mContactList.setEmptyText(getString(R.string.main_activity_contact_list_error_loading_contacts_wrong_credentials));
+
+					onWrongCredentials();
 				}
 				case PERMISSION_DENIED -> showNoContactPermissionFragment(true);
 			}
