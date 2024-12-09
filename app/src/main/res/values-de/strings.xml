@@ -30,9 +30,9 @@
     <string name="main_activity_contact_list_no_contacts_found">Keiner deiner Kontakte hat Simlar installiert. Empfiehl Simlar deinen Freunden!</string>
     <string name="main_activity_contact_list_error_loading_contacts">Fehler beim Laden der Kontakte.</string>
     <string name="main_activity_contact_list_error_loading_contacts_no_internet">Die Verindung zum Server ist fehlgeschlagen. Überprüfe deine Internetverbindung.</string>
-    <string name="main_activity_contact_list_error_loading_contacts_wrong_credentials">Authorisierung fehlgeschlagen. Erstelle erneut einen Account.</string>
-    <string name="main_activity_contact_list_error_loading_contacts_wrong_credentials_dialog_title">Authorisierung fehlgeschlagen.</string>
-    <string name="main_activity_contact_list_error_loading_contacts_wrong_credentials_dialog_message">Registriere Dich erneut.</string>
+    <string name="main_activity_contact_list_error_loading_contacts_wrong_credentials">Autorisierung fehlgeschlagen. Erstelle erneut einen Account.</string>
+    <string name="main_activity_contact_list_error_loading_contacts_wrong_credentials_dialog_title">Autorisierung fehlgeschlagen.</string>
+    <string name="main_activity_contact_list_error_loading_contacts_wrong_credentials_dialog_message">Registriere dich erneut.</string>
     <string name="main_activity_menu_reload_contacts">Kontakte neu laden</string>
     <string name="main_activity_menu_upload_logfile">Fehler melden</string>
     <string name="main_activity_menu_enable_debug_mode">Debug-Modus einschalten</string>
