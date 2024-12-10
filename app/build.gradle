@@ -161,9 +161,7 @@ dependencyCheck {
     def nvdApiKey = System.getenv("SIMLAR_NVD_API_KEY")
     if (nvdApiKey != null) {
         println("This product uses the NVD API but is not endorsed or certified by the NVD.")
-        nvd {
-            apiKey = "${nvdApiKey}"
-        }
+        nvd.apiKey = "${nvdApiKey}"
     }
 }
 connectedCheck.dependsOn dependencyCheckAnalyze
