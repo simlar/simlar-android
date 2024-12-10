@@ -166,7 +166,6 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		Lg.i("onCreate");
 
 		setContentView(R.layout.activity_call);
-		Util.edge2edgeLayout(findViewById(R.id.layoutCallActivity));
 
 		// make sure this activity is shown even if the phone is locked
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_IGNORE_CHEEK_PRESSES |

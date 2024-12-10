@@ -21,16 +21,11 @@
 package org.simlar.utils;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Build;
 import android.text.Html;
 import android.text.Spanned;
-import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -135,15 +130,5 @@ public final class Util
 			throw new IllegalArgumentException("no system service matching name: " + name);
 		}
 		return service;
-	}
-
-	public static void edge2edgeLayout(final View view)
-	{
-		ViewCompat.setOnApplyWindowInsetsListener(view, (v, insets) -> {
-			final Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-			v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-			v.setBackgroundColor(Color.BLACK);
-			return insets;
-		});
 	}
 }
