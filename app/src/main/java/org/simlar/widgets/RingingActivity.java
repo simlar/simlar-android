@@ -21,6 +21,7 @@
 package org.simlar.widgets;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -33,6 +34,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +80,15 @@ public final class RingingActivity extends AppCompatActivity
 		Lg.i("onCreate");
 
 		setContentView(R.layout.activity_ringing);
-		Util.edge2edgeLayout(findViewById(R.id.layoutRingingActivity));
+
+
+		//Util.edge2edgeLayout(findViewById(R.id.layoutRingingActivity));
+		ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.layoutRingingActivity), (v, insets) -> {
+			final Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+			v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+			//v.setBackgroundColor(Color.BLACK);
+			return insets;
+		});
 
 		// make sure this activity is shown even if the phone is locked
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN |
