@@ -15,7 +15,7 @@ if [ -d "${LIBS_DIRECTRORY}" ] ; then
 fi
 
 
-git-create-space-commits.sh "liblinphone ${NEW_VERSION}"
+~/cloud/scripts/git-create-space-commits.sh "liblinphone ${NEW_VERSION}"
 
 
 sed -i "s/liblinphoneVersion = \"${OLD_VERSION}\"/liblinphoneVersion = \"${NEW_VERSION}\"/" app/build.gradle
