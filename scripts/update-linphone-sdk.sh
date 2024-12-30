@@ -8,11 +8,23 @@ declare -r USAGE="Usage example: $0 \"4.4.15\" \"4.4.20\""
 declare -r OLD_VERSION=${1?${USAGE}}
 declare -r NEW_VERSION=${2?${USAGE}}
 
+
 declare -r LIBS_DIRECTRORY="app/libs/linphone-sdk/${NEW_VERSION}"
 if [ -d "${LIBS_DIRECTRORY}" ] ; then
   echo "ERROR: "${LIBS_DIRECTRORY}" exists"
   exit 1
 fi
+
+
+declare -r PODMAN=$(which podman)
+if [ "${PODMAN}" == "" ] ; then
+    declare -r CONTAINER_RUNTIME=$(which docker)
+    declare -r CONTAINER_RUNTIME_RUN_OPTS=""
+else
+    declare -r CONTAINER_RUNTIME="${PODMAN}"
+    declare -r CONTAINER_RUNTIME_RUN_OPTS="--userns=keep-id"
+fi
+echo "using container runtime: ${CONTAINER_RUNTIME}"
 
 
 ~/cloud/scripts/git-create-space-commits.sh "liblinphone ${NEW_VERSION}"
@@ -30,7 +42,7 @@ sed -i "s/${OLD_VERSION}/${NEW_VERSION}/" scripts/bootstrap-liblinphone.sh
 git commit -am "[bootstrap-liblinphone.sh] default to version ${NEW_VERSION}"
 
 
-time docker run --cap-drop all --security-opt=no-new-privileges -it --rm -v $(pwd)-docker-gradle-cache:/home/builder/.gradle -v $(pwd):/pwd -e CMAKE_BUILD_PARALLEL_LEVEL=16 simlar-android-builder:latest bash -c "cd /pwd && ./scripts/bootstrap-liblinphone.sh"
+time "${CONTAINER_RUNTIME}" run "${CONTAINER_RUNTIME_RUN_OPTS}" --cap-drop all --security-opt=no-new-privileges -it --rm -v $(pwd)-docker-gradle-cache:/home/builder/.gradle -v $(pwd):/pwd -e CMAKE_BUILD_PARALLEL_LEVEL=16 simlar-android-builder:latest bash -c "cd /pwd && ./scripts/bootstrap-liblinphone.sh"
 
 #git add app/libs/
 #git commit -m "[liblinphone] rebuild version ${NEW_VERSION}"
