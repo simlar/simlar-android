@@ -140,10 +140,10 @@ public final class Util
 	public static void edge2edgeLayout(final View view)
 	{
 		ViewCompat.setOnApplyWindowInsetsListener(view, (v, insets) -> {
-			final Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-			v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+			final Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
+			v.setPadding(bars.left, bars.top, bars.right, bars.bottom);
 			v.setBackgroundColor(Color.BLACK);
-			return insets;
+			return WindowInsetsCompat.CONSUMED;
 		});
 	}
 }
