@@ -39,6 +39,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
 
 import org.simlar.R;
 import org.simlar.helper.CreateAccountStatus;
@@ -100,7 +101,10 @@ public final class VerifyNumberActivity extends AppCompatActivity
 	{
 		super.onCreate(savedInstanceState);
 		Lg.i("onCreate");
+
 		setContentView(R.layout.activity_verify_number);
+		WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+		Util.edge2edgeLayout(findViewById(R.id.layoutVerifyNumberActivity));
 
 		// region code spinner
 		final int regionCode = SimlarNumber.region2RegionCode(SimCardReader.readRegionCode(this));
