@@ -82,7 +82,6 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 		Lg.i("onCreate ", savedInstanceState);
 
 		setContentView(R.layout.activity_main);
-		Util.edge2edgeLayout(findViewById(R.id.layoutMainActivity));
 
 		mAdapter = new ContactsAdapter(this);
 

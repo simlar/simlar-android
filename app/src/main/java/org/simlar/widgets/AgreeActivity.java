@@ -28,10 +28,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.WindowCompat;
 
 import org.simlar.R;
-import org.simlar.utils.Util;
 
 public class AgreeActivity extends AppCompatActivity
 {
@@ -40,8 +38,6 @@ public class AgreeActivity extends AppCompatActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_agree);
-		WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-		Util.edge2edgeLayout(findViewById(R.id.layoutAgreeActivity));
 
 		// make hrefs work in terms and conditions
 		final TextView termsAndConditions = findViewById(R.id.textViewTermsAndConditions);
