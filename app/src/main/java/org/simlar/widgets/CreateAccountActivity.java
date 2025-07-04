@@ -142,8 +142,6 @@ public final class CreateAccountActivity extends AppCompatActivity
 		Lg.i("onCreate");
 
 		setContentView(R.layout.activity_create_account);
-		Util.edge2edgeLayout(findViewById(R.id.layoutCreateAccountActivity));
-		Lg.i("** WTF");
 
 		setFinishOnTouchOutside(false);
 
