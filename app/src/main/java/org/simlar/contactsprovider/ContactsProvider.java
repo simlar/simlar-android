@@ -250,9 +250,9 @@ public final class ContactsProvider
 
 			final Map<String, ContactData> result = new HashMap<>();
 			final String fakePhoto = createFakePhotoString();
-			result.put("*491761111111*", new ContactData("Barney Gumble", "+49 176 111 111 1", ContactStatus.UNKNOWN, ""));
+			result.put("*491761111111*", new ContactData("Barney Gumble Simulator", "+49 176 111 111 1", ContactStatus.UNKNOWN, ""));
 			result.put("*4916389427170*", new ContactData("Bender Rodriguez", "+49 163 89 42 717 0", ContactStatus.UNKNOWN, ""));
-			result.put("*0005*", new ContactData("Eric Cartman", "+49 173 333333", ContactStatus.UNKNOWN, ""));
+			result.put("*491761234567*", new ContactData("Eric Cartman iPhone", "+49 176 123 456 7", ContactStatus.UNKNOWN, ""));
 			result.put("*0006*", new ContactData("Glenn Quagmire", "+49 174 444444", ContactStatus.UNKNOWN, ""));
 			result.put("*0007*", new ContactData("H. M. Murdock", "+49 175 555555", ContactStatus.UNKNOWN, ""));
 			result.put("*0008*", new ContactData("Leslie Knope", "+49 176 666666", ContactStatus.UNKNOWN, ""));
