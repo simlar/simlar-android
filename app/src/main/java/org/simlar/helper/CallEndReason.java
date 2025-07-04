@@ -44,7 +44,7 @@ public enum CallEndReason
 			case NotFound -> OFFLINE;
 			case NotImplemented, NotAcceptable, UnsupportedContent -> UNSUPPORTED_MEDIA;
 			case Busy -> BUSY;
-			case ConditionalRequestFailed, Transferred, BadEvent, SessionIntervalTooSmall, None, NoResponse, Forbidden, NotAnswered, IOError, DoNotDisturb, Unauthorized, NoMatch, MovedPermanently, Gone, TemporarilyUnavailable, AddressIncomplete, BadGateway, ServerTimeout, Unknown ->
+			case ConditionalRequestFailed, Transferred, BadEvent, SessionIntervalTooSmall, None, NoResponse, Forbidden, NotAnswered, IOError, DoNotDisturb, Unauthorized, NoMatch, MovedPermanently, Gone, TemporarilyUnavailable, AddressIncomplete, BadGateway, ServerTimeout, Unknown, SasCheckRequired ->
 					NONE;
 		};
 	}
