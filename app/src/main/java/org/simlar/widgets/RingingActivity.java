@@ -20,10 +20,7 @@
 
 package org.simlar.widgets;
 
-import android.app.KeyguardManager;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -35,13 +32,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.core.view.WindowInsetsControllerCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,9 +41,6 @@ import org.simlar.R;
 import org.simlar.logging.Lg;
 import org.simlar.service.SimlarCallState;
 import org.simlar.service.SimlarServiceCommunicator;
-import org.simlar.utils.Util;
-
-import static androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE;
 
 public final class RingingActivity extends AppCompatActivity
 {
@@ -88,99 +76,12 @@ public final class RingingActivity extends AppCompatActivity
 
 		setContentView(R.layout.activity_ringing);
 
-		ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.layoutRingingActivity), (v, insets) -> {
-			final Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
-			v.setPadding(bars.left, bars.top, bars.right, bars.bottom);
-			return WindowInsetsCompat.CONSUMED;
-		});
-
-
-		//Util.edge2edgeLayout(findViewById(R.id.layoutRingingActivity));
-
-		/*
-
-		ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.layoutRingingActivity), (v, insets) -> {
-			final Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-			//final Insets systemBars2 = insets.getInsets(WindowInsetsCompat.Type.displayCutout());
-
-			v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-			//v.setPadding(0, systemBars.top, 0, 0);
-			v.setBackgroundColor(Color.BLACK);
-			//v.setBackgroundColor(Color.WHITE);
-			Lg.i("WTF xx ", systemBars.top);
-			return insets;
-		});
-
-		*/
-		//new WindowInsetsControllerCompat(getWindow(), getWindow().getDecorView()).hide(WindowInsetsCompat.Type.navigationBars());
-		//getWindow().getInsetsController().hide(WindowInsetsCompat.Type.navigationBars());
-		WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView()).hide(WindowInsetsCompat.Type.systemBars());
-		//WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView()).setSystemBarsBehavior(BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
-
-
-		Lg.i("****WTF 7 ***");
-
-		//ActivityCompat.set
-		//if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-			//getWindow().getAttributes().layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
-		//}
-
-
-		//setTurnScreenOn(true);
-		//setShowWhenLocked(true);
-
-		/*
-		new KeyguardManager().requestDismissKeyguard(this, new KeyguardManager.KeyguardDismissCallback() {
-			@Override
-			public void onDismissError()
-			{
-				//super.onDismissError();
-			}
-
-			@Override
-			public void onDismissSucceeded()
-			{
-				super.onDismissSucceeded();
-			}
-
-			@Override
-			public void onDismissCancelled()
-			{
-				super.onDismissCancelled();
-			}
-		});
-
-		 */
-		/*
-	   getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE          |
-                                                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-                                                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-*/
-		/*
-		getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE              |
-                                                              View.SYSTEM_UI_FLAG_LAYOUT_STABLE          |
-                                                              View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-                                                              View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN      |
-                                                              View.SYSTEM_UI_FLAG_HIDE_NAVIGATION        |
-                                                              View.SYSTEM_UI_FLAG_FULLSCREEN);
-
-		 */
-
-		getWindow().addFlags(//WindowManager.LayoutParams.FLAG_FULLSCREEN |
+		// make sure this activity is shown even if the phone is locked
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN |
 				WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
 				WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
 				WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
 				WindowManager.LayoutParams.FLAG_IGNORE_CHEEK_PRESSES);
-
-		/*
-		// make sure this activity is shown even if the phone is locked
-		getWindow().addFlags(//WindowManager.LayoutParams.FLAG_FULLSCREEN |
-				//WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
-				//WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-				WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
-				WindowManager.LayoutParams.FLAG_IGNORE_CHEEK_PRESSES);
-
-		 */
 
 		final Animation logoAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate_logo);
 		final ImageView logo = findViewById(R.id.logo);
