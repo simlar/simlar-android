@@ -94,7 +94,7 @@ public final class ContactsProvider
 	{
 		private final Map<String, ContactData> mContacts = new HashMap<>();
 		private State mState = State.UNINITIALIZED;
-		boolean mFakeData = false;
+		boolean mFakeData = true;
 		private final Set<FullContactsListener> mFullContactsListeners = new HashSet<>();
 		private final Map<ContactListener, String> mContactListener = new HashMap<>();
 		private final ExecutorService mExecutorService = Executors.newSingleThreadExecutor();
@@ -250,15 +250,15 @@ public final class ContactsProvider
 
 			final Map<String, ContactData> result = new HashMap<>();
 			final String fakePhoto = createFakePhotoString();
-			result.put("*0002*", new ContactData("Barney Gumble", "+49 171 111111", ContactStatus.UNKNOWN, ""));
-			result.put("*0004*", new ContactData("Bender Rodriguez", "+49 172 222222", ContactStatus.UNKNOWN, ""));
+			result.put("*491761111111*", new ContactData("Barney Gumble", "+49 176 111 111 1", ContactStatus.UNKNOWN, ""));
+			result.put("*4916389427170*", new ContactData("Bender Rodriguez", "+49 163 89 42 717 0", ContactStatus.UNKNOWN, ""));
 			result.put("*0005*", new ContactData("Eric Cartman", "+49 173 333333", ContactStatus.UNKNOWN, ""));
 			result.put("*0006*", new ContactData("Glenn Quagmire", "+49 174 444444", ContactStatus.UNKNOWN, ""));
 			result.put("*0007*", new ContactData("H. M. Murdock", "+49 175 555555", ContactStatus.UNKNOWN, ""));
 			result.put("*0008*", new ContactData("Leslie Knope", "+49 176 666666", ContactStatus.UNKNOWN, ""));
 			result.put("*0001*", new ContactData("Mona Lisa", "+49 177 777777", ContactStatus.UNKNOWN, fakePhoto));
 			result.put("*0003*", new ContactData("Rosemarie", "+49 178 888888", ContactStatus.UNKNOWN, fakePhoto));
-			result.put("*0009*", new ContactData("Stan Smith", "+49 179 999999", ContactStatus.UNKNOWN, ""));
+			result.put("*491638942717*", new ContactData("Stan Smith", "+49 163 89 42 717 0", ContactStatus.UNKNOWN, ""));
 			return result;
 		}
 
