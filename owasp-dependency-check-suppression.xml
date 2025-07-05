@@ -23,6 +23,8 @@
         <vulnerabilityName>CVE-2023-34462</vulnerabilityName>
         <vulnerabilityName>CVE-2023-44487</vulnerabilityName>
         <vulnerabilityName>CVE-2024-47535</vulnerabilityName>
+        <vulnerabilityName>CVE-2025-24970</vulnerabilityName>
+        <vulnerabilityName>CVE-2025-25193</vulnerabilityName>
     </suppress>
     <suppress>
         <notes>
