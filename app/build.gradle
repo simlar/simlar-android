@@ -63,10 +63,10 @@ android {
     defaultConfig {
         applicationId "org.simlar"
         minSdkVersion 23
-        compileSdk 34
+        compileSdk 35
         //noinspection OldTargetApi
-        targetSdkVersion 34
-        buildToolsVersion = "34.0.0"
+        targetSdkVersion 35
+        buildToolsVersion = "35.0.1"
         versionName createVersionName()
         versionCode createVersionCode(versionName)
         printf("versionName: $versionName\n")

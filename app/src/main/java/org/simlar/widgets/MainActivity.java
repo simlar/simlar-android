@@ -33,6 +33,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -82,6 +83,8 @@ public final class MainActivity extends AppCompatActivity implements NoContactPe
 		Lg.i("onCreate ", savedInstanceState);
 
 		setContentView(R.layout.activity_main);
+		WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+		Util.edge2edgeLayout(findViewById(R.id.layoutMainActivity));
 
 		mAdapter = new ContactsAdapter(this);
 
