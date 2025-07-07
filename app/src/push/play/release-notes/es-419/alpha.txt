@@ -1,5 +1,5 @@
 • Use post quantum encryption
-• Improve Call establishment
+• Android SDK 35
 • Linphone Sdk Update 5.4.24
 • Validate more international telephone numbers
 • Small improvements and fixes
