@@ -31,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.WindowCompat;
@@ -94,6 +95,14 @@ public final class RingingActivity extends AppCompatActivity
 
 		createCircles();
 		animateCircles();
+
+		getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+			@Override
+			public void handleOnBackPressed() {
+				// prevent switch to MainActivity
+				moveTaskToBack(true);
+			}
+		});
 	}
 
 	private void createCircles()
@@ -234,12 +243,5 @@ public final class RingingActivity extends AppCompatActivity
 	{
 		mCommunicator.getService().terminateCall();
 		finish();
-	}
-
-	@Override
-	public void onBackPressed()
-	{
-		// prevent switch to MainActivity
-		moveTaskToBack(true);
 	}
 }

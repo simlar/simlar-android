@@ -37,6 +37,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
@@ -210,6 +211,14 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		mLayoutVerifiedAuthenticationToken.setVisibility(View.GONE);
 		mLayoutAuthenticationToken.setVisibility(View.GONE);
 		mProgressBarRequestingVideo.setVisibility(View.GONE);
+
+		getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+			@Override
+			public void handleOnBackPressed() {
+				// prevent switch to MainActivity
+				moveTaskToBack(true);
+			}
+		});
 	}
 
 	@Override
@@ -732,12 +741,5 @@ public final class CallActivity extends AppCompatActivity implements VolumesCont
 		}
 
 		finish();
-	}
-
-	@Override
-	public void onBackPressed()
-	{
-		// prevent switch to MainActivity
-		moveTaskToBack(true);
 	}
 }

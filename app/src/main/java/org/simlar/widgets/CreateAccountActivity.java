@@ -425,10 +425,4 @@ public final class CreateAccountActivity extends AppCompatActivity
 
 		confirmRegistrationCode(mEditRegistrationCode.getText().toString());
 	}
-
-	@Override
-	public void onBackPressed()
-	{
-		// prevent back key from doing anything
-	}
 }
