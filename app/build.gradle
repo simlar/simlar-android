@@ -183,7 +183,7 @@ dependencies {
             exclude group: "com.google.firebase", module: "firebase-analytics"
             exclude group: "com.google.firebase", module: "firebase-measurement-connector"
         }
-        pushImplementation("com.google.android.gms:play-services-auth:21.3.0")
+        pushImplementation("com.google.android.gms:play-services-auth:21.4.0")
     }
     implementation("androidx.media:media:1.7.0")
     implementation("androidx.appcompat:appcompat:1.7.1")
