@@ -1,4 +1,4 @@
-FROM debian:bookworm
+FROM debian:trixie
 
 ENV ANDROID_SDK_VERSION "35"
 ENV ANDROID_BUILD_TOOLS_VERSION "35.0.1"
